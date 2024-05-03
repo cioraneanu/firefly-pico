@@ -1,0 +1,347 @@
+import { defineStore } from 'pinia'
+// import {keyBy} from 'lodash'
+import { cloneDeep, get, head, keyBy, set, uniq } from 'lodash'
+import { useLocalStorage } from '@vueuse/core'
+import AccountRepository from '~/repository/AccountRepository'
+import CategoryRepository from '~/repository/CategoryRepository'
+import TagRepository from '~/repository/TagRepository'
+import AccountTransformer from '~/transformers/AccountTransformer'
+import TransactionTemplateRepository from '~/repository/TransactionTemplateRepository'
+import CurrencyRepository from '~/repository/CurrencyRepository'
+import { useAppStore } from '~/stores/appStore'
+import { addMonths, differenceInHours, isToday, startOfDay, startOfMonth, subDays, subMonths, subYears } from 'date-fns'
+import CategoryTransformer from '~/transformers/CategoryTransformer'
+import TagTransformer from '~/transformers/TagTransformer'
+import TransactionTemplateTransformer from '~/transformers/TransactionTemplateTransformer'
+import Account from '~/models/Account'
+import TransactionRepository from '~/repository/TransactionRepository'
+import Transaction from '~/models/Transaction'
+import TransactionTransformer from '~/transformers/TransactionTransformer'
+import { listToTree, setLevel, sortByPath, treeToList } from '~/utils/DataUtils'
+import Tag from '~/models/Tag.js'
+
+export const useDataStore = defineStore('data', {
+  state: () => {
+    return {
+      isLoading: false,
+
+      dashboard: {
+        // Here we hold all transactions implied in stats => Last 7 days or current month whichever is smaller
+        month: startOfMonth(new Date()),
+        transactionsList: [],
+        transactionsListLastWeek: [],
+        transactionsWithTodo: [],
+      },
+
+      exchangeRates: useLocalStorage('exchangeRates', {}),
+      accountTotalCurrency: useLocalStorage('accountTotalCurrency', null),
+
+      transactionTemplateList: useLocalStorage('transactionTemplateList', []), // transactionTemplateList: useLocalStorage('transactionTemplateList', [], TransactionTemplateUtils.getLocalStorageSerializer()),
+      categoryList: useLocalStorage('categoryList', []),
+      accountList: useLocalStorage('accountList', []),
+      tagList: useLocalStorage('tagList', []),
+      currenciesList: useLocalStorage('currenciesList', []),
+      lastSync: useLocalStorage('lastSync', null, {
+        serializer: {
+          read: (v) => {
+            return v ? new Date(v) : null
+          },
+          write: (v) => {
+            return v ? v.toISOString() : null
+          },
+        },
+      }),
+
+      isSyncRequiredByMissingExtras: false,
+
+      isLoadingAccounts: false,
+      isLoadingTags: false,
+      isLoadingCategories: false,
+      isLoadingTransactionTemplates: false,
+      isLoadingDashboardTransactions: false,
+      isLoadingDashboardTransactionsLastWeek: false,
+      isLoadingExchangeRates: false,
+    }
+  },
+
+  getters: {
+
+    accountTotalCurrencyList (state) {
+      return uniq(state.accountList.map(account => get(account, 'attributes.currency_code')))
+    },
+
+    accountTotal (state) {
+      if (!state.accountTotalCurrency) {
+        return ' - '
+      }
+      let dictionaryByCurrency = state.accountList.reduce((result, account) => {
+        let accountCurrency = get(account, 'attributes.currency_code')
+        const accountBalance = parseInt(get(account, 'attributes.current_balance') ?? 0)
+        let oldValue = get(result, accountCurrency, 0)
+        set(result, accountCurrency, oldValue + accountBalance)
+        return result
+      }, {})
+
+      return Object.keys(dictionaryByCurrency).reduce((result, currencyCode) => {
+        let currencyAmount = dictionaryByCurrency[currencyCode]
+        let exchangeSource = get(state.exchangeRates, `rates.${currencyCode}`)
+        let exchangeDestination = get(state.exchangeRates, `rates.${state.accountTotalCurrency}`)
+        let convertedCurrencyAmount = 1.0 * currencyAmount * exchangeDestination / exchangeSource
+        return result + convertedCurrencyAmount
+      }, 0).toFixed(0)
+    },
+
+    dashboardDateStart (state) {
+      const appStore = useAppStore()
+      let dateCurrentMonth = startOfDay(state.dashboard.month).setDate(appStore.dashboard.firstDayOfMonth)
+      return (dateCurrentMonth > new Date()) ? subMonths(dateCurrentMonth, 1) : dateCurrentMonth
+    },
+
+    dashboardDateEnd (state) {
+      return subDays(addMonths(this.dashboardDateStart, 1), 1)
+    },
+
+    transactionsLatest (state) {
+      return state.dashboard.transactionsList.slice(0, 3)
+    },
+
+    dashboardExpenseByDay (state) {
+      return state.dashboard.transactionsListLastWeek.reduce((result, transaction) => {
+        let date = DateUtils.dateToString(Transaction.getDate(transaction))
+
+        let amount = Transaction.getAmount(transaction)
+        let oldValue = get(result, date, 0)
+        result[date] = oldValue + amount
+
+        return result
+      }, {})
+    },
+
+    transactionsListExpense (state) {
+      return state.dashboard.transactionsList.filter(item => get(item, 'attributes.transactions.0.type.code') === Transaction.types.expense.code)
+    },
+
+    transactionsListIncome (state) {
+      return state.dashboard.transactionsList.filter(item => get(item, 'attributes.transactions.0.type.code') === Transaction.types.income.code)
+    },
+
+    transactionsListTransfers (state) {
+      return state.dashboard.transactionsList.filter(item => get(item, 'attributes.transactions.0.type.code') === Transaction.types.transfer.code)
+    },
+
+    totalExpenseThisMonth (state) {
+      return this.transactionsListExpense.reduce((total, transaction) => {
+        return total + Transaction.getAmount(transaction)
+      }, 0)
+    },
+
+    totalIncomeThisMonth (state) {
+      return this.transactionsListIncome.reduce((total, transaction) => {
+        return total + Transaction.getAmount(transaction)
+      }, 0)
+    },
+
+    totalTransfersThisMonth (state) {
+      return this.transactionsListTransfers.reduce((total, transaction) => {
+        return total + Transaction.getAmount(transaction)
+      }, 0)
+    },
+
+    totalSurplusThisMonth (state) {
+      return this.totalIncomeThisMonth - this.totalExpenseThisMonth
+    },
+
+    totalTransactionsCount (state) {
+      return state.dashboard.transactionsList.length ?? 0
+    },
+
+    // -------
+
+    tagTodo (state) {
+      return state.tagList.find((tag) => get(tag, 'attributes.is_todo'))
+    },
+
+    isLoadingExtras (state) {
+      return state.isLoadingCategories || state.isLoadingTags || state.isLoadingTransactionTemplates || state.isLoadingAccounts
+    },
+
+    transactionTemplateDictionary: (state) => {
+      return keyBy(state.transactionTemplateList, 'id')
+    },
+
+    categoryDictionary: (state) => {
+      return keyBy(state.categoryList, 'id')
+    },
+
+    accountDictionary: (state) => {
+      return keyBy(state.accountList, 'id')
+    },
+
+    tagDictionaryByName: (state) => {
+      return keyBy(state.tagList, (item) => LanguageUtils.removeAccents(item.attributes.tag))
+    },
+
+    tagDictionaryById: (state) => {
+      return keyBy(state.tagList, 'id')
+    },
+
+    tagListHierarchy: (state) => {
+      let sortedList = sortByPath(state.tagList, 'attributes.tag')
+      const tree = listToTree(sortedList)
+      return treeToList(tree)
+    },
+
+    currencyDictionary: (state) => {
+      return keyBy(state.currenciesList, 'id')
+    },
+
+  },
+
+  actions: {
+    async fetchExchangeRate () {
+      let exchangeDate = get(this.exchangeRates, 'date')
+      exchangeDate = DateUtils.stringToDate(exchangeDate)
+      if (isToday(exchangeDate)) {
+        return
+      }
+
+      this.isLoadingExchangeRates = true
+      this.exchangeRates = await new CurrencyRepository().getCurrencyExchange()
+      this.isLoadingExchangeRates = false
+    },
+
+    async fetchTransactionsWithTodos () {
+      if (!this.tagTodo) {
+        return
+      }
+
+      // let filters = [{ field: 'query', value: filtersBackendList.value.join(' ') }]
+
+      let filters = [
+        { field: 'query', value: `tag_is:"${Tag.getDisplayName(this.tagTodo)}"` },
+      ]
+
+      let list = await new TransactionRepository().searchTransaction({ filters })
+      list = get(list, 'data') ?? []
+      this.dashboard.transactionsWithTodo = TransactionTransformer.transformFromApiList(list)
+    },
+
+    async fetchDashboardTransactionsForInterval () {
+      this.isLoadingDashboardTransactions = true
+      const appStore = useAppStore()
+
+      let filters = [
+        { field: 'start', value: DateUtils.dateToString(this.dashboardDateStart) },
+        { field: 'end', value: DateUtils.dateToString(this.dashboardDateEnd) },
+        { field: 'type', value: 'income,expense,transfer' },
+      ]
+      const list = await new TransactionRepository().getAllWithMerge({ filters })
+      this.dashboard.transactionsList = TransactionTransformer.transformFromApiList(list)
+      this.isLoadingDashboardTransactions = false
+    },
+
+    async fetchDashboardTransactionsForWeek () {
+      this.isLoadingDashboardTransactionsLastWeek = true
+
+      let startDate = DateUtils.dateToString(subDays(startOfDay(new Date()), 7))
+      let endDate = DateUtils.dateToString(startOfDay(new Date()))
+
+      let filters = [
+        { field: 'start', value: startDate },
+        { field: 'end', value: endDate },
+        { field: 'type', value: 'expense' },
+      ]
+      const list = await new TransactionRepository().getAllWithMerge({ filters })
+      this.dashboard.transactionsListLastWeek = TransactionTransformer.transformFromApiList(list)
+      this.isLoadingDashboardTransactionsLastWeek = false
+    },
+
+    async syncEverythingIfOld () {
+      let lastSyncTime = this.lastSync ?? subYears(new Date(), 1)
+      let now = new Date()
+
+      if (differenceInHours(now, lastSyncTime) < 24) {
+        return
+      }
+
+      this.isLoading = true
+      await this.syncEverything()
+      this.isLoading = false
+    },
+
+    // async syncEverythingIfMissing () {
+    //   if (this.isLoadingExtras) {
+    //     return
+    //   }
+    //   let lastSyncTime = this.lastSync ?? subYears(new Date(), 1)
+    //   let now = new Date()
+    //
+    //   if (differenceInMinutes(now, lastSyncTime) < 5) {
+    //     return
+    //   }
+    //
+    //   this.isLoading = true
+    //   await this.syncEverything()
+    //   this.isLoading = false
+    // },
+
+    async syncEverything () {
+      const appStore = useAppStore()
+      if (!appStore.hasAuthToken) {
+        return
+      }
+      let async1 = this.fetchCategories()
+      let async2 = this.fetchAccounts()
+      let async3 = this.fetchTags()
+      let async4 = this.fetchTransactionTemplates()
+      let async5 = this.fetchCurrencies()
+      await Promise.all([async1, async2, async3, async4, async5])
+      this.lastSync = new Date()
+    },
+
+    async fetchAccounts () {
+      this.isLoadingAccounts = true
+      let list = await new AccountRepository().getAllWithMerge()
+      // const allowedTypes = Object.values(Account.types).map(item => item.fireflyCode)
+      const allowedTypes = [Account.types.asset, Account.types.expense, Account.types.revenue].map(item => item.fireflyCode)
+      list = list.filter(item => allowedTypes.includes(get(item, 'attributes.type')))
+      this.accountList = AccountTransformer.transformFromApiList(list)
+      this.isLoadingAccounts = false
+
+      if (!this.accountTotalCurrency) {
+        this.accountTotalCurrency = get(head(list), 'attributes.currency_code')
+      }
+    },
+
+    async fetchCategories () {
+      this.isLoadingCategories = true
+      const list = await new CategoryRepository().getAllWithMerge()
+      this.categoryList = CategoryTransformer.transformFromApiList(list)
+      this.isLoadingCategories = false
+    },
+
+    async fetchTags () {
+      this.isLoadingTags = true
+      const list = await new TagRepository().getAllWithMerge()
+      this.tagList = TagTransformer.transformFromApiList(list)
+
+      let newTags = cloneDeep(this.tagList)
+      setLevel(newTags)
+      this.isLoadingTags = false
+    },
+
+    async fetchTransactionTemplates () {
+      const list = await new TransactionTemplateRepository().getAllWithMerge()
+      this.transactionTemplateList = TransactionTemplateTransformer.transformFromApiList(list)
+    },
+
+    async fetchCurrencies () {
+      this.currenciesList = await new CurrencyRepository().getAllWithMerge()
+    },
+
+    // -----
+
+    // -----
+
+  },
+})

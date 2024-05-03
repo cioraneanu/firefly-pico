@@ -1,0 +1,113 @@
+<template>
+
+  <app-select
+      :label="label"
+      popupTitle="Select an icon"
+      v-model="modelValue"
+      v-model:showDropdown="showDropdown"
+      v-model:search="search"
+      :list="filteredList"
+      :columns="6"
+      :getDisplayValue="getDisplayValue"
+      v-bind="dynamicAttrs">
+
+    <template #input>
+      <div v-if="!modelValue" class="text-muted">No icon</div>
+      <component v-else :is="modelValue.icon" style="width: 25px"/>
+    </template>
+
+
+    <template #item="{item}">
+      <div class="flex-center flex-column mt-5 text-size-12">
+        <component :is="item.icon" style="width: 30px"/>
+        <div class="app-icon-item"></div>
+      </div>
+    </template>
+
+  </app-select>
+
+</template>
+
+
+<script setup>
+import { useDataStore } from '~/stores/dataStore'
+import { useFormAttributes } from '~/composables/useFormAttributes'
+import Category from '~/models/Category.js'
+import { avatarListIcons, duoToneListIcons, fluentListIcons } from '~/constants/SvgConstants.js'
+
+const dataStore = useDataStore()
+const attrs = useAttrs()
+const { dynamicAttrs } = useFormAttributes(attrs)
+
+const props = defineProps({
+  label: {
+    type: String,
+    default: 'Icon select',
+  },
+  list: {},
+})
+
+const modelValue = defineModel()
+const showDropdown = ref(false)
+const search = ref('')
+
+const list = computed(() => {
+  if (props.list) {
+    return props.list
+  }
+
+  return [
+    ...duoToneListIcons,
+    ...fluentListIcons,
+    ...avatarListIcons,
+    // ...flatColorListIcons,
+  ]
+})
+
+// let list = ref(
+//     props.list ??
+//     [
+//       ...duoToneListIcons,
+//       ...fluentListIcons,
+//       ...avatarListIcons,
+//       // ...flatColorListIcons,c
+//     ])
+
+const filteredList = computed(() => {
+  if (search.value.length === 0) {
+    return list.value
+  }
+  return list.value.filter(icon => {
+    return icon.name.toLowerCase().indexOf(search.value.toLowerCase()) !== -1
+  })
+})
+
+// ------ Methods ------
+
+// onMounted(async () => {
+//   list.value = appSelectIcons
+// })
+
+const onSelectCell = (value) => {
+  modelValue.value = value
+  showDropdown.value = false
+}
+
+const getDisplayValue = (value) => {
+  return Category.getDisplayName(value)
+}
+
+const isLoading = ref(false)
+UIUtils.showLoadingWhen(isLoading)
+const onRefresh = async () => {
+  isLoading.value = true
+  await dataStore.fetchCategories()
+  isLoading.value = false
+}
+
+
+</script>
+
+<style>
+
+</style>

@@ -1,0 +1,39 @@
+{
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "npm run dev -- -o",
+    "build": "nuxt build",
+    "dev": "nuxt dev",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare",
+    "prod": "node .output/server/index.mjs"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^8.4.1",
+    "@nuxtjs/device": "^3.1.1",
+    "@vant/nuxt": "^1.0.4",
+    "nuxt": "^3.11.2",
+    "nuxt-svgo": "^4.0.0"
+  },
+  "dependencies": {
+    "@pinia/nuxt": "^0.5.1",
+    "@tabler/icons-vue": "^3.1.0",
+    "@vant/touch-emulator": "^1.4.0",
+    "@vueuse/core": "^10.9.0",
+    "@vueuse/gesture": "^2.0.0",
+    "axios": "^1.6.8",
+    "date-fns": "^3.6.0",
+    "fuse.js": "^7.0.0",
+    "lodash": "^4.17.21",
+    "mathjs": "^12.4.1",
+    "pinia": "^2.1.7",
+    "vant": "^4.8.10",
+    "vuedraggable": "^4.1.0"
+  },
+  "overrides": {
+    "vue": "latest"
+  },
+  "type": "module"
+}

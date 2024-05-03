@@ -1,0 +1,28 @@
+version: '3.3'
+services:
+
+  firefly-pico:
+    image: cioraneanu/firefly-pico:latest
+    ports:
+      - "6976:80"
+    environment:
+      - FIREFLY_URL=https://firefly.domain.com
+      - DB_CONNECTION=pgsql
+      - DB_HOST=firefly-pico-postgresql
+      - DB_PORT=5432
+      - DB_DATABASE=firefly-pico
+      - DB_USERNAME=firefly-pico
+      - DB_PASSWORD=
+    depends_on:
+      - firefly-pico-postgresql
+
+  firefly-pico-postgresql:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: firefly-pico
+      POSTGRES_USER: firefly-pico
+      POSTGRES_PASSWORD:
+    volumes:
+      - /:/var/lib/postgresql/data

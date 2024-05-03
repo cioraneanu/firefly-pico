@@ -1,0 +1,39 @@
+<?xml version="1.0" ?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 128 128" data-name="Layer 1" id="Layer_1" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<style>.cls-1{fill:#515570;}.cls-2{fill:#6b718e;}.cls-3{fill:#fbc0aa;}.cls-11,.cls-4{fill:#ffd8c9;}.cls-10,.cls-12,.cls-13,.cls-15,.cls-5{fill:none;}.cls-5{stroke:#fbc0aa;stroke-width:20px;}.cls-10,.cls-11,.cls-12,.cls-13,.cls-15,.cls-5{stroke-linecap:round;}.cls-10,.cls-11,.cls-13,.cls-15,.cls-5{stroke-linejoin:round;}.cls-6{fill:#8f5653;}.cls-7{fill:#ffffff;}.cls-8{fill:#ff8475;}.cls-9{fill:#393c54;}.cls-10,.cls-11{stroke:#8f5653;}.cls-10,.cls-12{stroke-width:5px;}.cls-10{opacity:0.2;}.cls-11{stroke-width:3px;}.cls-12{stroke:#ff8475;stroke-miterlimit:10;opacity:0.4;}.cls-13,.cls-15{stroke:#515570;}.cls-13{stroke-width:2px;opacity:0.1;}.cls-14{opacity:0.3;}</style>
+</defs>
+<title/>
+<circle class="cls-1" cx="64" cy="64" r="60"/>
+<circle class="cls-2" cx="64" cy="64" r="48"/>
+<circle class="cls-3" cx="94.32" cy="60.43" r="7.93"/>
+<path class="cls-4" d="M64,124.1A59.77,59.77,0,0,0,103.83,109l-2.23-5.32c-1.71-4-6.22-6.64-11.29-6.64H37.69c-5.07,0-9.58,2.66-11.29,6.64L24.17,109A59.77,59.77,0,0,0,64,124.1Z"/>
+<line class="cls-5" x1="64" x2="64" y1="84.75" y2="98.5"/>
+<circle class="cls-3" cx="32.68" cy="60.43" r="7.93"/>
+<path class="cls-6" d="M95.85,36H98a0,0,0,0,1,0,0V59a0,0,0,0,1,0,0H95.85A3.88,3.88,0,0,1,92,55.13V39.88A3.88,3.88,0,0,1,95.85,36Z" transform="translate(189.95 95) rotate(180)"/>
+<path class="cls-6" d="M33.88,36H36a0,0,0,0,1,0,0V59a0,0,0,0,1,0,0H33.88A3.88,3.88,0,0,1,30,55.13V39.88A3.88,3.88,0,0,1,33.88,36Z"/>
+<path class="cls-4" d="M64,94.49A30.67,30.67,0,0,1,33.34,63.82V46.66a30.66,30.66,0,0,1,61.32,0V63.82A30.67,30.67,0,0,1,64,94.49Z"/>
+<path class="cls-7" d="M70.21,76a.79.79,0,0,1,.78.89,7,7,0,0,1-14,0,.79.79,0,0,1,.78-.89Z"/>
+<path class="cls-6" d="M55.57,77a1.06,1.06,0,0,1-1.06-1.19,9.56,9.56,0,0,1,19,0A1.06,1.06,0,0,1,72.43,77H66.12L64,76l-2.25,1Z"/>
+<path class="cls-8" d="M70.17,66a6.17,6.17,0,0,1-12.34,0c0-3.41,2.76-8.7,6.17-8.7S70.17,62.6,70.17,66Z"/>
+<circle class="cls-9" cx="77.5" cy="59.28" r="2.5"/>
+<circle class="cls-9" cx="50.5" cy="59.28" r="2.5"/>
+<line class="cls-10" x1="75.5" x2="83.5" y1="50.5" y2="50.5"/>
+<line class="cls-10" x1="44.5" x2="52.5" y1="49.5" y2="51.5"/>
+<path class="cls-11" d="M73,24.28a27.24,27.24,0,0,0-18,0"/>
+<path class="cls-11" d="M73,29.56a23.28,23.28,0,0,0-18,0"/>
+<line class="cls-12" x1="44.5" x2="51.5" y1="66.5" y2="66.5"/>
+<line class="cls-12" x1="76.5" x2="83.5" y1="66.5" y2="66.5"/>
+<line class="cls-13" x1="63.5" x2="68.5" y1="85.5" y2="85.5"/>
+<path class="cls-6" d="M33.34,45.86V41.75H32V52.5h.34V58a1,1,0,0,0,1,1H35a1.64,1.64,0,0,0,1.64-1.65V49.14A1.64,1.64,0,0,0,35,47.5h0A1.64,1.64,0,0,1,33.34,45.86Z"/>
+<path class="cls-6" d="M94.64,45.86V41.75H96V52.5h-.34V58a1,1,0,0,1-1,1H93a1.65,1.65,0,0,1-1.64-1.65V49.14A1.65,1.65,0,0,1,93,47.5h0A1.65,1.65,0,0,0,94.64,45.86Z"/>
+<g class="cls-14">
+<path class="cls-15" d="M64,120.21a3,3,0,1,1,5.33-2.75"/>
+<path class="cls-15" d="M64.58,116.8a3,3,0,0,1,1.71-5.75"/>
+<path class="cls-15" d="M70.79,113a3,3,0,1,1,5.55-2.26"/>
+<path class="cls-15" d="M76.49,116.82a3,3,0,1,1,1.87-5.7"/>
+<path class="cls-15" d="M54.73,115.77a3,3,0,0,1,4.65,3.79"/>
+</g>
+<path class="cls-7" d="M86,98a22,22,0,0,1-44,0c0-.34,0-.67,0-1H39v21.74a60,60,0,0,0,50,0V97H86C86,97.33,86,97.66,86,98Z"/>
+</svg>
