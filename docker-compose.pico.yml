@@ -3,6 +3,7 @@ services:
 
   firefly-pico:
     image: cioraneanu/firefly-pico:latest
+    container_name: firefly_pico
     ports:
       - "6976:80"
     environment:
@@ -12,17 +13,23 @@ services:
       - DB_PORT=5432
       - DB_DATABASE=firefly-pico
       - DB_USERNAME=firefly-pico
-      - DB_PASSWORD=
+      - DB_PASSWORD=very-secure-pwd
     depends_on:
       - firefly-pico-postgresql
+    networks:
+      - firefly
 
   firefly-pico-postgresql:
     image: postgres:latest
-    ports:
-      - "5432:5432"
+    container_name: firefly_pico_db
     environment:
-      POSTGRES_DB: firefly-pico
-      POSTGRES_USER: firefly-pico
-      POSTGRES_PASSWORD:
+      - POSTGRES_DB=firefly-pico
+      - POSTGRES_USER=firefly-pico
+      - POSTGRES_PASSWORD=very-secure-pwd
     volumes:
-      - /:/var/lib/postgresql/data
+      - /<your_path>:/var/lib/postgresql/data
+    networks:
+      - firefly
+
+networks:
+  firefly:
