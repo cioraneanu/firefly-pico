@@ -17,7 +17,7 @@
 
 
     <van-grid :column-num="2">
-      <van-grid-item v-for="account in dataStore.accountList"
+      <van-grid-item v-for="account in dataStore.assetAccounts"
                      :key="account.id"
                      @click="onGoToTransactions(account)"
                      icon="photo-o">

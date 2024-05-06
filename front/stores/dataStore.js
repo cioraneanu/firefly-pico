@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 // import {keyBy} from 'lodash'
-import { cloneDeep, get, head, keyBy, set, uniq } from 'lodash'
+import {cloneDeep, get, head, isEqual, keyBy, set, uniq} from 'lodash'
 import { useLocalStorage } from '@vueuse/core'
 import AccountRepository from '~/repository/AccountRepository'
 import CategoryRepository from '~/repository/CategoryRepository'
@@ -65,6 +65,10 @@ export const useDataStore = defineStore('data', {
   },
 
   getters: {
+
+    assetAccounts(state) {
+      return state.accountList.filter(account => isEqual(Account.getType(account) , Account.types.asset))
+    },
 
     accountTotalCurrencyList (state) {
       return uniq(state.accountList.map(account => get(account, 'attributes.currency_code')))

@@ -14,9 +14,9 @@ services:
       - DB_CONNECTION=pgsql
       - DB_HOST=firefly-pico-postgresql
       - DB_PORT=54322
-      - DB_DATABASE=firefly-x
-      - DB_USERNAME=firefly-x
-      - DB_PASSWORD=firefly-x
+      - DB_DATABASE=firefly-pico
+      - DB_USERNAME=firefly-pico
+      - DB_PASSWORD=very-secure-pwd-pico
     networks:
       firefly:
 
@@ -25,11 +25,11 @@ services:
     container_name: firefly_pico_db
     restart: always
     environment:
-      - POSTGRES_DB=firefly-x
-      - POSTGRES_USER=firefly-x
-      - POSTGRES_PASSWORD=firefly-x
+      - POSTGRES_DB=firefly-pico
+      - POSTGRES_USER=firefly-pico
+      - POSTGRES_PASSWORD=very-secure-pwd-pico
     volumes:
-      - /<your_path>/firefly-x-db:/var/lib/postgresql/data
+      - /<your_path>/firefly-pico-db:/var/lib/postgresql/data
     networks:
       firefly:
 
@@ -52,7 +52,7 @@ services:
       - DB_PORT=5432
       - DB_DATABASE=firefly
       - DB_USERNAME=firefly
-      - DB_PASSWORD=firefly
+      - DB_PASSWORD=very-secure-pwd-firefly
     volumes:
       - /<your_path>/firefly-upload:/var/www/html/storage/upload
     networks:
@@ -65,7 +65,7 @@ services:
     environment:
       - POSTGRES_DB=firefly
       - POSTGRES_USER=firefly
-      - POSTGRES_PASSWORD=firefly
+      - POSTGRES_PASSWORD=very-secure-pwd-firefly
     volumes:
       - /<your_path>/firefly-db:/var/lib/postgresql/data
     networks:
