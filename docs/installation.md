@@ -7,7 +7,7 @@ For convince Pico comes with a prebuilt docker image which you can spin up.
 - [Pico only](../docker-compose.pico.yml) (If you already have Firefly installed)
 - [Pico + Firefly](../docker-compose.pico+firefly.yml) (If you want an easy 2 in 1)
 
-2. Set `FIREFLY_URL` to the URL of your Firefly instance (Will be used by the Pico backend to make calls to the Firefly REST API)
+2. Set `FIREFLY_URL` to the URL of your Firefly instance. <br>**Important!** Make sure you provide the host + port of Firefly instance ex. `http://192.168.1.10:8080` or `https://firefly.domain.com` if you have if proxied through something like Nginx.
 3. Make sure you set values to ALL envs named `DB_PASSWORD` + `POSTGRES_PASSWORD` (and that they match for PicoApp <-> PicoDB, and Firefly <-> Firefly DB )
 4. Start the container `docker compose -f docker-compose.yml up -d`
 

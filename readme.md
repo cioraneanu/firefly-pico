@@ -62,6 +62,7 @@ Several (bad) ideas later I've come to this version. A transaction assistant :to
 Firefly is very flexible and that can leave people unsure about how they should organise things.
 This is by no means the only / best way to do, but it's what works for me:
 ```
+- Create asset accounts for everything (ex. one for every family member, one for each of your savings account). It's easier to not use any revenue/expense accounts that way they default to cash and you have one less field to complete for transactions.
 - Create your big, general "categories" (ex. Bills, Food, Fun, Transportation etc.)
 - Create your root tags with names identical to the "categories" above (ex. Bills, Food, Fun, Transportation etc.) (This is useful because selecting a "tag" will automatically select the "category".)
 - Create your child tags for granularity (ex. Electricity, Heating, Internet with the parent tag Bills). It's a good idea to remember these names and use them with the assistant. 

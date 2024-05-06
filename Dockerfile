@@ -3,6 +3,8 @@ ARG LARAVEL_ALPINE_VERSION=8.3.2-laravel-alpine3.19
 
 FROM ${REGISTRY}/php:${LARAVEL_ALPINE_VERSION}-build as build-container
 
+RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable pdo_mysql
+
 WORKDIR /var/www/html
 
 COPY back .
