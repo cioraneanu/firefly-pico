@@ -17,7 +17,6 @@ services:
       - DB_DATABASE=firefly-x
       - DB_USERNAME=firefly-x
       - DB_PASSWORD=firefly-x
-
     networks:
       firefly:
 
