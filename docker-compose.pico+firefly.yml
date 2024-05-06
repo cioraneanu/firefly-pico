@@ -3,64 +3,74 @@ services:
 
   firefly-pico:
     image: cioraneanu/firefly-pico:latest
+    container_name: firefly_pico
     restart: always
+    depends_on:
+      - firefly-pico-postgresql
     ports:
-      - "6976:80"
+      - 6976:80
     environment:
-      - FIREFLY_URL=https://money.cioraneanu.com
+      - FIREFLY_URL=https://firefly.domain.com
       - DB_CONNECTION=pgsql
-      - DB_HOST=192.168.1.33
+      - DB_HOST=firefly-pico-postgresql
       - DB_PORT=54322
       - DB_DATABASE=firefly-x
       - DB_USERNAME=firefly-x
-      - DB_PASSWORD= #fill me
-    depends_on:
-      - firefly-pico-postgresql
+      - DB_PASSWORD=firefly-x
+
+    networks:
+      firefly:
 
   firefly-pico-postgresql:
     image: postgres:latest
+    container_name: firefly_pico_db
     restart: always
-    ports:
-      - "54322:5432"
     environment:
-      POSTGRES_DB: firefly-x
-      POSTGRES_USER: firefly-x
-      POSTGRES_PASSWORD: firefly-x
+      - POSTGRES_DB=firefly-x
+      - POSTGRES_USER=firefly-x
+      - POSTGRES_PASSWORD=firefly-x
     volumes:
-      - /mnt/ssd-zfs-1/apps/firefly-x/postgres:/var/lib/postgresql/data
+      - /<your_path>/firefly-x-db:/var/lib/postgresql/data
+    networks:
+      firefly:
 
 
   firefly-app:
     image: fireflyiii/core:latest
+    container_name: firefly_iii
     restart: always
-    volumes:
-      - /mnt/ssd-zfs-1/apps/firefly-new/upload:/var/www/html/storage/upload
-    environment:
-      - FIREFLY_III_LAYOUT=v1
-      - APP_URL=https://money.cioraneanu.com
-      - APP_KEY=8nFgQo6X4mAaxSYayaRPxcddLKTLRb7J
-      - TRUSTED_PROXIES=**
-      - DB_CONNECTION=pgsql
-      - DB_HOST=192.168.1.33
-      - DB_PORT=6042
-      - DB_DATABASE=firefly
-      - DB_USERNAME=firefly
-      - DB_PASSWORD= #fill me
-    ports:
-      - 6041:8080
     depends_on:
       - firefly-app-postgresql
-
+    ports:
+      - 6041:8080
+    environment:
+      - FIREFLY_III_LAYOUT=v1
+      - APP_URL=https://firefly.domain.com
+      - APP_KEY=<add unique 32-char key>
+      - TRUSTED_PROXIES=**
+      - DB_CONNECTION=pgsql
+      - DB_HOST=firefly-app-postgresql
+      - DB_PORT=5432
+      - DB_DATABASE=firefly
+      - DB_USERNAME=firefly
+      - DB_PASSWORD=firefly
+    volumes:
+      - /<your_path>/firefly-upload:/var/www/html/storage/upload
+    networks:
+      firefly:
 
   firefly-app-postgresql:
     image: postgres:latest
+    container_name: firefly_iii_db
     restart: always
-    ports:
-      - "6042:5432"
     environment:
-      POSTGRES_DB: firefly
-      POSTGRES_USER: firefly
-      POSTGRES_PASSWORD: #fill me
+      - POSTGRES_DB=firefly
+      - POSTGRES_USER=firefly
+      - POSTGRES_PASSWORD=firefly
     volumes:
       - /<your_path>/firefly-db:/var/lib/postgresql/data
+    networks:
+      firefly:
 
+networks:
+  firefly:
