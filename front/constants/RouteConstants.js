@@ -13,6 +13,7 @@ export default {
   ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTION_FIELDS_ORDER: '/settings/user-preferences-transaction-fields-order',
   ROUTE_SETTINGS_NEW_TRANSACTION_DEFAULTS: '/settings/user-preferences-new-transaction-defaults',
   ROUTE_SETTINGS_ABOUT: '/settings/about',
+  ROUTE_EXCHANGE_RATES: '/exchange-rates',
 
 
   ROUTE_TRANSACTION_TEMPLATE_LIST: '/transaction-templates/list',

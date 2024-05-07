@@ -66,19 +66,19 @@ export const useDataStore = defineStore('data', {
 
   getters: {
 
-    assetAccounts(state) {
-      return state.accountList.filter(account => isEqual(Account.getType(account) , Account.types.asset))
+    dashboardAccounts(state) {
+      return state.accountList.filter(account => isEqual(Account.getType(account) , Account.types.asset) && Account.getIsActive(account))
     },
 
-    accountTotalCurrencyList (state) {
-      return uniq(state.accountList.map(account => get(account, 'attributes.currency_code')))
+    dashboardAccountsCurrencyList (state) {
+      return uniq(this.dashboardAccounts.map(account => get(account, 'attributes.currency_code')))
     },
 
     accountTotal (state) {
       if (!state.accountTotalCurrency) {
         return ' - '
       }
-      let dictionaryByCurrency = state.accountList.reduce((result, account) => {
+      let dictionaryByCurrency = this.dashboardAccounts.reduce((result, account) => {
         let accountCurrency = get(account, 'attributes.currency_code')
         const accountBalance = parseInt(get(account, 'attributes.current_balance') ?? 0)
         let oldValue = get(result, accountCurrency, 0)
@@ -205,9 +205,9 @@ export const useDataStore = defineStore('data', {
     async fetchExchangeRate () {
       let exchangeDate = get(this.exchangeRates, 'date')
       exchangeDate = DateUtils.stringToDate(exchangeDate)
-      if (isToday(exchangeDate)) {
-        return
-      }
+      // if (isToday(exchangeDate)) {
+      //   return
+      // }
 
       this.isLoadingExchangeRates = true
       this.exchangeRates = await new CurrencyRepository().getCurrencyExchange()

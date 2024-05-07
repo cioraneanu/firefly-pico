@@ -17,7 +17,7 @@
 
 
     <van-grid :column-num="2">
-      <van-grid-item v-for="account in dataStore.assetAccounts"
+      <van-grid-item v-for="account in dataStore.dashboardAccounts"
                      :key="account.id"
                      @click="onGoToTransactions(account)"
                      icon="photo-o">
@@ -35,6 +35,21 @@
         </template>
       </van-grid-item>
     </van-grid>
+
+
+    <div class="flex-center text-size-13 m-10">
+      <icon-cash class="text-muted" :size="24" :stroke="1.5"/>
+      <span class="font-400 text-muted">Total: </span>
+      <span class="font-700 ms-1 me-2">~{{ accountTotal }} {{ dataStore.accountTotalCurrency }}</span>
+      <van-button
+          @click="onToggleTotalCurrency"
+          size="small"
+          style="height: 25px; padding: 0px 4px;">
+        <icon-switch2 :size="20" :stroke="1.5"/>
+
+      </van-button>
+    </div>
+
 
     <div class="flex-center text-size-13 m-10">
       <icon-cash class="text-muted" :size="24" :stroke="1.5"/>
@@ -75,12 +90,12 @@ const getAccountAmount = (account) => {
 }
 
 const onToggleTotalCurrency = () => {
-  if (dataStore.accountTotalCurrencyList.length === 0) {
+  if (dataStore.dashboardAccountsCurrencyList.length === 0) {
     return
   }
-  let index = dataStore.accountTotalCurrencyList.indexOf(dataStore.accountTotalCurrency)
-  let newIndex = (index + 1) % dataStore.accountTotalCurrencyList.length
-  dataStore.accountTotalCurrency = dataStore.accountTotalCurrencyList[newIndex]
+  let index = dataStore.dashboardAccountsCurrencyList.indexOf(dataStore.accountTotalCurrency)
+  let newIndex = (index + 1) % dataStore.dashboardAccountsCurrencyList.length
+  dataStore.accountTotalCurrency = dataStore.dashboardAccountsCurrencyList[newIndex]
 }
 
 const onGoToTransactions = async (account) => {

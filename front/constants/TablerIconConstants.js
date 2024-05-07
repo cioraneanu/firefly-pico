@@ -17,6 +17,7 @@ export const icons = {
   settingsUserPreferencesDate: 'IconCalendarEvent',
   settingsNewTransactionDefaults: 'IconCarambola',
   settingsAbout: 'IconInfoSquare',
+  exchangeRates: 'IconReplace',
 
   dashboardTotalExpenses: 'IconSquareRoundedMinus',
   dashboardTotalIncomes: 'IconSquareRoundedPlus',

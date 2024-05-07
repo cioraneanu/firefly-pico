@@ -31,6 +31,12 @@
           @click="onGoToTransactionTemplatesList"
       />
 
+      <app-field-link
+          label="Exchange rates"
+          :icon="TablerIconConstants.exchangeRates"
+          @click="navigateTo(RouteConstants.ROUTE_EXCHANGE_RATES)"
+      />
+
 <!--      <app-field-link-->
 <!--          label="Currencies"-->
 <!--          :icon="IconifyConstants.currency"-->
