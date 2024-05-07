@@ -141,7 +141,9 @@ class Account extends BaseModel {
     return `${this.getBalance(account)} ${this.getCurrency(account)}`
   }
 
-
+  static getIsActive (account) {
+    return _.get(account, 'attributes.active', false)
+  }
 
   static getType (account) {
     return get(account, 'attributes.type')
