@@ -74,20 +74,23 @@ export const useDataStore = defineStore('data', {
       return uniq(this.dashboardAccounts.map(account => get(account, 'attributes.currency_code')))
     },
 
-    accountTotal (state) {
-      if (!state.accountTotalCurrency) {
-        return ' - '
-      }
-      let dictionaryByCurrency = this.dashboardAccounts.reduce((result, account) => {
+    dashboardAccountsTotalByCurrency(state) {
+      return  this.dashboardAccounts.reduce((result, account) => {
         let accountCurrency = get(account, 'attributes.currency_code')
         const accountBalance = parseInt(get(account, 'attributes.current_balance') ?? 0)
         let oldValue = get(result, accountCurrency, 0)
         set(result, accountCurrency, oldValue + accountBalance)
         return result
       }, {})
+    },
 
-      return Object.keys(dictionaryByCurrency).reduce((result, currencyCode) => {
-        let currencyAmount = dictionaryByCurrency[currencyCode]
+    dashboardAccountsEstimatedTotal (state) {
+      if (!state.accountTotalCurrency) {
+        return ' - '
+      }
+
+      return Object.keys(this.dashboardAccountsTotalByCurrency).reduce((result, currencyCode) => {
+        let currencyAmount = this.dashboardAccountsTotalByCurrency[currencyCode]
         let exchangeSource = get(state.exchangeRates, `rates.${currencyCode}`)
         let exchangeDestination = get(state.exchangeRates, `rates.${state.accountTotalCurrency}`)
         let convertedCurrencyAmount = 1.0 * currencyAmount * exchangeDestination / exchangeSource
