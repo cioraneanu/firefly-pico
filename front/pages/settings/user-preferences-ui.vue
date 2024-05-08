@@ -11,7 +11,6 @@
         <!--        <div class="van-cell-group-title">Date settings:</div>-->
 
         <app-select
-            :clearable="false"
             label="Numbers formatting"
             popupTitle="Select preffered numbers formatting"
             v-model="numberFormat"
@@ -21,6 +20,7 @@
             :has-search="false"
             :rules="[{ required: true, message: 'This field is required' }]"
             required
+            :clearable="false"
         />
 
         <app-boolean

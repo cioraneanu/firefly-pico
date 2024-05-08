@@ -1,8 +1,8 @@
 import { evaluate } from 'mathjs'
 
 export const NUMBER_FORMAT = {
-  eu: { name: '123456.789 => 123.456,789', code: 'de-DE' },
-  international: { name: '123456.789 => 1,23,456.789', code: 'en-EN' },
+  eu: { name: '1234.56 -> 1.234,56', code: 'de-DE' },
+  international: { name: '1234.56 -> 1,234.56', code: 'en-EN' },
 }
 
 export const getFormattedValue = (value, digits = 0) => {
