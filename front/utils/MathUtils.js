@@ -1,70 +1,75 @@
-import {evaluate} from 'mathjs'
+import { evaluate } from 'mathjs'
+
+export const NUMBER_FORMAT = {
+  eu: { name: '123456.789 => 123.456,789', code: 'de-DE' },
+  international: { name: '123456.789 => 1,23,456.789', code: 'en-EN' },
+}
+
+export const getFormattedValue = (value, digits = 0) => {
+  const appStore = useAppStore()
+  if (!appStore.dashboard.showAccountAmounts) {
+    return '******'
+  }
+  let numberFormatCode = appStore.numberFormat.code ?? NUMBER_FORMAT.eu.code
+  return new Intl.NumberFormat(numberFormatCode, { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value)
+}
 
 export const isStringANumber = (value) => {
-    if (!value || value === '' || value === ' ') {
-        return false
-    }
-    return !isNaN(value)
+  if (!value || value === '' || value === ' ') {
+    return false
+  }
+  return !isNaN(value)
 }
 
 export const isStringAMathExpression = (value) => {
-    if (!value || value === '' || value === ' ') {
-        return false
-    }
+  if (!value || value === '' || value === ' ') {
+    return false
+  }
 
-    return /^[\d\s()+\-*/.^%]*$/.test(value)
-}
-
-
-export const getFormattedValue = (value, digits = 0) => {
-    const appStore = useAppStore()
-    if (!appStore.dashboard.showAccountAmounts) {
-        return '******'
-    }
-    return new Intl.NumberFormat('de-DE', {minimumFractionDigits: digits, maximumFractionDigits: digits}).format(value)
+  return /^[\d\s()+\-*/.^%]*$/.test(value)
 }
 
 export const evalMath = (value) => {
-    if (!value || value === '') {
-        return {
-            wasSuccessful: true,
-            hasChanged: true,
-            value: '0',
-        }
+  if (!value || value === '') {
+    return {
+      wasSuccessful: true,
+      hasChanged: true,
+      value: '0',
     }
+  }
 
-    try {
-        let newValue = evaluate(value).toString()
-        newValue = parseFloat(newValue).toFixed(2)
-        return {
-            wasSuccessful: true,
-            hasChanged: newValue !== value,
-            value: newValue,
-        }
-    } catch (error) {
-        return {
-            wasSuccessful: false,
-            hasChanged: false,
-            value: value,
-        }
+  try {
+    let newValue = evaluate(value).toString()
+    newValue = parseFloat(newValue).toFixed(2)
+    return {
+      wasSuccessful: true,
+      hasChanged: newValue !== value,
+      value: newValue,
     }
+  } catch (error) {
+    return {
+      wasSuccessful: false,
+      hasChanged: false,
+      value: value,
+    }
+  }
 }
 
 export const removeEndOperators = (inputString) => {
-    return inputString.replace(/[+\-*/]+$/, '')
+  return inputString.replace(/[+\-*/]+$/, '')
 }
 
 export const sanitizeAmount = (inputString) => {
-    if (!inputString) {
-        return ''
-    }
-    // Remove bad characters
-    inputString = inputString.replace(/[^0-9+\-*/\.,]/g, '')
-    inputString = inputString.replace(',', '.')
+  if (!inputString) {
+    return ''
+  }
+  // Remove bad characters
+  inputString = inputString.replace(/[^0-9+\-*/\.,]/g, '')
+  inputString = inputString.replace(',', '.')
 
-    // Remove duplicate math operators
-    const regexDuplicateOperators = /[-+*/.^]+/g
-    return inputString.replace(regexDuplicateOperators, (match) => {
-        return match.charAt(match.length - 1)
-    })
+  // Remove duplicate math operators
+  const regexDuplicateOperators = /[-+*/.^]+/g
+  return inputString.replace(regexDuplicateOperators, (match) => {
+    return match.charAt(match.length - 1)
+  })
 }
