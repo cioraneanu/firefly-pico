@@ -46,15 +46,7 @@ const dataStore = useDataStore()
 
 const barsList = computed(() => {
 
-  let dictionary = dataStore.transactionsListExpense.reduce((result, transaction) => {
-    let categoryId = Transaction.getCategoryId(transaction)
-
-
-    let amount = Transaction.getAmount(transaction)
-    let oldTotal = get(result, categoryId, 0)
-    result[categoryId] = oldTotal + amount
-    return result
-  }, {})
+  let dictionary = dataStore.dashboardExpensesByCategory
 
   let maxAmount = Math.max(...Object.values(dictionary))
 

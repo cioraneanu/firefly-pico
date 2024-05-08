@@ -45,20 +45,12 @@ const dataStore = useDataStore()
 
 const barsList = computed(() => {
 
-  let tagTotalDictionary = dataStore.transactionsListExpense.reduce((result, transaction) => {
-    let targetTag = Transaction.getTags(transaction).find(tag => get(tag, 'attributes.parent_id') === null)
-    let tagId = get(targetTag, 'id', 0)
+  const tagTotalDictionary = dataStore.dashboardExpensesByTag
 
-    let amount = Transaction.getAmount(transaction)
-    let oldTotal = get(result, tagId, 0)
-    result[tagId] = oldTotal + amount
-    return result
-  }, {})
+  const maxAmount = Math.max(...Object.values(tagTotalDictionary))
 
-  let maxAmount = Math.max(...Object.values(tagTotalDictionary))
-
-  let bars = Object.keys(tagTotalDictionary).map(tagId => {
-    let tag = dataStore.tagDictionaryById[tagId]
+  const bars = Object.keys(tagTotalDictionary).map(tagId => {
+    const tag = dataStore.tagDictionaryById[tagId]
     const amount = tagTotalDictionary[tagId].toFixed(0)
     const percent = (amount / maxAmount) * 100
     return {

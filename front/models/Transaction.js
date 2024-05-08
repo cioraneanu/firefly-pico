@@ -90,6 +90,10 @@ class Transaction extends BaseModel {
     }, 0)
   }
 
+  static getCurrency (transaction) {
+    return get(transaction, 'attributes.transactions.0.currency_code', [])
+  }
+
   static getTags (transaction) {
     return get(transaction, 'attributes.transactions.0.tags', [])
   }

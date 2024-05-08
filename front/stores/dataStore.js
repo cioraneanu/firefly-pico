@@ -19,6 +19,7 @@ import Transaction from '~/models/Transaction'
 import TransactionTransformer from '~/transformers/TransactionTransformer'
 import { listToTree, setLevel, sortByPath, treeToList } from '~/utils/DataUtils'
 import Tag from '~/models/Tag.js'
+import { convertAmount, transactionAmountInAccountCurrency, transactionsTotalInAccountCurrency } from '~/utils/CurrencyUtils'
 
 export const useDataStore = defineStore('data', {
   state: () => {
@@ -90,12 +91,36 @@ export const useDataStore = defineStore('data', {
       }
 
       return Object.keys(this.dashboardAccountsTotalByCurrency).reduce((result, currencyCode) => {
-        let currencyAmount = this.dashboardAccountsTotalByCurrency[currencyCode]
-        let exchangeSource = get(state.exchangeRates, `rates.${currencyCode}`)
-        let exchangeDestination = get(state.exchangeRates, `rates.${state.accountTotalCurrency}`)
-        let convertedCurrencyAmount = 1.0 * currencyAmount * exchangeDestination / exchangeSource
-        return result + convertedCurrencyAmount
+        const currencyAmount = this.dashboardAccountsTotalByCurrency[currencyCode]
+        return result + convertAmount(
+          currencyAmount,
+          currencyCode,
+          state.accountTotalCurrency,
+          state.exchangeRates
+        )
       }, 0).toFixed(0)
+    },
+
+    dashboardExpensesByCategory (state) {
+      return this.transactionsListExpense.reduce((result, transaction) => {
+        let categoryId = Transaction.getCategoryId(transaction)
+    
+        let oldTotal = get(result, categoryId, 0)
+        result[categoryId] = oldTotal + transactionAmountInAccountCurrency(transaction, state.accountTotalCurrency, state.exchangeRates)
+
+        return result
+      }, {})
+    },
+
+    dashboardExpensesByTag (state) {
+      return this.transactionsListExpense.reduce((result, transaction) => {
+        let targetTag = Transaction.getTags(transaction).find(tag => get(tag, 'attributes.parent_id') === null)
+        let tagId = get(targetTag, 'id', 0)
+    
+        let oldTotal = get(result, tagId, 0)
+        result[tagId] = oldTotal + transactionAmountInAccountCurrency(transaction, state.accountTotalCurrency, state.exchangeRates)
+        return result
+      }, {})
     },
 
     dashboardDateStart (state) {
@@ -114,11 +139,10 @@ export const useDataStore = defineStore('data', {
 
     dashboardExpenseByDay (state) {
       return state.dashboard.transactionsListLastWeek.reduce((result, transaction) => {
-        let date = DateUtils.dateToString(Transaction.getDate(transaction))
+        const date = DateUtils.dateToString(Transaction.getDate(transaction))
 
-        let amount = Transaction.getAmount(transaction)
-        let oldValue = get(result, date, 0)
-        result[date] = oldValue + amount
+        const oldValue = get(result, date, 0)
+        result[date] = oldValue + transactionAmountInAccountCurrency(transaction, state.accountTotalCurrency, state.exchangeRates)
 
         return result
       }, {})
@@ -137,21 +161,15 @@ export const useDataStore = defineStore('data', {
     },
 
     totalExpenseThisMonth (state) {
-      return this.transactionsListExpense.reduce((total, transaction) => {
-        return total + Transaction.getAmount(transaction)
-      }, 0)
+      return transactionsTotalInAccountCurrency(this.transactionsListExpense, state.accountTotalCurrency, state.exchangeRates)
     },
 
     totalIncomeThisMonth (state) {
-      return this.transactionsListIncome.reduce((total, transaction) => {
-        return total + Transaction.getAmount(transaction)
-      }, 0)
+      return transactionsTotalInAccountCurrency(this.transactionsListIncome, state.accountTotalCurrency, state.exchangeRates)
     },
 
     totalTransfersThisMonth (state) {
-      return this.transactionsListTransfers.reduce((total, transaction) => {
-        return total + Transaction.getAmount(transaction)
-      }, 0)
+      return transactionsTotalInAccountCurrency(this.transactionsListTransfers, state.accountTotalCurrency, state.exchangeRates)
     },
 
     totalSurplusThisMonth (state) {
