@@ -907,12 +907,16 @@ body {
 
 .layout {
     min-height: 100vh;
-    background: var(--van-background-2);
+    background: var(--van-background);
+    /*background: #f8f8f8;*/
 }
 
 body {
     background: var(--van-background);
+    /*background: #f2f2f2;*/
 }
+
+
 
 
 
