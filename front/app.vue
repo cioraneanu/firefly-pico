@@ -1,7 +1,10 @@
 <template>
-  <NuxtLayout>
-    <NuxtPage/>
-  </NuxtLayout>
+  <van-config-provider :theme="theme">
+    <NuxtLayout>
+      <NuxtPage/>
+    </NuxtLayout>
+  </van-config-provider>
+
 </template>
 
 
@@ -9,24 +12,15 @@ import { Locale } from 'vant';
 import enUS from 'vant/es/locale/lang/en-US';
 
 
-<script>
-
-// setup() {
-//   Locale.use('en-US', enUS);
-//   return {}
-// }
-
-
-</script>
-
 <script setup>
-// Locale.use('en-US', enUS);
-import { useDataStore } from '~/stores/dataStore'
+import {useDataStore} from '~/stores/dataStore'
 import RouteConstants from '~/constants/RouteConstants'
 
 const layout = 'custom'
 let dataStore = useDataStore()
 let appStore = useAppStore()
+
+const theme = computed(() => appStore.darkTheme ? "dark" : "white")
 
 onMounted(async () => {
   if (!appStore.authToken) {
@@ -38,7 +32,7 @@ onMounted(async () => {
   await appStore.fetchLatestAppVersion()
 })
 
-const { isLoading } = storeToRefs(dataStore)
+const {isLoading} = storeToRefs(dataStore)
 UIUtils.showLoadingWhen(isLoading)
 
 

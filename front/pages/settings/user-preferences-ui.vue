@@ -24,6 +24,11 @@
         />
 
         <app-boolean
+            label="Dark theme"
+            v-model="darkTheme"
+        />
+
+        <app-boolean
             label="Force transaction description lowercase"
             v-model="lowerCaseTransactionDescription"
         />
@@ -73,6 +78,9 @@ const numberFormat = ref(null)
 const numberFormatList = [NUMBER_FORMAT.eu, NUMBER_FORMAT.international]
 const isDropdownNumberFormatVisible = ref(false)
 
+const darkTheme = ref(false)
+
+
 const lowerCaseTransactionDescription = ref(false)
 const lowerCaseAccountName = ref(false)
 const lowerCaseCategoryName = ref(false)
@@ -90,16 +98,21 @@ const onSave = async () => {
   appStore.lowerCaseCategoryName = lowerCaseCategoryName.value
   appStore.lowerCaseTagName = lowerCaseTagName.value
 
+  appStore.darkTheme = darkTheme.value
+
   UIUtils.showToastSuccess('User preferences saved')
   init()
 }
 
 const init = () => {
   numberFormat.value = appStore.numberFormat
+
   lowerCaseTransactionDescription.value = appStore.lowerCaseTransactionDescription
   lowerCaseAccountName.value = appStore.lowerCaseAccountName
   lowerCaseCategoryName.value = appStore.lowerCaseCategoryName
   lowerCaseTagName.value = appStore.lowerCaseTagName
+
+  darkTheme.value = appStore.darkTheme
 }
 
 const toolbar = useToolbar()
