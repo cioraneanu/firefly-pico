@@ -13,5 +13,13 @@
     --transfer1: rgba(79, 195, 247, 1);
     --transfer2: rgba(41, 182, 246, 1);
     --transfer3: #E3F2FD;
+
+
+    --demo-color: #aaa;
+}
+
+
+.van-theme-dark {
+    --demo-color: #666;
 }
 
