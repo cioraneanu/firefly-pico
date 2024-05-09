@@ -17,7 +17,7 @@
       <template #right-icon>
         <div>
           <van-icon
-              v-if="modelValue"
+              v-if="modelValue && isClearable"
               @click.prevent.stop="onClear"
               name="clear"/>
         </div>
@@ -36,6 +36,7 @@
                 <span class="font-weight-400 text-size-12">{{ getDisplayName(item) }}</span>
               </slot>
               <van-icon
+                  v-if="isClearable"
                   :size="16"
                   style="color: #888"
                   @click.prevent.stop="onSelectCell(item)"
@@ -103,11 +104,11 @@
 
 
 <script setup>
-import {get} from 'lodash'
-import {useDataStore} from '~/stores/dataStore'
-import {useFormAttributes} from '~/composables/useFormAttributes'
-import {isEqual} from 'lodash/lang'
-import {useSwipeToDismiss} from '~/composables/useSwipeToDismiss'
+import { get } from 'lodash'
+import { useDataStore } from '~/stores/dataStore'
+import { useFormAttributes } from '~/composables/useFormAttributes'
+import { isEqual } from 'lodash/lang'
+import { useSwipeToDismiss } from '~/composables/useSwipeToDismiss'
 
 const dataStore = useDataStore()
 
@@ -173,7 +174,9 @@ const props = defineProps({
 })
 
 const attrs = useAttrs()
-const {dynamicAttrs} = useFormAttributes(attrs)
+const { dynamicAttrs } = useFormAttributes(attrs)
+
+const isClearable = computed(() => !('clearable' in attrs) || get(attrs, 'clearable'))
 
 const fieldClass = computed(() => {
   return {

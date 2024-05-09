@@ -14,6 +14,12 @@
       />
 
       <app-field-link
+          label="UI preferences"
+          :icon="TablerIconConstants.settingsUI"
+          @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_UI)"
+      />
+
+      <app-field-link
           label="Date preferences"
           :icon="TablerIconConstants.settingsUserPreferencesDate"
           @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_DATE)"
@@ -43,10 +49,12 @@
     </van-cell-group>
 
     <div class="text-muted subtitle flex-center mt-20 flex-column">
-      <div>Version {{ appStore.currentAppVersion }}</div>
+      <div>
+        <a :href="REPO_URL">Version: {{ appStore.currentAppVersion }}</a>
+      </div>
 
       <div v-if="appStore.isNewVersionAvailable" class="latest-version-badge">
-        New version available: {{ appStore.latestAppVersion }} 🎉
+        <a :href="REPO_URL">🎉 - Newer version available: {{ appStore.latestAppVersion }} - 🎉</a>
       </div>
 
 
@@ -106,6 +114,7 @@ import
 
 import RouteConstants from '~/constants/RouteConstants'
 import { useToolbar } from '~/composables/useToolbar'
+import { REPO_URL } from '~/constants/Constants'
 
 import TablerIconConstants from '~/constants/TablerIconConstants'
 

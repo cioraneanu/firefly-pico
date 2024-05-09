@@ -11,13 +11,14 @@ export const icons = {
   transaction: 'IconCoins',
   transactionTemplate: 'IconTemplate',
   dashboard: 'IconDeviceDesktopAnalytics',
+  exchangeRates: 'IconReplace',
 
   settingsAppConfig: 'IconTool',
   settingsUserPreferences: 'IconMoodCog',
   settingsUserPreferencesDate: 'IconCalendarEvent',
   settingsNewTransactionDefaults: 'IconCarambola',
+  settingsUI: 'IconCodeCircle',
   settingsAbout: 'IconInfoSquare',
-  exchangeRates: 'IconReplace',
 
   dashboardTotalExpenses: 'IconSquareRoundedMinus',
   dashboardTotalIncomes: 'IconSquareRoundedPlus',
