@@ -1,8 +1,10 @@
 <template>
-  <NuxtPwaManifest />
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+  <van-config-provider :theme="theme">
+    <NuxtPwaManifest />
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
+  </van-config-provider>
 </template>
 
 <script>
