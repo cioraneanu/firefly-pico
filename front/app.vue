@@ -7,15 +7,6 @@
   </van-config-provider>
 </template>
 
-<script>
-// import { Locale } from 'vant'
-// import enUS from 'vant/es/locale/lang/en-US'
-// setup() {
-//   Locale.use('en-US', enUS);
-//   return {}
-// }
-</script>
-
 <script setup>
 import {useDataStore} from '~/stores/dataStore'
 import RouteConstants from '~/constants/RouteConstants'
