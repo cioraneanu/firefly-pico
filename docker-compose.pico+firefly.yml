@@ -17,6 +17,7 @@ services:
       - DB_DATABASE=firefly-pico
       - DB_USERNAME=firefly-pico
       - DB_PASSWORD=very-secure-pwd-pico
+      - TZ=Europe/London
     networks:
       firefly:
 

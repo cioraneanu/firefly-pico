@@ -8,14 +8,23 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "prod": "node .output/server/index.mjs"
+    "prod": "node .output/server/index.mjs",
+    "lint": "npm run lint:eslint && npm run lint:prettier",
+    "lint:fix": "npm run lint:eslint:fix && npm run lint:prettier:fix",
+    "lint:eslint": "eslint .",
+    "lint:eslint:fix": "eslint . --fix",
+    "lint:prettier": "prettier . --check",
+    "lint:prettier:fix": "prettier --write --list-different ."
   },
   "devDependencies": {
     "@faker-js/faker": "^8.4.1",
+    "@nuxt/eslint": "^0.3.10",
     "@nuxtjs/device": "^3.1.1",
     "@vant/nuxt": "^1.0.4",
+    "eslint-config-prettier": "^9.1.0",
     "nuxt": "^3.11.2",
-    "nuxt-svgo": "^4.0.0"
+    "nuxt-svgo": "^4.0.0",
+    "prettier": "^3.2.5"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.5.1",
