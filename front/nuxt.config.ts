@@ -65,8 +65,8 @@ export default defineNuxtConfig({
     manifest: {
       name: 'Pico',
       short_name: 'Pico',
-      theme_color: '#1867c0',
-      background_color: '#1867c0',
+      theme_color: '#ffffff',
+      background_color: '#ffffff',
       icons: [
         {
           src: '/android-chrome-192x192.png',
