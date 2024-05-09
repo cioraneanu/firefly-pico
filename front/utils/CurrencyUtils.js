@@ -1,26 +1,27 @@
 import { get } from 'lodash'
 import Transaction from '~/models/Transaction'
 
-export function convertAmount(amount, fromCurrency, toCurrency, exchangeRates) {
-  const exchangeSource = get(exchangeRates, `rates.${fromCurrency}`)
-  const exchangeDestination = get(exchangeRates, `rates.${toCurrency}`)
+export function convertCurrency(amount, fromCurrency, toCurrency) {
+  const dataStore = useDataStore()
+
+  const exchangeSource = get(dataStore.exchangeRates, `rates.${fromCurrency}`)
+  const exchangeDestination = get(dataStore.exchangeRates, `rates.${toCurrency}`)
   return (1.0 * amount * exchangeDestination) / exchangeSource
 }
 
-export function transactionAmountInAccountCurrency (transaction, accountCurrency, exchangeRates) {
+export function convertTransactionAmountToCurrency (transaction, accountCurrency) {
   const amount = Transaction.getAmount(transaction)
   const currency = Transaction.getCurrency(transaction)
 
-  return convertAmount(
+  return convertCurrency(
     amount,
     currency,
     accountCurrency,
-    exchangeRates,
   )
 }
 
-export function transactionsTotalInAccountCurrency (transactions, accountCurrency, exchangeRates) {
+export function convertTransactionsTotalAmountToCurrency (transactions, accountCurrency) {
   return transactions.reduce((total, transaction) => {
-    return total + transactionAmountInAccountCurrency(transaction, accountCurrency, exchangeRates)
+    return total + convertTransactionAmountToCurrency(transaction, accountCurrency)
   }, 0);
 }
