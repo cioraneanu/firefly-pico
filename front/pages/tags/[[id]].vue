@@ -183,5 +183,14 @@ const onRefresh = () => {
   dataStore.fetchTags()
 }
 
+watch(tag, (newValue) => {
+  if (!appStore.lowerCaseTagName) {
+    return
+  }
+  tag.value = newValue.toLowerCase()
+})
+
+
+
 
 </script>

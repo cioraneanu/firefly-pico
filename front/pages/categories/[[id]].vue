@@ -59,15 +59,9 @@ import { ref } from 'vue';
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
 import _ from 'lodash'
-import { startOfDay } from 'date-fns'
-import UIUtils from '~/utils/UIUtils'
-import DateUtils from '~/utils/DateUtils'
 import { useAppStore } from '~/stores/appStore'
 import { ref } from 'vue'
-import AccountRepository from '~/repository/AccountRepository'
 import { useForm } from '~/composables/useForm'
-import AccountTransformer from '~/transformers/AccountTransformer'
-import Account from '~/models/Account'
 import { generateChildren } from '~/utils/VueUtils'
 import Category from '~/models/Category'
 import { useToolbar } from '~/composables/useToolbar'
@@ -103,7 +97,7 @@ let {
   itemId, item, isEmpty, title, addButtonText,
   isLoading,
   onClickBack, saveItem, onDelete, onNew,
-  onValidationError
+  onValidationError,
 } = useForm({
   form: form,
   titleAdd: 'Add category',
@@ -117,16 +111,23 @@ let {
 })
 
 const {
-  name, type, role, icon
+  name, type, role, icon,
 } = generateChildren(item, [
   { computed: 'name', parentKey: 'attributes.name' },
   { computed: 'icon', parentKey: `attributes.icon` },
 ])
 
+watch(name, (newValue) => {
+  if (!appStore.lowerCaseCategoryName) {
+    return
+  }
+  name.value = newValue.toLowerCase()
+})
+
 const toolbar = useToolbar()
 toolbar.init({
   title: title,
-  leftText: "List",
+  leftText: 'List',
   backRoute: RouteConstants.ROUTE_CATEGORY_LIST,
 })
 

@@ -159,6 +159,13 @@ const isRoleVisible = computed(() => {
   return _.get(type.value, 'code') === Account.types.TYPE_ASSET
 })
 
+watch(name, (newValue) => {
+  if (!appStore.lowerCaseAccountName) {
+    return
+  }
+  name.value = newValue.toLowerCase()
+})
+
 const toolbar = useToolbar()
 toolbar.init({
   title: title,

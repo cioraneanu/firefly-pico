@@ -154,12 +154,6 @@
       </div>
     </van-form>
 
-
-    <transaction-voice-dialog
-        v-model:show="showTransactionVoice"
-        @change="onTemplateAssistant"
-    />
-
   </div>
 
 
@@ -171,20 +165,20 @@ import { ref } from 'vue';
 <script setup>
 
 import RouteConstants from '~/constants/RouteConstants'
-import {useDataStore} from '~/stores/dataStore'
-import _, {get, head, isEqual} from 'lodash'
-import {useAppStore} from '~/stores/appStore'
-import {ref} from 'vue'
-import {useForm} from '~/composables/useForm'
+import { useDataStore } from '~/stores/dataStore'
+import _, { get, head, isEqual } from 'lodash'
+import { useAppStore } from '~/stores/appStore'
+import { ref } from 'vue'
+import { useForm } from '~/composables/useForm'
 import Account from '~/models/Account'
-import {generateChildren} from '~/utils/VueUtils'
+import { generateChildren } from '~/utils/VueUtils'
 import Transaction from '~/models/Transaction'
-import {useToolbar} from '~/composables/useToolbar'
+import { useToolbar } from '~/composables/useToolbar'
 import TagSelect from '~/components/select/tag-select.vue'
 import Category from '~/models/Category'
-import {FORM_CONSTANTS_TRANSACTION_FIELDS} from '~/constants/FormConstants'
+import { FORM_CONSTANTS_TRANSACTION_FIELDS } from '~/constants/FormConstants'
 import Tag from '~/models/Tag'
-import {isStringEmpty} from '~/utils/DataUtils'
+import { isStringEmpty } from '~/utils/DataUtils'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 
 const refAmount = ref(null)
@@ -227,15 +221,15 @@ const {
   category,
   type,
 } = generateChildren(item, [
-  {computed: 'amount', parentKey: `${pathKey}.amount`},
-  {computed: 'date', parentKey: `${pathKey}.date`},
-  {computed: 'tags', parentKey: `${pathKey}.tags`},
-  {computed: 'description', parentKey: `${pathKey}.description`},
-  {computed: 'notes', parentKey: `${pathKey}.notes`},
-  {computed: 'accountSource', parentKey: `${pathKey}.accountSource`},
-  {computed: 'accountDestination', parentKey: `${pathKey}.accountDestination`},
-  {computed: 'category', parentKey: `${pathKey}.category`},
-  {computed: 'type', parentKey: `${pathKey}.type`},
+  { computed: 'amount', parentKey: `${pathKey}.amount` },
+  { computed: 'date', parentKey: `${pathKey}.date` },
+  { computed: 'tags', parentKey: `${pathKey}.tags` },
+  { computed: 'description', parentKey: `${pathKey}.description` },
+  { computed: 'notes', parentKey: `${pathKey}.notes` },
+  { computed: 'accountSource', parentKey: `${pathKey}.accountSource` },
+  { computed: 'accountDestination', parentKey: `${pathKey}.accountDestination` },
+  { computed: 'category', parentKey: `${pathKey}.category` },
+  { computed: 'type', parentKey: `${pathKey}.type` },
 ])
 
 const transactions = computed(() => _.get(item.value, 'attributes.transactions', []))
@@ -283,7 +277,6 @@ const onTransactionTemplateSelected = (transactionTemplate) => {
   tags.value = transactionTemplate.tags
 }
 
-
 watch(category, async (newValue) => {
   if (!appStore.copyCategoryToDescription || !isStringEmpty(description.value) || itemId.value || !newValue) {
     return
@@ -321,12 +314,12 @@ watch(tags, async (newValue) => {
 })
 
 const onTemplateAssistant = async ({
-                                     tag: newTag,
-                                     category: newCategory,
-                                     transactionTemplate: transactionTemplate,
-                                     amount: newAmount,
-                                     description: newDescription
-                                   }) => {
+  tag: newTag,
+  category: newCategory,
+  transactionTemplate: transactionTemplate,
+  amount: newAmount,
+  description: newDescription,
+}) => {
   if (newTag) {
     tags.value = Tag.getTagWithParents(newTag)
     // tags.value = [newTag]
@@ -388,7 +381,7 @@ const accountSourceBinding = computed(() => {
   const isRequired = isTypeExpense.value || isTypeTransfer.value
   return {
     required: isRequired,
-    rules: isRequired ? [{required: true, message: 'Source account is required!'}] : [],
+    rules: isRequired ? [{ required: true, message: 'Source account is required!' }] : [],
   }
 })
 
@@ -396,7 +389,7 @@ const accountDestinationBinding = computed(() => {
   const isRequired = isTypeIncome.value || isTypeTransfer.value
   return {
     required: isRequired,
-    rules: isRequired ? [{required: true, message: 'Destination account is required!'}] : [],
+    rules: isRequired ? [{ required: true, message: 'Destination account is required!' }] : [],
   }
 })
 
@@ -411,6 +404,13 @@ watch(type, (newValue, oldValue) => {
     accountSource.value = accountDestination.value
     accountDestination.value = temp
   }
+})
+
+watch(description, (newValue) => {
+  if (!appStore.lowerCaseTransactionDescription) {
+    return
+  }
+  description.value = newValue.toLowerCase()
 })
 
 const showSourceAccountSuggestion = computed(() => !appStore.defaultAccountSource && !accountSource.value)

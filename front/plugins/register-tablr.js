@@ -28,11 +28,13 @@ import {
   IconTemplate,
   IconTool,
   IconTransfer,
-  IconReplace
+  IconReplace,
+  IconCodeCircle
 } from '@tabler/icons-vue'
 
 export default defineNuxtPlugin(nuxtApp => {
 
+  nuxtApp.vueApp.component('IconCodeCircle', IconCodeCircle)
   nuxtApp.vueApp.component('IconReplace', IconReplace)
   nuxtApp.vueApp.component('IconCarambola', IconCarambola)
   nuxtApp.vueApp.component('IconDelta', IconDelta)

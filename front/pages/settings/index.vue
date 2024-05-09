@@ -14,6 +14,12 @@
       />
 
       <app-field-link
+          label="UI preferences"
+          :icon="TablerIconConstants.settingsUI"
+          @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_UI)"
+      />
+
+      <app-field-link
           label="Date preferences"
           :icon="TablerIconConstants.settingsUserPreferencesDate"
           @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_DATE)"
