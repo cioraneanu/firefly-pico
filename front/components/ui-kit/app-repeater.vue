@@ -1,14 +1,9 @@
 <!-- OK-->
 <template>
   <div>
-    <draggable
-        v-model="modelValue"
-        handle=".app-repeater-handle"
-        class="w-100"
-        itemKey="id">
+    <draggable v-model="modelValue" handle=".app-repeater-handle" class="w-100" itemKey="id">
       <template #item="{ element, index }">
         <div>
-
           <!--          <van-swipe-cell>-->
           <!--            <div class="flex-center-vertical">-->
           <!--              <div v-if="!disabled && isDraggable" class="p-2 app-repeater-handle">-->
@@ -28,17 +23,15 @@
 
           <div class="flex-center-vertical">
             <div v-if="!disabled && isDraggable" class="p-1 app-repeater-handle">
-              <app-icon :icon="TablerIconConstants.repeaterHandler" :size="20"/>
+              <app-icon :icon="TablerIconConstants.repeaterHandler" :size="20" />
             </div>
 
             <div class="flex-1">
-              <slot name="content" v-bind="{ index, element, removeItemAtIndex }"/>
+              <slot name="content" v-bind="{ index, element, removeItemAtIndex }" />
             </div>
 
-            <van-button
-                v-if="!props.disabled && props.isListDynamic"
-                @click="removeItemAtIndex(index)">
-              <van-icon name="delete-o" size="20"/>
+            <van-button v-if="!props.disabled && props.isListDynamic" @click="removeItemAtIndex(index)">
+              <van-icon name="delete-o" size="20" />
             </van-button>
           </div>
         </div>
@@ -46,23 +39,13 @@
 
       <template #footer>
         <div>
-
           <div class="app-repeater-no-values" v-if="isListEmpty">No values set. Use the 'add' button.</div>
           <div v-if="!props.disabled && props.isListDynamic">
-            <van-button
-                class="w-100"
-                style="border: 1px dashed #888;"
-                @click="addItem">
-              Add
-            </van-button>
+            <van-button class="w-100" style="border: 1px dashed #888" @click="addItem"> Add </van-button>
           </div>
-
-
         </div>
       </template>
-
     </draggable>
-
   </div>
 </template>
 
@@ -76,16 +59,16 @@ const props = defineProps({
   emptyItem: {},
   isDraggable: {
     type: Boolean,
-    default: true
+    default: true,
   },
   disabled: {
     type: Boolean,
-    default: false
+    default: false,
   },
   isListDynamic: {
     type: Boolean,
-    default: true
-  }
+    default: true,
+  },
 })
 
 const modelValue = defineModel()
@@ -108,9 +91,6 @@ const addItem = () => {
 const removeItemAtIndex = (index) => {
   modelValue.value.splice(index, 1)
 }
-
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

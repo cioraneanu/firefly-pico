@@ -1,9 +1,8 @@
 <template>
-
   <div class="app-form">
     <app-top-toolbar>
       <template #right>
-        <app-button-list-add v-if="addButtonText" @click="onNew"/>
+        <app-button-list-add v-if="addButtonText" @click="onNew" />
       </template>
     </app-top-toolbar>
 
@@ -11,50 +10,31 @@
     <!--        v-model="dataStore.isLoadingTags"-->
     <!--        @refresh="onRefresh">-->
 
-    <van-form
-        ref="form"
-        @submit="saveItem"
-        @failed="onValidationError"
-        class="">
-
-
+    <van-form ref="form" @submit="saveItem" @failed="onValidationError" class="">
       <van-cell-group inset>
-
         <app-field
-            v-model="tag"
-            name="Name"
-            label="Name"
-            rows="1"
-            autosize
-            left-icon="notes-o"
-            placeholder="Description (lowercase)"
-            :rules="[{ required: true, message: 'Name is required' }]"
-            required
+          v-model="tag"
+          name="Name"
+          label="Name"
+          rows="1"
+          autosize
+          left-icon="notes-o"
+          placeholder="Description (lowercase)"
+          :rules="[{ required: true, message: 'Name is required' }]"
+          required
         />
 
-        <tag-select
-            label="Parent tag"
-            v-model="parentTag"
-            :isMultiSelect="false"
-        />
+        <tag-select label="Parent tag" v-model="parentTag" :isMultiSelect="false" />
 
-        <icon-select
-            v-model="icon"
-        />
+        <icon-select v-model="icon" />
 
-        <app-boolean
-            label="Mark as to-do"
-            v-model="isTodo">
-
+        <app-boolean label="Mark as to-do" v-model="isTodo">
           <template #label>
             <div class="flex-center-vertical gap-1">
-              <div class="flex-1">
-                Mark as to-do
-              </div>
-              <app-tutorial v-bind="TUTORIAL_CONSTANTS.todoTag"/>
+              <div class="flex-1">Mark as to-do</div>
+              <app-tutorial v-bind="TUTORIAL_CONSTANTS.todoTag" />
             </div>
           </template>
-
         </app-boolean>
 
         <!--        <app-icon-select-new-->
@@ -72,34 +52,22 @@
         <!--            left-icon="notes-o"-->
         <!--            placeholder="Icon"-->
         <!--        />-->
-
       </van-cell-group>
 
+      <div style="margin: 16px">
+        <app-button-form-save />
 
-      <div style="margin: 16px;">
-        <app-button-form-save/>
-
-        <app-button-form-delete
-            class="mt-10"
-            v-if="itemId"
-            @click="onDelete"
-        />
-
+        <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
       </div>
     </van-form>
 
     <!--    </van-pull-refresh>-->
-
   </div>
-
-
 </template>
-
 
 import { ref } from 'vue';
 
 <script setup>
-
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
 import _, { cloneDeep, get, set } from 'lodash'
@@ -120,7 +88,6 @@ const route = useRoute()
 const form = ref(null)
 
 const fetchItem = async () => {
-
   let tag = cloneDeep(dataStore.tagDictionaryById[itemId.value])
 
   let parentTagId = get(tag, 'attributes.parent_id')
@@ -136,11 +103,11 @@ const onEvent = (event, payload) => {
     newItem = TagTransformer.transformFromApi(newItem)
 
     let isTodo = get(newItem, 'attributes.is_todo')
-    const oldTagsList = dataStore.tagList.map(item => isTodo && set(item, 'attributes.is_todo', false) || item).filter(item => item.id !== itemId.value)
+    const oldTagsList = dataStore.tagList.map((item) => (isTodo && set(item, 'attributes.is_todo', false)) || item).filter((item) => item.id !== itemId.value)
     dataStore.tagList = [newItem, ...oldTagsList]
   }
   if (event === 'onPostDelete') {
-    dataStore.tagList = dataStore.tagList.filter(item => parseInt(item.id) !== parseInt(itemId.value))
+    dataStore.tagList = dataStore.tagList.filter((item) => parseInt(item.id) !== parseInt(itemId.value))
   }
 }
 
@@ -148,12 +115,7 @@ const resetFields = () => {
   tag.value = ''
 }
 
-let {
-  itemId, item, isEmpty, title, addButtonText,
-  isLoading,
-  onClickBack, saveItem, onDelete, onNew,
-  onValidationError,
-} = useForm({
+let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError } = useForm({
   form: form,
   titleAdd: 'Add tag',
   titleEdit: 'Edit tag',
@@ -189,8 +151,4 @@ watch(tag, (newValue) => {
   }
   tag.value = newValue.toLowerCase()
 })
-
-
-
-
 </script>

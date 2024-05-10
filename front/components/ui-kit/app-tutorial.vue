@@ -1,5 +1,4 @@
 <template>
-
   <!--  <van-popover v-model:show="showPopover">-->
 
   <!--    <div @click="showPopover = false" class="app-tutorial-popover" style="width: 260px;">-->
@@ -12,7 +11,6 @@
   <!--    </template>-->
   <!--  </van-popover>-->
 
-
   <div class="app-tutorial">
     <div @click.stop.prevent="showPopover = true" class="app-tutorial-button">?</div>
 
@@ -23,21 +21,14 @@
       </div>
     </van-dialog>
   </div>
-
 </template>
 
-
 <script setup>
-
 const showPopover = ref(false)
 const props = defineProps({
   title: {},
   body: {},
 })
-
-
 </script>
 
-<style>
-
-</style>
+<style></style>

@@ -1,47 +1,24 @@
 <template>
-
   <div :class="formClass">
     <app-top-toolbar>
       <template #right>
-        <app-button-list-add @click="onAdd"/>
+        <app-button-list-add @click="onAdd" />
       </template>
     </app-top-toolbar>
 
+    <empty-list v-if="isEmpty" />
 
-    <empty-list v-if="isEmpty"/>
+    <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
+      <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
+        <app-list-search v-if="isSearchVisible" v-model="search" />
 
-
-    <van-pull-refresh
-        v-model="isRefreshing"
-        @refresh="onRefresh">
-
-      <van-list
-          class="p-1"
-          :finished="isFinished"
-          @load="onLoadMore">
-
-        <app-list-search v-if="isSearchVisible" v-model="search"/>
-
-        <tag-list-item
-            v-for="item in filteredList"
-            :key="item.id"
-            :value="item"
-            @onEdit="onEdit"
-            @onDelete="onDelete"
-        />
-
+        <tag-list-item v-for="item in filteredList" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
       </van-list>
-
     </van-pull-refresh>
-
-
   </div>
-
 </template>
 
-
 <script setup>
-
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
 import { useList } from '~/composables/useList'
@@ -54,7 +31,7 @@ let dataStore = useDataStore()
 
 const onEvent = (event, payload) => {
   if (event === 'onPostDelete') {
-    dataStore.tagList = dataStore.tagList.filter(item => parseInt(item.id) !== parseInt(payload.id))
+    dataStore.tagList = dataStore.tagList.filter((item) => parseInt(item.id) !== parseInt(payload.id))
   }
 }
 
@@ -64,17 +41,12 @@ const filteredList = computed(() => {
   if (search.value.length === 0) {
     return list.value
   }
-  return list.value.filter(item => {
+  return list.value.filter((item) => {
     return Tag.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
   })
 })
 
-const {
-  isLoading, isFinished, isRefreshing,
-  page, pageSize, totalPages, listTotalCount,
-  list, isEmpty,
-  onAdd, onEdit, onDelete,
-} = useList({
+const { isLoading, isFinished, isRefreshing, page, pageSize, totalPages, listTotalCount, list, isEmpty, onAdd, onEdit, onDelete } = useList({
   title: 'Tags list',
   routeList: RouteConstants.ROUTE_TAG_LIST,
   routeForm: RouteConstants.ROUTE_TAG_ID,
@@ -84,7 +56,7 @@ const {
 
 const formClass = computed(() => ({
   'app-form': true,
-  'empty': isEmpty.value,
+  empty: isEmpty.value,
 }))
 
 const onRefresh = async () => {
@@ -113,6 +85,4 @@ toolbar.init({
   title: 'Tags list',
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })
-
-
 </script>

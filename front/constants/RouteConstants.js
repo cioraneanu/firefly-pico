@@ -16,7 +16,6 @@ export default {
   ROUTE_SETTINGS_ABOUT: '/settings/about',
   ROUTE_EXCHANGE_RATES: '/exchange-rates',
 
-
   ROUTE_TRANSACTION_TEMPLATE_LIST: '/transaction-templates/list',
   ROUTE_TRANSACTION_TEMPLATE_ID: '/transaction-templates',
 
@@ -32,8 +31,8 @@ export default {
   ROUTE_CURRENCY_LIST: '/currencies/list',
   ROUTE_CURRENCY_ID: '/currencies',
 
-  isForm (routeForm, currentForm) {
+  isForm(routeForm, currentForm) {
     let regex = new RegExp(`${routeForm}/[0-9]+`)
     return regex.test(currentForm)
-  }
+  },
 }

@@ -1,16 +1,11 @@
 <template>
-  <div>
-    Page Mihai
-  </div>
+  <div>Page Mihai</div>
 </template>
-
 
 <script setup>
 definePageMeta({
   layout: 'empty',
 })
 
-onMounted(() => {
-})
-
+onMounted(() => {})
 </script>

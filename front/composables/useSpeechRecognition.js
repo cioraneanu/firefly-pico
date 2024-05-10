@@ -3,7 +3,7 @@ import UIUtils from '~/utils/UIUtils'
 import * as LanguageConstants from '~/constants/LanguageConstants'
 
 // by convention, composable function names start with "use"
-export function useSpeechRecognition ({ language, onSpeechFinished }) {
+export function useSpeechRecognition({ language, onSpeechFinished }) {
   // state encapsulated and managed by the composable
 
   let speechRecognition = null
@@ -92,7 +92,6 @@ export function useSpeechRecognition ({ language, onSpeechFinished }) {
         //     textTemporary.value += event.results[i][0].transcript
         //   }
         // }
-
       }
     } else {
       UIUtils.showToastError('Speech recognisition not available. Please use a different browser...')

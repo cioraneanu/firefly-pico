@@ -1,82 +1,38 @@
 <template>
-
   <div class="app-form">
-    <app-top-toolbar/>
+    <app-top-toolbar />
 
-    <van-form
-        @submit="onSave"
-        class="">
+    <van-form @submit="onSave" class="">
       <van-cell-group inset>
         <!--        <div class="van-cell-group-title">Setup</div>-->
 
-        <app-field
-            left-icon="link-o"
-            v-model="picoBackendURL"
-            label="Pico backend URL"
-            :rules="[{ required: true, message: 'This field is required' }]"
-            required
-        />
+        <app-field left-icon="link-o" v-model="picoBackendURL" label="Pico backend URL" :rules="[{ required: true, message: 'This field is required' }]" required />
 
-        <settings-token-field
-            v-model="authToken"
-            required
-        />
-
-
+        <settings-token-field v-model="authToken" required />
       </van-cell-group>
-
 
       <van-cell-group inset>
         <div class="van-cell-group-title">Loaded data stats</div>
 
         <van-grid :column-num="3">
+          <app-config-stat :icon="TablerIconConstants.account" name="Account" :value="accountsCount" />
 
-          <app-config-stat
-              :icon="TablerIconConstants.account"
-              name="Account"
-              :value="accountsCount"
-          />
+          <app-config-stat :icon="TablerIconConstants.category" name="Categories" :value="categoriesCount" />
 
-          <app-config-stat
-              :icon="TablerIconConstants.category"
-              name="Categories"
-              :value="categoriesCount"
-          />
+          <app-config-stat :icon="TablerIconConstants.tag" name="Tags" :value="tagsCount" />
 
-          <app-config-stat
-              :icon="TablerIconConstants.tag"
-              name="Tags"
-              :value="tagsCount"
-          />
+          <app-config-stat :icon="TablerIconConstants.transactionTemplate" name="Templates" :value="transactionTemplatesCount" />
 
-          <app-config-stat
-              :icon="TablerIconConstants.transactionTemplate"
-              name="Templates"
-              :value="transactionTemplatesCount"
-          />
-
-          <app-config-stat
-              :icon="TablerIconConstants.lastSync"
-              name="Last sync"
-              :value="lastSync"
-          />
-
+          <app-config-stat :icon="TablerIconConstants.lastSync" name="Last sync" :value="lastSync" />
         </van-grid>
-
       </van-cell-group>
 
-      <app-button-form-save/>
+      <app-button-form-save />
     </van-form>
-
-
   </div>
-
-
 </template>
 
-
 <script setup>
-
 import { onMounted, ref } from 'vue'
 import { useAppStore } from '~/stores/appStore'
 import { useDataStore } from '~/stores/dataStore'
@@ -135,5 +91,4 @@ toolbar.init({
   title: 'App settings',
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
-
 </script>

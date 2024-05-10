@@ -1,67 +1,38 @@
 <template>
   <div class="van-cell-fake">
-    <van-field
-        :model-value="modelValueDisplayName"
-        :class="fieldClass"
-        :label="label"
-        :placeholder="props.placeholder"
-        v-bind="dynamicAttrs"
-        @click.stop="onShowDropdown"
-        is-link
-        readonly>
-
+    <van-field :model-value="modelValueDisplayName" :class="fieldClass" :label="label" :placeholder="props.placeholder" v-bind="dynamicAttrs" @click.stop="onShowDropdown" is-link readonly>
       <template v-if="$slots.label" #label>
-        <slot name="label"/>
+        <slot name="label" />
       </template>
 
       <template #right-icon>
         <div>
-          <van-icon
-              v-if="modelValue && isClearable"
-              @click.prevent.stop="onClear"
-              name="clear"/>
+          <van-icon v-if="modelValue && isClearable" @click.prevent.stop="onClear" name="clear" />
         </div>
       </template>
-
 
       <!--      <template #input v-if="isMultiSelect">-->
       <template #input>
         <slot name="input">
           <div v-if="isEmpty" class="text-muted">No selection...</div>
           <div class="display-flex flex-wrap" style="gap: 4px">
-            <div
-                v-for="item in modelValueList"
-                class="app-select-option-tag flex-center-vertical gap-2">
+            <div v-for="item in modelValueList" class="app-select-option-tag flex-center-vertical gap-2">
               <slot name="inputItemContent" :item="item">
                 <span class="font-weight-400 text-size-12">{{ getDisplayName(item) }}</span>
               </slot>
-              <van-icon
-                  v-if="isClearable"
-                  :size="16"
-                  style="color: #888"
-                  @click.prevent.stop="onSelectCell(item)"
-                  name="clear"/>
+              <van-icon v-if="isClearable" :size="16" style="color: #888" @click.prevent.stop="onSelectCell(item)" name="clear" />
             </div>
-
           </div>
         </slot>
       </template>
     </van-field>
 
-    <van-popup
-        v-model:show="showDropdown"
-        round
-        position="bottom"
-        style="height: 90%; padding-top: 4px;">
-
+    <van-popup v-model:show="showDropdown" round position="bottom" style="height: 90%; padding-top: 4px">
       <div ref="popupRef" class="h-100 display-flex flex-column qqq">
-
         <div v-if="props.popupTitle" class="van-popup-title">{{ props.popupTitle }}</div>
 
-        <div v-if="hasSearch"
-             style="margin-right: 12px;"
-             class="p-1 flex-center-vertical gap-1">
-          <van-search v-model="search" placeholder="Search..." class="flex-1"/>
+        <div v-if="hasSearch" style="margin-right: 12px" class="p-1 flex-center-vertical gap-1">
+          <van-search v-model="search" placeholder="Search..." class="flex-1" />
 
           <slot name="top-right"></slot>
         </div>
@@ -69,24 +40,15 @@
         <div ref="popupContentRef" class="flex-1 flex-column overflow-auto mt-20">
           <slot name="popup" :onSelectCell="onSelectCell">
             <van-grid :column-num="columns">
-              <template
-                  v-for="(item, index) in list"
-                  :key="index">
-
-                <van-grid-item
-                    @click="onSelectCell(item)"
-                    style="cursor: pointer"
-                    :class="getOptionClass(item)">
+              <template v-for="(item, index) in list" :key="index">
+                <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
                   <template #default>
                     <slot name="item" :item="item">
                       <!--                      <div class="">-->
                       <!--                      {{ getDisplayName(item) }}-->
                       <!--                      </div>-->
 
-                      <app-select-option
-                          :text="getDisplayName(item)"
-                      />
-
+                      <app-select-option :text="getDisplayName(item)" />
                     </slot>
                   </template>
                 </van-grid-item>
@@ -94,14 +56,10 @@
             </van-grid>
           </slot>
         </div>
-
       </div>
-
-
     </van-popup>
   </div>
 </template>
-
 
 <script setup>
 import { get } from 'lodash'
@@ -123,14 +81,14 @@ const isItemSelected = (option) => {
     return false
   }
   if (props.isMultiSelect) {
-    return modelValue.value.some(item => isEqual(item, option))
+    return modelValue.value.some((item) => isEqual(item, option))
   }
   return isEqual(modelValue.value, option)
 }
 
 const getOptionClass = (option) => {
   return {
-    'active': isItemSelected(option),
+    active: isItemSelected(option),
   }
 }
 
@@ -181,7 +139,7 @@ const isClearable = computed(() => !('clearable' in attrs) || get(attrs, 'cleara
 const fieldClass = computed(() => {
   return {
     'app-field': true,
-    'empty': !modelValue.value,
+    empty: !modelValue.value,
   }
 })
 
@@ -228,9 +186,9 @@ const getDisplayName = (item) => {
 const onSelectCell = (item) => {
   if (props.isMultiSelect) {
     let newValue = modelValue.value ?? []
-    let isSelected = newValue.some(value => isEqual(item, value))
+    let isSelected = newValue.some((value) => isEqual(item, value))
     if (isSelected) {
-      newValue = newValue.filter(value => !isEqual(item, value))
+      newValue = newValue.filter((value) => !isEqual(item, value))
     } else {
       newValue = [...newValue, item]
     }
@@ -261,14 +219,10 @@ useSwipeToDismiss({
   swipeRef: popupContentRef,
   showDropdown: showDropdown,
 })
-
-
 </script>
 
 <style>
-
 .empty .van-field__control {
   color: #ddd;
 }
-
 </style>

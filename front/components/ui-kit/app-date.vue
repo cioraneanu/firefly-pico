@@ -1,38 +1,21 @@
 <template>
-
   <div class="">
-
     <!--    <van-cell :title="label" :value="date" @click="show = true"/>-->
-    <van-field
-        v-model="getSelectedName"
-        is-link
-        readonly
-        class="app-field"
-        :label="label"
-        placeholder="No date"
-        @click="show = true"
-        v-bind="dynamicAttrs">
+    <van-field v-model="getSelectedName" is-link readonly class="app-field" :label="label" placeholder="No date" @click="show = true" v-bind="dynamicAttrs">
       <template #input>
         <div>
           <div :class="labelClass">
             {{ getSelectedName }}
           </div>
-
         </div>
-
       </template>
 
       <template #right-icon>
         <div>
-          <van-icon
-              v-if="modelValue"
-              @click.prevent.stop="date = null"
-              name="clear"/>
+          <van-icon v-if="modelValue" @click.prevent.stop="date = null" name="clear" />
         </div>
       </template>
-
     </van-field>
-
 
     <div v-if="false" class="display-flex" style="gap: 3px">
       <!--      <div class="van-field__label"/>-->
@@ -43,29 +26,17 @@
         <van-button @click.prevent.stop="onClickedToday" type="default" size="normal">Today</van-button>
         <van-button @click.prevent.stop="onClickedAddDay" type="default" size="normal">+1</van-button>
       </div>
-
     </div>
 
     <!--    <van-cell title="Cell title" :value="getSelectedName" is-link @click="show = true" />-->
 
-
-    <van-calendar
-
-        v-model:show="show"
-        @confirm="onConfirm"
-        :show-confirm="false"
-        color="#000"
-        :min-date="minDate">
+    <van-calendar v-model:show="show" @confirm="onConfirm" :show-confirm="false" color="#000" :min-date="minDate">
       <template #title>
-        <div ref="appCalendar">
-          Select a date
-        </div>
+        <div ref="appCalendar">Select a date</div>
       </template>
     </van-calendar>
   </div>
-
 </template>
-
 
 <script setup>
 import { useDataStore } from '~/stores/dataStore'
@@ -89,10 +60,10 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue'])
 
 const date = computed({
-  get () {
+  get() {
     return props.modelValue
   },
-  set (value) {
+  set(value) {
     emit('update:modelValue', value)
   },
 })
@@ -132,13 +103,12 @@ const onClickedAddDay = () => {
 
 const appCalendar = ref(null)
 useSwipeToDismiss({
-  onSwipe: () => {show.value = false},
+  onSwipe: () => {
+    show.value = false
+  },
   swipeRef: appCalendar,
   showDropdown: show,
 })
-
 </script>
 
-<style>
-
-</style>
+<style></style>

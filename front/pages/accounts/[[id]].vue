@@ -1,89 +1,47 @@
 <template>
-
   <div class="app-form">
-
     <app-top-toolbar>
       <template #right>
-        <app-button-list-add v-if="addButtonText" @click="onNew"/>
+        <app-button-list-add v-if="addButtonText" @click="onNew" />
       </template>
     </app-top-toolbar>
 
-
-    <van-form
-        ref="form"
-        @submit="saveItem"
-        @failed="onValidationError"
-        class="">
-
-
+    <van-form ref="form" @submit="saveItem" @failed="onValidationError" class="">
       <van-cell-group inset>
-
         <app-field
-            v-model="name"
-            name="Description"
-            label="Description"
-            type="textarea"
-            rows="1"
-            autosize
-            left-icon="notes-o"
-            placeholder="Description"
-            :rules="[{ required: true, message: 'Name is required' }]"
-            required
+          v-model="name"
+          name="Description"
+          label="Description"
+          type="textarea"
+          rows="1"
+          autosize
+          left-icon="notes-o"
+          placeholder="Description"
+          :rules="[{ required: true, message: 'Name is required' }]"
+          required
         />
 
-        <icon-select
-            v-model="icon"
-            :list="avatarListIcons"
-        />
+        <icon-select v-model="icon" :list="avatarListIcons" />
 
-        <currency-select
-            v-if="false"
-            v-model="currency"
-            :rules="[{ required: true, message: 'Field is required' }]"
-            required
-        />
+        <currency-select v-if="false" v-model="currency" :rules="[{ required: true, message: 'Field is required' }]" required />
 
-        <account-type-select
-            v-model="type"
-            :rules="[{ required: true, message: 'Type is required' }]"
-            required
-        />
+        <account-type-select v-model="type" :rules="[{ required: true, message: 'Type is required' }]" required />
 
-
-        <account-role-select
-            v-if="isRoleVisible"
-            v-model="role"
-            :rules="[{ required: true, message: 'Role is required' }]"
-            required
-        />
-
-
+        <account-role-select v-if="isRoleVisible" v-model="role" :rules="[{ required: true, message: 'Role is required' }]" required />
       </van-cell-group>
 
+      <div style="margin: 16px" class="">
+        <app-button-form-save />
 
-      <div style="margin: 16px;" class="">
-
-        <app-button-form-save/>
-
-        <app-button-form-delete
-            class="mt-10"
-            v-if="itemId"
-            @click="onDelete"
-        />
-
+        <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
       </div>
     </van-form>
-
   </div>
-
-
 </template>
-
 
 import { ref } from 'vue';
 
 <script setup>
-
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
 import _, { get } from 'lodash'
@@ -116,19 +74,14 @@ const onEvent = (event, payload) => {
   if (event === 'onPostSave') {
     let newItem = get(payload, 'data.data')
     newItem = AccountTransformer.transformFromApi(newItem)
-    dataStore.accountList = [newItem, ...dataStore.accountList.filter(item => item.id !== itemId.value)]
+    dataStore.accountList = [newItem, ...dataStore.accountList.filter((item) => item.id !== itemId.value)]
   }
   if (event === 'onPostDelete') {
-    dataStore.accountList = dataStore.accountList.filter(item => item.id !== itemId.value)
+    dataStore.accountList = dataStore.accountList.filter((item) => item.id !== itemId.value)
   }
 }
 
-let {
-  itemId, item, isEmpty, title, addButtonText,
-  isLoading,
-  onClickBack, saveItem, onDelete, onNew,
-  onValidationError,
-} = useForm({
+let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError } = useForm({
   form: form,
   titleAdd: 'Add account',
   titleEdit: 'Edit account',
@@ -172,6 +125,4 @@ toolbar.init({
   leftText: 'List',
   backRoute: RouteConstants.ROUTE_ACCOUNT_LIST,
 })
-
-
 </script>

@@ -1,42 +1,34 @@
 <template>
-
   <app-select
-      :label="label"
-      class=""
-      popupTitle="Select a category"
-      v-model="modelValue"
-      v-model:showDropdown="showDropdown"
-      v-model:search="search"
-      :list="filteredList"
-      :columns="3"
-      :getDisplayValue="getDisplayValue"
-      v-bind="dynamicAttrs">
-
+    :label="label"
+    class=""
+    popupTitle="Select a category"
+    v-model="modelValue"
+    v-model:showDropdown="showDropdown"
+    v-model:search="search"
+    :list="filteredList"
+    :columns="3"
+    :getDisplayValue="getDisplayValue"
+    v-bind="dynamicAttrs"
+  >
     <template #top-right>
       <van-button size="small" @click="onRefresh" class="">
-        <icon-refresh :strokeWidth="1" size="14" color="black"/>
+        <icon-refresh :strokeWidth="1" size="14" color="black" />
       </van-button>
     </template>
 
-    <template #item="{item}">
-      <app-select-option
-          :text="Category.getDisplayName(item)"
-          :icon="Category.getIcon(item) ?? TablerIconConstants.category"
-      />
+    <template #item="{ item }">
+      <app-select-option :text="Category.getDisplayName(item)" :icon="Category.getIcon(item) ?? TablerIconConstants.category" />
     </template>
 
-    <template #inputItemContent="{item}">
+    <template #inputItemContent="{ item }">
       <div class="flex-center gap-1">
-        <app-icon :icon="Category.getIcon(item) ?? TablerIconConstants.category" :size="18"/>
+        <app-icon :icon="Category.getIcon(item) ?? TablerIconConstants.category" :size="18" />
         <span class="font-weight-400 text-size-12">{{ getDisplayValue(item) }}</span>
       </div>
     </template>
-
   </app-select>
-
-
 </template>
-
 
 <script setup>
 import { useDataStore } from '~/stores/dataStore'
@@ -68,7 +60,7 @@ const filteredList = computed(() => {
   if (search.value.length === 0) {
     return list.value
   }
-  return list.value.filter(item => {
+  return list.value.filter((item) => {
     return Category.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
   })
 })
@@ -77,7 +69,7 @@ const categoryList = computed(() => {
   if (search.value.length === 0) {
     return dataStore.categoryList
   }
-  return dataStore.categoryList.filter(item => {
+  return dataStore.categoryList.filter((item) => {
     return Category.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
   })
 })
@@ -104,9 +96,6 @@ const onRefresh = async () => {
   await dataStore.fetchCategories()
   isLoading.value = false
 }
-
 </script>
 
-<style>
-
-</style>
+<style></style>

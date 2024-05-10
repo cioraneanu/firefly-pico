@@ -11,9 +11,7 @@ import { HERO_ICONS, HERO_ICONS_LIST } from '~/constants/TransactionConstants.js
 import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
 
 export const useAppStore = defineStore('app', {
-
   state: () => {
-
     const defaultUrl = window.location.origin
     const runtimeConfig = useRuntimeConfig()
     // const appVersion = runtimeConfig.public.version
@@ -47,15 +45,16 @@ export const useAppStore = defineStore('app', {
 
       showTagSelectAsGrid: useLocalStorage('showTagSelectAsGrid', true),
 
-      numberFormat:  useLocalStorage('numberFormat', NUMBER_FORMAT.eu),
+      numberFormat: useLocalStorage('numberFormat', NUMBER_FORMAT.eu),
       lowerCaseTransactionDescription: useLocalStorage('lowerCaseTransactionDescription', false),
       lowerCaseAccountName: useLocalStorage('lowerCaseTagName', false),
       lowerCaseCategoryName: useLocalStorage('lowerCaseCategoryName', true),
       lowerCaseTagName: useLocalStorage('lowerCaseTagName', true),
 
-      heroIcons: useLocalStorage('heroIcons', HERO_ICONS_LIST.filter(item => [
-        HERO_ICONS.tag, HERO_ICONS.account,
-      ].includes(item.code))),
+      heroIcons: useLocalStorage(
+        'heroIcons',
+        HERO_ICONS_LIST.filter((item) => [HERO_ICONS.tag, HERO_ICONS.account].includes(item.code)),
+      ),
 
       dashboard: {
         firstDayOfMonth: useLocalStorage('firstDayOfMonth', 1),
@@ -65,11 +64,10 @@ export const useAppStore = defineStore('app', {
   },
 
   getters: {
-
-    hasAuthToken (state) {
-      return (state.authToken && state.authToken.length > 0)
+    hasAuthToken(state) {
+      return state.authToken && state.authToken.length > 0
     },
-    isNewVersionAvailable (state) {
+    isNewVersionAvailable(state) {
       if (!state.latestAppVersion) {
         return false
       }
@@ -78,7 +76,7 @@ export const useAppStore = defineStore('app', {
   },
 
   actions: {
-    async fetchLatestAppVersion () {
+    async fetchLatestAppVersion() {
       let response = await new InfoRepository().getLatestVersion()
       if (!ResponseUtils.isSuccess(response)) {
         return

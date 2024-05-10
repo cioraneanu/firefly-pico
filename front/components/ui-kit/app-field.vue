@@ -1,33 +1,21 @@
 <template>
-
-  <van-field
-      ref="vanFieldRef"
-      v-model="modelValue"
-      v-bind="dynamicAttrs"
-      class="app-field app-field-text"
-      @focus="onFocus"
-      clearable
-  />
-
-
+  <van-field ref="vanFieldRef" v-model="modelValue" v-bind="dynamicAttrs" class="app-field app-field-text" @focus="onFocus" clearable />
 </template>
 
-
 <script setup>
-import {useFormAttributes} from '~/composables/useFormAttributes'
-import {useScroll} from "@vueuse/core";
+import { useFormAttributes } from '~/composables/useFormAttributes'
+import { useScroll } from '@vueuse/core'
 
 const modelValue = defineModel()
 
 const vanFieldRef = ref(null)
 const attrs = useAttrs()
-const {dynamicAttrs} = useFormAttributes(attrs)
+const { dynamicAttrs } = useFormAttributes(attrs)
 
 const focus = () => {
   vanFieldRef.value?.focus()
 }
-defineExpose({focus})
-
+defineExpose({ focus })
 
 const onFocus = async () => {
   // const inputRect = vanFieldRef.value.$el.getBoundingClientRect();
@@ -40,10 +28,6 @@ const onFocus = async () => {
   //   // behavior: 'smooth' // Optionally, use smooth scrolling
   // });
 }
-
-
 </script>
 
-<style>
-
-</style>
+<style></style>

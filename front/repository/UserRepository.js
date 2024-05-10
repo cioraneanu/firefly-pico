@@ -2,13 +2,11 @@ import BaseRepository from '~/repository/BaseRepository'
 import axios from 'axios'
 
 export default class UserRepository extends BaseRepository {
-  constructor () {
+  constructor() {
     super('api/user')
   }
 
-  async getUser () {
+  async getUser() {
     return await axios.get(`${this.getUrl()}`)
   }
-
 }
-

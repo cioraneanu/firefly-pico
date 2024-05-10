@@ -1,7 +1,5 @@
 <template>
-
   <div class="app-form">
-
     <app-top-toolbar>
       <template #right>
         <!--                <van-button-->
@@ -14,156 +12,110 @@
         <!--                  </template>-->
         <!--                </van-button>-->
 
-        <app-button-list-add v-if="addButtonText" @click="onNew"/>
+        <app-button-list-add v-if="addButtonText" @click="onNew" />
       </template>
     </app-top-toolbar>
 
-    <div class="mb-10"/>
+    <div class="mb-10" />
 
-    <transaction-assistant
-        v-if="!itemId"
-        @change="onTemplateAssistant"
-    />
+    <transaction-assistant v-if="!itemId" @change="onTemplateAssistant" />
 
-    <transaction-type-tabs
-        v-model="type"
-        class="mx-3 mt-1 mb-1"/>
+    <transaction-type-tabs v-model="type" class="mx-3 mt-1 mb-1" />
 
-
-    <van-form
-        class="transaction-form-group"
-        ref="form"
-        @submit="saveItem"
-        @failed="onValidationError">
-
+    <van-form class="transaction-form-group" ref="form" @submit="saveItem" @failed="onValidationError">
       <van-cell-group inset class="mt-0 flex-column display-flex">
         <template #title v-if="isSplitPayment">
           <div>
-            <van-tag
-                class="ml-5"
-                type="warning">
-              Split payment
-            </van-tag>
+            <van-tag class="ml-5" type="warning"> Split payment </van-tag>
           </div>
         </template>
 
-
         <transaction-amount-field
-            required
-            v-model="amount"
-            :currency="currency"
-            ref="refAmount"
-            :rules="[{ required: true, message: 'Amount is required' }]"
-            :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_AMOUNT)"
+          required
+          v-model="amount"
+          :currency="currency"
+          ref="refAmount"
+          :rules="[{ required: true, message: 'Amount is required' }]"
+          :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_AMOUNT)"
         />
 
-
         <account-select
-            v-model="accountSource"
-            label="Source account"
-            :allowed-types="accountSourceAllowedTypes"
-            :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT)"
-            v-bind="accountSourceBinding">
-
+          v-model="accountSource"
+          label="Source account"
+          :allowed-types="accountSourceAllowedTypes"
+          :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT)"
+          v-bind="accountSourceBinding"
+        >
           <template #label>
             <div class="flex-center-vertical gap-1">
-              <div class="flex-1">
-                Source account
-              </div>
-              <van-button
-                  v-if="showSourceAccountSuggestion"
-                  @click="navigateTo(RouteConstants.ROUTE_SETTINGS_NEW_TRANSACTION_DEFAULTS)"
-                  size="mini" class="suggestion-button">Set your default
+              <div class="flex-1">Source account</div>
+              <van-button v-if="showSourceAccountSuggestion" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_NEW_TRANSACTION_DEFAULTS)" size="mini" class="suggestion-button"
+                >Set your default
               </van-button>
             </div>
           </template>
-
         </account-select>
 
         <account-select
-            v-model="accountDestination"
-            label="Destination account"
-            :allowed-types="accountDestinationAllowedTypes"
-            :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT)"
-            v-bind="accountDestinationBinding"
+          v-model="accountDestination"
+          label="Destination account"
+          :allowed-types="accountDestinationAllowedTypes"
+          :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT)"
+          v-bind="accountDestinationBinding"
         />
 
-        <category-select
-            v-model="category"
-            :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_CATEGORY)"
-
-        />
+        <category-select v-model="category" :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_CATEGORY)" />
 
         <app-field
-            v-model="description"
-            label="Description"
-            type="textarea"
-            rows="1"
-            autosize
-            left-icon="notes-o"
-            placeholder="Description"
-            :rules="[{ required: true, message: 'Description is required' }]"
-            required
-            :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESCRIPTION)"
+          v-model="description"
+          label="Description"
+          type="textarea"
+          rows="1"
+          autosize
+          left-icon="notes-o"
+          placeholder="Description"
+          :rules="[{ required: true, message: 'Description is required' }]"
+          required
+          :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESCRIPTION)"
         />
 
-
-        <tag-select
-            v-model="tags"
-            :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_TAG)"
-        />
-
+        <tag-select v-model="tags" :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_TAG)" />
 
         <app-date-time-grid
-            v-model="date"
-            :rules="[{ required: true, message: 'Date is required' }]"
-            required
-            :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DATE)"
+          v-model="date"
+          :rules="[{ required: true, message: 'Date is required' }]"
+          required
+          :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DATE)"
         />
-
 
         <app-field
-            v-model="notes"
-            label="Notes"
-            placeholder="No notes..."
-            type="textarea"
-            rows="1"
-            autosize
-            :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_NOTES)"
+          v-model="notes"
+          label="Notes"
+          placeholder="No notes..."
+          type="textarea"
+          rows="1"
+          autosize
+          :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_NOTES)"
         />
-
       </van-cell-group>
 
-
       <div style="margin: 16px; position: relative">
-        <app-button-form-save/>
+        <app-button-form-save />
 
-        <app-button-form-delete
-            class="mt-10"
-            v-if="itemId"
-            @click="onDelete"
-        />
+        <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
 
-        <van-button
-            v-if="itemId && !isSplitPayment"
-            @click="onCreateTransactionTemplate"
-            block type="default" class="mt-2">
-          <app-icon :icon="TablerIconConstants.transactionTemplate"/>
+        <van-button v-if="itemId && !isSplitPayment" @click="onCreateTransactionTemplate" block type="default" class="mt-2">
+          <app-icon :icon="TablerIconConstants.transactionTemplate" />
           Make template
         </van-button>
       </div>
     </van-form>
-
   </div>
-
-
 </template>
-
 
 import { ref } from 'vue';
 
 <script setup>
-
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
 import _, { get, head, isEqual } from 'lodash'
@@ -193,12 +145,7 @@ const form = ref(null)
 const showTransactionVoice = ref(false)
 // const selectedTransactionTemplate = ref(null)
 
-let {
-  itemId, item, isEmpty, title, addButtonText,
-  isLoading,
-  onClickBack, saveItem, onDelete, onNew,
-  onValidationError,
-} = useForm({
+let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError } = useForm({
   form: form,
   titleAdd: 'Add transaction',
   titleEdit: 'Edit transaction',
@@ -210,17 +157,7 @@ let {
 const time = ref(['12', '00'])
 
 const pathKey = 'attributes.transactions.0'
-const {
-  amount,
-  date,
-  tags,
-  description,
-  notes,
-  accountSource,
-  accountDestination,
-  category,
-  type,
-} = generateChildren(item, [
+const { amount, date, tags, description, notes, accountSource, accountDestination, category, type } = generateChildren(item, [
   { computed: 'amount', parentKey: `${pathKey}.amount` },
   { computed: 'date', parentKey: `${pathKey}.date` },
   { computed: 'tags', parentKey: `${pathKey}.tags` },
@@ -285,13 +222,12 @@ watch(category, async (newValue) => {
 })
 
 watch(tags, async (newValue) => {
-
   if (itemId.value || !newValue) {
     return
   }
 
   // Give child tags more priority for more granularity
-  const sortedTagNames = sortByPath(newValue, 'level', false).map(tag => Tag.getDisplayName(tag).toLowerCase())
+  const sortedTagNames = sortByPath(newValue, 'level', false).map((tag) => Tag.getDisplayName(tag).toLowerCase())
 
   if (appStore.copyTagToDescription && isStringEmpty(description.value)) {
     // The first one is the one with the highest level
@@ -300,7 +236,7 @@ watch(tags, async (newValue) => {
 
   if (appStore.copyTagToCategory && !category.value) {
     for (let tagName of sortedTagNames) {
-      let foundCategory = dataStore.categoryList.find(category => {
+      let foundCategory = dataStore.categoryList.find((category) => {
         let categoryName = Category.getDisplayName(category).toLowerCase()
 
         return tagName === categoryName
@@ -313,13 +249,7 @@ watch(tags, async (newValue) => {
   }
 })
 
-const onTemplateAssistant = async ({
-  tag: newTag,
-  category: newCategory,
-  transactionTemplate: transactionTemplate,
-  amount: newAmount,
-  description: newDescription,
-}) => {
+const onTemplateAssistant = async ({ tag: newTag, category: newCategory, transactionTemplate: transactionTemplate, amount: newAmount, description: newDescription }) => {
   if (newTag) {
     tags.value = Tag.getTagWithParents(newTag)
     // tags.value = [newTag]
@@ -346,7 +276,7 @@ const isTypeTransfer = computed(() => isEqual(type.value, Transaction.types.tran
 
 const getStyleForField = (fieldCode) => {
   if (isTypeExpense.value) {
-    let position = appStore.transactionOrderedFieldsList.findIndex(item => item.code === fieldCode)
+    let position = appStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
     return `order: ${position}`
   }
 
@@ -354,12 +284,12 @@ const getStyleForField = (fieldCode) => {
 
   // Should be same as income, but reverse the position on source with destination
   if (isTypeIncome.value) {
-    let position = appStore.transactionOrderedFieldsList.findIndex(item => item.code === fieldCode)
+    let position = appStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
     if (fieldCode === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT) {
-      position = appStore.transactionOrderedFieldsList.findIndex(item => item.code === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT)
+      position = appStore.transactionOrderedFieldsList.findIndex((item) => item.code === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT)
     }
     if (fieldCode === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT) {
-      position = appStore.transactionOrderedFieldsList.findIndex(item => item.code === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT)
+      position = appStore.transactionOrderedFieldsList.findIndex((item) => item.code === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT)
     }
     return `order: ${position}`
   }
@@ -369,7 +299,7 @@ const getStyleForField = (fieldCode) => {
     if (fieldTypeAccountsList.includes(fieldCode)) {
       return `order: 0`
     }
-    let position = appStore.transactionOrderedFieldsList.findIndex(item => item.code === fieldCode)
+    let position = appStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
     return `order: ${position}`
   }
 
@@ -422,13 +352,7 @@ toolbar.init({
   backRoute: RouteConstants.ROUTE_TRANSACTION_LIST,
 })
 
-onMounted(() => {
-})
-
-
+onMounted(() => {})
 </script>
 
-<style>
-
-
-</style>
+<style></style>

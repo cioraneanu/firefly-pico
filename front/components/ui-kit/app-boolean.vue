@@ -1,16 +1,8 @@
 <template>
-
-
   <div class="van-cell-fake">
-    <van-field
-        class="app-field"
-        :label="label"
-        v-bind="dynamicAttrs"
-        @click="onToggle"
-        readonly>
-
+    <van-field class="app-field" :label="label" v-bind="dynamicAttrs" @click="onToggle" readonly>
       <template v-if="$slots.label" #label>
-        <slot name="label"/>
+        <slot name="label" />
       </template>
 
       <template #input>
@@ -21,13 +13,9 @@
       </template>
     </van-field>
   </div>
-
-
 </template>
 
-
 <script setup>
-
 const props = defineProps({
   label: {
     type: String,
@@ -43,10 +31,6 @@ const { dynamicAttrs } = useFormAttributes(attrs)
 const onToggle = () => {
   modelValue.value = !modelValue.value
 }
-
-
 </script>
 
-<style>
-
-</style>
+<style></style>

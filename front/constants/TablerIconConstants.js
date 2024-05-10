@@ -1,5 +1,4 @@
 export const icons = {
-
   // ------ UI usage -----
   account: 'IconCreditCard',
   description: 'IconNotes',

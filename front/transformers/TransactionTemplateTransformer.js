@@ -4,8 +4,7 @@ import { useDataStore } from '~/stores/dataStore'
 import Transaction from '~/models/Transaction'
 
 export default class TransactionTemplateTransformer extends ApiTransformer {
-
-  static transformFromApi (item) {
+  static transformFromApi(item) {
     if (!item) {
       return null
     }
@@ -21,18 +20,18 @@ export default class TransactionTemplateTransformer extends ApiTransformer {
     item.account_source = accountsDictionary[item['account_source_id']]
     item.account_destination = accountsDictionary[item['account_destination_id']]
     item.category = categoryDictionary[item['category_id']]
-    item.tags = (item.tags ?? []).map(transactionTemplateTag => tagDictionaryById[transactionTemplateTag.tag_id])
-    item.extra_names = get(item, 'extra_names', []).map(item => {
+    item.tags = (item.tags ?? []).map((transactionTemplateTag) => tagDictionaryById[transactionTemplateTag.tag_id])
+    item.extra_names = get(item, 'extra_names', []).map((item) => {
       return {
         value: item.name,
       }
     })
 
-    item.type = Transaction.typesList.find(type =>  type.fireflyCode === item.type)
+    item.type = Transaction.typesList.find((type) => type.fireflyCode === item.type)
     return item
   }
 
-  static transformToApi (item) {
+  static transformToApi(item) {
     if (!item) {
       return null
     }
@@ -44,17 +43,16 @@ export default class TransactionTemplateTransformer extends ApiTransformer {
     return {
       id: _.get(item, 'id'),
       name: _.get(item, 'name'),
-      extra_names: (item.extra_names ?? []).map(item => item.value),
+      extra_names: (item.extra_names ?? []).map((item) => item.value),
       amount: _.get(item, 'amount'),
       description: _.get(item, 'description'),
       notes: _.get(item, 'notes'),
       account_source_id: _.get(item, 'account_source.id'),
       account_destination_id: _.get(item, 'account_destination.id'),
       category_id: _.get(item, 'category.id'),
-      tags: (item.tags ?? []).map(item => item.id),
+      tags: (item.tags ?? []).map((item) => item.id),
       type: get(transactionType, 'fireflyCode'),
       // tags
     }
-
   }
 }

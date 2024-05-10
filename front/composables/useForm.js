@@ -4,7 +4,7 @@ import UIUtils from '~/utils/UIUtils'
 import { next } from 'lodash/seq'
 
 // by convention, composable function names start with "use"
-export function useForm (props) {
+export function useForm(props) {
   const { form } = props
   const { titleAdd, titleEdit } = props
   const { routeList, routeForm } = props
@@ -14,19 +14,22 @@ export function useForm (props) {
   const transformer = model.getTransformer()
   const repository = model.getRepository()
 
-
   // let dataStore = useDataStore()
   // let appStore = useAppStore()
   const route = useRoute()
 
-  const title = computed(() => route.params.id ? titleEdit : titleAdd)
+  const title = computed(() => (route.params.id ? titleEdit : titleAdd))
 
   let itemId = ref(null)
   // let itemId = computed(() => route.params.id)
 
-  watch(() => route.params.id, async (newValue, oldValue) => {
-    itemId.value = newValue
-  }, { immediate: true })
+  watch(
+    () => route.params.id,
+    async (newValue, oldValue) => {
+      itemId.value = newValue
+    },
+    { immediate: true },
+  )
 
   let isLoading = ref(false)
   let item = ref({})
@@ -46,13 +49,13 @@ export function useForm (props) {
     return !name.value
   })
 
-// --
+  // --
 
   const onClickBack = async () => {
     await navigateTo(routeList)
   }
 
-  async function initItem () {
+  async function initItem() {
     // isLoading.value = true
 
     if (itemId.value) {
@@ -64,7 +67,7 @@ export function useForm (props) {
     // isLoading.value = false
   }
 
-  async function fetchItem () {
+  async function fetchItem() {
     if (fetchItemExternal) {
       return fetchItemExternal()
     }
@@ -79,7 +82,6 @@ export function useForm (props) {
       newValue = transformer.transformFromApi(newValue)
     }
 
-
     item.value = newValue
     fetchedItem.value = _.cloneDeep(newValue)
 
@@ -87,12 +89,11 @@ export function useForm (props) {
     isLoading.value = false
   }
 
-  async function saveItem () {
+  async function saveItem() {
     // form.submit()
     isLoading.value = true
 
     let newItem = item.value
-
 
     if (transformer) {
       newItem = transformer.transformToApi(newItem)
@@ -102,7 +103,7 @@ export function useForm (props) {
 
     let response = null
     // let newItemId = newItem.id
-    let newItemId = (itemId.value || newItem.id)
+    let newItemId = itemId.value || newItem.id
     if (newItemId) {
       response = await repository.update(newItemId, newItem)
     } else {
@@ -127,7 +128,6 @@ export function useForm (props) {
 
       onEvent ? onEvent('onPostSave', response) : null
       await navigateTo(`${routeForm}/${responseId}`)
-
     } else {
       let errorMessage = _.get(response, 'data.message')
       // UIUtils.showToastError(`Unexpected error. ${errorMessage}`)
@@ -174,6 +174,17 @@ export function useForm (props) {
   // -----------------------------
 
   return {
-    itemId, item, fetchedItem, isEmpty, title, addButtonText, isLoading, onClickBack, onNew, saveItem, onDelete, onValidationError,
+    itemId,
+    item,
+    fetchedItem,
+    isEmpty,
+    title,
+    addButtonText,
+    isLoading,
+    onClickBack,
+    onNew,
+    saveItem,
+    onDelete,
+    onValidationError,
   }
 }

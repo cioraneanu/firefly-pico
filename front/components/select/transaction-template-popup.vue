@@ -1,18 +1,10 @@
 <template>
-  <van-popup
-      v-model:show="showDropdown"
-      round
-      position="bottom"
-      style="height: 90%; padding-top: 4px;">
-
+  <van-popup v-model:show="showDropdown" round position="bottom" style="height: 90%; padding-top: 4px">
     <div ref="popupRef" class="h-100 display-flex flex-column qqq">
-
       <div class="van-popup-title">Select a template</div>
 
-
-      <div style="margin-right: 12px;"
-           class="p-1 flex-center-vertical gap-1">
-        <van-search v-model="search" placeholder="Search..." class="flex-1"/>
+      <div style="margin-right: 12px" class="p-1 flex-center-vertical gap-1">
+        <van-search v-model="search" placeholder="Search..." class="flex-1" />
 
         <slot name="top-right"></slot>
       </div>
@@ -20,33 +12,19 @@
       <div ref="popupContentRef" class="flex-1 flex-column overflow-auto">
         <slot name="popup">
           <van-grid :column-num="columns">
-            <template
-                v-for="(item, index) in list"
-                :key="index">
-              <van-grid-item
-                  @click="onSelectCell(item)"
-                  style="cursor: pointer"
-                  :class="getOptionClass(item)">
+            <template v-for="(item, index) in list" :key="index">
+              <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
                 <template #default>
-                  <app-select-option
-                      :text="TransactionTemplate.getDisplayName(item)"
-                      :icon="TablerIconConstants.transactionTemplate"
-                  />
+                  <app-select-option :text="TransactionTemplate.getDisplayName(item)" :icon="TablerIconConstants.transactionTemplate" />
                 </template>
               </van-grid-item>
-
-
             </template>
           </van-grid>
         </slot>
       </div>
-
     </div>
-
-
   </van-popup>
 </template>
-
 
 <script setup>
 import { get } from 'lodash'
@@ -72,14 +50,14 @@ const isItemSelected = (option) => {
     return false
   }
   if (props.isMultiSelect) {
-    return modelValue.value.some(item => isEqual(item, option))
+    return modelValue.value.some((item) => isEqual(item, option))
   }
   return isEqual(modelValue.value, option)
 }
 
 const getOptionClass = (option) => {
   return {
-    'active': isItemSelected(option),
+    active: isItemSelected(option),
   }
 }
 
@@ -88,12 +66,12 @@ const { x, y } = useScroll(popupContentRef)
 
 const { distanceY } = usePointerSwipe(popupRef, {
   disableTextSelect: true,
-  onSwipe (e) {
+  onSwipe(e) {
     if (y.value === 0) {
       isScrollOnTop = true
     }
   },
-  onSwipeEnd (e, direction) {
+  onSwipeEnd(e, direction) {
     if (distanceY.value < -100 && isScrollOnTop) {
       showDropdown.value = false
     }
@@ -115,7 +93,7 @@ const { dynamicAttrs } = useFormAttributes(attrs)
 const fieldClass = computed(() => {
   return {
     'app-field': true,
-    'empty': !modelValue.value,
+    empty: !modelValue.value,
   }
 })
 
@@ -149,11 +127,10 @@ const getDisplayName = (item) => {
 
 const onSelectCell = (item) => {
   if (props.isMultiSelect) {
-
     let newValue = modelValue.value ?? []
-    let isSelected = newValue.some(value => isEqual(item, value))
+    let isSelected = newValue.some((value) => isEqual(item, value))
     if (isSelected) {
-      newValue = newValue.filter(value => !isEqual(item, value))
+      newValue = newValue.filter((value) => !isEqual(item, value))
     } else {
       newValue = [...newValue, item]
     }
@@ -175,14 +152,10 @@ onMounted(async () => {
 const onShowDropdown = () => {
   showDropdown.value = true
 }
-
-
 </script>
 
 <style>
-
 .empty .van-field__control {
   color: #ddd;
 }
-
 </style>

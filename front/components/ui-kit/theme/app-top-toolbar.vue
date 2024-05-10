@@ -1,15 +1,7 @@
 <template>
-
-  <van-nav-bar
-      :safe-area-inset-top="true"
-      :fixed="true"
-      :placeholder="true"
-      v-bind="attributes"
-      :left-text="leftText"
-      @click-left="onBack">
-
+  <van-nav-bar :safe-area-inset-top="true" :fixed="true" :placeholder="true" v-bind="attributes" :left-text="leftText" @click-left="onBack">
     <template #right>
-      <slot name="right"/>
+      <slot name="right" />
     </template>
 
     <template #title>
@@ -21,18 +13,12 @@
         </div>
       </slot>
 
-      <slot name="subtitle">
-      </slot>
-
+      <slot name="subtitle"> </slot>
     </template>
-
   </van-nav-bar>
-
 </template>
 
 <script setup>
-
-
 import { useAppStore } from '~/stores/appStore'
 import { useToolbar } from '~/composables/useToolbar'
 
@@ -46,5 +32,4 @@ const attributes = computed(() => {
     'left-arrow': !!backRoute.value,
   }
 })
-
 </script>

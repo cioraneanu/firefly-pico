@@ -1,47 +1,24 @@
 <template>
-
   <div :class="formClass">
     <app-top-toolbar>
       <template #right>
-        <app-button-list-add @click="onAdd"/>
+        <app-button-list-add @click="onAdd" />
       </template>
     </app-top-toolbar>
 
+    <empty-list v-if="isEmpty" />
 
-    <empty-list v-if="isEmpty"/>
-
-    <van-pull-refresh
-        v-model="isRefreshing"
-        @refresh="onRefresh">
-
-      <van-list
-          class="p-1"
-          :finished="isFinished"
-          @load="onLoadMore"
-      >
-
-        <transaction-template-list-item
-            v-for="item in list"
-            :key="item.id"
-            :value="item"
-            @onEdit="onEdit"
-            @onDelete="onDelete"
-        />
-
+    <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
+      <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
+        <transaction-template-list-item v-for="item in list" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
       </van-list>
-
     </van-pull-refresh>
-
-
   </div>
-
 </template>
-
 
 import { ref } from 'vue';
 
 <script setup>
-
 import RouteConstants from '~/constants/RouteConstants'
 import { useList } from '~/composables/useList'
 import TransactionTemplate from '~/models/TransactionTemplate'
@@ -51,29 +28,22 @@ import { useToolbar } from '~/composables/useToolbar'
 const dataStore = useDataStore()
 const onEvent = (event, payload) => {
   if (event === 'onPostDelete') {
-    dataStore.transactionTemplateList = dataStore.transactionTemplateList.filter(item => parseInt(item.id) !== parseInt(payload.id))
+    dataStore.transactionTemplateList = dataStore.transactionTemplateList.filter((item) => parseInt(item.id) !== parseInt(payload.id))
   }
 }
 
-const {
-  title,
-  isLoading, isFinished, isRefreshing,
-  page, pageSize, totalPages, listTotalCount,
-  list, isEmpty,
-  onAdd, onEdit, onDelete,
-} = useList({
+const { title, isLoading, isFinished, isRefreshing, page, pageSize, totalPages, listTotalCount, list, isEmpty, onAdd, onEdit, onDelete } = useList({
   title: 'Transaction templates list',
   routeList: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST,
   routeForm: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID,
   model: new TransactionTemplate(),
-  onEvent: onEvent
+  onEvent: onEvent,
 })
 
 const formClass = computed(() => ({
   'app-form': true,
-  'empty': isEmpty.value
+  empty: isEmpty.value,
 }))
-
 
 const onLoadMore = async () => {
   const dataStore = useDataStore()
@@ -92,8 +62,7 @@ const onRefresh = async () => {
   await onLoadMore()
 }
 
-onMounted(() => {
-})
+onMounted(() => {})
 
 // ----
 
@@ -102,5 +71,4 @@ toolbar.init({
   title: 'Templates list',
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })
-
 </script>

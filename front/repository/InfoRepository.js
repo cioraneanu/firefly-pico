@@ -2,13 +2,11 @@ import BaseRepository from '~/repository/BaseRepository'
 import axios from 'axios'
 
 export default class InfoRepository extends BaseRepository {
-  constructor () {
+  constructor() {
     super('api/latest-version')
   }
 
-  async getLatestVersion () {
+  async getLatestVersion() {
     return await axios.get(`${this.getUrl()}`)
   }
-
 }
-

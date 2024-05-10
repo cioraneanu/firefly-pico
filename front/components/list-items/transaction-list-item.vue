@@ -1,10 +1,8 @@
 <template>
-
   <van-swipe-cell ref="swipeCell" v-bind="clickWithoutSwipe">
     <van-cell :class="cellClass">
       <template #title>
         <div class="display-flex transaction-card prevent-select align-items-lg-stretch">
-
           <!--          <div class="first_column flex-center flex-column">-->
           <!--            <div class="font-700 text-size-14">{{ dateDayOfMonth }}</div>-->
           <!--            <div class="font-500 text-size-12" style="margin-top: -5px">{{ dateMonth }}</div>-->
@@ -14,62 +12,46 @@
           <!--          <div class="separator"></div>-->
 
           <div class="second_column flex-1">
-
             <div class="flex-center-vertical gap-2">
-              <div :class="iconTypeClass"/>
+              <div :class="iconTypeClass" />
               <div v-if="description" class="list-item-title">{{ description }}</div>
             </div>
 
-
             <div class="flex-column">
               <div v-for="displayedAccount in displayedAccountNames" class="list-item-subtitle">
-                <app-icon :icon="TablerIconConstants.account" :size="20"/>
+                <app-icon :icon="TablerIconConstants.account" :size="20" />
                 <span>{{ displayedAccount }}</span>
               </div>
             </div>
 
             <div v-if="category && props.isDetailedMode" class="list-item-subtitle">
-              <app-icon :icon="TablerIconConstants.category" :size="20"/>
+              <app-icon :icon="TablerIconConstants.category" :size="20" />
               {{ category }}
             </div>
 
             <div v-if="notes && props.isDetailedMode" class="list-item-subtitle">
-              <app-icon :icon="TablerIconConstants.notes" :size="20"/>
+              <app-icon :icon="TablerIconConstants.notes" :size="20" />
               {{ notes }}
             </div>
 
             <div v-if="tags && props.isDetailedMode" class="tags-container">
               <div v-for="tag in visibleTags" class="tag">
-                <app-icon :icon="Tag.getIcon(tag) ?? TablerIconConstants.tag" :size="14"/>
+                <app-icon :icon="Tag.getIcon(tag) ?? TablerIconConstants.tag" :size="14" />
                 <div class="list-item-subtitle ml-5">{{ Tag.getDisplayName(tag, 10) }}</div>
               </div>
             </div>
 
-
             <div v-if="isSplitPayment && props.isDetailedMode">
-              <van-tag
-                  class=""
-                  type="warning">
-                Split payment
-              </van-tag>
+              <van-tag class="" type="warning"> Split payment </van-tag>
             </div>
           </div>
 
-
           <!--          <div class="separator"></div>-->
 
-
           <div class="third_column">
+            <div class="font-weight-700 text-size-16">{{ transactionAmount }} {{ transactionCurrency }}</div>
 
-
-            <div class="font-weight-700 text-size-16">
-              {{ transactionAmount }} {{ transactionCurrency }}
-            </div>
-
-            <transaction-list-item-hero-icon
-                v-if="props.isDetailedMode"
-                :value="props.value"
-            />
+            <transaction-list-item-hero-icon v-if="props.isDetailedMode" :value="props.value" />
 
             <!--            <div-->
             <!--                v-if="heroIcon.length > 0 && props.isDetailedMode"-->
@@ -85,24 +67,16 @@
             </div>
 
             <!--            <div v-if="props.isDetailedMode" class="day-of-week" style="margin-top: -2px">{{ dateWeekdayName }}</div>-->
-
           </div>
-
         </div>
       </template>
     </van-cell>
 
-
     <template #right>
-      <van-button
-          @click="onDelete"
-          class="delete-button" square type="danger" text="Delete"/>
+      <van-button @click="onDelete" class="delete-button" square type="danger" text="Delete" />
     </template>
   </van-swipe-cell>
-
-
 </template>
-
 
 <script setup>
 import _, { get, isEqual } from 'lodash'
@@ -154,7 +128,7 @@ const tags = computed(() => {
   return firstTransaction.value.tags ?? []
 })
 
-const isTodo = computed(() => tags.value.some(tag => get(tag, 'attributes.is_todo')))
+const isTodo = computed(() => tags.value.some((tag) => get(tag, 'attributes.is_todo')))
 const cellClass = computed(() => ({
   'transaction-list-item-todo': isTodo.value,
 }))
@@ -182,8 +156,8 @@ const iconTypeClass = computed(() => {
 
 const date = computed(() => DateUtils.autoToDate(_.get(firstTransaction.value, 'date')))
 const dateFormatted = computed(() => DateUtils.dateToUI(date.value))
-const dateMonth = computed(() => date.value ? format(date.value, 'LLL').toUpperCase() : '')
-const dateWeekdayName = computed(() => date.value ? format(date.value, 'E').toUpperCase() : '')
+const dateMonth = computed(() => (date.value ? format(date.value, 'LLL').toUpperCase() : ''))
+const dateWeekdayName = computed(() => (date.value ? format(date.value, 'E').toUpperCase() : ''))
 const dateDayOfMonth = computed(() => {
   return date.value ? format(date.value, 'dd') : ''
 })
@@ -218,12 +192,9 @@ const heroIcon = computed(() => {
   let heroAccountIcon = isTransactionExpense.value ? sourceAccountIcon.value : destinationAccountIcon.value
 
   let listOfIcons = [heroTagIcon, heroAccountIcon]
-  return listOfIcons.filter(item => !!item)
+  return listOfIcons.filter((item) => !!item)
 })
 
 const swipeCell = ref(null)
 const clickWithoutSwipe = useClickWithoutSwipe({ swipeCell: swipeCell, onClick: onEdit })
-
-
 </script>
-

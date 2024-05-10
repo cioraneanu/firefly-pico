@@ -1,74 +1,49 @@
 <template>
-
   <app-select
-      :label="label"
-      v-model="modelValue"
-      class=""
-      popupTitle="Select tags"
-      v-model:showDropdown="showDropdown"
-      v-model:search="search"
-      :list="filteredList"
-      :isMultiSelect="props.isMultiSelect"
-      :getDisplayValue="getDisplayValue"
-      v-bind="dynamicAttrs">
-
+    :label="label"
+    v-model="modelValue"
+    class=""
+    popupTitle="Select tags"
+    v-model:showDropdown="showDropdown"
+    v-model:search="search"
+    :list="filteredList"
+    :isMultiSelect="props.isMultiSelect"
+    :getDisplayValue="getDisplayValue"
+    v-bind="dynamicAttrs"
+  >
     <template #top-right>
       <van-button size="small" @click="onRefresh" class="">
-        <app-icon icon="IconRefresh" :stroke="1" size="14" color="black"/>
+        <app-icon icon="IconRefresh" :stroke="1" size="14" color="black" />
       </van-button>
 
       <van-button size="small" @click="onToggleDisplayMode" class="">
-        <app-icon :icon="showGridIcon" :size="14"/>
+        <app-icon :icon="showGridIcon" :size="14" />
       </van-button>
     </template>
 
-    <template #inputItemContent="{item}">
+    <template #inputItemContent="{ item }">
       <div class="flex-center gap-1">
-        <app-icon :icon="Tag.getIcon(item) ?? TablerIconConstants.tag" :size="18"/>
+        <app-icon :icon="Tag.getIcon(item) ?? TablerIconConstants.tag" :size="18" />
         <span class="font-weight-400 text-size-12">{{ getDisplayValue(item) }}</span>
       </div>
     </template>
 
-
     <template #popup>
-
       <van-grid v-if="showTagSelectAsGrid" :column-num="3">
-        <template
-            v-for="(item, index) in filteredList"
-            :key="index">
-          <van-grid-item
-              @click="onSelectCell(item)"
-              style="cursor: pointer"
-              :class="getOptionClass(item)">
-
-            <app-select-option
-                :text="Tag.getDisplayName(item)"
-                :icon="Tag.getIcon(item) ?? TablerIconConstants.tag"
-            />
+        <template v-for="(item, index) in filteredList" :key="index">
+          <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
+            <app-select-option :text="Tag.getDisplayName(item)" :icon="Tag.getIcon(item) ?? TablerIconConstants.tag" />
           </van-grid-item>
         </template>
       </van-grid>
       <div v-else>
-        <div
-            v-for="(item, index) in filteredList"
-            :key="item.id"
-            @click="onSelectCell(item)">
-          <tag-list-item
-              :value="item"
-              :class="getOptionClass(item)"
-              :is-swipeable="false"
-          />
-
+        <div v-for="(item, index) in filteredList" :key="item.id" @click="onSelectCell(item)">
+          <tag-list-item :value="item" :class="getOptionClass(item)" :is-swipeable="false" />
         </div>
       </div>
     </template>
-
-
   </app-select>
-
-
 </template>
-
 
 <script setup>
 import { useDataStore } from '~/stores/dataStore'
@@ -111,7 +86,7 @@ const filteredList = computed(() => {
   if (search.value.length === 0) {
     return list.value
   }
-  return list.value.filter(item => {
+  return list.value.filter((item) => {
     return Tag.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
   })
 })
@@ -136,12 +111,12 @@ const onSelectCell = (item) => {
     let targetTags = props.autoSelectParents ? Tag.getTagWithParents(item) : [item]
 
     let newValue = modelValue.value ?? []
-    let isSelected = newValue.some(value => {
+    let isSelected = newValue.some((value) => {
       const result = item.id === value.id
       return result
     })
     if (isSelected) {
-      newValue = newValue.filter(value => item.id !== value.id)
+      newValue = newValue.filter((value) => item.id !== value.id)
       // newValue = newValue.filter(value => !isEqual(item, value))
     } else {
       newValue = uniqBy([...newValue, ...targetTags], 'id')
@@ -168,14 +143,14 @@ const isItemSelected = (option) => {
     return false
   }
   if (props.isMultiSelect) {
-    return modelValue.value.some(item => item.id == option.id)
+    return modelValue.value.some((item) => item.id == option.id)
   }
   return isEqual(modelValue.value, option)
 }
 
 const getOptionClass = (option) => {
   return {
-    'active': isItemSelected(option),
+    active: isItemSelected(option),
   }
 }
 
@@ -186,10 +161,6 @@ const onToggleDisplayMode = () => {
 const showGridIcon = computed(() => {
   return showTagSelectAsGrid.value ? 'IconList' : 'IconGridDots'
 })
-
-
 </script>
 
-<style>
-
-</style>
+<style></style>

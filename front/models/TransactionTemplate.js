@@ -5,36 +5,35 @@ import Transaction from '~/models/Transaction'
 import _, { isEqual } from 'lodash'
 
 export default class TransactionTemplate extends BaseModel {
-
-  getTransformer () {
+  getTransformer() {
     return TransactionTemplateTransformer
   }
 
-  getRepository () {
+  getRepository() {
     return new TransactionTemplateRepository()
   }
 
-  getEmpty () {
-    let type = Transaction.typesList.find(item => isEqual(item, Transaction.types.expense))
+  getEmpty() {
+    let type = Transaction.typesList.find((item) => isEqual(item, Transaction.types.expense))
     return {
-      'type': type,
-      'amount': '',
-      'tags': [],
-      'description': '',
-      'notes': '',
-      'accountSource': null,
-      'accountDestination': null,
-      'category': null,
+      type: type,
+      amount: '',
+      tags: [],
+      description: '',
+      notes: '',
+      accountSource: null,
+      accountDestination: null,
+      category: null,
     }
   }
 
   // ------------
 
-  getFake (id) {
+  getFake(id) {
     return {}
   }
 
-  static getDisplayName (item) {
+  static getDisplayName(item) {
     return _.get(item, 'name')
   }
 }

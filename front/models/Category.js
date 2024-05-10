@@ -4,38 +4,37 @@ import CategoryRepository from '~/repository/CategoryRepository'
 import _ from 'lodash'
 
 class Category extends BaseModel {
-
-  getTransformer () {
+  getTransformer() {
     return CategoryTransformer
   }
 
-  getRepository () {
+  getRepository() {
     return new CategoryRepository()
   }
 
-  getEmpty () {
+  getEmpty() {
     return {
-      'name': '',
-      'type': null,
-      'role': null,
+      name: '',
+      type: null,
+      role: null,
     }
   }
 
   // ------------
 
-  getFake (id) {
+  getFake(id) {
     return {
-      'type': 'categories',
-      'attributes': {
-        'name': '',
-        'notes': null,
+      type: 'categories',
+      attributes: {
+        name: '',
+        notes: null,
       },
     }
   }
 
   // --------
 
-  static getDisplayName (account) {
+  static getDisplayName(account) {
     return _.get(account, 'attributes.name')
   }
 }

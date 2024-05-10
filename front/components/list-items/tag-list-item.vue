@@ -1,17 +1,12 @@
 <template>
-
   <van-swipe-cell ref="swipeCell" v-bind="clickWithoutSwipe" :disabled="!props.isSwipeable">
     <van-cell>
       <template #title>
-
-
         <div class="list-item-container">
-
-
           <div class="first_column flex-center">
-            <div v-for="n in level - 1" style="width: 30px"/>
+            <div v-for="n in level - 1" style="width: 30px" />
             <!--            <app-icon v-if="icon" :icon="icon" :size="TablerIconConstants.defaultSize" :stroke="TablerIconConstants.defaultStroke"/>-->
-            <app-icon :icon="icon ?? TablerIconConstants.tag" :size="TablerIconConstants.defaultSize"/>
+            <app-icon :icon="icon ?? TablerIconConstants.tag" :size="TablerIconConstants.defaultSize" />
           </div>
 
           <div class="separator"></div>
@@ -24,25 +19,16 @@
             <div class="app-icon-item"></div>
           </div>
 
-          <div class="flex-1">
-          </div>
-
-
+          <div class="flex-1"></div>
         </div>
-
-
       </template>
     </van-cell>
 
-
     <template #right>
-      <van-button class="delete-button" square type="danger" text="Delete" @mouseup.stop="onDelete"/>
+      <van-button class="delete-button" square type="danger" text="Delete" @mouseup.stop="onDelete" />
     </template>
   </van-swipe-cell>
-
-
 </template>
-
 
 <script setup>
 import _, { get } from 'lodash'
@@ -78,9 +64,6 @@ const onDelete = async () => {
 
 const swipeCell = ref(null)
 const clickWithoutSwipe = useClickWithoutSwipe({ swipeCell: swipeCell, onClick: onEdit })
-
 </script>
 
-<style>
-
-</style>
+<style></style>

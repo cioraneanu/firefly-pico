@@ -5,8 +5,7 @@ import { useDataStore } from '~/stores/dataStore'
 import Icon from '~/models/Icon.js'
 
 export default class AccountTransformer extends ApiTransformer {
-  static transformFromApi (item) {
-
+  static transformFromApi(item) {
     if (!item) {
       return null
     }
@@ -17,8 +16,8 @@ export default class AccountTransformer extends ApiTransformer {
     // Utils.stringToData(item, 'attributes.account_role', Account.roleAssetsList)
     // Utils.stringToData(item, 'attributes.type', Account.typesList)
 
-    item.attributes.account_role = Account.roleAssetsList().find(role => role.fireflyCode === item.attributes.account_role)
-    item.attributes.type = Account.typesList().find(type => type.fireflyCode === item.attributes.type)
+    item.attributes.account_role = Account.roleAssetsList().find((role) => role.fireflyCode === item.attributes.account_role)
+    item.attributes.type = Account.typesList().find((type) => type.fireflyCode === item.attributes.type)
 
     let currencyId = get(item, 'attributes.currency_id')
     item.attributes.currency = currencyDictionary[currencyId]
@@ -27,7 +26,7 @@ export default class AccountTransformer extends ApiTransformer {
     return item
   }
 
-  static transformToApi (item) {
+  static transformToApi(item) {
     if (!item) {
       return null
     }

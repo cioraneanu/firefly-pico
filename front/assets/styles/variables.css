@@ -1,25 +1,22 @@
 :root {
-    --max-device-width: 800px;
-    --van-tabbar-z-index: 9;
+  --max-device-width: 800px;
+  --van-tabbar-z-index: 9;
 
-    --expense1: rgba(236, 64, 122, 1);
-    --expense2: rgba(236, 64, 122, 1);
-    --expense3: #FCE4EC;
+  --expense1: rgba(236, 64, 122, 1);
+  --expense2: rgba(236, 64, 122, 1);
+  --expense3: #fce4ec;
 
-    --income1: rgba(102, 187, 106, 1);
-    --income2: rgba(129, 199, 132, 1);
-    --income3: #E8F5E9;
+  --income1: rgba(102, 187, 106, 1);
+  --income2: rgba(129, 199, 132, 1);
+  --income3: #e8f5e9;
 
-    --transfer1: rgba(79, 195, 247, 1);
-    --transfer2: rgba(41, 182, 246, 1);
-    --transfer3: #E3F2FD;
+  --transfer1: rgba(79, 195, 247, 1);
+  --transfer2: rgba(41, 182, 246, 1);
+  --transfer3: #e3f2fd;
 
-
-    --demo-color: #aaa;
+  --demo-color: #aaa;
 }
-
 
 .van-theme-dark {
-    --demo-color: #666;
+  --demo-color: #666;
 }
-

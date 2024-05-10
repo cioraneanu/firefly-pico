@@ -3,10 +3,9 @@ import { avatarListIcons, duoToneListIcons, fluentListIcons } from '~/constants/
 // import { appSelectIcons } from '~/constants/TablerIconConstants.js'
 
 export default class Icon extends BaseModel {
-
   // ------------
 
-  static getIcon (iconName) {
+  static getIcon(iconName) {
     if (!iconName) {
       return null
     }
@@ -27,6 +26,6 @@ export default class Icon extends BaseModel {
     // if (iconName.startsWith('Icon')) {
     //   iconsList = appSelectIcons
     // }
-    return iconsList.find(item => item.icon === iconName)
+    return iconsList.find((item) => item.icon === iconName)
   }
 }

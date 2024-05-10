@@ -5,10 +5,10 @@ import { useAppStore } from '~/stores/appStore'
 import { useDataStore } from '~/stores/dataStore'
 import Transaction from '~/models/Transaction'
 import Tag from '~/models/Tag'
-import Account from "~/models/Account.js";
+import Account from '~/models/Account.js'
 
 export default class TransactionTransformer extends ApiTransformer {
-  static transformFromApi (item) {
+  static transformFromApi(item) {
     if (!item) {
       return null
     }
@@ -18,7 +18,7 @@ export default class TransactionTransformer extends ApiTransformer {
     const categoryDictionary = dataStore.categoryDictionary
     const tagDictionaryByName = dataStore.tagDictionaryByName
 
-    item.attributes.transactions = item.attributes.transactions.map(transaction => {
+    item.attributes.transactions = item.attributes.transactions.map((transaction) => {
       /*
         When used with multiple devices, someone can create a category that you don't have locally.
         => show a prompt to resync your extras. There may be edge cases where even after a full resync stuff is still missing...
@@ -26,7 +26,7 @@ export default class TransactionTransformer extends ApiTransformer {
       */
       // let hasMissingAccountSource = (transaction['source_id'] && !accountsDictionary[transaction['source_id']])
       // let hasMissingAccountDestination = (transaction['destination_id'] && !accountsDictionary[transaction['destination_id']])
-      let hasMissingCategory = (transaction['category_id'] && !categoryDictionary[transaction['category_id']])
+      let hasMissingCategory = transaction['category_id'] && !categoryDictionary[transaction['category_id']]
       let hasMissingTag = false
 
       transaction.amount = Transaction.formatAmount(_.get(transaction, 'amount', 0))
@@ -35,14 +35,14 @@ export default class TransactionTransformer extends ApiTransformer {
       transaction.accountDestination = accountsDictionary[transaction['destination_id']]
       transaction.category = categoryDictionary[transaction['category_id']]
       // transaction.tags = TagTransformer.transformFromApiList(transaction.tags.map(tagName => tagDictionaryByName[LanguageUtils.removeAccents(tagName)]))
-      transaction.tags = transaction.tags.map(tagName => {
+      transaction.tags = transaction.tags.map((tagName) => {
         hasMissingTag = hasMissingTag || !tagDictionaryByName[LanguageUtils.removeAccents(tagName)]
         return tagDictionaryByName[LanguageUtils.removeAccents(tagName)]
       })
 
       // let subTransactionType = Transaction.transactionTypeFromFirefly(transaction.type)
       // transaction.type = Transaction.typesList().find(item => item.code === subTransactionType)
-      transaction.type = Transaction.typesList.find(item => item.fireflyCode === transaction.type)
+      transaction.type = Transaction.typesList.find((item) => item.fireflyCode === transaction.type)
 
       if (hasMissingCategory || hasMissingTag) {
         dataStore.isSyncRequiredByMissingExtras = true
@@ -52,16 +52,15 @@ export default class TransactionTransformer extends ApiTransformer {
     })
 
     return item
-
   }
 
-  static transformToApi (item) {
+  static transformToApi(item) {
     const appStore = useAppStore()
 
     let id = _.get(item, 'data.id')
     let newTransactions = item.attributes.transactions
 
-    newTransactions = newTransactions.map(item => {
+    newTransactions = newTransactions.map((item) => {
       // let newItem = cloneDeep(item)
       let newItem = {}
       newItem.amount = _.get(item, 'amount', 0)
@@ -87,7 +86,7 @@ export default class TransactionTransformer extends ApiTransformer {
       if (!id && appStore.autoAddedTags && appStore.autoAddedTags.length > 0) {
         tags = [...tags, ...appStore.autoAddedTags]
       }
-      tags = tags.map(tag => Tag.getDisplayName(tag))
+      tags = tags.map((tag) => Tag.getDisplayName(tag))
       tags = uniq(tags)
 
       newItem.tags = tags
@@ -96,10 +95,10 @@ export default class TransactionTransformer extends ApiTransformer {
     })
 
     return {
-      'id': id,
-      'apply_rules': true,
-      'fire_webhooks': true,
-      'transactions': newTransactions,
+      id: id,
+      apply_rules: true,
+      fire_webhooks: true,
+      transactions: newTransactions,
     }
   }
 }

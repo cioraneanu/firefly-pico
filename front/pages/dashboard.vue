@@ -1,40 +1,26 @@
 <template>
-
   <div class="app-form">
+    <app-top-toolbar />
 
-    <app-top-toolbar/>
+    <van-pull-refresh v-model="isLoadingAccounts" @refresh="onRefresh">
+      <dashboard-accounts />
 
+      <dashboard-week-bars />
 
-    <van-pull-refresh
-        v-model="isLoadingAccounts"
-        @refresh="onRefresh">
+      <dashboard-summary />
 
-      <dashboard-accounts/>
+      <dashboard-tag-totals />
 
-      <dashboard-week-bars/>
+      <dashboard-category-totals />
 
-      <dashboard-summary/>
-
-      <dashboard-tag-totals/>
-
-      <dashboard-category-totals/>
-
-      <dashboard-todo-transactions/>
-
+      <dashboard-todo-transactions />
     </van-pull-refresh>
-
-
   </div>
-
-
 </template>
 
-
-import { ref, onMounted } from 'vue';
-import { useAppStore } from '~/stores/appStore'
+import { ref, onMounted } from 'vue'; import { useAppStore } from '~/stores/appStore'
 
 <script setup>
-
 import { useToolbar } from '~/composables/useToolbar'
 import { debounce } from 'lodash/function'
 import UIUtils from '~/utils/UIUtils.js'
@@ -69,6 +55,4 @@ const isLoadingDashboard = computed(() => {
 })
 
 UIUtils.showLoadingWhen(isLoadingDashboard)
-
-
 </script>

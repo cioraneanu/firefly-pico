@@ -1,27 +1,26 @@
 <template>
   <app-select
-      :label="label"
-      class=""
-      popupTitle="Select an account"
-      v-model="modelValue"
-      v-model:showDropdown="showDropdown"
-      v-model:search="search"
-      :list="accountList"
-      :columns="3"
-      :getDisplayValue="getDisplayValue"
-      v-bind="dynamicAttrs">
-
-
-    <template #inputItemContent="{item}">
+    :label="label"
+    class=""
+    popupTitle="Select an account"
+    v-model="modelValue"
+    v-model:showDropdown="showDropdown"
+    v-model:search="search"
+    :list="accountList"
+    :columns="3"
+    :getDisplayValue="getDisplayValue"
+    v-bind="dynamicAttrs"
+  >
+    <template #inputItemContent="{ item }">
       <div class="flex-center">
-        <app-icon :icon="Account.getIcon(item) ?? TablerIconConstants.account" :size="20"/>
+        <app-icon :icon="Account.getIcon(item) ?? TablerIconConstants.account" :size="20" />
         <span class="font-weight-400 text-size-12">{{ getDisplayValue(item) }}</span>
       </div>
     </template>
 
     <template #top-right>
       <van-button size="small" @click="onRefresh" class="">
-        <icon-refresh :strokeWidth="1" size="14" color="black"/>
+        <icon-refresh :strokeWidth="1" size="14" color="black" />
       </van-button>
     </template>
 
@@ -31,34 +30,21 @@
           <span class="account-select-section-title">Personal accounts</span>
           <van-grid>
             <template v-for="(item, index) in assetAccountList" :key="index">
-              <van-grid-item
-                  @click="onSelectCell(item)"
-                  style="cursor: pointer"
-                  :class="getOptionClass(item)">
+              <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
                 <template #default>
-                  <app-select-option
-                      :text="Account.getDisplayName(item)"
-                      :icon="Account.getIcon(item) ?? TablerIconConstants.account"
-                  />
+                  <app-select-option :text="Account.getDisplayName(item)" :icon="Account.getIcon(item) ?? TablerIconConstants.account" />
                 </template>
               </van-grid-item>
             </template>
           </van-grid>
         </template>
         <template v-if="showExpense">
-
           <span class="account-select-section-title">Expense accounts</span>
           <van-grid>
             <template v-for="(item, index) in expenseAccountList" :key="index">
-              <van-grid-item
-                  @click="onSelectCell(item)"
-                  style="cursor: pointer"
-                  :class="getOptionClass(item)">
+              <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
                 <template #default>
-                  <app-select-option
-                      :text="Account.getDisplayName(item)"
-                      :icon="Account.getIcon(item) ?? TablerIconConstants.account"
-                  />
+                  <app-select-option :text="Account.getDisplayName(item)" :icon="Account.getIcon(item) ?? TablerIconConstants.account" />
                 </template>
               </van-grid-item>
             </template>
@@ -68,15 +54,9 @@
           <span class="account-select-section-title">Income accounts</span>
           <van-grid>
             <template v-for="(item, index) in incomeAccountList" :key="index">
-              <van-grid-item
-                  @click="onSelectCell(item)"
-                  style="cursor: pointer"
-                  :class="getOptionClass(item)">
+              <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
                 <template #default>
-                  <app-select-option
-                      :text="Account.getDisplayName(item)"
-                      :icon="Account.getIcon(item) ?? TablerIconConstants.account"
-                  />
+                  <app-select-option :text="Account.getDisplayName(item)" :icon="Account.getIcon(item) ?? TablerIconConstants.account" />
                 </template>
               </van-grid-item>
             </template>
@@ -89,12 +69,10 @@
     </template>
 
     <template v-for="slot in Object.keys($slots)" v-slot:[slot]="scoped">
-      <slot :name="slot" v-bind="scoped ?? {}"/>
+      <slot :name="slot" v-bind="scoped ?? {}" />
     </template>
-
   </app-select>
 </template>
-
 
 <script setup>
 import { useDataStore } from '~/stores/dataStore'
@@ -115,7 +93,7 @@ const props = defineProps({
     default: 'Account',
   },
   allowedTypes: {
-    default: () =>  Account.typesList(),
+    default: () => Account.typesList(),
   },
 })
 
@@ -129,18 +107,18 @@ const accountList = computed(() => {
   if (search.value.length === 0) {
     return list.value
   }
-  return list.value.filter(item => {
+  return list.value.filter((item) => {
     return Account.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
   })
 })
 
-const expenseAccountList = computed(() => accountList.value.filter(item => isEqual(Account.getType(item), Account.types.expense)))
-const assetAccountList = computed(() => accountList.value.filter(item => isEqual(Account.getType(item), Account.types.asset)))
-const incomeAccountList = computed(() => accountList.value.filter(item => isEqual(Account.getType(item), Account.types.revenue)))
+const expenseAccountList = computed(() => accountList.value.filter((item) => isEqual(Account.getType(item), Account.types.expense)))
+const assetAccountList = computed(() => accountList.value.filter((item) => isEqual(Account.getType(item), Account.types.asset)))
+const incomeAccountList = computed(() => accountList.value.filter((item) => isEqual(Account.getType(item), Account.types.revenue)))
 
-const showAssets = computed(() => props.allowedTypes.some(item => isEqual(item, Account.types.asset)) && assetAccountList.value.length > 0)
-const showExpense = computed(() => props.allowedTypes.some(item => isEqual(item, Account.types.expense)) && expenseAccountList.value.length > 0)
-const showIncome = computed(() => props.allowedTypes.some(item => isEqual(item, Account.types.revenue)) && incomeAccountList.value.length > 0)
+const showAssets = computed(() => props.allowedTypes.some((item) => isEqual(item, Account.types.asset)) && assetAccountList.value.length > 0)
+const showExpense = computed(() => props.allowedTypes.some((item) => isEqual(item, Account.types.expense)) && expenseAccountList.value.length > 0)
+const showIncome = computed(() => props.allowedTypes.some((item) => isEqual(item, Account.types.revenue)) && incomeAccountList.value.length > 0)
 
 // ------ Methods ------
 
@@ -163,7 +141,7 @@ const isItemSelected = (option) => {
 
 const getOptionClass = (option) => {
   return {
-    'active': isItemSelected(option),
+    active: isItemSelected(option),
   }
 }
 
@@ -174,10 +152,6 @@ const onRefresh = async () => {
   await dataStore.fetchAccounts()
   isLoading.value = false
 }
-
-
 </script>
 
-<style>
-
-</style>
+<style></style>

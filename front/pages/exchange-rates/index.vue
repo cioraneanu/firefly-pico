@@ -1,19 +1,13 @@
 <template>
-
   <div class="app-form">
-    <app-top-toolbar/>
+    <app-top-toolbar />
 
-    <van-pull-refresh
-        v-model="isRefreshing"
-        @refresh="onRefresh">
-
+    <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
       <van-cell-group inset>
         <div class="van-cell-group-title">Date: {{ exchangeDate }}</div>
 
         <van-grid :column-num="3">
-          <van-grid-item
-
-              v-for="(currencyValue, currencyCode ) in exchangeRates">
+          <van-grid-item v-for="(currencyValue, currencyCode) in exchangeRates">
             <template #text>
               <div>
                 <div class="flex-center text-size-14 font-weight-600">{{ currencyCode }}</div>
@@ -22,21 +16,12 @@
             </template>
           </van-grid-item>
         </van-grid>
-
-
       </van-cell-group>
-
     </van-pull-refresh>
-
-
   </div>
-
-
 </template>
 
-
 <script setup>
-
 import { get } from 'lodash'
 import { useAppStore } from '~/stores/appStore'
 import { useDataStore } from '~/stores/dataStore'
@@ -70,5 +55,4 @@ toolbar.init({
   title: 'Exchange rates',
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
-
 </script>

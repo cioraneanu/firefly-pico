@@ -1,7 +1,7 @@
 <template>
   <van-grid-item>
     <template #icon>
-      <app-icon :icon="icon" :size="24"/>
+      <app-icon :icon="icon" :size="24" />
     </template>
     <template #text>
       <div class="display-flex flex-column align-items-center">
@@ -12,7 +12,6 @@
   </van-grid-item>
 </template>
 <script setup>
-
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Account from '~/models/Account.js'
 import { addMonths, differenceInDays, startOfDay, subDays, subMonths } from 'date-fns'
@@ -29,5 +28,4 @@ const props = defineProps({
 const subtitleClass = computed(() => {
   return `font-700 text-size-12 text-center ${props.subtitleClass}`
 })
-
 </script>

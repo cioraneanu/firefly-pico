@@ -7,8 +7,7 @@ import _ from 'lodash'
 import Transaction from '~/models/Transaction'
 
 // by convention, composable function names start with "use"
-export function useClickWithoutSwipe ({ swipeCell, onClick }) {
-
+export function useClickWithoutSwipe({ swipeCell, onClick }) {
   let x = 0
   let y = 0
   let isOpened = false
@@ -27,7 +26,6 @@ export function useClickWithoutSwipe ({ swipeCell, onClick }) {
   }
 
   const onMouseup = (e) => {
-
     let threshold = 30
 
     const deltaX = Math.abs(e.clientX - x)
@@ -46,12 +44,13 @@ export function useClickWithoutSwipe ({ swipeCell, onClick }) {
       return
     }
 
-
     onClick()
   }
 
   return {
-    onMouseup, onMousedown, onOpen, onClose
+    onMouseup,
+    onMousedown,
+    onOpen,
+    onClose,
   }
-
 }

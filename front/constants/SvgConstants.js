@@ -333,7 +333,6 @@ export const fluentListIcons = [
   { name: 'vehicle-bicycle-20-regular', icon: 'svgo-fluent-vehicle-bicycle-20-regular' },
   { name: 'vehicle-car-profile-24-regular', icon: 'svgo-fluent-vehicle-car-profile-24-regular' },
   { name: 'wallet-20-regular', icon: 'svgo-fluent-wallet-20-regular' },
-
 ]
 
 export const avatarListIcons = [
@@ -414,5 +413,4 @@ export const avatarListIcons = [
   { name: 'wallet-money-business-svgrepo-com', icon: 'svgo-avatar-wallet-money-business-svgrepo-com' },
   { name: 'wallet-svgrepo-com-2', icon: 'svgo-avatar-wallet-svgrepo-com-2' },
   { name: 'wallet-svgrepo-com', icon: 'svgo-avatar-wallet-svgrepo-com' },
-
 ]

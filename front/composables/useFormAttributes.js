@@ -1,5 +1,4 @@
-export function useFormAttributes (attributes) {
-
+export function useFormAttributes(attributes) {
   const dynamicAttrs = computed(() => {
     let defaultAttributes = {
       'label-align': 'top',
@@ -8,6 +7,6 @@ export function useFormAttributes (attributes) {
   })
 
   return {
-    dynamicAttrs
+    dynamicAttrs,
   }
 }

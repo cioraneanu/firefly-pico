@@ -6,10 +6,9 @@ import { useAppStore } from '~/stores/appStore'
 import { useDataStore } from '~/stores/dataStore'
 
 class AccountRepository extends BaseRepository {
-  constructor () {
+  constructor() {
     super('api/accounts')
   }
-
 }
 
 export default AccountRepository

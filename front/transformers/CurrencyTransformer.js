@@ -5,14 +5,14 @@ import Utils from '~/utils/Utils'
 import ApiTransformer from '~/transformers/ApiTransformer'
 
 export default class CurrencyTransformer extends ApiTransformer {
-  static transformFromApi (item) {
+  static transformFromApi(item) {
     if (!item) {
       return null
     }
     return item
   }
 
-  static transformToApi (item) {
+  static transformToApi(item) {
     if (!item) {
       return null
     }

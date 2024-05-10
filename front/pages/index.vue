@@ -1,5 +1,5 @@
 <template>
-  <transaction-create/>
+  <transaction-create />
 </template>
 
 <script setup>
