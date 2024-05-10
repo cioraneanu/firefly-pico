@@ -1,22 +1,16 @@
 <template>
   <van-config-provider :theme="theme">
+    <NuxtPwaManifest />
     <NuxtLayout>
-      <NuxtPage/>
+      <NuxtPage />
     </NuxtLayout>
   </van-config-provider>
-
 </template>
-
-
-import { Locale } from 'vant';
-import enUS from 'vant/es/locale/lang/en-US';
-
 
 <script setup>
 import {useDataStore} from '~/stores/dataStore'
 import RouteConstants from '~/constants/RouteConstants'
 
-const layout = 'custom'
 let dataStore = useDataStore()
 let appStore = useAppStore()
 
@@ -34,8 +28,6 @@ onMounted(async () => {
 
 const {isLoading} = storeToRefs(dataStore)
 UIUtils.showLoadingWhen(isLoading)
-
-
 </script>
 
 <style>
