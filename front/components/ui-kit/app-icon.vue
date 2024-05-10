@@ -1,10 +1,8 @@
 <template>
-  <component :is="props.icon" :fontControlled="false" :style="style" :stroke-width="props.stroke"/>
+  <component :is="props.icon" :fontControlled="false" :style="style" :stroke-width="props.stroke" />
 </template>
 
-
 <script setup>
-
 const props = defineProps({
   icon: {
     type: String,
@@ -20,10 +18,6 @@ const props = defineProps({
 })
 
 const style = computed(() => `width: ${props.size}px`)
-
-
 </script>
 
-<style>
-
-</style>
+<style></style>

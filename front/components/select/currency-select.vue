@@ -1,35 +1,26 @@
 <template>
-
   <app-select
-      :label="label"
-      popupTitle="Select a currency"
-      v-model="modelValue"
-      v-model:showDropdown="showDropdown"
-      v-model:search="search"
-      :list="filteredList"
-      :columns="3"
-      :getDisplayValue="getDisplayValue"
-      v-bind="dynamicAttrs">
-
+    :label="label"
+    popupTitle="Select a currency"
+    v-model="modelValue"
+    v-model:showDropdown="showDropdown"
+    v-model:search="search"
+    :list="filteredList"
+    :columns="3"
+    :getDisplayValue="getDisplayValue"
+    v-bind="dynamicAttrs"
+  >
     <template #top-right>
       <van-button size="small" @click="onRefresh" class="">
-        <icon-refresh :strokeWidth="1" size="14" color="black"/>
+        <icon-refresh :strokeWidth="1" size="14" color="black" />
       </van-button>
     </template>
 
-    <template #item="{item}">
-      <app-select-option
-          :text="Currency.getDisplayName(item)"
-          :icon="TablerIconConstants.account"
-      />
+    <template #item="{ item }">
+      <app-select-option :text="Currency.getDisplayName(item)" :icon="TablerIconConstants.account" />
     </template>
-
-
   </app-select>
-
-
 </template>
-
 
 <script setup>
 import _, { get } from 'lodash'
@@ -47,7 +38,7 @@ const { dynamicAttrs } = useFormAttributes(attrs)
 const props = defineProps({
   label: {
     type: String,
-    default: 'Currency'
+    default: 'Currency',
   },
 })
 
@@ -61,7 +52,7 @@ const filteredList = computed(() => {
   if (search.value.length === 0) {
     return list.value
   }
-  return list.value.filter(item => {
+  return list.value.filter((item) => {
     return Currency.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
   })
 })
@@ -78,7 +69,7 @@ const filteredList = computed(() => {
 // ------ Methods ------
 
 onMounted(async () => {
-  list.value = dataStore.currenciesList.filter(item => get(item, 'attributes.enabled'))
+  list.value = dataStore.currenciesList.filter((item) => get(item, 'attributes.enabled'))
 })
 
 const onSelectCell = (value) => {
@@ -97,9 +88,6 @@ const onRefresh = async () => {
   await dataStore.fetchCurrencies()
   isLoading.value = false
 }
-
 </script>
 
-<style>
-
-</style>
+<style></style>

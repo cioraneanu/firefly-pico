@@ -4,10 +4,9 @@
     <van-button round type="primary" native-type="submit" class="flex-1 shadow-depth2">
       {{ label }}
     </van-button>
-    <slot name="right"/>
+    <slot name="right" />
   </div>
 </template>
-
 
 <script setup>
 const props = defineProps({
@@ -27,9 +26,10 @@ visualViewport.addEventListener('resize', () => {
 const style = computed(() => {
   return {
     // 'bottom': `calc(env(safe-area-inset-bottom) + ${props.bottom}px)`,
-    'bottom': keyboardOffset.value === 0 ? `calc(env(safe-area-inset-bottom) + ${props.bottom}px)` : `calc( ${keyboardOffset.value}px + 10px )`,
+    bottom:
+      keyboardOffset.value === 0
+        ? `calc(env(safe-area-inset-bottom) + ${props.bottom}px)`
+        : `calc( ${keyboardOffset.value}px + 10px )`,
   }
 })
-
-
 </script>

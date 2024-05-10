@@ -6,11 +6,4 @@ export const OPTION_ENGLISH = { code: LANGUAGE_ENGLISH, name: 'English', flag: '
 export const OPTION_ROMANIAN = { code: LANGUAGE_ROMANIAN, name: 'Romanian', flag: 'ro' }
 export const OPTION_FRENCH = { code: LANGUAGE_FRENCH, name: 'French', flag: 'fr' }
 
-export const OPTIONS_LIST = [
-  OPTION_ENGLISH,
-  OPTION_ROMANIAN,
-  OPTION_FRENCH,
-]
-
-
-
+export const OPTIONS_LIST = [OPTION_ENGLISH, OPTION_ROMANIAN, OPTION_FRENCH]

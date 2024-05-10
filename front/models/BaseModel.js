@@ -1,23 +1,17 @@
-import axios from 'axios'
-import _, { get } from 'lodash'
-import { useAppStore } from '~/stores/appStore'
-import UIUtils from '~/utils/UIUtils'
+import { get } from 'lodash'
 
 export default class BaseModel {
+  constructor() {}
 
-  constructor () {
-
+  getEmpty() {
+    throw 'Implement me'
   }
 
-  getEmpty () {
-    throw "Implement me"
+  getFake(id) {
+    throw 'Implement me'
   }
 
-  getFake (id) {
-    throw "Implement me"
-  }
-
-  getFakeList () {
+  getFakeList() {
     let list = []
     for (let i = 1; i <= 50; i++) {
       list.push(this.getFake(i))
@@ -27,9 +21,7 @@ export default class BaseModel {
     }
   }
 
-  static getIcon (item) {
+  static getIcon(item) {
     return get(item, 'attributes.icon.icon')
   }
-
-
 }

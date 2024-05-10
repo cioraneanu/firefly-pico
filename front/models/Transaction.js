@@ -1,26 +1,27 @@
+import _, { get, isEqual } from 'lodash'
+import Account from '~/models/Account'
 import BaseModel from '~/models/BaseModel'
-import TransactionTransformer from '~/transformers/TransactionTransformer'
 import TransactionRepository from '~/repository/TransactionRepository'
 import { useAppStore } from '~/stores/appStore'
-import Account from '~/models/Account'
-import _, { get, isEqual } from 'lodash'
+import TransactionTransformer from '~/transformers/TransactionTransformer'
 
 class Transaction extends BaseModel {
-
-  getTransformer () {
+  getTransformer() {
     return TransactionTransformer
   }
 
-  getRepository () {
+  getRepository() {
     return new TransactionRepository()
   }
 
-  getEmpty () {
+  getEmpty() {
     const appStore = useAppStore()
 
-    let type = Transaction.getTransactionTypeForAccounts({
-      source: appStore.defaultAccountSource, destination: appStore.defaultAccountDestination,
-    }) ?? Transaction.types.expense
+    let type =
+      Transaction.getTransactionTypeForAccounts({
+        source: appStore.defaultAccountSource,
+        destination: appStore.defaultAccountDestination,
+      }) ?? Transaction.types.expense
     // let type = Transaction.typesList.find(item => item.code === transactionTypeCode)
     // let type = Transaction.types[transactionTypeCode]
 
@@ -33,30 +34,30 @@ class Transaction extends BaseModel {
       attributes: {
         transactions: [
           {
-            'amount': '',
+            amount: '',
             // 'date': startOfDay(new Date()),
-            'date': date,
-            'tags': appStore.defaultTags,
-            'description': '',
-            'notes': '',
-            'accountSource': appStore.defaultAccountSource,
-            'accountDestination': appStore.defaultAccountDestination,
-            'type': type,
-            'category': appStore.defaultCategory,
-          }],
+            date: date,
+            tags: appStore.defaultTags,
+            description: '',
+            notes: '',
+            accountSource: appStore.defaultAccountSource,
+            accountDestination: appStore.defaultAccountDestination,
+            type: type,
+            category: appStore.defaultCategory,
+          },
+        ],
       },
       // },
     }
   }
 
-  getFake (id) {
+  getFake(id) {
     return {}
-
   }
 
   // ------------
 
-  static get types () {
+  static get types() {
     return {
       expense: {
         name: 'Expense',
@@ -76,13 +77,13 @@ class Transaction extends BaseModel {
     }
   }
 
-  static get typesList () {
+  static get typesList() {
     return Object.values(this.types)
   }
 
   // -----
 
-  static getAmount (transaction) {
+  static getAmount(transaction) {
     let transactionSplits = _.get(transaction, 'attributes.transactions', [])
     return transactionSplits.reduce((result, item) => {
       let amount = parseFloat(item.amount)
@@ -90,31 +91,31 @@ class Transaction extends BaseModel {
     }, 0)
   }
 
-  static getCurrency (transaction) {
+  static getCurrency(transaction) {
     return get(transaction, 'attributes.transactions.0.currency_code', [])
   }
 
-  static getTags (transaction) {
+  static getTags(transaction) {
     return get(transaction, 'attributes.transactions.0.tags', [])
   }
 
-  static getCategoryId (transaction) {
+  static getCategoryId(transaction) {
     return get(transaction, 'attributes.transactions.0.category_id', 0)
   }
 
-  static getAmountFormatted (transaction) {
+  static getAmountFormatted(transaction) {
     return this.getAmount(transaction).toFixed(2)
   }
 
-  static getDate (transaction) {
+  static getDate(transaction) {
     return get(transaction, 'attributes.transactions.0.date')
   }
 
-  static formatAmount (amount) {
+  static formatAmount(amount) {
     return (Math.round(amount * 100) / 100).toFixed(2)
   }
 
-  static getTransactionTypeForAccounts ({ source, destination }) {
+  static getTransactionTypeForAccounts({ source, destination }) {
     if (!source && !destination) {
       return this.types.expense
     }
@@ -123,13 +124,15 @@ class Transaction extends BaseModel {
       return this.types.income
     }
 
-    if (isEqual(Account.getType(source), Account.types.asset) && isEqual(Account.getType(destination), Account.types.asset)) {
+    if (
+      isEqual(Account.getType(source), Account.types.asset) &&
+      isEqual(Account.getType(destination), Account.types.asset)
+    ) {
       return this.types.transfer
     }
 
     return this.types.expense
   }
-
 }
 
 export default Transaction

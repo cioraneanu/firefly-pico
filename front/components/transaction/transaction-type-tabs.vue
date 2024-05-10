@@ -1,9 +1,6 @@
 <template>
   <div class="transaction-type-container">
-    <div
-        @click="onClick(item)"
-        :class="getItemClass(item)"
-        v-for="item in list">
+    <div @click="onClick(item)" :class="getItemClass(item)" v-for="item in list">
       <span>{{ item.name }}</span>
       <span class="type-indicator"></span>
     </div>
@@ -11,7 +8,6 @@
 </template>
 
 <script setup>
-
 import Transaction from '~/models/Transaction'
 import { isEqual } from 'lodash/lang'
 
@@ -26,8 +22,7 @@ const onClick = (item) => {
 const getItemClass = (item) => {
   return {
     'transaction-type-item': true,
-    'selected': isEqual(item, modelValue.value)
+    selected: isEqual(item, modelValue.value),
   }
 }
-
 </script>

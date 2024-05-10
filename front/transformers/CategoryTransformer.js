@@ -1,12 +1,9 @@
 import _, { get } from 'lodash'
-import DateUtils from '~/utils/DateUtils'
-import Account from '~/models/Account'
-import Utils from '~/utils/Utils'
-import ApiTransformer from '~/transformers/ApiTransformer'
 import Icon from '~/models/Icon.js'
+import ApiTransformer from '~/transformers/ApiTransformer'
 
 export default class CategoryTransformer extends ApiTransformer {
-  static transformFromApi (item) {
+  static transformFromApi(item) {
     if (!item) {
       return null
     }
@@ -17,7 +14,7 @@ export default class CategoryTransformer extends ApiTransformer {
     return item
   }
 
-  static transformToApi (item) {
+  static transformToApi(item) {
     if (!item) {
       return null
     }
@@ -27,6 +24,5 @@ export default class CategoryTransformer extends ApiTransformer {
       name: get(data, 'name', '').toLowerCase(),
       icon: get(data, 'icon.icon'),
     }
-
   }
 }

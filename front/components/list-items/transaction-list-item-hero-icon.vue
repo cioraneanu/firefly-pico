@@ -1,21 +1,15 @@
 <template>
-
-
-  <div
-      v-if="isAnyIconVisible"
-      class="hero-icons-section gap-1 flex-center-vertical">
-
-
+  <div v-if="isAnyIconVisible" class="hero-icons-section gap-1 flex-center-vertical">
     <template v-if="isAccountIconVisible">
-      <app-icon v-for="accountIcon in accountIcons" :icon="accountIcon" :size="30"/>
+      <app-icon v-for="accountIcon in accountIcons" :icon="accountIcon" :size="30" />
     </template>
 
     <template v-if="isTagIconVisible">
-      <app-icon :icon="tagIcon" :size="30"/>
+      <app-icon :icon="tagIcon" :size="30" />
     </template>
 
     <template v-if="isCategoryIconVisible">
-      <app-icon :icon="categoryIcon" :size="30"/>
+      <app-icon :icon="categoryIcon" :size="30" />
     </template>
 
     <template v-if="isWeekdayIconVisible">
@@ -23,13 +17,8 @@
         <div class="hero-icon-weekday">{{ dayOfWeek }}</div>
       </div>
     </template>
-
-
   </div>
-
-
 </template>
-
 
 <script setup>
 import _, { get, isEmpty, isEqual } from 'lodash'
@@ -64,10 +53,10 @@ const tags = computed(() => {
 })
 
 const date = computed(() => DateUtils.autoToDate(_.get(firstTransaction.value, 'date')))
-const dayOfWeek = computed(() => date.value ? format(date.value, 'E').toUpperCase() : '')
-const time = computed(() => date.value ? format(date.value, 'HH:mm') : '')
-const timeHour = computed(() => date.value ? format(date.value, 'HH') : '')
-const timeMinute = computed(() => date.value ? format(date.value, 'mm') : '')
+const dayOfWeek = computed(() => (date.value ? format(date.value, 'E').toUpperCase() : ''))
+const time = computed(() => (date.value ? format(date.value, 'HH:mm') : ''))
+const timeHour = computed(() => (date.value ? format(date.value, 'HH') : ''))
+const timeMinute = computed(() => (date.value ? format(date.value, 'mm') : ''))
 
 const accountIcons = computed(() => {
   const destinationAccount = get(dataStore.accountDictionary, get(firstTransaction.value, 'destination_id'))
@@ -94,20 +83,21 @@ const categoryIcon = computed(() => {
   return get(category, 'attributes.icon.icon') ?? TablerIconConstants.category
 })
 
-const isAccountIconVisible = computed(() => appStore.heroIcons.some(item => item.code === HERO_ICONS.account))
-const isTagIconVisible = computed(() => appStore.heroIcons.some(item => item.code === HERO_ICONS.tag) && !isEmpty(tags.value))
-const isCategoryIconVisible = computed(() => appStore.heroIcons.some(item => item.code === HERO_ICONS.category))
-const isWeekdayIconVisible = computed(() => appStore.heroIcons.some(item => item.code === HERO_ICONS.dayOfWeek))
-const isHourIconVisible = computed(() => appStore.heroIcons.some(item => item.code === HERO_ICONS.hour))
+const isAccountIconVisible = computed(() => appStore.heroIcons.some((item) => item.code === HERO_ICONS.account))
+const isTagIconVisible = computed(
+  () => appStore.heroIcons.some((item) => item.code === HERO_ICONS.tag) && !isEmpty(tags.value),
+)
+const isCategoryIconVisible = computed(() => appStore.heroIcons.some((item) => item.code === HERO_ICONS.category))
+const isWeekdayIconVisible = computed(() => appStore.heroIcons.some((item) => item.code === HERO_ICONS.dayOfWeek))
+const isHourIconVisible = computed(() => appStore.heroIcons.some((item) => item.code === HERO_ICONS.hour))
 
 const isAnyIconVisible = computed(() => {
-  return isAccountIconVisible.value ||
-      isTagIconVisible.value ||
-      isCategoryIconVisible.value ||
-      isWeekdayIconVisible ||
-      isHourIconVisible
+  return (
+    isAccountIconVisible.value ||
+    isTagIconVisible.value ||
+    isCategoryIconVisible.value ||
+    isWeekdayIconVisible ||
+    isHourIconVisible
+  )
 })
-
-
 </script>
-

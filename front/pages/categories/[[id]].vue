@@ -1,61 +1,37 @@
 <template>
-
   <div class="app-form">
     <app-top-toolbar>
       <template #right>
-        <app-button-list-add v-if="addButtonText" @click="onNew"/>
+        <app-button-list-add v-if="addButtonText" @click="onNew" />
       </template>
     </app-top-toolbar>
 
-    <van-form
-        ref="form"
-        @submit="saveItem"
-        @failed="onValidationError"
-        class="">
-
-
+    <van-form ref="form" class="" @submit="saveItem" @failed="onValidationError">
       <van-cell-group inset>
-
         <app-field
-            v-model="name"
-            name="Name"
-            label="Name"
-            rows="1"
-            autosize
-            left-icon="notes-o"
-            placeholder="Description"
-            :rules="[{ required: true, message: 'Name is required' }]"
+          v-model="name"
+          name="Name"
+          label="Name"
+          rows="1"
+          autosize
+          left-icon="notes-o"
+          placeholder="Description"
+          :rules="[{ required: true, message: 'Name is required' }]"
         />
 
-        <icon-select
-            v-model="icon"
-        />
-
+        <icon-select v-model="icon" />
       </van-cell-group>
 
+      <div style="margin: 16px">
+        <app-button-form-save />
 
-      <div style="margin: 16px;">
-        <app-button-form-save/>
-
-        <app-button-form-delete
-            class="mt-10"
-            v-if="itemId"
-            @click="onDelete"
-        />
-
+        <app-button-form-delete v-if="itemId" class="mt-10" @click="onDelete" />
       </div>
     </van-form>
-
   </div>
-
-
 </template>
 
-
-import { ref } from 'vue';
-
 <script setup>
-
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
 import _ from 'lodash'
@@ -67,8 +43,8 @@ import Category from '~/models/Category'
 import { useToolbar } from '~/composables/useToolbar'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
 
-let dataStore = useDataStore()
-let appStore = useAppStore()
+const dataStore = useDataStore()
+const appStore = useAppStore()
 const route = useRoute()
 
 const form = ref(null)
@@ -86,17 +62,24 @@ const onEvent = (event, payload) => {
   if (event === 'onPostSave') {
     let newItem = _.get(payload, 'data.data')
     newItem = CategoryTransformer.transformFromApi(newItem)
-    dataStore.categoryList = [newItem, ...dataStore.categoryList.filter(item => item.id !== itemId.value)]
+    dataStore.categoryList = [newItem, ...dataStore.categoryList.filter((item) => item.id !== itemId.value)]
   }
   if (event === 'onPostDelete') {
-    dataStore.categoryList = dataStore.categoryList.filter(item => item.id !== itemId.value)
+    dataStore.categoryList = dataStore.categoryList.filter((item) => item.id !== itemId.value)
   }
 }
 
-let {
-  itemId, item, isEmpty, title, addButtonText,
+const {
+  itemId,
+  item,
+  isEmpty,
+  title,
+  addButtonText,
   isLoading,
-  onClickBack, saveItem, onDelete, onNew,
+  onClickBack,
+  saveItem,
+  onDelete,
+  onNew,
   onValidationError,
 } = useForm({
   form: form,
@@ -110,9 +93,7 @@ let {
   onEvent: onEvent,
 })
 
-const {
-  name, type, role, icon,
-} = generateChildren(item, [
+const { name, type, role, icon } = generateChildren(item, [
   { computed: 'name', parentKey: 'attributes.name' },
   { computed: 'icon', parentKey: `attributes.icon` },
 ])
@@ -130,6 +111,4 @@ toolbar.init({
   leftText: 'List',
   backRoute: RouteConstants.ROUTE_CATEGORY_LIST,
 })
-
-
 </script>

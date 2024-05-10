@@ -4,6 +4,7 @@ import {
   IconCalendarEvent,
   IconCarambola,
   IconCategory,
+  IconCodeCircle,
   IconCoin,
   IconCoins,
   IconCreditCard,
@@ -20,6 +21,7 @@ import {
   IconMoodCog,
   IconNotes,
   IconRefresh,
+  IconReplace,
   IconRuler,
   IconSettings,
   IconSquareRoundedMinus,
@@ -28,12 +30,9 @@ import {
   IconTemplate,
   IconTool,
   IconTransfer,
-  IconReplace,
-  IconCodeCircle
 } from '@tabler/icons-vue'
 
-export default defineNuxtPlugin(nuxtApp => {
-
+export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconCodeCircle', IconCodeCircle)
   nuxtApp.vueApp.component('IconReplace', IconReplace)
   nuxtApp.vueApp.component('IconCarambola', IconCarambola)

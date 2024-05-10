@@ -3,37 +3,27 @@
     <div class="van-cell-group-title">Expenses by tags:</div>
     <div class="display-flex flex-column ml-15 mr-15">
       <table>
-
         <tr v-for="bar in barsList" @click="onClick(bar)">
-
-          <td style="width: 1%;">
+          <td style="width: 1%">
             <div class="flex-center-vertical gap-1 my-1">
-              <app-icon :icon="Tag.getIcon(bar.tag)" :size="20"/>
+              <app-icon :icon="Tag.getIcon(bar.tag)" :size="20" />
               <span class="text-size-12 font-weight-400">{{ bar.label }}</span>
             </div>
           </td>
 
           <td>
-            <bar-chart-item-horizontal
-                :percent="bar.percent"
-
-            />
+            <bar-chart-item-horizontal :percent="bar.percent" />
           </td>
 
-          <td style="width: 1%;">
+          <td style="width: 1%">
             <div class="display-flex flex-column">
               <span class="text-size-12 font-weight-400">{{ bar.value }}</span>
             </div>
           </td>
         </tr>
-
       </table>
-
     </div>
-
   </van-cell-group>
-
-
 </template>
 <script setup>
 import { get } from 'lodash'
@@ -44,12 +34,11 @@ import Tag from '~/models/Tag.js'
 const dataStore = useDataStore()
 
 const barsList = computed(() => {
-
   const tagTotalDictionary = dataStore.dashboardExpensesByTag
 
   const maxAmount = Math.max(...Object.values(tagTotalDictionary))
 
-  const bars = Object.keys(tagTotalDictionary).map(tagId => {
+  const bars = Object.keys(tagTotalDictionary).map((tagId) => {
     const tag = dataStore.tagDictionaryById[tagId]
     const amount = tagTotalDictionary[tagId].toFixed(0)
     const percent = (amount / maxAmount) * 100
@@ -70,12 +59,14 @@ const onClick = async (bar) => {
 
   let tagId = get(bar, 'tag_id')
   if (!tagId) {
-    await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_tag=true&date_start=${startDate}&date_end=${endDate}`)
+    await navigateTo(
+      `${RouteConstants.ROUTE_TRANSACTION_LIST}?without_tag=true&date_start=${startDate}&date_end=${endDate}`,
+    )
     return
   }
 
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${bar.tag_id}&date_start=${startDate}&date_end=${endDate}`)
+  await navigateTo(
+    `${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${bar.tag_id}&date_start=${startDate}&date_end=${endDate}`,
+  )
 }
-
-
 </script>

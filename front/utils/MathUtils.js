@@ -11,7 +11,10 @@ export const getFormattedValue = (value, digits = 0) => {
     return '******'
   }
   let numberFormatCode = appStore.numberFormat.code ?? NUMBER_FORMAT.eu.code
-  return new Intl.NumberFormat(numberFormatCode, { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value)
+  return new Intl.NumberFormat(numberFormatCode, {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(value)
 }
 
 export const isStringANumber = (value) => {

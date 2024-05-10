@@ -1,31 +1,26 @@
 <template>
   <van-cell-group inset style="overflow: auto">
-
     <div class="flex-center-vertical">
       <div class="van-cell-group-title">Total balance:</div>
-      <div class="flex-1"/>
-      <van-button
-          @click="onToggleShowDashboardAccountValues"
-          size="small"
-          class="mr-10">
+      <div class="flex-1" />
+      <van-button @click="onToggleShowDashboardAccountValues" size="small" class="mr-10">
         <template #icon>
-          <app-icon :icon="appStore.dashboard.showAccountAmounts ? 'IconEyeX' : 'IconEye'" :size="20"/>
+          <app-icon :icon="appStore.dashboard.showAccountAmounts ? 'IconEyeX' : 'IconEye'" :size="20" />
           <!--              <van-icon name="eye-o"/>-->
         </template>
       </van-button>
     </div>
 
-
     <van-grid :column-num="2">
-      <van-grid-item v-for="account in dataStore.dashboardAccounts"
-                     :key="account.id"
-                     @click="onGoToTransactions(account)"
-                     icon="photo-o">
-
+      <van-grid-item
+        v-for="account in dataStore.dashboardAccounts"
+        :key="account.id"
+        @click="onGoToTransactions(account)"
+        icon="photo-o"
+      >
         <template #icon>
-          <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="24"/>
+          <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="24" />
         </template>
-
 
         <template #text>
           <div class="display-flex flex-column align-items-center">
@@ -36,34 +31,26 @@
       </van-grid-item>
     </van-grid>
 
-
-
     <div class="flex-center text-size-13 m-10 flex-wrap">
       <div class="flex-center text-size-13 me-1">
-        <icon-cash class="text-muted" :size="24" :stroke="1.5"/>
+        <icon-cash class="text-muted" :size="24" :stroke="1.5" />
         <span class="font-400 text-muted">Total: </span>
       </div>
 
       <span
-          v-for="(totalValue, totalCurrency ) in dataStore.dashboardAccountsTotalByCurrency"
-          class="font-700 ms-1 mx-1 app-select-option-tag">
+        v-for="(totalValue, totalCurrency) in dataStore.dashboardAccountsTotalByCurrency"
+        class="font-700 ms-1 mx-1 app-select-option-tag"
+      >
         {{ getFormattedValue(totalValue) }} {{ totalCurrency }}
       </span>
     </div>
 
-    <div
-        v-if="hasMultipleCurrencies"
-        class="flex-center text-size-13 mb-3 gap-1">
+    <div v-if="hasMultipleCurrencies" class="flex-center text-size-13 mb-3 gap-1">
       <span class="font-700">~{{ accountTotal }} {{ dataStore.accountTotalCurrency }}</span>
-      <van-button
-          @click="onToggleTotalCurrency"
-          size="small"
-          style="height: 25px; padding: 0px 4px;">
-        <icon-switch2 :size="20" :stroke="1.5"/>
-
+      <van-button @click="onToggleTotalCurrency" size="small" style="height: 25px; padding: 0px 4px">
+        <icon-switch2 :size="20" :stroke="1.5" />
       </van-button>
     </div>
-
   </van-cell-group>
 </template>
 
@@ -106,5 +93,4 @@ const onGoToTransactions = async (account) => {
   }
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?account_id=${account.id}`)
 }
-
 </script>

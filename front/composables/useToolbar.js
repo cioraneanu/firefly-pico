@@ -9,8 +9,7 @@ let backRoute = ref(null)
 // let rightButtons = ref([])
 // let onRightButton = () => {}
 
-export function useToolbar () {
-
+export function useToolbar() {
   const init = ({
     title: _title = null,
     subtitle: _subtitle = null,
@@ -22,18 +21,26 @@ export function useToolbar () {
   } = {}) => {
     if (_title) {
       if (isRef(_title)) {
-        watch(_title, newValue => {
-          title.value = newValue
-        }, { immediate: true })
+        watch(
+          _title,
+          (newValue) => {
+            title.value = newValue
+          },
+          { immediate: true },
+        )
       } else {
         title.value = _title
       }
     }
 
     if (isRef(_subtitle)) {
-      watch(_subtitle, newValue => {
-        subtitle.value = newValue
-      }, { immediate: true })
+      watch(
+        _subtitle,
+        (newValue) => {
+          subtitle.value = newValue
+        },
+        { immediate: true },
+      )
     } else {
       subtitle.value = _subtitle
     }
@@ -42,9 +49,11 @@ export function useToolbar () {
     leftText.value = _leftText
     backRoute.value = _backRoute
 
-    onBackButton = (!_backRoute) ? () => {} : async () => {
-      await navigateTo(_backRoute)
-    }
+    onBackButton = !_backRoute
+      ? () => {}
+      : async () => {
+          await navigateTo(_backRoute)
+        }
 
     // rightButtons.value = _rightButtons
 
@@ -60,7 +69,12 @@ export function useToolbar () {
   }
 
   return {
-    init, title, subtitle, leftText, onBack, backRoute, titleIcon,
+    init,
+    title,
+    subtitle,
+    leftText,
+    onBack,
+    backRoute,
+    titleIcon,
   }
-
 }

@@ -1,19 +1,17 @@
-import { defineStore } from 'pinia'
 import { StorageSerializers, useLocalStorage } from '@vueuse/core'
-import * as LanguageConstants from '~/constants/LanguageConstants'
-import DateUtils from '~/utils/DateUtils'
-import { FORM_CONSTANTS_TRANSACTION_FIELDS_LIST } from '~/constants/FormConstants'
-import ResponseUtils from '~/utils/ResponseUtils'
-import { compareVersionStrings } from '~/utils/DataUtils'
-import InfoRepository from '~/repository/InfoRepository.js'
 import { get } from 'lodash'
+import { defineStore } from 'pinia'
+import { FORM_CONSTANTS_TRANSACTION_FIELDS_LIST } from '~/constants/FormConstants'
+import * as LanguageConstants from '~/constants/LanguageConstants'
 import { HERO_ICONS, HERO_ICONS_LIST } from '~/constants/TransactionConstants.js'
+import InfoRepository from '~/repository/InfoRepository.js'
+import { compareVersionStrings } from '~/utils/DataUtils'
+import DateUtils from '~/utils/DateUtils'
 import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
+import ResponseUtils from '~/utils/ResponseUtils'
 
 export const useAppStore = defineStore('app', {
-
   state: () => {
-
     const defaultUrl = window.location.origin
     const runtimeConfig = useRuntimeConfig()
     // const appVersion = runtimeConfig.public.version
@@ -26,18 +24,25 @@ export const useAppStore = defineStore('app', {
       authToken: useLocalStorage('authToken', ''),
       picoBackendURL: useLocalStorage('picoBackendURL', defaultUrl),
 
-      voiceLanguage: useLocalStorage('voiceLanguage', LanguageConstants.OPTION_ROMANIAN, { serializer: StorageSerializers.object }),
+      voiceLanguage: useLocalStorage('voiceLanguage', LanguageConstants.OPTION_ROMANIAN, {
+        serializer: StorageSerializers.object,
+      }),
       autoAddTransactionFromVoice: useLocalStorage('autoAddTransactionFromVoice', false),
 
       defaultAccountSource: useLocalStorage('defaultAccountSource', null, { serializer: StorageSerializers.object }),
-      defaultAccountDestination: useLocalStorage('defaultAccountDestination', null, { serializer: StorageSerializers.object }),
+      defaultAccountDestination: useLocalStorage('defaultAccountDestination', null, {
+        serializer: StorageSerializers.object,
+      }),
       defaultCategory: useLocalStorage('defaultCategory', null, { serializer: StorageSerializers.object }),
 
       defaultTags: useLocalStorage('defaultTags', [], { serializer: StorageSerializers.object }),
       autoAddedTags: useLocalStorage('autoAddedTags', [], { serializer: StorageSerializers.object }),
 
       quickValueButtons: useLocalStorage('quickValueButtons', ['-10', '-1', '+1', '+10']),
-      transactionOrderedFieldsList: useLocalStorage('transactionOrderedFieldsList', FORM_CONSTANTS_TRANSACTION_FIELDS_LIST),
+      transactionOrderedFieldsList: useLocalStorage(
+        'transactionOrderedFieldsList',
+        FORM_CONSTANTS_TRANSACTION_FIELDS_LIST,
+      ),
 
       dateFormat: useLocalStorage('dateFormat', DateUtils.FORMAT_ENGLISH_DATE),
 
@@ -47,15 +52,16 @@ export const useAppStore = defineStore('app', {
 
       showTagSelectAsGrid: useLocalStorage('showTagSelectAsGrid', true),
 
-      numberFormat:  useLocalStorage('numberFormat', NUMBER_FORMAT.eu),
+      numberFormat: useLocalStorage('numberFormat', NUMBER_FORMAT.eu),
       lowerCaseTransactionDescription: useLocalStorage('lowerCaseTransactionDescription', false),
       lowerCaseAccountName: useLocalStorage('lowerCaseTagName', false),
       lowerCaseCategoryName: useLocalStorage('lowerCaseCategoryName', true),
       lowerCaseTagName: useLocalStorage('lowerCaseTagName', true),
 
-      heroIcons: useLocalStorage('heroIcons', HERO_ICONS_LIST.filter(item => [
-        HERO_ICONS.tag, HERO_ICONS.account,
-      ].includes(item.code))),
+      heroIcons: useLocalStorage(
+        'heroIcons',
+        HERO_ICONS_LIST.filter((item) => [HERO_ICONS.tag, HERO_ICONS.account].includes(item.code)),
+      ),
 
       dashboard: {
         firstDayOfMonth: useLocalStorage('firstDayOfMonth', 1),
@@ -65,11 +71,10 @@ export const useAppStore = defineStore('app', {
   },
 
   getters: {
-
-    hasAuthToken (state) {
-      return (state.authToken && state.authToken.length > 0)
+    hasAuthToken(state) {
+      return state.authToken && state.authToken.length > 0
     },
-    isNewVersionAvailable (state) {
+    isNewVersionAvailable(state) {
       if (!state.latestAppVersion) {
         return false
       }
@@ -78,7 +83,7 @@ export const useAppStore = defineStore('app', {
   },
 
   actions: {
-    async fetchLatestAppVersion () {
+    async fetchLatestAppVersion() {
       let response = await new InfoRepository().getLatestVersion()
       if (!ResponseUtils.isSuccess(response)) {
         return

@@ -2,12 +2,13 @@
 
 import { get } from 'lodash'
 
-export const sortByPath = (list, path, isAsc = true) => list.sort((a, b) => {
-  let value1 = (get(a, path) ?? '').toString().toLowerCase()
-  let value2 = (get(b, path) ?? '').toString().toLowerCase()
-  let direction = isAsc ? 1 : -1
-  return (value1 > value2) ? direction : ((value2 > value1) ? -1 * direction : 0)
-})
+export const sortByPath = (list, path, isAsc = true) =>
+  list.sort((a, b) => {
+    let value1 = (get(a, path) ?? '').toString().toLowerCase()
+    let value2 = (get(b, path) ?? '').toString().toLowerCase()
+    let direction = isAsc ? 1 : -1
+    return value1 > value2 ? direction : value2 > value1 ? -1 * direction : 0
+  })
 
 // export const sortByPath = ({ list, path, isAsc = true, isNumeric = false, ignoreCase = true, shouldRemoveAccents = true } = {}) => list.sort((a, b) => {
 //   let valueA = get(a, path, '').toString()
@@ -36,7 +37,7 @@ export const areIntEqual = (a, b) => {
 }
 
 export const isStringEmpty = (value) => {
-  return (!value || value.length === 0)
+  return !value || value.length === 0
 }
 
 export const listToTree = (flatList) => {
@@ -44,12 +45,12 @@ export const listToTree = (flatList) => {
   const tree = []
 
   // Create a map where the keys are the IDs and the values are the items
-  flatList.forEach(item => {
+  flatList.forEach((item) => {
     map[item.id] = { ...item, children: [] }
   })
 
   // Iterate through the items to build the tree
-  flatList.forEach(item => {
+  flatList.forEach((item) => {
     if (item.attributes && item.attributes.parent_id && map[item.attributes.parent_id]) {
       // If the item has a parent, add it as a child of the parent
       map[item.attributes.parent_id].children.push(map[item.id])
@@ -60,13 +61,13 @@ export const listToTree = (flatList) => {
   })
 
   // Function to recursively set the level of each node in the tree
-  function setLevel (node, level) {
+  function setLevel(node, level) {
     node.level = level
-    node.children.forEach(child => setLevel(child, level + 1))
+    node.children.forEach((child) => setLevel(child, level + 1))
   }
 
   // Set the level of each node starting from the root
-  tree.forEach(root => setLevel(root, 1))
+  tree.forEach((root) => setLevel(root, 1))
 
   return tree
 }
@@ -93,5 +94,3 @@ export const setLevel = (data, parentId = null, level = 0) => {
 export const compareVersionStrings = (a, b) => {
   return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })
 }
-
-

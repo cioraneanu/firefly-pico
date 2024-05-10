@@ -1,46 +1,33 @@
 <template>
-
   <div class="">
-
     <!--    <van-cell :title="label" :value="date" @click="show = true"/>-->
     <van-field
-        v-model="getSelectedName"
-        is-link
-        readonly
-        class="app-field"
-        left-icon="calendar-o"
-        :label="label"
-        placeholder="No date"
-        @click="onShowDropdown"
-        v-bind="dynamicAttrs"
+      v-model="getSelectedName"
+      is-link
+      readonly
+      class="app-field"
+      left-icon="calendar-o"
+      :label="label"
+      placeholder="No date"
+      @click="onShowDropdown"
+      v-bind="dynamicAttrs"
     >
       <template #input>
         <div>
           <div :class="labelClass">
             {{ getSelectedName }}
           </div>
-
         </div>
-
       </template>
 
       <template #right-icon>
         <div>
-          <van-icon
-              v-if="modelValue"
-              @click.prevent.stop="date = null"
-              name="clear"/>
+          <van-icon v-if="modelValue" @click.prevent.stop="date = null" name="clear" />
         </div>
       </template>
-
     </van-field>
 
-    <van-popup
-        v-model:show="showDropdown"
-        round
-        position="bottom"
-        style="padding-top: 4px;">
-
+    <van-popup v-model:show="showDropdown" round position="bottom" style="padding-top: 4px">
       <div ref="popupRef" class="h-100 display-flex flex-column">
         <!--        <div class="display-flex">-->
         <!--          <van-button>Cancel</van-button>-->
@@ -49,23 +36,12 @@
         <!--        </div>-->
 
         <div>
-          <van-time-picker
-              v-model="localModelValue"
-              :filter="filter"
-              title="Choose time"
-              @confirm="onConfirm"
-          />
+          <van-time-picker v-model="localModelValue" :filter="filter" title="Choose time" @confirm="onConfirm" />
         </div>
       </div>
-
-
     </van-popup>
-
-
   </div>
-
 </template>
-
 
 <script setup>
 import _ from 'lodash'
@@ -82,7 +58,7 @@ const { dynamicAttrs } = useFormAttributes(attrs)
 const props = defineProps({
   label: {
     type: String,
-    default: 'Time'
+    default: 'Time',
   },
 })
 
@@ -102,7 +78,7 @@ const filter = (type, options) => {
 
 const labelClass = computed(() => {
   return {
-    'text-muted': !modelValue.value
+    'text-muted': !modelValue.value,
   }
 })
 
@@ -121,10 +97,6 @@ const onConfirm = (value) => {
 const onShowDropdown = () => {
   showDropdown.value = true
 }
-
-
 </script>
 
-<style>
-
-</style>
+<style></style>

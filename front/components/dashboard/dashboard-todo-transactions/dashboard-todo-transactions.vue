@@ -1,24 +1,23 @@
 <template>
   <van-cell-group inset style="overflow: auto">
     <div class="van-cell-group-title flex-center-vertical">
-      <div class=" flex-1">Todo transactions:</div>
+      <div class="flex-1">Todo transactions:</div>
 
-
-      <van-button v-if="dataStore.tagTodo" size="small" @click="onGoToTodos">Todos: {{ dataStore.dashboard.transactionsWithTodo.length }}</van-button>
+      <van-button v-if="dataStore.tagTodo" size="small" @click="onGoToTodos"
+        >Todos: {{ dataStore.dashboard.transactionsWithTodo.length }}</van-button
+      >
       <div v-else class="flex-center-vertical gap-1">
-        <span class="text-muted text-size-10 font-weight-400">
-          No "todo" tag
-        </span>
-        <app-tutorial v-bind="TUTORIAL_CONSTANTS.todoTag"/>
+        <span class="text-muted text-size-10 font-weight-400"> No "todo" tag </span>
+        <app-tutorial v-bind="TUTORIAL_CONSTANTS.todoTag" />
       </div>
     </div>
     <div>
       <transaction-list-item
-          v-for="transaction in dataStore.dashboard.transactionsWithTodo"
-          :key="transaction.id"
-          :value="transaction"
-          :is-detailed-mode="false"
-          @onEdit="onEditTransaction"
+        v-for="transaction in dataStore.dashboard.transactionsWithTodo"
+        :key="transaction.id"
+        :value="transaction"
+        :is-detailed-mode="false"
+        @onEdit="onEditTransaction"
       />
     </div>
   </van-cell-group>
@@ -42,6 +41,4 @@ const onGoToTodos = async () => {
   }
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${todoTagId}`)
 }
-
-
 </script>

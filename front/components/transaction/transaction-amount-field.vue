@@ -2,49 +2,47 @@
   <div class="van-cell-fake pb-10">
     <div>
       <van-field
-          v-model="modelValue"
-          placeholder="Amount"
-          @click="() => input.focus()"
-          label="Amount"
-          left-icon="peer-pay"
-          class="flex-center-vertical app-field transaction-amount-field"
-          v-bind="attrs"
-          label-align="top">
-
+        v-model="modelValue"
+        placeholder="Amount"
+        @click="() => input.focus()"
+        label="Amount"
+        left-icon="peer-pay"
+        class="flex-center-vertical app-field transaction-amount-field"
+        v-bind="attrs"
+        label-align="top"
+      >
         <template #right-icon>
           {{ props.currency }}
         </template>
 
         <template #input>
-
           <input
-              v-model="modelValue"
-              @focus="onFocus"
-              @blur="onBlur"
-              ref="input"
-              style="width: 100%; border: none; background: transparent; height: 24px;"
-              type="text"
-              inputmode="decimal"
-              :class="transactionInputClass"
+            v-model="modelValue"
+            @focus="onFocus"
+            @blur="onBlur"
+            ref="input"
+            style="width: 100%; border: none; background: transparent; height: 24px"
+            type="text"
+            inputmode="decimal"
+            :class="transactionInputClass"
           />
 
           <!--          <transaction-amount-field-success-animation-->
           <!--              v-if="showEvaluateSuccessAnimation"-->
           <!--          />-->
-
         </template>
       </van-field>
     </div>
-
 
     <table class="transaction-amount-table-buttons">
       <tr>
         <td v-for="quickButton in quickButtons">
           <van-button
-              class="w-100 transaction-amount-button"
-              @mousedown.prevent.stop="onQuickButton(quickButton)"
-              type="default"
-              size="normal">
+            class="w-100 transaction-amount-button"
+            @mousedown.prevent.stop="onQuickButton(quickButton)"
+            type="default"
+            size="normal"
+          >
             {{ quickButton }}
           </van-button>
         </td>
@@ -53,22 +51,20 @@
       <tr v-show="isInputFocused">
         <td v-for="operator in operatorsList">
           <van-button
-              class="w-100 transaction-amount-button transaction-operation-button mt-5"
-              @mousedown.prevent.stop="onOperation(operator)"
-              type="default"
-              size="normal">
+            class="w-100 transaction-amount-button transaction-operation-button mt-5"
+            @mousedown.prevent.stop="onOperation(operator)"
+            type="default"
+            size="normal"
+          >
             {{ operator }}
           </van-button>
         </td>
       </tr>
     </table>
 
-
     <!--    <div class="delimiter"/>-->
-
   </div>
 </template>
-
 
 <script setup>
 import { useDataStore } from '~/stores/dataStore'
@@ -95,8 +91,8 @@ const modelValue = defineModel()
 
 const transactionInputClass = computed(() => {
   return {
-    'transactionAmountField': true,
-    'animate': showEvaluateSuccessAnimation.value
+    transactionAmountField: true,
+    animate: showEvaluateSuccessAnimation.value,
   }
 })
 const showEvaluateSuccessAnimation = ref(false)
@@ -109,7 +105,7 @@ const quickButtons = appStore.quickValueButtons
 const operatorsList = ref(['+', '-', '*', '/'])
 
 const onQuickButton = async (quickButton) => {
-  let value = (!modelValue.value || modelValue.value === '') ? '0' : modelValue.value
+  let value = !modelValue.value || modelValue.value === '' ? '0' : modelValue.value
   value = parseInt(value)
   modelValue.value = `${value + parseInt(quickButton)}`
 }
@@ -155,11 +151,9 @@ const onOperation = async (operation) => {
 onMounted(() => {
   // UIUtils.focusInput(input)
 })
-
 </script>
 
 <style scoped>
-
 .transaction-amount-table-buttons {
   margin-left: 15px;
 }
@@ -183,6 +177,4 @@ onMounted(() => {
     transform: scale(0.95, 1.05);
   }
 }
-
-
 </style>

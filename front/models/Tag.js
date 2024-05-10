@@ -1,45 +1,43 @@
+import { get } from 'lodash'
 import BaseModel from '~/models/BaseModel'
 import TagRepository from '~/repository/TagRepository'
 import TagTransformer from '~/transformers/TagTransformer'
-import { get } from 'lodash'
 import { ellipsizeText } from '~/utils/Utils.js'
 
 class Tag extends BaseModel {
-
-  getTransformer () {
+  getTransformer() {
     return TagTransformer
   }
 
-  getRepository () {
+  getRepository() {
     return new TagRepository()
   }
 
-  getEmpty () {
+  getEmpty() {
     return {
-      'name': '',
+      name: '',
     }
   }
 
   // ------------
 
-  getFake (id) {
+  getFake(id) {
     return {
-      'type': 'tags',
-      'attributes': {
-        'tag': '',
-        'date': null,
-        'description': null,
-        'longitude': null,
-        'latitude': null,
-        'zoom_level': null,
+      type: 'tags',
+      attributes: {
+        tag: '',
+        date: null,
+        description: null,
+        longitude: null,
+        latitude: null,
+        zoom_level: null,
       },
     }
-
   }
 
   // --------------
 
-  static getDisplayName (tag, ellipsizeLength = 100) {
+  static getDisplayName(tag, ellipsizeLength = 100) {
     const name = get(tag, 'attributes.tag') ?? ''
     return ellipsizeText(name, ellipsizeLength)
   }
@@ -64,17 +62,17 @@ class Tag extends BaseModel {
     const result = []
 
     // Helper function to find node by tag
-    function findNode (node) {
+    function findNode(node) {
       result.push(node)
       // If parent exists, recursively find its parent
       if (node.parent_id !== null) {
-        const parent = list.find(item => item.id === node.parent_id)
+        const parent = list.find((item) => item.id === node.parent_id)
         findNode(parent)
       }
     }
 
     // Find the node with the given tag
-    const node = list.find(item => item.id === tag || item.parent_id === tag)
+    const node = list.find((item) => item.id === tag || item.parent_id === tag)
     if (node) {
       findNode(node)
     }

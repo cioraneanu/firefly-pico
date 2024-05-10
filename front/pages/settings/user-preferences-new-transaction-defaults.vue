@@ -1,51 +1,26 @@
 <template>
-
   <div class="app-form">
-    <app-top-toolbar/>
+    <app-top-toolbar />
 
-    <van-form
-        @submit="onSave"
-        class="">
-
+    <van-form class="" @submit="onSave">
       <van-cell-group inset>
-        <account-select
-            v-model="defaultAccountSource"
-            label="Default source account"
-        />
+        <account-select v-model="defaultAccountSource" label="Default source account" />
 
-        <account-select
-            v-model="defaultAccountDestination"
-            label="Default destination account"
-        />
+        <account-select v-model="defaultAccountDestination" label="Default destination account" />
 
-        <category-select
-            v-model="defaultCategory"
-            label="Default category"
-        />
+        <category-select v-model="defaultCategory" label="Default category" />
 
-        <tag-select
-            v-model="defaultTags"
-            label="Default tags (only preselected)"
-        />
+        <tag-select v-model="defaultTags" label="Default tags (only preselected)" />
 
-        <tag-select
-            v-model="autoAddedTags"
-            label="Auto tags (appended after creation)"
-        />
+        <tag-select v-model="autoAddedTags" label="Auto tags (appended after creation)" />
       </van-cell-group>
 
-
-      <app-button-form-save/>
+      <app-button-form-save />
     </van-form>
-
   </div>
-
-
 </template>
 
-
 <script setup>
-
 import { onMounted, ref } from 'vue'
 import { useAppStore } from '~/stores/appStore'
 import { useDataStore } from '~/stores/dataStore'
@@ -90,5 +65,4 @@ toolbar.init({
   title: 'New transaction defaults',
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
-
 </script>

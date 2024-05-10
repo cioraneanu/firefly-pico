@@ -1,10 +1,7 @@
 import BaseRepository from '~/repository/BaseRepository'
-import axios from 'axios'
-import _ from 'lodash'
 
 class TransactionTemplateRepository extends BaseRepository {
-
-  constructor () {
+  constructor() {
     super(`api/transaction-templates`)
   }
 
@@ -19,7 +16,6 @@ class TransactionTemplateRepository extends BaseRepository {
   //   let response = await axios.get(url)
   //   return _.get(response, 'data', {})
   // }
-
 }
 
 export default TransactionTemplateRepository

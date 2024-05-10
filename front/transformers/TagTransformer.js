@@ -1,9 +1,9 @@
 import { get } from 'lodash'
-import ApiTransformer from '~/transformers/ApiTransformer'
 import Icon from '~/models/Icon.js'
+import ApiTransformer from '~/transformers/ApiTransformer'
 
 export default class TagTransformer extends ApiTransformer {
-  static transformFromApi (item) {
+  static transformFromApi(item) {
     if (!item) {
       return null
     }
@@ -19,7 +19,7 @@ export default class TagTransformer extends ApiTransformer {
     return item
   }
 
-  static transformToApi (item) {
+  static transformToApi(item) {
     if (!item) {
       return null
     }

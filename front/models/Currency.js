@@ -1,37 +1,40 @@
-import BaseRepository from '~/repository/BaseRepository'
-import { faker } from '@faker-js/faker'
+import { get } from 'lodash'
 import BaseModel from '~/models/BaseModel'
-import _, { get } from 'lodash'
-import CurrencyTransformer from '~/transformers/CurrencyTransformer'
 import CurrencyRepository from '~/repository/CurrencyRepository'
+import CurrencyTransformer from '~/transformers/CurrencyTransformer'
 
 class Currency extends BaseModel {
-
-  getTransformer () {
+  getTransformer() {
     return CurrencyTransformer
   }
 
-  getRepository () {
+  getRepository() {
     return new CurrencyRepository()
   }
 
-  getEmpty () {
+  getEmpty() {
     return {
-      'name': '', 'code': '', 'symbol': '', 'decimal_places': '2', 'enabled': true, 'default': true,
+      name: '',
+      code: '',
+      symbol: '',
+      decimal_places: '2',
+      enabled: true,
+      default: true,
     }
   }
 
   // ------------
 
-  getFake (id) {
+  getFake(id) {
     return {
-      'type': 'currencies', 'attributes': {},
+      type: 'currencies',
+      attributes: {},
     }
   }
 
   // --------
 
-  static getDisplayName (account) {
+  static getDisplayName(account) {
     const name = get(account, 'attributes.name')
     const symbol = get(account, 'attributes.symbol')
     return `${name}, ${symbol}`

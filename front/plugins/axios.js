@@ -1,10 +1,9 @@
 import axios from 'axios'
-import { useAppStore } from '~/stores/appStore'
 import _ from 'lodash'
-import RouteConstants from '~/constants/RouteConstants'
+import { useAppStore } from '~/stores/appStore'
 
 axios.interceptors.request.use(
-  config => {
+  (config) => {
     const appStore = useAppStore()
 
     const controller = new AbortController()
@@ -21,26 +20,28 @@ axios.interceptors.request.use(
     config.timeout = 4000
     return config
   },
-  error => {
+  (error) => {
     return Promise.reject(error)
   },
 )
 
-axios.interceptors.response.use(function (response) {
-  // Any status code that lie within the range of 2xx cause this function to trigger
-  // Do something with response data
-  return response
-}, function (error) {
-  // Any status codes that falls outside the range of 2xx cause this function to trigger
-  // Do something with response error
-  let errorMessage = _.get(error, 'response.data.message')
+axios.interceptors.response.use(
+  function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    return response
+  },
+  function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    let errorMessage = _.get(error, 'response.data.message')
 
-  if (errorMessage) {
-    UIUtils.showToastError(`Error: ${errorMessage}`, 4000)
-  }
-  // return Promise.reject(error)
-  return Promise.resolve(error.response)
-})
+    if (errorMessage) {
+      UIUtils.showToastError(`Error: ${errorMessage}`, 4000)
+    }
+    // return Promise.reject(error)
+    return Promise.resolve(error.response)
+  },
+)
 
-export default defineNuxtPlugin(nuxtApp => {
-})
+export default defineNuxtPlugin((nuxtApp) => {})

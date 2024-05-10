@@ -1,5 +1,3 @@
-import { FORM_CONSTANTS_TRANSACTION_FIELDS } from '~/constants/FormConstants.js'
-
 export const HERO_ICONS = {
   dayOfWeek: 'dayOfWeek',
   account: 'account',

@@ -1,14 +1,11 @@
 <template>
-
   <van-swipe-cell ref="swipeCell" v-bind="clickWithoutSwipe">
     <van-cell>
       <template #title>
         <div class="list-item-container">
-
-
           <div class="first_column flex-center flex-column">
-            <app-icon :icon="icon ?? TablerIconConstants.account" :size="32"/>
-<!--            <span class="badge2"> {{ currencySymbol }}</span>-->
+            <app-icon :icon="icon ?? TablerIconConstants.account" :size="32" />
+            <!--            <span class="badge2"> {{ currencySymbol }}</span>-->
           </div>
 
           <div class="separator"></div>
@@ -27,21 +24,15 @@
           <!--          <div class="third-column">-->
           <!--            <div class="font-weight-600">{{ currencySymbol }}</div>-->
           <!--          </div>-->
-
-
         </div>
       </template>
     </van-cell>
 
-
     <template #right>
-      <van-button class="delete-button" square type="danger" text="Delete" @click="onDelete"/>
+      <van-button class="delete-button" square type="danger" text="Delete" @click="onDelete" />
     </template>
   </van-swipe-cell>
-
-
 </template>
-
 
 <script setup>
 import _ from 'lodash'
@@ -75,9 +66,6 @@ const onDelete = async () => {
 
 const swipeCell = ref(null)
 const clickWithoutSwipe = useClickWithoutSwipe({ swipeCell: swipeCell, onClick: onEdit })
-
 </script>
 
-<style>
-
-</style>
+<style></style>

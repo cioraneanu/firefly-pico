@@ -1,130 +1,80 @@
 <template>
-
   <div class="app-form">
-
     <app-top-toolbar>
       <template #right>
-        <app-button-list-add v-if="addButtonText" @click="onNew"/>
+        <app-button-list-add v-if="addButtonText" @click="onNew" />
       </template>
     </app-top-toolbar>
 
-
-    <transaction-type-tabs
-        v-model="type"
-        class="mx-3 mt-3 mb-2"/>
-
+    <transaction-type-tabs v-model="type" class="mx-3 mt-3 mb-2" />
 
     <!--    @submit="onSave"-->
-    <van-form
-        class="transaction-form-group"
-        ref="form"
-        @submit="saveItem"
-        @failed="onValidationError"
-    >
-
+    <van-form ref="form" class="transaction-form-group" @submit="saveItem" @failed="onValidationError">
       <van-cell-group inset>
-
         <app-field
-            v-model="name"
-            label="Name"
-            placeholder="Name"
-            required
-            :rules="[{ required: true, message: 'Name is required' }]"
+          v-model="name"
+          label="Name"
+          placeholder="Name"
+          required
+          :rules="[{ required: true, message: 'Name is required' }]"
         />
 
         <div class="van-cell-fake flex-column van-cell">
           <span>Extra names (assistant findable):</span>
-          <app-repeater
-              v-model="extra_names"
-              :empty-item="{value: ''}">
+          <app-repeater v-model="extra_names" :empty-item="{ value: '' }">
             <template #content="{ element, index }">
               <app-field
-                  placeholder="Name"
-                  v-model="element.value"
-                  class="compact"
-                  required
-                  :rules="[{ required: true, message: 'Name is required' }]"
+                v-model="element.value"
+                placeholder="Name"
+                class="compact"
+                required
+                :rules="[{ required: true, message: 'Name is required' }]"
               />
             </template>
           </app-repeater>
         </div>
 
-        <transaction-amount-field
-            v-model="amount"
-            ref="refAmount"
-        />
+        <transaction-amount-field ref="refAmount" v-model="amount" />
 
+        <account-select v-model="account_source" label="Source account" :allowed-types="accountSourceAllowedTypes" />
 
         <account-select
-            v-model="account_source"
-            label="Source account"
-            :allowed-types="accountSourceAllowedTypes"
-        />
-
-        <account-select
-            v-model="account_destination"
-            label="Destinatination account"
-            :allowed-types="accountDestinationAllowedTypes"
+          v-model="account_destination"
+          label="Destinatination account"
+          :allowed-types="accountDestinationAllowedTypes"
         />
 
         <app-field
-            v-model="description"
-            label="Description"
-            type="textarea"
-            rows="1"
-            autosize
-            left-icon="notes-o"
-            placeholder="Description"
+          v-model="description"
+          label="Description"
+          type="textarea"
+          rows="1"
+          autosize
+          left-icon="notes-o"
+          placeholder="Description"
         />
 
-        <category-select
-            v-model="category"
-        />
+        <category-select v-model="category" />
 
-        <tag-select
-            v-model="tags"
-        />
-
+        <tag-select v-model="tags" />
 
         <!--        <app-date-->
         <!--            v-model="date"-->
         <!--        />-->
 
-
-        <app-field
-            v-model="notes"
-            label="Notes"
-            placeholder="Notes"
-            type="textarea"
-            rows="1"
-            autosize
-        />
-
+        <app-field v-model="notes" label="Notes" placeholder="Notes" type="textarea" rows="1" autosize />
       </van-cell-group>
 
+      <div style="margin: 16px">
+        <app-button-form-save />
 
-      <div style="margin: 16px;">
-        <app-button-form-save/>
-
-        <app-button-form-delete
-            class="mt-10"
-            v-if="itemId"
-            @click="onDelete"
-        />
+        <app-button-form-delete v-if="itemId" class="mt-10" @click="onDelete" />
       </div>
     </van-form>
-
-
   </div>
-
-
 </template>
 
-
-import { ref } from 'vue';
-
 <script setup>
-
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
 import _, { get } from 'lodash'
@@ -144,8 +94,8 @@ const refAmount = ref(null)
 
 // ------------------------------------
 
-let dataStore = useDataStore()
-let appStore = useAppStore()
+const dataStore = useDataStore()
+const appStore = useAppStore()
 const route = useRoute()
 
 const form = ref(null)
@@ -154,17 +104,29 @@ const onEvent = (event, payload) => {
   if (event === 'onPostSave') {
     let newItem = _.get(payload, 'data.data')
     newItem = TransactionTemplateTransformer.transformFromApi(newItem)
-    dataStore.transactionTemplateList = [newItem, ...dataStore.transactionTemplateList.filter(item => !areIntEqual(item.id, itemId.value))]
+    dataStore.transactionTemplateList = [
+      newItem,
+      ...dataStore.transactionTemplateList.filter((item) => !areIntEqual(item.id, itemId.value)),
+    ]
   }
   if (event === 'onPostDelete') {
-    dataStore.transactionTemplateList = dataStore.transactionTemplateList.filter(item => !areIntEqual(item.id, itemId.value))
+    dataStore.transactionTemplateList = dataStore.transactionTemplateList.filter(
+      (item) => !areIntEqual(item.id, itemId.value),
+    )
   }
 }
 
-let {
-  itemId, item, isEmpty, title, addButtonText,
+const {
+  itemId,
+  item,
+  isEmpty,
+  title,
+  addButtonText,
   isLoading,
-  onClickBack, saveItem, onDelete, onNew,
+  onClickBack,
+  saveItem,
+  onDelete,
+  onNew,
   onValidationError,
 } = useForm({
   form: form,
@@ -237,6 +199,4 @@ toolbar.init({
   leftText: 'List',
   backRoute: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST,
 })
-
-
 </script>

@@ -1,38 +1,31 @@
 <template>
-
   <div class="">
-
     <!--    <van-cell :title="label" :value="date" @click="show = true"/>-->
     <van-field
-        v-model="getDisplayDate"
-        is-link
-        readonly
-        :clickable="false"
-        class=""
-        left-icon="calendar-o"
-        :label="label"
-        placeholder="No date"
-        v-bind="dynamicAttrs">
-
+      v-model="getDisplayDate"
+      is-link
+      readonly
+      :clickable="false"
+      class=""
+      left-icon="calendar-o"
+      :label="label"
+      placeholder="No date"
+      v-bind="dynamicAttrs"
+    >
       <template #input>
         <div class="display-flex gap-2 w-100">
-          <div @click.stop="showDatePicker = true"
-               class="fake-input flex-1 cursor-pointer">
+          <div @click.stop="showDatePicker = true" class="fake-input flex-1 cursor-pointer">
             <div :class="labelDateClass">
               {{ getDisplayDate }}
             </div>
           </div>
 
-
-          <div @click.stop="onShowTimePicker"
-               class="fake-input flex-1 cursor-pointer">
+          <div @click.stop="onShowTimePicker" class="fake-input flex-1 cursor-pointer">
             <div :class="labelDateClass">
               {{ getDisplayTime }}
             </div>
           </div>
-
         </div>
-
       </template>
 
       <!--      <template #right-icon>-->
@@ -43,37 +36,27 @@
       <!--              name="clear"/>-->
       <!--        </div>-->
       <!--      </template>-->
-
     </van-field>
 
-
     <div v-if="false" class="display-flex" style="gap: 3px">
-
       <div class="display-flex flex-1 ml-15" style="justify-content: flex-start; align-items: center; gap: 3px">
         <span class="text-size-14 mr-20 text-muted">Quick actions:</span>
         <van-button @click.prevent.stop="onClickedMinusDay" type="default" size="normal">-1</van-button>
         <van-button @click.prevent.stop="onClickedToday" type="default" size="normal">Today</van-button>
         <van-button @click.prevent.stop="onClickedAddDay" type="default" size="normal">+1</van-button>
       </div>
-
     </div>
 
-
     <van-calendar
-        v-model:show="showDatePicker"
-        @confirm="onConfirmDate"
-        :show-confirm="false"
-        :min-date="minDate"
-        :max-date="maxDate"
-        color="#ee0a24"
+      v-model:show="showDatePicker"
+      @confirm="onConfirmDate"
+      :show-confirm="false"
+      :min-date="minDate"
+      :max-date="maxDate"
+      color="#ee0a24"
     />
 
-    <van-popup
-        v-model:show="showTimePicker"
-        round
-        position="bottom"
-        style="padding-top: 4px;">
-
+    <van-popup v-model:show="showTimePicker" round position="bottom" style="padding-top: 4px">
       <div ref="popupRef" class="h-100 display-flex flex-column">
         <!--        <div class="display-flex">-->
         <!--          <van-button>Cancel</van-button>-->
@@ -83,22 +66,17 @@
 
         <div>
           <van-time-picker
-              :model-value="tempTime"
-              :filter="timeFilter"
-              title="Choose time"
-              @confirm="onConfirmTime"
-              :visible-option-num="14"
+            :model-value="tempTime"
+            :filter="timeFilter"
+            title="Choose time"
+            @confirm="onConfirmTime"
+            :visible-option-num="14"
           />
         </div>
       </div>
-
-
     </van-popup>
-
   </div>
-
 </template>
-
 
 <script setup>
 import { useDataStore } from '~/stores/dataStore'
@@ -197,12 +175,7 @@ const onClickedToday = () => {
 }
 const onClickedAddDay = () => {
   date.value = addDays(date.value, 1)
-
 }
-
-
 </script>
 
-<style>
-
-</style>
+<style></style>

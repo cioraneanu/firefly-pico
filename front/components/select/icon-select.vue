@@ -1,33 +1,28 @@
 <template>
-
   <app-select
-      :label="label"
-      popupTitle="Select an icon"
-      v-model="modelValue"
-      v-model:showDropdown="showDropdown"
-      v-model:search="search"
-      :list="filteredList"
-      :columns="6"
-      :getDisplayValue="getDisplayValue"
-      v-bind="dynamicAttrs">
-
+    :label="label"
+    popupTitle="Select an icon"
+    v-model="modelValue"
+    v-model:showDropdown="showDropdown"
+    v-model:search="search"
+    :list="filteredList"
+    :columns="6"
+    :getDisplayValue="getDisplayValue"
+    v-bind="dynamicAttrs"
+  >
     <template #input>
       <div v-if="!modelValue" class="text-muted">No icon</div>
-      <component v-else :is="modelValue.icon" style="width: 25px"/>
+      <component v-else :is="modelValue.icon" style="width: 25px" />
     </template>
 
-
-    <template #item="{item}">
+    <template #item="{ item }">
       <div class="flex-center flex-column mt-5 text-size-12">
-        <component :is="item.icon" style="width: 30px"/>
+        <component :is="item.icon" style="width: 30px" />
         <div class="app-icon-item"></div>
       </div>
     </template>
-
   </app-select>
-
 </template>
-
 
 <script setup>
 import { useDataStore } from '~/stores/dataStore'
@@ -77,7 +72,7 @@ const filteredList = computed(() => {
   if (search.value.length === 0) {
     return list.value
   }
-  return list.value.filter(icon => {
+  return list.value.filter((icon) => {
     return icon.name.toLowerCase().indexOf(search.value.toLowerCase()) !== -1
   })
 })
@@ -104,10 +99,6 @@ const onRefresh = async () => {
   await dataStore.fetchCategories()
   isLoading.value = false
 }
-
-
 </script>
 
-<style>
-
-</style>
+<style></style>

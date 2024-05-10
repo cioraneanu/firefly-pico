@@ -1,94 +1,59 @@
 <template>
-
   <div :class="formClass">
-
     <app-top-toolbar>
       <template #right>
         <div>
-          <van-button
-              @click="onShowFilters"
-              size="small"
-              class="mr-10 no-border">
+          <van-button size="small" class="mr-10 no-border" @click="onShowFilters">
             <template #icon>
-              <icon-adjustments-alt size="20" :stroke-width="1.9"/>
+              <icon-adjustments-alt size="20" :stroke-width="1.9" />
             </template>
           </van-button>
 
-          <app-button-list-add @click="onAdd"/>
+          <app-button-list-add @click="onAdd" />
         </div>
       </template>
     </app-top-toolbar>
 
-    <div class="applied-filters-container" v-if="filtersDisplayList.length > 0">
+    <div v-if="filtersDisplayList.length > 0" class="applied-filters-container">
       <div class="flex-center-vertical">
         <div class="title flex-1">Applied filters</div>
-        <van-button
-            @click="onClearFilters"
-            size="small"
-            class="">
-          Clear
-        </van-button>
+        <van-button size="small" class="" @click="onClearFilters"> Clear </van-button>
       </div>
 
       <div class="display-flex flex-wrap gap-1">
         <div
-            v-for="appliedFilter in filtersDisplayList"
-            class="app-tag van-tag van-tag--round van-tag--medium van-tag--primary">
-          <icon-filter size="14" :stroke-width="1.9"/>
+          v-for="appliedFilter in filtersDisplayList"
+          class="app-tag van-tag van-tag--round van-tag--medium van-tag--primary"
+        >
+          <icon-filter size="14" :stroke-width="1.9" />
           <span class="ml-5">{{ appliedFilter }}</span>
         </div>
       </div>
-
-
     </div>
 
-
-    <empty-list v-if="isEmpty && !isLoading"/>
-
+    <empty-list v-if="isEmpty && !isLoading" />
 
     <!--    loading-text="yyyyyyyyy"-->
 
-    <van-pull-refresh
-        v-model="isRefreshing"
-        @refresh="onRefresh">
+    <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
+      <!--      v-model:loading="isLoading"-->
 
-
-<!--      v-model:loading="isLoading"-->
-
-      <van-list
-          class="p-1"
-          :finished="isFinished"
-          @load="onLoadMore"
-      >
-
+      <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
         <transaction-list-item
-            v-for="item in list"
-            :key="item.id"
-            :value="item"
-            @onEdit="onEdit"
-            @onDelete="onDelete"
+          v-for="item in list"
+          :key="item.id"
+          :value="item"
+          @on-edit="onEdit"
+          @on-delete="onDelete"
         />
-
       </van-list>
-
     </van-pull-refresh>
 
-
-    <transaction-filters
-        ref="transactionFiltersRef"
-        v-model="filters"
-    />
-
-
+    <transaction-filters ref="transactionFiltersRef" v-model="filters" />
   </div>
-
 </template>
 
-
-import { ref } from 'vue';
-
 <script setup>
-
 import RouteConstants from '~/constants/RouteConstants'
 import { useList } from '~/composables/useList'
 import Transaction from '~/models/Transaction'
@@ -107,13 +72,12 @@ const route = useRoute()
 
 const transactionFiltersRef = ref(null)
 
-let transactionRepository = new TransactionRepository()
+const transactionRepository = new TransactionRepository()
 const onCustomGetAll = async ({ page, pageSize }) => {
-
   if (filtersBackendList.value.length === 0) {
     return await transactionRepository.getAll({ page: page, pageSize })
   }
-  let filters = [{ field: 'query', value: filtersBackendList.value.join(' ') }]
+  const filters = [{ field: 'query', value: filtersBackendList.value.join(' ') }]
   return await transactionRepository.searchTransaction({
     page: page,
     pageSize: pageSize,
@@ -123,11 +87,21 @@ const onCustomGetAll = async ({ page, pageSize }) => {
 
 const {
   title,
-  isLoading, isFinished, isRefreshing,
-  page, pageSize, totalPages, listTotalCount,
-  list, isEmpty, listPagination,
-  onAdd, onEdit, onDelete,
-  onLoadMore, onRefresh,
+  isLoading,
+  isFinished,
+  isRefreshing,
+  page,
+  pageSize,
+  totalPages,
+  listTotalCount,
+  list,
+  isEmpty,
+  listPagination,
+  onAdd,
+  onEdit,
+  onDelete,
+  onLoadMore,
+  onRefresh,
 } = useList({
   title: 'Transactions list',
   routeList: RouteConstants.ROUTE_TRANSACTION_LIST,
@@ -142,12 +116,12 @@ const onShowFilters = () => {
 
 const formClass = computed(() => ({
   'app-form': true,
-  'empty': isEmpty.value
+  empty: isEmpty.value,
 }))
 
-let filters = ref({})
+const filters = ref({})
 
-let filtersDictionary = computed(() => {
+const filtersDictionary = computed(() => {
   const _filter = filters.value
   return [
     {
@@ -204,16 +178,16 @@ let filtersDictionary = computed(() => {
       display: `Date < ${DateUtils.dateToUI(_filter.dateEnd)}`,
       filter: `date_before:"${DateUtils.dateToString(_filter.dateEnd)}"`,
       active: !!_filter.dateEnd,
-    }
+    },
   ]
 })
 
-let filtersDisplayList = computed(() => {
-  return filtersDictionary.value.filter(item => item.active).map(item => item.display)
+const filtersDisplayList = computed(() => {
+  return filtersDictionary.value.filter((item) => item.active).map((item) => item.display)
 })
 
-let filtersBackendList = computed(() => {
-  return filtersDictionary.value.filter(item => item.active).map(item => item.filter)
+const filtersBackendList = computed(() => {
+  return filtersDictionary.value.filter((item) => item.active).map((item) => item.filter)
 })
 
 watch(filtersBackendList, (newValue) => {
@@ -236,9 +210,9 @@ toolbar.init({
 })
 
 onMounted(() => {
-  let urlFilters = {
+  const urlFilters = {
     tag: dataStore.tagDictionaryById[get(route.query, 'tag_id')],
-    transactionType: Object.values(Transaction.types).find(item => item.code === get(route.query, 'type')) ,
+    transactionType: Object.values(Transaction.types).find((item) => item.code === get(route.query, 'type')),
     category: dataStore.categoryDictionary[get(route.query, 'category_id')],
     account: dataStore.accountDictionary[get(route.query, 'account_id')],
     description: get(route.query, 'description'),
@@ -251,6 +225,4 @@ onMounted(() => {
   }
   filters.value = urlFilters
 })
-
-
 </script>

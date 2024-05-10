@@ -1,67 +1,40 @@
 <template>
-
   <div class="app-form">
-    <app-top-toolbar/>
+    <app-top-toolbar />
 
-    <van-form
-        @submit="onSave"
-        class="">
-
+    <van-form class="" @submit="onSave">
       <van-cell-group inset>
         <!--        <div class="van-cell-group-title">Date settings:</div>-->
 
         <app-select
-            label="Numbers formatting"
-            popupTitle="Select preffered numbers formatting"
-            v-model="numberFormat"
-            v-model:showDropdown="isDropdownNumberFormatVisible"
-            :list="numberFormatList"
-            :columns="1"
-            :has-search="false"
-            :rules="[{ required: true, message: 'This field is required' }]"
-            required
-            :clearable="false"
+          v-model="numberFormat"
+          v-model:showDropdown="isDropdownNumberFormatVisible"
+          label="Numbers formatting"
+          popup-title="Select preffered numbers formatting"
+          :list="numberFormatList"
+          :columns="1"
+          :has-search="false"
+          :rules="[{ required: true, message: 'This field is required' }]"
+          required
+          :clearable="false"
         />
 
-        <app-boolean
-            label="Dark theme"
-            v-model="darkTheme"
-        />
+        <app-boolean v-model="darkTheme" label="Dark theme" />
 
-        <app-boolean
-            label="Force transaction description lowercase"
-            v-model="lowerCaseTransactionDescription"
-        />
-        <app-boolean
-            label="Force account name lowercase"
-            v-model="lowerCaseAccountName"
-        />
+        <app-boolean v-model="lowerCaseTransactionDescription" label="Force transaction description lowercase" />
+        <app-boolean v-model="lowerCaseAccountName" label="Force account name lowercase" />
 
-        <app-boolean
-            label="Force category name lowercase"
-            v-model="lowerCaseCategoryName"
-        />
+        <app-boolean v-model="lowerCaseCategoryName" label="Force category name lowercase" />
 
-        <app-boolean
-            label="Force tag name lowercase"
-            v-model="lowerCaseTagName"
-        />
-
-
+        <app-boolean v-model="lowerCaseTagName" label="Force tag name lowercase" />
       </van-cell-group>
 
-
-      <app-button-form-save/>
+      <app-button-form-save />
     </van-form>
-
   </div>
-
-
 </template>
 
-
 <script setup>
-
 import { onMounted, ref } from 'vue'
 import { useAppStore } from '~/stores/appStore'
 import { useDataStore } from '~/stores/dataStore'
@@ -79,7 +52,6 @@ const numberFormatList = [NUMBER_FORMAT.eu, NUMBER_FORMAT.international]
 const isDropdownNumberFormatVisible = ref(false)
 
 const darkTheme = ref(false)
-
 
 const lowerCaseTransactionDescription = ref(false)
 const lowerCaseAccountName = ref(false)
@@ -120,5 +92,4 @@ toolbar.init({
   title: 'UI preferences',
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
-
 </script>
