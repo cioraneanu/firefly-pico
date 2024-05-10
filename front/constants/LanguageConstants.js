@@ -1,5 +1,3 @@
-const FIREFLY_URL = 'https://money.cioraneanu.com'
-
 export const LANGUAGE_ENGLISH = 'en-US'
 export const LANGUAGE_ROMANIAN = 'ro-RO'
 export const LANGUAGE_FRENCH = 'fr-FR'
