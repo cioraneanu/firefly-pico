@@ -19,7 +19,7 @@
           rows="1"
           autosize
           left-icon="notes-o"
-          placeholder="Description (lowercase)"
+          placeholder="Description"
           :rules="[{ required: true, message: 'Name is required' }]"
           required
         />

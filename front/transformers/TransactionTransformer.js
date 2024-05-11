@@ -64,7 +64,7 @@ export default class TransactionTransformer extends ApiTransformer {
       // let newItem = cloneDeep(item)
       let newItem = {}
       newItem.amount = _.get(item, 'amount', 0)
-      newItem.description = get(item, 'description', '').toLowerCase()
+      newItem.description = get(item, 'description', '')
       newItem.notes = _.get(item, 'notes')
       newItem.source_id = _.get(item, 'accountSource.id')
       newItem.source_name = Account.getDisplayName(get(item, 'accountSource'))
