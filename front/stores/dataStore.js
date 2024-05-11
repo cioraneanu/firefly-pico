@@ -35,7 +35,7 @@ export const useDataStore = defineStore('data', {
       },
 
       exchangeRates: useLocalStorage('exchangeRates', {}),
-      accountTotalCurrency: useLocalStorage('accountTotalCurrency', null),
+      dashboardCurrency: useLocalStorage('dashboardCurrency', null),
 
       transactionTemplateList: useLocalStorage('transactionTemplateList', []), // transactionTemplateList: useLocalStorage('transactionTemplateList', [], TransactionTemplateUtils.getLocalStorageSerializer()),
       categoryList: useLocalStorage('categoryList', []),
@@ -85,14 +85,14 @@ export const useDataStore = defineStore('data', {
     },
 
     dashboardAccountsEstimatedTotal(state) {
-      if (!state.accountTotalCurrency) {
+      if (!state.dashboardCurrency) {
         return ' - '
       }
 
       return Object.keys(this.dashboardAccountsTotalByCurrency)
         .reduce((result, currencyCode) => {
           const currencyAmount = this.dashboardAccountsTotalByCurrency[currencyCode]
-          return result + convertCurrency(currencyAmount, currencyCode, state.accountTotalCurrency)
+          return result + convertCurrency(currencyAmount, currencyCode, state.dashboardCurrency)
         }, 0)
         .toFixed(0)
     },
@@ -102,7 +102,7 @@ export const useDataStore = defineStore('data', {
         let categoryId = Transaction.getCategoryId(transaction)
 
         let oldTotal = get(result, categoryId, 0)
-        result[categoryId] = oldTotal + convertTransactionAmountToCurrency(transaction, state.accountTotalCurrency)
+        result[categoryId] = oldTotal + convertTransactionAmountToCurrency(transaction, state.dashboardCurrency)
 
         return result
       }, {})
@@ -114,7 +114,7 @@ export const useDataStore = defineStore('data', {
         let tagId = get(targetTag, 'id', 0)
 
         let oldTotal = get(result, tagId, 0)
-        result[tagId] = oldTotal + convertTransactionAmountToCurrency(transaction, state.accountTotalCurrency)
+        result[tagId] = oldTotal + convertTransactionAmountToCurrency(transaction, state.dashboardCurrency)
         return result
       }, {})
     },
@@ -138,7 +138,7 @@ export const useDataStore = defineStore('data', {
         const date = DateUtils.dateToString(Transaction.getDate(transaction))
 
         const oldValue = get(result, date, 0)
-        result[date] = oldValue + convertTransactionAmountToCurrency(transaction, state.accountTotalCurrency)
+        result[date] = oldValue + convertTransactionAmountToCurrency(transaction, state.dashboardCurrency)
 
         return result
       }, {})
@@ -157,15 +157,15 @@ export const useDataStore = defineStore('data', {
     },
 
     totalExpenseThisMonth(state) {
-      return convertTransactionsTotalAmountToCurrency(this.transactionsListExpense, state.accountTotalCurrency)
+      return convertTransactionsTotalAmountToCurrency(this.transactionsListExpense, state.dashboardCurrency)
     },
 
     totalIncomeThisMonth(state) {
-      return convertTransactionsTotalAmountToCurrency(this.transactionsListIncome, state.accountTotalCurrency)
+      return convertTransactionsTotalAmountToCurrency(this.transactionsListIncome, state.dashboardCurrency)
     },
 
     totalTransfersThisMonth(state) {
-      return convertTransactionsTotalAmountToCurrency(this.transactionsListTransfers, state.accountTotalCurrency)
+      return convertTransactionsTotalAmountToCurrency(this.transactionsListTransfers, state.dashboardCurrency)
     },
 
     totalSurplusThisMonth(state) {
@@ -326,8 +326,8 @@ export const useDataStore = defineStore('data', {
       this.accountList = AccountTransformer.transformFromApiList(list)
       this.isLoadingAccounts = false
 
-      if (!this.accountTotalCurrency) {
-        this.accountTotalCurrency = get(head(list), 'attributes.currency_code')
+      if (!this.dashboardCurrency) {
+        this.dashboardCurrency = get(head(list), 'attributes.currency_code')
       }
     },
 
