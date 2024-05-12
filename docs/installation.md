@@ -2,13 +2,16 @@
 
 ## 1. Docker (recommended)
 
-For convince Pico comes with a prebuilt docker image which you can spin up. 
-1. Pick the docker compose that fits your needs:
+1. Pick a docker-compose as a starting point:
 - [Pico only](../docker-compose.pico.yml) (If you already have Firefly installed)
 - [Pico + Firefly](../docker-compose.pico+firefly.yml) (If you want an easy 2 in 1)
 
-2. Set `FIREFLY_URL` to the URL of your Firefly instance. <br>**Important!** Make sure you provide the host + port of Firefly instance ex. `http://192.168.1.10:8080` or `https://firefly.domain.com` if you have if proxied through something like Nginx.
-3. Make sure you set values to ALL envs named `DB_PASSWORD` + `POSTGRES_PASSWORD` (and that they match for PicoApp <-> PicoDB, and Firefly <-> Firefly DB )
+2. Change `FIREFLY_URL` to the URL of your **Firefly** instance. If you don't use a reverse proxy make sure you provide the full ip+port. Ex. `http://192.168.1.10:8080` or `https://firefly.domain.com`
+
+
+3. Change `DB_PASSWORD` and `POSTGRES_PASSWORD` to something secure. **Make sure they match!** If you want separate passwords for Pico and Firefly make sure they match for `pico-app <-> pico-db`, and `firefly-app <-> firefly-db`
+
+
 4. Start the container `docker compose -f docker-compose.yml up -d`
 
 See configuration [3. Post install config](installation.md#3-post-install-config)
@@ -35,7 +38,7 @@ cd firefly-pico
 Backend (Laravel):
 
 1. `cd back`
-2. Copy the .env.example file to .env and fill with your own database.
+2. Copy the `.env.example` file to `.env`. Set `FIREFLY_URL` + database config.
 3. Run `composer install --no-dev`
 4. Run `php artisan key:generate` to generate a unique application key
 5. Run `php artisan migrate` to update the database.
@@ -57,10 +60,12 @@ Frontend (Nuxt):
 
 ## 3. Post install config
 
-1. Open Firefly and create your first login account (if you haven't used Firefly before).
+If you've used Firefly before skip to step 3.
 
-2. Inside Firefly enable your desired currencies and mark one as default.
+1. Open **Firefly** and create your first login account.
 
-3. Go to "Options" -> "Profile" -> OAuth -> Create New Personal Access Token. Save this token somewhere safe.
+2. Enable your desired currencies and mark one as default.
 
-4. Open Firefly-Pico , go to Settings -> App Config and paste the token from the step above.
+3. Go to `"Options" -> "Profile" -> OAuth -> Create New Personal Access Token`. Save this token somewhere safe.
+
+4. Open **Pico** , go to `Settings -> App Config` and paste the token from the step above. In 99% of cases you don't need to change the `Pico Backend URL`. *DO NOT PUT FIREFLY URL HERE! :)*
