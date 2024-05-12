@@ -10,7 +10,7 @@ services:
     ports:
       - 6976:80
     environment:
-      - FIREFLY_URL=https://firefly.domain.com
+      - FIREFLY_URL=http://firefly-app:8080
       - DB_CONNECTION=pgsql
       - DB_HOST=firefly-pico-postgresql
       - DB_PORT=54322
