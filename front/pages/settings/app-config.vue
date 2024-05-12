@@ -6,7 +6,8 @@
       <van-cell-group inset>
         <!--        <div class="van-cell-group-title">Setup</div>-->
 
-        <app-field left-icon="link-o" v-model="picoBackendURL" label="Pico backend URL" :rules="[{ required: true, message: 'This field is required' }]" required />
+        <app-field left-icon="link-o" v-model="picoBackendURL" label="Pico backend URL"
+                   :rules="[{ required: true, message: 'This field is required' }]" required />
 
         <settings-token-field v-model="authToken" required />
       </van-cell-group>
@@ -21,7 +22,8 @@
 
           <app-config-stat :icon="TablerIconConstants.tag" name="Tags" :value="tagsCount" />
 
-          <app-config-stat :icon="TablerIconConstants.transactionTemplate" name="Templates" :value="transactionTemplatesCount" />
+          <app-config-stat :icon="TablerIconConstants.transactionTemplate" name="Templates"
+                           :value="transactionTemplatesCount" />
 
           <app-config-stat :icon="TablerIconConstants.lastSync" name="Last sync" :value="lastSync" />
         </van-grid>
@@ -68,6 +70,8 @@ onMounted(() => {
 })
 
 const onSave = async () => {
+  picoBackendURL.value = picoBackendURL.value.endsWith('/') ? picoBackendURL.value.slice(0, -1) : picoBackendURL.value
+
   appStore.authToken = authToken.value
   appStore.picoBackendURL = picoBackendURL.value
 
