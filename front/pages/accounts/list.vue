@@ -12,8 +12,8 @@
       <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
         <app-list-search v-if="isSearchVisible" v-model="search" />
 
-        <van-collapse v-model="activeNames" >
-          <van-collapse-item v-for="{accounts, typeName} in filteredLists" :title="typeName" :name="typeName">
+        <van-collapse v-model="activeNames">
+          <van-collapse-item v-for="{ accounts, typeName } in filteredLists" :title="typeName" :name="typeName">
             <account-list-item v-for="item in accounts" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
           </van-collapse-item>
         </van-collapse>
@@ -59,8 +59,8 @@ const filteredLists = computed(() => {
       ? (item) => {
           return Account.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
         }
-      : () => true
-  );
+      : () => true,
+  )
 
   const groupedAccounts = allAccounts.reduce((result, account) => {
     const type = Account.getType(account).name
@@ -70,13 +70,15 @@ const filteredLists = computed(() => {
     return result
   }, {})
 
-  return Object.keys(groupedAccounts).sort().map((typeName) => ({
-    typeName,
-    accounts: groupedAccounts[typeName],
-  }))
-});
+  return Object.keys(groupedAccounts)
+    .sort()
+    .map((typeName) => ({
+      typeName,
+      accounts: groupedAccounts[typeName],
+    }))
+})
 
-const activeNames = ref(Object.values(Account.types).map(account => account.name));
+const activeNames = ref(Object.values(Account.types).map((account) => account.name))
 
 const formClass = computed(() => ({
   'app-form': true,
