@@ -9,7 +9,7 @@ import AccountTransformer from '~/transformers/AccountTransformer'
 import TransactionTemplateRepository from '~/repository/TransactionTemplateRepository'
 import CurrencyRepository from '~/repository/CurrencyRepository'
 import { useAppStore } from '~/stores/appStore'
-import { addMonths, differenceInHours, isToday, startOfDay, startOfMonth, subDays, subMonths, subYears } from 'date-fns'
+import { addMonths, differenceInHours, startOfDay, startOfMonth, subDays, subMonths, subYears } from 'date-fns'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
 import TagTransformer from '~/transformers/TagTransformer'
 import TransactionTemplateTransformer from '~/transformers/TransactionTemplateTransformer'
@@ -66,15 +66,20 @@ export const useDataStore = defineStore('data', {
   },
 
   getters: {
-    dashboardAccounts(state) {
-      return state.accountList.filter((account) => isEqual(Account.getType(account), Account.types.asset) && Account.getIsActive(account))
+    dashboardAccounts (state) {
+      return state.accountList.filter((account) => {
+          return isEqual(Account.getType(account), Account.types.asset) &&
+            Account.getIsActive(account) &&
+            Account.getIsIncludedInNetWorth(account)
+        },
+      )
     },
 
-    dashboardAccountsCurrencyList(state) {
+    dashboardAccountsCurrencyList (state) {
       return uniq(this.dashboardAccounts.map((account) => get(account, 'attributes.currency_code')))
     },
 
-    dashboardAccountsTotalByCurrency(state) {
+    dashboardAccountsTotalByCurrency (state) {
       return this.dashboardAccounts.reduce((result, account) => {
         let accountCurrency = get(account, 'attributes.currency_code')
         const accountBalance = parseInt(get(account, 'attributes.current_balance') ?? 0)
@@ -84,20 +89,18 @@ export const useDataStore = defineStore('data', {
       }, {})
     },
 
-    dashboardAccountsEstimatedTotal(state) {
+    dashboardAccountsEstimatedTotal (state) {
       if (!state.dashboardCurrency) {
         return ' - '
       }
 
-      return Object.keys(this.dashboardAccountsTotalByCurrency)
-        .reduce((result, currencyCode) => {
-          const currencyAmount = this.dashboardAccountsTotalByCurrency[currencyCode]
-          return result + convertCurrency(currencyAmount, currencyCode, state.dashboardCurrency)
-        }, 0)
-        .toFixed(0)
+      return Object.keys(this.dashboardAccountsTotalByCurrency).reduce((result, currencyCode) => {
+        const currencyAmount = this.dashboardAccountsTotalByCurrency[currencyCode]
+        return result + convertCurrency(currencyAmount, currencyCode, state.dashboardCurrency)
+      }, 0).toFixed(0)
     },
 
-    dashboardExpensesByCategory(state) {
+    dashboardExpensesByCategory (state) {
       return this.transactionsListExpense.reduce((result, transaction) => {
         let categoryId = Transaction.getCategoryId(transaction)
 
@@ -108,7 +111,7 @@ export const useDataStore = defineStore('data', {
       }, {})
     },
 
-    dashboardExpensesByTag(state) {
+    dashboardExpensesByTag (state) {
       return this.transactionsListExpense.reduce((result, transaction) => {
         let targetTag = Transaction.getTags(transaction).find((tag) => get(tag, 'attributes.parent_id') === null)
         let tagId = get(targetTag, 'id', 0)
@@ -119,21 +122,21 @@ export const useDataStore = defineStore('data', {
       }, {})
     },
 
-    dashboardDateStart(state) {
+    dashboardDateStart (state) {
       const appStore = useAppStore()
       let dateCurrentMonth = startOfDay(state.dashboard.month).setDate(appStore.dashboard.firstDayOfMonth)
       return dateCurrentMonth > new Date() ? subMonths(dateCurrentMonth, 1) : dateCurrentMonth
     },
 
-    dashboardDateEnd(state) {
+    dashboardDateEnd (state) {
       return subDays(addMonths(this.dashboardDateStart, 1), 1)
     },
 
-    transactionsLatest(state) {
+    transactionsLatest (state) {
       return state.dashboard.transactionsList.slice(0, 3)
     },
 
-    dashboardExpenseByDay(state) {
+    dashboardExpenseByDay (state) {
       return state.dashboard.transactionsListLastWeek.reduce((result, transaction) => {
         const date = DateUtils.dateToString(Transaction.getDate(transaction))
 
@@ -144,45 +147,45 @@ export const useDataStore = defineStore('data', {
       }, {})
     },
 
-    transactionsListExpense(state) {
+    transactionsListExpense (state) {
       return state.dashboard.transactionsList.filter((item) => get(item, 'attributes.transactions.0.type.code') === Transaction.types.expense.code)
     },
 
-    transactionsListIncome(state) {
+    transactionsListIncome (state) {
       return state.dashboard.transactionsList.filter((item) => get(item, 'attributes.transactions.0.type.code') === Transaction.types.income.code)
     },
 
-    transactionsListTransfers(state) {
+    transactionsListTransfers (state) {
       return state.dashboard.transactionsList.filter((item) => get(item, 'attributes.transactions.0.type.code') === Transaction.types.transfer.code)
     },
 
-    totalExpenseThisMonth(state) {
+    totalExpenseThisMonth (state) {
       return convertTransactionsTotalAmountToCurrency(this.transactionsListExpense, state.dashboardCurrency)
     },
 
-    totalIncomeThisMonth(state) {
+    totalIncomeThisMonth (state) {
       return convertTransactionsTotalAmountToCurrency(this.transactionsListIncome, state.dashboardCurrency)
     },
 
-    totalTransfersThisMonth(state) {
+    totalTransfersThisMonth (state) {
       return convertTransactionsTotalAmountToCurrency(this.transactionsListTransfers, state.dashboardCurrency)
     },
 
-    totalSurplusThisMonth(state) {
+    totalSurplusThisMonth (state) {
       return this.totalIncomeThisMonth - this.totalExpenseThisMonth
     },
 
-    totalTransactionsCount(state) {
+    totalTransactionsCount (state) {
       return state.dashboard.transactionsList.length ?? 0
     },
 
     // -------
 
-    tagTodo(state) {
+    tagTodo (state) {
       return state.tagList.find((tag) => get(tag, 'attributes.is_todo'))
     },
 
-    isLoadingExtras(state) {
+    isLoadingExtras (state) {
       return state.isLoadingCategories || state.isLoadingTags || state.isLoadingTransactionTemplates || state.isLoadingAccounts
     },
 
@@ -218,7 +221,7 @@ export const useDataStore = defineStore('data', {
   },
 
   actions: {
-    async fetchExchangeRate() {
+    async fetchExchangeRate () {
       let exchangeDate = get(this.exchangeRates, 'date')
       exchangeDate = DateUtils.stringToDate(exchangeDate)
       // if (isToday(exchangeDate)) {
@@ -230,7 +233,7 @@ export const useDataStore = defineStore('data', {
       this.isLoadingExchangeRates = false
     },
 
-    async fetchTransactionsWithTodos() {
+    async fetchTransactionsWithTodos () {
       if (!this.tagTodo) {
         return
       }
@@ -244,7 +247,7 @@ export const useDataStore = defineStore('data', {
       this.dashboard.transactionsWithTodo = TransactionTransformer.transformFromApiList(list)
     },
 
-    async fetchDashboardTransactionsForInterval() {
+    async fetchDashboardTransactionsForInterval () {
       this.isLoadingDashboardTransactions = true
       const appStore = useAppStore()
 
@@ -258,7 +261,7 @@ export const useDataStore = defineStore('data', {
       this.isLoadingDashboardTransactions = false
     },
 
-    async fetchDashboardTransactionsForWeek() {
+    async fetchDashboardTransactionsForWeek () {
       this.isLoadingDashboardTransactionsLastWeek = true
 
       let startDate = DateUtils.dateToString(subDays(startOfDay(new Date()), 7))
@@ -274,7 +277,7 @@ export const useDataStore = defineStore('data', {
       this.isLoadingDashboardTransactionsLastWeek = false
     },
 
-    async syncEverythingIfOld() {
+    async syncEverythingIfOld () {
       let lastSyncTime = this.lastSync ?? subYears(new Date(), 1)
       let now = new Date()
 
@@ -303,7 +306,7 @@ export const useDataStore = defineStore('data', {
     //   this.isLoading = false
     // },
 
-    async syncEverything() {
+    async syncEverything () {
       const appStore = useAppStore()
       if (!appStore.hasAuthToken) {
         return
@@ -317,7 +320,7 @@ export const useDataStore = defineStore('data', {
       this.lastSync = new Date()
     },
 
-    async fetchAccounts() {
+    async fetchAccounts () {
       this.isLoadingAccounts = true
       let list = await new AccountRepository().getAllWithMerge()
       // const allowedTypes = Object.values(Account.types).map(item => item.fireflyCode)
@@ -331,14 +334,14 @@ export const useDataStore = defineStore('data', {
       }
     },
 
-    async fetchCategories() {
+    async fetchCategories () {
       this.isLoadingCategories = true
       const list = await new CategoryRepository().getAllWithMerge()
       this.categoryList = CategoryTransformer.transformFromApiList(list)
       this.isLoadingCategories = false
     },
 
-    async fetchTags() {
+    async fetchTags () {
       this.isLoadingTags = true
       const list = await new TagRepository().getAllWithMerge()
       this.tagList = TagTransformer.transformFromApiList(list)
@@ -348,12 +351,12 @@ export const useDataStore = defineStore('data', {
       this.isLoadingTags = false
     },
 
-    async fetchTransactionTemplates() {
+    async fetchTransactionTemplates () {
       const list = await new TransactionTemplateRepository().getAllWithMerge()
       this.transactionTemplateList = TransactionTemplateTransformer.transformFromApiList(list)
     },
 
-    async fetchCurrencies() {
+    async fetchCurrencies () {
       this.currenciesList = await new CurrencyRepository().getAllWithMerge()
     },
 

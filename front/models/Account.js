@@ -142,6 +142,14 @@ class Account extends BaseModel {
     return _.get(account, 'attributes.active', false)
   }
 
+  static getIsVisibleOnDashboard(account) {
+    return _.get(account, 'attributes.is_dashboard_visible', true)
+  }
+
+  static getIsIncludedInNetWorth(account) {
+    return _.get(account, 'attributes.include_net_worth', false)
+  }
+
   static getType(account) {
     return get(account, 'attributes.type')
   }

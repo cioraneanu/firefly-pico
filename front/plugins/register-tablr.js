@@ -31,7 +31,7 @@ import {
   IconReplace,
   IconCodeCircle,
   IconSquareRounded,
-  IconSquareRoundedCheck
+  IconSquareRoundedCheck,
 } from '@tabler/icons-vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
