@@ -12,27 +12,29 @@
       <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
         <app-list-search v-if="isSearchVisible" v-model="search" />
 
-        <account-list-item v-for="item in filteredList" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
+        <van-collapse v-model="activeNames" >
+          <van-collapse-item v-for="{accounts, typeName} in filteredLists" :title="typeName" :name="typeName">
+            <account-list-item v-for="item in accounts" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
+          </van-collapse-item>
+        </van-collapse>
       </van-list>
     </van-pull-refresh>
   </div>
 </template>
-
-import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
 import { useList } from '~/composables/useList'
 import Account from '~/models/Account'
-import { useAppStore } from '~/stores/appStore'
 import { useToolbar } from '~/composables/useToolbar'
+import { ref } from 'vue'
+import { get } from 'lodash'
 
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
 
 let dataStore = useDataStore()
-const appStore = useAppStore()
 
 const onEvent = (event, payload) => {
   if (event === 'onPostDelete') {
@@ -40,7 +42,7 @@ const onEvent = (event, payload) => {
   }
 }
 
-const { isLoading, isFinished, isRefreshing, page, pageSize, totalPages, listTotalCount, list, isEmpty, onAdd, onEdit, onDelete } = useList({
+const { isLoading, isFinished, isRefreshing, list, isEmpty, onAdd, onEdit, onDelete } = useList({
   title: 'Accounts list',
   routeList: RouteConstants.ROUTE_ACCOUNT_LIST,
   routeForm: RouteConstants.ROUTE_ACCOUNT_ID,
@@ -50,14 +52,31 @@ const { isLoading, isFinished, isRefreshing, page, pageSize, totalPages, listTot
 
 const search = ref('')
 const isSearchVisible = ref(true)
-const filteredList = computed(() => {
-  if (search.value.length === 0) {
-    return list.value
-  }
-  return list.value.filter((item) => {
-    return Account.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
-  })
-})
+
+const filteredLists = computed(() => {
+  const allAccounts = list.value.filter(
+    search.value.length !== 0
+      ? (item) => {
+          return Account.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
+        }
+      : () => true
+  );
+
+  const groupedAccounts = allAccounts.reduce((result, account) => {
+    const type = Account.getType(account).name
+    const typeList = get(result, type, [])
+    typeList.push(account)
+    result[type] = typeList
+    return result
+  }, {})
+
+  return Object.keys(groupedAccounts).sort().map((typeName) => ({
+    typeName,
+    accounts: groupedAccounts[typeName],
+  }))
+});
+
+const activeNames = ref(Object.values(Account.types).map(account => account.name));
 
 const formClass = computed(() => ({
   'app-form': true,
