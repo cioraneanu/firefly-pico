@@ -53,6 +53,6 @@ UIUtils.showLoadingWhen(isRefreshing)
 const toolbar = useToolbar()
 toolbar.init({
   title: 'Exchange rates',
-  backRoute: RouteConstants.ROUTE_SETTINGS,
+  backRoute: RouteConstants.ROUTE_EXTRAS,
 })
 </script>
