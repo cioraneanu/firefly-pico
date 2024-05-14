@@ -34,6 +34,9 @@ export const icons = {
   leftArrow: 'IconArrowLeft',
   rightArrow: 'IconArrowRight',
 
+  booleanCheckOn: 'IconSquareRoundedCheck',
+  booleanCheckOff: 'IconSquareRounded',
+
   // ------ Icon Select -----
 
   ad2: 'IconAd2',

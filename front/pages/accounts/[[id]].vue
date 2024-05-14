@@ -32,7 +32,7 @@
         <app-boolean v-model="includeNetWorth" label="Is include in net worth"/>
 
         <app-boolean v-model="isDashboardVisible" label="Is visible on Dashboard"/>
-
+        
       </van-cell-group>
 
       <div style="margin: 16px" class="">

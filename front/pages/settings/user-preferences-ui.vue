@@ -7,7 +7,7 @@
         <!--        <div class="van-cell-group-title">Date settings:</div>-->
 
         <app-select
-          label="Numbers formatting"
+          label="Numbers formatting:"
           popupTitle="Select preffered numbers formatting"
           v-model="numberFormat"
           v-model:showDropdown="isDropdownNumberFormatVisible"
@@ -19,14 +19,12 @@
           :clearable="false"
         />
 
-        <app-boolean label="Dark theme" v-model="darkTheme" />
+        <app-boolean label="Dark theme:" v-model="darkTheme" />
 
-        <app-boolean label="Force transaction description lowercase" v-model="lowerCaseTransactionDescription" />
-        <app-boolean label="Force account name lowercase" v-model="lowerCaseAccountName" />
-
-        <app-boolean label="Force category name lowercase" v-model="lowerCaseCategoryName" />
-
-        <app-boolean label="Force tag name lowercase" v-model="lowerCaseTagName" />
+        <app-boolean label="Force transaction description lowercase:" v-model="lowerCaseTransactionDescription" />
+        <app-boolean label="Force account name lowercase:" v-model="lowerCaseAccountName" />
+        <app-boolean label="Force category name lowercase:" v-model="lowerCaseCategoryName" />
+        <app-boolean label="Force tag name lowercase:" v-model="lowerCaseTagName" />
       </van-cell-group>
 
       <app-button-form-save />
