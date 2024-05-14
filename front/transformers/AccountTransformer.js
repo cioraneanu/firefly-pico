@@ -37,6 +37,7 @@ export default class AccountTransformer extends ApiTransformer {
       name: get(data, 'name', ''),
       icon: get(data, 'icon.icon'),
       type: get(data, 'type.fireflyCode'),
+      is_hidden: get(data, 'is_hidden'),
       account_role: get(data, 'account_role.fireflyCode'),
       currency_id: get(data, 'currency.id'),
       currency_code: get(data, 'currency.attributes.code'),

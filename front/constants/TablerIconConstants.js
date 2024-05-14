@@ -34,6 +34,9 @@ export const icons = {
   leftArrow: 'IconArrowLeft',
   rightArrow: 'IconArrowRight',
 
+  eye: 'IconEye',
+  eyeX: 'IconEyeX',
+
   // ------ Icon Select -----
 
   ad2: 'IconAd2',

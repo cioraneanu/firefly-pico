@@ -142,6 +142,10 @@ class Account extends BaseModel {
     return _.get(account, 'attributes.active', false)
   }
 
+  static getIsHidden(account) {
+    return _.get(account, 'attributes.is_hidden', false)
+  }
+
   static getType(account) {
     return get(account, 'attributes.type')
   }

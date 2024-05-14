@@ -13,14 +13,14 @@
 
       <van-button @click="onToggleShowDashboardAccountValues" size="small" class="mr-10">
         <template #icon>
-          <app-icon :icon="appStore.dashboard.showAccountAmounts ? 'IconEyeX' : 'IconEye'" :size="20" />
+          <app-icon :icon="appStore.dashboard.showAccountAmounts ? TablerIconConstants.eye : TablerIconConstants.eyeX" :size="20" />
           <!--              <van-icon name="eye-o"/>-->
         </template>
       </van-button>
     </div>
 
     <van-grid :column-num="2">
-      <van-grid-item v-for="account in dataStore.dashboardAccounts" :key="account.id" @click="onGoToTransactions(account)" icon="photo-o">
+      <van-grid-item v-for="account in accounts" :key="account.id" @click="onGoToTransactions(account)" icon="photo-o">
         <template #icon>
           <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="24" />
         </template>
@@ -33,6 +33,15 @@
         </template>
       </van-grid-item>
     </van-grid>
+
+    <div v-if="hasHiddenAccounts" class="display-flex flex-column align-items-center m-10">
+      <van-button size="small" @click="onToggleShowHiddenAccounts">
+        <template #icon>
+          <app-icon :icon="showHiddenAccounts ? TablerIconConstants.eye : TablerIconConstants.eyeX" :size="20" />
+          {{ showHiddenAccounts ? 'See less' : 'See more' }}
+        </template>
+      </van-button>
+    </div>
 
     <div class="flex-center text-size-13 m-10 flex-wrap">
       <div class="flex-center text-size-13 me-1">
@@ -55,11 +64,29 @@
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Account from '~/models/Account.js'
 import RouteConstants from '~/constants/RouteConstants.js'
-import { IconCash, IconSwitch2 } from '@tabler/icons-vue'
+import { IconCash } from '@tabler/icons-vue'
 import { getFormattedValue } from '~/utils/MathUtils.js'
+import { computed, ref } from 'vue'
 
 const appStore = useAppStore()
 const dataStore = useDataStore()
+
+const showHiddenAccounts = ref(false)
+const onToggleShowHiddenAccounts = () => {
+  showHiddenAccounts.value = !showHiddenAccounts.value
+}
+
+const accounts = computed(() => {
+  if (showHiddenAccounts.value) {
+    return dataStore.dashboardAccounts
+  } else {
+    return dataStore.dashboardAccounts.filter((account) => !Account.getIsHidden(account))
+  }
+})
+
+const hasHiddenAccounts = computed(() => {
+  return dataStore.dashboardAccounts.some((account) => Account.getIsHidden(account))
+})
 
 const accountTotal = computed(() => {
   return getFormattedValue(dataStore.dashboardAccountsEstimatedTotal)

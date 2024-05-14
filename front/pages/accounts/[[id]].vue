@@ -28,6 +28,8 @@
         <account-type-select v-model="type" :rules="[{ required: true, message: 'Type is required' }]" required />
 
         <account-role-select v-if="isRoleVisible" v-model="role" :rules="[{ required: true, message: 'Role is required' }]" required />
+
+        <app-boolean label="Hide in dashboard" v-model="isHidden" />
       </van-cell-group>
 
       <div style="margin: 16px" class="">
@@ -38,8 +40,6 @@
     </van-form>
   </div>
 </template>
-
-import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
@@ -81,7 +81,7 @@ const onEvent = (event, payload) => {
   }
 }
 
-let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError } = useForm({
+let { itemId, item, title, addButtonText, saveItem, onDelete, onNew, onValidationError } = useForm({
   form: form,
   titleAdd: 'Add account',
   titleEdit: 'Edit account',
@@ -93,20 +93,16 @@ let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveI
   onEvent: onEvent,
 })
 
-// const type = ref(null)
-
 const pathKey = 'attributes'
 
-// const name = ref("")
-const children = generateChildren(item, [
+const { name, type, role, currency, icon, isHidden } = generateChildren(item, [
   { computed: 'name', parentKey: `${pathKey}.name` },
   { computed: 'icon', parentKey: `${pathKey}.icon` },
   { computed: 'type', parentKey: `${pathKey}.type` },
   { computed: 'role', parentKey: `${pathKey}.account_role` },
   { computed: 'currency', parentKey: `${pathKey}.currency` },
+  { computed: 'isHidden', parentKey: `${pathKey}.is_hidden` },
 ])
-
-const { name, type, role, currency, icon } = children
 
 const isRoleVisible = computed(() => {
   return _.get(type.value, 'code') === Account.types.TYPE_ASSET
