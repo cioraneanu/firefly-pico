@@ -2,19 +2,19 @@
   <div :class="formClass">
     <app-top-toolbar>
       <template #right>
-        <app-button-list-add @click="onAdd" />
+        <app-button-list-add @click="onAdd"/>
       </template>
     </app-top-toolbar>
 
-    <empty-list v-if="isEmpty" />
+    <empty-list v-if="isEmpty"/>
 
     <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
       <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
-        <app-list-search v-if="isSearchVisible" v-model="search" />
+        <app-list-search v-if="isSearchVisible" v-model="search"/>
 
-        <van-collapse v-model="activeNames">
-          <van-collapse-item v-for="{ accounts, typeName } in filteredLists" :title="typeName" :name="typeName">
-            <account-list-item v-for="item in accounts" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
+        <van-collapse v-model="visibleAccountTypes">
+          <van-collapse-item v-for="{ accounts, typeName } in accountsDictionary" :title="typeName" :name="typeName">
+            <account-list-item v-for="item in accounts" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete"/>
           </van-collapse-item>
         </van-collapse>
       </van-list>
@@ -53,32 +53,27 @@ const { isLoading, isFinished, isRefreshing, list, isEmpty, onAdd, onEdit, onDel
 const search = ref('')
 const isSearchVisible = ref(true)
 
-const filteredLists = computed(() => {
-  const allAccounts = list.value.filter(
-    search.value.length !== 0
-      ? (item) => {
-          return Account.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
-        }
-      : () => true,
-  )
+const visibleAccountTypes = ref(Object.values(Account.types).map((account) => account.name))
 
-  const groupedAccounts = allAccounts.reduce((result, account) => {
-    const type = Account.getType(account).name
-    const typeList = get(result, type, [])
-    typeList.push(account)
-    result[type] = typeList
+const filteredList = computed(() => {
+  if (search.value.length === 0) {
+    return list.value
+  }
+  return list.value.filter((item) => Account.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1)
+})
+
+const accountsDictionary = computed(() => {
+  const groupedAccounts = filteredList.value.reduce((result, account) => {
+    const type = get(Account.getType(account), 'name')
+    result[type] = [...(result[type] ?? []), account]
     return result
   }, {})
 
-  return Object.keys(groupedAccounts)
-    .sort()
-    .map((typeName) => ({
-      typeName,
-      accounts: groupedAccounts[typeName],
-    }))
+  return Object.keys(groupedAccounts).sort().map((typeName) => ({
+    typeName,
+    accounts: groupedAccounts[typeName],
+  }))
 })
-
-const activeNames = ref(Object.values(Account.types).map((account) => account.name))
 
 const formClass = computed(() => ({
   'app-form': true,
