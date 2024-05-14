@@ -1,7 +1,7 @@
 <template>
-  <transaction-create />
+  <dashboard />
 </template>
 
 <script setup>
-import TransactionCreate from './transactions/[[id]].vue'
+import Dashboard from './dashboard.vue'
 </script>

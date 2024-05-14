@@ -113,8 +113,6 @@
   </div>
 </template>
 
-import { ref } from 'vue';
-
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'

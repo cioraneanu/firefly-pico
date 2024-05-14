@@ -18,19 +18,17 @@
   </div>
 </template>
 
-import { ref, onMounted } from 'vue'; import { useAppStore } from '~/stores/appStore'
-
 <script setup>
 import { useToolbar } from '~/composables/useToolbar'
 import { debounce } from 'lodash/function'
 import UIUtils from '~/utils/UIUtils.js'
+import { onMounted } from 'vue'
 import DashboardTagTotals from '~/components/dashboard/dashboard-tag-totals/dashboard-tag-totals.vue'
 
 const toolbar = useToolbar()
 toolbar.init({ title: 'Dashboard' })
 
 const dataStore = useDataStore()
-const appStore = useAppStore()
 const { isLoadingAccounts } = storeToRefs(dataStore)
 
 const onRefresh = () => {
