@@ -2,12 +2,12 @@
   <div class="van-cell-fake">
     <van-field class="app-field" :label="label" v-bind="dynamicAttrs" @click="onToggle" readonly>
       <template v-if="$slots.label" #label>
-        <slot name="label"/>
+        <slot name="label" />
       </template>
 
       <template #input>
         <div>
-          <app-icon :icon="icon" :size="23" :stroke-width="2.0"/>
+          <app-icon :icon="icon" :size="23" :stroke-width="2.0" />
         </div>
       </template>
     </van-field>
@@ -33,7 +33,7 @@ const onToggle = () => {
   modelValue.value = !modelValue.value
 }
 
-const icon = computed(() => modelValue.value ? TablerIconConstants.booleanCheckOn : TablerIconConstants.booleanCheckOff)
+const icon = computed(() => (modelValue.value ? TablerIconConstants.booleanCheckOn : TablerIconConstants.booleanCheckOff))
 </script>
 
 <style></style>

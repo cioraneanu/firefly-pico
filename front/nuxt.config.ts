@@ -40,12 +40,7 @@ export default defineNuxtConfig({
     },
   ],
 
-  css: [
-    '@/assets/styles/bootstrap.min.css',
-    '@/assets/styles/variables.css',
-    '@/assets/styles/theme.css',
-    '@/assets/styles/helper.css',
-  ],
+  css: ['@/assets/styles/bootstrap.min.css', '@/assets/styles/variables.css', '@/assets/styles/theme.css', '@/assets/styles/helper.css'],
   build: {
     // transpile: ['vuetify'],
   },
