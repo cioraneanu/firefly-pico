@@ -7,7 +7,9 @@
 
       <template #input>
         <div>
-          <app-icon :icon="icon" :size="23" :stroke-width="2.0" />
+          <slot name="icon" :value="modelValue">
+            <app-icon :icon="icon" :size="23" :stroke-width="2.0" />
+          </slot>
         </div>
       </template>
     </van-field>

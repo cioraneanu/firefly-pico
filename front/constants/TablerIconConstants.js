@@ -37,6 +37,9 @@ export const icons = {
   booleanCheckOn: 'IconSquareRoundedCheck',
   booleanCheckOff: 'IconSquareRounded',
 
+  darkTheme: 'IconMoon',
+  whiteTheme: 'IconSun',
+
   // ------ Icon Select -----
 
   ad2: 'IconAd2',

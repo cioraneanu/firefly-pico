@@ -32,9 +32,13 @@ import {
   IconCodeCircle,
   IconSquareRounded,
   IconSquareRoundedCheck,
+  IconMoon,
+  IconSun
 } from '@tabler/icons-vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
+  nuxtApp.vueApp.component('IconMoon', IconMoon)
+  nuxtApp.vueApp.component('IconSun', IconSun)
   nuxtApp.vueApp.component('IconSquareRoundedCheck', IconSquareRoundedCheck)
   nuxtApp.vueApp.component('IconSquareRounded', IconSquareRounded)
   nuxtApp.vueApp.component('IconCodeCircle', IconCodeCircle)

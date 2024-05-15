@@ -35,7 +35,7 @@
     </van-grid>
 
     <div v-if="hasHiddenAccounts" class="flex-center">
-      <div @click="toggleHiddenAccounts" class="m-5 button-link">{{ showHiddenAccounts ? 'View less...' : 'View more...' }}</div>
+      <div @click="toggleHiddenAccounts" class="p-5 m-5 button-link">{{ showHiddenAccounts ? 'View less...' : 'View more...' }}</div>
     </div>
 
     <div class="flex-center text-size-13 m-10 flex-wrap">
