@@ -9,7 +9,7 @@ import AccountTransformer from '~/transformers/AccountTransformer'
 import TransactionTemplateRepository from '~/repository/TransactionTemplateRepository'
 import CurrencyRepository from '~/repository/CurrencyRepository'
 import { useAppStore } from '~/stores/appStore'
-import { addMonths, differenceInHours, isToday, startOfDay, startOfMonth, subDays, subMonths, subYears } from 'date-fns'
+import { addMonths, differenceInHours, startOfDay, startOfMonth, subDays, subMonths, subYears } from 'date-fns'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
 import TagTransformer from '~/transformers/TagTransformer'
 import TransactionTemplateTransformer from '~/transformers/TransactionTemplateTransformer'
@@ -67,7 +67,9 @@ export const useDataStore = defineStore('data', {
 
   getters: {
     dashboardAccounts(state) {
-      return state.accountList.filter((account) => isEqual(Account.getType(account), Account.types.asset) && Account.getIsActive(account))
+      return state.accountList.filter((account) => {
+        return isEqual(Account.getType(account), Account.types.asset) && Account.getIsActive(account) && Account.getIsIncludedInNetWorth(account)
+      })
     },
 
     dashboardAccountsCurrencyList(state) {

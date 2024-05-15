@@ -888,3 +888,11 @@ body {
   background: var(--van-background);
   /*background: #f2f2f2;*/
 }
+
+.button-link {
+  font-size: 12px;
+  cursor: pointer;
+  color: #01579b;
+  font-weight: 600;
+  border-bottom: 1px solid #01579b;
+}

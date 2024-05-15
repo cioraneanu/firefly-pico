@@ -7,7 +7,8 @@
 
       <template #input>
         <div>
-          <app-icon :icon="icon" :size="23" :stroke-width="2.0" />
+          <van-tag v-if="modelValue" round size="medium" type="primary">Yes</van-tag>
+          <van-tag v-else round size="medium" type="primary">No</van-tag>
         </div>
       </template>
     </van-field>
@@ -15,8 +16,6 @@
 </template>
 
 <script setup>
-import TablerIconConstants from '~/constants/TablerIconConstants.js'
-
 const props = defineProps({
   label: {
     type: String,
@@ -27,13 +26,11 @@ const props = defineProps({
 const modelValue = defineModel()
 
 const attrs = useAttrs()
-const { dynamicAttrs } = useFormAttributes(attrs, { 'label-align': 'top' })
+const { dynamicAttrs } = useFormAttributes(attrs)
 
 const onToggle = () => {
   modelValue.value = !modelValue.value
 }
-
-const icon = computed(() => (modelValue.value ? TablerIconConstants.booleanCheckOn : TablerIconConstants.booleanCheckOff))
 </script>
 
 <style></style>

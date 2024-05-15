@@ -20,7 +20,7 @@
     </div>
 
     <van-grid :column-num="2">
-      <van-grid-item v-for="account in dataStore.dashboardAccounts" :key="account.id" @click="onGoToTransactions(account)" icon="photo-o">
+      <van-grid-item v-for="account in visibleDashboardAccounts" :key="account.id" @click="onGoToTransactions(account)" icon="photo-o">
         <template #icon>
           <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="24" />
         </template>
@@ -33,6 +33,10 @@
         </template>
       </van-grid-item>
     </van-grid>
+
+    <div v-if="hasHiddenAccounts" class="flex-center">
+      <div @click="toggleHiddenAccounts" class="m-5 button-link">{{ showHiddenAccounts ? 'View less...' : 'View more...' }}</div>
+    </div>
 
     <div class="flex-center text-size-13 m-10 flex-wrap">
       <div class="flex-center text-size-13 me-1">
@@ -55,11 +59,22 @@
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Account from '~/models/Account.js'
 import RouteConstants from '~/constants/RouteConstants.js'
-import { IconCash, IconSwitch2 } from '@tabler/icons-vue'
+import { IconCash } from '@tabler/icons-vue'
 import { getFormattedValue } from '~/utils/MathUtils.js'
 
 const appStore = useAppStore()
 const dataStore = useDataStore()
+
+const showHiddenAccounts = ref(false)
+const toggleHiddenAccounts = () => {
+  showHiddenAccounts.value = !showHiddenAccounts.value
+}
+
+const visibleDashboardAccounts = computed(() => {
+  return showHiddenAccounts.value ? dataStore.dashboardAccounts : dataStore.dashboardAccounts.filter((account) => Account.getIsVisibleOnDashboard(account))
+})
+
+const hasHiddenAccounts = computed(() => dataStore.dashboardAccounts.some((account) => !Account.getIsVisibleOnDashboard(account)))
 
 const accountTotal = computed(() => {
   return getFormattedValue(dataStore.dashboardAccountsEstimatedTotal)

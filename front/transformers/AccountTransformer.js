@@ -40,6 +40,9 @@ export default class AccountTransformer extends ApiTransformer {
       account_role: get(data, 'account_role.fireflyCode'),
       currency_id: get(data, 'currency.id'),
       currency_code: get(data, 'currency.attributes.code'),
+
+      include_net_worth: get(data, 'include_net_worth', false),
+      is_dashboard_visible: get(data, 'is_dashboard_visible', true),
     }
   }
 }
