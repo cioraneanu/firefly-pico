@@ -18,6 +18,7 @@ export const useAppStore = defineStore('app', {
 
     return {
       currentAppVersion: runtimeConfig.public.version,
+      queryTimeout: runtimeConfig.public.queryTimeout,
       latestAppVersion: null,
 
       darkTheme: useLocalStorage('darkTheme', false),
