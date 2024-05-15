@@ -18,7 +18,7 @@ axios.interceptors.request.use(
     }
 
     config.headers['Authorization'] = `Bearer ${authToken}`
-    config.timeout = 4000
+    config.timeout = appStore.queryTimeout
     return config
   },
   (error) => {

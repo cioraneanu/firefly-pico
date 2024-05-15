@@ -8,6 +8,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       version: pkg.version,
+      queryTimeout: 4000,
       // mihai: 'test'
     },
   },
