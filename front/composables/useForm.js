@@ -112,7 +112,7 @@ export function useForm(props) {
 
     if (ResponseUtils.isSuccess(response)) {
       // UIUtils.showToastSuccess(Vue.prototype.$my_t('entity_action_results.update_entity_completed'))
-      UIUtils.showToastSuccess('Succes')
+      UIUtils.showToastSuccess('Success')
 
       let responseId = _.get(response, 'data.data.id')
       // await nextTick()
