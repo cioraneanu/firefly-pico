@@ -13,7 +13,7 @@
         <app-list-search v-if="isSearchVisible" v-model="search"/>
 
         <van-collapse v-model="visibleAccountTypes">
-          <van-collapse-item v-for="{ accounts, typeName } in accountsDictionary" :title="typeName" :name="typeName">
+          <van-collapse-item v-for="{ accounts, typeName } in accountsGroupList" :title="typeName" :name="typeName">
             <account-list-item v-for="item in accounts" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete"/>
           </van-collapse-item>
         </van-collapse>
@@ -62,7 +62,7 @@ const filteredList = computed(() => {
   return list.value.filter((item) => Account.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1)
 })
 
-const accountsDictionary = computed(() => {
+const accountsGroupList = computed(() => {
   const groupedAccounts = filteredList.value.reduce((result, account) => {
     const type = get(Account.getType(account), 'name')
     result[type] = [...(result[type] ?? []), account]

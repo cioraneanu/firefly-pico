@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { useAppStore } from '~/stores/appStore'
-import _ from 'lodash'
-import RouteConstants from '~/constants/RouteConstants'
+import { get } from 'lodash'
 
 axios.interceptors.request.use(
   (config) => {
@@ -33,9 +32,7 @@ axios.interceptors.response.use(
     return response
   },
   function (error) {
-    // Any status codes that falls outside the range of 2xx cause this function to trigger
-    // Do something with response error
-    let errorMessage = _.get(error, 'response.data.message')
+    let errorMessage = get(error, 'response.data.message') ?? get(error, 'message')
 
     if (errorMessage) {
       UIUtils.showToastError(`Error: ${errorMessage}`, 4000)
