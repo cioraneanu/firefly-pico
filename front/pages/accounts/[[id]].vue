@@ -113,7 +113,7 @@ const { name, type, role, currency, icon, includeNetWorth, isDashboardVisible } 
   { computed: 'isDashboardVisible', parentKey: `${pathKey}.is_dashboard_visible` },
 ])
 
-const isRoleVisible = computed(() => get(type.value, 'code') === Account.types.asset.fireflyCode)
+const isRoleVisible = computed(() => get(type.value, 'fireflyCode') === Account.types.asset.fireflyCode)
 
 watch(name, (newValue) => {
   if (!appStore.lowerCaseAccountName) {

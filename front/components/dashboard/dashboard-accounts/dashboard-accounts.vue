@@ -34,8 +34,8 @@
       </van-grid-item>
     </van-grid>
 
-    <div v-if="hasHiddenAccounts">
-      <van-button @click="toggleHiddenAccounts" size="small" class="">{{ showHiddenAccounts ? "View less" : "View more" }}</van-button>
+    <div v-if="hasHiddenAccounts" class="flex-center">
+      <div @click="toggleHiddenAccounts" class="m-5 button-link">{{ showHiddenAccounts ? "View less..." : "View more..." }}</div>
     </div>
 
     <div class="flex-center text-size-13 m-10 flex-wrap">
