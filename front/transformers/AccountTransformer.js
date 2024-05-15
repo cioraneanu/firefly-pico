@@ -23,6 +23,8 @@ export default class AccountTransformer extends ApiTransformer {
     item.attributes.currency = currencyDictionary[currencyId]
     item.attributes.icon = Icon.getIcon(get(item, 'attributes.icon'))
 
+    item.attributes.is_dashboard_visible = get(item, 'attributes.is_dashboard_visible', true)
+
     return item
   }
 
