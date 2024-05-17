@@ -338,14 +338,14 @@
     color: var(--test);
 }
 
-.transaction-type-container div:nth-child(1) .type-indicator {
+.van-theme-dark .transaction-type-container div:nth-child(1) .type-indicator {
     background: #e04579;
 }
 
-.transaction-type-container div:nth-child(2) .type-indicator {
+.van-theme-dark .transaction-type-container div:nth-child(2) .type-indicator {
     background: #59a75c;
 }
 
-.transaction-type-container div:nth-child(3) .type-indicator {
+.van-theme-dark .transaction-type-container div:nth-child(3) .type-indicator {
     background: #3e9eec;
 }
