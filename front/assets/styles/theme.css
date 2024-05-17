@@ -1,6 +1,3 @@
-
-
-
 html,
 body,
 #__nuxt {
@@ -350,8 +347,10 @@ body {
 
 /* Hide scrollbar for IE, Edge and Firefox */
 body {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .van-tabbar {
@@ -402,7 +401,11 @@ body {
   transition: all 0.5s ease;
 }
 
-.fade-slide-enter, .fade-slide-leave-to /* .fade-slide-leave-active in <2.1.8 */ {
+.fade-slide-enter,
+.fade-slide-leave-to
+
+/* .fade-slide-leave-active in <2.1.8 */
+  {
   opacity: 1;
   transform: translateY(0);
 }
@@ -900,7 +903,7 @@ body {
   border-bottom: 1px solid #01579b;
 }
 
-.van-collapse-item__title .van-cell__title{
+.van-collapse-item__title .van-cell__title {
   font-weight: 600;
   display: flex;
   align-items: center;
