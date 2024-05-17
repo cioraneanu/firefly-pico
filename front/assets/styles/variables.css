@@ -373,6 +373,6 @@
 }
 
 .van-theme-dark svg.tabler-icon,
-.van-theme-dark svg * {
+.van-theme-dark svg * :not(.svg-add-icon-bg,.svg-add-icon-plus){
   stroke: var(--van-text-color)
 }
