@@ -41,12 +41,12 @@ const barsList = computed(() => {
 
   let bars = Object.keys(dictionary).map((categoryId) => {
     let category = dataStore.categoryDictionary[categoryId]
-    const amount = dictionary[categoryId].toFixed(0)
+    const amount = dictionary[categoryId]
     const percent = (amount / maxAmount) * 100
     return {
       category: category,
       label: category ? Category.getDisplayName(category) : 'Not set',
-      value: amount,
+      value: getFormattedValue(amount, 0),
       percent: percent,
     }
   })
