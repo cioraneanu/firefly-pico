@@ -10,11 +10,11 @@
 <p align="center">
 <a href="docs/installation.md">Installation</a>
 ·
-<a href="https://github.com/cioraneanu/firefly-pico/issues">Suggestion / bug?</a>
-·
-<a href="docs/contribute.md">Contribute</a>
+<a href="https://github.com/cioraneanu/firefly-pico/issues">Suggestion or bug?</a>
 ·
 <a href="docs/architecture.md">Architecture</a>
+·
+<a href="docs/contribute.md">Contribution</a>
 </p>
 
 <h1></h1>

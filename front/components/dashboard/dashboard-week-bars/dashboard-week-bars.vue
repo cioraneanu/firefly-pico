@@ -19,8 +19,6 @@ const dataStore = useDataStore()
 
 const barsList = computed(() => {
   const amountsList = Object.values(dataStore.dashboardExpenseByDay)
-  const totalIn7Days = amountsList.reduce((total, dayAmount) => total + dayAmount, 0)
-  const minAmount = Math.min(...amountsList)
   const maxAmount = Math.max(...amountsList)
 
   const daysList = eachDayOfInterval({
@@ -30,7 +28,7 @@ const barsList = computed(() => {
   return daysList.map((date) => {
     const weekdayName = format(date, 'E')
     let amount = get(dataStore.dashboardExpenseByDay, DateUtils.dateToString(date), 0)
-    amount = Math.round(amount)
+    amount = getFormattedValue(amount, 0)
     const percent = (amount / maxAmount) * 100
 
     return {

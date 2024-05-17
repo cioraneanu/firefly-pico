@@ -4,8 +4,6 @@ body,
   height: 100%;
 }
 
-
-
 body {
   color: var(--van-text-color);
 }
@@ -39,8 +37,6 @@ body {
 .van-tabbar--fixed {
   position: fixed !important;
 }
-
-
 
 .app-form {
   /*padding-top: 47px;*/
