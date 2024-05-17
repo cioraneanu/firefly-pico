@@ -19,7 +19,6 @@ import RouteConstants from '~/constants/RouteConstants.js'
 import { TUTORIAL_CONSTANTS } from '~/constants/TutorialConstants.js'
 import { get } from 'lodash'
 
-const appStore = useAppStore()
 const dataStore = useDataStore()
 
 const onEditTransaction = async (transaction) => {
