@@ -149,7 +149,7 @@
 
 
 .van-theme-dark .transaction-form-group .van-cell-group--inset {
-    border: 1px solid #444;
+    border: 1px solid var(--theme-border-color-grey);
 }
 
 .van-theme-dark .van-tabs--line {
@@ -169,11 +169,11 @@
 }
 
 .van-theme-dark .transaction-card .tag, .tag {
-    border: 1px solid #666;
+    border: 1px solid var(--van-border-color);
 }
 
 .van-theme-dark .tag-gray {
-    border: 1px solid #666;
+    border: 1px solid var(--van-border-color);
     background: #000;
 }
 
@@ -188,7 +188,7 @@
 }
 
 .van-theme-dark .badge {
-    border: 1px dashed #666;
+    border: 1px dashed var(--van-border-color);
     color: #1c1c1e;
     background: #000;
 }
@@ -247,7 +247,7 @@
 
 .van-theme-dark .vant-card{
     background: #1c1c1e;
-    border: 1px solid #666;
+    border: 1px solid var(--van-border-color);
 }
 
 .van-theme-dark .bar-container-vertical .bar-container
