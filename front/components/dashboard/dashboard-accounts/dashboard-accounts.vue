@@ -71,7 +71,16 @@ const toggleHiddenAccounts = () => {
 }
 
 const visibleDashboardAccounts = computed(() => {
-  return showHiddenAccounts.value ? dataStore.dashboardAccounts : dataStore.dashboardAccounts.filter((account) => Account.getIsVisibleOnDashboard(account))
+  const sortedAccounts = dataStore.dashboardAccounts.sort((a, b) => {
+    const aVisible = Account.getIsVisibleOnDashboard(a)
+    const bVisible = Account.getIsVisibleOnDashboard(b)
+    if (aVisible === bVisible) {
+      return 0
+    } else {
+      return aVisible ? -1 : 1
+    }
+  })
+  return showHiddenAccounts.value ? sortedAccounts : sortedAccounts.filter((account) => Account.getIsVisibleOnDashboard(account))
 })
 
 const hasHiddenAccounts = computed(() => dataStore.dashboardAccounts.some((account) => !Account.getIsVisibleOnDashboard(account)))
