@@ -5,11 +5,11 @@
         <div>
           <van-button @click="onShowFilters" size="small" class="mr-10 no-border">
             <template #icon>
-              <icon-adjustments-alt size="20" :stroke-width="1.9"/>
+              <icon-adjustments-alt size="20" :stroke-width="1.9" />
             </template>
           </van-button>
 
-          <app-button-list-add @click="onAdd"/>
+          <app-button-list-add @click="onAdd" />
         </div>
       </template>
     </app-top-toolbar>
@@ -22,13 +22,13 @@
 
       <div class="display-flex flex-wrap gap-1">
         <div v-for="appliedFilter in filtersDisplayList" class="app-tag van-tag van-tag--round van-tag--medium van-tag--primary">
-          <icon-filter size="14" :stroke-width="1.9"/>
+          <icon-filter size="14" :stroke-width="1.9" />
           <span class="ml-5">{{ appliedFilter }}</span>
         </div>
       </div>
     </div>
 
-    <empty-list v-if="isEmpty && !isLoading"/>
+    <empty-list v-if="isEmpty && !isLoading" />
 
     <!--    loading-text="yyyyyyyyy"-->
 
@@ -36,11 +36,11 @@
       <!--      v-model:loading="isLoading"-->
 
       <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
-        <transaction-list-item v-for="item in list" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete"/>
+        <transaction-list-item v-for="item in list" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
       </van-list>
     </van-pull-refresh>
 
-    <transaction-filters ref="transactionFiltersRef" v-model="filters"/>
+    <transaction-filters ref="transactionFiltersRef" v-model="filters" />
   </div>
 </template>
 

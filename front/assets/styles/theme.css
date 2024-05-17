@@ -1,13 +1,8 @@
-
-
-
 html,
 body,
 #__nuxt {
   height: 100%;
 }
-
-
 
 body {
   color: var(--van-text-color);
@@ -42,8 +37,6 @@ body {
 .van-tabbar--fixed {
   position: fixed !important;
 }
-
-
 
 .app-form {
   /*padding-top: 47px;*/
@@ -900,7 +893,7 @@ body {
   border-bottom: 1px solid #01579b;
 }
 
-.van-collapse-item__title .van-cell__title{
+.van-collapse-item__title .van-cell__title {
   font-weight: 600;
   display: flex;
   align-items: center;
