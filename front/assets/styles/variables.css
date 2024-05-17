@@ -306,7 +306,7 @@
 }
 
 .van-theme-dark .app-tutorial-button {
-    color: #000;
+    color: var(--van-text-color);
     box-shadow: rgba(200, 200, 200, 0.15) 1.95px 1.95px 2.6px;
     background-image: linear-gradient(120deg, #b15f7a 0%, #770028 100%)
 }
