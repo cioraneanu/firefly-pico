@@ -250,6 +250,10 @@
     border: 1px solid #666;
 }
 
+.van-theme-dark .bar-container-vertical .bar-container
+{
+    background: #707070;
+}
 .van-theme-dark .app-repeater-no-values {
     color: #707070;
 }
