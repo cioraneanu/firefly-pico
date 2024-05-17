@@ -236,6 +236,11 @@
     color: #1c1c1e;
 }
 
+.van-theme-dark .transaction-type-item.selected {
+    background-color: #303030;
+    background-image: none;
+}
+
 .van-theme-dark .transaction-type-item {
     color: #707070;
 }
@@ -305,4 +310,35 @@
 
 .van-theme-dark .transaction-type-container {
     background: var(--van-cell-background);
+    border: 1px solid var(--van-border-color);
+}
+
+.van-theme-dark .transaction-type-container .transaction-type-item:nth-child(1).selected {
+    --test: #df5c88;
+    border: 2.8px solid var(--test);
+    color: var(--test);
+}
+
+.van-theme-dark .transaction-type-container .transaction-type-item:nth-child(2).selected {
+    --test: #2c9467;
+    border: 2.8px solid var(--test);
+    color: var(--test);
+}
+
+.van-theme-dark .transaction-type-container .transaction-type-item:nth-child(3).selected {
+    --test: #4f92fd;
+    border: 2.8px solid var(--test);
+    color: var(--test);
+}
+
+.transaction-type-container div:nth-child(1) .type-indicator {
+    background: #e04579;
+}
+
+.transaction-type-container div:nth-child(2) .type-indicator {
+    background: #59a75c;
+}
+
+.transaction-type-container div:nth-child(3) .type-indicator {
+    background: #3e9eec;
 }
