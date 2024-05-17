@@ -51,6 +51,8 @@
   --theme-highlight-g: 0;
   --theme-highlight-b: 0;
   --theme-text-white: #000;
+  --theme-link-color: orange;
+  --theme-link-hover-color: #c78100;
   --van-text-color-3: var(--van-text-color-2);
   --van-text-color-4: #aaa;
   --svg-color: #ffffff;
@@ -82,12 +84,22 @@
   background: #1c1c1e;
 }
 
-.van-theme-dark a {
-  color: orange;
+.van-theme-dark .button-link {
+  border-bottom: 1px solid var(--theme-link-color);
 }
 
+.van-theme-dark .button-link:hover {
+  border-bottom: 1px solid var(--theme-link-hover-color);
+}
+
+.van-theme-dark .button-link,
+.van-theme-dark a {
+  color: var(--theme-link-color);
+}
+
+.van-theme-dark .button-link:hover,
 .van-theme-dark a:hover {
-  color: rgb(199, 129, 0);
+  color: var(--theme-link-hover-color);
 }
 
 /* bugfix */
