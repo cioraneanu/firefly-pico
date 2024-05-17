@@ -1,10 +1,9 @@
-name: Build latest docker image
+name: Build dev docker image
 
 on:
   push:
     tags:
-      - '*'
-      - '!*-dev'
+      - '*-dev'
 
 jobs:
   build:
@@ -34,4 +33,4 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/firefly-pico:latest , ${{ secrets.DOCKERHUB_USERNAME }}/firefly-pico:${{ github.ref_name  }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/firefly-pico:dev
