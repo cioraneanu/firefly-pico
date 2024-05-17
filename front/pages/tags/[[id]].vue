@@ -12,17 +12,7 @@
 
     <van-form ref="form" @submit="saveItem" @failed="onValidationError" class="">
       <van-cell-group inset>
-        <app-field
-          v-model="tag"
-          name="Name"
-          label="Name"
-          rows="1"
-          autosize
-          left-icon="notes-o"
-          placeholder="Description (lowercase)"
-          :rules="[{ required: true, message: 'Name is required' }]"
-          required
-        />
+        <app-field v-model="tag" name="Name" label="Name" rows="1" autosize left-icon="notes-o" placeholder="Description" :rules="[{ required: true, message: 'Name is required' }]" required />
 
         <tag-select label="Parent tag" v-model="parentTag" :isMultiSelect="false" />
 

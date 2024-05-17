@@ -28,6 +28,10 @@
         <account-type-select v-model="type" :rules="[{ required: true, message: 'Type is required' }]" required />
 
         <account-role-select v-if="isRoleVisible" v-model="role" :rules="[{ required: true, message: 'Role is required' }]" required />
+
+        <app-boolean v-model="includeNetWorth" label="Is include in net worth" />
+
+        <app-boolean v-model="isDashboardVisible" label="Is visible on Dashboard" />
       </van-cell-group>
 
       <div style="margin: 16px" class="">
@@ -44,7 +48,7 @@ import { ref } from 'vue';
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
-import _, { get } from 'lodash'
+import { get } from 'lodash'
 import { useAppStore } from '~/stores/appStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
@@ -98,19 +102,17 @@ let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveI
 const pathKey = 'attributes'
 
 // const name = ref("")
-const children = generateChildren(item, [
+const { name, type, role, currency, icon, includeNetWorth, isDashboardVisible } = generateChildren(item, [
   { computed: 'name', parentKey: `${pathKey}.name` },
   { computed: 'icon', parentKey: `${pathKey}.icon` },
   { computed: 'type', parentKey: `${pathKey}.type` },
   { computed: 'role', parentKey: `${pathKey}.account_role` },
   { computed: 'currency', parentKey: `${pathKey}.currency` },
+  { computed: 'includeNetWorth', parentKey: `${pathKey}.include_net_worth` },
+  { computed: 'isDashboardVisible', parentKey: `${pathKey}.is_dashboard_visible` },
 ])
 
-const { name, type, role, currency, icon } = children
-
-const isRoleVisible = computed(() => {
-  return _.get(type.value, 'code') === Account.types.TYPE_ASSET
-})
+const isRoleVisible = computed(() => get(type.value, 'fireflyCode') === Account.types.asset.fireflyCode)
 
 watch(name, (newValue) => {
   if (!appStore.lowerCaseAccountName) {

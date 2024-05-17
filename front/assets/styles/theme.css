@@ -1,8 +1,13 @@
+
+
+
 html,
 body,
 #__nuxt {
   height: 100%;
 }
+
+
 
 body {
   color: var(--van-text-color);
@@ -38,9 +43,7 @@ body {
   position: fixed !important;
 }
 
-:root {
-  --van-field-label-width: 10.5em !important;
-}
+
 
 .app-form {
   /*padding-top: 47px;*/
@@ -887,4 +890,27 @@ body {
 body {
   background: var(--van-background);
   /*background: #f2f2f2;*/
+}
+
+.button-link {
+  font-size: 12px;
+  cursor: pointer;
+  color: #01579b;
+  font-weight: 600;
+  border-bottom: 1px solid #01579b;
+}
+
+.van-collapse-item__title .van-cell__title{
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.van-button--danger {
+  /*border: none !important;*/
+}
+
+.van-collapse-item__content {
+  /*background: transparent !important;*/
 }

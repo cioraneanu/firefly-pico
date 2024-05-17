@@ -36,6 +36,10 @@ export const areIntEqual = (a, b) => {
   return parseInt(a) === parseInt(b)
 }
 
+export const areStringEqual = (a, b) => {
+  return a.localeCompare(b, undefined, { sensitivity: 'accent' }) === 0
+}
+
 export const isStringEmpty = (value) => {
   return !value || value.length === 0
 }

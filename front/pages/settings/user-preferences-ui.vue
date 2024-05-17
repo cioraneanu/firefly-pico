@@ -7,7 +7,7 @@
         <!--        <div class="van-cell-group-title">Date settings:</div>-->
 
         <app-select
-          label="Numbers formatting"
+          label="Numbers formatting:"
           popupTitle="Select preffered numbers formatting"
           v-model="numberFormat"
           v-model:showDropdown="isDropdownNumberFormatVisible"
@@ -19,14 +19,20 @@
           :clearable="false"
         />
 
-        <app-boolean label="Dark theme" v-model="darkTheme" />
+        <app-boolean label="Dark theme (alpha):" v-model="darkTheme">
+          <template #icon="{value}">
+            <app-icon
+              :size="23"
+              :stroke-width="2.0"
+              :icon="value ? TablerIconConstants.darkTheme : TablerIconConstants.whiteTheme"
+            />
+          </template>
+        </app-boolean>
 
-        <app-boolean label="Force transaction description lowercase" v-model="lowerCaseTransactionDescription" />
-        <app-boolean label="Force account name lowercase" v-model="lowerCaseAccountName" />
-
-        <app-boolean label="Force category name lowercase" v-model="lowerCaseCategoryName" />
-
-        <app-boolean label="Force tag name lowercase" v-model="lowerCaseTagName" />
+        <app-boolean label="Force transaction description lowercase:" v-model="lowerCaseTransactionDescription" />
+        <app-boolean label="Force account name lowercase:" v-model="lowerCaseAccountName" />
+        <app-boolean label="Force category name lowercase:" v-model="lowerCaseCategoryName" />
+        <app-boolean label="Force tag name lowercase:" v-model="lowerCaseTagName" />
       </van-cell-group>
 
       <app-button-form-save />
@@ -43,6 +49,7 @@ import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
 import SettingsTokenField from '~/components/settings/settings-token-field.vue'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 const appStore = useAppStore()
 const dataStore = useDataStore()

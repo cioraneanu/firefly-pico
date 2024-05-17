@@ -23,6 +23,8 @@ export default class AccountTransformer extends ApiTransformer {
     item.attributes.currency = currencyDictionary[currencyId]
     item.attributes.icon = Icon.getIcon(get(item, 'attributes.icon'))
 
+    item.attributes.is_dashboard_visible = get(item, 'attributes.is_dashboard_visible', true)
+
     return item
   }
 
@@ -40,6 +42,9 @@ export default class AccountTransformer extends ApiTransformer {
       account_role: get(data, 'account_role.fireflyCode'),
       currency_id: get(data, 'currency.id'),
       currency_code: get(data, 'currency.attributes.code'),
+
+      include_net_worth: get(data, 'include_net_worth', false),
+      is_dashboard_visible: get(data, 'is_dashboard_visible', true),
     }
   }
 }

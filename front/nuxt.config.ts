@@ -3,11 +3,12 @@
 import pkg from './package.json'
 
 const appName = 'Firefly Pico'
-const appDescription = 'Firefly III companian app.'
+const appDescription = 'Firefly III companion app.'
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       version: pkg.version,
+      queryTimeout: 4000,
       // mihai: 'test'
     },
   },
@@ -39,7 +40,7 @@ export default defineNuxtConfig({
     },
   ],
 
-  css: ['@/assets/styles/bootstrap.min.css', '@/assets/styles/theme.css', '@/assets/styles/helper.css'],
+  css: ['@/assets/styles/bootstrap.min.css', '@/assets/styles/variables.css', '@/assets/styles/theme.css', '@/assets/styles/helper.css'],
   build: {
     // transpile: ['vuetify'],
   },
@@ -84,7 +85,7 @@ export default defineNuxtConfig({
       navigateFallback: '/',
     },
     devOptions: {
-      enabled: true,
+      enabled: false,
       type: 'module',
     },
   },

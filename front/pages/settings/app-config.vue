@@ -68,6 +68,8 @@ onMounted(() => {
 })
 
 const onSave = async () => {
+  picoBackendURL.value = picoBackendURL.value.endsWith('/') ? picoBackendURL.value.slice(0, -1) : picoBackendURL.value
+
   appStore.authToken = authToken.value
   appStore.picoBackendURL = picoBackendURL.value
 

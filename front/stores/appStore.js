@@ -18,6 +18,7 @@ export const useAppStore = defineStore('app', {
 
     return {
       currentAppVersion: runtimeConfig.public.version,
+      queryTimeout: runtimeConfig.public.queryTimeout,
       latestAppVersion: null,
 
       darkTheme: useLocalStorage('darkTheme', false),
@@ -47,7 +48,7 @@ export const useAppStore = defineStore('app', {
 
       numberFormat: useLocalStorage('numberFormat', NUMBER_FORMAT.eu),
       lowerCaseTransactionDescription: useLocalStorage('lowerCaseTransactionDescription', false),
-      lowerCaseAccountName: useLocalStorage('lowerCaseTagName', false),
+      lowerCaseAccountName: useLocalStorage('lowerCaseAccountName', false),
       lowerCaseCategoryName: useLocalStorage('lowerCaseCategoryName', true),
       lowerCaseTagName: useLocalStorage('lowerCaseTagName', true),
 

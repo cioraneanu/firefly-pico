@@ -24,7 +24,7 @@ export default class CategoryTransformer extends ApiTransformer {
 
     let data = _.get(item, 'attributes')
     return {
-      name: get(data, 'name', '').toLowerCase(),
+      name: get(data, 'name', ''),
       icon: get(data, 'icon.icon'),
     }
   }
