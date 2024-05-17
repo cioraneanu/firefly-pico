@@ -76,10 +76,6 @@
   color: var(--van-text-color);
 }
 
-.van-theme-dark svg.tabler-icon {
-  stroke: #fff
-}
-
 .van-theme-dark .applied-filters-container {
   background: #1c1c1e;
 }
@@ -374,4 +370,9 @@
 .van-theme-dark .svg-add-icon-plus {
   opacity: 1;
   fill: rgb(250, 192, 232);
+}
+
+.van-theme-dark svg.tabler-icon,
+.van-theme-dark svg * {
+  stroke: var(--van-text-color)
 }
