@@ -44,7 +44,6 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { addMonths, differenceInDays, startOfDay, subDays, subMonths } from 'date-fns'
 import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
-import Account from '~/models/Account.js'
 
 const appStore = useAppStore()
 const dataStore = useDataStore()

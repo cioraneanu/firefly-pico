@@ -40,13 +40,13 @@ const barsList = computed(() => {
 
   const bars = Object.keys(tagTotalDictionary).map((tagId) => {
     const tag = dataStore.tagDictionaryById[tagId]
-    const amount = tagTotalDictionary[tagId].toFixed(0)
+    const amount = tagTotalDictionary[tagId]
     const percent = (amount / maxAmount) * 100
     return {
       tag: tag,
       tag_id: tagId,
       label: tag ? Tag.getDisplayName(tag) : 'Not set',
-      value: amount,
+      value: getFormattedValue(amount, 0),
       percent: percent,
     }
   })
