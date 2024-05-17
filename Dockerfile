@@ -11,16 +11,11 @@ COPY back .
 
 COPY back/.env.example .env
 
-
-#RUN composer install --no-dev \
-#    && php artisan key:generate \
-#    && tar --owner=www-data --group=www-data --exclude=.git -czf /tmp/app-back.tar.gz .
-
 ENV COMPOSER_ALLOW_SUPERUSER=1
-#RUN rm -rf vendor/
+
 RUN composer install --no-dev
 RUN php artisan key:generate
-#RUN php artisan migrate
+
 RUN tar --owner=www-data --group=www-data --exclude=.git -czf /tmp/app-back.tar.gz .
 
 # ================================
@@ -28,9 +23,6 @@ RUN tar --owner=www-data --group=www-data --exclude=.git -czf /tmp/app-back.tar.
 WORKDIR /var/www/html/front
 
 COPY front .
-
-#COPY front/.env.example .env
-
 
 RUN npm install \
     && npm run build
@@ -73,23 +65,20 @@ RUN tar --owner=www-data --group=www-data \
     --exclude=node_modules/@babel \
     --exclude=node_modules/@tabler \
     -czf /tmp/app-front.tar.gz .
-    # ================================
+# ================================
 
-    FROM ${REGISTRY}/php:${LARAVEL_ALPINE_VERSION}-build
+FROM ${REGISTRY}/php:${LARAVEL_ALPINE_VERSION}-build
 
-    WORKDIR /var/www/html
-
-    RUN --mount=type=bind,from=build-container,source=/tmp/,target=/build \
+WORKDIR /var/www/html
+RUN --mount=type=bind,from=build-container,source=/tmp/,target=/build \
     tar -xf /build/app-back.tar.gz -C .
 
 WORKDIR /var/www/html/front
-
 RUN --mount=type=bind,from=build-container,source=/tmp/,target=/build \
     tar -xf /build/app-front.tar.gz -C .
 
 COPY docker/conf/supervisor/node.ini /etc/supervisor.d
 COPY docker/conf/nginx/default.conf /etc/nginx/http.d
-
 
 # Configure entrypoint
 COPY docker/docker-entrypoint.d /docker-entrypoint.d/
