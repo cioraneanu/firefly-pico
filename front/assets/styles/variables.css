@@ -54,14 +54,16 @@
 }
 
 
-.van-theme-dark .van-nav-bar .van-icon, .van-nav-bar__text {
+.van-theme-dark .van-nav-bar .van-icon,
+.van-nav-bar__text {
     color: #ececec !important;
-  }
+}
 
 .van-theme-dark .van-tabbar-item--active {
     color: #ececec !important;
 }
-.van-theme-dark .van-field__control::placeholder{
+
+.van-theme-dark .van-field__control::placeholder {
     color: var(--van-text-color);
 }
 
@@ -76,13 +78,14 @@
 .van-theme-dark a {
     color: orange;
 }
+
 .van-theme-dark a:hover {
     color: rgb(199, 129, 0);
 }
 
 /* bugfix */
 
-.van-button--plain.van-button--danger{
+.van-button--plain.van-button--danger {
     border-width: 1px;
 }
 
@@ -168,7 +171,8 @@
     background: #1c1c1e;
 }
 
-.van-theme-dark .transaction-card .tag, .tag {
+.van-theme-dark .transaction-card .tag,
+.tag {
     border: 1px solid var(--van-border-color);
 }
 
@@ -250,15 +254,15 @@
     box-shadow: rgba(200, 200, 200, 0.24) 0px 3px 8px;
 }
 
-.van-theme-dark .vant-card{
+.van-theme-dark .vant-card {
     background: #1c1c1e;
     border: 1px solid var(--van-border-color);
 }
 
-.van-theme-dark .bar-container-vertical .bar-container
-{
+.van-theme-dark .bar-container-vertical .bar-container {
     background: #707070;
 }
+
 .van-theme-dark .app-repeater-no-values {
     color: #707070;
 }
@@ -301,7 +305,6 @@
     color: #000;
     box-shadow: rgba(200, 200, 200, 0.15) 1.95px 1.95px 2.6px;
     background-image: linear-gradient(120deg, #d2cdd2 0%, #5c5b5b 100%)
-
 }
 
 .van-theme-dark .app-bottom-loading {
