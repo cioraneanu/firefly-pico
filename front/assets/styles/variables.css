@@ -349,3 +349,13 @@
 .van-theme-dark .transaction-type-container div:nth-child(3) .type-indicator {
     background: #3e9eec;
 }
+
+.van-theme-dark .svg-add-icon-bg{
+    opacity: 0.8;
+    fill: #f53675;
+}
+
+.van-theme-dark .svg-add-icon-plus{
+    opacity: 1;
+    fill: rgb(250, 192, 232);
+}
