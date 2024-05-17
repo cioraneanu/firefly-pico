@@ -53,6 +53,10 @@
     --van-field-placeholder-text-color: var(--van-text-color);
 }
 
+.van-theme-dark .body
+{
+    color: var(--van-text-color-2)
+}
 
 .van-theme-dark .van-nav-bar .van-icon,
 .van-nav-bar__text {
@@ -304,7 +308,7 @@
 .van-theme-dark .app-tutorial-button {
     color: #000;
     box-shadow: rgba(200, 200, 200, 0.15) 1.95px 1.95px 2.6px;
-    background-image: linear-gradient(120deg, #d2cdd2 0%, #5c5b5b 100%)
+    background-image: linear-gradient(120deg, #b15f7a 0%, #770028 100%)
 }
 
 .van-theme-dark .app-bottom-loading {
