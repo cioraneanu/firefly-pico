@@ -83,7 +83,6 @@ export function useList(prop) {
     listTotalCount.value = _.get(result, 'meta.pagination.total', 0)
 
     // await new Promise(resolve => setTimeout(resolve, 3000))
-    console.log('isFinished', { page: page.value, totalPages: totalPages.value })
     isFinished.value = page.value >= totalPages.value
     isLoading.value = false
   }

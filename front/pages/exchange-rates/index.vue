@@ -44,7 +44,6 @@ const exchangeDate = computed(() => get(dataStore.exchangeRates, 'date'))
 const exchangeRates = computed(() => get(dataStore.exchangeRates, 'rates'))
 
 const getCurrencyValue = (currency) => {
-  console.log('xxxx', exchangeRates.value, currency)
   return get(exchangeRates.value, currency)
 }
 

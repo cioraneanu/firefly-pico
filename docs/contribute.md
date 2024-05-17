@@ -1,7 +1,8 @@
 # General rules
-- Please provide a nice and positive attitude when writing issues and feedback. We are all doing this for fun. Let's keep it that way :innocent:
+- Please provide a nice and positive attitude when writing issues. We are all doing this for fun. Please keep it that way :innocent:
 - Don't create Pull Requests without opening an issue to discuss the benefits and implications.
-- Don't be offended if a feature that you find great doesn't get approved. We have to keep a healthy balance between features that provides value to most users and bloating the UI / code.
+- All Pull Requests should be performed on the `dev` branch.
+- Don't be offended if a feature that you find necessary doesn't get approved. We have to keep a healthy balance between things that provides value to most users and bloating the UI / code.
 
 ## Frontend development
 - Install [Node and NPM](https://nodejs.org/en)
