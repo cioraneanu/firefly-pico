@@ -2,18 +2,18 @@
   <van-cell-group inset style="overflow: auto">
     <div class="flex-center-vertical">
       <div class="van-cell-group-title">Total balance:</div>
-      <div class="flex-1"/>
+      <div class="flex-1" />
 
       <van-button v-if="hasMultipleCurrencies" @click="onToggleTotalCurrency" size="small" class="mr-10">
         <template #icon>
-          <app-icon :icon="TablerIconConstants.transaction" :size="20"/>
+          <app-icon :icon="TablerIconConstants.transaction" :size="20" />
           {{ dataStore.dashboardCurrency }}
         </template>
       </van-button>
 
       <van-button @click="onToggleShowDashboardAccountValues" size="small" class="mr-10">
         <template #icon>
-          <app-icon :icon="appStore.dashboard.showAccountAmounts ? 'IconEyeX' : 'IconEye'" :size="20"/>
+          <app-icon :icon="appStore.dashboard.showAccountAmounts ? 'IconEyeX' : 'IconEye'" :size="20" />
           <!--              <van-icon name="eye-o"/>-->
         </template>
       </van-button>
@@ -22,7 +22,7 @@
     <van-grid :column-num="2">
       <van-grid-item v-for="account in visibleDashboardAccounts" :key="account.id" @click="onGoToTransactions(account)" icon="photo-o">
         <template #icon>
-          <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="24"/>
+          <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="24" />
         </template>
 
         <template #text>
@@ -40,7 +40,7 @@
 
     <div class="flex-center text-size-13 m-10 flex-wrap">
       <div class="flex-center text-size-13 me-1">
-        <icon-cash class="text-muted" :size="24" :stroke="1.5"/>
+        <icon-cash class="text-muted" :size="24" :stroke="1.5" />
         <span class="font-400 text-muted">Total: </span>
       </div>
 

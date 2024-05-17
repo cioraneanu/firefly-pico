@@ -20,12 +20,8 @@
         />
 
         <app-boolean label="Dark theme (alpha):" v-model="darkTheme">
-          <template #icon="{value}">
-            <app-icon
-              :size="23"
-              :stroke-width="2.0"
-              :icon="value ? TablerIconConstants.darkTheme : TablerIconConstants.whiteTheme"
-            />
+          <template #icon="{ value }">
+            <app-icon :size="23" :stroke-width="2.0" :icon="value ? TablerIconConstants.darkTheme : TablerIconConstants.whiteTheme" />
           </template>
         </app-boolean>
 
