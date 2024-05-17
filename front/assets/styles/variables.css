@@ -52,6 +52,7 @@
   --theme-highlight-b: 0;
   --theme-text-white: #000;
   --van-text-color-3: var(--van-text-color-2);
+  --van-text-color-4: #aaa;
   --svg-color: #ffffff;
   --van-field-placeholder-text-color: var(--van-text-color);
 }
@@ -273,8 +274,9 @@
   color: #707070;
 }
 
-.van-theme-dark .list-item-subtitle {
-  color: #a1a1a1;
+.van-theme-dark .list-item-subtitle,
+.van-theme-dark .text-muted {
+  color: var(--van-text-color-4) !important;
 }
 
 .van-theme-dark .list-item-title {
