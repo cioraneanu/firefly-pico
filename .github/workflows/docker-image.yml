@@ -1,9 +1,10 @@
-name: Build docker image
+name: Build latest docker image
 
 on:
   push:
     tags:
       - '*'
+      - '!*-dev'
 
 jobs:
   build:
