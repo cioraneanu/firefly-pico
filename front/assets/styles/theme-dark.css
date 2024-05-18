@@ -264,6 +264,7 @@
 
 .van-theme-dark .app-bottom-loading {
   box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px, rgba(200, 200, 200, 0.3) 0px 3px 7px -3px;
+  background: var(--van-cell-background);
 }
 
 .van-theme-dark .transaction-type-container {
