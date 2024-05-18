@@ -372,7 +372,14 @@
   fill: rgb(250, 192, 232);
 }
 
-.van-theme-dark svg.tabler-icon,
-.van-theme-dark svg * :not(.svg-add-icon-bg,.svg-add-icon-plus){
-  stroke: var(--van-text-color)
+.van-theme-dark .svg-icon,
+.van-theme-dark svg.tabler-icon {
+  * {
+    fill: var(--van-text-color);
+  }
+
+  path {
+    stroke: var(--van-text-color);
+    fill: none;
+  }
 }
