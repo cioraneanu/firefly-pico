@@ -21,9 +21,12 @@
 
 <p align="center">
   <a href="https://hub.docker.com/r/cioraneanu/firefly-pico/tags">
-<img alt="Docker Image Version" src="https://img.shields.io/docker/v/cioraneanu/firefly-pico?sort=semver&arch=amd64&logo=docker&logoSize=auto" >
+    <img alt="Docker Image Version" src="https://img.shields.io/docker/v/cioraneanu/firefly-pico?sort=semver&arch=amd64&logo=docker&logoSize=auto" >
+  </a>
   
-</a>
+  <a href="https://hub.docker.com/r/cioraneanu/firefly-pico/tags">
+    <img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/cioraneanu/firefly-pico?logo=docker&logoSize=auto">
+  </a>
 </p>
 
 
