@@ -1,5 +1,7 @@
+
 <div align="center">
-<img src="docs/images/logo2.png" height="100">
+
+  <img src="docs/images/logo2.png" height="100">
 </div>
 
 
@@ -16,6 +18,14 @@
 ·
 <a href="docs/contribute.md">Contribution</a>
 </p>
+
+<p align="center">
+  <a href="https://hub.docker.com/r/cioraneanu/firefly-pico/tags">
+<img alt="Docker Image Version" src="https://img.shields.io/docker/v/cioraneanu/firefly-pico?sort=semver&arch=amd64&logo=docker&logoSize=auto" >
+  
+</a>
+</p>
+
 
 <h1></h1>
 
