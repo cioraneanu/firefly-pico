@@ -35,3 +35,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/firefly-pico:latest , ${{ secrets.DOCKERHUB_USERNAME }}/firefly-pico:${{ github.ref_name  }}
+          labels: ${{ steps.meta.outputs.labels }}
+
