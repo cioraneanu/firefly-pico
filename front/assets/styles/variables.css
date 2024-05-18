@@ -4,23 +4,58 @@
 
   --expense1: rgba(236, 64, 122, 1);
   --expense2: rgba(236, 64, 122, 1);
-  --expense3: #fce4ec;
+  --expense3: #FCE4EC;
 
   --income1: rgba(102, 187, 106, 1);
   --income2: rgba(129, 199, 132, 1);
-  --income3: #e8f5e9;
+  --income3: #E8F5E9;
 
   --transfer1: rgba(79, 195, 247, 1);
   --transfer2: rgba(41, 182, 246, 1);
-  --transfer3: #e3f2fd;
+  --transfer3: #E3F2FD;
 
-  --demo-color: #aaa;
+
 
   --van-field-label-width: 10.5em !important;
   --van-collapse-item-content-background: transparent !important;
   --van-collapse-item-content-padding: 5px 5px !important;
 }
 
+
 .van-theme-dark {
-  --demo-color: #666;
+  --max-device-width: 800px;
+  --van-tabbar-z-index: 9;
+
+  --expense1: rgba(236, 64, 122, 1);
+  --expense2: rgba(236, 64, 122, 1);
+  --expense3: #FCE4EC;
+
+  --income1: rgba(102, 187, 106, 1);
+  --income2: rgba(129, 199, 132, 1);
+  --income3: #E8F5E9;
+
+  --transfer1: rgba(79, 195, 247, 1);
+  --transfer2: rgba(41, 182, 246, 1);
+  --transfer3: #E3F2FD;
+
+  --van-border-color: #666;
+
+  --theme-black: #fff;
+  --theme-background-grey: #777;
+  --theme-border-color-grey: #444;
+  --theme-shadow-color: #fff;
+  --theme-shadow-r: 200;
+  --theme-shadow-g: 200;
+  --theme-shadow-b: 200;
+  --theme-highlight-r: 0;
+  --theme-highlight-g: 0;
+  --theme-highlight-b: 0;
+  --theme-text-white: #000;
+  --theme-link-color: orange;
+  --theme-link-hover-color: #c78100;
+  --van-text-color-3: var(--van-text-color-2);
+  --van-text-color-4: #aaa;
+  --svg-color: #ffffff;
+  --van-field-placeholder-text-color: var(--van-text-color);
 }
+

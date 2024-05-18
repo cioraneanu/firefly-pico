@@ -17,7 +17,7 @@
 
     <template #item="{ item }">
       <div class="flex-center flex-column mt-5 text-size-12">
-        <component :is="item.icon" style="width: 30px" />
+        <component :is="item.icon" style="width: 30px" class="svg-icon" />
         <div class="app-icon-item"></div>
       </div>
     </template>

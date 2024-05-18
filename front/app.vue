@@ -11,6 +11,8 @@
 import { useDataStore } from '~/stores/dataStore'
 import RouteConstants from '~/constants/RouteConstants'
 
+import '~/assets/styles/variables.css'
+
 let dataStore = useDataStore()
 let appStore = useAppStore()
 
