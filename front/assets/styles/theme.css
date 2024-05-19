@@ -158,10 +158,6 @@ body {
   height: 100%;
 }
 
-.add-button {
-  background: #0b5ed7;
-}
-
 /*.amount-input, .app-field .van-field__body {*/
 /*.amount-input, .van-field__body {*/
 .app-field .van-field__body {
@@ -400,8 +396,7 @@ body {
 .fade-slide-enter,
 .fade-slide-leave-to
 
-/* .fade-slide-leave-active in <2.1.8 */
-  {
+    /* .fade-slide-leave-active in <2.1.8 */ {
   opacity: 1;
   transform: translateY(0);
 }
@@ -466,6 +461,12 @@ body {
 
 .add-button {
   height: 28px !important;
+  background: var(--primary-action) !important;
+  color: var(--van-white) !important;
+  font-weight: 700 !important;
+  border: 0 !important;
+  border-radius: 10px !important;
+  /*style="background: #000; color: white; font-weight: 700; border: 0; border-radius: 10px"*/
 }
 
 .van-field__label--required:after {
@@ -658,7 +659,7 @@ body {
 .bar-container-vertical .bar-container {
   width: 12px;
   height: 120px;
-  background: #c4c7d4;
+  background: var(--chart-bar-background);
   border-radius: 3px;
   position: relative;
 }
@@ -681,7 +682,7 @@ body {
 .bar-container-horizontal .bar-container {
   height: 12px;
   width: 100%;
-  background: #c4c7d4;
+  background: var(--chart-bar-background);
   border-radius: 3px;
   position: relative;
 }

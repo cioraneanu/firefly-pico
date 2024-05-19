@@ -29,7 +29,6 @@ export default class Icon extends BaseModel {
     return iconsList.find((item) => item.icon === iconName)
   }
 
-
   static isTypeAvatar(iconName) {
     return iconName.startsWith('svgo-avatar')
   }
