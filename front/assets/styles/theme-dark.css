@@ -1,5 +1,6 @@
 .van-theme-dark .svg-icon[color-invertable=true] {
   filter: invert(100%);
+  opacity: 0.9;
 }
 
 .van-theme-dark .body {
@@ -235,7 +236,7 @@
 }
 
 .van-theme-dark .fake-input {
-  background: #000;
+  background: var(--van-background-2-5);;
 }
 
 .van-theme-dark .latest-version-badge {

@@ -3,6 +3,8 @@
 </template>
 
 <script setup>
+import Icon from '~/models/Icon.js'
+
 const props = defineProps({
   icon: {
     type: String,
@@ -19,8 +21,12 @@ const props = defineProps({
 
 const style = computed(() => `width: ${props.size}px`)
 
-const isColorInvertable = computed(() => !props.icon.startsWith("svgo-avatar"))
-
+const isColorInvertable = computed(() => {
+  if (Icon.isTypeTabler(props.icon)) {
+    return false
+  }
+  return !props.icon.startsWith('svgo-avatar')
+})
 </script>
 
 <style></style>

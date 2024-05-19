@@ -55,7 +55,7 @@
   --theme-link-color: #03A9F4;
   --theme-link-hover-color: #0288D1;
   --van-text-color-3: var(--van-text-color-2);
-  --van-text-color-4: #aaa;
+  --van-text-color-4: #ccc;
   --svg-color: #ffffff;
   --van-field-placeholder-text-color: var(--van-text-color);
 }

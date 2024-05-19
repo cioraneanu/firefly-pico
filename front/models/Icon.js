@@ -14,18 +14,35 @@ export default class Icon extends BaseModel {
     // if (iconName.startsWith('svgo-flat')) {
     //   iconsList = flatColorListIcons
     // }
-    if (iconName.startsWith('svgo-duo')) {
+    if (this.isTypeDuo(iconName)) {
       iconsList = duoToneListIcons
     }
-    if (iconName.startsWith('svgo-fluent')) {
+    if (this.isTypeFluent(iconName)) {
       iconsList = fluentListIcons
     }
-    if (iconName.startsWith('svgo-avatar')) {
+    if (this.isTypeAvatar(iconName)) {
       iconsList = avatarListIcons
     }
     // if (iconName.startsWith('Icon')) {
     //   iconsList = appSelectIcons
     // }
     return iconsList.find((item) => item.icon === iconName)
+  }
+
+
+  static isTypeAvatar(iconName) {
+    return iconName.startsWith('svgo-avatar')
+  }
+
+  static isTypeDuo(iconName) {
+    return iconName.startsWith('svgo-duo')
+  }
+
+  static isTypeFluent(iconName) {
+    return iconName.startsWith('svgo-fluent')
+  }
+
+  static isTypeTabler(iconName) {
+    return iconName.startsWith('Icon')
   }
 }
