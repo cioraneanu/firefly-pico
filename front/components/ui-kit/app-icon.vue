@@ -1,5 +1,5 @@
 <template>
-  <component :is="props.icon" :fontControlled="false" :style="style" :stroke-width="props.stroke" />
+  <component :is="props.icon" :fontControlled="false" :style="style" :stroke-width="props.stroke" class="svg-icon" :color-invertable="isColorInvertable" />
 </template>
 
 <script setup>
@@ -18,6 +18,9 @@ const props = defineProps({
 })
 
 const style = computed(() => `width: ${props.size}px`)
+
+const isColorInvertable = computed(() => !props.icon.startsWith("svgo-avatar"))
+
 </script>
 
 <style></style>

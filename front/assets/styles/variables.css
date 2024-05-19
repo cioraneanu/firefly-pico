@@ -1,6 +1,6 @@
 :root {
   --max-device-width: 800px;
-  --van-tabbar-z-index: 9;
+  --van-tabbar-z-index: 10 !important;
 
   --expense1: rgba(236, 64, 122, 1);
   --expense2: rgba(236, 64, 122, 1);
@@ -24,10 +24,6 @@
 
 
 .van-theme-dark {
-
-  --max-device-width: 800px;
-  --van-tabbar-z-index: 9;
-
   --van-background-2-5: #2f2f2f;
 
 

@@ -1,3 +1,7 @@
+.van-theme-dark .svg-icon[color-invertable=true] {
+  filter: invert(100%);
+}
+
 .van-theme-dark .body {
   color: var(--van-text-color-2)
 }
@@ -312,14 +316,15 @@
   fill: rgb(250, 192, 232);
 }
 
-.van-theme-dark .svg-icon,
-.van-theme-dark svg.tabler-icon {
-  * {
-    fill: var(--van-text-color);
-  }
+/*.van-theme-dark .svg-icon,*/
+/*.van-theme-dark svg.tabler-icon {*/
+  /*fill: white;*/
+  /** {*/
+  /*  fill: var(--van-text-color);*/
+  /*}*/
 
-  path {
-    stroke: var(--van-text-color);
-    fill: none;
-  }
-}
+  /*path {*/
+  /*  stroke: var(--van-text-color);*/
+  /*  fill: none;*/
+  /*}*/
+/*}*/
