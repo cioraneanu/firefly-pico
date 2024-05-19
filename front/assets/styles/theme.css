@@ -168,7 +168,7 @@ body {
   text-align: left;
   border: 0;
   /*background: #f4f4f4;*/
-  background: var(--van-background);
+  background: var(--van-background-2-5);
   border-radius: 5px;
   padding: 8px 12px;
 }
