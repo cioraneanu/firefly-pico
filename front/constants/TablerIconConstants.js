@@ -30,6 +30,7 @@ export const icons = {
   repeaterHandler: 'IconMenu2',
 
   lastSync: 'IconRefresh',
+  refresh: 'IconRefresh',
 
   leftArrow: 'IconArrowLeft',
   rightArrow: 'IconArrowRight',

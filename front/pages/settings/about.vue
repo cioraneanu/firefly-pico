@@ -16,7 +16,7 @@
     <van-cell-group inset>
       <div class="van-cell-group-title mb-0">Credits</div>
       <div class="text-muted text-size-12 p-20 pt-10">
-        <div>- Developed by Mihai Cioraneanu - <a :href="REPO_URL">Source on GitHub</a></div>
+        <div>- Developed by Mihai Cioraneanu - <a :href="REPO_URL">GitHub</a></div>
         <br />
         <div>- Using <a href="https://laravel.com/" target="_blank">Laravel</a> and <a href="https://nuxt.com/" target="_blank">Nuxt</a></div>
         <div>- Consuming the <a href="https://www.firefly-iii.org" target="_blank">Firefly III</a> REST API</div>

@@ -13,7 +13,7 @@
   >
     <template #top-right>
       <van-button size="small" @click="onRefresh" class="">
-        <app-icon icon="IconRefresh" :stroke="1" size="14" color="black" />
+        <app-icon :icon="TablerIconConstants.refresh" :stroke="1.7" size="14" />
       </van-button>
 
       <van-button size="small" @click="onToggleDisplayMode" class="">

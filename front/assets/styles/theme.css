@@ -405,7 +405,8 @@ body {
 
 .account-select-section-title {
   font-size: 14px;
-  background: #eee;
+  /*background: #eee;*/
+  background: var(--van-background-2-5);
   padding: 10px;
   font-weight: 600;
 }
@@ -933,5 +934,10 @@ body {
 }
 
 .svg-add-icon-plus {
+  /*fill: #1b5e20;*/
   fill: #1b5e20;
+}
+
+.van-swipe-cell .van-cell:after {
+  border-bottom: none;
 }

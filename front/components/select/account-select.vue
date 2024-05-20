@@ -20,7 +20,7 @@
 
     <template #top-right>
       <van-button size="small" @click="onRefresh" class="">
-        <icon-refresh :strokeWidth="1" size="14" color="black" />
+        <app-icon :icon="TablerIconConstants.refresh" :stroke="1.7" size="14" />
       </van-button>
     </template>
 
