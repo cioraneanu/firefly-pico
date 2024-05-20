@@ -628,7 +628,7 @@ body {
 .fake-input {
   text-align: left;
   border: 0;
-  background: #f4f4f4;
+  background: var(--van-background-2-5);
   border-radius: 5px;
   padding: 8px 12px;
 }
@@ -907,10 +907,23 @@ body {
   justify-content: center;
 }
 
+.text-placeholder {
+  color:var(--van-text-color-2);
+}
+
 .van-button--danger {
   /*border: none !important;*/
 }
 
 .van-collapse-item__content {
   /*background: transparent !important;*/
+}
+
+
+.svg-add-icon-bg {
+  fill: #E91E63;
+}
+
+.svg-add-icon-plus {
+  fill: #E91E63;
 }
