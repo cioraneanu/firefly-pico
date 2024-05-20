@@ -17,7 +17,7 @@
 }
 
 .van-theme-dark .van-field__control::placeholder {
-  color:var(--van-text-color-2);
+  color: var(--van-text-color-2);
 }
 
 .van-theme-dark .applied-filters-container {
@@ -50,47 +50,47 @@
 
 .van-theme-dark .shadow-depth1 {
   -webkit-box-shadow:
-          0 1px 3px rgba(0, 0, 0, 0.12),
-          0 1px 2px rgba(0, 0, 0, 0.24);
+    0 1px 3px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.24);
   box-shadow:
-          0 1px 3px rgba(0, 0, 0, 0.12),
-          0 1px 2px rgba(0, 0, 0, 0.24);
+    0 1px 3px rgba(0, 0, 0, 0.12),
+    0 1px 2px rgba(0, 0, 0, 0.24);
 }
 
 .van-theme-dark .shadow-depth2 {
   -webkit-box-shadow:
-          0 3px 6px rgba(0, 0, 0, 0.16),
-          0 3px 6px rgba(0, 0, 0, 0.23);
+    0 3px 6px rgba(0, 0, 0, 0.16),
+    0 3px 6px rgba(0, 0, 0, 0.23);
   box-shadow:
-          0 3px 6px rgba(0, 0, 0, 0.16),
-          0 3px 6px rgba(0, 0, 0, 0.23);
+    0 3px 6px rgba(0, 0, 0, 0.16),
+    0 3px 6px rgba(0, 0, 0, 0.23);
 }
 
 .van-theme-dark .shadow-depth3 {
   -webkit-box-shadow:
-          0 10px 20px rgba(0, 0, 0, 0.19),
-          0 6px 6px rgba(0, 0, 0, 0.23);
+    0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
   box-shadow:
-          0 10px 20px rgba(0, 0, 0, 0.19),
-          0 6px 6px rgba(0, 0, 0, 0.23);
+    0 10px 20px rgba(0, 0, 0, 0.19),
+    0 6px 6px rgba(0, 0, 0, 0.23);
 }
 
 .van-theme-dark .shadow-depth4 {
   -webkit-box-shadow:
-          0 14px 28px rgba(0, 0, 0, 0.25),
-          0 10px 10px rgba(0, 0, 0, 0.22);
+    0 14px 28px rgba(0, 0, 0, 0.25),
+    0 10px 10px rgba(0, 0, 0, 0.22);
   box-shadow:
-          0 14px 28px rgba(0, 0, 0, 0.25),
-          0 10px 10px rgba(0, 0, 0, 0.22);
+    0 14px 28px rgba(0, 0, 0, 0.25),
+    0 10px 10px rgba(0, 0, 0, 0.22);
 }
 
 .van-theme-dark .shadow-depth5 {
   -webkit-box-shadow:
-          0 19px 38px rgba(0, 0, 0, 0.3),
-          0 15px 12px rgba(0, 0, 0, 0.22);
+    0 19px 38px rgba(0, 0, 0, 0.3),
+    0 15px 12px rgba(0, 0, 0, 0.22);
   box-shadow:
-          0 19px 38px rgba(0, 0, 0, 0.3),
-          0 15px 12px rgba(0, 0, 0, 0.22);
+    0 19px 38px rgba(0, 0, 0, 0.3),
+    0 15px 12px rgba(0, 0, 0, 0.22);
 }
 
 .van-theme-dark .shadow-soft-1 {
@@ -133,8 +133,8 @@
 
 .van-theme-dark .van-tabs--line {
   box-shadow:
-          rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
-          rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+    rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
 }
 
 .van-theme-dark .van-tab__text {
@@ -199,14 +199,14 @@
 
 .van-theme-dark .van-tabbar {
   box-shadow:
-          rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
-          rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
 }
 
 .van-theme-dark .van-nav-bar {
   box-shadow:
-          rgba(0, 0, 0, 0.5) 0px 6px 24px 0px,
-          rgba(0, 0, 0, 0.4) 0px 0px 0px 1px;
+    rgba(0, 0, 0, 0.5) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.4) 0px 0px 0px 1px;
 }
 
 .van-theme-dark .active .app-icon-item {
@@ -217,7 +217,7 @@
 .van-theme-dark .van-button--primary {
   /*background: #00A261 !important;*/
   /*background: #006ae6 !important;*/
-  background: #00A261 !important;
+  background: #00a261 !important;
 }
 
 .van-theme-dark .first_column {
@@ -287,8 +287,8 @@
 
 .van-theme-dark .app-bottom-loading {
   box-shadow:
-          rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
-          rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
+    rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
+    rgba(0, 0, 0, 0.3) 0px 3px 7px -3px;
   background: var(--van-cell-background);
 }
 
@@ -328,11 +328,10 @@
 }
 
 .van-theme-dark .svg-add-icon-bg {
-  opacity: 1.0;
-  fill: #00A261;
+  opacity: 1;
+  fill: #00a261;
 }
 
 .van-theme-dark .svg-add-icon-plus {
-  /*opacity: 1;*/
-  fill: #1F212A;
+  fill: #1f212a;
 }

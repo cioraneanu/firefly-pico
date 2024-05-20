@@ -908,7 +908,7 @@ body {
 }
 
 .text-placeholder {
-  color:var(--van-text-color-2);
+  color: var(--van-text-color-2);
 }
 
 .van-button--danger {
@@ -919,11 +919,19 @@ body {
   /*background: transparent !important;*/
 }
 
-
 .svg-add-icon-bg {
-  fill: #E91E63;
+  fill: #e91e63;
 }
 
 .svg-add-icon-plus {
-  fill: #E91E63;
+  fill: #e91e63;
+}
+
+.svg-add-icon-bg {
+  opacity: 0.6;
+  fill: #4caf50;
+}
+
+.svg-add-icon-plus {
+  fill: #1b5e20;
 }
