@@ -27,14 +27,13 @@ const barsList = computed(() => {
   })
   return daysList.map((date) => {
     const weekdayName = format(date, 'E')
-    let amount = get(dataStore.dashboardExpenseByDay, DateUtils.dateToString(date), 0)
-    amount = getFormattedValue(amount, 0)
+    const amount = get(dataStore.dashboardExpenseByDay, DateUtils.dateToString(date), 0)
     const percent = (amount / maxAmount) * 100
 
     return {
       date: date,
       label: weekdayName,
-      value: amount,
+      value: getFormattedValue(amount, 0),
       percent: percent,
     }
   })
