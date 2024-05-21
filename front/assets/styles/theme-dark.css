@@ -281,8 +281,7 @@
 .van-theme-dark .app-tutorial-button {
   color: var(--van-text-color);
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-  background-image: linear-gradient(120deg, #7b4397, #dc2430);
-  /*background-image: linear-gradient(120deg, #b15f7a 0%, #770028 100%);*/
+  background-image: linear-gradient(120deg, #F06292, #D81B60);
 }
 
 .van-theme-dark .app-bottom-loading {

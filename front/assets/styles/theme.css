@@ -920,24 +920,21 @@ body {
   /*background: transparent !important;*/
 }
 
-.svg-add-icon-bg {
-  fill: #e91e63;
-}
-
-.svg-add-icon-plus {
-  fill: #e91e63;
-}
 
 .svg-add-icon-bg {
-  opacity: 0.6;
+  opacity: 1.0;
   fill: #4caf50;
 }
 
 .svg-add-icon-plus {
   /*fill: #1b5e20;*/
-  fill: #1b5e20;
+  fill: #fff;
 }
 
 .van-swipe-cell .van-cell:after {
   border-bottom: none;
+}
+
+.first_column svg {
+  color: var(--van-text-color);
 }

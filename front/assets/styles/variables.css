@@ -15,7 +15,8 @@
   --transfer3: #e3f2fd;
 
   --van-background-2-5: #f7f8fa;
-  --primary-action: #000;
+  /*--primary-action: #000;*/
+  --primary-action: #00a261;
 
   --chart-bar-background: #c4c7d4;
 
@@ -28,7 +29,8 @@
 
 .van-theme-dark {
   --van-background-2-5: #2f2f2f;
-  --primary-action: #2f2f2f;
+  /*--primary-action: #2f2f2f;*/
+  --primary-action: #00a261dd;
 
   --chart-bar-background: #707070;
 
