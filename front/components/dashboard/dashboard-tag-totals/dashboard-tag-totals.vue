@@ -54,16 +54,15 @@ const barsList = computed(() => {
   return bars.sort((a, b) => b.percent - a.percent).slice(0, 15)
 })
 
-const onClick = async (bar) => {
+const onClick = async ({tag_id, tag}) => {
   const startDate = DateUtils.dateToString(dataStore.dashboardDateStart)
   const endDate = DateUtils.dateToString(dataStore.dashboardDateEnd)
 
-  let tagId = get(bar, 'tag_id')
-  if (!tagId) {
+  if (!tag) {
     await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_tag=true&date_start=${startDate}&date_end=${endDate}`)
     return
   }
 
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${bar.tag_id}&date_start=${startDate}&date_end=${endDate}`)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${tag_id}&date_start=${startDate}&date_end=${endDate}`)
 }
 </script>

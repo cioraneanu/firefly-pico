@@ -42,7 +42,6 @@ export default class Icon extends BaseModel {
   }
 
   static isTypeTabler(iconName) {
-    console.log('xxx', {iconName})
     return iconName?.startsWith('Icon')
   }
 }
