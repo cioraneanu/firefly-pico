@@ -210,6 +210,20 @@ body {
   transform: scaleY(0.5);
 }
 
+:not(.no-van-cell-fake) .van-cell-fake:last-child:after {
+  border-bottom: 0 !important;
+}
+
+.van-hairline--top-bottom:after, .van-hairline-unset--top-bottom:after {
+  border-bottom: 0 !important;
+  /*border-width: 0 !important;*/
+}
+
+.van-collapse-item .van-cell:after {
+  border-bottom: 0 !important;
+}
+
+
 /*.van-cell-group > div:nth-child(even) {background: #fff !important;}*/
 /*.van-cell-group > div:nth-child(odd) {background: #fafafa !important;}*/
 

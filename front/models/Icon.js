@@ -30,18 +30,19 @@ export default class Icon extends BaseModel {
   }
 
   static isTypeAvatar(iconName) {
-    return iconName.startsWith('svgo-avatar')
+    return iconName?.startsWith('svgo-avatar')
   }
 
   static isTypeDuo(iconName) {
-    return iconName.startsWith('svgo-duo')
+    return iconName?.startsWith('svgo-duo')
   }
 
   static isTypeFluent(iconName) {
-    return iconName.startsWith('svgo-fluent')
+    return iconName?.startsWith('svgo-fluent')
   }
 
   static isTypeTabler(iconName) {
-    return iconName.startsWith('Icon')
+    console.log('xxx', {iconName})
+    return iconName?.startsWith('Icon')
   }
 }

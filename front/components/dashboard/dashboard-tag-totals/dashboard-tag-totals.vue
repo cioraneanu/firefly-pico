@@ -6,7 +6,7 @@
         <tr v-for="bar in barsList" @click="onClick(bar)">
           <td style="width: 1%">
             <div class="flex-center-vertical gap-1 my-1">
-              <app-icon :icon="Tag.getIcon(bar.tag)" :size="20" />
+              <app-icon :icon="Tag.getIcon(bar.tag) ?? TablerIconConstants.tag" :size="20" />
               <span class="text-size-12 font-weight-400">{{ bar.label }}</span>
             </div>
           </td>
@@ -30,6 +30,7 @@ import { get } from 'lodash'
 import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
 import Tag from '~/models/Tag.js'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 const dataStore = useDataStore()
 

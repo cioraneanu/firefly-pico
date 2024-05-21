@@ -334,3 +334,7 @@
 .van-theme-dark .svg-add-icon-plus {
   fill: #fff;
 }
+
+.van-field--disabled.app-field .van-field__body {
+  background: #212121 !important;
+}
