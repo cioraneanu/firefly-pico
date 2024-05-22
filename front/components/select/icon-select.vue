@@ -12,12 +12,12 @@
   >
     <template #input>
       <div v-if="!modelValue" class="text-muted">No icon</div>
-      <component v-else :is="modelValue.icon" style="width: 25px" />
+      <app-icon :icon="modelValue.icon" style="width: 25px"/>
     </template>
 
     <template #item="{ item }">
       <div class="flex-center flex-column mt-5 text-size-12">
-        <component :is="item.icon" style="width: 30px" class="svg-icon" />
+        <app-icon :icon="item.icon" style="width: 30px"/>
         <div class="app-icon-item"></div>
       </div>
     </template>
