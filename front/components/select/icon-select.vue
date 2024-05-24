@@ -12,7 +12,7 @@
   >
     <template #input>
       <div v-if="!modelValue" class="text-muted">No icon</div>
-      <app-icon :icon="modelValue.icon" style="width: 25px"/>
+      <app-icon v-else :icon="modelValue.icon" style="width: 25px"/>
     </template>
 
     <template #item="{ item }">
