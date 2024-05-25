@@ -1,0 +1,90 @@
+version: '3.3'
+services:
+
+  firefly-pico:
+    image: cioraneanu/firefly-pico:latest
+    container_name: firefly_pico
+    restart: always
+    depends_on:
+      - firefly-pico-postgresql
+    ports:
+      - 6976:80
+    environment:
+      - FIREFLY_URL=http://firefly-app:8080
+      - DB_CONNECTION=pgsql
+      - DB_HOST=firefly-pico-postgresql
+      - DB_PORT=54322
+      - DB_DATABASE=firefly-pico
+      - DB_USERNAME=firefly-pico
+      - DB_PASSWORD=very-secure-pwd-pico
+      - TZ=Europe/London
+    networks:
+      firefly:
+
+  firefly-pico-postgresql:
+    image: postgres:latest
+    container_name: firefly_pico_db
+    restart: always
+    environment:
+      - POSTGRES_DB=firefly-pico
+      - POSTGRES_USER=firefly-pico
+      - POSTGRES_PASSWORD=very-secure-pwd-pico
+    volumes:
+      - /<your_path>/firefly-pico-db:/var/lib/postgresql/data
+    networks:
+      firefly:
+
+
+  firefly-app:
+    image: fireflyiii/core:latest
+    container_name: firefly_iii
+    restart: always
+    depends_on:
+      - firefly-app-postgresql
+    ports:
+      - 6041:8080
+    environment:
+      - FIREFLY_III_LAYOUT=v1
+      - APP_URL=https://firefly.domain.com
+      - APP_KEY=<add unique 32-char key>
+      - TRUSTED_PROXIES=**
+      - DB_CONNECTION=pgsql
+      - DB_HOST=firefly-app-postgresql
+      - DB_PORT=5432
+      - DB_DATABASE=firefly
+      - DB_USERNAME=firefly
+      - DB_PASSWORD=very-secure-pwd-firefly
+    volumes:
+      - /<your_path>/firefly-upload:/var/www/html/storage/upload
+    networks:
+      firefly:
+
+  firefly-app-postgresql:
+    image: postgres:latest
+    container_name: firefly_iii_db
+    restart: always
+    environment:
+      - POSTGRES_DB=firefly
+      - POSTGRES_USER=firefly
+      - POSTGRES_PASSWORD=very-secure-pwd-firefly
+    volumes:
+      - /<your_path>/firefly-db:/var/lib/postgresql/data
+    networks:
+      firefly:
+
+  importer:
+    image: fireflyiii/data-importer:latest
+    restart: always
+    container_name: firefly_iii_importer
+    ports:
+      - 4086:8080
+    depends_on:
+      - firefly-app
+    environment:
+      - FIREFLY_III_URL=http://local-ip:port
+      - VANITY_URL=http://firefly.domain.com #omit this if you have no fancy URL other than the local ip:port URL
+    networks:
+      firefly:
+
+networks:
+  firefly:
