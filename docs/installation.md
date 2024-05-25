@@ -8,8 +8,9 @@
 1. Pick a docker-compose as a starting point:
 - [Pico only](../docker-compose.pico.yml) (If you already have Firefly installed)
 - [Pico + Firefly](../docker-compose.pico+firefly.yml) (If you want an easy 2 in 1)
+- [Pico + Firefly + Importer](../docker-compose.pico+firefly+importer.yml) (If you want an easy 2 in 1 and the importer as well)
 
-2. Change `FIREFLY_URL` to the URL of your **Firefly** instance. If you don't use a reverse proxy make sure you provide the full ip+port. <br>Ex. `http://192.168.1.10:8080` or `https://firefly.domain.com`
+2. Change `FIREFLY_URL`, `APP_URL` and `FIREFLY_III_URL` (if required) to the URL of your **Firefly** instance. If you don't use a reverse proxy make sure you provide the full ip+port. <br>Ex. `http://192.168.1.10:8080` or `https://firefly.domain.com`
 
 
 3. Change `DB_PASSWORD` and `POSTGRES_PASSWORD` to something secure. **Make sure they match!** If you want separate passwords for Pico and Firefly make sure they match for `pico-app <-> pico-db`, and `firefly-app <-> firefly-db`
