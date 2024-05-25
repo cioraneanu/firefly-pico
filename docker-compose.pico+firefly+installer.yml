@@ -81,8 +81,8 @@ services:
     depends_on:
       - firefly-app
     environment:
-      - FIREFLY_III_URL=http://local-ip:port
-      - VANITY_URL=http://firefly.domain.com #omit this if you have no fancy URL other than the local ip:port URL
+      - FIREFLY_III_URL=http://firefly-app:8080
+      - VANITY_URL=http://firefly.domain.com  #omit this if you`re not using a reverse proxy
     networks:
       firefly:
 
