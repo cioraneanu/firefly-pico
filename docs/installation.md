@@ -1,11 +1,12 @@
 # Installation
 
 ## 1. Docker (recommended)
-0. The Firefly-Pico docker image comes in 2 flavors:
-- **:latest** - Regular updates
-- **:dev** - Latest features, frequent updates
+1. Choose your preferred docker image flavor:
 
-1. Pick a docker-compose as a starting point:
+- **:latest** - Stable, less frequent updates
+- **:dev** - Cutting edge, latest features
+
+2. Pick a docker-compose as a starting point:
   - [Pico only](../docker-compose.pico.yml) (If you already have Firefly installed).
     - Change `FIREFLY_URL`
   - [Pico + Firefly](../docker-compose.pico+firefly.yml) (If you want an easy 2 in 1)
@@ -13,13 +14,11 @@
   - [Pico + Firefly + Importer](../docker-compose.pico+firefly+importer.yml) (If you want an easy 2 in 1 and the importer as well)
     - Change `FIREFLY_URL`, `APP_URL` and `FIREFLY_III_URL`
 
-
 > [!NOTE]  
 > `FIREFLY_URL` needs to point your **Firefly** instance. If you don't use a reverse proxy make sure you provide the full IP + Port.
 <br>Ex. `http://192.168.1.10:8080` or `https://firefly.domain.com`
 
 3. Change `DB_PASSWORD` and `POSTGRES_PASSWORD` to something secure. **Make sure they match!** If you want separate passwords for Pico and Firefly make sure they match for `pico-app <-> pico-db`, and `firefly-app <-> firefly-db`
-
 
 4. Start the container `docker compose -f docker-compose.yml up -d`
 
@@ -27,8 +26,8 @@ Pico image env variables:
 
 | Name       | Value                                                                    |
 |------------|--------------------------------------------------------------------------|
-| NUXT_PUBLIC_QUERY_TIMEOUT | Milliseconds Pico should wait before a request times out. (Default 4000) |
-| TZ | Pico backend Timezone (ex. Europe/London)                                |
+| `NUXT_PUBLIC_QUERY_TIMEOUT` | Milliseconds **Pico** should wait before a request times out. (Default 4000) |
+| `TZ` | **Pico** backend Timezone (ex. Europe/London)                                |
 
 See configuration [3. Post install config](installation.md#3-post-install-config)
 
@@ -84,4 +83,4 @@ If you've used Firefly before skip to step 3.
 
 3. Go to `"Options" -> "Profile" -> OAuth -> Create New Personal Access Token`. Save this token somewhere safe.
 
-4. Open **Pico** , go to `Settings -> App Config` and paste the token from the step above. In 99% of cases you don't need to change the `Pico Backend URL`. *DO NOT PUT FIREFLY URL HERE! :)*
+4. Open **Pico** , go to `Settings -> App Config` and paste the token from the step above. In 99% of cases you don't need to change the `Pico Backend URL`. **DO NOT PUT FIREFLY URL HERE! :)**

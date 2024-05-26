@@ -39,7 +39,7 @@
 
 
 
-## About 💡
+## 💡About 
 For several years I've enjoyed tracking my expenses in proprietary mobile apps 
 but after getting into self-hosting I've wondered if there is an alternative that 
 gives me the same functionality without losing control over my data.
@@ -73,21 +73,21 @@ Several (bad) ideas later I've come to this version. A transaction assistant :to
 - ✅ Free and open-source
 
 
-## My setup
-Firefly is very flexible and that can leave people unsure about how they should organise things.
+## 🔧 My setup
+**Firefly** is very flexible and that can leave people unsure about how they should organise things.
 This is by no means the only / best way to do, but it's what works for me:
 ```
 - Create asset accounts for everything (ex. one for every family member, one for each savings account). It's easier to not use any revenue/expense accounts; that way they will be threated as "cash" and you'll have one less field to fill inside transactions
-- Create your big, general "categories" (ex. Bills, Food, Fun, Transportation etc.)
-- Create your root tags with names identical to the "categories" above (ex. Bills, Food, Fun, Transportation etc.) (This is useful because selecting a "tag" will automatically select the "category".)
-- Create your child tags for granularity (ex. Electricity, Heating, Internet with the parent tag Bills). It's a good idea to remember these names and use them with the assistant. 
-- Create a tag called "todo", and set "Mark as to-do" to Yes. Add this tag to any transaction that will be edited later. Ex. You paid dinner for multiple people and some will give you the money back later. Or you buy multiple shoes and return some of them. All these transactions will show up on your dashboard.
+- Create your big, general "Categories" (ex. Bills, Food, Fun, Transportation etc.)
+- Create your root tags with names identical to the "Categories" above (ex. Bills, Food, Fun, Transportation etc.) (This is useful because selecting a "Tg" will automatically select the "Category".)
+- Create your child tags for granularity (ex. Electricity, Heating, Internet with the parent tag Bills). It's a good idea to remember these names and use them with the assistant for super fast expense tracking
+- Create a tag, name it "todo", and set the "Mark as to-do" field to Yes. Add this tag to any transaction that will be edited later. Ex. You paid dinner for multiple people and some will give you the money back later. Or you buy multiple shoes and return some of them. All these transactions will show up on your dashboard.
 - Go to Settings -> New transaction defaults -> Set your default source account. 
   - (Optionally) If there are multiple users sharing an account you can create separate "tags" with their names. Then everyone can select their own for the "Auto tags" field.
-- Identify any transactions that you perform often but cannot be turned into "Reapeating transactions" because of date irregularities. Create "templates" for them.
+- Identify any transactions that you perform often but cannot be turned into "Reapeating transactions" because of irregularities. Create "templates" for them. That you the assistant can easily handle them as well. 
 
 - Finally make the process of starting the app faster:
-  - [iOS] Create a home screen shortcut: open the app in Safari -> share icon -> Add to Homescreen. The app will also show up in the global iOS search
+  - [iOS] Create a home screen shortcut: open the app in Safari -> Share icon -> Add to Homescreen. The app will also show up in you iOS global search
   - [iOS] [Optional] Add double tap shortcut: 
     - Open Shortcuts app -> + -> Add action -> search for "Open URLs" -> Enter the pico deployment URL -> Tap toolbar and rename it to "Open Pico"
     - Open Settings -> Accesibility -> Touch -> Back tap -> Double tap -> Select the shortcut created above.
@@ -96,8 +96,8 @@ This is by no means the only / best way to do, but it's what works for me:
 
 
 ## 📑 Notes
-- Firefly-Pico does NOT intend on replacing the Firefly GUI. My main focus is to optimize the daily interactions and leave more general config for the mother app ^_^.
-- Split transactions will show up as read-only, and you cannot create them inside Pico. Separate transactions make more sense to me.
+- **Pico** does NOT intend on replacing the **Firefly** GUI. My main focus is to optimize the daily interactions and leave more general config for the mother app ^_^.
+- Split transactions will show up as read-only, and you cannot create them inside **Pico**. Separate transactions make more sense to me.
 
 
 ## :coffee: Support
