@@ -1,5 +1,5 @@
 {
-  "version": "1.1.1",
+  "version": "1.1.2",
   "private": true,
   "scripts": {
     "start": "npm run dev -- -o",
@@ -33,6 +33,7 @@
     "@vant/touch-emulator": "^1.4.0",
     "@vueuse/core": "^10.9.0",
     "@vueuse/gesture": "^2.0.0",
+    "animejs": "^3.2.2",
     "axios": "^1.6.8",
     "date-fns": "^3.6.0",
     "fuse.js": "^7.0.0",

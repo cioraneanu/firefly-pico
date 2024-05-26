@@ -715,11 +715,13 @@ body {
 
 .latest-version-badge {
   border-radius: 5px;
-  padding: 2px 8px;
+  padding: 6px 10px;
   margin: 10px;
+  background: #ffeef3;
+}
 
-  background: #d81b6099;
-  color: #fff;
+.latest-version-badge a {
+  color: rgb(240, 101, 72);
 }
 
 .assistant-tag {

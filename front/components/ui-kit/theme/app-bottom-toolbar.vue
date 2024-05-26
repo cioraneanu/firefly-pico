@@ -15,18 +15,9 @@
       </template>
     </van-tabbar-item>
 
-    <!--    <van-tabbar-item :name="tabConstants.transactionTemplateList"-->
-    <!--                     @click="onChange(tabConstants.transactionTemplateList)">-->
-    <!--      Templates-->
-    <!--      <template #icon="{active}">-->
-    <!--        <Icon :name="IconifyConstants.transactionTemplate" :width="getStrokeWidth(active)"/>-->
-    <!--      </template>-->
-    <!--    </van-tabbar-item>-->
-
     <van-tabbar-item :name="tabConstants.add" @click="onChange(tabConstants.add)">
       <template #icon="{ active }">
-        <svg-add-icon width="40" height="40" />
-        <!--        <Icon :name="IconifyConstants.add" width="40" height="40"/>-->
+          <svg-add-icon  width="40" height="40" />
       </template>
     </van-tabbar-item>
 
@@ -66,6 +57,7 @@ const tabConstants = {
 }
 const activeTab = ref(null)
 
+// const isAddButtonVisible = computed(() => route.path !== RouteConstants.ROUTE_TRANSACTION_ID)
 watch(
   () => route.path,
   (newValue) => {
@@ -89,26 +81,6 @@ watch(
     if ([RouteConstants.ROUTE_SETTINGS].includes(newValue)) {
       activeTab.value = tabConstants.settings
     }
-
-    // let normalMappedRoutes = [
-    //   RouteConstants.ROUTE_TRANSACTION_LIST,
-    //   RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST,
-    //   RouteConstants.ROUTE_EXTRAS,
-    //   RouteConstants.ROUTE_SETTINGS,
-    //   RouteConstants.ROUTE_TRANSACTION_ID,
-    // ]
-    // if (normalMappedRoutes.includes(path)) {
-    //   activeTab.value = path
-    //   return
-    // }
-    // if (/\/transactions\/[0-9]+/.test(path)) {
-    //   activeTab.value = RouteConstants.ROUTE_TRANSACTION_LIST
-    // }
-    //
-    // if ([RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST, RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID].includes(path)) {
-    //   activeTab.value = RouteConstants.ROUTE_EXTRAS
-    // }
-    //
   },
   { deep: true, immediate: true },
 )

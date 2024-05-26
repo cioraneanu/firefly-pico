@@ -12,7 +12,7 @@
 
         <app-select
           label="Numbers formatting:"
-          popupTitle="Select preffered numbers formatting"
+          popupTitle="Select preferred numbers formatting"
           v-model="numberFormat"
           v-model:showDropdown="isDropdownNumberFormatVisible"
           :list="numberFormatList"

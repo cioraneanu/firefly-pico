@@ -67,8 +67,12 @@ export const useDataStore = defineStore('data', {
 
   getters: {
     dashboardAccounts(state) {
+      const appStore = useAppStore()
       return state.accountList.filter((account) => {
-        return isEqual(Account.getType(account), Account.types.asset) && Account.getIsActive(account) && Account.getIsIncludedInNetWorth(account)
+        return isEqual(Account.getType(account), Account.types.asset) &&
+          Account.getIsActive(account) &&
+          Account.getIsIncludedInNetWorth(account) &&
+          (Account.getBalance(account) > 0 || appStore.dashboard.areEmptyAccountsVisible)
       })
     },
 

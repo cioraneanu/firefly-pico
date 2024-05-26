@@ -7,6 +7,8 @@
 
       <app-field-link label="UI preferences" :icon="TablerIconConstants.settingsUI" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_UI)" />
 
+      <app-field-link label="Dashboard preferences" :icon="TablerIconConstants.dashboard" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_DASHBOARD)" />
+
       <app-field-link label="Date preferences" :icon="TablerIconConstants.settingsUserPreferencesDate" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_DATE)" />
 
       <app-field-link label="New transaction defaults" :icon="TablerIconConstants.settingsNewTransactionDefaults" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_NEW_TRANSACTION_DEFAULTS)" />
@@ -21,51 +23,14 @@
         <a :href="REPO_URL">Version: {{ appStore.currentAppVersion }}</a>
       </div>
 
-      <div v-if="appStore.isNewVersionAvailable" class="latest-version-badge">
-        <a :href="REPO_URL">🎉 - Newer version available: {{ appStore.latestAppVersion }} - 🎉</a>
+      <div v-if="true" class="latest-version-badge">
+        <a :href="REPO_URL">Newer version available: {{ appStore.latestAppVersion }} 🎉</a>
       </div>
-
-      <!--      <svgo-about />-->
-      <!--      <svgo-flat-color-icons-about style="width: 20px" />-->
-
-      <!--      <IconAlarm />-->
-
-      <!--      <icon-phone/>-->
-      <!--      <icon-album/>-->
-
-      <!--      <component is="icon-Credit-card"/>-->
-
-      <!--      <svgo-xxx class="" style="width: 20px" />-->
-
-      <!--      <nuxt-icon name="duotone-line/Call/Call Cancel" filled />-->
-
-      <!--      <icon-dislile />-->
     </div>
-
-    <div>
-      <!--      <div>-->
-      <!--        1.-->
-      <!--        <IconAnalyze/>-->
-      <!--      </div>-->
-      <!--      <div>-->
-      <!--        2.-->
-      <!--        <component is="IconAnalyze"/>-->
-      <!--      </div>-->
-
-      <!--      <div>-->
-      <!--        3.-->
-      <!--        <IconAlarm  :size="20"/>-->
-      <!--      </div>-->
-
-      <!--      <div>-->
-      <!--        4.-->
-      <!--        <component is="IconAlarm"  :size="20"/>-->
-      <!--      </div>-->
-    </div>
+    <div></div>
   </div>
 </template>
 
-<!--import IconDislike from '~/assets/icons/duotone-line/Like/Dislike.svg'-->
 import { ref, onMounted } from 'vue'; import { useAppStore } from '~/stores/appStore' import
 
 <script setup>
@@ -76,14 +41,7 @@ import { REPO_URL } from '~/constants/Constants'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 
 const appStore = useAppStore()
-
-// const onGoToSettingsUserPreferenceTransactions = async () => await navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTIONS)
-//
-// const onGoToSettingsAppConfig = async () => await navigateTo(RouteConstants.ROUTE_SETTINGS_APP_CONFIG)
-// const onGoToSettingsUserPreferenceTransactions = async () => await navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTIONS)
-// const onGoToSettingsUserPreferenceDates = async () => await navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_DATE)
-// const onGoToSettingsAbout = async () => await navigateTo(RouteConstants.ROUTE_SETTINGS_ABOUT)
-
 const toolbar = useToolbar()
+
 toolbar.init({ title: 'Settings' })
 </script>

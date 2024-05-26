@@ -261,8 +261,15 @@
 /*}*/
 
 .van-theme-dark .latest-version-badge {
-  color: #707070;
+  background: #302024;
 }
+
+
+.van-theme-dark .latest-version-badge a {
+  color: #e42855;
+}
+
+
 
 .van-theme-dark .hero-icons-section {
   background: var(--van-cell-background);
