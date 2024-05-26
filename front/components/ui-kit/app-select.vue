@@ -184,6 +184,7 @@ const getDisplayName = (item) => {
 }
 
 const onSelectCell = (item) => {
+  console.log('here!', {item})
   if (props.isMultiSelect) {
     let newValue = modelValue.value ?? []
     let isSelected = newValue.some((value) => isEqual(item, value))
