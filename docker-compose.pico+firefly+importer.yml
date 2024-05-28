@@ -13,7 +13,7 @@ services:
       - FIREFLY_URL=http://firefly-app:8080
       - DB_CONNECTION=pgsql
       - DB_HOST=firefly-pico-postgresql
-      - DB_PORT=54322
+      - DB_PORT=5432
       - DB_DATABASE=firefly-pico
       - DB_USERNAME=firefly-pico
       - DB_PASSWORD=very-secure-pwd-pico
