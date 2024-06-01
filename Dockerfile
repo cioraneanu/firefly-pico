@@ -56,9 +56,8 @@ RUN git init \
     && echo "back/" >> .git/info/sparse-checkout \
     && echo "front/" >> .git/info/sparse-checkout \
     && git pull origin ${BRANCH} \
-    && rm -rf .git
-
-RUN mv back/.env.example .env \
+    && rm -rf .git \
+    && mv back/.env.example .env \
     && mv ./back/* ./ \
     && rm -rf /back
 
@@ -132,8 +131,8 @@ RUN adduser \
     --no-create-home \
     www-data
 
-RUN mkdir -p -m 772 /tmp/nginx/ && chown -R :www-data /tmp/nginx
-RUN chmod -R 772 /var/www/html/storage && chown -R :www-data /var/www/html/storage
+RUN mkdir -p -m 772 /tmp/nginx/ && chown -R www-data:www-data /tmp/nginx
+RUN chmod -R 772 /var/www/html/storage && chown -R www-data:www-data /var/www/html/storage
 
 # Configure supervisor
 COPY docker/conf/supervisor/supervisord.conf /etc/supervisord.conf
@@ -149,9 +148,6 @@ COPY docker/conf/nginx/ /etc/nginx/
 # Configure entrypoint
 COPY --chmod=755 docker/docker-entrypoint.d/ /docker-entrypoint.d/
 
-#Cleanup
-COPY --chmod=755 docker/cleanup.sh .
-RUN ./cleanup.sh && rm cleanup.sh
 
 ENTRYPOINT ["/docker-entrypoint.d/start.sh"]
 CMD ["run"]
