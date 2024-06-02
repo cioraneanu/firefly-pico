@@ -61,9 +61,9 @@ export const useAppStore = defineStore('app', {
         firstDayOfMonth: useLocalStorage('firstDayOfMonth', 1),
         showAccountAmounts: useLocalStorage('showAccountAmounts', true),
         areEmptyAccountsVisible: useLocalStorage('areEmptyAccountsVisible', false),
-        excludedAccountsList: useLocalStorage('excludedAccountsList', false),
-        excludedCategoriesList: useLocalStorage('excludedCategoriesList', false),
-        excludedTagsList: useLocalStorage('excludedTagsList', false),
+        excludedAccountsList: useLocalStorage('excludedAccountsList', []),
+        excludedCategoriesList: useLocalStorage('excludedCategoriesList', []),
+        excludedTagsList: useLocalStorage('excludedTagsList', []),
       },
     }
   },
