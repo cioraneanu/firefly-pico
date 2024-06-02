@@ -254,12 +254,22 @@ export const useDataStore = defineStore('data', {
       this.isLoadingDashboardTransactions = true
       const appStore = useAppStore()
 
-      let filters = [
-        { field: 'start', value: DateUtils.dateToString(this.dashboardDateStart) },
-        { field: 'end', value: DateUtils.dateToString(this.dashboardDateEnd) },
-        { field: 'type', value: 'income,expense,transfer' },
+      // let filters = [
+      //   { field: 'start', value: DateUtils.dateToString(this.dashboardDateStart) },
+      //   { field: 'end', value: DateUtils.dateToString(this.dashboardDateEnd) },
+      //   { field: 'type', value: 'income,expense,transfer' },
+      // ]
+      // const list = await new TransactionRepository().getAllWithMerge({ filters })
+
+
+      let filtersParts = [
+        `date_after:${DateUtils.dateToString(this.dashboardDateStart)}`,
+        `date_before:${DateUtils.dateToString(this.dashboardDateEnd)}`,
       ]
-      const list = await new TransactionRepository().getAllWithMerge({ filters })
+      let filters = [{ field: 'query', value: filtersParts.join(' ')}]
+      let searchMethod = new TransactionRepository().searchTransaction
+      let list = await new TransactionRepository().getAllWithMerge({ filters, getAll: searchMethod })
+
       this.dashboard.transactionsList = TransactionTransformer.transformFromApiList(list)
       this.isLoadingDashboardTransactions = false
     },
