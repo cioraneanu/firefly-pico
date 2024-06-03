@@ -42,27 +42,14 @@ RUN ln -s /usr/bin/php82 /usr/bin/php
 #-----------------------------------------------------------------
 FROM base AS build-container
 
-#Install packages
-RUN apk add --no-cache git
-
 # Installing composer
 COPY --from=composer_base /usr/bin/composer /usr/local/bin/composer
 
-#Pull Firefly-Pico from repo
-WORKDIR /var/www/html
-RUN git init \
-    && git remote add origin ${REPO} \
-    && git config core.sparseCheckout true \
-    && echo "back/" >> .git/info/sparse-checkout \
-    && echo "front/" >> .git/info/sparse-checkout \
-    && git pull origin ${BRANCH} \
-    && rm -rf .git \
-    && mv back/.env.example .env \
-    && mv ./back/* ./ \
-    && rm -rf /back
-
 #Configure backend
 WORKDIR /var/www/html
+COPY back/ .
+RUN mv .env.example .env
+
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --no-dev --optimize-autoloader
 RUN php artisan key:generate
@@ -70,6 +57,8 @@ RUN tar --owner=www-data --group=www-data --exclude=.git -czf /tmp/app-back.tar.
 
 #Configure frontend
 WORKDIR /var/www/html/front
+COPY front/ .
+
 RUN npm install \
     && npm run build
 RUN npm prune --production
