@@ -12,7 +12,7 @@
         <div class="van-cell-group-title mb-0">Transaction exclusion:</div>
         <account-select v-model="excludedAccountsList" :isMultiSelect="true" />
         <category-select v-model="excludedCategoriesList" :isMultiSelect="true" />
-        <tag-select v-model="excludedTagsList" :isMultiSelect="true" />
+        <tag-select v-model="excludedTagsList" :isMultiSelect="true" :autoSelectParents="false" />
       </van-cell-group>
 
       <app-button-form-save />

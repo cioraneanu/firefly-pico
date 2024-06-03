@@ -21,6 +21,7 @@ import { listToTree, setLevel, sortByPath, treeToList } from '~/utils/DataUtils'
 import Tag from '~/models/Tag.js'
 import { convertCurrency, convertTransactionAmountToCurrency, convertTransactionsTotalAmountToCurrency } from '~/utils/CurrencyUtils'
 import Category from '~/models/Category.js'
+import { getExcludedTransactionFilters } from '~/utils/DashboardUtils.js'
 
 export const useDataStore = defineStore('data', {
   state: () => {
@@ -253,7 +254,6 @@ export const useDataStore = defineStore('data', {
 
     async fetchDashboardTransactionsForInterval() {
       this.isLoadingDashboardTransactions = true
-      const appStore = useAppStore()
 
       // let filters = [
       //   { field: 'start', value: DateUtils.dateToString(this.dashboardDateStart) },
@@ -264,18 +264,11 @@ export const useDataStore = defineStore('data', {
 
 
       // TODO: Test this on user with larger Databases. Need to make sure the /search endpoint + filters is faster than all transaction with frontend filtering
-      let excludedTags = appStore.dashboard.excludedTagsList.map(tag => Tag.getDisplayName(tag))
-      let excludedCategories = appStore.dashboard.excludedCategoriesList.map(category => Category.getDisplayName(category))
-      let excludedAccounts = appStore.dashboard.excludedAccountsList.map(account => Account.getDisplayName(account))
       let filtersParts = [
         `date_after:${DateUtils.dateToString(this.dashboardDateStart)}`,
         `date_before:${DateUtils.dateToString(this.dashboardDateEnd)}`,
-        ...excludedTags.map(tagName => `-tag_is:${tagName}`),
-        ...excludedCategories.map(categoryName => `-category_is:${categoryName}`),
-        ...excludedAccounts.map(accountName => `-account_is:${accountName}`),
+        ...getExcludedTransactionFilters()
       ]
-
-
       let filters = [{ field: 'query', value: filtersParts.join(' ')}]
       let searchMethod = new TransactionRepository().searchTransaction
       let list = await new TransactionRepository().getAllWithMerge({ filters, getAll: searchMethod })
@@ -290,12 +283,22 @@ export const useDataStore = defineStore('data', {
       let startDate = DateUtils.dateToString(subDays(startOfDay(new Date()), 7))
       let endDate = DateUtils.dateToString(startOfDay(new Date()))
 
-      let filters = [
-        { field: 'start', value: startDate },
-        { field: 'end', value: endDate },
-        { field: 'type', value: 'expense' },
+      // let filters = [
+      //   { field: 'start', value: startDate },
+      //   { field: 'end', value: endDate },
+      //   { field: 'type', value: 'expense' },
+      // ]
+      // const list = await new TransactionRepository().getAllWithMerge({ filters })
+
+      let filtersParts = [
+        `date_after:${startDate}`,
+        `date_before:${endDate}`,
+        ...getExcludedTransactionFilters()
       ]
-      const list = await new TransactionRepository().getAllWithMerge({ filters })
+      let filters = [{ field: 'query', value: filtersParts.join(' ')}]
+      let searchMethod = new TransactionRepository().searchTransaction
+      let list = await new TransactionRepository().getAllWithMerge({ filters, getAll: searchMethod })
+
       this.dashboard.transactionsListLastWeek = TransactionTransformer.transformFromApiList(list)
       this.isLoadingDashboardTransactionsLastWeek = false
     },
