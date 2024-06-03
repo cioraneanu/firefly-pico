@@ -5,7 +5,7 @@
     <van-form @submit="onSave" class="">
       <van-cell-group inset>
         <div class="van-cell-group-title mb-0">Config:</div>
-        <app-boolean label="Hide accounts with 0 amount:" v-model="areEmptyAccountsVisible" />
+        <app-boolean label="Show accounts with 0 amount:" v-model="areEmptyAccountsVisible" />
       </van-cell-group>
 
       <van-cell-group inset>
