@@ -45,7 +45,7 @@
               <!--              <app-icon :icon="TablerIconConstants.tag" color="#fff" class="" :size="15"/>-->
               <span>Tag</span>
               <span>|</span>
-              {{ Tag.getDisplayName(foundTag) }}
+              {{ Tag.getDisplayNameEllipsized(foundTag) }}
             </van-tag>
           </template>
 

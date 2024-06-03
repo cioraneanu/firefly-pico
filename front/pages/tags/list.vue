@@ -42,7 +42,7 @@ const filteredList = computed(() => {
     return list.value
   }
   return list.value.filter((item) => {
-    return Tag.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
+    return Tag.getDisplayNameEllipsized(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
   })
 })
 

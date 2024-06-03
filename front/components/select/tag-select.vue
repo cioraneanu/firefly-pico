@@ -32,7 +32,7 @@
       <van-grid v-if="showTagSelectAsGrid" :column-num="3">
         <template v-for="(item, index) in filteredList" :key="index">
           <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
-            <app-select-option :text="Tag.getDisplayName(item)" :icon="Tag.getIcon(item) ?? TablerIconConstants.tag" />
+            <app-select-option :text="Tag.getDisplayNameEllipsized(item)" :icon="Tag.getIcon(item) ?? TablerIconConstants.tag" />
           </van-grid-item>
         </template>
       </van-grid>
@@ -87,7 +87,7 @@ const filteredList = computed(() => {
     return list.value
   }
   return list.value.filter((item) => {
-    return Tag.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
+    return Tag.getDisplayNameEllipsized(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
   })
 })
 
@@ -129,7 +129,7 @@ const onSelectCell = (item) => {
 }
 
 const getDisplayValue = (value) => {
-  return Tag.getDisplayName(value)
+  return Tag.getDisplayNameEllipsized(value)
 }
 
 const onRefresh = async () => {

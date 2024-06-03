@@ -111,8 +111,8 @@ let filtersDictionary = computed(() => {
       active: !!_filter.transactionType,
     },
     {
-      display: `Tag: ${Tag.getDisplayName(_filter.tag)}`,
-      filter: `tag_is:"${Tag.getDisplayName(_filter.tag)}"`,
+      display: `Tag: ${Tag.getDisplayNameEllipsized(_filter.tag)}`,
+      filter: `tag_is:"${Tag.getDisplayNameEllipsized(_filter.tag)}"`,
       active: !!_filter.tag,
     },
     {

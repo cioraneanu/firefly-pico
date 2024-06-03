@@ -20,6 +20,7 @@ import TransactionTransformer from '~/transformers/TransactionTransformer'
 import { listToTree, setLevel, sortByPath, treeToList } from '~/utils/DataUtils'
 import Tag from '~/models/Tag.js'
 import { convertCurrency, convertTransactionAmountToCurrency, convertTransactionsTotalAmountToCurrency } from '~/utils/CurrencyUtils'
+import Category from '~/models/Category.js'
 
 export const useDataStore = defineStore('data', {
   state: () => {
@@ -243,7 +244,7 @@ export const useDataStore = defineStore('data', {
 
       // let filters = [{ field: 'query', value: filtersBackendList.value.join(' ') }]
 
-      let filters = [{ field: 'query', value: `tag_is:"${Tag.getDisplayName(this.tagTodo)}"` }]
+      let filters = [{ field: 'query', value: `tag_is:"${Tag.getDisplayNameEllipsized(this.tagTodo)}"` }]
 
       let list = await new TransactionRepository().searchTransaction({ filters })
       list = get(list, 'data') ?? []
@@ -262,10 +263,19 @@ export const useDataStore = defineStore('data', {
       // const list = await new TransactionRepository().getAllWithMerge({ filters })
 
 
+      // TODO: Test this on user with larger Databases. Need to make sure the /search endpoint + filters is faster than all transaction with frontend filtering
+      let excludedTags = appStore.dashboard.excludedTagsList.map(tag => Tag.getDisplayName(tag))
+      let excludedCategories = appStore.dashboard.excludedCategoriesList.map(category => Category.getDisplayName(category))
+      let excludedAccounts = appStore.dashboard.excludedAccountsList.map(account => Account.getDisplayName(account))
       let filtersParts = [
         `date_after:${DateUtils.dateToString(this.dashboardDateStart)}`,
         `date_before:${DateUtils.dateToString(this.dashboardDateEnd)}`,
+        ...excludedTags.map(tagName => `-tag_is:${tagName}`),
+        ...excludedCategories.map(categoryName => `-category_is:${categoryName}`),
+        ...excludedAccounts.map(accountName => `-account_is:${accountName}`),
       ]
+
+
       let filters = [{ field: 'query', value: filtersParts.join(' ')}]
       let searchMethod = new TransactionRepository().searchTransaction
       let list = await new TransactionRepository().getAllWithMerge({ filters, getAll: searchMethod })

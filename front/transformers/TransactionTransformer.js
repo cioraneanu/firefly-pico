@@ -86,7 +86,7 @@ export default class TransactionTransformer extends ApiTransformer {
       if (!id && appStore.autoAddedTags && appStore.autoAddedTags.length > 0) {
         tags = [...tags, ...appStore.autoAddedTags]
       }
-      tags = tags.map((tag) => Tag.getDisplayName(tag))
+      tags = tags.map((tag) => Tag.getDisplayNameEllipsized(tag))
       tags = uniq(tags)
 
       newItem.tags = tags

@@ -37,9 +37,12 @@ class Tag extends BaseModel {
 
   // --------------
 
-  static getDisplayName(tag, ellipsizeLength = 100) {
-    const name = get(tag, 'attributes.tag') ?? ''
-    return ellipsizeText(name, ellipsizeLength)
+  static getDisplayName(tag) {
+    return get(tag, 'attributes.tag') ?? ''
+  }
+
+  static getDisplayNameEllipsized(tag, ellipsizeLength = 100) {
+    return ellipsizeText(this.getDisplayName(tag), ellipsizeLength)
   }
 
   static getTagWithParents = (tag) => {
