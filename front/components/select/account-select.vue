@@ -97,7 +97,7 @@ const props = defineProps({
     default: () => Account.typesList(),
   },
   isMultiSelect: {
-    default: true,
+    default: false,
   },
 })
 
