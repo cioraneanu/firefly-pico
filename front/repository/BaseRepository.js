@@ -4,6 +4,7 @@ import _ from 'lodash'
 class BaseRepository {
   constructor(endpoint) {
     this.endpoint = endpoint
+    this.getAll = this.getAll.bind(this)
   }
 
   getUrl() {
@@ -30,15 +31,16 @@ class BaseRepository {
     return _.get(response, 'data', {})
   }
 
-  async getAllWithMerge({ filters = [] } = {}) {
+  async getAllWithMerge({ filters = [], getAll = null } = {}) {
     let list = []
-    const firstPageResponseBody = await this.getAll({ filters, page: 1 })
+    let getMethod = (getAll ?? this.getAll)
+    const firstPageResponseBody = await getMethod({ filters, page: 1 })
     let responseList = _.get(firstPageResponseBody, 'data', [])
     list = [...list, ...responseList]
 
     let totalPages = _.get(firstPageResponseBody, 'meta.pagination.total_pages')
     for (let page = 2; page <= totalPages; page++) {
-      const pageResponse = await this.getAll({ filters, page })
+      const pageResponse = await getMethod({ filters, page })
       let responseList = _.get(pageResponse, 'data', [])
       list = [...list, ...responseList]
     }

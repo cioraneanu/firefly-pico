@@ -714,11 +714,14 @@ body {
 /*===========================*/
 
 .latest-version-badge {
-  border-radius: 5px;
-  padding: 2px 8px;
+  border-radius: 18px;
+  padding: 4px 9px;
   margin: 10px;
+  background: #61b765;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
 
-  background: #d81b6099;
+.latest-version-badge a {
   color: #fff;
 }
 

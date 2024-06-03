@@ -227,7 +227,7 @@ watch(tags, async (newValue) => {
   }
 
   // Give child tags more priority for more granularity
-  const sortedTagNames = sortByPath(newValue, 'level', false).map((tag) => Tag.getDisplayName(tag).toLowerCase())
+  const sortedTagNames = sortByPath(newValue, 'level', false).map((tag) => Tag.getDisplayNameEllipsized(tag).toLowerCase())
 
   if (appStore.copyTagToDescription && isStringEmpty(description.value)) {
     // The first one is the one with the highest level

@@ -5,7 +5,9 @@ import _ from 'lodash'
 class TransactionRepository extends BaseRepository {
   constructor() {
     super(`api/transactions`)
+    this.searchTransaction = this.searchTransaction.bind(this)
   }
+
 
   async searchTransaction({ filters = [], page = 1, pageSize = 50 } = {}) {
     const appStore = useAppStore()

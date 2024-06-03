@@ -60,6 +60,10 @@ export const useAppStore = defineStore('app', {
       dashboard: {
         firstDayOfMonth: useLocalStorage('firstDayOfMonth', 1),
         showAccountAmounts: useLocalStorage('showAccountAmounts', true),
+        areEmptyAccountsVisible: useLocalStorage('areEmptyAccountsVisible', false),
+        excludedAccountsList: useLocalStorage('excludedAccountsList', []),
+        excludedCategoriesList: useLocalStorage('excludedCategoriesList', []),
+        excludedTagsList: useLocalStorage('excludedTagsList', []),
       },
     }
   },

@@ -8,6 +8,7 @@
     v-model:search="search"
     :list="accountList"
     :columns="3"
+    :isMultiSelect="props.isMultiSelect"
     :getDisplayValue="getDisplayValue"
     v-bind="dynamicAttrs"
   >
@@ -24,7 +25,7 @@
       </van-button>
     </template>
 
-    <template #popup>
+    <template #popup="{ onSelectCell }">
       <div class="display-flex flex-column h-100">
         <template v-if="showAssets">
           <span class="account-select-section-title">Personal accounts</span>
@@ -95,6 +96,9 @@ const props = defineProps({
   allowedTypes: {
     default: () => Account.typesList(),
   },
+  isMultiSelect: {
+    default: true,
+  },
 })
 
 const modelValue = defineModel()
@@ -126,16 +130,22 @@ onMounted(async () => {
   list.value = dataStore.accountList
 })
 
-const onSelectCell = (account) => {
-  modelValue.value = account
-  showDropdown.value = false
-}
+// const onSelectCell = (account) => {
+//   modelValue.value = account
+//   showDropdown.value = false
+// }
 
 const getDisplayValue = (value) => {
   return Account.getDisplayName(value)
 }
 
 const isItemSelected = (option) => {
+  if (!modelValue.value) {
+    return false
+  }
+  if (props.isMultiSelect) {
+    return modelValue.value.some((item) => isEqual(item, option))
+  }
   return isEqual(modelValue.value, option)
 }
 

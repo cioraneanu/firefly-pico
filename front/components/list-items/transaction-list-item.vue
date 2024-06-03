@@ -37,7 +37,7 @@
             <div v-if="tags && props.isDetailedMode" class="tags-container">
               <div v-for="tag in visibleTags" class="tag">
                 <app-icon :icon="Tag.getIcon(tag) ?? TablerIconConstants.tag" :size="14" />
-                <div class="list-item-subtitle ml-5">{{ Tag.getDisplayName(tag, 10) }}</div>
+                <div class="list-item-subtitle ml-5">{{ Tag.getDisplayNameEllipsized(tag, 10) }}</div>
               </div>
             </div>
 
