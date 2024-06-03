@@ -14,7 +14,7 @@
   - [Pico + Firefly + Importer](../docker-compose.pico+firefly+importer.yml) (If you want an easy 2 in 1 and the importer as well)
     - Change `FIREFLY_URL`, `APP_URL` and `FIREFLY_III_URL`
 
-> [!NOTE]  
+> [!NOTE]
 > `FIREFLY_URL` needs to point your **Firefly** instance. If you don't use a reverse proxy make sure you provide the full IP + Port.
 <br>Ex. `http://192.168.1.10:8080` or `https://firefly.domain.com`
 
@@ -24,12 +24,24 @@
 
 Pico image env variables:
 
-| Name       | Value                                                                    |
-|------------|--------------------------------------------------------------------------|
-| `NUXT_PUBLIC_QUERY_TIMEOUT` | Milliseconds **Pico** should wait before a request times out. (Default 4000) |
-| `TZ` | **Pico** backend Timezone (ex. Europe/London)                                |
+| Name| Value|
+|-|-|
+|`NUXT_PUBLIC_QUERY_TIMEOUT`| Milliseconds **Pico** should wait before a request times out. (Default 4000) |
+|`TZ`| **Pico** backend Timezone (ex. Europe/London)                                |
+|`FIREFLY_URL`| Firefly url. This is the url that your normally use to visit your Firefly instance|
+|`APP_KEY`| Unique KEY|
+|`DB_CONNECTION`| Database connection type. Can be `sqlite` or `pgsql`. Defaults to `sqlite`|
+|`DB_HOST`| Database host ip or domain.|
+|`DB_PORT`| Database port.|
+|`DB_DATABASE`| Database name|
+|`DB_USERNAME`| Username to authenticate to database|
+|`DB_PASSWORD`| Password to authenticate to database|
 
-See configuration [3. Post install config](installation.md#3-post-install-config)
+See [.env.example](../back/.env.example) for more variables.
+
+Continue to step [3. Post install config](installation.md#3-post-install-config)
+
+
 
 ## 2. Manual installation
 
@@ -75,7 +87,7 @@ Frontend (Nuxt):
 
 ## 3. Post install config
 
-If you've used Firefly before skip to step 3.
+If you've used Firefly before you can skip step 1-2 and continue at step 3.
 
 1. Open **Firefly** and create your first login account.
 
@@ -83,4 +95,8 @@ If you've used Firefly before skip to step 3.
 
 3. Go to `"Options" -> "Profile" -> OAuth -> Create New Personal Access Token`. Save this token somewhere safe.
 
-4. Open **Pico** , go to `Settings -> App Config` and paste the token from the step above. In 99% of cases you don't need to change the `Pico Backend URL`. **DO NOT PUT FIREFLY URL HERE! :)**
+4. Open **Pico** , go to `Settings -> App Config` and paste the token from step 3.
+> [!NOTE]
+>
+> In 99% of cases you don't need to change the `Pico Backend URL` setting. The backend url is where **Pico** lives.
+<br> **DO NOT PUT YOUR FIREFLY URL HERE! :)**
