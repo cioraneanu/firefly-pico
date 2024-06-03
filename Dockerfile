@@ -137,6 +137,8 @@ COPY docker/conf/nginx/ /etc/nginx/
 # Configure entrypoint
 COPY --chmod=755 docker/docker-entrypoint.d/ /docker-entrypoint.d/
 
+#set default db connection
+ENV DB_CONNECTION=sqlite
 
 ENTRYPOINT ["/docker-entrypoint.d/start.sh"]
 CMD ["run"]
