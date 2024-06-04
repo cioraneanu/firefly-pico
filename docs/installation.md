@@ -24,23 +24,10 @@
 
 Pico image env variables:
 
-| Name| Value|
-|-|-|
-|`NUXT_PUBLIC_QUERY_TIMEOUT`| Milliseconds **Pico** should wait before a request times out. (Default 4000) |
-|`TZ`| **Pico** backend Timezone (ex. Europe/London)                                |
-|`FIREFLY_URL`| Firefly url. This is the url that your normally use to visit your Firefly instance|
-|`APP_KEY`| Unique KEY|
-|`DB_CONNECTION`| Database connection type. Can be `sqlite` or `pgsql`. Defaults to `sqlite`|
-|`DB_HOST`| Database host ip or domain.|
-|`DB_PORT`| Database port.|
-|`DB_DATABASE`| Database name|
-|`DB_USERNAME`| Username to authenticate to database|
-|`DB_PASSWORD`| Password to authenticate to database|
-
-See [.env.example](../back/.env.example) for more variables.
-
-Continue to step [3. Post install config](installation.md#3-post-install-config)
-
+| Name       | Value                                                                    |
+|------------|--------------------------------------------------------------------------|
+| `NUXT_PUBLIC_QUERY_TIMEOUT` | Milliseconds **Pico** should wait before a request times out. (Default 4000) |
+| `TZ` | **Pico** backend Timezone (ex. Europe/London)                                |
 
 
 ## 2. Manual installation
