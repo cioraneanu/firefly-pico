@@ -3,10 +3,6 @@ FROM composer:2.2 AS composer_base
 #-----------------------------------------------------------------
 FROM alpine:3.20 AS base
 
-ARG REPO=https://github.com/cioraneanu/firefly-pico.git
-ARG BRANCH=main
-
-
 #Install packages
 RUN apk add --no-cache \
     tar \
