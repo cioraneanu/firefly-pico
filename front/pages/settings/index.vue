@@ -23,7 +23,7 @@
         <a :href="REPO_URL">Version: {{ appStore.currentAppVersion }}</a>
       </div>
 
-      <div v-if="true" class="latest-version-badge">
+      <div v-if="appStore.isNewVersionAvailable" class="latest-version-badge">
         <a :href="REPO_URL">Newer version available: {{ appStore.latestAppVersion }} 🎉</a>
       </div>
     </div>
