@@ -1,34 +1,68 @@
-ARG REGISTRY=docker.io/stsdockerhub
-ARG LARAVEL_ALPINE_VERSION=8.3.2-laravel-alpine3.19
+FROM composer:2.2 AS composer_base
 
-FROM ${REGISTRY}/php:${LARAVEL_ALPINE_VERSION}-build as build-container
+#-----------------------------------------------------------------
+FROM alpine:3.20 AS base
 
-RUN docker-php-ext-install mysqli pdo pdo_mysql && docker-php-ext-enable pdo_mysql
+ARG REPO=https://github.com/cioraneanu/firefly-pico.git
+ARG BRANCH=main
 
+
+#Install packages
+RUN apk add --no-cache \
+    tar \
+    nginx \
+    nodejs \
+    npm \
+    supervisor \
+    php82 \
+    php82-session \
+    php82-ctype \
+    php82-fpm \
+    php82-pdo \
+    php82-opcache \
+    php82-zip \
+    php82-phar \
+    php82-iconv \
+    php82-cli \
+    php82-curl \
+    php82-openssl \
+    php82-mbstring \
+    php82-tokenizer \
+    php82-fileinfo \
+    php82-json \
+    php82-xml \
+    php82-xmlwriter \
+    php82-simplexml \
+    php82-dom \
+    php82-pdo_mysql \
+    php82-pdo_pgsql \
+    php82-tokenizer
+RUN ln -s /usr/bin/php82 /usr/bin/php
+
+#-----------------------------------------------------------------
+FROM base AS build-container
+
+# Installing composer
+COPY --from=composer_base /usr/bin/composer /usr/local/bin/composer
+
+#Configure backend
 WORKDIR /var/www/html
-
-COPY back .
-
-COPY back/.env.example .env
+COPY back/ .
+RUN mv .env.example .env
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
-
-RUN composer install --no-dev
+RUN composer install --no-dev --optimize-autoloader
 RUN php artisan key:generate
-
 RUN tar --owner=www-data --group=www-data --exclude=.git -czf /tmp/app-back.tar.gz .
 
-# ================================
-
+#Configure frontend
 WORKDIR /var/www/html/front
-
-COPY front .
+COPY front/ .
 
 RUN npm install \
     && npm run build
-
+RUN npm prune --production
 RUN npm cache clean --force
-
 RUN tar --owner=www-data --group=www-data \
     --exclude=.git \
     --exclude=.nuxt \
@@ -65,9 +99,10 @@ RUN tar --owner=www-data --group=www-data \
     --exclude=node_modules/@babel \
     --exclude=node_modules/@tabler \
     -czf /tmp/app-front.tar.gz .
-# ================================
 
-FROM ${REGISTRY}/php:${LARAVEL_ALPINE_VERSION}-build
+
+#-----------------------------------------------------------------
+FROM base
 
 WORKDIR /var/www/html
 RUN --mount=type=bind,from=build-container,source=/tmp/,target=/build \
@@ -77,9 +112,33 @@ WORKDIR /var/www/html/front
 RUN --mount=type=bind,from=build-container,source=/tmp/,target=/build \
     tar -xf /build/app-front.tar.gz -C .
 
-COPY docker/conf/supervisor/node.ini /etc/supervisor.d
-COPY docker/conf/nginx/default.conf /etc/nginx/http.d
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "$(pwd)" \
+    --ingroup www-data \
+    --no-create-home \
+    www-data
+
+RUN mkdir -p -m 772 /tmp/nginx/ && chown -R www-data:www-data /tmp/nginx
+RUN chmod -R 772 /var/www/html/storage && chown -R www-data:www-data /var/www/html/storage
+
+# Configure supervisor
+COPY docker/conf/supervisor/supervisord.conf /etc/supervisord.conf
+COPY docker/conf/supervisor/ /etc/supervisor.d/
+
+# Configure PHP
+RUN mkdir -p /run/php/ && touch /run/php/php8.2-fpm.pid
+COPY docker/conf/php-fpm/ /etc/php82/
+
+# Configure nginx
+COPY docker/conf/nginx/ /etc/nginx/
 
 # Configure entrypoint
-COPY docker/docker-entrypoint.d /docker-entrypoint.d/
-RUN chmod +x /docker-entrypoint.d/*
+COPY --chmod=755 docker/docker-entrypoint.d/ /docker-entrypoint.d/
+
+#set default db connection
+ENV DB_CONNECTION=sqlite
+
+ENTRYPOINT ["/docker-entrypoint.d/start.sh"]
+CMD ["run"]
