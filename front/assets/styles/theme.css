@@ -955,3 +955,11 @@ body {
 .first_column svg {
   color: var(--van-text-color);
 }
+
+label {
+  margin-bottom: 0px;
+}
+
+img,svg {
+  vertical-align: middle
+}
