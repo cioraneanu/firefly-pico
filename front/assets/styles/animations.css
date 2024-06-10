@@ -1,0 +1,35 @@
+@keyframes zoom-fade-in {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes zoom-fade-out {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+}
+
+.zoom-fade-enter-active,
+.zoom-fade-leave-active {
+    animation-duration: 0.2s;
+    animation-fill-mode: both;
+}
+
+.zoom-fade-enter-active {
+    animation-name: zoom-fade-in;
+}
+
+.zoom-fade-leave-active {
+    animation-name: zoom-fade-out;
+}
