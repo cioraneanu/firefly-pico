@@ -9,6 +9,8 @@
 </template>
 
 <script setup>
+import anime from 'animejs'
+
 const props = defineProps({
   label: {
     default: 'Save',
@@ -25,8 +27,19 @@ visualViewport.addEventListener('resize', () => {
 
 const style = computed(() => {
   return {
+    // opacity: '0',
     // 'bottom': `calc(env(safe-area-inset-bottom) + ${props.bottom}px)`,
     bottom: keyboardOffset.value === 0 ? `calc(env(safe-area-inset-bottom) + ${props.bottom}px)` : `calc( ${keyboardOffset.value}px + 10px )`,
   }
+})
+
+onMounted(async () => {
+  anime({
+    targets: '.app-button-save',
+    opacity: [0, 1],
+    scale: [0.7, 1],
+    delay: 200,
+    duration: 700,
+  })
 })
 </script>
