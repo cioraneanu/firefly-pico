@@ -24,6 +24,7 @@ import { useList } from '~/composables/useList'
 import TransactionTemplate from '~/models/TransactionTemplate'
 import { useDataStore } from '~/stores/dataStore'
 import { useToolbar } from '~/composables/useToolbar'
+import { animateSwipeList } from '~/utils/AnimationUtils.js'
 
 const dataStore = useDataStore()
 const onEvent = (event, payload) => {
@@ -71,4 +72,8 @@ toolbar.init({
   title: 'Templates list',
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })
+
+animateSwipeList(list)
+
+
 </script>

@@ -37,6 +37,9 @@ export function useList(prop) {
     await navigateTo(`${routeForm}/${transaction.id}`)
   }
   const onLoadMore = async () => {
+    if (isLoading.value) {
+      return
+    }
     isLoading.value = true
 
     // let result = await new TransactionRepository().getAll()
