@@ -62,7 +62,7 @@ const tabConstants = {
 }
 const activeTab = ref(null)
 
-const isAddButtonVisible = computed(() => route.path !== RouteConstants.ROUTE_TRANSACTION_ID)
+const isAddButtonVisible = computed(() => route.path !== RouteConstants.ROUTE_TRANSACTION_ID && route.path !== RouteConstants.ROUTE_HOME)
 watch(
   () => route.path,
   (newValue) => {
