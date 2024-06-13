@@ -132,6 +132,7 @@ import { FORM_CONSTANTS_TRANSACTION_FIELDS } from '~/constants/FormConstants'
 import Tag from '~/models/Tag'
 import { isStringEmpty } from '~/utils/DataUtils'
 import TablerIconConstants from '~/constants/TablerIconConstants'
+import { animateTransactionForm } from '~/utils/AnimationUtils.js'
 
 const refAmount = ref(null)
 
@@ -352,7 +353,12 @@ toolbar.init({
   backRoute: RouteConstants.ROUTE_TRANSACTION_LIST,
 })
 
-onMounted(() => {})
+onMounted(async () => {
+  await nextTick()
+  animateTransactionForm()
+})
+
+
 </script>
 
 <style></style>

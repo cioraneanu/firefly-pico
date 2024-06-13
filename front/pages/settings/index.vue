@@ -44,4 +44,9 @@ const appStore = useAppStore()
 const toolbar = useToolbar()
 
 toolbar.init({ title: 'Settings' })
+
+onMounted(async () => {
+  await nextTick()
+  animateSettings()
+})
 </script>

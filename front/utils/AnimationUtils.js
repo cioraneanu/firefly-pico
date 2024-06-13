@@ -6,10 +6,31 @@ export function animateSwipeList(list) {
 
     anime({
       targets: `.van-swipe-cell:nth-child(n+${oldValue.length ?? 0})`,
-      translateX: [-50, 0],
+      translateY: [-50, 0],
       opacity: [0, 1],
       delay: anime.stagger(25, { start: 0 }), // delay starts at 500ms then increase by 100ms for each elements.
     })
+  })
+}
+
+
+export function animateTransactionForm() {
+  anime({
+    targets: `.vant-card, .transaction-type-container, .van-cell-group`,
+    translateY: [-100, 0],
+    opacity: [0, 1],
+    duration: 1000,
+    // delay: anime.stagger(500, { start: 0 }),
+  })
+}
+
+export function animateSettings() {
+  anime({
+    targets: `.van-cell-group`,
+    translateY: [-100, 0],
+    opacity: [0, 1],
+    duration: 1000,
+    delay: anime.stagger(100, { start: 200 }),
   })
 }
 
@@ -18,7 +39,7 @@ export async function animateDashboard() {
 
   anime({
     targets: `.van-cell-group`,
-    translateX: [-50, 0],
+    translateY: [-50, 0],
     opacity: [0, 1],
     delay: anime.stagger(200, { start: 0 }),
   })
@@ -39,3 +60,5 @@ export async function animateDashboard() {
   // }
 
 }
+
+

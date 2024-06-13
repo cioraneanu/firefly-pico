@@ -19,9 +19,9 @@
 
     <van-tabbar-item  :name="tabConstants.add" @click="onChange(tabConstants.add)" >
       <template #icon="{ active }">
-        <transition name="zoom-fade">
-          <svg-add-icon v-if="isAddButtonVisible" width="40" height="40"/>
-        </transition>
+<!--        <transition name="zoom-fade">-->
+          <svg-add-icon width="40" height="40"/>
+<!--        </transition>-->
       </template>
     </van-tabbar-item>
 
