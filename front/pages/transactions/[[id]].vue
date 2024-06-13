@@ -354,7 +354,6 @@ toolbar.init({
 })
 
 onMounted(async () => {
-  await nextTick()
   animateTransactionForm()
 })
 

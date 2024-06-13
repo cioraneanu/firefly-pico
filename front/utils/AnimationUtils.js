@@ -6,6 +6,8 @@ export function animateSwipeList(list) {
 
     anime({
       targets: `.van-swipe-cell:nth-child(n+${oldValue.length ?? 0})`,
+      // scale: [0.6, 1.0],
+      // translateX: [50, 0],
       translateY: [-50, 0],
       opacity: [0, 1],
       delay: anime.stagger(25, { start: 0 }), // delay starts at 500ms then increase by 100ms for each elements.
@@ -14,13 +16,16 @@ export function animateSwipeList(list) {
 }
 
 
-export function animateTransactionForm() {
+export async function animateTransactionForm () {
+  await nextTick()
+
   anime({
     targets: `.vant-card, .transaction-type-container, .van-cell-group`,
+    // scale: [1.2, 1.0],
     translateY: [-100, 0],
     opacity: [0, 1],
     duration: 1000,
-    // delay: anime.stagger(500, { start: 0 }),
+    // easing: 'easeOutElastic(1, .6)'
   })
 }
 
