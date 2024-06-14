@@ -4,6 +4,7 @@
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
+    <app-loading />
   </van-config-provider>
 </template>
 
@@ -12,6 +13,7 @@ import { useDataStore } from '~/stores/dataStore'
 import RouteConstants from '~/constants/RouteConstants'
 
 import '~/assets/styles/variables.css'
+import AppLoading from '~/components/ui-kit/app-loading.vue'
 
 let dataStore = useDataStore()
 let appStore = useAppStore()

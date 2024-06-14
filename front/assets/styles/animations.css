@@ -37,3 +37,37 @@
 }
 
 /*-----------------*/
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    animation-duration: 0.2s;
+    /*animation-timing-function: ease-in-out;*/
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    animation-fill-mode: both;
+}
+
+.fade-enter-active {
+    animation-name: fade-in;
+}
+
+.fade-leave-active {
+    animation-name: fade-out;
+}

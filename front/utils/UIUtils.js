@@ -50,23 +50,28 @@ class UIUtils {
   }
 
   static showLoadingWhen(isLoading) {
-    let loadingIndicator = null
+    const appStore = useAppStore()
+    watch(isLoading, (newValue) => {
+      appStore.isLoading = newValue
+    })
 
-    watch(
-      () => isLoading.value,
-      async (newValue, oldValue) => {
-        if (newValue) {
-          loadingIndicator = showLoadingToast({
-            duration: 0,
-            message: 'Loading...',
-            forbidClick: true,
-          })
-        } else {
-          closeToast()
-        }
-      },
-      { immediate: true },
-    )
+    // let loadingIndicator = null
+    //
+    // watch(
+    //   () => isLoading.value,
+    //   async (newValue, oldValue) => {
+    //     if (newValue) {
+    //       loadingIndicator = showLoadingToast({
+    //         duration: 0,
+    //         message: 'Loading...',
+    //         forbidClick: true,
+    //       })
+    //     } else {
+    //       closeToast()
+    //     }
+    //   },
+    //   { immediate: true },
+    // )
   }
 
   static focusInput(inputRef) {
