@@ -292,7 +292,8 @@ export const useDataStore = defineStore('data', {
 
       let filtersParts = [
         `date_after:${startDate}`,
-        `date_before:${endDate}`,
+        `date_after:${startDate}`,
+        `type:withdrawal`,
         ...getExcludedTransactionFilters()
       ]
       let filters = [{ field: 'query', value: filtersParts.join(' ')}]
