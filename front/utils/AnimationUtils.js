@@ -29,14 +29,28 @@ export async function animateTransactionForm () {
   })
 }
 
-export function animateSettings() {
+export async function animateSettings() {
+  await nextTick()
+
   anime({
-    targets: `.van-cell-group`,
-    translateY: [-100, 0],
+    targets: `.van-cell`,
+
+    translateY: [50, 0],
     opacity: [0, 1],
-    duration: 1000,
-    delay: anime.stagger(100, { start: 200 }),
+
+    // translateY: [-10, 0],
+    // opacity: [0.1, 1],
+    // duration: 400,
+    delay: anime.stagger(30, { start: 0 }),
   })
+
+  // anime({
+  //   targets: `.van-cell-group`,
+  //   translateY: [-100, 0],
+  //   opacity: [0, 1],
+  //   duration: 1000,
+  //   delay: anime.stagger(100, { start: 200 }),
+  // })
 }
 
 export async function animateDashboard() {

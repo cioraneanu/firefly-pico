@@ -67,4 +67,8 @@ toolbar.init({
   title: 'Dashboard preferences',
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
+
+onMounted(() => {
+  animateSettings()
+})
 </script>

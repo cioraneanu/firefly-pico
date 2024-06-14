@@ -122,4 +122,9 @@ toolbar.init({
   title: 'Transaction config',
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
+
+onMounted(() => {
+  animateSettings()
+})
+
 </script>

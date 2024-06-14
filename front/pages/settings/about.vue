@@ -39,6 +39,7 @@ import { useDataStore } from '~/stores/dataStore'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import { REPO_URL } from '~/constants/Constants'
+import { onMounted } from 'vue'
 
 const appStore = useAppStore()
 const dataStore = useDataStore()
@@ -47,5 +48,9 @@ const toolbar = useToolbar()
 toolbar.init({
   title: 'About',
   backRoute: RouteConstants.ROUTE_SETTINGS,
+})
+
+onMounted(() => {
+  animateSettings()
 })
 </script>

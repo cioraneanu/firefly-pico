@@ -97,8 +97,7 @@ toolbar.init({
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
 
-onMounted(async () => {
-  await nextTick()
+onMounted(() => {
   animateSettings()
 })
 </script>

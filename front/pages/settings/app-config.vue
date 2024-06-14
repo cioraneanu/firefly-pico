@@ -93,4 +93,8 @@ toolbar.init({
   title: 'App settings',
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
+
+onMounted(() => {
+  animateSettings()
+})
 </script>
