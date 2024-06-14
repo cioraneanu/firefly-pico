@@ -1,12 +1,12 @@
 <template>
-  <transition name="fade">
-    <div v-if="appStore.isLoading" class="app-loading-background">
-      <div class="app-loading flex-column flex-center">
+  <div v-if="appStore.isLoading" class="app-loading-background">
+    <div class="app-loading flex-column flex-center">
+      <div class="app-loading-content flex-column flex-center">
         <icon-rotate :size="30" :stroke="1.4" class="animate-rotate-infinite" />
         <div class="text-size-16">Loading...</div>
       </div>
     </div>
-  </transition>
+  </div>
 </template>
 
 <script setup>
@@ -15,17 +15,27 @@ import anime from 'animejs'
 
 const appStore = useAppStore()
 
+watch(
+  () => appStore.isLoading,
+  async (newValue) => {
+    await nextTick()
+
+    anime({
+      targets: '.app-loading-content',
+      translateY: [-2, 2],
+      // scale: [1.0, 0.98],
+      // left: '10px',
+      direction: 'alternate',
+      loop: true,
+      easing: 'easeInOutSine',
+      duration: 500,
+    })
+  },
+  { immediate: true },
+)
+
 onMounted(async () => {
   await nextTick()
-
-  // anime({
-  //   targets: '.app-loading',
-  //   translateX: [-10, 0, -10, 0, -10],
-  //   loop: true,
-  //   easing: 'linear',
-  //   duration: 700,
-  // })
-
 })
 </script>
 

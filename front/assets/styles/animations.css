@@ -58,7 +58,7 @@
 
 .fade-enter-active,
 .fade-leave-active {
-    animation-duration: 0.2s;
+    animation-duration: 2.2s;
     /*animation-timing-function: ease-in-out;*/
     transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
     animation-fill-mode: both;

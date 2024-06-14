@@ -17,7 +17,7 @@ export const useAppStore = defineStore('app', {
     // const appVersion = runtimeConfig.public.version
 
     return {
-      isLoading: false,
+      isLoading: true,
 
       currentAppVersion: runtimeConfig.public.version,
       queryTimeout: runtimeConfig.public.queryTimeout,
