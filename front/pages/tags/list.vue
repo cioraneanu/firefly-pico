@@ -10,7 +10,7 @@
 
     <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
       <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
-        <app-list-search v-if="isSearchVisible" v-model="search" />
+        <app-list-search v-if="isSearchVisible && list.length > 0" v-model="search" />
 
         <tag-list-item v-for="item in filteredList" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
       </van-list>
