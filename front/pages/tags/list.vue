@@ -26,6 +26,7 @@ import Tag from '~/models/Tag'
 import { useToolbar } from '~/composables/useToolbar'
 import EmptyList from '~/components/general/empty-list.vue'
 import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
+import { animateSwipeList } from '~/utils/AnimationUtils.js'
 
 let dataStore = useDataStore()
 
@@ -85,4 +86,8 @@ toolbar.init({
   title: 'Tags list',
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })
+
+animateSwipeList(list)
+
+
 </script>

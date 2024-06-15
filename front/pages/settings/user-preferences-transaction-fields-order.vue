@@ -57,4 +57,9 @@ toolbar.init({
   title: 'Transaction fields order',
   backRoute: RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTIONS,
 })
+
+onMounted(() => {
+  animateSettings()
+})
+
 </script>

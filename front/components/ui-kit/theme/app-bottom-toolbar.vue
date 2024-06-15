@@ -15,9 +15,13 @@
       </template>
     </van-tabbar-item>
 
-    <van-tabbar-item :name="tabConstants.add" @click="onChange(tabConstants.add)">
+
+
+    <van-tabbar-item  :name="tabConstants.add" @click="onChange(tabConstants.add)" >
       <template #icon="{ active }">
-          <svg-add-icon  width="40" height="40" />
+<!--        <transition name="zoom-fade">-->
+          <svg-add-icon width="40" height="40"/>
+<!--        </transition>-->
       </template>
     </van-tabbar-item>
 
@@ -42,6 +46,7 @@ import { useDataStore } from '~/stores/dataStore'
 import { useAppStore } from '~/stores/appStore'
 import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants'
+import anime from 'animejs'
 
 const dataStore = useDataStore()
 const appStore = useAppStore()
@@ -57,7 +62,7 @@ const tabConstants = {
 }
 const activeTab = ref(null)
 
-// const isAddButtonVisible = computed(() => route.path !== RouteConstants.ROUTE_TRANSACTION_ID)
+const isAddButtonVisible = computed(() => route.path !== RouteConstants.ROUTE_TRANSACTION_ID && route.path !== RouteConstants.ROUTE_HOME)
 watch(
   () => route.path,
   (newValue) => {
@@ -85,7 +90,27 @@ watch(
   { deep: true, immediate: true },
 )
 
-onMounted(async () => {})
+onMounted(async () => {
+
+})
+
+// watch(isAddButtonVisible, (newValue) => {
+//   console.log('isAddButtonVisible', {newValue})
+//   if (newValue) {
+//     anime({
+//       targets: '.bottom-add-button',
+//       scale: 1,
+//     });
+//   } else {
+//     anime({
+//       targets: '.bottom-add-button',
+//       scale: 0,
+//     });
+//   }
+//
+// }, {immediate: true})
+
+
 
 const getStrokeWidth = (active) => {
   return active ? 2.2 : 1.7

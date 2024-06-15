@@ -1,0 +1,121 @@
+@keyframes zoom-fade-in {
+    0% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@keyframes zoom-fade-out {
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(0.5);
+        opacity: 0;
+    }
+}
+
+.zoom-fade-enter-active,
+.zoom-fade-leave-active {
+    animation-duration: 0.6s;
+    /*animation-timing-function: ease-in-out;*/
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    animation-fill-mode: both;
+}
+
+.zoom-fade-enter-active {
+    animation-name: zoom-fade-in;
+}
+
+.zoom-fade-leave-active {
+    animation-name: zoom-fade-out;
+}
+
+/*-----------------*/
+
+@keyframes fade-in {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fade-out {
+    0% {
+        opacity: 1;
+    }
+    100% {
+        opacity: 0;
+    }
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    animation-duration: 0.25s;
+    /*animation-timing-function: ease-in-out;*/
+    transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+    animation-fill-mode: both;
+}
+
+.fade-enter-active {
+    animation-name: fade-in;
+}
+
+.fade-leave-active {
+    animation-name: fade-out;
+}
+
+/*--------------*/
+
+.animate-rotate-infinite {
+    animation: apply-rotation 1s infinite linear;
+}
+
+@keyframes apply-rotation {
+    100% {
+        transform: rotate(-1turn);
+    }
+}
+
+
+/*-----------------*/
+
+@keyframes jump {
+    0%, 100% {
+        transform: translate(-50%, -50%) translateY(0);
+    }
+    50% {
+        transform: translate(-50%, -50%) translateY(-20px); /* Adjust this value for jump height */
+    }
+}
+
+.jump {
+    animation: jump 2s ease-in-out infinite;
+}
+
+
+/*------------------*/
+
+
+.fade-slide-enter-active, .fade-slide-leave-active {
+    transition: all 0.5s ease;
+}
+
+.fade-slide-enter, .fade-slide-leave-to /* .fade-slide-leave-active in <2.1.8 */ {
+    opacity: 0;
+}
+
+.fade-slide-enter {
+    transform: translateY(-30px);
+}
+
+.fade-slide-leave-to {
+    transform: translateY(30px);
+}

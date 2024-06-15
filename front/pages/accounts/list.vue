@@ -33,6 +33,7 @@ import { get } from 'lodash'
 
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
+import { animateSwipeList } from '~/utils/AnimationUtils.js'
 
 let dataStore = useDataStore()
 
@@ -109,4 +110,7 @@ toolbar.init({
   titleIcon: TablerIconConstants.account,
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })
+
+animateSwipeList(list)
+
 </script>

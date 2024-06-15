@@ -27,6 +27,7 @@ import { useList } from '~/composables/useList'
 import Category from '~/models/Category'
 import { useToolbar } from '~/composables/useToolbar'
 import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
+import { animateSwipeList } from '~/utils/AnimationUtils.js'
 
 let dataStore = useDataStore()
 
@@ -88,4 +89,9 @@ toolbar.init({
   title: 'Categories list',
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })
+
+
+animateSwipeList(list)
+
+
 </script>

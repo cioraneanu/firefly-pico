@@ -25,6 +25,8 @@ import { useToolbar } from '~/composables/useToolbar'
 import { debounce } from 'lodash/function'
 import UIUtils from '~/utils/UIUtils.js'
 import DashboardTagTotals from '~/components/dashboard/dashboard-tag-totals/dashboard-tag-totals.vue'
+import anime from 'animejs'
+import { animateDashboard } from '~/utils/AnimationUtils.js'
 
 const toolbar = useToolbar()
 toolbar.init({ title: 'Dashboard' })
@@ -48,6 +50,8 @@ onMounted(() => {
     return
   }
   onRefreshDebounce()
+
+  animateDashboard()
 })
 
 const isLoadingDashboard = computed(() => {
@@ -55,4 +59,5 @@ const isLoadingDashboard = computed(() => {
 })
 
 UIUtils.showLoadingWhen(isLoadingDashboard)
+
 </script>

@@ -60,4 +60,8 @@ toolbar.init({
   title: 'Quick transaction amounts',
   backRoute: RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTIONS,
 })
+
+onMounted(() => {
+  animateSettings()
+})
 </script>

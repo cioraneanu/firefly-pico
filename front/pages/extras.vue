@@ -29,6 +29,7 @@ import { useAppStore } from '~/stores/appStore'
 import RouteConstants from '~/constants/RouteConstants'
 import { useToolbar } from '~/composables/useToolbar'
 import TablerIconConstants from '~/constants/TablerIconConstants'
+import { onMounted } from 'vue'
 
 const onNavigateToCalendar = async () => await navigateTo(RouteConstants.ROUTE_CALENDAR)
 const onNavigateToTransactionTemplate = async () => await navigateTo(RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST)
@@ -40,4 +41,9 @@ const onGoToTransactionTemplatesList = async () => await navigateTo(RouteConstan
 
 const toolbar = useToolbar()
 toolbar.init({ title: 'Extra' })
+
+onMounted(() => {
+  animateSettings()
+})
+
 </script>

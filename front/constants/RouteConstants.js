@@ -1,4 +1,5 @@
 export default {
+  ROUTE_HOME: '/',
   ROUTE_TRANSACTION_LIST: '/transactions/list',
   ROUTE_TRANSACTION_ID: '/transactions',
   ROUTE_CALENDAR: '/calendar',
