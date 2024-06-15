@@ -342,6 +342,19 @@
   fill: #fff;
 }
 
-.van-field--disabled.app-field .van-field__body {
+.van-theme-dark .van-field--disabled.app-field .van-field__body {
   background: #212121 !important;
 }
+
+.van-theme-dark .app-loading-background {
+  background: rgba(0,0, 0, 0.7);
+}
+
+.van-theme-dark .app-loading {
+  background: #222;
+  box-shadow: rgba(0, 0, 0, 0.4) 0px 3px 8px;
+
+
+
+}
+

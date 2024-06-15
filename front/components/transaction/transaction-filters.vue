@@ -11,7 +11,7 @@
 
           <transaction-type-select v-model="transactionType" />
 
-          <div class="display-flex van-cell-fake ps-3 align-items-baseline">
+          <div class="display-flex van-cell-fake pl-3 align-items-baseline">
             <div class="display-flex flex-column gap-3 align-items-center">
               <div class="text-size-14">Without</div>
               <app-checkbox v-model="withoutCategory" shape="square" />
@@ -20,7 +20,7 @@
             <category-select v-model="category" :disabled="!!withoutCategory" class="flex-1" />
           </div>
 
-          <div class="display-flex van-cell-fake ps-3 align-items-baseline">
+          <div class="display-flex van-cell-fake pl-3 align-items-baseline">
             <div class="display-flex flex-column gap-3 align-items-center">
               <div class="text-size-14">Without</div>
               <app-checkbox v-model="withoutTag" shape="square" />
