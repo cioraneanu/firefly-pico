@@ -2,7 +2,7 @@ import BaseModel from '~/models/BaseModel'
 import TransactionTemplateTransformer from '~/transformers/TransactionTemplateTransformer'
 import TransactionTemplateRepository from '~/repository/TransactionTemplateRepository'
 import Transaction from '~/models/Transaction'
-import _, { isEqual } from 'lodash'
+import { get, isEqual } from 'lodash'
 
 export default class TransactionTemplate extends BaseModel {
   getTransformer() {
@@ -34,6 +34,14 @@ export default class TransactionTemplate extends BaseModel {
   }
 
   static getDisplayName(item) {
-    return _.get(item, 'name')
+    return get(item, 'name')
+  }
+
+  static getExtraNames(item) {
+    return (get(item, 'extra_names') ?? []).map((item) => item.value)
+  }
+
+  static getAllNames(item) {
+    return [this.getDisplayName(item), ...this.getExtraNames(item)]
   }
 }

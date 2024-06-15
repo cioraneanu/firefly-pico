@@ -10,7 +10,9 @@
 
     <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
       <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
-        <transaction-template-list-item v-for="item in list" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
+        <app-list-search v-if="isSearchVisible && list.length > 0" v-model="search" />
+
+        <transaction-template-list-item v-for="item in filteredList" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
       </van-list>
     </van-pull-refresh>
   </div>
@@ -25,6 +27,8 @@ import TransactionTemplate from '~/models/TransactionTemplate'
 import { useDataStore } from '~/stores/dataStore'
 import { useToolbar } from '~/composables/useToolbar'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
+import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
+import Tag from '~/models/Tag.js'
 
 const dataStore = useDataStore()
 const onEvent = (event, payload) => {
@@ -32,6 +36,18 @@ const onEvent = (event, payload) => {
     dataStore.transactionTemplateList = dataStore.transactionTemplateList.filter((item) => parseInt(item.id) !== parseInt(payload.id))
   }
 }
+
+const search = ref('')
+const isSearchVisible = ref(true)
+const filteredList = computed(() => {
+  if (search.value.length === 0) {
+    return list.value
+  }
+  return list.value.filter((item) => {
+    return TransactionTemplate.getAllNames(item).some(item => item.toLowerCase().indexOf(search.value.toLowerCase()) !== -1)
+  })
+})
+
 
 const { title, isLoading, isFinished, isRefreshing, page, pageSize, totalPages, listTotalCount, list, isEmpty, onAdd, onEdit, onDelete } = useList({
   title: 'Transaction templates list',
@@ -45,6 +61,7 @@ const formClass = computed(() => ({
   'app-form': true,
   empty: isEmpty.value,
 }))
+
 
 const onLoadMore = async () => {
   const dataStore = useDataStore()
