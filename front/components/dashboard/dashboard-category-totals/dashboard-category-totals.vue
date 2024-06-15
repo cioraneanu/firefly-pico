@@ -62,10 +62,10 @@ const onClick = async (bar) => {
   const endDate = DateUtils.dateToString(dataStore.dashboardDateEnd)
   let categoryId = get(bar, 'category.id')
   if (!categoryId) {
-    await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_category=true&date_start=${startDate}&date_end=${endDate}`)
+    await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_category=true&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}`)
     return
   }
 
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?category_id=${categoryId}&date_start=${startDate}&date_end=${endDate}`)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?category_id=${categoryId}&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}`)
 }
 </script>

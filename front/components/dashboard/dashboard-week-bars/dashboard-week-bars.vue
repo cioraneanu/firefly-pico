@@ -14,6 +14,7 @@
 import { eachDayOfInterval, format, startOfDay, subDays } from 'date-fns'
 import { get } from 'lodash'
 import RouteConstants from '~/constants/RouteConstants.js'
+import Transaction from '~/models/Transaction.js'
 
 const dataStore = useDataStore()
 
@@ -41,6 +42,6 @@ const barsList = computed(() => {
 
 const onClick = async (bar) => {
   const date = DateUtils.dateToString(bar.date)
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?date_start=${date}&date_end=${date}`)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?date_start=${date}&date_end=${date}&type=${Transaction.types.expense.code}`)
 }
 </script>

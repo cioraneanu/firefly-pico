@@ -59,10 +59,10 @@ const onClick = async ({tag_id, tag}) => {
   const endDate = DateUtils.dateToString(dataStore.dashboardDateEnd)
 
   if (!tag) {
-    await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_tag=true&date_start=${startDate}&date_end=${endDate}`)
+    await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_tag=true&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}`)
     return
   }
 
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${tag_id}&date_start=${startDate}&date_end=${endDate}`)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${tag_id}&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}`)
 }
 </script>
