@@ -33,15 +33,15 @@ export async function animateSettings() {
   await nextTick()
 
   anime({
-    targets: `.van-cell`,
+    targets: `.van-cell, .van-grid-item`,
 
-    translateY: [50, 0],
+    // translateY: [50, 0],
     opacity: [0, 1],
 
     // translateY: [-10, 0],
     // opacity: [0.1, 1],
     // duration: 400,
-    delay: anime.stagger(30, { start: 0 }),
+    delay: anime.stagger(45, { start: 0 }),
   })
 
   // anime({
@@ -58,7 +58,7 @@ export async function animateDashboard() {
 
   anime({
     targets: `.van-cell-group`,
-    translateY: [-50, 0],
+    translateX: [-50, 0],
     opacity: [0, 1],
     delay: anime.stagger(200, { start: 0 }),
   })
