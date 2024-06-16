@@ -61,7 +61,7 @@ export default defineNuxtConfig({
   },
 
   app: {
-    pageTransition: { name: 'page', mode: 'out-in' },
+    // pageTransition: { name: 'page', mode: 'out-in' },
     head: {
       title: 'Pico',
       charset: 'utf-8',

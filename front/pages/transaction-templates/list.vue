@@ -40,10 +40,11 @@ const onEvent = (event, payload) => {
 const search = ref('')
 const isSearchVisible = ref(true)
 const filteredList = computed(() => {
+  const sortedList = list.value.sort((a,b) => TransactionTemplate.getDisplayName(a) > TransactionTemplate.getDisplayName(b))
   if (search.value.length === 0) {
-    return list.value
+    return sortedList
   }
-  return list.value.filter((item) => {
+  return sortedList.filter((item) => {
     return TransactionTemplate.getAllNames(item).some(item => item.toLowerCase().indexOf(search.value.toLowerCase()) !== -1)
   })
 })

@@ -1,4 +1,4 @@
-import _, { cloneDeep, get } from 'lodash'
+import { cloneDeep, get } from 'lodash'
 import ApiTransformer from './ApiTransformer'
 import { useDataStore } from '~/stores/dataStore'
 import Transaction from '~/models/Transaction'
@@ -14,7 +14,7 @@ export default class TransactionTemplateTransformer extends ApiTransformer {
     const categoryDictionary = dataStore.categoryDictionary
     const tagDictionaryById = dataStore.tagDictionaryById
 
-    item.amount = Transaction.formatAmount(_.get(item, 'amount', 0))
+    item.amount = Transaction.formatAmount(get(item, 'amount', 0))
 
     // item.date = DateUtils.autoToDate(item.date)
     item.account_source = accountsDictionary[item['account_source_id']]
@@ -36,20 +36,21 @@ export default class TransactionTemplateTransformer extends ApiTransformer {
       return null
     }
 
-    const source = _.get(item, 'account_source')
-    const destination = _.get(item, 'account_destination')
-    const transactionType = Transaction.getTransactionTypeForAccounts({ source, destination })
+    const source = get(item, 'account_source')
+    const destination = get(item, 'account_destination')
+    // const transactionType = Transaction.getTransactionTypeForAccounts({ source, destination })
+    const transactionType = get(item, 'type')
 
     return {
-      id: _.get(item, 'id'),
-      name: _.get(item, 'name'),
+      id: get(item, 'id'),
+      name: get(item, 'name'),
       extra_names: (item.extra_names ?? []).map((item) => item.value),
-      amount: _.get(item, 'amount'),
-      description: _.get(item, 'description'),
-      notes: _.get(item, 'notes'),
-      account_source_id: _.get(item, 'account_source.id'),
-      account_destination_id: _.get(item, 'account_destination.id'),
-      category_id: _.get(item, 'category.id'),
+      amount: get(item, 'amount'),
+      description: get(item, 'description'),
+      notes: get(item, 'notes'),
+      account_source_id: get(item, 'account_source.id'),
+      account_destination_id: get(item, 'account_destination.id'),
+      category_id: get(item, 'category.id'),
       tags: (item.tags ?? []).map((item) => item.id),
       type: get(transactionType, 'fireflyCode'),
       // tags

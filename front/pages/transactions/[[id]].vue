@@ -18,7 +18,7 @@
 
     <div class="mb-10" />
 
-    <transaction-assistant v-if="!itemId" @change="onTemplateAssistant" />
+    <transaction-assistant v-if="!itemId" @change="onAssistant" />
 
     <transaction-type-tabs v-model="type" class="mx-3 mt-1 mb-1" />
 
@@ -200,7 +200,7 @@ const onTransactionTemplateSelected = (transactionTemplate) => {
     item.value = new Transaction().getEmpty()
     return
   }
-
+  type.value = transactionTemplate.type
   amount.value = transactionTemplate.amount
   if (!accountSource.value) {
     accountSource.value = dataStore.accountDictionary[transactionTemplate.account_source_id]
@@ -250,7 +250,7 @@ watch(tags, async (newValue) => {
   }
 })
 
-const onTemplateAssistant = async ({ tag: newTag, category: newCategory, transactionTemplate: transactionTemplate, amount: newAmount, description: newDescription }) => {
+const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemplate: transactionTemplate, amount: newAmount, description: newDescription }) => {
   if (newTag) {
     tags.value = Tag.getTagWithParents(newTag)
     // tags.value = [newTag]
@@ -262,6 +262,8 @@ const onTemplateAssistant = async ({ tag: newTag, category: newCategory, transac
 
   if (transactionTemplate) {
     onTransactionTemplateSelected(transactionTemplate)
+  } else {
+    type.value = Transaction.types.expense
   }
 
   if (newAmount) {

@@ -14,7 +14,11 @@
               <app-icon :icon="TablerIconConstants.transactionTemplate" :size="24" />
 
               <div>
-                <div v-if="name" class="list-item-title" style="line-height: 18px !important">{{ name }}</div>
+                <div class="flex-center-vertical gap-1">
+                  <transaction-type-dot :transactionType="transactionType" />
+                  <div v-if="name" class="list-item-title" style="line-height: 18px !important">{{ name }}</div>
+                </div>
+
                 <div class="text-size-12 font-weight-400 text-muted" style="line-height: 18px !important">{{ extraNames }}</div>
               </div>
               <!--              <div v-if="extraNames" class="text-size-12 font-weight-400 text-muted">( {{ extraNames }} )</div>-->
@@ -55,7 +59,10 @@
           </div>
 
           <div class="third_column">
-            <div v-show="transactionAmount > 0" class="font-weight-700 text-size-14">{{ transactionAmount }} {{ transactionCurrency }}</div>
+            <div v-show="transactionAmount > 0" class="font-weight-700 text-size-14">
+              {{ transactionAmount }}
+              {{ transactionCurrency }}
+            </div>
           </div>
         </div>
       </template>
