@@ -193,7 +193,7 @@ const processAssistantText = () => {
       ? null
       : amountWords
           .reduce((total, value) => {
-            return total + parseInt(value)
+            return total + parseFloat(value)
           }, 0)
           .toString()
 
