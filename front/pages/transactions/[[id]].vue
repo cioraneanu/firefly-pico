@@ -26,7 +26,7 @@
       <van-cell-group inset class="mt-0 flex-column display-flex">
         <template #title v-if="isSplitPayment">
           <div>
-            <van-tag class="ml-5" type="warning"> Split payment </van-tag>
+            <van-tag class="ml-5" type="warning"> Split payment</van-tag>
           </div>
         </template>
 
@@ -81,12 +81,15 @@
 
         <tag-select v-model="tags" :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_TAG)" />
 
-        <app-date-time-grid
-          v-model="date"
-          :rules="[{ required: true, message: 'Date is required' }]"
-          required
-          :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DATE)"
-        />
+        <div :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DATE)">
+          <app-date-time-grid v-model="date" :rules="[{ required: true, message: 'Date is required' }]" required />
+
+          <div class="px-3 flex-center-vertical gap-1">
+            <van-button size="small" @click="onSubDay">-1 day</van-button>
+            <van-button size="small" @click="onToday">Today</van-button>
+            <van-button size="small" @click="onAddDay">+1 day</van-button>
+          </div>
+        </div>
 
         <app-field
           v-model="notes"
@@ -133,6 +136,8 @@ import Tag from '~/models/Tag'
 import { isStringEmpty } from '~/utils/DataUtils'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import { animateTransactionForm } from '~/utils/AnimationUtils.js'
+import tag from '~/models/Tag'
+import { addDays, endOfMonth, startOfMonth } from 'date-fns'
 
 const refAmount = ref(null)
 
@@ -190,6 +195,21 @@ const currency = computed(() => {
 //
 
 // ----- Custom logic -----
+
+const onSubDay = () => {
+  date.value = addDays(date.value, -1)
+}
+
+const onToday = () => {
+  const today = new Date()
+  let newDate = new Date(date.value)
+  newDate.setFullYear(today.getFullYear(), today.getMonth(), today.getDate())
+  date.value = newDate
+}
+
+const onAddDay = () => {
+  date.value = addDays(date.value, 1)
+}
 
 const onCreateTransactionTemplate = async () => {
   // dataStore.transactionToCopy = firstTransaction.value
@@ -251,6 +271,10 @@ watch(tags, async (newValue) => {
 })
 
 const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemplate: transactionTemplate, amount: newAmount, description: newDescription }) => {
+  tags.value = []
+  category.value = null
+  description.value = ''
+
   if (newTag) {
     tags.value = Tag.getTagWithParents(newTag)
     // tags.value = [newTag]
@@ -270,7 +294,9 @@ const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemp
     amount.value = newAmount
   }
 
-  description.value = newDescription
+  if (newDescription) {
+    description.value = newDescription
+  }
 }
 
 const isTypeExpense = computed(() => isEqual(type.value, Transaction.types.expense))
@@ -358,8 +384,6 @@ toolbar.init({
 onMounted(async () => {
   animateTransactionForm()
 })
-
-
 </script>
 
 <style></style>

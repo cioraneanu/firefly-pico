@@ -75,7 +75,7 @@ export async function animateDashboard() {
 
 
   anime({
-    targets: `.van-grid-item`,
+    targets: `.van-grid-item, .bar-container`,
     opacity: [0, 1],
     delay: anime.stagger(45, { start: 250 }),
   })
