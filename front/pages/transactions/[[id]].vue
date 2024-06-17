@@ -84,7 +84,7 @@
         <div :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DATE)">
           <app-date-time-grid v-model="date" :rules="[{ required: true, message: 'Date is required' }]" required />
 
-          <div class="px-3 flex-center-vertical gap-1">
+          <div v-if="!itemId" class="px-3 flex-center-vertical gap-1">
             <van-button size="small" @click="onSubDay">-1 day</van-button>
             <van-button size="small" @click="onToday">Today</van-button>
             <van-button size="small" @click="onAddDay">+1 day</van-button>

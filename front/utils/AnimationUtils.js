@@ -60,13 +60,6 @@ export async function animateSettings() {
 export async function animateDashboard() {
   await nextTick()
 
-  // anime({
-  //   targets: `.van-cell-group`,
-  //   translateX: [-50, 0],
-  //   opacity: [0, 1],
-  //   delay: anime.stagger(200, { start: 0 }),
-  // })
-
   anime({
     targets: `.van-cell-group`,
     opacity: [0, 1],
@@ -75,9 +68,9 @@ export async function animateDashboard() {
 
 
   anime({
-    targets: `.van-grid-item, .bar-container`,
+    targets: `.van-grid-item, .bar-container, .app-select-option-tag`,
     opacity: [0, 1],
-    delay: anime.stagger(45, { start: 250 }),
+    delay: anime.stagger(25, { start: 250  }),
   })
 
 

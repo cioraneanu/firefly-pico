@@ -46,12 +46,12 @@ const onRefresh = () => {
 const onRefreshDebounce = debounce(onRefresh, 200)
 
 onMounted(() => {
+  animateDashboard()
+
   if (dataStore.dashboard.transactionsListLastWeek.length > 0) {
     return
   }
   onRefreshDebounce()
-
-  animateDashboard()
 })
 
 const isLoadingDashboard = computed(() => {
