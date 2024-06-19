@@ -1,6 +1,6 @@
 <template>
   <van-tabbar @change="onChange" v-model="activeTab" :safe-area-inset-bottom="true" :fixed="true">
-    <van-tabbar-item :name="tabConstants.dashboard" @click="onChange(tabConstants.dashboard)">
+    <van-tabbar-item :name="tabConstants.dashboard">
       Home
       <template #icon="{ active }">
         <!--        <IconDeviceDesktopAnalytics />-->
@@ -8,7 +8,7 @@
       </template>
     </van-tabbar-item>
 
-    <van-tabbar-item :name="tabConstants.transactionList" @click="onChange(tabConstants.transactionList)">
+    <van-tabbar-item :name="tabConstants.transactionList">
       Transactions
       <template #icon="{ active }">
         <app-icon :icon="TablerIconConstants.transaction" :size="20" :stroke="getStrokeWidth(active)" />
@@ -17,20 +17,20 @@
 
 
 
-    <van-tabbar-item  :name="tabConstants.add" @click="onChange(tabConstants.add)" >
+    <van-tabbar-item  :name="tabConstants.add"  @click="animateBottomToolbarAddButton" >
       <template #icon="{ active }">
           <svg-add-icon width="40" height="40" id="add-new-transaction"/>
       </template>
     </van-tabbar-item>
 
-    <van-tabbar-item :name="tabConstants.extras" @click="onChange(tabConstants.extras)">
+    <van-tabbar-item :name="tabConstants.extras" >
       Extras
       <template #icon="{ active }">
         <app-icon :icon="TablerIconConstants.extras" :size="20" :stroke="getStrokeWidth(active)" />
       </template>
     </van-tabbar-item>
 
-    <van-tabbar-item :name="tabConstants.settings" @click="onChange(tabConstants.settings)" :dot="appStore.isNewVersionAvailable">
+    <van-tabbar-item :name="tabConstants.settings"  :dot="appStore.isNewVersionAvailable">
       Settings
       <template #icon="{ active }">
         <app-icon :icon="TablerIconConstants.settings" :size="20" :stroke="getStrokeWidth(active)" />
@@ -45,6 +45,7 @@ import { useAppStore } from '~/stores/appStore'
 import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import anime from 'animejs'
+import { animateBottomToolbarAddButton } from '~/utils/AnimationUtils.js'
 
 const dataStore = useDataStore()
 const appStore = useAppStore()
@@ -60,7 +61,6 @@ const tabConstants = {
 }
 const activeTab = ref(null)
 
-const isAddButtonVisible = computed(() => route.path !== RouteConstants.ROUTE_TRANSACTION_ID && route.path !== RouteConstants.ROUTE_HOME)
 watch(
   () => route.path,
   (newValue) => {
@@ -92,38 +92,12 @@ onMounted(async () => {
 
 })
 
-// watch(isAddButtonVisible, (newValue) => {
-//   console.log('isAddButtonVisible', {newValue})
-//   if (newValue) {
-//     anime({
-//       targets: '.bottom-add-button',
-//       scale: 1,
-//     });
-//   } else {
-//     anime({
-//       targets: '.bottom-add-button',
-//       scale: 0,
-//     });
-//   }
-//
-// }, {immediate: true})
-
 
 
 const getStrokeWidth = (active) => {
   return active ? 2.2 : 1.7
 }
 
-const onAnimateAdd = () => {
-  anime({
-    targets: `#add-new-transaction`,
-    scale: [1, 0.2],
-    direction: 'alternate',
-    duration: 300,
-    delay: 0,
-    easing: 'easeInExpo'
-  })
-}
 
 const onChange = async (code) => {
   switch (code) {
@@ -132,7 +106,6 @@ const onChange = async (code) => {
       break
 
     case tabConstants.add:
-      onAnimateAdd()
       await navigateTo(RouteConstants.ROUTE_TRANSACTION_ID)
       break
 

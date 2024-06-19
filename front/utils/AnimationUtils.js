@@ -72,6 +72,17 @@ export async function animateDashboard() {
     opacity: [0, 1],
     delay: anime.stagger(25, { start: 250  }),
   })
+}
 
-
+export async function animateBottomToolbarAddButton() {
+  anime({
+    targets: `#add-new-transaction`,
+    // translateY: [0, -10],
+    scale: [1, 0.2],
+    opacity: [1, 0.4],
+    direction: 'alternate',
+    duration: 150,
+    delay: 0,
+    easing: 'easeOutSine'
+  })
 }
