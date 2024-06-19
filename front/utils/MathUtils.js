@@ -10,6 +10,9 @@ export const getFormattedValue = (value, digits = 0) => {
   if (!appStore.dashboard.showAccountAmounts) {
     return '******'
   }
+  if (appStore.showDecimal) {
+    digits = 2
+  }
   let numberFormatCode = appStore.numberFormat.code ?? NUMBER_FORMAT.eu.code
   return new Intl.NumberFormat(numberFormatCode, { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value)
 }

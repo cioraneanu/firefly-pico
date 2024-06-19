@@ -53,6 +53,7 @@ export const useAppStore = defineStore('app', {
       lowerCaseAccountName: useLocalStorage('lowerCaseAccountName', false),
       lowerCaseCategoryName: useLocalStorage('lowerCaseCategoryName', true),
       lowerCaseTagName: useLocalStorage('lowerCaseTagName', true),
+      showDecimal: useLocalStorage('showDecimals', false),
 
       heroIcons: useLocalStorage(
         'heroIcons',
