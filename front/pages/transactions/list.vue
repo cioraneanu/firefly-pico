@@ -114,6 +114,11 @@ let filtersDictionary = computed(() => {
       active: !!_filter.tag,
     },
     {
+      display: `- Tag: ${Tag.getDisplayNameEllipsized(_filter.excludedTag)}`,
+      filter: `-tag_is:"${Tag.getDisplayNameEllipsized(_filter.excludedTag)}"`,
+      active: !!_filter.excludedTag,
+    },
+    {
       display: `No tags`,
       filter: `has_any_tag:false"`,
       active: !!_filter.withoutTag,
@@ -124,6 +129,11 @@ let filtersDictionary = computed(() => {
       active: !!_filter.category,
     },
     {
+      display: `- Category: ${Category.getDisplayName(_filter.excludedCategory)}`,
+      filter: `-category_is:"${Category.getDisplayName(_filter.excludedCategory)}"`,
+      active: !!_filter.excludedCategory,
+    },
+    {
       display: `No category`,
       filter: `has_any_category:false"`,
       active: !!_filter.withoutCategory,
@@ -132,6 +142,11 @@ let filtersDictionary = computed(() => {
       display: `Account: ${Account.getDisplayName(_filter.account)}`,
       filter: `account_is:"${Account.getDisplayName(_filter.account)}"`,
       active: !!_filter.account,
+    },
+    {
+      display: `- Account: ${Account.getDisplayName(_filter.excludedAccount)}`,
+      filter: `-account_is:"${Account.getDisplayName(_filter.excludedAccount)}"`,
+      active: !!_filter.excludedAccount,
     },
     {
       display: `Amount > ${_filter.amountStart}`,
@@ -187,9 +202,12 @@ toolbar.init({
 onMounted(() => {
   let urlFilters = {
     tag: dataStore.tagDictionaryById[get(route.query, 'tag_id')],
+    excludedTag: dataStore.tagDictionaryById[get(route.query, 'excluded_tag_id')],
     transactionType: Object.values(Transaction.types).find((item) => item.code === get(route.query, 'type')),
     category: dataStore.categoryDictionary[get(route.query, 'category_id')],
+    excludedCategory: dataStore.categoryDictionary[get(route.query, 'excluded_category_id')],
     account: dataStore.accountDictionary[get(route.query, 'account_id')],
+    excludedAccount: dataStore.accountDictionary[get(route.query, 'excluded_account_id')],
     description: get(route.query, 'description'),
     dateStart: DateUtils.stringToDate(get(route.query, 'date_start')),
     dateEnd: DateUtils.stringToDate(get(route.query, 'date_end')),

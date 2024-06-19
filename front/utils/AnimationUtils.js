@@ -27,7 +27,7 @@ export async function animateTransactionForm() {
     duration: 1000,
     complete: function (anim) {
       // Temporary fix... for some reason leaving "transform: translateY(0px);" after the animation is finished on .van-cell-group causes the app-select popup to not go fullscreen... Hmmm...
-      document.querySelector(".van-cell-group").removeAttribute('style')
+      document.querySelector(".van-cell-group")?.removeAttribute('style')
     },
     // easing: 'easeOutElastic(1, .6)'
   })

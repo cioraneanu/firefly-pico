@@ -82,7 +82,9 @@ const totalSurplusFormatted = computed(() => getFormattedValue(dataStore.totalSu
 const onGoToTransactionsByType = async (type) => {
   const startDate = DateUtils.dateToString(dataStore.dashboardDateStart)
   const endDate = DateUtils.dateToString(dataStore.dashboardDateEnd)
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?type=${type}&date_start=${startDate}&date_end=${endDate}`)
+  let excludedUrl = getExcludedTransactionUrl()
+
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?type=${type}&date_start=${startDate}&date_end=${endDate}${excludedUrl}`)
 }
 
 const onNextMonth = () => {

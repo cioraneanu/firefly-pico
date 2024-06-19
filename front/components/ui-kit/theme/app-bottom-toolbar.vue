@@ -19,9 +19,7 @@
 
     <van-tabbar-item  :name="tabConstants.add" @click="onChange(tabConstants.add)" >
       <template #icon="{ active }">
-<!--        <transition name="zoom-fade">-->
-          <svg-add-icon width="40" height="40"/>
-<!--        </transition>-->
+          <svg-add-icon width="40" height="40" id="add-new-transaction"/>
       </template>
     </van-tabbar-item>
 
@@ -116,6 +114,17 @@ const getStrokeWidth = (active) => {
   return active ? 2.2 : 1.7
 }
 
+const onAnimateAdd = () => {
+  anime({
+    targets: `#add-new-transaction`,
+    scale: [1, 0.2],
+    direction: 'alternate',
+    duration: 300,
+    delay: 0,
+    easing: 'easeInExpo'
+  })
+}
+
 const onChange = async (code) => {
   switch (code) {
     case tabConstants.dashboard:
@@ -123,6 +132,7 @@ const onChange = async (code) => {
       break
 
     case tabConstants.add:
+      onAnimateAdd()
       await navigateTo(RouteConstants.ROUTE_TRANSACTION_ID)
       break
 

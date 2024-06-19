@@ -31,6 +31,7 @@ import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
 import Tag from '~/models/Tag.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
 
 const dataStore = useDataStore()
 
@@ -57,12 +58,14 @@ const barsList = computed(() => {
 const onClick = async ({tag_id, tag}) => {
   const startDate = DateUtils.dateToString(dataStore.dashboardDateStart)
   const endDate = DateUtils.dateToString(dataStore.dashboardDateEnd)
+  let excludedUrl = getExcludedTransactionUrl()
+
 
   if (!tag) {
-    await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_tag=true&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}`)
+    await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_tag=true&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}${excludedUrl}`)
     return
   }
 
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${tag_id}&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}`)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${tag_id}&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}${excludedUrl}`)
 }
 </script>
