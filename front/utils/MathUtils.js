@@ -10,7 +10,7 @@ export const getFormattedValue = (value, digits = 0) => {
   if (!appStore.dashboard.showAccountAmounts) {
     return '******'
   }
-  if (appStore.showDecimal) {
+  if (appStore.dashboard.showDecimal) {
     digits = 2
   }
   let numberFormatCode = appStore.numberFormat.code ?? NUMBER_FORMAT.eu.code

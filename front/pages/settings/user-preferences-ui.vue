@@ -31,7 +31,6 @@
         <app-boolean label="Force account name lowercase:" v-model="lowerCaseAccountName" />
         <app-boolean label="Force category name lowercase:" v-model="lowerCaseCategoryName" />
         <app-boolean label="Force tag name lowercase:" v-model="lowerCaseTagName" />
-        <app-boolean label="Show decimal places:" v-model="showDecimal" />
       </van-cell-group>
 
       <app-button-form-save />
@@ -62,7 +61,6 @@ const lowerCaseTransactionDescription = ref(false)
 const lowerCaseAccountName = ref(false)
 const lowerCaseCategoryName = ref(false)
 const lowerCaseTagName = ref(false)
-const showDecimal = ref(false)
 
 onMounted(() => {
   init()
@@ -75,7 +73,6 @@ const onSave = async () => {
   appStore.lowerCaseAccountName = lowerCaseAccountName.value
   appStore.lowerCaseCategoryName = lowerCaseCategoryName.value
   appStore.lowerCaseTagName = lowerCaseTagName.value
-  appStore.showDecimal = showDecimal.value
 
   appStore.darkTheme = darkTheme.value
 
@@ -90,7 +87,6 @@ const init = () => {
   lowerCaseAccountName.value = appStore.lowerCaseAccountName
   lowerCaseCategoryName.value = appStore.lowerCaseCategoryName
   lowerCaseTagName.value = appStore.lowerCaseTagName
-  showDecimal.value = appStore.showDecimal
 
   darkTheme.value = appStore.darkTheme
 }

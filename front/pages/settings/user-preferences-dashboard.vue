@@ -6,6 +6,7 @@
       <van-cell-group inset>
         <div class="van-cell-group-title mb-0">Config:</div>
         <app-boolean label="Show accounts with 0 amount:" v-model="areEmptyAccountsVisible" />
+        <app-boolean label="Show decimal places:" v-model="showDecimal" />
       </van-cell-group>
 
       <van-cell-group inset>
@@ -34,6 +35,8 @@ const appStore = useAppStore()
 const dataStore = useDataStore()
 
 const areEmptyAccountsVisible = ref(false)
+const showDecimal = ref(false)
+
 
 const excludedAccountsList = ref([])
 const excludedCategoriesList = ref([])
@@ -45,6 +48,7 @@ onMounted(() => {
 
 const onSave = async () => {
   appStore.dashboard.areEmptyAccountsVisible = areEmptyAccountsVisible.value
+  appStore.dashboard.showDecimal = showDecimal.value
 
   appStore.dashboard.excludedAccountsList = excludedAccountsList.value
   appStore.dashboard.excludedCategoriesList = excludedCategoriesList.value
@@ -56,6 +60,8 @@ const onSave = async () => {
 
 const init = () => {
   areEmptyAccountsVisible.value = appStore.dashboard.areEmptyAccountsVisible
+  showDecimal.value = appStore.dashboard.showDecimal
+
 
   excludedAccountsList.value = appStore.dashboard.excludedAccountsList
   excludedCategoriesList.value = appStore.dashboard.excludedCategoriesList
