@@ -40,6 +40,8 @@ export default class AccountTransformer extends ApiTransformer {
       icon: get(data, 'icon.icon'),
       type: get(data, 'type.fireflyCode'),
       account_role: get(data, 'account_role.fireflyCode'),
+      credit_card_type: get(data, 'credit_card_type'),
+      monthly_payment_date: get(data, 'monthly_payment_date'),
       currency_id: get(data, 'currency.id'),
       currency_code: get(data, 'currency.attributes.code'),
 
