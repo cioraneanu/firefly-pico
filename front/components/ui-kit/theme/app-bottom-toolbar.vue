@@ -1,6 +1,6 @@
 <template>
-  <van-tabbar @change="onChange" v-model="activeTab" :safe-area-inset-bottom="true" :fixed="true">
-    <van-tabbar-item :name="tabConstants.dashboard">
+  <van-tabbar v-model="activeTab" :safe-area-inset-bottom="true" :fixed="true">
+    <van-tabbar-item :name="tabConstants.dashboard" @click="onChange(tabConstants.dashboard)">
       Home
       <template #icon="{ active }">
         <!--        <IconDeviceDesktopAnalytics />-->
@@ -8,29 +8,27 @@
       </template>
     </van-tabbar-item>
 
-    <van-tabbar-item :name="tabConstants.transactionList">
+    <van-tabbar-item :name="tabConstants.transactionList" @click="onChange(tabConstants.transactionList)">
       Transactions
       <template #icon="{ active }">
         <app-icon :icon="TablerIconConstants.transaction" :size="20" :stroke="getStrokeWidth(active)" />
       </template>
     </van-tabbar-item>
 
-
-
-    <van-tabbar-item  :name="tabConstants.add"  @click="animateBottomToolbarAddButton" >
+    <van-tabbar-item :name="tabConstants.add" @click="onNewTransaction">
       <template #icon="{ active }">
-          <svg-add-icon width="40" height="40" id="add-new-transaction"/>
+        <svg-add-icon width="40" height="40" id="add-new-transaction" />
       </template>
     </van-tabbar-item>
 
-    <van-tabbar-item :name="tabConstants.extras" >
+    <van-tabbar-item :name="tabConstants.extras" @click="onChange(tabConstants.extras)">
       Extras
       <template #icon="{ active }">
         <app-icon :icon="TablerIconConstants.extras" :size="20" :stroke="getStrokeWidth(active)" />
       </template>
     </van-tabbar-item>
 
-    <van-tabbar-item :name="tabConstants.settings"  :dot="appStore.isNewVersionAvailable">
+    <van-tabbar-item :name="tabConstants.settings" :dot="appStore.isNewVersionAvailable" @click="onChange(tabConstants.settings)">
       Settings
       <template #icon="{ active }">
         <app-icon :icon="TablerIconConstants.settings" :size="20" :stroke="getStrokeWidth(active)" />
@@ -88,16 +86,16 @@ watch(
   { deep: true, immediate: true },
 )
 
-onMounted(async () => {
-
-})
-
-
+onMounted(async () => {})
 
 const getStrokeWidth = (active) => {
   return active ? 2.2 : 1.7
 }
 
+const onNewTransaction = () => {
+  animateBottomToolbarAddButton()
+  onChange(tabConstants.add)
+}
 
 const onChange = async (code) => {
   switch (code) {

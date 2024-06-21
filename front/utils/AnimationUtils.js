@@ -6,8 +6,6 @@ export function animateSwipeList(list) {
 
     anime({
       targets: `.van-swipe-cell:nth-child(n+${oldValue.length ?? 0})`,
-      // scale: [0.6, 1.0],
-      // translateX: [50, 0],
       translateY: [-50, 0],
       opacity: [0, 1],
       delay: anime.stagger(25, { start: 0 }), // delay starts at 500ms then increase by 100ms for each elements.
@@ -29,7 +27,6 @@ export async function animateTransactionForm() {
       // Temporary fix... for some reason leaving "transform: translateY(0px);" after the animation is finished on .van-cell-group causes the app-select popup to not go fullscreen... Hmmm...
       document.querySelector(".van-cell-group")?.removeAttribute('style')
     },
-    // easing: 'easeOutElastic(1, .6)'
   })
 }
 
@@ -38,23 +35,9 @@ export async function animateSettings() {
 
   anime({
     targets: `.van-cell, .van-grid-item`,
-
-    // translateY: [50, 0],
     opacity: [0, 1],
-
-    // translateY: [-10, 0],
-    // opacity: [0.1, 1],
-    // duration: 400,
     delay: anime.stagger(45, { start: 0 }),
   })
-
-  // anime({
-  //   targets: `.van-cell-group`,
-  //   translateY: [-100, 0],
-  //   opacity: [0, 1],
-  //   duration: 1000,
-  //   delay: anime.stagger(100, { start: 200 }),
-  // })
 }
 
 export async function animateDashboard() {
@@ -77,7 +60,6 @@ export async function animateDashboard() {
 export async function animateBottomToolbarAddButton() {
   anime({
     targets: `#add-new-transaction`,
-    // translateY: [0, -10],
     scale: [1, 0.2],
     opacity: [1, 0.4],
     direction: 'alternate',
