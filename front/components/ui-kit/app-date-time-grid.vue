@@ -28,7 +28,7 @@
       </div>
     </div>
 
-    <van-calendar v-model:show="showDatePicker" @confirm="onConfirmDate" :show-confirm="false" :min-date="minDate" :max-date="maxDate" color="#000" first-day-of-week="1" />
+    <van-calendar @open="onOpen" v-model:show="showDatePicker" @confirm="onConfirmDate" :show-confirm="false" :min-date="minDate" :max-date="maxDate" color="#000" first-day-of-week="1" />
 
     <van-popup v-model:show="showTimePicker" round position="bottom" style="padding-top: 4px">
       <div ref="popupRef" class="h-100 display-flex flex-column app-date-time-grid">
@@ -74,8 +74,9 @@ import { useDataStore } from '~/stores/dataStore'
 import DateUtils from '~/utils/DateUtils'
 import { addDays, addYears, startOfDay, subYears } from 'date-fns'
 import { useFormAttributes } from '~/composables/useFormAttributes'
-import { clone } from 'lodash'
+import { clone, head } from 'lodash'
 import { usePointerSwipe } from '@vueuse/core'
+import { useSwipeToDismiss } from '~/composables/useSwipeToDismiss.js'
 
 const dataStore = useDataStore()
 const attrs = useAttrs()
@@ -197,6 +198,21 @@ const { distanceY } = usePointerSwipe(popupRef, {
       onConfirmTime()
     }
   },
+})
+
+const appCalendar = ref(null)
+
+const onOpen = async () => {
+  await nextTick()
+  appCalendar.value = head(document.getElementsByClassName('van-calendar__popup'))
+}
+
+useSwipeToDismiss({
+  onSwipe: () => {
+    showDatePicker.value = false
+  },
+  swipeRef: appCalendar,
+  showDropdown: showDatePicker,
 })
 
 // -------------------------------
