@@ -3,6 +3,7 @@ import Account from '~/models/Account'
 import ApiTransformer from '~/transformers/ApiTransformer'
 import { useDataStore } from '~/stores/dataStore'
 import Icon from '~/models/Icon.js'
+import { startOfMonth } from 'date-fns'
 
 export default class AccountTransformer extends ApiTransformer {
   static transformFromApi(item) {
@@ -34,15 +35,9 @@ export default class AccountTransformer extends ApiTransformer {
     }
 
     let data = _.get(item, 'attributes')
-    let creditCardType = get(data, 'credit_card_type')
-    if (creditCardType == null) {
-      creditCardType = 'monthlyFull'
-    }
-    let monthlyPaymentDate = get(data, 'monthly_payment_date')
-    if (monthlyPaymentDate == null) {
-      monthlyPaymentDate = '0001-01-01T00:00:00+01:34'
-    }
-    
+    let creditCardType = get(data, 'credit_card_type') ?? Account.creditCardPaymentPlans.monthlyFull
+    let monthlyPaymentDate = get(data, 'monthly_payment_date') ?? DateUtils.dateToString(startOfMonth(new Date()), DateUtils.FORMAT_ENGLISH_DATE )
+
     return {
       name: get(data, 'name', ''),
       icon: get(data, 'icon.icon'),

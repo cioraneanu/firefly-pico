@@ -66,6 +66,12 @@ class Account extends BaseModel {
 
   // ------------
 
+  static get creditCardPaymentPlans() {
+    return {
+      monthlyFull: 'monthlyFull',
+    }
+  }
+
   static get types() {
     return {
       cash: {
