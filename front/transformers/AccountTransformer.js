@@ -34,12 +34,22 @@ export default class AccountTransformer extends ApiTransformer {
     }
 
     let data = _.get(item, 'attributes')
-
+    let creditCardType = get(data, 'credit_card_type')
+    if (creditCardType == null) {
+      creditCardType = 'monthlyFull'
+    }
+    let monthlyPaymentDate = get(data, 'monthly_payment_date')
+    if (monthlyPaymentDate == null) {
+      monthlyPaymentDate = '0001-01-01T00:00:00+01:34'
+    }
+    
     return {
       name: get(data, 'name', ''),
       icon: get(data, 'icon.icon'),
       type: get(data, 'type.fireflyCode'),
       account_role: get(data, 'account_role.fireflyCode'),
+      credit_card_type:  creditCardType,
+      monthly_payment_date: monthlyPaymentDate,
       currency_id: get(data, 'currency.id'),
       currency_code: get(data, 'currency.attributes.code'),
 
