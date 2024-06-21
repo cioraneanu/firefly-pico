@@ -10,6 +10,7 @@
 
 <script setup>
 import anime from 'animejs'
+import { animateSaveButton } from '~/utils/AnimationUtils.js'
 
 const props = defineProps({
   label: {
@@ -34,12 +35,6 @@ const style = computed(() => {
 })
 
 onMounted(async () => {
-  anime({
-    targets: '.app-button-save',
-    opacity: [0, 1],
-    scale: [0.7, 1],
-    delay: 200,
-    duration: 700,
-  })
+  await animateSaveButton()
 })
 </script>

@@ -87,7 +87,7 @@
           <div v-if="!itemId" class="px-3 flex-center-vertical gap-1">
             <van-button size="small" @click="onSubDay">-1 day</van-button>
             <van-button size="small" @click="onToday">Today</van-button>
-            <van-button size="small" @click="onAddDay">+1 day</van-button>
+            <van-button size="small" @click="onAddDay" >+1 day</van-button>
           </div>
         </div>
 

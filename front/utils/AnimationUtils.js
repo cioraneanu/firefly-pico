@@ -68,3 +68,15 @@ export async function animateBottomToolbarAddButton() {
     easing: 'easeOutSine'
   })
 }
+
+export async function animateSaveButton() {
+  await nextTick()
+
+  anime({
+    targets: '.app-button-save',
+    opacity: [0, 1],
+    scale: [0.7, 1],
+    delay: 200,
+    duration: 700,
+  })
+}
