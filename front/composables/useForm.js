@@ -111,29 +111,18 @@ export function useForm(props) {
     }
 
     if (ResponseUtils.isSuccess(response)) {
-      // UIUtils.showToastSuccess(Vue.prototype.$my_t('entity_action_results.update_entity_completed'))
       UIUtils.showToastSuccess('Success')
-
       let responseId = _.get(response, 'data.data.id')
-      // await nextTick()
-      //   step1: response,
-      //   step2: _.get(response, 'data'),
-      //   step3: _.get(response, 'data.data'),
-      //   step4: _.get(response, 'data.data.id'),
-      //   responseId
-      // })
-      // itemId.value = responseId
-
       itemId.value = _.get(response, 'data.data.id')
-
       onEvent ? onEvent('onPostSave', response) : null
+      isLoading.value = false
       await navigateTo(`${routeForm}/${responseId}`)
     } else {
-      let errorMessage = _.get(response, 'data.message')
+      isLoading.value = false
+      // let errorMessage = _.get(response, 'data.message')
       // UIUtils.showToastError(`Unexpected error. ${errorMessage}`)
     }
 
-    isLoading.value = false
     return response
   }
 

@@ -14,9 +14,10 @@ class Category extends BaseModel {
 
   getEmpty() {
     return {
-      name: '',
-      type: null,
-      role: null,
+      attributes: {
+        name: '',
+        icon: null,
+      }
     }
   }
 

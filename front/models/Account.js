@@ -16,9 +16,15 @@ class Account extends BaseModel {
 
   getEmpty() {
     return {
-      name: '',
-      type: null,
-      role: null,
+      attributes: {
+        name: '',
+        icon: null,
+        type: null,
+        role: null,
+        include_net_worth: true,
+        is_dashboard_visible: true,
+      }
+
     }
   }
 

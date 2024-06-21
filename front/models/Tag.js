@@ -15,7 +15,12 @@ class Tag extends BaseModel {
 
   getEmpty() {
     return {
-      name: '',
+      attributes: {
+        tag: '',
+        parentTag: null,
+        icon: null,
+        is_todo: false,
+      },
     }
   }
 

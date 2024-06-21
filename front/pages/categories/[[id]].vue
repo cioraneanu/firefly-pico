@@ -74,7 +74,7 @@ let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveI
   onEvent: onEvent,
 })
 
-const { name, type, role, icon } = generateChildren(item, [
+const { name, icon } = generateChildren(item, [
   { computed: 'name', parentKey: 'attributes.name' },
   { computed: 'icon', parentKey: `attributes.icon` },
 ])
