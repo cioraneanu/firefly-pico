@@ -54,17 +54,17 @@ Several (bad) ideas later I've come to this version. A transaction assistant :to
   <img src="docs/images/demo.gif" width="300">
 </div>
 
-| Action                                                                          | Result                                                                                                                                                                                                                                                                                                                                                                                   |
-|---------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| - Partially write the name of a "tag" + "amount".<br>- Hit "Save". You're done!<br>(Ex. "elctr 28") | - Source account is preselected in Settings.<br>- Date is automatically set to "now"<br>- Fuzzy search found a tag with name close to what you typed ("electricity"). It also selected all of its parent tags.<br>- Category is selected by matching it to one of the tags above.<br>- The description field is copied from the child tag. <br> [Assistant details](./docs/assistant.md) |
+| Action                                                                          | Result                                                                                                                                                                                                                                                                                                                                                                                        |
+|---------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| - Partially write the name of a "tag" + "amount".<br>- Hit "Save". You're done!<br>(Ex. "elctr 28") | - Source account is preselected in Settings.<br>- Date is automatically set to "now"<br>- Fuzzy search found a tag with name close to what you typed ("electricity"). It also selected all of its parent tags.<br>- Category is selected by matching it to one of the tags above.<br>- The description field is copied from the child tag. <br><br> [Assistant tutorial](./docs/assistant.md) |
 
 
 
 
 ## 🚀 Features
-- ✅ Beautiful clean minimalistic UI :fire:
-- ✅ Optimized for mobile :iphone:
-- ✅ The assistant makes recording expenses feel like magic :sparkles:
+- ✅ Beautiful clean minimalistic UI :fire: subtle animations and dark-theme support :first_quarter_moon_with_face: 
+- ✅ Optimized for mobile, with PWA support for a native feel :iphone:
+- ✅ The Assistant makes recording an expense feel like magic :sparkles:
 - ✅ Expand Firefly data with icons for all resources :art:
 - ✅ Expand Firefly "tags" with the option of subtags for better granularity
 - ✅ Add "templates" to make auto-completing fields a breeze :loudspeaker:

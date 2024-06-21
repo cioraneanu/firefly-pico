@@ -22,7 +22,7 @@ export function useSwipeToDismiss({ onSwipe, swipeRef, showDropdown }) {
 
   const { x, y } = useScroll(swipeRef)
 
-  const { lengthY: swipeYDistance,  } = useSwipe(swipeRef, {
+  const { lengthY: swipeYDistance } = useSwipe(swipeRef, {
     disableTextSelect: true,
 
     onSwipeStart(e) {
@@ -36,10 +36,8 @@ export function useSwipeToDismiss({ onSwipe, swipeRef, showDropdown }) {
       let velocity = Math.abs(swipeYDistance.value) / duration
       // console.log('velocity', {duration, velocity, swipeYDistance: swipeYDistance.value})
 
-      if (zIndex === globalZIndex && swipeYDistance.value < -100) {
-        if (isScrollOnTop || velocity >= 1.0) {
-          onSwipe()
-        }
+      if (zIndex === globalZIndex && swipeYDistance.value < -100 && velocity >= 1.0) {
+        onSwipe()
       }
 
       isScrollOnTop = false
