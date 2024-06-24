@@ -15,7 +15,7 @@ export default class AppSettingsTransformer extends ApiTransformer {
     }
 
     return {
-      settings: item,
+      settings: JSON.stringify(item),
     }
   }
 }
