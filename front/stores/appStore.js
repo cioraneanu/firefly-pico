@@ -13,6 +13,7 @@ import AppSettingsRepository from '~/repository/AppSettingsRepository'
 import AppSettingsTransformer from '~/transformers/AppSettingsTransformer'
 
 const PERSISTED_FIELDS = new Set([
+  'darkTheme',
   'voiceLanguage',
   'autoAddTransactionFromVoice',
   'defaultAccountSource',
@@ -49,6 +50,7 @@ export const useAppStore = defineStore('app', {
       queryTimeout: runtimeConfig.public.queryTimeout,
       latestAppVersion: null,
 
+      darkTheme: useLocalStorage('darkTheme', false),
       authToken: useLocalStorage('authToken', ''),
       picoBackendURL: useLocalStorage('picoBackendURL', defaultUrl),
 
