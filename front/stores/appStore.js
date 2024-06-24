@@ -131,6 +131,9 @@ export const useAppStore = defineStore('app', {
       const newValues = AppSettingsTransformer.transformFromApi(response.data)
 
       for (let key of PERSISTED_FIELDS.values()) {
+        if (!(key in newValues)) {
+          continue
+        }
         if (NESTED_FIELDS.has(key)) {
           for (let nestedKey of Object.keys(newValues[key])) {
             this.$state[key][nestedKey] = newValues[key][nestedKey]
