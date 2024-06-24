@@ -27,7 +27,7 @@ onMounted(async () => {
   }
 
   await dataStore.syncEverythingIfOld()
-  await appStore.fetchLatestAppVersion()
+  await appStore.syncEverything()
 })
 
 const { isLoading } = storeToRefs(dataStore)

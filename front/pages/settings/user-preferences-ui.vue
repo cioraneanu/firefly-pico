@@ -76,6 +76,8 @@ const onSave = async () => {
 
   appStore.darkTheme = darkTheme.value
 
+  await appStore.writeAppSettings()
+
   UIUtils.showToastSuccess('User preferences saved')
   init()
 }

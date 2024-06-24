@@ -9,12 +9,38 @@ import InfoRepository from '~/repository/InfoRepository.js'
 import { get } from 'lodash'
 import { HERO_ICONS, HERO_ICONS_LIST } from '~/constants/TransactionConstants.js'
 import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
+import AppSettingsRepository from '~/repository/AppSettingsRepository'
+import AppSettingsTransformer from '~/transformers/AppSettingsTransformer'
+
+const PERSISTED_FIELDS = new Set([
+  'voiceLanguage',
+  'autoAddTransactionFromVoice',
+  'defaultAccountSource',
+  'defaultAccountDestination',
+  'defaultCategory',
+  'defaultTags',
+  'autoAddedTags',
+  'quickValueButtons',
+  'transactionOrderedFieldsList',
+  'dateFormat',
+  'copyCategoryToDescription',
+  'copyTagToDescription',
+  'copyTagToCategory',
+  'showTagSelectAsGrid',
+  'numberFormat',
+  'lowerCaseTransactionDescription',
+  'lowerCaseAccountName',
+  'lowerCaseCategoryName',
+  'lowerCaseTagName',
+  'dashboard',
+])
+
+const NESTED_FIELDS = new Set(['dashboard'])
 
 export const useAppStore = defineStore('app', {
   state: () => {
     const defaultUrl = window.location.origin
     const runtimeConfig = useRuntimeConfig()
-    // const appVersion = runtimeConfig.public.version
 
     return {
       isLoading: false,
@@ -23,7 +49,6 @@ export const useAppStore = defineStore('app', {
       queryTimeout: runtimeConfig.public.queryTimeout,
       latestAppVersion: null,
 
-      darkTheme: useLocalStorage('darkTheme', false),
       authToken: useLocalStorage('authToken', ''),
       picoBackendURL: useLocalStorage('picoBackendURL', defaultUrl),
 
@@ -84,14 +109,60 @@ export const useAppStore = defineStore('app', {
   },
 
   actions: {
+    async syncEverything() {
+      if (!this.hasAuthToken) {
+        return
+      }
+      const async1 = this.fetchLatestAppVersion()
+      const async2 = this.fetchAppSettings()
+      await Promise.all([async1, async2])
+      this.lastSync = new Date()
+    },
+
+    async fetchAppSettings() {
+      const response = await new AppSettingsRepository().getSettings(this.authToken)
+
+      if (response.data == null) {
+        return
+      }
+
+      const newValues = AppSettingsTransformer.transformFromApi(response.data)
+
+      for (let key of PERSISTED_FIELDS.values()) {
+        if (NESTED_FIELDS.has(key)) {
+          const nested = {}
+          for (let nestedKey in Object.keys(newValues[key])) {
+            nested[nestedKey] = newValues[key][nestedKey]
+          }
+          this.$state[key] = nested
+        } else {
+          this.$state[key] = newValues[key]
+        }
+      }
+    },
+
     async fetchLatestAppVersion() {
       let response = await new InfoRepository().getLatestVersion()
       if (!ResponseUtils.isSuccess(response)) {
         return
       }
       this.latestAppVersion = get(response, 'data')
+    },
 
-      // this.latestAppVersion = head(versions)
+    async writeAppSettings() {
+      const data = {}
+      for (let key of PERSISTED_FIELDS.values()) {
+        if (NESTED_FIELDS.has(key)) {
+          const nested = {}
+          for (let nestedKey in Object.keys(this.$state[key])) {
+            nested[nestedKey] = this.$state[key][nestedKey]
+          }
+          data[key] = nested
+        } else {
+          data[key] = this.$state[key]
+        }
+      }
+      await new AppSettingsRepository().writeSettings(this.authToken, AppSettingsTransformer.transformToApi(data))
     },
   },
 })

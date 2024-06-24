@@ -1,7 +1,4 @@
-import axios from 'axios'
 import _, { get } from 'lodash'
-import { useAppStore } from '~/stores/appStore'
-import UIUtils from '~/utils/UIUtils'
 
 export default class BaseModel {
   constructor() {}

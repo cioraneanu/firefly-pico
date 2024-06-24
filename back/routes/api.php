@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AppSettingsController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\TagController;
@@ -39,6 +40,8 @@ Route::get('currencies/exchange', [CurrencyController::class, 'exchangeRates']);
 RouteUtils::makeCRUD("transactions", TransactionController::class);
 Route::get('search/transactions', [TransactionController::class, 'getAll']);
 
+Route::get("app_settings", [AppSettingsController::class, "get"]);
+Route::put("app_settings", [AppSettingsController::class, "createOrUpdate"]);
 
 
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

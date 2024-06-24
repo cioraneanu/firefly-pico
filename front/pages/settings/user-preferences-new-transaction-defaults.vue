@@ -48,6 +48,8 @@ const onSave = async () => {
   appStore.defaultTags = defaultTags.value
   appStore.autoAddedTags = autoAddedTags.value
 
+  await appStore.writeAppSettings()
+
   UIUtils.showToastSuccess('User preferences saved')
   init()
 }
