@@ -132,11 +132,9 @@ export const useAppStore = defineStore('app', {
 
       for (let key of PERSISTED_FIELDS.values()) {
         if (NESTED_FIELDS.has(key)) {
-          const nested = {}
-          for (let nestedKey in Object.keys(newValues[key])) {
-            nested[nestedKey] = newValues[key][nestedKey]
+          for (let nestedKey of Object.keys(newValues[key])) {
+            this.$state[key][nestedKey] = newValues[key][nestedKey]
           }
-          this.$state[key] = nested
         } else {
           this.$state[key] = newValues[key]
         }
@@ -155,11 +153,10 @@ export const useAppStore = defineStore('app', {
       const data = {}
       for (let key of PERSISTED_FIELDS.values()) {
         if (NESTED_FIELDS.has(key)) {
-          const nested = {}
-          for (let nestedKey in Object.keys(this.$state[key])) {
-            nested[nestedKey] = this.$state[key][nestedKey]
+          data[key] = {}
+          for (let nestedKey of Object.keys(this.$state[key])) {
+            data[key][nestedKey] = this.$state[key][nestedKey]
           }
-          data[key] = nested
         } else {
           data[key] = this.$state[key]
         }
