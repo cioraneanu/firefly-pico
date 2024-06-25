@@ -9,7 +9,7 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::create('app_settings', function (Blueprint $table) {
+        Schema::create('profiles', function (Blueprint $table) {
             $table->string("auth_token_hash")->primary();
             $table->timestamps();
 
@@ -20,6 +20,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('app_settings');
+        Schema::dropIfExists('profiles');
     }
 };

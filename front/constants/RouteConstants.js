@@ -33,8 +33,6 @@ export default {
   ROUTE_CURRENCY_LIST: '/currencies/list',
   ROUTE_CURRENCY_ID: '/currencies',
 
-  ROUTE_APP_SETTINGS: '/app_settings',
-
   isForm(routeForm, currentForm) {
     let regex = new RegExp(`${routeForm}/[0-9]+`)
     return regex.test(currentForm)

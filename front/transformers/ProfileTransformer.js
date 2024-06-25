@@ -1,12 +1,12 @@
 import ApiTransformer from '~/transformers/ApiTransformer'
 
-export default class AppSettingsTransformer extends ApiTransformer {
+export default class ProfileTransformer extends ApiTransformer {
   static transformFromApi(item) {
     if (!item) {
       return null
     }
 
-    return JSON.parse(item.settings)
+    return item.settings
   }
 
   static transformToApi(item) {
@@ -15,7 +15,7 @@ export default class AppSettingsTransformer extends ApiTransformer {
     }
 
     return {
-      settings: JSON.stringify(item),
+      settings: item,
     }
   }
 }

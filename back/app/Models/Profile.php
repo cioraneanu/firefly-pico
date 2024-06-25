@@ -4,10 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class AppSettings extends Model
+class Profile extends Model
 {
-    protected $table = 'app_settings';
-
     protected $primaryKey = 'auth_token_hash';
 
     protected $keyType = 'string';

@@ -9,8 +9,8 @@ import InfoRepository from '~/repository/InfoRepository.js'
 import { get } from 'lodash'
 import { HERO_ICONS, HERO_ICONS_LIST } from '~/constants/TransactionConstants.js'
 import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
-import AppSettingsRepository from '~/repository/AppSettingsRepository'
-import AppSettingsTransformer from '~/transformers/AppSettingsTransformer'
+import ProfileRepository from '~/repository/ProfileRepository'
+import ProfileTransformer from '~/transformers/ProfileTransformer'
 
 const PERSISTED_FIELDS = new Set([
   'darkTheme',
@@ -122,13 +122,13 @@ export const useAppStore = defineStore('app', {
     },
 
     async fetchAppSettings() {
-      const response = await new AppSettingsRepository().getSettings(this.authToken)
+      const response = await new ProfileRepository().getSettings(this.authToken)
 
       if (response.data == null) {
         return
       }
 
-      const newValues = AppSettingsTransformer.transformFromApi(response.data)
+      const newValues = ProfileTransformer.transformFromApi(response.data)
 
       for (let key of PERSISTED_FIELDS.values()) {
         if (!(key in newValues)) {
@@ -164,7 +164,7 @@ export const useAppStore = defineStore('app', {
           data[key] = this.$state[key]
         }
       }
-      await new AppSettingsRepository().writeSettings(this.authToken, AppSettingsTransformer.transformToApi(data))
+      await new ProfileRepository().writeSettings(this.authToken, ProfileTransformer.transformToApi(data))
     },
   },
 })
