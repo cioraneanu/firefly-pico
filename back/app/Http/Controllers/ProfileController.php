@@ -13,7 +13,7 @@ class ProfileController extends BaseController
         $auth_token_hash = hash('sha256', $request->bearerToken());
         $settings = Profile::find($auth_token_hash);
 
-        $result = ['data' => json_decode($settings)];
+        $result = ['data' => $settings];
         return $this->respondSuccessWithData($result);
     }
 
@@ -23,7 +23,7 @@ class ProfileController extends BaseController
         $settings = Profile::findOrNew($auth_token_hash)
             ->fill([
                 'auth_token_hash' => $auth_token_hash,
-                'settings' => json_encode($request->settings)
+                'settings' => $request->settings
             ])
             ->save();
 
