@@ -14,4 +14,8 @@ class Profile extends Model
         'auth_token_hash',
         'settings',
     ];
+
+    protected $casts = [
+        'settings' => 'array'
+    ];
 }
