@@ -7,12 +7,12 @@ class ProfileRepository extends BaseRepository {
     super('api/profile')
   }
 
-  async getSettings() {
+  async getProfile() {
     let result = await axios.get(`${this.getUrl()}`)
     return _.get(result, 'data', {})
   }
 
-  async writeSettings(data) {
+  async writeProfile(data) {
     let result = await axios.put(`${this.getUrl()}`, data)
     return result
   }

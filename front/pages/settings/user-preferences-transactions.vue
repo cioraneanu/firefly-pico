@@ -92,7 +92,7 @@ const onSave = async () => {
     return startsWithOperator ? value : `+${value}`
   })
 
-  await appStore.writeAppSettings()
+  await appStore.writeProfile()
 
   UIUtils.showToastSuccess('User preferences saved')
   init()

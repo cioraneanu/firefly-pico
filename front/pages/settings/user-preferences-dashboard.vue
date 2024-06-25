@@ -52,7 +52,7 @@ const onSave = async () => {
   appStore.dashboard.excludedCategoriesList = excludedCategoriesList.value
   appStore.dashboard.excludedTagsList = excludedTagsList.value
 
-  await appStore.writeAppSettings()
+  await appStore.writeProfile()
 
   UIUtils.showToastSuccess('User preferences saved')
   init()

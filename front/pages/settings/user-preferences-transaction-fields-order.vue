@@ -44,7 +44,7 @@ onMounted(() => {
 const onSave = async () => {
   appStore.transactionOrderedFieldsList = fieldsList.value
   
-  await appStore.writeAppSettings()
+  await appStore.writeProfile()
 
   UIUtils.showToastSuccess('User preferences saved')
   init()

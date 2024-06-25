@@ -61,7 +61,7 @@ const onSave = async () => {
   appStore.dateFormat = dateFormat.value
   appStore.dashboard.firstDayOfMonth = firstDayOfMonth.value
 
-  await appStore.writeAppSettings()
+  await appStore.writeProfile()
 
   UIUtils.showToastSuccess('User preferences saved')
   init()

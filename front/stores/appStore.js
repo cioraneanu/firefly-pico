@@ -116,13 +116,13 @@ export const useAppStore = defineStore('app', {
         return
       }
       const async1 = this.fetchLatestAppVersion()
-      const async2 = this.fetchAppSettings()
+      const async2 = this.fetchProfile()
       await Promise.all([async1, async2])
       this.lastSync = new Date()
     },
 
-    async fetchAppSettings() {
-      const response = await new ProfileRepository().getSettings()
+    async fetchProfile() {
+      const response = await new ProfileRepository().getProfile()
 
       if (response.data == null) {
         return
@@ -152,7 +152,7 @@ export const useAppStore = defineStore('app', {
       this.latestAppVersion = get(response, 'data')
     },
 
-    async writeAppSettings() {
+    async writeProfile() {
       const data = {}
       for (let key of PERSISTED_FIELDS.values()) {
         if (NESTED_FIELDS.has(key)) {
@@ -164,7 +164,7 @@ export const useAppStore = defineStore('app', {
           data[key] = this.$state[key]
         }
       }
-      await new ProfileRepository().writeSettings(ProfileTransformer.transformToApi(data))
+      await new ProfileRepository().writeProfile(ProfileTransformer.transformToApi(data))
     },
   },
 })
