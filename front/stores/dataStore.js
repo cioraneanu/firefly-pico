@@ -74,7 +74,7 @@ export const useDataStore = defineStore('data', {
         return isEqual(Account.getType(account), Account.types.asset) &&
           Account.getIsActive(account) &&
           Account.getIsIncludedInNetWorth(account) &&
-          (Account.getBalance(account) > 0 || appStore.dashboard.areEmptyAccountsVisible)
+          (Account.getBalance(account) != 0 || appStore.dashboard.areEmptyAccountsVisible)
       })
     },
 
