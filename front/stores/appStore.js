@@ -122,7 +122,7 @@ export const useAppStore = defineStore('app', {
     },
 
     async fetchAppSettings() {
-      const response = await new ProfileRepository().getSettings(this.authToken)
+      const response = await new ProfileRepository().getSettings()
 
       if (response.data == null) {
         return
@@ -164,7 +164,7 @@ export const useAppStore = defineStore('app', {
           data[key] = this.$state[key]
         }
       }
-      await new ProfileRepository().writeSettings(this.authToken, ProfileTransformer.transformToApi(data))
+      await new ProfileRepository().writeSettings(ProfileTransformer.transformToApi(data))
     },
   },
 })
