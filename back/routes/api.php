@@ -40,8 +40,8 @@ Route::get('currencies/exchange', [CurrencyController::class, 'exchangeRates']);
 RouteUtils::makeCRUD("transactions", TransactionController::class);
 Route::get('search/transactions', [TransactionController::class, 'getAll']);
 
-Route::get("profile", [AppSettingsController::class, "get"]);
-Route::put("profile", [AppSettingsController::class, "createOrUpdate"]);
+Route::get("profile", [ProfileController::class, "get"]);
+Route::put("profile", [ProfileController::class, "createOrUpdate"]);
 
 
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
