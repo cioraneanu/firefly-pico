@@ -10,8 +10,8 @@ class TransactionRepository extends BaseRepository {
 
 
   async searchTransaction({ filters = [], page = 1, pageSize = 50 } = {}) {
-    const appStore = useAppStore()
-    const url = `${appStore.picoBackendURL}/api/search/transactions`
+    const profileStore = useProfileStore()
+    const url = `${profileStore.picoBackendURL}/api/search/transactions`
     let searchUrl = this.getUrlForRequest({ filters, page, pageSize, url })
     let response = await axios.get(searchUrl)
     return _.get(response, 'data', {})

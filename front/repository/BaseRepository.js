@@ -8,10 +8,10 @@ class BaseRepository {
   }
 
   getUrl() {
-    const appStore = useAppStore()
+    const profileStore = useProfileStore()
     // let appURL = window.location.host
     // let appURL = 'http://127.0.0.1:8000'
-    return `${appStore.picoBackendURL}/${this.endpoint}`
+    return `${profileStore.picoBackendURL}/${this.endpoint}`
   }
 
   async getOne(id) {

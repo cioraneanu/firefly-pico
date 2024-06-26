@@ -22,13 +22,13 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
 const defaultAccountSource = ref(null)
@@ -42,24 +42,24 @@ onMounted(() => {
 })
 
 const onSave = async () => {
-  appStore.defaultAccountSource = defaultAccountSource.value
-  appStore.defaultAccountDestination = defaultAccountDestination.value
-  appStore.defaultCategory = defaultCategory.value
-  appStore.defaultTags = defaultTags.value
-  appStore.autoAddedTags = autoAddedTags.value
+  profileStore.defaultAccountSource = defaultAccountSource.value
+  profileStore.defaultAccountDestination = defaultAccountDestination.value
+  profileStore.defaultCategory = defaultCategory.value
+  profileStore.defaultTags = defaultTags.value
+  profileStore.autoAddedTags = autoAddedTags.value
 
-  await appStore.writeProfile()
+  await profileStore.writeProfile()
 
   UIUtils.showToastSuccess('User preferences saved')
   init()
 }
 
 const init = () => {
-  defaultAccountSource.value = appStore.defaultAccountSource
-  defaultAccountDestination.value = appStore.defaultAccountDestination
-  defaultCategory.value = appStore.defaultCategory
-  defaultTags.value = appStore.defaultTags
-  autoAddedTags.value = appStore.autoAddedTags
+  defaultAccountSource.value = profileStore.defaultAccountSource
+  defaultAccountDestination.value = profileStore.defaultAccountDestination
+  defaultCategory.value = profileStore.defaultCategory
+  defaultTags.value = profileStore.defaultTags
+  autoAddedTags.value = profileStore.autoAddedTags
 }
 
 const toolbar = useToolbar()

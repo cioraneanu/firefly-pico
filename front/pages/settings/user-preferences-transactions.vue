@@ -48,14 +48,14 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import { HERO_ICONS_LIST } from '~/constants/TransactionConstants.js'
 
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 
 const heroIcons = ref([])
 const heroIconsList = HERO_ICONS_LIST
@@ -77,39 +77,39 @@ onMounted(() => {
 })
 
 const onSave = async () => {
-  appStore.heroIcons = heroIcons.value
-  appStore.copyCategoryToDescription = copyCategoryToDescription.value
-  appStore.copyTagToDescription = copyTagToDescription.value
-  appStore.copyTagToCategory = copyTagToCategory.value
-  appStore.defaultAccountSource = defaultAccountSource.value
-  appStore.defaultAccountDestination = defaultAccountDestination.value
-  appStore.defaultCategory = defaultCategory.value
-  appStore.defaultTags = defaultTags.value
-  appStore.autoAddedTags = autoAddedTags.value
-  appStore.quickValueButtons = quickAmountValues.value.map((item) => {
+  profileStore.heroIcons = heroIcons.value
+  profileStore.copyCategoryToDescription = copyCategoryToDescription.value
+  profileStore.copyTagToDescription = copyTagToDescription.value
+  profileStore.copyTagToCategory = copyTagToCategory.value
+  profileStore.defaultAccountSource = defaultAccountSource.value
+  profileStore.defaultAccountDestination = defaultAccountDestination.value
+  profileStore.defaultCategory = defaultCategory.value
+  profileStore.defaultTags = defaultTags.value
+  profileStore.autoAddedTags = autoAddedTags.value
+  profileStore.quickValueButtons = quickAmountValues.value.map((item) => {
     let value = sanitizeAmount(item.value)
     let startsWithOperator = ['-', '+'].includes(value[0])
     return startsWithOperator ? value : `+${value}`
   })
 
-  await appStore.writeProfile()
+  await profileStore.writeProfile()
 
   UIUtils.showToastSuccess('User preferences saved')
   init()
 }
 
 const init = () => {
-  heroIcons.value = appStore.heroIcons
-  copyCategoryToDescription.value = appStore.copyCategoryToDescription
-  copyTagToDescription.value = appStore.copyTagToDescription
-  copyTagToCategory.value = appStore.copyTagToCategory
+  heroIcons.value = profileStore.heroIcons
+  copyCategoryToDescription.value = profileStore.copyCategoryToDescription
+  copyTagToDescription.value = profileStore.copyTagToDescription
+  copyTagToCategory.value = profileStore.copyTagToCategory
 
-  defaultAccountSource.value = appStore.defaultAccountSource
-  defaultAccountDestination.value = appStore.defaultAccountDestination
-  defaultCategory.value = appStore.defaultCategory
-  defaultTags.value = appStore.defaultTags
-  autoAddedTags.value = appStore.autoAddedTags
-  quickAmountValues.value = appStore.quickValueButtons.map((item) => {
+  defaultAccountSource.value = profileStore.defaultAccountSource
+  defaultAccountDestination.value = profileStore.defaultAccountDestination
+  defaultCategory.value = profileStore.defaultCategory
+  defaultTags.value = profileStore.defaultTags
+  autoAddedTags.value = profileStore.autoAddedTags
+  quickAmountValues.value = profileStore.quickValueButtons.map((item) => {
     return { value: item }
   })
 }

@@ -5,11 +5,11 @@ import Category from '~/models/Category.js'
 import Account from '~/models/Account.js'
 
 export function getExcludedTransactionFilters() {
-  const appStore = useAppStore()
+  const profileStore = useProfileStore()
 
-  let excludedTags = appStore.dashboard.excludedTagsList.map((tag) => Tag.getDisplayName(tag))
-  let excludedCategories = appStore.dashboard.excludedCategoriesList.map((category) => Category.getDisplayName(category))
-  let excludedAccounts = appStore.dashboard.excludedAccountsList.map((account) => Account.getDisplayName(account))
+  let excludedTags = profileStore.dashboard.excludedTagsList.map((tag) => Tag.getDisplayName(tag))
+  let excludedCategories = profileStore.dashboard.excludedCategoriesList.map((category) => Category.getDisplayName(category))
+  let excludedAccounts = profileStore.dashboard.excludedAccountsList.map((account) => Account.getDisplayName(account))
 
   return [
     ...excludedTags.map((tagName) => `-tag_is:"${tagName}"`),
@@ -19,11 +19,11 @@ export function getExcludedTransactionFilters() {
 }
 
 export function getExcludedTransactionUrl() {
-  const appStore = useAppStore()
+  const profileStore = useProfileStore()
 
-  let excludedTags = appStore.dashboard.excludedTagsList.map((tag) => tag.id)
-  let excludedCategories = appStore.dashboard.excludedCategoriesList.map((category) => category.id)
-  let excludedAccounts = appStore.dashboard.excludedAccountsList.map((account) => account.id)
+  let excludedTags = profileStore.dashboard.excludedTagsList.map((tag) => tag.id)
+  let excludedCategories = profileStore.dashboard.excludedCategoriesList.map((category) => category.id)
+  let excludedAccounts = profileStore.dashboard.excludedAccountsList.map((account) => account.id)
 
   let list = [
     ...excludedTags.map((tagId) => `excluded_tag_id=${tagId}`),

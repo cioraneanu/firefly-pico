@@ -34,13 +34,13 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
 // const isDateformatVisible = ref(false)
@@ -58,18 +58,18 @@ onMounted(() => {
 })
 
 const onSave = async () => {
-  appStore.dateFormat = dateFormat.value
-  appStore.dashboard.firstDayOfMonth = firstDayOfMonth.value
+  profileStore.dateFormat = dateFormat.value
+  profileStore.dashboard.firstDayOfMonth = firstDayOfMonth.value
 
-  await appStore.writeProfile()
+  await profileStore.writeProfile()
 
   UIUtils.showToastSuccess('User preferences saved')
   init()
 }
 
 const init = () => {
-  dateFormat.value = appStore.dateFormat
-  firstDayOfMonth.value = appStore.dashboard.firstDayOfMonth
+  dateFormat.value = profileStore.dateFormat
+  firstDayOfMonth.value = profileStore.dashboard.firstDayOfMonth
 }
 
 const toolbar = useToolbar()

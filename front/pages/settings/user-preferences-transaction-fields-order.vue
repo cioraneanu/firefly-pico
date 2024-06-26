@@ -24,7 +24,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
@@ -32,7 +32,7 @@ import RouteConstants from '~/constants/RouteConstants'
 import { FORM_CONSTANTS_TRANSACTION_FIELDS_LIST } from '~/constants/FormConstants'
 import * as FormConstants from '~/constants/FormConstants'
 
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
 const fieldsList = ref([])
@@ -42,17 +42,17 @@ onMounted(() => {
 })
 
 const onSave = async () => {
-  appStore.transactionOrderedFieldsList = fieldsList.value
+  profileStore.transactionOrderedFieldsList = fieldsList.value
   
-  await appStore.writeProfile()
+  await profileStore.writeProfile()
 
   UIUtils.showToastSuccess('User preferences saved')
   init()
 }
 
 const init = () => {
-  let isListOk = appStore.transactionOrderedFieldsList.length === FORM_CONSTANTS_TRANSACTION_FIELDS_LIST.length
-  fieldsList.value = isListOk ? appStore.transactionOrderedFieldsList : FORM_CONSTANTS_TRANSACTION_FIELDS_LIST
+  let isListOk = profileStore.transactionOrderedFieldsList.length === FORM_CONSTANTS_TRANSACTION_FIELDS_LIST.length
+  fieldsList.value = isListOk ? profileStore.transactionOrderedFieldsList : FORM_CONSTANTS_TRANSACTION_FIELDS_LIST
 }
 
 const toolbar = useToolbar()

@@ -100,7 +100,7 @@ import { ellipsizeText } from '~/utils/Utils.js'
 const props = defineProps({})
 
 const dataStore = useDataStore()
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 
 const emit = defineEmits(['change'])
 const show = ref(false)

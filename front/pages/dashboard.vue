@@ -18,8 +18,6 @@
   </div>
 </template>
 
-import { ref, onMounted } from 'vue'; import { useAppStore } from '~/stores/appStore'
-
 <script setup>
 import { useToolbar } from '~/composables/useToolbar'
 import { debounce } from 'lodash/function'
@@ -32,7 +30,7 @@ const toolbar = useToolbar()
 toolbar.init({ title: 'Dashboard' })
 
 const dataStore = useDataStore()
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 const { isLoadingAccounts } = storeToRefs(dataStore)
 
 const onRefresh = () => {

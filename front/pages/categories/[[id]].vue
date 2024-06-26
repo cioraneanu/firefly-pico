@@ -28,7 +28,7 @@ import { ref } from 'vue';
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
 import _ from 'lodash'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
 import { generateChildren } from '~/utils/VueUtils'
@@ -37,7 +37,7 @@ import { useToolbar } from '~/composables/useToolbar'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
 
 let dataStore = useDataStore()
-let appStore = useAppStore()
+let profileStore = useProfileStore()
 const route = useRoute()
 
 const form = ref(null)
@@ -80,7 +80,7 @@ const { name, icon } = generateChildren(item, [
 ])
 
 watch(name, (newValue) => {
-  if (!appStore.lowerCaseCategoryName) {
+  if (!profileStore.lowerCaseCategoryName) {
     return
   }
   name.value = newValue.toLowerCase()

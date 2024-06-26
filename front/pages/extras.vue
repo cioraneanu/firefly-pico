@@ -22,10 +22,9 @@
   </div>
 </template>
 
-import { ref, onMounted } from 'vue'; import { useAppStore } from '~/stores/appStore'
 
 <script setup>
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import RouteConstants from '~/constants/RouteConstants'
 import { useToolbar } from '~/composables/useToolbar'
 import TablerIconConstants from '~/constants/TablerIconConstants'

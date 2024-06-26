@@ -19,10 +19,10 @@
 </template>
 
 <script setup>
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { useToolbar } from '~/composables/useToolbar'
 
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 const { title, subtitle, onBack, leftText, backRoute, titleIcon } = useToolbar()
 
 const hasSubtitle = computed(() => !isStringEmpty(subtitle.value))

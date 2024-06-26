@@ -8,7 +8,7 @@ import TagRepository from '~/repository/TagRepository'
 import AccountTransformer from '~/transformers/AccountTransformer'
 import TransactionTemplateRepository from '~/repository/TransactionTemplateRepository'
 import CurrencyRepository from '~/repository/CurrencyRepository'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { addMonths, differenceInHours, startOfDay, startOfMonth, subDays, subMonths, subYears } from 'date-fns'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
 import TagTransformer from '~/transformers/TagTransformer'
@@ -68,12 +68,12 @@ export const useDataStore = defineStore('data', {
 
   getters: {
     dashboardAccounts(state) {
-      const appStore = useAppStore()
+      const profileStore = useProfileStore()
       return state.accountList.filter((account) => {
         return isEqual(Account.getType(account), Account.types.asset) &&
           Account.getIsActive(account) &&
           Account.getIsIncludedInNetWorth(account) &&
-          (Account.getBalance(account) != 0 || appStore.dashboard.areEmptyAccountsVisible)
+          (Account.getBalance(account) != 0 || profileStore.dashboard.areEmptyAccountsVisible)
       })
     },
 
@@ -127,8 +127,8 @@ export const useDataStore = defineStore('data', {
     },
 
     dashboardDateStart(state) {
-      const appStore = useAppStore()
-      let dateCurrentMonth = startOfDay(state.dashboard.month).setDate(appStore.dashboard.firstDayOfMonth)
+      const profileStore = useProfileStore()
+      let dateCurrentMonth = startOfDay(state.dashboard.month).setDate(profileStore.dashboard.firstDayOfMonth)
       return dateCurrentMonth > new Date() ? subMonths(dateCurrentMonth, 1) : dateCurrentMonth
     },
 
@@ -333,8 +333,8 @@ export const useDataStore = defineStore('data', {
     // },
 
     async syncEverything() {
-      const appStore = useAppStore()
-      if (!appStore.hasAuthToken) {
+      const profileStore = useProfileStore()
+      if (!profileStore.hasAuthToken) {
         return
       }
       let async1 = this.fetchCategories()

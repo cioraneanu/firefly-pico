@@ -39,13 +39,14 @@
 
 <script setup>
 import { useDataStore } from '~/stores/dataStore'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import anime from 'animejs'
 import { animateBottomToolbarAddButton } from '~/utils/AnimationUtils.js'
 
 const dataStore = useDataStore()
+const profileStore = useProfileStore()
 const appStore = useAppStore()
 const route = useRoute()
 

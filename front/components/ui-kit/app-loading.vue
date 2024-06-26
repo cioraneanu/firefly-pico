@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div v-if="appStore.isLoading" class="app-loading-background">
+    <div v-if="profileStore.isLoading" class="app-loading-background">
         <div class="app-loading flex-column flex-center">
           <icon-rotate :size="30" :stroke="1.4" class="animate-rotate-infinite" />
           <div class="text-size-16">Loading...</div>
@@ -13,7 +13,7 @@
 import { IconRotate } from '@tabler/icons-vue'
 import anime from 'animejs'
 
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 
 // onMounted(async () => {
 //   await nextTick()

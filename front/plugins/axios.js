@@ -1,15 +1,15 @@
 import axios from 'axios'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { get } from 'lodash'
 
 axios.interceptors.request.use(
   (config) => {
-    const appStore = useAppStore()
+    const profileStore = useProfileStore()
 
     const controller = new AbortController()
 
-    let authToken = appStore.authToken
-    if (!appStore.hasAuthToken) {
+    let authToken = profileStore.authToken
+    if (!profileStore.hasAuthToken) {
       const router = useRouter()
       UIUtils.showToastError('No personal access token...')
       // router.push(RouteConstants.ROUTE_SETTINGS_APP_CONFIG).then(r => {})
@@ -17,7 +17,7 @@ axios.interceptors.request.use(
     }
 
     config.headers['Authorization'] = `Bearer ${authToken}`
-    config.timeout = appStore.queryTimeout
+    config.timeout = profileStore.queryTimeout
     return config
   },
   (error) => {
