@@ -20,7 +20,6 @@ import TransactionTransformer from '~/transformers/TransactionTransformer'
 import { listToTree, setLevel, sortByPath, treeToList } from '~/utils/DataUtils'
 import Tag from '~/models/Tag.js'
 import { convertCurrency, convertTransactionAmountToCurrency, convertTransactionsTotalAmountToCurrency } from '~/utils/CurrencyUtils'
-import Category from '~/models/Category.js'
 import { getExcludedTransactionFilters } from '~/utils/DashboardUtils.js'
 
 export const useDataStore = defineStore('data', {

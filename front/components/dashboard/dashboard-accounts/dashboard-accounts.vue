@@ -81,8 +81,10 @@ const accountTotal = computed(() => {
   return getFormattedValue(dataStore.dashboardAccountsEstimatedTotal)
 })
 
-const onToggleShowDashboardAccountValues = () => {
+const onToggleShowDashboardAccountValues = async () => {
   appStore.dashboard.showAccountAmounts = !appStore.dashboard.showAccountAmounts
+
+  await appStore.writeProfile()
 }
 
 const getAccountAmount = (account) => {

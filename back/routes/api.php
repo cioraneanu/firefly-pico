@@ -3,6 +3,7 @@
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TransactionTemplateController;
@@ -39,6 +40,8 @@ Route::get('currencies/exchange', [CurrencyController::class, 'exchangeRates']);
 RouteUtils::makeCRUD("transactions", TransactionController::class);
 Route::get('search/transactions', [TransactionController::class, 'getAll']);
 
+Route::get("profile", [ProfileController::class, "get"]);
+Route::put("profile", [ProfileController::class, "createOrUpdate"]);
 
 
 //Route::middleware('auth:sanctum')->get('/user', function (Request $request) {

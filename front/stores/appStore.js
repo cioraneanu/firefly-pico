@@ -9,12 +9,39 @@ import InfoRepository from '~/repository/InfoRepository.js'
 import { get } from 'lodash'
 import { HERO_ICONS, HERO_ICONS_LIST } from '~/constants/TransactionConstants.js'
 import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
+import ProfileRepository from '~/repository/ProfileRepository'
+import ProfileTransformer from '~/transformers/ProfileTransformer'
+
+const PERSISTED_FIELDS = new Set([
+  'darkTheme',
+  'voiceLanguage',
+  'autoAddTransactionFromVoice',
+  'defaultAccountSource',
+  'defaultAccountDestination',
+  'defaultCategory',
+  'defaultTags',
+  'autoAddedTags',
+  'quickValueButtons',
+  'transactionOrderedFieldsList',
+  'dateFormat',
+  'copyCategoryToDescription',
+  'copyTagToDescription',
+  'copyTagToCategory',
+  'showTagSelectAsGrid',
+  'numberFormat',
+  'lowerCaseTransactionDescription',
+  'lowerCaseAccountName',
+  'lowerCaseCategoryName',
+  'lowerCaseTagName',
+  'dashboard',
+])
+
+const NESTED_FIELDS = new Set(['dashboard'])
 
 export const useAppStore = defineStore('app', {
   state: () => {
     const defaultUrl = window.location.origin
     const runtimeConfig = useRuntimeConfig()
-    // const appVersion = runtimeConfig.public.version
 
     return {
       isLoading: false,
@@ -84,14 +111,60 @@ export const useAppStore = defineStore('app', {
   },
 
   actions: {
+    async syncEverything() {
+      if (!this.hasAuthToken) {
+        return
+      }
+      const async1 = this.fetchLatestAppVersion()
+      const async2 = this.fetchProfile()
+      await Promise.all([async1, async2])
+      this.lastSync = new Date()
+    },
+
+    async fetchProfile() {
+      const response = await new ProfileRepository().getProfile()
+
+      if (response.data == null) {
+        return
+      }
+
+      const newValues = ProfileTransformer.transformFromApi(response.data)
+
+      for (let key of PERSISTED_FIELDS.values()) {
+        if (!(key in newValues)) {
+          continue
+        }
+        if (NESTED_FIELDS.has(key)) {
+          for (let nestedKey of Object.keys(newValues[key])) {
+            this.$state[key][nestedKey] = newValues[key][nestedKey]
+          }
+        } else {
+          this.$state[key] = newValues[key]
+        }
+      }
+    },
+
     async fetchLatestAppVersion() {
       let response = await new InfoRepository().getLatestVersion()
       if (!ResponseUtils.isSuccess(response)) {
         return
       }
       this.latestAppVersion = get(response, 'data')
+    },
 
-      // this.latestAppVersion = head(versions)
+    async writeProfile() {
+      const data = {}
+      for (let key of PERSISTED_FIELDS.values()) {
+        if (NESTED_FIELDS.has(key)) {
+          data[key] = {}
+          for (let nestedKey of Object.keys(this.$state[key])) {
+            data[key][nestedKey] = this.$state[key][nestedKey]
+          }
+        } else {
+          data[key] = this.$state[key]
+        }
+      }
+      await new ProfileRepository().writeProfile(ProfileTransformer.transformToApi(data))
     },
   },
 })
