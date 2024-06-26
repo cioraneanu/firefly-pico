@@ -9,7 +9,7 @@ class CurrencyRepository extends BaseRepository {
 
   async getCurrencyExchange() {
     const profileStore = useProfileStore()
-    const url = `${profileStore.picoBackendURL}/api/currencies/exchange`
+    const url = `${appStore.picoBackendURL}/api/currencies/exchange`
     let response = await axios.get(url)
     return _.get(response, 'data', {})
   }

@@ -4,12 +4,12 @@ import { get } from 'lodash'
 
 axios.interceptors.request.use(
   (config) => {
-    const profileStore = useProfileStore()
+    const appStore = useAppStore()
 
     const controller = new AbortController()
 
-    let authToken = profileStore.authToken
-    if (!profileStore.hasAuthToken) {
+    let authToken = appStore.authToken
+    if (!appStore.hasAuthToken) {
       const router = useRouter()
       UIUtils.showToastError('No personal access token...')
       // router.push(RouteConstants.ROUTE_SETTINGS_APP_CONFIG).then(r => {})
@@ -17,7 +17,7 @@ axios.interceptors.request.use(
     }
 
     config.headers['Authorization'] = `Bearer ${authToken}`
-    config.timeout = profileStore.queryTimeout
+    config.timeout = appStore.queryTimeout
     return config
   },
   (error) => {

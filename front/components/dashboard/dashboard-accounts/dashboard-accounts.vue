@@ -83,8 +83,6 @@ const accountTotal = computed(() => {
 
 const onToggleShowDashboardAccountValues = async () => {
   profileStore.dashboard.showAccountAmounts = !profileStore.dashboard.showAccountAmounts
-
-  await profileStore.writeProfile()
 }
 
 const getAccountAmount = (account) => {

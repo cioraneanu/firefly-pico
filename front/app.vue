@@ -22,7 +22,7 @@ let appStore = useAppStore()
 const theme = computed(() => (profileStore.darkTheme ? 'dark' : 'white'))
 
 onMounted(async () => {
-  if (!profileStore.authToken) {
+  if (!appStore.authToken) {
     navigateTo(`${RouteConstants.ROUTE_SETTINGS_APP_CONFIG}`)
     return
   }

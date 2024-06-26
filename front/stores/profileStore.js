@@ -6,19 +6,15 @@ import { FORM_CONSTANTS_TRANSACTION_FIELDS_LIST } from '~/constants/FormConstant
 import ResponseUtils from '~/utils/ResponseUtils'
 import { compareVersionStrings } from '~/utils/DataUtils'
 import InfoRepository from '~/repository/InfoRepository.js'
-import { get } from 'lodash'
+import { cloneDeep, get, omit } from 'lodash'
 import { HERO_ICONS, HERO_ICONS_LIST } from '~/constants/TransactionConstants.js'
 import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
 import ProfileRepository from '~/repository/ProfileRepository'
 import ProfileTransformer from '~/transformers/ProfileTransformer'
 import { useAppStore } from '~/stores/appStore.js'
 
-
 export const useProfileStore = defineStore('profile', {
   state: () => {
-    const defaultUrl = window.location.origin
-    const runtimeConfig = useRuntimeConfig()
-
     return {
       isLoading: false,
 
@@ -65,13 +61,11 @@ export const useProfileStore = defineStore('profile', {
     }
   },
 
-  getters: {
-
-  },
+  getters: {},
 
   actions: {
-
     async fetchProfile() {
+      console.log('fetch profile')
       const response = await new ProfileRepository().getProfile()
 
       if (response.data == null) {
@@ -79,33 +73,15 @@ export const useProfileStore = defineStore('profile', {
       }
 
       const newValues = ProfileTransformer.transformFromApi(response.data)
+      console.log('newValues', newValues)
+      this.$patch(newValues)
 
-      // for (let key of PERSISTED_FIELDS.values()) {
-      //   if (!(key in newValues)) {
-      //     continue
-      //   }
-      //   if (NESTED_FIELDS.has(key)) {
-      //     for (let nestedKey of Object.keys(newValues[key])) {
-      //       this.$state[key][nestedKey] = newValues[key][nestedKey]
-      //     }
-      //   } else {
-      //     this.$state[key] = newValues[key]
-      //   }
-      // }
     },
 
     async writeProfile() {
-      const data = {}
-      // for (let key of PERSISTED_FIELDS.values()) {
-      //   if (NESTED_FIELDS.has(key)) {
-      //     data[key] = {}
-      //     for (let nestedKey of Object.keys(this.$state[key])) {
-      //       data[key][nestedKey] = this.$state[key][nestedKey]
-      //     }
-      //   } else {
-      //     data[key] = this.$state[key]
-      //   }
-      // }
+      let data = cloneDeep(this.$state)
+      data = omit(data, 'dashboard.showAccountAmounts')
+
       await new ProfileRepository().writeProfile(ProfileTransformer.transformToApi(data))
     },
   },

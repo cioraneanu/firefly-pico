@@ -45,7 +45,7 @@ import AppConfigStat from '~/components/settings/app-config-stat.vue'
 import UserRepository from '~/repository/UserRepository'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 
-const profileStore = useProfileStore()
+const appStore = useAppStore()
 const dataStore = useDataStore()
 
 const authToken = ref('')
@@ -63,15 +63,15 @@ const lastSync = computed(() => {
 })
 
 onMounted(() => {
-  authToken.value = profileStore.authToken
-  picoBackendURL.value = profileStore.picoBackendURL
+  authToken.value = appStore.authToken
+  picoBackendURL.value = appStore.picoBackendURL
 })
 
 const onSave = async () => {
   picoBackendURL.value = picoBackendURL.value.endsWith('/') ? picoBackendURL.value.slice(0, -1) : picoBackendURL.value
 
-  profileStore.authToken = authToken.value
-  profileStore.picoBackendURL = picoBackendURL.value
+  appStore.authToken = authToken.value
+  appStore.picoBackendURL = picoBackendURL.value
 
   UIUtils.showToastLoading('Checking configuration')
   let userResponse = await new UserRepository().getUser()
