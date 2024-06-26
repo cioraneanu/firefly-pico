@@ -28,8 +28,6 @@ import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
-import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
-import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 const appStore = useAppStore()
 const dataStore = useDataStore()
@@ -53,6 +51,8 @@ const onSave = async () => {
   appStore.dashboard.excludedAccountsList = excludedAccountsList.value
   appStore.dashboard.excludedCategoriesList = excludedCategoriesList.value
   appStore.dashboard.excludedTagsList = excludedTagsList.value
+
+  await appStore.writeProfile()
 
   UIUtils.showToastSuccess('User preferences saved')
   init()

@@ -54,10 +54,8 @@ import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import { HERO_ICONS_LIST } from '~/constants/TransactionConstants.js'
-import { TUTORIAL_CONSTANTS } from '~/constants/TutorialConstants.js'
 
 const appStore = useAppStore()
-const dataStore = useDataStore()
 
 const heroIcons = ref([])
 const heroIconsList = HERO_ICONS_LIST
@@ -93,6 +91,8 @@ const onSave = async () => {
     let startsWithOperator = ['-', '+'].includes(value[0])
     return startsWithOperator ? value : `+${value}`
   })
+
+  await appStore.writeProfile()
 
   UIUtils.showToastSuccess('User preferences saved')
   init()
