@@ -9,8 +9,6 @@ class BaseRepository {
 
   getUrl() {
     const appStore = useAppStore()
-    // let appURL = window.location.host
-    // let appURL = 'http://127.0.0.1:8000'
     return `${appStore.picoBackendURL}/${this.endpoint}`
   }
 
