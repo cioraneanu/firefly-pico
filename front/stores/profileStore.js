@@ -65,24 +65,29 @@ export const useProfileStore = defineStore('profile', {
 
   actions: {
     async fetchProfile() {
-      console.log('fetch profile')
-      const response = await new ProfileRepository().getProfile()
-
-      if (response.data == null) {
+      const appStore = useAppStore()
+      if (!appStore.syncProfileInDB) {
         return
       }
-
-      const newValues = ProfileTransformer.transformFromApi(response.data)
-      console.log('newValues', newValues)
-      this.$patch(newValues)
-
+      this.isLoading = true
+      const response = await new ProfileRepository().getProfile()
+      let responseData = response.data ?? {}
+      responseData = ProfileTransformer.transformFromApi(responseData)
+      this.$patch(responseData)
+      this.isLoading = false
     },
 
     async writeProfile() {
+      const appStore = useAppStore()
+      if (!appStore.syncProfileInDB) {
+        return
+      }
+
+      this.isLoading = true
       let data = cloneDeep(this.$state)
       data = omit(data, 'dashboard.showAccountAmounts')
-
       await new ProfileRepository().writeProfile(ProfileTransformer.transformToApi(data))
+      this.isLoading = false
     },
   },
 })

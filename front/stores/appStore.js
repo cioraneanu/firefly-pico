@@ -12,7 +12,6 @@ import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
 import ProfileRepository from '~/repository/ProfileRepository'
 import ProfileTransformer from '~/transformers/ProfileTransformer'
 
-
 export const useAppStore = defineStore('app', {
   state: () => {
     const defaultUrl = window.location.origin
@@ -21,6 +20,7 @@ export const useAppStore = defineStore('app', {
     return {
       authToken: useLocalStorage('authToken', ''),
       picoBackendURL: useLocalStorage('picoBackendURL', defaultUrl),
+      syncProfileInDB: useLocalStorage('syncProfileInDB', true),
 
       currentAppVersion: runtimeConfig.public.version,
       queryTimeout: runtimeConfig.public.queryTimeout,
@@ -47,6 +47,6 @@ export const useAppStore = defineStore('app', {
         return
       }
       this.latestAppVersion = get(response, 'data')
-    }
+    },
   },
 })
