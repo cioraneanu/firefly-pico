@@ -1,7 +1,7 @@
 import BaseModel from '~/models/BaseModel'
 import TransactionTransformer from '~/transformers/TransactionTransformer'
 import TransactionRepository from '~/repository/TransactionRepository'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import Account from '~/models/Account'
 import _, { get, isEqual } from 'lodash'
 
@@ -15,12 +15,12 @@ class Transaction extends BaseModel {
   }
 
   getEmpty() {
-    const appStore = useAppStore()
+    const profileStore = useProfileStore()
 
     let type =
       Transaction.getTransactionTypeForAccounts({
-        source: appStore.defaultAccountSource,
-        destination: appStore.defaultAccountDestination,
+        source: profileStore.defaultAccountSource,
+        destination: profileStore.defaultAccountDestination,
       }) ?? Transaction.types.expense
     // let type = Transaction.typesList.find(item => item.code === transactionTypeCode)
     // let type = Transaction.types[transactionTypeCode]
@@ -37,13 +37,13 @@ class Transaction extends BaseModel {
             amount: '',
             // 'date': startOfDay(new Date()),
             date: date,
-            tags: appStore.defaultTags,
+            tags: profileStore.defaultTags,
             description: '',
             notes: '',
-            accountSource: appStore.defaultAccountSource,
-            accountDestination: appStore.defaultAccountDestination,
+            accountSource: profileStore.defaultAccountSource,
+            accountDestination: profileStore.defaultAccountDestination,
             type: type,
-            category: appStore.defaultCategory,
+            category: profileStore.defaultCategory,
           },
         ],
       },

@@ -33,7 +33,7 @@ import _ from 'lodash'
 import { startOfDay } from 'date-fns'
 import UIUtils from '~/utils/UIUtils'
 import DateUtils from '~/utils/DateUtils'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import AccountRepository from '~/repository/AccountRepository'
 import { useForm } from '~/composables/useForm'
@@ -45,7 +45,7 @@ import CurrencyTransformer from '~/transformers/CurrencyTransformer'
 import Currency from '~/models/Currency'
 
 let dataStore = useDataStore()
-let appStore = useAppStore()
+let profileStore = useProfileStore()
 const route = useRoute()
 
 const form = ref(null)

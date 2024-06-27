@@ -14,11 +14,11 @@
 
 <script setup>
 import { useDataStore } from '~/stores/dataStore'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { IconRotateClockwise } from '@tabler/icons-vue'
 
 const dataStore = useDataStore()
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 const route = useRoute()
 
 const onResync = async () => {

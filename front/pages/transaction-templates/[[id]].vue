@@ -56,7 +56,7 @@ import { ref } from 'vue';
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
 import _, { get } from 'lodash'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
 import Account from '~/models/Account'
@@ -73,7 +73,7 @@ const refAmount = ref(null)
 // ------------------------------------
 
 let dataStore = useDataStore()
-let appStore = useAppStore()
+let profileStore = useProfileStore()
 const route = useRoute()
 
 const form = ref(null)

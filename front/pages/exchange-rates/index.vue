@@ -23,13 +23,13 @@
 
 <script setup>
 import { get } from 'lodash'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { useDataStore } from '~/stores/dataStore'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import UIUtils from '~/utils/UIUtils.js'
 
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
 const isRefreshing = ref(false)

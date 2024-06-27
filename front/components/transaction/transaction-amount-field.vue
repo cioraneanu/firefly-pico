@@ -62,7 +62,7 @@ import { moveInputCursorToEnd, sleep } from '~/utils/VueUtils'
 import { evalMath, removeEndOperators, sanitizeAmount } from '~/utils/MathUtils' // import { useDevice } from '@nuxtjs/device'
 // import { useDevice } from '@nuxtjs/device'
 
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 const dataStore = useDataStore()
 const attrs = useAttrs()
 
@@ -91,7 +91,7 @@ const input = ref(null)
 
 const { isMobile } = useDevice()
 
-const quickButtons = appStore.quickValueButtons
+const quickButtons = profileStore.quickValueButtons
 const operatorsList = ref(['+', '-', '*', '/'])
 
 const onQuickButton = async (quickButton) => {

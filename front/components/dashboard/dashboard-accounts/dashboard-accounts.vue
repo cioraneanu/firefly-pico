@@ -13,7 +13,7 @@
 
       <van-button @click="onToggleShowDashboardAccountValues" size="small" class="mr-10">
         <template #icon>
-          <app-icon :icon="appStore.dashboard.showAccountAmounts ? 'IconEyeX' : 'IconEye'" :size="20" />
+          <app-icon :icon="profileStore.dashboard.showAccountAmounts ? 'IconEyeX' : 'IconEye'" :size="20" />
           <!--              <van-icon name="eye-o"/>-->
         </template>
       </van-button>
@@ -62,7 +62,7 @@ import RouteConstants from '~/constants/RouteConstants.js'
 import { IconCash } from '@tabler/icons-vue'
 import { getFormattedValue } from '~/utils/MathUtils.js'
 
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
 const showHiddenAccounts = ref(false)
@@ -82,9 +82,7 @@ const accountTotal = computed(() => {
 })
 
 const onToggleShowDashboardAccountValues = async () => {
-  appStore.dashboard.showAccountAmounts = !appStore.dashboard.showAccountAmounts
-
-  await appStore.writeProfile()
+  profileStore.dashboard.showAccountAmounts = !profileStore.dashboard.showAccountAmounts
 }
 
 const getAccountAmount = (account) => {

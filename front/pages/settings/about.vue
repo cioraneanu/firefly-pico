@@ -34,14 +34,14 @@
 </template>
 
 <script setup>
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { useDataStore } from '~/stores/dataStore'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import { REPO_URL } from '~/constants/Constants'
 import { onMounted } from 'vue'
 
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
 const toolbar = useToolbar()

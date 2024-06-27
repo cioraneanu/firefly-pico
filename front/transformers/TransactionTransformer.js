@@ -1,7 +1,7 @@
 import _, { uniq, get } from 'lodash'
 import ApiTransformer from './ApiTransformer'
 import DateUtils from '~/utils/DateUtils'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { useDataStore } from '~/stores/dataStore'
 import Transaction from '~/models/Transaction'
 import Tag from '~/models/Tag'
@@ -55,7 +55,7 @@ export default class TransactionTransformer extends ApiTransformer {
   }
 
   static transformToApi(item) {
-    const appStore = useAppStore()
+    const profileStore = useProfileStore()
 
     let id = _.get(item, 'data.id')
     let newTransactions = item.attributes.transactions
@@ -83,8 +83,8 @@ export default class TransactionTransformer extends ApiTransformer {
       // newItem.type = transformedTransactionType
 
       let tags = item.tags ?? []
-      if (!id && appStore.autoAddedTags && appStore.autoAddedTags.length > 0) {
-        tags = [...tags, ...appStore.autoAddedTags]
+      if (!id && profileStore.autoAddedTags && profileStore.autoAddedTags.length > 0) {
+        tags = [...tags, ...profileStore.autoAddedTags]
       }
       tags = tags.map((tag) => Tag.getDisplayNameEllipsized(tag))
       tags = uniq(tags)
