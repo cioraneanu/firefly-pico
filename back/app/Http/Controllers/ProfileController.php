@@ -5,13 +5,12 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Base\BaseController;
 use App\Models\Profile;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 
 class ProfileController extends BaseController
 {
     public function get(Request $request)
     {
-        $authTokenHash = $this->getHash($request->bearerToken());
+        $authTokenHash = $this->getAuthTokenHash();
         $profile = Profile::where('auth_token_hash', $authTokenHash)->first();
         $result = ['data' => $profile];
         return $this->respondSuccessWithData($result);
@@ -19,7 +18,7 @@ class ProfileController extends BaseController
 
     public function createOrUpdate(Request $request)
     {
-        $authTokenHash = $this->getHash($request->bearerToken());
+        $authTokenHash = $this->getAuthTokenHash();
         $profile = Profile::updateOrCreate(
             ['auth_token_hash' => $authTokenHash],
             ['settings' => $request->settings]
@@ -30,9 +29,10 @@ class ProfileController extends BaseController
 
     // -----
 
-    private function getHash($value)
+    private function getAuthTokenHash()
     {
-        return Hash::make($value);
+        $token = request()->bearerToken();
+        return hash('sha256', $token);
     }
 
 

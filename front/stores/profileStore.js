@@ -83,9 +83,10 @@ export const useProfileStore = defineStore('profile', {
         return
       }
 
+      let omitList = ['isLoading', 'dashboard.showAccountAmounts']
       this.isLoading = true
       let data = cloneDeep(this.$state)
-      data = omit(data, 'dashboard.showAccountAmounts')
+      data = omit(data, omitList)
       await new ProfileRepository().writeProfile(ProfileTransformer.transformToApi(data))
       this.isLoading = false
     },
