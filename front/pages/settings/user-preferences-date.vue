@@ -39,6 +39,7 @@ import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
+import { saveSettingsToLocal, saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
@@ -53,29 +54,27 @@ const firstDayOfMonth = ref(null)
 const firstDayOfMonthList = [...Array(27).keys()].map((item) => item + 1)
 const isDropdownFirstDayVisible = ref(false)
 
-onMounted(() => {
-  init()
-})
+
+// TODO: Play a little with this idea, maybe apply it to all settings pages... :)
+const syncedSettings = [
+  { store: profileStore, path: 'dateFormat', ref: dateFormat },
+  { store: profileStore, path: 'dashboard.firstDayOfMonth', ref: firstDayOfMonth },
+]
+
+// This gets the UI reactive to all store changes not just 1 x time via onMount
+watchSettingsStore(syncedSettings)
 
 const onSave = async () => {
-  profileStore.dateFormat = dateFormat.value
-  profileStore.dashboard.firstDayOfMonth = firstDayOfMonth.value
-
+  saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-
   UIUtils.showToastSuccess('User preferences saved')
-  init()
 }
 
-const init = () => {
-  dateFormat.value = profileStore.dateFormat
-  firstDayOfMonth.value = profileStore.dashboard.firstDayOfMonth
-}
 
 const toolbar = useToolbar()
 toolbar.init({
   title: 'Date preferences',
-  backRoute: RouteConstants.ROUTE_SETTINGS,
+  backRoute: RouteConstants.ROUTE_SETTINGS
 })
 
 onMounted(() => {
