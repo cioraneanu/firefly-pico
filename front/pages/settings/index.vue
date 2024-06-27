@@ -31,8 +31,6 @@
   </div>
 </template>
 
-import { ref, onMounted } from 'vue'; import { useAppStore } from '~/stores/appStore' import
-
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
 import { useToolbar } from '~/composables/useToolbar'
@@ -48,5 +46,4 @@ toolbar.init({ title: 'Settings' })
 onMounted(() => {
   animateSettings()
 })
-
 </script>

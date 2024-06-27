@@ -6,14 +6,14 @@ export const NUMBER_FORMAT = {
 }
 
 export const getFormattedValue = (value, digits = 0) => {
-  const appStore = useAppStore()
-  if (!appStore.dashboard.showAccountAmounts) {
+  const profileStore = useProfileStore()
+  if (!profileStore.dashboard.showAccountAmounts) {
     return '******'
   }
-  if (appStore.dashboard.showDecimal) {
+  if (profileStore.dashboard.showDecimal) {
     digits = 2
   }
-  let numberFormatCode = appStore.numberFormat.code ?? NUMBER_FORMAT.eu.code
+  let numberFormatCode = profileStore.numberFormat.code ?? NUMBER_FORMAT.eu.code
   return new Intl.NumberFormat(numberFormatCode, { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value)
 }
 

@@ -61,7 +61,7 @@ import { ref } from 'vue';
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
 import _, { cloneDeep, get, set } from 'lodash'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
 import { generateChildren } from '~/utils/VueUtils'
@@ -72,7 +72,7 @@ import TagSelect from '~/components/select/tag-select.vue'
 import { TUTORIAL_CONSTANTS } from '~/constants/TutorialConstants.js'
 
 let dataStore = useDataStore()
-let appStore = useAppStore()
+let profileStore = useProfileStore()
 const route = useRoute()
 
 const form = ref(null)
@@ -136,7 +136,7 @@ const onRefresh = () => {
 }
 
 watch(tag, (newValue) => {
-  if (!appStore.lowerCaseTagName) {
+  if (!profileStore.lowerCaseTagName) {
     return
   }
   tag.value = newValue.toLowerCase()

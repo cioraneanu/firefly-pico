@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { get } from 'lodash'
 
 axios.interceptors.request.use(

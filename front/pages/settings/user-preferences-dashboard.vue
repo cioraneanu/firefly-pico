@@ -23,13 +23,13 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
 const areEmptyAccountsVisible = ref(false)
@@ -45,27 +45,27 @@ onMounted(() => {
 })
 
 const onSave = async () => {
-  appStore.dashboard.areEmptyAccountsVisible = areEmptyAccountsVisible.value
-  appStore.dashboard.showDecimal = showDecimal.value
+  profileStore.dashboard.areEmptyAccountsVisible = areEmptyAccountsVisible.value
+  profileStore.dashboard.showDecimal = showDecimal.value
 
-  appStore.dashboard.excludedAccountsList = excludedAccountsList.value
-  appStore.dashboard.excludedCategoriesList = excludedCategoriesList.value
-  appStore.dashboard.excludedTagsList = excludedTagsList.value
+  profileStore.dashboard.excludedAccountsList = excludedAccountsList.value
+  profileStore.dashboard.excludedCategoriesList = excludedCategoriesList.value
+  profileStore.dashboard.excludedTagsList = excludedTagsList.value
 
-  await appStore.writeProfile()
+  await profileStore.writeProfile()
 
   UIUtils.showToastSuccess('User preferences saved')
   init()
 }
 
 const init = () => {
-  areEmptyAccountsVisible.value = appStore.dashboard.areEmptyAccountsVisible
-  showDecimal.value = appStore.dashboard.showDecimal
+  areEmptyAccountsVisible.value = profileStore.dashboard.areEmptyAccountsVisible
+  showDecimal.value = profileStore.dashboard.showDecimal
 
 
-  excludedAccountsList.value = appStore.dashboard.excludedAccountsList
-  excludedCategoriesList.value = appStore.dashboard.excludedCategoriesList
-  excludedTagsList.value = appStore.dashboard.excludedTagsList
+  excludedAccountsList.value = profileStore.dashboard.excludedAccountsList
+  excludedCategoriesList.value = profileStore.dashboard.excludedCategoriesList
+  excludedTagsList.value = profileStore.dashboard.excludedTagsList
 }
 
 const toolbar = useToolbar()

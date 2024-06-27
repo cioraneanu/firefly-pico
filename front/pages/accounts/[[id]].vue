@@ -49,7 +49,7 @@ import { ref } from 'vue';
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
 import { get } from 'lodash'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
 import Account from '~/models/Account'
@@ -60,7 +60,7 @@ import { useToolbar } from '~/composables/useToolbar'
 import { avatarListIcons } from '~/constants/SvgConstants.js'
 
 let dataStore = useDataStore()
-let appStore = useAppStore()
+let profileStore = useProfileStore()
 const route = useRoute()
 
 const resetFields = () => {
@@ -115,7 +115,7 @@ const { name, type, role, currency, icon, includeNetWorth, isDashboardVisible } 
 const isRoleVisible = computed(() => get(type.value, 'fireflyCode') === Account.types.asset.fireflyCode)
 
 watch(name, (newValue) => {
-  if (!appStore.lowerCaseAccountName) {
+  if (!profileStore.lowerCaseAccountName) {
     return
   }
   name.value = newValue.toLowerCase()

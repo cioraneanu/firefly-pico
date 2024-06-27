@@ -55,11 +55,11 @@ import TablerIconConstants from '~/constants/TablerIconConstants'
 import { uniqBy } from 'lodash/array.js'
 
 const dataStore = useDataStore()
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 
-const { showTagSelectAsGrid } = storeToRefs(appStore)
+const { showTagSelectAsGrid } = storeToRefs(profileStore)
 
 const props = defineProps({
   label: {

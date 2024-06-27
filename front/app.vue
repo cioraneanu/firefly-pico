@@ -16,9 +16,10 @@ import '~/assets/styles/variables.css'
 import AppLoading from '~/components/ui-kit/app-loading.vue'
 
 let dataStore = useDataStore()
+let profileStore = useProfileStore()
 let appStore = useAppStore()
 
-const theme = computed(() => (appStore.darkTheme ? 'dark' : 'white'))
+const theme = computed(() => (profileStore.darkTheme ? 'dark' : 'white'))
 
 onMounted(async () => {
   if (!appStore.authToken) {
@@ -26,8 +27,9 @@ onMounted(async () => {
     return
   }
 
+  appStore.fetchLatestAppVersion()
+  await profileStore.fetchProfile()
   await dataStore.syncEverythingIfOld()
-  await appStore.syncEverything()
 })
 
 const { isLoading } = storeToRefs(dataStore)

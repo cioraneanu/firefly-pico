@@ -40,7 +40,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
@@ -48,7 +48,7 @@ import RouteConstants from '~/constants/RouteConstants'
 import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
 const numberFormat = ref(null)
@@ -67,30 +67,30 @@ onMounted(() => {
 })
 
 const onSave = async () => {
-  appStore.numberFormat = numberFormat.value
+  profileStore.numberFormat = numberFormat.value
 
-  appStore.lowerCaseTransactionDescription = lowerCaseTransactionDescription.value
-  appStore.lowerCaseAccountName = lowerCaseAccountName.value
-  appStore.lowerCaseCategoryName = lowerCaseCategoryName.value
-  appStore.lowerCaseTagName = lowerCaseTagName.value
+  profileStore.lowerCaseTransactionDescription = lowerCaseTransactionDescription.value
+  profileStore.lowerCaseAccountName = lowerCaseAccountName.value
+  profileStore.lowerCaseCategoryName = lowerCaseCategoryName.value
+  profileStore.lowerCaseTagName = lowerCaseTagName.value
 
-  appStore.darkTheme = darkTheme.value
+  profileStore.darkTheme = darkTheme.value
 
-  await appStore.writeProfile()
+  await profileStore.writeProfile()
 
   UIUtils.showToastSuccess('User preferences saved')
   init()
 }
 
 const init = () => {
-  numberFormat.value = appStore.numberFormat
+  numberFormat.value = profileStore.numberFormat
 
-  lowerCaseTransactionDescription.value = appStore.lowerCaseTransactionDescription
-  lowerCaseAccountName.value = appStore.lowerCaseAccountName
-  lowerCaseCategoryName.value = appStore.lowerCaseCategoryName
-  lowerCaseTagName.value = appStore.lowerCaseTagName
+  lowerCaseTransactionDescription.value = profileStore.lowerCaseTransactionDescription
+  lowerCaseAccountName.value = profileStore.lowerCaseAccountName
+  lowerCaseCategoryName.value = profileStore.lowerCaseCategoryName
+  lowerCaseTagName.value = profileStore.lowerCaseTagName
 
-  darkTheme.value = appStore.darkTheme
+  darkTheme.value = profileStore.darkTheme
 }
 
 const toolbar = useToolbar()

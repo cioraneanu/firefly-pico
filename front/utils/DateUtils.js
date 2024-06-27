@@ -67,13 +67,13 @@ class DateUtils {
   }
 
   static dateToUI(date) {
-    const appStore = useAppStore()
-    return this.dateToString(date, appStore.dateFormat)
+    const profileStore = useProfileStore()
+    return this.dateToString(date, profileStore.dateFormat)
   }
 
   static dateToUIWithTime(date) {
-    const appStore = useAppStore()
-    return this.dateToString(date, `${appStore.dateFormat} HH:mm`)
+    const profileStore = useProfileStore()
+    return this.dateToString(date, `${profileStore.dateFormat} HH:mm`)
   }
 }
 

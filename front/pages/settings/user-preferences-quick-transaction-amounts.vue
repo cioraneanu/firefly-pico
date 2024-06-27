@@ -23,13 +23,13 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
 const quickAmountValues = ref([])
@@ -39,20 +39,20 @@ onMounted(() => {
 })
 
 const onSave = async () => {
-  appStore.quickValueButtons = quickAmountValues.value.map((item) => {
+  profileStore.quickValueButtons = quickAmountValues.value.map((item) => {
     let value = sanitizeAmount(item.value)
     let startsWithOperator = ['-', '+'].includes(value[0])
     return startsWithOperator ? value : `+${value}`
   })
 
-  await appStore.writeProfile()
+  await profileStore.writeProfile()
 
   UIUtils.showToastSuccess('User preferences saved')
   init()
 }
 
 const init = () => {
-  quickAmountValues.value = appStore.quickValueButtons.map((item) => {
+  quickAmountValues.value = profileStore.quickValueButtons.map((item) => {
     return { value: item }
   })
 }

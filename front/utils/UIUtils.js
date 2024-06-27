@@ -50,9 +50,9 @@ class UIUtils {
   }
 
   static showLoadingWhen(isLoading) {
-    const appStore = useAppStore()
+    const profileStore = useProfileStore()
     watch(isLoading, (newValue) => {
-      appStore.isLoading = newValue
+      profileStore.isLoading = newValue
     })
 
     // let loadingIndicator = null

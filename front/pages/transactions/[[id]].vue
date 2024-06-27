@@ -122,7 +122,7 @@ import { ref } from 'vue';
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
 import _, { get, head, isEqual } from 'lodash'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
 import Account from '~/models/Account'
@@ -144,7 +144,7 @@ const refAmount = ref(null)
 // ------------------------------------
 
 let dataStore = useDataStore()
-let appStore = useAppStore()
+let profileStore = useProfileStore()
 const route = useRoute()
 
 const form = ref(null)
@@ -236,7 +236,7 @@ const onTransactionTemplateSelected = (transactionTemplate) => {
 }
 
 watch(category, async (newValue) => {
-  if (!appStore.copyCategoryToDescription || !isStringEmpty(description.value) || itemId.value || !newValue) {
+  if (!profileStore.copyCategoryToDescription || !isStringEmpty(description.value) || itemId.value || !newValue) {
     return
   }
   description.value = Category.getDisplayName(newValue)
@@ -250,12 +250,12 @@ watch(tags, async (newValue) => {
   // Give child tags more priority for more granularity
   const sortedTagNames = sortByPath(newValue, 'level', false).map((tag) => Tag.getDisplayNameEllipsized(tag).toLowerCase())
 
-  if (appStore.copyTagToDescription && isStringEmpty(description.value)) {
+  if (profileStore.copyTagToDescription && isStringEmpty(description.value)) {
     // The first one is the one with the highest level
     description.value = head(sortedTagNames)
   }
 
-  if (appStore.copyTagToCategory && !category.value) {
+  if (profileStore.copyTagToCategory && !category.value) {
     for (let tagName of sortedTagNames) {
       let foundCategory = dataStore.categoryList.find((category) => {
         let categoryName = Category.getDisplayName(category).toLowerCase()
@@ -305,7 +305,7 @@ const isTypeTransfer = computed(() => isEqual(type.value, Transaction.types.tran
 
 const getStyleForField = (fieldCode) => {
   if (isTypeExpense.value) {
-    let position = appStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
+    let position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
     return `order: ${position}`
   }
 
@@ -313,12 +313,12 @@ const getStyleForField = (fieldCode) => {
 
   // Should be same as income, but reverse the position on source with destination
   if (isTypeIncome.value) {
-    let position = appStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
+    let position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
     if (fieldCode === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT) {
-      position = appStore.transactionOrderedFieldsList.findIndex((item) => item.code === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT)
+      position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT)
     }
     if (fieldCode === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT) {
-      position = appStore.transactionOrderedFieldsList.findIndex((item) => item.code === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT)
+      position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT)
     }
     return `order: ${position}`
   }
@@ -328,7 +328,7 @@ const getStyleForField = (fieldCode) => {
     if (fieldTypeAccountsList.includes(fieldCode)) {
       return `order: 0`
     }
-    let position = appStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
+    let position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
     return `order: ${position}`
   }
 
@@ -366,13 +366,13 @@ watch(type, (newValue, oldValue) => {
 })
 
 watch(description, (newValue) => {
-  if (!appStore.lowerCaseTransactionDescription) {
+  if (!profileStore.lowerCaseTransactionDescription) {
     return
   }
   description.value = newValue.toLowerCase()
 })
 
-const showSourceAccountSuggestion = computed(() => !appStore.defaultAccountSource && !accountSource.value)
+const showSourceAccountSuggestion = computed(() => !profileStore.defaultAccountSource && !accountSource.value)
 
 const toolbar = useToolbar()
 toolbar.init({

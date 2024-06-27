@@ -33,7 +33,7 @@ const props = defineProps({
   value: Object,
 })
 
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
 const emit = defineEmits(['onEdit', 'onDelete'])
@@ -83,11 +83,11 @@ const categoryIcon = computed(() => {
   return get(category, 'attributes.icon.icon') ?? TablerIconConstants.category
 })
 
-const isAccountIconVisible = computed(() => appStore.heroIcons.some((item) => item.code === HERO_ICONS.account))
-const isTagIconVisible = computed(() => appStore.heroIcons.some((item) => item.code === HERO_ICONS.tag) && !isEmpty(tags.value))
-const isCategoryIconVisible = computed(() => appStore.heroIcons.some((item) => item.code === HERO_ICONS.category))
-const isWeekdayIconVisible = computed(() => appStore.heroIcons.some((item) => item.code === HERO_ICONS.dayOfWeek))
-const isHourIconVisible = computed(() => appStore.heroIcons.some((item) => item.code === HERO_ICONS.hour))
+const isAccountIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === HERO_ICONS.account))
+const isTagIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === HERO_ICONS.tag) && !isEmpty(tags.value))
+const isCategoryIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === HERO_ICONS.category))
+const isWeekdayIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === HERO_ICONS.dayOfWeek))
+const isHourIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === HERO_ICONS.hour))
 
 const isAnyIconVisible = computed(() => {
   return isAccountIconVisible.value || isTagIconVisible.value || isCategoryIconVisible.value || isWeekdayIconVisible || isHourIconVisible

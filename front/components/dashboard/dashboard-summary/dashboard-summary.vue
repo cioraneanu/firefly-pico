@@ -45,11 +45,11 @@ import { addMonths, differenceInDays, startOfDay, subDays, subMonths } from 'dat
 import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
 
-const appStore = useAppStore()
+const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
 const startDate = computed(() => {
-  let dateCurrentMonth = startOfDay(new Date()).setDate(appStore.dashboard.firstDayOfMonth)
+  let dateCurrentMonth = startOfDay(new Date()).setDate(profileStore.dashboard.firstDayOfMonth)
   return dateCurrentMonth > new Date() ? subMonths(dateCurrentMonth, 1) : dateCurrentMonth
 })
 
@@ -68,7 +68,7 @@ const remainingDays = computed(() => {
 })
 
 // const getFormattedValue = (value) => {
-//   if (!appStore.dashboard.showAccountAmounts) {
+//   if (!profileStore.dashboard.showAccountAmounts) {
 //     return  '******'
 //   }
 //   return new Intl.NumberFormat('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(value)

@@ -7,8 +7,8 @@
         <!--        <div class="van-cell-group-title">Setup</div>-->
 
         <app-field left-icon="link-o" v-model="picoBackendURL" label="Pico backend URL" :rules="[{ required: true, message: 'This field is required' }]" required />
-
         <settings-token-field v-model="authToken" required />
+        <app-boolean left-icon="points" label="Save settings in database, linked with token" v-model="syncProfileInDB" />
       </van-cell-group>
 
       <van-cell-group inset>
@@ -34,7 +34,7 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useAppStore } from '~/stores/appStore'
+import { useProfileStore } from '~/stores/profileStore'
 import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import SettingsTokenField from '~/components/settings/settings-token-field.vue'
@@ -50,6 +50,7 @@ const dataStore = useDataStore()
 
 const authToken = ref('')
 const picoBackendURL = ref('')
+const syncProfileInDB = ref(true)
 
 const accountsCount = computed(() => dataStore.accountList.length)
 const categoriesCount = computed(() => dataStore.categoryList.length)
@@ -65,6 +66,7 @@ const lastSync = computed(() => {
 onMounted(() => {
   authToken.value = appStore.authToken
   picoBackendURL.value = appStore.picoBackendURL
+  syncProfileInDB.value = appStore.syncProfileInDB
 })
 
 const onSave = async () => {
@@ -72,6 +74,7 @@ const onSave = async () => {
 
   appStore.authToken = authToken.value
   appStore.picoBackendURL = picoBackendURL.value
+  appStore.syncProfileInDB = syncProfileInDB.value
 
   UIUtils.showToastLoading('Checking configuration')
   let userResponse = await new UserRepository().getUser()
