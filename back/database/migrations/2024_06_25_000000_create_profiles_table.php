@@ -11,7 +11,7 @@ return new class extends Migration {
         Schema::create('profiles', function (Blueprint $table) {
             $table->id();
             $table->string("auth_token_hash")->unique();
-            $table->jsonb('settings')->default('{}');
+            $table->jsonb('settings')->nullable();
             $table->timestamps();
         });
     }

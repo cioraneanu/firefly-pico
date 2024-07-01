@@ -29,7 +29,7 @@ return new class extends Migration {
             $table->id();
             $table->timestamps();
 
-            $table->integer("transaction_template_id");
+            $table->unsignedBigInteger("transaction_template_id");
             $table->integer("tag_id");
 
             $table->foreign('transaction_template_id')->references('id')->on('transaction_templates')->onDelete('cascade');
