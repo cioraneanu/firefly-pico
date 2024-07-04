@@ -86,6 +86,7 @@
 
 <script setup>
 import { onMounted, watch } from 'vue'
+import { useProfileStore } from '~/stores/profileStore'
 import { useDataStore } from '~/stores/dataStore'
 import TransactionTemplate from '~/models/TransactionTemplate'
 import { debounce } from 'lodash/function'
@@ -178,7 +179,6 @@ const processAssistantText = () => {
     return
   }
 
-  text = LanguageUtils.removeAccents(text)
   text = RomanianLanguageUtils.fixBadWordNumbers(text)
   text = text.replace(',', '.')
   let words = text.split(' ')
@@ -202,6 +202,8 @@ const processAssistantText = () => {
   let indexOfLastAmount = words.findLastIndex((item) => isStringAMathExpression(item))
   // let searchWords = words.filter(item => !isStringAMathExpression(item)).join(' ')
   let searchWords = indexOfLastAmount < 0 ? words.join(' ') : words.slice(0, indexOfLastAmount).join(' ')
+  searchWords = LanguageUtils.removeAccentsAndForceLowerCase(searchWords)
+
   let descriptionWords =
     indexOfLastAmount < 0
       ? null
@@ -209,7 +211,13 @@ const processAssistantText = () => {
           .slice(indexOfLastAmount)
           .filter((item) => !isStringAMathExpression(item))
           .join(' ')
-  foundDescription.value = descriptionWords
+  descriptionWords = LanguageUtils.removeAccents(descriptionWords)
+
+  if (profileStore.lowerCaseTransactionDescription) {
+    foundDescription.value = LanguageUtils.forceLowerCase(descriptionWords)
+  } else {
+    foundDescription.value = descriptionWords
+  }
 
   // receivedWords = RomanianLanguageUtils.sanitize(receivedWords)
 
