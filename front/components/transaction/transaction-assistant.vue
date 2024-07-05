@@ -178,7 +178,6 @@ const processAssistantText = () => {
     return
   }
 
-  text = LanguageUtils.removeAccents(text)
   text = RomanianLanguageUtils.fixBadWordNumbers(text)
   text = text.replace(',', '.')
   let words = text.split(' ')
@@ -202,6 +201,8 @@ const processAssistantText = () => {
   let indexOfLastAmount = words.findLastIndex((item) => isStringAMathExpression(item))
   // let searchWords = words.filter(item => !isStringAMathExpression(item)).join(' ')
   let searchWords = indexOfLastAmount < 0 ? words.join(' ') : words.slice(0, indexOfLastAmount).join(' ')
+  searchWords = LanguageUtils.removeAccents(searchWords)
+
   let descriptionWords =
     indexOfLastAmount < 0
       ? null
