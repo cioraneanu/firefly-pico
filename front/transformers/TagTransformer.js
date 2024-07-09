@@ -25,7 +25,7 @@ export default class TagTransformer extends ApiTransformer {
     }
 
     return {
-      tag: LanguageUtils.removeAccentsAndForceLowerCase(get(item, 'attributes.tag')),
+      tag: get(item, 'attributes.tag'),
       parent_id: get(item, 'attributes.parentTag.id'),
       icon: get(item, 'attributes.icon.icon', null),
       is_todo: get(item, 'attributes.is_todo', false),
