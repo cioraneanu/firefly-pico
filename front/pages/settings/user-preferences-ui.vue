@@ -27,6 +27,7 @@
       <van-cell-group inset>
         <!--        <div class="van-cell-group-title">Date settings:</div>-->
 
+        <app-boolean label="Strip accents:" v-model="stripAccents" />
         <app-boolean label="Force transaction description lowercase:" v-model="lowerCaseTransactionDescription" />
         <app-boolean label="Force account name lowercase:" v-model="lowerCaseAccountName" />
         <app-boolean label="Force category name lowercase:" v-model="lowerCaseCategoryName" />
@@ -57,6 +58,7 @@ const isDropdownNumberFormatVisible = ref(false)
 
 const darkTheme = ref(false)
 
+const stripAccents = ref(false)
 const lowerCaseTransactionDescription = ref(false)
 const lowerCaseAccountName = ref(false)
 const lowerCaseCategoryName = ref(false)
@@ -69,6 +71,7 @@ onMounted(() => {
 const onSave = async () => {
   profileStore.numberFormat = numberFormat.value
 
+  profileStore.stripAccents = stripAccents.value
   profileStore.lowerCaseTransactionDescription = lowerCaseTransactionDescription.value
   profileStore.lowerCaseAccountName = lowerCaseAccountName.value
   profileStore.lowerCaseCategoryName = lowerCaseCategoryName.value
@@ -85,6 +88,7 @@ const onSave = async () => {
 const init = () => {
   numberFormat.value = profileStore.numberFormat
 
+  stripAccents.value = profileStore.stripAccents
   lowerCaseTransactionDescription.value = profileStore.lowerCaseTransactionDescription
   lowerCaseAccountName.value = profileStore.lowerCaseAccountName
   lowerCaseCategoryName.value = profileStore.lowerCaseCategoryName

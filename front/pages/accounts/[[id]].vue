@@ -115,10 +115,13 @@ const { name, type, role, currency, icon, includeNetWorth, isDashboardVisible } 
 const isRoleVisible = computed(() => get(type.value, 'fireflyCode') === Account.types.asset.fireflyCode)
 
 watch(name, (newValue) => {
-  if (!profileStore.lowerCaseAccountName) {
-    return
+  if (profileStore.lowerCaseAccountName) {
+    newValue = newValue.toLowerCase()
   }
-  name.value = newValue.toLowerCase()
+  if (profileStore.stripAccents) {
+    newValue = LanguageUtils.removeAccents(newValue)
+  }
+  name.value = newValue
 })
 
 const toolbar = useToolbar()

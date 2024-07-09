@@ -136,9 +136,12 @@ const onRefresh = () => {
 }
 
 watch(tag, (newValue) => {
-  if (!profileStore.lowerCaseTagName) {
-    return
+  if (profileStore.lowerCaseTagName) {
+    newValue = newValue.toLowerCase()
   }
-  tag.value = newValue.toLowerCase()
+  if (profileStore.stripAccents) {
+    newValue = LanguageUtils.removeAccents(newValue)
+  }
+  tag.value = newValue
 })
 </script>
