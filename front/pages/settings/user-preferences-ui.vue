@@ -31,7 +31,7 @@
         <app-boolean label="Force account name lowercase:" v-model="lowerCaseAccountName" />
         <app-boolean label="Force category name lowercase:" v-model="lowerCaseCategoryName" />
         <app-boolean label="Force tag name lowercase:" v-model="lowerCaseTagName" />
-        <app-boolean label="Strip accents for above:" v-model="stripAccents" />
+        <app-boolean label="Strip accents:" v-model="stripAccents" />
 
       </van-cell-group>
 
