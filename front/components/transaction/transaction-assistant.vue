@@ -86,7 +86,6 @@
 
 <script setup>
 import { onMounted, watch } from 'vue'
-import { useProfileStore } from '~/stores/profileStore'
 import { useDataStore } from '~/stores/dataStore'
 import TransactionTemplate from '~/models/TransactionTemplate'
 import { debounce } from 'lodash/function'
@@ -202,7 +201,7 @@ const processAssistantText = () => {
   let indexOfLastAmount = words.findLastIndex((item) => isStringAMathExpression(item))
   // let searchWords = words.filter(item => !isStringAMathExpression(item)).join(' ')
   let searchWords = indexOfLastAmount < 0 ? words.join(' ') : words.slice(0, indexOfLastAmount).join(' ')
-  searchWords = LanguageUtils.removeAccentsAndForceLowerCase(searchWords)
+  searchWords = LanguageUtils.removeAccents(searchWords)
 
   let descriptionWords =
     indexOfLastAmount < 0
@@ -211,13 +210,7 @@ const processAssistantText = () => {
           .slice(indexOfLastAmount)
           .filter((item) => !isStringAMathExpression(item))
           .join(' ')
-  descriptionWords = LanguageUtils.removeAccents(descriptionWords)
-
-  if (profileStore.lowerCaseTransactionDescription) {
-    foundDescription.value = LanguageUtils.forceLowerCase(descriptionWords)
-  } else {
-    foundDescription.value = descriptionWords
-  }
+  foundDescription.value = descriptionWords
 
   // receivedWords = RomanianLanguageUtils.sanitize(receivedWords)
 
