@@ -206,7 +206,7 @@ export const useDataStore = defineStore('data', {
     },
 
     tagDictionaryByName: (state) => {
-      return keyBy(state.tagList, (item) => LanguageUtils.removeAccents(item.attributes.tag))
+      return keyBy(state.tagList, (item) => LanguageUtils.removeAccentsAndLowerCase(item.attributes.tag))
     },
 
     tagDictionaryById: (state) => {

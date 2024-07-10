@@ -20,8 +20,8 @@ export const sortByPath = (list, path, isAsc = true) =>
 //   }
 //
 //   if (shouldRemoveAccents) {
-//     valueA = LanguageUtils.removeAccents(valueA)
-//     valueB = LanguageUtils.removeAccents(valueB)
+//     valueA = LanguageUtils.removeAccentsAndForceLowerCase(valueA)
+//     valueB = LanguageUtils.removeAccentsAndForceLowerCase(valueB)
 //   }
 //
 //   if (isNumeric) {

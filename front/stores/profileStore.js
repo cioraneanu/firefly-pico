@@ -43,6 +43,7 @@ export const useProfileStore = defineStore('profile', {
       lowerCaseAccountName: useLocalStorage('lowerCaseAccountName', false),
       lowerCaseCategoryName: useLocalStorage('lowerCaseCategoryName', true),
       lowerCaseTagName: useLocalStorage('lowerCaseTagName', true),
+      stripAccents: useLocalStorage('stripAccents', true),
 
       heroIcons: useLocalStorage(
         'heroIcons',

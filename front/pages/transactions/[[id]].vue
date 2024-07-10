@@ -366,10 +366,13 @@ watch(type, (newValue, oldValue) => {
 })
 
 watch(description, (newValue) => {
-  if (!profileStore.lowerCaseTransactionDescription) {
-    return
+  if (profileStore.lowerCaseTransactionDescription) {
+    newValue = newValue.toLowerCase()
   }
-  description.value = newValue.toLowerCase()
+  if (profileStore.stripAccents) {
+    newValue = LanguageUtils.removeAccents(newValue)
+  }
+  description.value = newValue
 })
 
 const showSourceAccountSuggestion = computed(() => !profileStore.defaultAccountSource && !accountSource.value)

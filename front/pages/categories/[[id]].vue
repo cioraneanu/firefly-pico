@@ -80,10 +80,13 @@ const { name, icon } = generateChildren(item, [
 ])
 
 watch(name, (newValue) => {
-  if (!profileStore.lowerCaseCategoryName) {
-    return
+  if (profileStore.lowerCaseCategoryName) {
+    newValue = newValue.toLowerCase()
   }
-  name.value = newValue.toLowerCase()
+  if (profileStore.stripAccents) {
+    newValue = LanguageUtils.removeAccents(newValue)
+  }
+  name.value = newValue
 })
 
 const toolbar = useToolbar()
