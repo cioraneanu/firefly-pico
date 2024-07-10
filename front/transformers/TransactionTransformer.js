@@ -36,8 +36,8 @@ export default class TransactionTransformer extends ApiTransformer {
       transaction.category = categoryDictionary[transaction['category_id']]
       // transaction.tags = TagTransformer.transformFromApiList(transaction.tags.map(tagName => tagDictionaryByName[LanguageUtils.removeAccentsAndForceLowerCase(tagName)]))
       transaction.tags = transaction.tags.map((tagName) => {
-        hasMissingTag = hasMissingTag || !tagDictionaryByName[LanguageUtils.removeAccentsAndForceLowerCase(tagName)]
-        return tagDictionaryByName[LanguageUtils.removeAccentsAndForceLowerCase(tagName)]
+        hasMissingTag = hasMissingTag || !tagDictionaryByName[LanguageUtils.removeAccentsAndLowerCase(tagName)]
+        return tagDictionaryByName[LanguageUtils.removeAccentsAndLowerCase(tagName)]
       })
 
       // let subTransactionType = Transaction.transactionTypeFromFirefly(transaction.type)

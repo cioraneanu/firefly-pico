@@ -8,16 +8,18 @@ export default class LanguageUtils {
       .replace(/[\u0300-\u036f]/g, '')
   }
 
-  static forceLowerCase(text) {
+  static removeAccentsAndLowerCase(text) {
+    text = LanguageUtils.removeAccents(text)
+    text = LanguageUtils.lowercase(text)
+    return text
+  }
+
+  static lowercase(text) {
     if (!text) {
       return ''
     }
     return text.toLowerCase()
   }
 
-  static removeAccentsAndForceLowerCase(text) {
-    text = LanguageUtils.removeAccents(text)
-    text = LanguageUtils.forceLowerCase(text)
-    return text
-  }
+
 }
