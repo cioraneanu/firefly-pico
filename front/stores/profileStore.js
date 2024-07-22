@@ -85,7 +85,7 @@ export const useProfileStore = defineStore('profile', {
         return
       }
 
-      let omitList = ['isLoading', 'dashboard.showAccountAmounts']
+      let omitList = ['isLoading', 'loadingMessage', 'dashboard.showAccountAmounts']
       this.isLoading = true
       let data = cloneDeep(this.$state)
       data = omit(data, omitList)

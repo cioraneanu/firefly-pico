@@ -55,7 +55,6 @@ const firstDayOfMonthList = [...Array(27).keys()].map((item) => item + 1)
 const isDropdownFirstDayVisible = ref(false)
 
 
-// TODO: Play a little with this idea, maybe apply it to all settings pages... :)
 const syncedSettings = [
   { store: profileStore, path: 'dateFormat', ref: dateFormat },
   { store: profileStore, path: 'dashboard.firstDayOfMonth', ref: firstDayOfMonth },

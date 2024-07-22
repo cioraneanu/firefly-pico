@@ -28,44 +28,30 @@ import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
+import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 
 const profileStore = useProfileStore()
-const dataStore = useDataStore()
 
 const areEmptyAccountsVisible = ref(false)
 const showDecimal = ref(false)
-
-
 const excludedAccountsList = ref([])
 const excludedCategoriesList = ref([])
 const excludedTagsList = ref([])
 
-onMounted(() => {
-  init()
-})
+const syncedSettings = [
+  { store: profileStore, path: 'dashboard.areEmptyAccountsVisible', ref: areEmptyAccountsVisible },
+  { store: profileStore, path: 'dashboard.showDecimal', ref: showDecimal },
+  { store: profileStore, path: 'dashboard.excludedAccountsList', ref: excludedAccountsList },
+  { store: profileStore, path: 'dashboard.excludedCategoriesList', ref: excludedCategoriesList },
+  { store: profileStore, path: 'dashboard.excludedTagsList', ref: excludedTagsList },
+]
+
+watchSettingsStore(syncedSettings)
 
 const onSave = async () => {
-  profileStore.dashboard.areEmptyAccountsVisible = areEmptyAccountsVisible.value
-  profileStore.dashboard.showDecimal = showDecimal.value
-
-  profileStore.dashboard.excludedAccountsList = excludedAccountsList.value
-  profileStore.dashboard.excludedCategoriesList = excludedCategoriesList.value
-  profileStore.dashboard.excludedTagsList = excludedTagsList.value
-
+  saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-
   UIUtils.showToastSuccess('User preferences saved')
-  init()
-}
-
-const init = () => {
-  areEmptyAccountsVisible.value = profileStore.dashboard.areEmptyAccountsVisible
-  showDecimal.value = profileStore.dashboard.showDecimal
-
-
-  excludedAccountsList.value = profileStore.dashboard.excludedAccountsList
-  excludedCategoriesList.value = profileStore.dashboard.excludedCategoriesList
-  excludedTagsList.value = profileStore.dashboard.excludedTagsList
 }
 
 const toolbar = useToolbar()

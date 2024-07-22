@@ -8,7 +8,7 @@
 
         <app-field left-icon="link-o" v-model="picoBackendURL" label="Pico backend URL" :rules="[{ required: true, message: 'This field is required' }]" required />
         <settings-token-field v-model="authToken" required />
-        <app-boolean left-icon="points" label="Sync app settings via token" v-model="syncProfileInDB" />
+        <app-boolean left-icon="points" label="Sync settings across devices via token" v-model="syncProfileInDB" />
       </van-cell-group>
 
       <van-cell-group inset>

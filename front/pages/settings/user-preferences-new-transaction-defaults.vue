@@ -27,6 +27,7 @@ import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
+import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
@@ -37,29 +38,20 @@ const defaultCategory = ref(null)
 const defaultTags = ref([])
 const autoAddedTags = ref([])
 
-onMounted(() => {
-  init()
-})
+const syncedSettings = [
+  { store: profileStore, path: 'defaultAccountSource', ref: defaultAccountSource },
+  { store: profileStore, path: 'defaultAccountDestination', ref: defaultAccountDestination },
+  { store: profileStore, path: 'defaultCategory', ref: defaultCategory },
+  { store: profileStore, path: 'defaultTags', ref: defaultTags },
+  { store: profileStore, path: 'autoAddedTags', ref: autoAddedTags },
+]
+
+watchSettingsStore(syncedSettings)
 
 const onSave = async () => {
-  profileStore.defaultAccountSource = defaultAccountSource.value
-  profileStore.defaultAccountDestination = defaultAccountDestination.value
-  profileStore.defaultCategory = defaultCategory.value
-  profileStore.defaultTags = defaultTags.value
-  profileStore.autoAddedTags = autoAddedTags.value
-
+  saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-
   UIUtils.showToastSuccess('User preferences saved')
-  init()
-}
-
-const init = () => {
-  defaultAccountSource.value = profileStore.defaultAccountSource
-  defaultAccountDestination.value = profileStore.defaultAccountDestination
-  defaultCategory.value = profileStore.defaultCategory
-  defaultTags.value = profileStore.defaultTags
-  autoAddedTags.value = profileStore.autoAddedTags
 }
 
 const toolbar = useToolbar()
