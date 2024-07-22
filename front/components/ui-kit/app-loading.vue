@@ -3,7 +3,7 @@
     <div v-if="profileStore.isLoading" class="app-loading-background">
         <div class="app-loading flex-column flex-center">
           <icon-rotate :size="30" :stroke="1.4" class="animate-rotate-infinite" />
-          <div class="text-size-16">Loading...</div>
+          <div class="text-size-16">{{ profileStore.loadingMessage }}</div>
         </div>
     </div>
   </transition>

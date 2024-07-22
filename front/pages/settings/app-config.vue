@@ -76,7 +76,7 @@ const onSave = async () => {
   appStore.picoBackendURL = picoBackendURL.value
   appStore.syncProfileInDB = syncProfileInDB.value
 
-  UIUtils.showToastLoading('Checking configuration')
+  UIUtils.showToastLoading('Verifying...')
   let userResponse = await new UserRepository().getUser()
   UIUtils.stopToastLoading()
 
@@ -85,7 +85,7 @@ const onSave = async () => {
     return
   }
 
-  UIUtils.showToastLoading('Fetching data')
+  UIUtils.showToastLoading('Fetching...')
   await dataStore.syncEverything()
   UIUtils.stopToastLoading()
   UIUtils.showToastSuccess('Settings saved')

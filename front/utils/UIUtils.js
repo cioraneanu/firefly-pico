@@ -23,17 +23,15 @@ class UIUtils {
     })
   }
 
-  static showToastLoading(message) {
-    showLoadingToast({
-      duration: 0,
-      message: message,
-      forbidClick: true,
-      wordBreak: 'break-word',
-    })
+  static showToastLoading(message = "Loading...") {
+    const profileStore = useProfileStore()
+    profileStore.isLoading = true
+    profileStore.loadingMessage = message
   }
 
   static stopToastLoading() {
-    closeToast()
+    const profileStore = useProfileStore()
+    profileStore.isLoading = false
   }
 
   static showConfirmation(title, text, buttonConfirm = 'Da', buttonCancel = 'Nu') {}
@@ -52,26 +50,9 @@ class UIUtils {
   static showLoadingWhen(isLoading) {
     const profileStore = useProfileStore()
     watch(isLoading, (newValue) => {
+      profileStore.loadingMessage = "Loading..."
       profileStore.isLoading = newValue
     })
-
-    // let loadingIndicator = null
-    //
-    // watch(
-    //   () => isLoading.value,
-    //   async (newValue, oldValue) => {
-    //     if (newValue) {
-    //       loadingIndicator = showLoadingToast({
-    //         duration: 0,
-    //         message: 'Loading...',
-    //         forbidClick: true,
-    //       })
-    //     } else {
-    //       closeToast()
-    //     }
-    //   },
-    //   { immediate: true },
-    // )
   }
 
   static focusInput(inputRef) {

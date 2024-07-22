@@ -333,10 +333,11 @@ export const useDataStore = defineStore('data', {
     // },
 
     async syncEverything() {
-      const profileStore = useProfileStore()
-      if (!profileStore.hasAuthToken) {
+      const appStore = useAppStore()
+      if (!appStore.hasAuthToken) {
         return
       }
+
       let async1 = this.fetchCategories()
       let async2 = this.fetchAccounts()
       let async3 = this.fetchTags()

@@ -17,6 +17,7 @@ export const useProfileStore = defineStore('profile', {
   state: () => {
     return {
       isLoading: false,
+      loadingMessage: 'Loading...',
 
       darkTheme: useLocalStorage('darkTheme', false),
 
