@@ -4,14 +4,16 @@
 
     <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
       <van-cell-group inset>
+        <app-list-search v-model="search" />
+
         <div class="van-cell-group-title">Date: {{ exchangeDate }}</div>
 
         <van-grid :column-num="3">
-          <van-grid-item v-for="(currencyValue, currencyCode) in exchangeRates">
+          <van-grid-item v-for="currency in filteredList">
             <template #text>
               <div>
-                <div class="flex-center text-size-14 font-weight-600">{{ currencyCode }}</div>
-                <div class="flex-center text-size-10 text-muted">{{ currencyValue }}</div>
+                <div class="flex-center text-size-14 font-weight-600">{{ currency.code }}</div>
+                <div class="flex-center text-size-10 text-muted">{{ currency.value }}</div>
               </div>
             </template>
           </van-grid-item>
@@ -28,20 +30,40 @@ import { useDataStore } from '~/stores/dataStore'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import UIUtils from '~/utils/UIUtils.js'
+import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
+import Tag from '~/models/Tag.js'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
 const isRefreshing = ref(false)
+const search = ref('')
+const isSearchVisible = ref(true)
+
+const exchangeDate = computed(() => get(dataStore.exchangeRates, 'date'))
+const exchangeRates = computed(() => get(dataStore.exchangeRates, 'rates'))
+const list = computed(() =>
+  Object.keys(exchangeRates.value).map((currencyCode) => ({
+    code: currencyCode,
+    value: exchangeRates.value[currencyCode],
+  })),
+)
+
+const filteredList = computed(() => {
+  if (search.value.length === 0) {
+    return list.value
+  }
+
+  return list.value.filter((item) => {
+    return item.code.toUpperCase().indexOf(search.value.toUpperCase()) !== -1
+  })
+})
 
 const onRefresh = async () => {
   isRefreshing.value = true
   await dataStore.fetchExchangeRate()
   isRefreshing.value = false
 }
-
-const exchangeDate = computed(() => get(dataStore.exchangeRates, 'date'))
-const exchangeRates = computed(() => get(dataStore.exchangeRates, 'rates'))
 
 const getCurrencyValue = (currency) => {
   return get(exchangeRates.value, currency)

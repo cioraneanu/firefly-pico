@@ -49,53 +49,40 @@ import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
-const numberFormat = ref(null)
 const numberFormatList = [NUMBER_FORMAT.eu, NUMBER_FORMAT.international]
 const isDropdownNumberFormatVisible = ref(false)
 
 const darkTheme = ref(false)
-
+const numberFormat = ref(null)
 const stripAccents = ref(false)
 const lowerCaseTransactionDescription = ref(false)
 const lowerCaseAccountName = ref(false)
 const lowerCaseCategoryName = ref(false)
 const lowerCaseTagName = ref(false)
 
-onMounted(() => {
-  init()
-})
+const syncedSettings = [
+  { store: profileStore, path: 'darkTheme', ref: darkTheme },
+  { store: profileStore, path: 'numberFormat', ref: numberFormat },
+  { store: profileStore, path: 'stripAccents', ref: stripAccents },
+  { store: profileStore, path: 'lowerCaseTransactionDescription', ref: lowerCaseTransactionDescription },
+  { store: profileStore, path: 'lowerCaseAccountName', ref: lowerCaseAccountName },
+  { store: profileStore, path: 'lowerCaseCategoryName', ref: lowerCaseCategoryName },
+  { store: profileStore, path: 'lowerCaseTagName', ref: lowerCaseTagName },
+]
+
+watchSettingsStore(syncedSettings)
+
+
 
 const onSave = async () => {
-  profileStore.numberFormat = numberFormat.value
-
-  profileStore.stripAccents = stripAccents.value
-  profileStore.lowerCaseTransactionDescription = lowerCaseTransactionDescription.value
-  profileStore.lowerCaseAccountName = lowerCaseAccountName.value
-  profileStore.lowerCaseCategoryName = lowerCaseCategoryName.value
-  profileStore.lowerCaseTagName = lowerCaseTagName.value
-
-  profileStore.darkTheme = darkTheme.value
-
+  saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-
   UIUtils.showToastSuccess('User preferences saved')
-  init()
-}
-
-const init = () => {
-  numberFormat.value = profileStore.numberFormat
-
-  stripAccents.value = profileStore.stripAccents
-  lowerCaseTransactionDescription.value = profileStore.lowerCaseTransactionDescription
-  lowerCaseAccountName.value = profileStore.lowerCaseAccountName
-  lowerCaseCategoryName.value = profileStore.lowerCaseCategoryName
-  lowerCaseTagName.value = profileStore.lowerCaseTagName
-
-  darkTheme.value = profileStore.darkTheme
 }
 
 const toolbar = useToolbar()

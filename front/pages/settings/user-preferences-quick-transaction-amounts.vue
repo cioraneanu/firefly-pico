@@ -2,22 +2,19 @@
   <div class="app-form">
     <app-top-toolbar />
 
-    <van-cell-group inset>
-      <!--      <div class="van-cell-group-title">Quick transaction amount modifiers:</div>-->
+    <van-form @submit="onSave" class="">
+      <van-cell-group inset>
+        <div class="van-cell-fake flex-column van-cell">
+          <app-repeater v-model="quickAmountValues" :empty-item="{ value: '' }">
+            <template #content="{ element, index }">
+              <app-field placeholder="Value" v-model="element.value" inputmode="decimal" />
+            </template>
+          </app-repeater>
+        </div>
+      </van-cell-group>
 
-      <div class="van-cell-fake flex-column van-cell">
-        <!--          <span>Quick transaction amount modifiers:</span>-->
-        <app-repeater v-model="quickAmountValues" :empty-item="{ value: '' }">
-          <template #content="{ element, index }">
-            <app-field placeholder="Value" v-model="element.value" inputmode="decimal" />
-          </template>
-        </app-repeater>
-      </div>
-    </van-cell-group>
-
-    <div style="margin: 16px">
-      <van-button round type="primary" @click="onSave" class="app-button-save"> Save </van-button>
-    </div>
+      <app-button-form-save />
+    </van-form>
   </div>
 </template>
 

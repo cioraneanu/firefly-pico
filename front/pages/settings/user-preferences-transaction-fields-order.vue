@@ -2,23 +2,21 @@
   <div class="app-form">
     <app-top-toolbar />
 
-    <van-cell-group inset class="p-10">
-      <!--      <div class="van-cell-group-title">Quick transaction amount modifiers:</div>-->
+    <van-form @submit="onSave" class="">
+      <van-cell-group inset class="p-10">
+        <div class="van-cell-fake flex-column van-cell">
+          <app-repeater v-model="fieldsList" :is-list-dynamic="false" :empty-item="{ value: '' }">
+            <template #content="{ element, index }">
+              <div class="app-field m-5 pointer-events-none prevent-select">
+                <div class="van-field__body">{{ element.name }}</div>
+              </div>
+            </template>
+          </app-repeater>
+        </div>
+      </van-cell-group>
 
-      <div class="van-cell-fake flex-column van-cell">
-        <app-repeater v-model="fieldsList" :is-list-dynamic="false" :empty-item="{ value: '' }">
-          <template #content="{ element, index }">
-            <div class="app-field m-5 pointer-events-none prevent-select">
-              <div class="van-field__body">{{ element.name }}</div>
-            </div>
-          </template>
-        </app-repeater>
-      </div>
-    </van-cell-group>
-
-    <div style="margin: 16px">
-      <van-button round type="primary" native-type="submit" @click="onSave" class="app-button-save"> Save </van-button>
-    </div>
+      <app-button-form-save />
+    </van-form>
   </div>
 </template>
 
@@ -43,9 +41,7 @@ onMounted(() => {
 
 const onSave = async () => {
   profileStore.transactionOrderedFieldsList = fieldsList.value
-  
   await profileStore.writeProfile()
-
   UIUtils.showToastSuccess('User preferences saved')
   init()
 }
@@ -64,5 +60,4 @@ toolbar.init({
 onMounted(() => {
   animateSettings()
 })
-
 </script>
