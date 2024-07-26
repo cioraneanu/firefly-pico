@@ -13,6 +13,7 @@
             <template #text>
               <div>
                 <div class="flex-center text-size-14 font-weight-600">{{ currency.code }}</div>
+                <div class="flex-center text-size-10">{{ currency.name }}</div>
                 <div class="flex-center text-size-10 text-muted">{{ currency.value }}</div>
               </div>
             </template>
@@ -41,32 +42,24 @@ const search = ref('')
 const isSearchVisible = ref(true)
 
 const exchangeDate = computed(() => get(dataStore.exchangeRates, 'date'))
-const exchangeRates = computed(() => get(dataStore.exchangeRates, 'rates'))
-const list = computed(() =>
-  Object.keys(exchangeRates.value).map((currencyCode) => ({
-    code: currencyCode,
-    value: exchangeRates.value[currencyCode],
-  })),
-)
+const list = computed(() => dataStore.exchangeRatesList)
 
 const filteredList = computed(() => {
   if (search.value.length === 0) {
     return list.value
   }
 
-  return list.value.filter((item) => {
-    return item.code.toUpperCase().indexOf(search.value.toUpperCase()) !== -1
-  })
+  return list.value.filter((item) =>
+    ['code', 'name', 'country'].some((key) => {
+      return (item[key] ?? '').toLowerCase().includes(search.value.toLowerCase())
+    }),
+  )
 })
 
 const onRefresh = async () => {
   isRefreshing.value = true
   await dataStore.fetchExchangeRate()
   isRefreshing.value = false
-}
-
-const getCurrencyValue = (currency) => {
-  return get(exchangeRates.value, currency)
 }
 
 UIUtils.showLoadingWhen(isRefreshing)

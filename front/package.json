@@ -20,7 +20,7 @@
     "@faker-js/faker": "^8.4.1",
     "@nuxt/eslint": "^0.3.13",
     "@nuxtjs/device": "^3.1.1",
-    "@vant/nuxt": "^1.0.4",
+    "@vant/nuxt": "^1.0.5",
     "@vite-pwa/nuxt": "^0.8.0",
     "eslint-config-prettier": "^9.1.0",
     "nuxt": "^3.12.3",
@@ -40,7 +40,7 @@
     "lodash": "^4.17.21",
     "mathjs": "^12.4.1",
     "pinia": "^2.1.7",
-    "vant": "^4.9.1",
+    "vant": "^4.9.3",
     "vuedraggable": "^4.1.0"
   },
   "overrides": {

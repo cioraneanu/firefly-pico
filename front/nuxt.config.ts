@@ -12,10 +12,12 @@ export default defineNuxtConfig({
       // mihai: 'test'
     },
   },
+
   devServer: {
     // host: '192.168.1.10',
     // host: '0'
   },
+
   vite: {
     vue: {
       script: {
@@ -24,10 +26,13 @@ export default defineNuxtConfig({
       },
     },
   },
+
   devtools: {
     enabled: false,
   },
+
   ssr: false,
+
   // components: {},
   components: [
     {
@@ -48,9 +53,11 @@ export default defineNuxtConfig({
     '@/assets/styles/helper.css',
     '@/assets/styles/animations.css',
   ],
+
   build: {
     // transpile: ['vuetify'],
   },
+
   modules: ['@vite-pwa/nuxt', '@nuxtjs/device', '@pinia/nuxt', '@vant/nuxt', 'nuxt-svgo', '@nuxt/eslint'],
 
   svgo: {
@@ -68,6 +75,7 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover',
     },
   },
+
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
@@ -96,4 +104,6 @@ export default defineNuxtConfig({
       type: 'module',
     },
   },
+
+  compatibilityDate: '2024-07-26',
 })

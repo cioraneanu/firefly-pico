@@ -70,10 +70,12 @@ export const useDataStore = defineStore('data', {
     dashboardAccounts(state) {
       const profileStore = useProfileStore()
       return state.accountList.filter((account) => {
-        return isEqual(Account.getType(account), Account.types.asset) &&
+        return (
+          isEqual(Account.getType(account), Account.types.asset) &&
           Account.getIsActive(account) &&
           Account.getIsIncludedInNetWorth(account) &&
           (Account.getBalance(account) != 0 || profileStore.dashboard.areEmptyAccountsVisible)
+        )
       })
     },
 
@@ -222,6 +224,19 @@ export const useDataStore = defineStore('data', {
     currencyDictionary: (state) => {
       return keyBy(state.currenciesList, 'id')
     },
+
+    exchangeRatesList: (state) => {
+      let infoList = get(state.exchangeRates, 'currencies') ?? []
+      let infoDictionary = keyBy(infoList, 'code')
+
+      let rates = get(state.exchangeRates, 'rates')
+      return Object.keys(rates ?? {}).map((currencyCode) => ({
+        code: currencyCode,
+        value: rates[currencyCode],
+        name: get(infoDictionary, `${currencyCode}.name`, ' - '),
+        country: get(infoDictionary, `${currencyCode}.country`, ' - ')
+      }))
+    },
   },
 
   actions: {
@@ -261,14 +276,9 @@ export const useDataStore = defineStore('data', {
       // ]
       // const list = await new TransactionRepository().getAllWithMerge({ filters })
 
-
       // TODO: Test this on user with larger Databases. Need to make sure the /search endpoint + filters is faster than all transaction with frontend filtering
-      let filtersParts = [
-        `date_after:${DateUtils.dateToString(this.dashboardDateStart)}`,
-        `date_before:${DateUtils.dateToString(this.dashboardDateEnd)}`,
-        ...getExcludedTransactionFilters()
-      ]
-      let filters = [{ field: 'query', value: filtersParts.join(' ')}]
+      let filtersParts = [`date_after:${DateUtils.dateToString(this.dashboardDateStart)}`, `date_before:${DateUtils.dateToString(this.dashboardDateEnd)}`, ...getExcludedTransactionFilters()]
+      let filters = [{ field: 'query', value: filtersParts.join(' ') }]
       let searchMethod = new TransactionRepository().searchTransaction
       let list = await new TransactionRepository().getAllWithMerge({ filters, getAll: searchMethod })
 
@@ -289,13 +299,8 @@ export const useDataStore = defineStore('data', {
       // ]
       // const list = await new TransactionRepository().getAllWithMerge({ filters })
 
-      let filtersParts = [
-        `date_after:${startDate}`,
-        `date_after:${startDate}`,
-        `type:withdrawal`,
-        ...getExcludedTransactionFilters()
-      ]
-      let filters = [{ field: 'query', value: filtersParts.join(' ')}]
+      let filtersParts = [`date_after:${startDate}`, `date_after:${startDate}`, `type:withdrawal`, ...getExcludedTransactionFilters()]
+      let filters = [{ field: 'query', value: filtersParts.join(' ') }]
       let searchMethod = new TransactionRepository().searchTransaction
       let list = await new TransactionRepository().getAllWithMerge({ filters, getAll: searchMethod })
 
