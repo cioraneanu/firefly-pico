@@ -33,9 +33,19 @@
         <transaction-amount-field
           required
           v-model="amount"
-          :currency="currency"
+          :currency="sourceCurrencyCode"
           ref="refAmount"
           :rules="[{ required: true, message: 'Amount is required' }]"
+          :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_AMOUNT)"
+        />
+
+        <transaction-amount-field
+          v-if="isForeignAmountVisible"
+          label="Foreign amount"
+          v-model="amountForeign"
+          :currency="destinationCurrencyCode"
+          :showQuickButtons="false"
+          ref="refAmountForeign"
           :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_AMOUNT)"
         />
 
@@ -87,7 +97,7 @@
           <div v-if="!itemId" class="px-3 flex-center-vertical gap-1">
             <van-button size="small" @click="onSubDay">-1 day</van-button>
             <van-button size="small" @click="onToday">Today</van-button>
-            <van-button size="small" @click="onAddDay" >+1 day</van-button>
+            <van-button size="small" @click="onAddDay">+1 day</van-button>
           </div>
         </div>
 
@@ -163,8 +173,9 @@ let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveI
 const time = ref(['12', '00'])
 
 const pathKey = 'attributes.transactions.0'
-const { amount, date, tags, description, notes, accountSource, accountDestination, category, type } = generateChildren(item, [
+const { amount, amountForeign, date, tags, description, notes, accountSource, accountDestination, category, type } = generateChildren(item, [
   { computed: 'amount', parentKey: `${pathKey}.amount` },
+  { computed: 'amountForeign', parentKey: `${pathKey}.amountForeign` },
   { computed: 'date', parentKey: `${pathKey}.date` },
   { computed: 'tags', parentKey: `${pathKey}.tags` },
   { computed: 'description', parentKey: `${pathKey}.description` },
@@ -185,11 +196,13 @@ const accountDestinationAllowedTypes = computed(() => Account.getAccountTypesFor
 
 // ------------------------------------
 
-const currency = computed(() => {
-  if (!accountSource.value) {
-    return ''
+const sourceCurrencyCode = computed(() => get(accountSource.value, 'attributes.currency_symbol', ''))
+const destinationCurrencyCode = computed(() => get(accountDestination.value, 'attributes.currency_symbol', ''))
+const isForeignAmountVisible = computed(() => {
+  if (!accountSource.value || !accountDestination.value) {
+    return false
   }
-  return get(accountSource.value, 'attributes.currency_symbol')
+  return sourceCurrencyCode.value !== destinationCurrencyCode.value
 })
 
 //

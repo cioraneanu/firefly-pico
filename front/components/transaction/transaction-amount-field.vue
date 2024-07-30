@@ -5,7 +5,7 @@
         v-model="modelValue"
         placeholder="Amount"
         @click="() => input.focus()"
-        label="Amount"
+        :label="label"
         left-icon="peer-pay"
         class="flex-center-vertical app-field transaction-amount-field"
         v-bind="attrs"
@@ -34,7 +34,7 @@
       </van-field>
     </div>
 
-    <table class="transaction-amount-table-buttons">
+    <table v-if="showQuickButtons" class="transaction-amount-table-buttons">
       <tr>
         <td v-for="quickButton in quickButtons">
           <van-button class="w-100 transaction-amount-button" @mousedown.prevent.stop="onQuickButton(quickButton)" type="default" size="normal">
@@ -74,6 +74,10 @@ const props = defineProps({
   currency: {
     type: String,
     default: '',
+  },
+  showQuickButtons: {
+    type: Boolean,
+    default: true,
   },
 })
 
