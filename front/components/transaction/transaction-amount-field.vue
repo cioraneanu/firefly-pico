@@ -7,13 +7,18 @@
         placeholder="Amount"
         @click="() => inputAmount.focus()"
         label="Amount"
-        left-icon="peer-pay"
         class="flex-center-vertical app-field transaction-amount-field"
         v-bind="attrs"
         label-align="top"
       >
+        <template #left-icon>
+          <app-icon :icon="TablerIconConstants.cashBanknote" :size="20"/>
+        </template>
+
         <template #right-icon>
-          {{ props.currency }}
+          <div class="flex-center-vertical gap-2">
+            {{ props.currency }}
+          </div>
         </template>
 
         <template #input>
@@ -31,38 +36,61 @@
       </van-field>
     </div>
 
-<!--          <app-icon icon="svgo-custom-exchange" style="width: 20px; margin-left: 16px" />-->
+    <template v-if="props.isForeignAmountVisible">
+      <div class="flex-center">
+        <van-button @click="convertAmountToForeign" size="small" class="mr-10">
+          <template #icon>
+            <div class="display-flex">
+              <app-icon :icon="TablerIconConstants.transaction" :size="16" />
+              <app-icon :icon="TablerIconConstants.downArrow" :size="16" />
+            </div>
+          </template>
+        </van-button>
 
-    <!--    Foreign amount field    -->
-<!--    display-flex align-items-start-->
-    <div v-if="props.isForeignAmountVisible" class="flex-center-vertical">
-      <app-icon icon="svgo-custom-exchange" style="width: 22px; margin-left: 16px" />
+        <van-button @click="convertForeignToAmount" size="small" class="mr-10">
+          <template #icon>
+            <div class="display-flex">
+              <app-icon :icon="TablerIconConstants.transaction" :size="16" />
+              <app-icon :icon="TablerIconConstants.upArrow" :size="16" />
+            </div>
+          </template>
+        </van-button>
+      </div>
 
-      <van-field
-        v-model="modelValueForeign"
-        placeholder="Foreign amount "
-        @click="() => inputAmountForeign.focus()"
-        label="Foreign amount"
-        left-icon="peer-pay"
-        class="flex-1 flex-center-vertical app-field transaction-amount-field"
-        v-bind="attrs"
-        label-align="top">
-        <template #right-icon>
-          {{ props.currencyForeign }}
-        </template>
+      <!--    Foreign amount field    -->
+      <div class="flex-center-vertical">
+        <!--      <app-icon :icon="SvgConstants.custom.exchange" style="width: 22px; margin-left: 16px" />-->
 
-        <template #input>
-          <input
-            v-model="modelValueForeign"
-            ref="inputAmountForeign"
-            style="width: 100%; border: none; background: transparent; height: 24px"
-            type="text"
-            inputmode="decimal"
-            class="transactionAmountField"
-          />
-        </template>
-      </van-field>
-    </div>
+        <van-field
+          v-model="modelValueForeign"
+          placeholder="Foreign amount "
+          @click="() => inputAmountForeign.focus()"
+          label="Foreign amount"
+          class="flex-1 flex-center-vertical app-field transaction-amount-field"
+          v-bind="attrs"
+          label-align="top"
+        >
+          <template #left-icon>
+            <app-icon :icon="TablerIconConstants.cash" :size="20" />
+          </template>
+
+          <template #right-icon>
+            {{ props.currencyForeign }}
+          </template>
+
+          <template #input>
+            <input
+              v-model="modelValueForeign"
+              ref="inputAmountForeign"
+              style="width: 100%; border: none; background: transparent; height: 24px"
+              type="text"
+              inputmode="decimal"
+              class="transactionAmountField"
+            />
+          </template>
+        </van-field>
+      </div>
+    </template>
 
     <table v-if="showQuickButtons" class="transaction-amount-table-buttons">
       <tr>
@@ -90,6 +118,7 @@
 import { useDataStore } from '~/stores/dataStore'
 import { moveInputCursorToEnd, sleep } from '~/utils/VueUtils'
 import { evalMath, removeEndOperators, sanitizeAmount } from '~/utils/MathUtils'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
@@ -173,6 +202,14 @@ watch(modelValue, (newValue) => {
 const onOperation = async (operation) => {
   modelValue.value = sanitizeAmount(modelValue.value + operation)
   moveInputCursorToEnd(input, modelValue)
+}
+
+const convertAmountToForeign = () => {
+  modelValueForeign.value = convertCurrency(modelValue.value, 'RON', 'EUR').toFixed(2)
+}
+
+const convertForeignToAmount = () => {
+  modelValue.value = convertCurrency(modelValueForeign.value, 'EUR', 'RON').toFixed(2)
 }
 
 onMounted(() => {

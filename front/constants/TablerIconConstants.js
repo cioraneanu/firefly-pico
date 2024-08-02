@@ -34,12 +34,18 @@ export const icons = {
 
   leftArrow: 'IconArrowLeft',
   rightArrow: 'IconArrowRight',
+  upArrow: 'IconArrowUp',
+  downArrow: 'IconArrowDown',
 
   booleanCheckOn: 'IconSquareRoundedCheck',
   booleanCheckOff: 'IconSquareRounded',
 
   darkTheme: 'IconMoon',
   whiteTheme: 'IconSun',
+
+  external: 'IconExternalLink',
+  cash: 'IconCash',
+  cashBanknote: 'IconCashBanknote',
 
   // ------ Icon Select -----
 

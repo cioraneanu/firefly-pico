@@ -414,3 +414,10 @@ export const avatarListIcons = [
   { name: 'wallet-svgrepo-com-2', icon: 'svgo-avatar-wallet-svgrepo-com-2' },
   { name: 'wallet-svgrepo-com', icon: 'svgo-avatar-wallet-svgrepo-com' },
 ]
+
+
+
+export const custom = {
+  exchange: 'svgo-custom-exchange'
+}
+

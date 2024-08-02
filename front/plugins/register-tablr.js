@@ -1,6 +1,8 @@
 import {
   IconArrowLeft,
   IconArrowRight,
+  IconArrowUp,
+  IconArrowDown,
   IconCalendarEvent,
   IconCarambola,
   IconCategory,
@@ -34,6 +36,9 @@ import {
   IconSquareRoundedCheck,
   IconMoon,
   IconSun,
+  IconExternalLink,
+  IconCash,
+  IconCashBanknote,
 } from '@tabler/icons-vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -48,6 +53,8 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconHash', IconHash)
   nuxtApp.vueApp.component('IconTransfer', IconTransfer)
   nuxtApp.vueApp.component('IconArrowLeft', IconArrowLeft)
+  nuxtApp.vueApp.component('IconArrowUp', IconArrowUp)
+  nuxtApp.vueApp.component('IconArrowDown', IconArrowDown)
   nuxtApp.vueApp.component('IconArrowRight', IconArrowRight)
   nuxtApp.vueApp.component('IconNotes', IconNotes)
   nuxtApp.vueApp.component('IconLetterCase', IconLetterCase)
@@ -72,6 +79,9 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconCalendarEvent', IconCalendarEvent)
   nuxtApp.vueApp.component('IconSquareRoundedMinus', IconSquareRoundedMinus)
   nuxtApp.vueApp.component('IconSquareRoundedPlus', IconSquareRoundedPlus)
+  nuxtApp.vueApp.component('IconExternalLink', IconExternalLink)
+  nuxtApp.vueApp.component('IconCash', IconCash)
+  nuxtApp.vueApp.component('IconCashBanknote', IconCashBanknote)
 
   // for (let iconName in tablerIcons) {
   //   nuxtApp.vueApp.component(iconName, tablerIcons[iconName])
