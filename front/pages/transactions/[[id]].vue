@@ -33,19 +33,12 @@
         <transaction-amount-field
           required
           v-model="amount"
+          v-model:foreign="amountForeign"
           :currency="sourceCurrencyCode"
+          :currencyForeign="destinationCurrencyCode"
+          :isForeignAmountVisible="isForeignAmountVisible"
           ref="refAmount"
           :rules="[{ required: true, message: 'Amount is required' }]"
-          :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_AMOUNT)"
-        />
-
-        <transaction-amount-field
-          v-if="isForeignAmountVisible"
-          label="Foreign amount"
-          v-model="amountForeign"
-          :currency="destinationCurrencyCode"
-          :showQuickButtons="false"
-          ref="refAmountForeign"
           :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_AMOUNT)"
         />
 
@@ -199,10 +192,7 @@ const accountDestinationAllowedTypes = computed(() => Account.getAccountTypesFor
 const sourceCurrencyCode = computed(() => get(accountSource.value, 'attributes.currency_symbol', ''))
 const destinationCurrencyCode = computed(() => get(accountDestination.value, 'attributes.currency_symbol', ''))
 const isForeignAmountVisible = computed(() => {
-  if (!accountSource.value || !accountDestination.value) {
-    return false
-  }
-  return sourceCurrencyCode.value !== destinationCurrencyCode.value
+  return accountSource.value && accountDestination.value && sourceCurrencyCode.value !== destinationCurrencyCode.value
 })
 
 //

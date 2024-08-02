@@ -1,11 +1,12 @@
 <template>
   <div class="van-cell-fake pb-10">
+    <!--    Amount field    -->
     <div>
       <van-field
         v-model="modelValue"
         placeholder="Amount"
-        @click="() => input.focus()"
-        :label="label"
+        @click="() => inputAmount.focus()"
+        label="Amount"
         left-icon="peer-pay"
         class="flex-center-vertical app-field transaction-amount-field"
         v-bind="attrs"
@@ -20,16 +21,45 @@
             v-model="modelValue"
             @focus="onFocus"
             @blur="onBlur"
-            ref="input"
+            ref="inputAmount"
             style="width: 100%; border: none; background: transparent; height: 24px"
             type="text"
             inputmode="decimal"
             :class="transactionInputClass"
           />
+        </template>
+      </van-field>
+    </div>
 
-          <!--          <transaction-amount-field-success-animation-->
-          <!--              v-if="showEvaluateSuccessAnimation"-->
-          <!--          />-->
+<!--          <app-icon icon="svgo-custom-exchange" style="width: 20px; margin-left: 16px" />-->
+
+    <!--    Foreign amount field    -->
+<!--    display-flex align-items-start-->
+    <div v-if="props.isForeignAmountVisible" class="flex-center-vertical">
+      <app-icon icon="svgo-custom-exchange" style="width: 22px; margin-left: 16px" />
+
+      <van-field
+        v-model="modelValueForeign"
+        placeholder="Foreign amount "
+        @click="() => inputAmountForeign.focus()"
+        label="Foreign amount"
+        left-icon="peer-pay"
+        class="flex-1 flex-center-vertical app-field transaction-amount-field"
+        v-bind="attrs"
+        label-align="top">
+        <template #right-icon>
+          {{ props.currencyForeign }}
+        </template>
+
+        <template #input>
+          <input
+            v-model="modelValueForeign"
+            ref="inputAmountForeign"
+            style="width: 100%; border: none; background: transparent; height: 24px"
+            type="text"
+            inputmode="decimal"
+            class="transactionAmountField"
+          />
         </template>
       </van-field>
     </div>
@@ -59,29 +89,33 @@
 <script setup>
 import { useDataStore } from '~/stores/dataStore'
 import { moveInputCursorToEnd, sleep } from '~/utils/VueUtils'
-import { evalMath, removeEndOperators, sanitizeAmount } from '~/utils/MathUtils' // import { useDevice } from '@nuxtjs/device'
-// import { useDevice } from '@nuxtjs/device'
+import { evalMath, removeEndOperators, sanitizeAmount } from '~/utils/MathUtils'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
 const attrs = useAttrs()
 
+const modelValue = defineModel()
+const modelValueForeign = defineModel('foreign')
+
 const props = defineProps({
-  label: {
-    type: String,
-    default: 'Amount',
+  showQuickButtons: {
+    type: Boolean,
+    default: true,
   },
   currency: {
     type: String,
     default: '',
   },
-  showQuickButtons: {
+  currencyForeign: {
+    type: String,
+    default: '',
+  },
+  isForeignAmountVisible: {
     type: Boolean,
-    default: true,
+    default: false,
   },
 })
-
-const modelValue = defineModel()
 
 const transactionInputClass = computed(() => {
   return {
@@ -91,9 +125,8 @@ const transactionInputClass = computed(() => {
 })
 const showEvaluateSuccessAnimation = ref(false)
 const isInputFocused = ref(false)
-const input = ref(null)
-
-const { isMobile } = useDevice()
+const inputAmount = ref(null)
+const inputAmountForeign = ref(null)
 
 const quickButtons = profileStore.quickValueButtons
 const operatorsList = ref(['+', '-', '*', '/'])
@@ -113,7 +146,7 @@ const onBlur = async () => {
   modelValue.value = await evaluateModelValue(modelValue.value)
 
   // On iOS if you hide the keyboard via the "Done" button, onBlur gets called but it's not actually blurred. This is a temp fix...
-  input.value?.blur()
+  inputAmount.value?.blur()
 }
 
 const evaluateModelValue = async (amount) => {
