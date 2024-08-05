@@ -47,6 +47,13 @@ export const icons = {
   cash: 'IconCash',
   cashBanknote: 'IconCashBanknote',
 
+  icon: 'IconFavicon',
+  toggleRight: 'IconToggleRight',
+  article: 'IconArticle',
+  selector: 'IconSelector',
+  blockQuote: 'IconBlockquote',
+
+
   // ------ Icon Select -----
 
   ad2: 'IconAd2',

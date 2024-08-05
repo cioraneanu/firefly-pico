@@ -1,8 +1,8 @@
 <template>
   <div class="van-cell-fake">
     <van-field :model-value="modelValueDisplayName" :class="fieldClass" :label="label" :placeholder="props.placeholder" v-bind="dynamicAttrs" @click.stop="onShowDropdown" is-link readonly>
-      <template v-if="$slots.label" #label>
-        <slot name="label" />
+      <template v-for="slot in Object.keys($slots)" v-slot:[slot]="scoped">
+        <slot :name="slot" v-bind="scoped ?? {}" />
       </template>
 
       <template #right-icon>

@@ -1,8 +1,12 @@
 <template>
   <div class="van-cell-fake">
     <van-field class="app-field" :label="label" v-bind="dynamicAttrs" @click="onToggle" readonly>
-      <template v-if="$slots.label" #label>
-        <slot name="label" />
+      <template v-for="slot in Object.keys($slots)" v-slot:[slot]="scoped">
+        <slot :name="slot" v-bind="scoped ?? {}" />
+      </template>
+
+      <template #left-icon>
+        <app-icon :icon="TablerIconConstants.toggleRight" :size="20" />
       </template>
 
       <template #input>

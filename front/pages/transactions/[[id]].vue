@@ -102,7 +102,11 @@
           rows="1"
           autosize
           :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_NOTES)"
-        />
+        >
+          <template #left-icon>
+            <app-icon :icon="TablerIconConstants.description" :size="20" />
+          </template>
+        </app-field>
       </van-cell-group>
 
       <div style="margin: 16px; position: relative">

@@ -12,7 +12,7 @@
         label-align="top"
       >
         <template #left-icon>
-          <app-icon :icon="TablerIconConstants.cashBanknote" :size="20"/>
+          <app-icon :icon="TablerIconConstants.cashBanknote" :size="20" />
         </template>
 
         <template #right-icon>
@@ -66,7 +66,7 @@
           placeholder="Foreign amount "
           @click="() => inputAmountForeign.focus()"
           label="Foreign amount"
-          class="flex-1 flex-center-vertical app-field transaction-amount-field"
+          class="flex-1 flex-center-vertical app-field transaction-amount-field transaction-foreign-amount-field"
           v-bind="attrs"
           label-align="top"
         >

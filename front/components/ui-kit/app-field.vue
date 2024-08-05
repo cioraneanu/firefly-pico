@@ -1,5 +1,14 @@
 <template>
-  <van-field ref="vanFieldRef" v-model="modelValue" v-bind="dynamicAttrs" class="app-field app-field-text" @focus="onFocus" clearable />
+  <van-field ref="vanFieldRef" v-model="modelValue" v-bind="dynamicAttrs" class="app-field app-field-text" @focus="onFocus" clearable>
+    <template v-for="slot in Object.keys($slots)" v-slot:[slot]="scoped">
+      <slot :name="slot" v-bind="scoped ?? {}" />
+    </template>
+
+    <template v-if="attrs.icon" #left-icon>
+      <app-icon :icon="attrs.icon" :size="20" />
+    </template>
+
+  </van-field>
 </template>
 
 <script setup>

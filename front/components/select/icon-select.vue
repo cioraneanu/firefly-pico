@@ -10,6 +10,10 @@
     :getDisplayValue="getDisplayValue"
     v-bind="dynamicAttrs"
   >
+    <template #left-icon>
+      <app-icon :icon="TablerIconConstants.icon" :size="20" />
+    </template>
+
     <template #input>
       <div v-if="!modelValue" class="text-muted">No icon</div>
       <app-icon v-else :icon="modelValue.icon" style="width: 25px"/>
@@ -29,6 +33,7 @@ import { useDataStore } from '~/stores/dataStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import Category from '~/models/Category.js'
 import { avatarListIcons, duoToneListIcons, fluentListIcons } from '~/constants/SvgConstants.js'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 const dataStore = useDataStore()
 const attrs = useAttrs()

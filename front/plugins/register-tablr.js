@@ -39,6 +39,11 @@ import {
   IconExternalLink,
   IconCash,
   IconCashBanknote,
+  IconFavicon,
+  IconToggleRight,
+  IconArticle,
+  IconSelector,
+  IconBlockquote
 } from '@tabler/icons-vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -82,6 +87,11 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconExternalLink', IconExternalLink)
   nuxtApp.vueApp.component('IconCash', IconCash)
   nuxtApp.vueApp.component('IconCashBanknote', IconCashBanknote)
+  nuxtApp.vueApp.component('IconFavicon', IconFavicon)
+  nuxtApp.vueApp.component('IconToggleRight', IconToggleRight)
+  nuxtApp.vueApp.component('IconArticle', IconArticle)
+  nuxtApp.vueApp.component('IconSelector', IconSelector)
+  nuxtApp.vueApp.component('IconBlockquote', IconBlockquote)
 
   // for (let iconName in tablerIcons) {
   //   nuxtApp.vueApp.component(iconName, tablerIcons[iconName])
