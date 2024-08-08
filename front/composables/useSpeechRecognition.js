@@ -2,7 +2,7 @@ import { ref } from 'vue'
 import UIUtils from '~/utils/UIUtils'
 import * as LanguageConstants from '~/constants/LanguageConstants'
 
-// by convention, composable function names start with "use"
+// Legacy. No longer necessary since we can use the phone's dictation
 export function useSpeechRecognition({ language, onSpeechFinished }) {
   // state encapsulated and managed by the composable
 

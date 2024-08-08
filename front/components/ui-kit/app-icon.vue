@@ -13,7 +13,7 @@ const props = defineProps({
     default: 25,
   },
 
-  // Only for Tablr
+  // Only for TablerIcons
   stroke: {
     default: 1.7,
   },

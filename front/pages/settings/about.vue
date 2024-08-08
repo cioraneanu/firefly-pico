@@ -23,7 +23,7 @@
         <div>- With a UI theme based on <a href="https://vant-ui.github.io" target="_blank">Vant</a></div>
         <div>- Exchange rate by <a href="https://www.exchangerate-api.com">Exchange Rate API</a></div>
         <br />
-        <div>- IconPacks: <a href="https://tabler.io/icons" target="_blank">Tablr Icons</a></div>
+        <div>- IconPacks: <a href="https://tabler.io/icons" target="_blank">Tabler Icons</a></div>
         <div>- IconPacks: <a href="https://github.com/microsoft/fluentui" target="_blank">Fluent UI System Icons</a></div>
         <div>- IconPacks: <a href="https://www.svgrepo.com/author/Laura%20Reen" target="_blank">Circle Avatar Vectors by Laura Reen</a></div>
         <div>- IconPacks: <a href="https://www.svgrepo.com/" target="_blank">SVG Repo</a></div>
