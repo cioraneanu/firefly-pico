@@ -43,7 +43,8 @@ import {
   IconToggleRight,
   IconArticle,
   IconSelector,
-  IconBlockquote
+  IconBlockquote,
+  IconWriting
 } from '@tabler/icons-vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -92,6 +93,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconArticle', IconArticle)
   nuxtApp.vueApp.component('IconSelector', IconSelector)
   nuxtApp.vueApp.component('IconBlockquote', IconBlockquote)
+  nuxtApp.vueApp.component('IconWriting', IconWriting)
 
   // for (let iconName in tablerIcons) {
   //   nuxtApp.vueApp.component(iconName, tablerIcons[iconName])

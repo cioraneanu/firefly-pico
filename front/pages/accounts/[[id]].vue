@@ -37,7 +37,6 @@
 
       <div style="margin: 16px" class="">
         <app-button-form-save />
-
         <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
       </div>
     </van-form>

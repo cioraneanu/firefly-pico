@@ -1,24 +1,21 @@
 export function useKeyboard() {
   const isKeyboardVisible = ref(false)
   const keyboardHeight = ref(0)
-
   const originalHeight = ref(0)
 
-  const onResize = () => {
-    const threshold = 100
-    isKeyboardVisible.value = window.innerHeight < originalHeight.value - threshold
+  const onResize = async () => {
+    // await sleep(1000)
     keyboardHeight.value = Math.max(window.innerHeight - visualViewport.height, 0)
+    isKeyboardVisible.value = keyboardHeight.value > 0
   }
 
   onMounted(() => {
-    console.log('Mounted called')
     originalHeight.value = window.innerHeight
-    window.addEventListener('resize', onResize)
+    visualViewport.addEventListener('resize', onResize)
   })
 
   onBeforeUnmount(() => {
-    console.log('Unmounted called')
-    window.removeEventListener('resize', onResize)
+    visualViewport.removeEventListener('resize', onResize)
   })
 
   return { isKeyboardVisible, keyboardHeight }

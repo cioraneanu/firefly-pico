@@ -52,6 +52,7 @@ export const icons = {
   article: 'IconArticle',
   selector: 'IconSelector',
   blockQuote: 'IconBlockquote',
+  textInput: 'IconWriting',
 
 
   // ------ Icon Select -----

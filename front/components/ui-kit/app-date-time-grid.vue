@@ -2,6 +2,10 @@
   <div class="">
     <!--    <van-cell :title="label" :value="date" @click="show = true"/>-->
     <van-field v-model="getDisplayDate" is-link readonly :clickable="false" class="" left-icon="calendar-o" :label="label" placeholder="No date" v-bind="dynamicAttrs">
+      <template #left-icon>
+        <app-icon :icon="TablerIconConstants.settingsUserPreferencesDate" :size="20" />
+      </template>
+
       <template #input>
         <div class="display-flex gap-2 w-100">
           <div @click.stop="showDatePicker = true" class="fake-input flex-1 cursor-pointer">
@@ -77,6 +81,7 @@ import { useFormAttributes } from '~/composables/useFormAttributes'
 import { clone, head } from 'lodash'
 import { usePointerSwipe } from '@vueuse/core'
 import { useSwipeToDismiss } from '~/composables/useSwipeToDismiss.js'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 const dataStore = useDataStore()
 const attrs = useAttrs()
