@@ -30,8 +30,6 @@
           </div>
         </template>
 
-        Keyboard = {{ isKeyboardVisible }}, Height = {{ keyboardHeight }}
-
         <transaction-amount-field
           required
           v-model="amount"
@@ -141,7 +139,6 @@ import tag from '~/models/Tag'
 import { addDays, endOfMonth, startOfMonth } from 'date-fns'
 
 const refAmount = ref(null)
-const { isKeyboardVisible, keyboardHeight } = useKeyboard()
 
 // ------------------------------------
 

@@ -1,22 +1,30 @@
 export function useKeyboard() {
-  const isKeyboardVisible = ref(false)
-  const keyboardHeight = ref(0)
-  const originalHeight = ref(0)
+  const visualViewportHeight = ref(0)
+  const visualViewportPageTop = ref(0)
+  const visualViewportOffsetTop = ref(0)
 
-  const onResize = async () => {
-    // await sleep(1000)
+  const keyboardHeight = ref(0)
+  const isKeyboardVisible = ref(false)
+
+  const onVisualViewportChange = async () => {
+    // await sleep(200)
+    visualViewportHeight.value = visualViewport.height
+    visualViewportPageTop.value = visualViewport.pageTop
+    visualViewportOffsetTop.value = visualViewport.offsetTop
+
     keyboardHeight.value = Math.max(window.innerHeight - visualViewport.height, 0)
     isKeyboardVisible.value = keyboardHeight.value > 0
   }
 
   onMounted(() => {
-    originalHeight.value = window.innerHeight
-    visualViewport.addEventListener('resize', onResize)
+    visualViewport.addEventListener('resize', onVisualViewportChange)
+    visualViewport.addEventListener('scroll', onVisualViewportChange)
   })
 
   onBeforeUnmount(() => {
-    visualViewport.removeEventListener('resize', onResize)
+    visualViewport.removeEventListener('resize', onVisualViewportChange)
+    visualViewport.removeEventListener('scroll', onVisualViewportChange)
   })
 
-  return { isKeyboardVisible, keyboardHeight }
+  return { visualViewportHeight, visualViewportPageTop, visualViewportOffsetTop, keyboardHeight, isKeyboardVisible }
 }
