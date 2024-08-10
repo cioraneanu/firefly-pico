@@ -15,11 +15,12 @@
           type="textarea"
           rows="1"
           autosize
-          left-icon="notes-o"
+          :icon="TablerIconConstants.blockQuote"
           placeholder="Description"
           :rules="[{ required: true, message: 'Name is required' }]"
           required
-        />
+        >
+        </app-field>
 
         <icon-select v-model="icon" :list="avatarListIcons" />
 
@@ -36,7 +37,6 @@
 
       <div style="margin: 16px" class="">
         <app-button-form-save />
-
         <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
       </div>
     </van-form>
@@ -58,6 +58,7 @@ import AccountTypeSelect from '~/components/select/account-type-select.vue'
 import AccountTransformer from '~/transformers/AccountTransformer'
 import { useToolbar } from '~/composables/useToolbar'
 import { avatarListIcons } from '~/constants/SvgConstants.js'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 let dataStore = useDataStore()
 let profileStore = useProfileStore()

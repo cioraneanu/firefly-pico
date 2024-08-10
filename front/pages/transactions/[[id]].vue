@@ -26,14 +26,19 @@
       <van-cell-group inset class="mt-0 flex-column display-flex">
         <template #title v-if="isSplitPayment">
           <div>
-            <van-tag class="ml-5" type="warning"> Split payment</van-tag>
+            <van-tag class="ml-5" type="warning">Split payment</van-tag>
           </div>
         </template>
+
+        Keyboard = {{ isKeyboardVisible }}, Height = {{ keyboardHeight }}
 
         <transaction-amount-field
           required
           v-model="amount"
-          :currency="currency"
+          v-model:foreign="amountForeign"
+          :currency="sourceCurrencyCode"
+          :currencyForeign="destinationCurrencyCode"
+          :isForeignAmountVisible="isForeignAmountVisible"
           ref="refAmount"
           :rules="[{ required: true, message: 'Amount is required' }]"
           :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_AMOUNT)"
@@ -72,7 +77,7 @@
           type="textarea"
           rows="1"
           autosize
-          left-icon="notes-o"
+          :icon="TablerIconConstants.blockQuote"
           placeholder="Description"
           :rules="[{ required: true, message: 'Description is required' }]"
           required
@@ -84,27 +89,21 @@
         <div :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DATE)">
           <app-date-time-grid v-model="date" :rules="[{ required: true, message: 'Date is required' }]" required />
 
-          <div v-if="!itemId" class="px-3 flex-center-vertical gap-1">
+          <div class="px-3 flex-center-vertical gap-1">
             <van-button size="small" @click="onSubDay">-1 day</van-button>
             <van-button size="small" @click="onToday">Today</van-button>
-            <van-button size="small" @click="onAddDay" >+1 day</van-button>
+            <van-button size="small" @click="onAddDay">+1 day</van-button>
           </div>
         </div>
 
-        <app-field
-          v-model="notes"
-          label="Notes"
-          placeholder="No notes..."
-          type="textarea"
-          rows="1"
-          autosize
-          :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_NOTES)"
-        />
+        <app-field v-model="notes" label="Notes" placeholder="No notes..." type="textarea" rows="1" autosize :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_NOTES)">
+          <template #left-icon>
+            <app-icon :icon="TablerIconConstants.textInput" :size="20" />
+          </template>
+        </app-field>
       </van-cell-group>
 
       <div style="margin: 16px; position: relative">
-        <app-button-form-save />
-
         <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
 
         <van-button v-if="itemId && !isSplitPayment" @click="onCreateTransactionTemplate" block type="default" class="mt-2">
@@ -112,6 +111,8 @@
           Make template
         </van-button>
       </div>
+
+      <app-button-form-save />
     </van-form>
   </div>
 </template>
@@ -140,6 +141,7 @@ import tag from '~/models/Tag'
 import { addDays, endOfMonth, startOfMonth } from 'date-fns'
 
 const refAmount = ref(null)
+const { isKeyboardVisible, keyboardHeight } = useKeyboard()
 
 // ------------------------------------
 
@@ -163,8 +165,9 @@ let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveI
 const time = ref(['12', '00'])
 
 const pathKey = 'attributes.transactions.0'
-const { amount, date, tags, description, notes, accountSource, accountDestination, category, type } = generateChildren(item, [
+const { amount, amountForeign, date, tags, description, notes, accountSource, accountDestination, category, type } = generateChildren(item, [
   { computed: 'amount', parentKey: `${pathKey}.amount` },
+  { computed: 'amountForeign', parentKey: `${pathKey}.amountForeign` },
   { computed: 'date', parentKey: `${pathKey}.date` },
   { computed: 'tags', parentKey: `${pathKey}.tags` },
   { computed: 'description', parentKey: `${pathKey}.description` },
@@ -185,11 +188,10 @@ const accountDestinationAllowedTypes = computed(() => Account.getAccountTypesFor
 
 // ------------------------------------
 
-const currency = computed(() => {
-  if (!accountSource.value) {
-    return ''
-  }
-  return get(accountSource.value, 'attributes.currency_symbol')
+const sourceCurrencyCode = computed(() => get(accountSource.value, 'attributes.currency_symbol', ''))
+const destinationCurrencyCode = computed(() => get(accountDestination.value, 'attributes.currency_symbol', ''))
+const isForeignAmountVisible = computed(() => {
+  return accountSource.value && accountDestination.value && sourceCurrencyCode.value !== destinationCurrencyCode.value
 })
 
 //

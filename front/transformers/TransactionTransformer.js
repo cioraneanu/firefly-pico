@@ -30,6 +30,9 @@ export default class TransactionTransformer extends ApiTransformer {
       let hasMissingTag = false
 
       transaction.amount = Transaction.formatAmount(_.get(transaction, 'amount', 0))
+      transaction.amountForeign = Transaction.formatAmount(_.get(transaction, 'foreign_amount', 0))
+      transaction.foreignCurrencyId = get(transaction, 'foreign_currency_id')
+
       transaction.date = DateUtils.autoToDate(transaction.date)
       transaction.accountSource = accountsDictionary[transaction['source_id']]
       transaction.accountDestination = accountsDictionary[transaction['destination_id']]
@@ -64,6 +67,9 @@ export default class TransactionTransformer extends ApiTransformer {
       // let newItem = cloneDeep(item)
       let newItem = {}
       newItem.amount = _.get(item, 'amount', 0)
+      newItem.foreign_amount = _.get(item, 'amountForeign', 0)
+      newItem.foreign_currency_id = _.get(item, 'foreignCurrencyId')
+
       newItem.description = get(item, 'description', '')
       newItem.notes = _.get(item, 'notes')
       newItem.source_id = _.get(item, 'accountSource.id')
@@ -90,6 +96,8 @@ export default class TransactionTransformer extends ApiTransformer {
       tags = uniq(tags)
 
       newItem.tags = tags
+
+
 
       return newItem
     })

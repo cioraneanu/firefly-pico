@@ -12,6 +12,11 @@
     :getDisplayValue="getDisplayValue"
     v-bind="dynamicAttrs"
   >
+
+    <template #left-icon>
+      <app-icon :icon="TablerIconConstants.account" :size="20" />
+    </template>
+
     <template #inputItemContent="{ item }">
       <div class="flex-center">
         <app-icon :icon="Account.getIcon(item) ?? TablerIconConstants.account" :size="20" />

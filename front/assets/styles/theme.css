@@ -984,3 +984,11 @@ img, svg {
     left: 0;
     background: rgba(0, 0, 0, 0.2);
 }
+
+.van-field__left-icon svg {
+    margin-bottom: 2px;
+}
+
+.transaction-foreign-amount-field .van-field__body {
+    border: 1.5px solid #0288D1;
+}

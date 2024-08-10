@@ -17,20 +17,18 @@ const props = defineProps({
     default: 'Save',
   },
   bottom: {
-    default: '70',
+    default: '20',
   },
 })
 
-const keyboardOffset = ref(0)
-visualViewport.addEventListener('resize', () => {
-  keyboardOffset.value = window.innerHeight - visualViewport.height
-})
+const { isKeyboardVisible, keyboardHeight } = useKeyboard()
 
 const style = computed(() => {
+  const bottomWithoutKeyboard = `calc(env(safe-area-inset-bottom, 0px) + var(--van-tabbar-height) + ${props.bottom}px)`
+  const bottomWithKeyboard = `calc( ${keyboardHeight.value}px + 10px )`
+
   return {
-    // opacity: '0',
-    // 'bottom': `calc(env(safe-area-inset-bottom) + ${props.bottom}px)`,
-    bottom: keyboardOffset.value === 0 ? `calc(env(safe-area-inset-bottom) + ${props.bottom}px)` : `calc( ${keyboardOffset.value}px + 10px )`,
+    bottom: isKeyboardVisible.value ? bottomWithKeyboard : bottomWithoutKeyboard,
   }
 })
 
