@@ -47,12 +47,15 @@ export const icons = {
   cash: 'IconCash',
   cashBanknote: 'IconCashBanknote',
 
-  icon: 'IconFavicon',
-  toggleRight: 'IconToggleRight',
+  fieldIcon: 'IconFavicon',
+  fieldCheckbox: 'IconToggleLeftFilled',
+  fieldSelect: 'IconSelector',
+  fieldSelect2: 'IconGridPattern',
+  fieldText1: 'IconBlockquote',
+  fieldText2: 'IconWriting',
+
   article: 'IconArticle',
-  selector: 'IconSelector',
-  blockQuote: 'IconBlockquote',
-  textInput: 'IconWriting',
+  key: 'IconKey',
 
 
   // ------ Icon Select -----

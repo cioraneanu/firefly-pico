@@ -1,6 +1,10 @@
 <template>
   <div>
-    <van-field is-link readonly class="app-field" left-icon="eye-o" label-align="top" :model-value="modelValue" :label="label" placeholder="Personal token" @click="showDialog = true"> </van-field>
+    <van-field is-link readonly class="app-field" label-align="top" :model-value="modelValue" :label="label" placeholder="Personal token" @click="showDialog = true">
+      <template #left-icon>
+        <app-icon :icon="TablerIconConstants.key" :size="20" />
+      </template>
+    </van-field>
 
     <van-dialog confirm-button-text="OK" width="100%" style="margin: 20px; max-height: 500px" v-model:show="showDialog">
       <div class="p-20">
@@ -28,6 +32,7 @@ import { useDataStore } from '~/stores/dataStore'
 import DateUtils from '~/utils/DateUtils'
 import { addDays, startOfDay } from 'date-fns'
 import { IconClipboard, IconCopy } from '@tabler/icons-vue'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 const dataStore = useDataStore()
 

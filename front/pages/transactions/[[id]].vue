@@ -75,7 +75,7 @@
           type="textarea"
           rows="1"
           autosize
-          :icon="TablerIconConstants.blockQuote"
+          :icon="TablerIconConstants.fieldText2"
           placeholder="Description"
           :rules="[{ required: true, message: 'Description is required' }]"
           required
@@ -94,10 +94,19 @@
           </div>
         </div>
 
-        <app-field v-model="notes" label="Notes" placeholder="No notes..." type="textarea" rows="1" autosize :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_NOTES)">
-          <template #left-icon>
-            <app-icon :icon="TablerIconConstants.textInput" :size="20" />
-          </template>
+        <app-field
+          v-model="notes"
+          :icon="TablerIconConstants.fieldText1"
+          label="Notes"
+          placeholder="No notes..."
+          type="textarea"
+          rows="1"
+          autosize
+          :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_NOTES)"
+        >
+          <!--          <template #left-icon>-->
+          <!--            <app-icon :icon="TablerIconConstants.fieldText2" :size="20" />-->
+          <!--          </template>-->
         </app-field>
       </van-cell-group>
 

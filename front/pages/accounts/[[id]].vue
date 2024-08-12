@@ -15,7 +15,7 @@
           type="textarea"
           rows="1"
           autosize
-          :icon="TablerIconConstants.blockQuote"
+          :icon="TablerIconConstants.fieldText2"
           placeholder="Description"
           :rules="[{ required: true, message: 'Name is required' }]"
           required

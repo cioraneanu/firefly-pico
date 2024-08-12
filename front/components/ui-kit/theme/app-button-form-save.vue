@@ -27,14 +27,14 @@ const props = defineProps({
     default: 'Save',
   },
   bottom: {
-    default: '20',
+    default: '+ 20px',
   },
 })
 
 const { isKeyboardVisible, keyboardHeight, visualViewportHeight, visualViewportOffsetTop, visualViewportPageTop, debug } = useKeyboard()
 
 const style = computed(() => {
-  const bottomWithoutKeyboard = `calc(env(safe-area-inset-bottom, 0px) + var(--van-tabbar-height) + ${props.bottom}px)`
+  const bottomWithoutKeyboard = `calc(env(safe-area-inset-bottom, 0px) + var(--van-tabbar-height) ${props.bottom})`
   const bottomWithKeyboardValue = Math.max(keyboardHeight.value + 10 - visualViewportOffsetTop.value, 0)
   const bottomWithKeyboard = `${bottomWithKeyboardValue}px`
 

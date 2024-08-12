@@ -8,7 +8,7 @@
 
     <van-form ref="form" @submit="saveItem" @failed="onValidationError" class="">
       <van-cell-group inset>
-        <app-field v-model="name" name="Name" label="Name" rows="1" autosize left-icon="notes-o" placeholder="Description" :rules="[{ required: true, message: 'Name is required' }]" />
+        <app-field v-model="name" name="Name" label="Name" rows="1" autosize :icon="TablerIconConstants.fieldText2" placeholder="Description" :rules="[{ required: true, message: 'Name is required' }]" />
 
         <icon-select v-model="icon" />
       </van-cell-group>
@@ -35,6 +35,7 @@ import { generateChildren } from '~/utils/VueUtils'
 import Category from '~/models/Category'
 import { useToolbar } from '~/composables/useToolbar'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 let dataStore = useDataStore()
 let profileStore = useProfileStore()

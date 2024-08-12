@@ -48,7 +48,7 @@
             <app-field class="flex-1" v-model="amountEnd" label="Amount max" placeholder="Amount max" />
           </div>
 
-          <app-button-form-save label="Apply filters" bottom="20">
+          <app-button-form-save label="Apply filters" bottom=" - var(--van-tabbar-height) + 20px">
             <template #left>
               <van-button v-if="isFiltered" @click="onClearFilters" round> Clear </van-button>
             </template>

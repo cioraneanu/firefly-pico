@@ -1,7 +1,7 @@
 <template>
   <app-select label="Account role" popupTitle="Select an account role" v-model="modelValue" v-model:showDropdown="showDropdown" :list="list" :columns="1" v-bind="dynamicAttrs" :has-search="false">
     <template #left-icon>
-      <app-icon :icon="TablerIconConstants.selector" :size="20" />
+      <app-icon :icon="TablerIconConstants.fieldSelect2" :size="20" />
     </template>
   </app-select>
 </template>

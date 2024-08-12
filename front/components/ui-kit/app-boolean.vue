@@ -6,7 +6,7 @@
       </template>
 
       <template #left-icon>
-        <app-icon :icon="TablerIconConstants.toggleRight" :size="20" />
+<!--        <app-icon :icon="TablerIconConstants.fieldCheckbox" :size="20" />-->
       </template>
 
       <template #input>

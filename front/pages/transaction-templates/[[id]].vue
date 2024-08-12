@@ -11,7 +11,7 @@
     <!--    @submit="onSave"-->
     <van-form class="transaction-form-group" ref="form" @submit="saveItem" @failed="onValidationError">
       <van-cell-group inset>
-        <app-field v-model="name" label="Name" placeholder="Name" required :rules="[{ required: true, message: 'Name is required' }]" />
+        <app-field v-model="name" :icon="TablerIconConstants.fieldText2" label="Name" placeholder="Name" required :rules="[{ required: true, message: 'Name is required' }]" />
 
         <div class="van-cell-fake flex-column van-cell">
           <span>Extra names (assistant findable):</span>
@@ -28,17 +28,13 @@
 
         <account-select v-model="account_destination" label="Destinatination account" :allowed-types="accountDestinationAllowedTypes" />
 
-        <app-field v-model="description" label="Description" type="textarea" rows="1" autosize left-icon="notes-o" placeholder="Description" />
+        <app-field v-model="description" label="Description" :icon="TablerIconConstants.fieldText2" type="textarea" rows="1" autosize placeholder="Description" />
 
         <category-select v-model="category" />
 
         <tag-select v-model="tags" />
 
-        <!--        <app-date-->
-        <!--            v-model="date"-->
-        <!--        />-->
-
-        <app-field v-model="notes" label="Notes" placeholder="Notes" type="textarea" rows="1" autosize />
+        <app-field v-model="notes" label="Notes" placeholder="Notes" type="textarea" :icon="TablerIconConstants.fieldText1" rows="1" autosize />
       </van-cell-group>
 
       <div style="margin: 16px">
@@ -67,6 +63,7 @@ import TransactionTemplateTransformer from '~/transformers/TransactionTemplateTr
 import TransactionRepository from '~/repository/TransactionRepository'
 import TransactionTransformer from '~/transformers/TransactionTransformer'
 import { areIntEqual } from '~/utils/DataUtils'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 const refAmount = ref(null)
 

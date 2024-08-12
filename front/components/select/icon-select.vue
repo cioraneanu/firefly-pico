@@ -11,7 +11,7 @@
     v-bind="dynamicAttrs"
   >
     <template #left-icon>
-      <app-icon :icon="TablerIconConstants.icon" :size="20" />
+      <app-icon :icon="TablerIconConstants.fieldIcon" :size="20" />
     </template>
 
     <template #input>
