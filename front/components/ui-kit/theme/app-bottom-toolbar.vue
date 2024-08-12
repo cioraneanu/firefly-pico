@@ -1,5 +1,5 @@
 <template>
-  <van-tabbar v-model="activeTab" :safe-area-inset-bottom="true" :fixed="true">
+  <van-tabbar v-if="!isKeyboardVisible" v-model="activeTab" :safe-area-inset-bottom="true" :fixed="true">
     <van-tabbar-item :name="tabConstants.dashboard" @click="onChange(tabConstants.dashboard)">
       Home
       <template #icon="{ active }">
@@ -59,6 +59,10 @@ const tabConstants = {
   settings: 'settings',
 }
 const activeTab = ref(null)
+
+
+const { isKeyboardVisible } = useKeyboard()
+
 
 watch(
   () => route.path,

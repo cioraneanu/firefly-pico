@@ -6,14 +6,22 @@ export function useKeyboard() {
   const keyboardHeight = ref(0)
   const isKeyboardVisible = ref(false)
 
+  const debug = ref(null)
+
   const onVisualViewportChange = async () => {
     // await sleep(200)
     visualViewportHeight.value = visualViewport.height
     visualViewportPageTop.value = visualViewport.pageTop
     visualViewportOffsetTop.value = visualViewport.offsetTop
 
-    keyboardHeight.value = Math.max(window.innerHeight - visualViewport.height, 0)
+    const windowHeight = Math.max(window.innerHeight, document.documentElement.clientHeight)
+    keyboardHeight.value = Math.max(windowHeight - visualViewport.height, 0)
     isKeyboardVisible.value = keyboardHeight.value > 0
+
+    debug.value = {
+      innerH: window.innerHeight,
+      client: document.documentElement.clientHeight,
+    }
   }
 
   onMounted(() => {
@@ -26,5 +34,12 @@ export function useKeyboard() {
     visualViewport.removeEventListener('scroll', onVisualViewportChange)
   })
 
-  return { visualViewportHeight, visualViewportPageTop, visualViewportOffsetTop, keyboardHeight, isKeyboardVisible }
+  return {
+    visualViewportHeight,
+    visualViewportPageTop,
+    visualViewportOffsetTop,
+    keyboardHeight,
+    isKeyboardVisible,
+    debug,
+  }
 }

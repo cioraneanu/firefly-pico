@@ -11,6 +11,7 @@
           H = {{ visualViewportHeight }}, page = {{ visualViewportPageTop }}, offset =
           {{ visualViewportOffsetTop }}
         </div>
+        <div class="text-size-10">Window = {{ debug }}</div>
       </template>
     </van-button>
     <slot name="right" />
@@ -30,11 +31,12 @@ const props = defineProps({
   },
 })
 
-const { isKeyboardVisible, keyboardHeight, visualViewportHeight, visualViewportOffsetTop, visualViewportPageTop } = useKeyboard()
+const { isKeyboardVisible, keyboardHeight, visualViewportHeight, visualViewportOffsetTop, visualViewportPageTop, debug } = useKeyboard()
 
 const style = computed(() => {
   const bottomWithoutKeyboard = `calc(env(safe-area-inset-bottom, 0px) + var(--van-tabbar-height) + ${props.bottom}px)`
-  const bottomWithKeyboard = `calc( ${keyboardHeight.value}px + 10px )`
+  const bottomWithKeyboardValue = Math.max(keyboardHeight.value + 10 - visualViewportOffsetTop.value, 0)
+  const bottomWithKeyboard = `${bottomWithKeyboardValue}px`
 
   return {
     bottom: isKeyboardVisible.value ? bottomWithKeyboard : bottomWithoutKeyboard,
