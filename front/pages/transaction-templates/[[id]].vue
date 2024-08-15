@@ -26,7 +26,7 @@
 
         <account-select v-model="account_source" label="Source account" :allowed-types="accountSourceAllowedTypes" />
 
-        <account-select v-model="account_destination" label="Destinatination account" :allowed-types="accountDestinationAllowedTypes" />
+        <account-select v-model="account_destination" label="Destination account" :allowed-types="accountDestinationAllowedTypes" />
 
         <app-field v-model="description" label="Description" :icon="TablerIconConstants.fieldText2" type="textarea" rows="1" autosize placeholder="Description" />
 
