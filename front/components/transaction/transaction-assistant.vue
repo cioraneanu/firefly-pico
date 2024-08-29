@@ -180,39 +180,20 @@ const processAssistantText = () => {
 
   text = RomanianLanguageUtils.fixBadWordNumbers(text)
   text = text.replace(',', '.')
-  let words = text.split(' ')
+  // let words = text.split(' ')
 
-  let amountWords = words.filter((item) => isStringAMathExpression(item))
-  amountWords = amountWords.map((item) => {
-    let { wasSuccessful, value } = evalMath(item)
-    return wasSuccessful ? value : 0
-  })
-  foundAmount.value =
-    amountWords.length === 0
-      ? null
-      : amountWords
-          .reduce((total, value) => {
-            return total + parseFloat(value)
-          }, 0)
-          .toString()
+  // 3 groups: <template> <amount> <description>
+  const regex = /^(\D+)?(?:\s*(\d[\.\d\s\+\-\*\/]*))?(?:\s+(.*))?$/
+  const match = text.match(regex)
 
-  // let templateWords = words.filter(item => isNaN(item)).join(' ')
-
-  let indexOfLastAmount = words.findLastIndex((item) => isStringAMathExpression(item))
-  // let searchWords = words.filter(item => !isStringAMathExpression(item)).join(' ')
-  let searchWords = indexOfLastAmount < 0 ? words.join(' ') : words.slice(0, indexOfLastAmount).join(' ')
+  let searchWords = match[1] || ''
   searchWords = LanguageUtils.removeAccents(searchWords)
 
-  let descriptionWords =
-    indexOfLastAmount < 0
-      ? null
-      : words
-          .slice(indexOfLastAmount)
-          .filter((item) => !isStringAMathExpression(item))
-          .join(' ')
-  foundDescription.value = descriptionWords
+  let numerical = match[2] || ''
+  let { wasSuccessful, value } = evalMath(numerical)
+  foundAmount.value = wasSuccessful ? value : 0
 
-  // receivedWords = RomanianLanguageUtils.sanitize(receivedWords)
+  foundDescription.value = match[3] || ''
 
   const fuseTemplateResults = fuseTransactionTemplate.search(searchWords)
   const fuseTagResults = fuseTags.search(searchWords)

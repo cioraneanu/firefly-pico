@@ -14,7 +14,10 @@ export const getFormattedValue = (value, digits = 0) => {
     digits = 2
   }
   let numberFormatCode = profileStore.numberFormat.code ?? NUMBER_FORMAT.eu.code
-  return new Intl.NumberFormat(numberFormatCode, { minimumFractionDigits: digits, maximumFractionDigits: digits }).format(value)
+  return new Intl.NumberFormat(numberFormatCode, {
+    minimumFractionDigits: digits,
+    maximumFractionDigits: digits,
+  }).format(value)
 }
 
 export const isStringANumber = (value) => {
@@ -40,9 +43,15 @@ export const evalMath = (value) => {
       value: '0',
     }
   }
+  console.log('1')
+
 
   try {
-    let newValue = evaluate(value).toString()
+    console.log('2')
+
+    let sanitizedValue = sanitizeMathString(value)
+    console.log('sanitize', {value, sanitizedValue})
+    let newValue = evaluate(sanitizedValue).toString()
     newValue = parseFloat(newValue).toFixed(2)
     return {
       wasSuccessful: true,
@@ -56,6 +65,21 @@ export const evalMath = (value) => {
       value: value,
     }
   }
+}
+
+export const sanitizeMathString = (value) => {
+  // Trim unnecessary spaces and reduce multiple spaces to a single space
+  let cleaned = value.trim().replace(/\s+/g, ' ')
+
+  // Replace all spaces with the '+' operator
+  cleaned = cleaned.replace(/\s+/g, '+')
+
+  // Handle multiple adjacent operators by keeping only the last one
+  cleaned = cleaned.replace(/([+\-*/]){2,}/g, (match) => match[match.length - 1])
+
+  // Remove any trailing operators
+  cleaned = cleaned.replace(/[+\-*/]$/, '');
+  return cleaned
 }
 
 export const removeEndOperators = (inputString) => {
