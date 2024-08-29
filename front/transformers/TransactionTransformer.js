@@ -64,11 +64,10 @@ export default class TransactionTransformer extends ApiTransformer {
     let newTransactions = item.attributes.transactions
 
     newTransactions = newTransactions.map((item) => {
-      // let newItem = cloneDeep(item)
       let newItem = {}
       newItem.amount = _.get(item, 'amount', 0)
       newItem.foreign_amount = _.get(item, 'amountForeign', 0)
-      newItem.foreign_currency_id = _.get(item, 'foreignCurrencyId')
+      newItem.foreign_currency_id = Account.getCurrencyId(get(item, 'accountDestination'))
 
       newItem.description = get(item, 'description', '')
       newItem.notes = _.get(item, 'notes')
@@ -97,6 +96,7 @@ export default class TransactionTransformer extends ApiTransformer {
 
       newItem.tags = tags
 
+      console.log('debug', {item, newItem})
 
 
       return newItem

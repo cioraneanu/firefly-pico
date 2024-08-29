@@ -142,6 +142,10 @@ class Account extends BaseModel {
     return get(account, 'attributes.currency_symbol')
   }
 
+  static getCurrencyId(account) {
+    return get(account, 'attributes.currency_id')
+  }
+
   static getBalance(account) {
     return get(account, 'attributes.current_balance')
   }
