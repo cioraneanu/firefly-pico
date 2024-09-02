@@ -64,24 +64,28 @@ export default class TransactionTransformer extends ApiTransformer {
     let newTransactions = item.attributes.transactions
 
     newTransactions = newTransactions.map((item) => {
+      const accountSource = _.get(item, 'accountSource')
+      const accountDestination = _.get(item, 'accountDestination')
+      const hasDifferentCurrencies = accountSource && accountDestination && Account.getCurrencyId(accountSource) !== Account.getCurrencyId(accountDestination)
+
       let newItem = {}
       newItem.amount = _.get(item, 'amount', 0)
-      newItem.foreign_amount = _.get(item, 'amountForeign', 0)
-      newItem.foreign_currency_id = Account.getCurrencyId(get(item, 'accountDestination'))
+      newItem.foreign_amount = hasDifferentCurrencies ? _.get(item, 'amountForeign', 0) : null
+      newItem.foreign_currency_id = hasDifferentCurrencies ? Account.getCurrencyId(accountDestination) : null
 
       newItem.description = get(item, 'description', '')
       newItem.notes = _.get(item, 'notes')
       newItem.source_id = _.get(item, 'accountSource.id')
-      newItem.source_name = Account.getDisplayName(get(item, 'accountSource'))
+      newItem.source_name = Account.getDisplayName(accountSource)
       newItem.destination_id = _.get(item, 'accountDestination.id')
-      newItem.destination_name = Account.getDisplayName(get(item, 'accountDestination'))
+      newItem.destination_name = Account.getDisplayName(accountDestination)
       newItem.category_id = _.get(item, 'category.id')
       newItem.date = DateUtils.dateToString(item.date, DateUtils.FORMAT_ENGLISH_DATE_HOUR_MINUTE)
 
-      const source = _.get(item, 'accountSource')
-      const destination = _.get(item, 'accountDestination')
-
-      const transactionType = Transaction.getTransactionTypeForAccounts({ source, destination })
+      const transactionType = Transaction.getTransactionTypeForAccounts({
+        source: accountSource,
+        destination: accountDestination,
+      })
       newItem.type = transactionType.fireflyCode
 
       // const transformedTransactionType = Transaction.transactionTypeToFirefly(transactionType)
@@ -95,8 +99,6 @@ export default class TransactionTransformer extends ApiTransformer {
       tags = uniq(tags)
 
       newItem.tags = tags
-
-      console.log('debug', {item, newItem})
 
 
       return newItem
