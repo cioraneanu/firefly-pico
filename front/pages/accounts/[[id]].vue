@@ -24,7 +24,7 @@
 
         <icon-select v-model="icon" :list="avatarListIcons" />
 
-        <currency-select v-if="false" v-model="currency" :rules="[{ required: true, message: 'Field is required' }]" required />
+        <currency-select v-model="currency" :rules="[{ required: true, message: 'Field is required' }]" required />
 
         <account-type-select v-model="type" :rules="[{ required: true, message: 'Type is required' }]" required />
 
