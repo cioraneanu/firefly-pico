@@ -74,8 +74,7 @@
             </van-tag>
           </template>
 
-          <div class="flex-1" />
-          <!--          <van-button @click="onClear" size="small">Clear</van-button>-->
+          <!--          <div class="flex-1" />-->
         </div>
       </template>
     </div>
@@ -189,9 +188,10 @@ const processAssistantText = () => {
   let searchWords = match[1] || ''
   searchWords = LanguageUtils.removeAccents(searchWords)
 
-  let numerical = match[2] || ''
+  let numerical = match[2]
   let { wasSuccessful, value } = evalMath(numerical)
-  foundAmount.value = wasSuccessful ? value : 0
+  foundAmount.value = numerical && wasSuccessful ? value : null
+
 
   foundDescription.value = match[3] || ''
 

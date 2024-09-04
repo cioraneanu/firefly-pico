@@ -15,7 +15,7 @@ export default defineNuxtConfig({
 
   devServer: {
     // host: '192.168.1.10',
-    // host: '0'
+    host: '0'
   },
 
   vite: {

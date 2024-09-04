@@ -93,21 +93,23 @@
     </template>
 
     <table v-if="showQuickButtons" class="transaction-amount-table-buttons">
-      <tr>
-        <td v-for="quickButton in quickButtons">
-          <van-button class="w-100 transaction-amount-button" @mousedown.prevent.stop="onQuickButton(quickButton)" type="default" size="normal">
-            {{ quickButton }}
-          </van-button>
-        </td>
-      </tr>
+      <tbody>
+        <tr>
+          <td v-for="quickButton in quickButtons">
+            <van-button class="w-100 transaction-amount-button" @mousedown.prevent.stop="onQuickButton(quickButton)" type="default" size="normal">
+              {{ quickButton }}
+            </van-button>
+          </td>
+        </tr>
 
-      <tr v-show="isInputFocused">
-        <td v-for="operator in operatorsList">
-          <van-button class="w-100 transaction-amount-button transaction-operation-button mt-5" @mousedown.prevent.stop="onOperation(operator)" type="default" size="normal">
-            {{ operator }}
-          </van-button>
-        </td>
-      </tr>
+        <tr v-show="isInputFocused">
+          <td v-for="operator in operatorsList">
+            <van-button class="w-100 transaction-amount-button transaction-operation-button mt-5" @mousedown.prevent.stop="onOperation(operator)" type="default" size="normal">
+              {{ operator }}
+            </van-button>
+          </td>
+        </tr>
+      </tbody>
     </table>
 
     <!--    <div class="delimiter"/>-->
