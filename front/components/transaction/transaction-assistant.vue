@@ -5,7 +5,7 @@
       <!--      <app-icon icon="svgo-speed1" :size="20"/>-->
       <app-tutorial v-bind="TUTORIAL_CONSTANTS.assistant" />
     </div>
-    <div class="text-size-12 text-muted mb-5">Format = [template | tag] [amount?] [description?]</div>
+    <div class="text-size-12 text-muted mb-5">Format = [template | tag?] [amount?] [description?]</div>
 
     <div class="display-flex flex-column">
       <div class="flex-center-vertical gap-2">
