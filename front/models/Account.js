@@ -4,6 +4,7 @@ import AccountTransformer from '~/transformers/AccountTransformer'
 import AccountRepository from '~/repository/AccountRepository'
 import _, { get } from 'lodash'
 import Transaction from '~/models/Transaction'
+import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
 
 class Account extends BaseModel {
   getTransformer() {
@@ -23,8 +24,7 @@ class Account extends BaseModel {
         role: null,
         include_net_worth: true,
         is_dashboard_visible: true,
-      }
-
+      },
     }
   }
 
@@ -151,7 +151,17 @@ class Account extends BaseModel {
   }
 
   static getBalanceWithCurrency(account) {
-    return `${this.getBalance(account)} ${this.getCurrency(account)}`
+    const profileStore = useProfileStore()
+    let digits = profileStore.dashboard.showDecimal ? 2 : 0
+    let numberFormatCode = profileStore.numberFormat.code ?? NUMBER_FORMAT.eu.code
+    let amount = this.getBalance(account)
+
+    amount = new Intl.NumberFormat(numberFormatCode, {
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits,
+    }).format(amount)
+
+    return `${amount} ${this.getCurrency(account)}`
   }
 
   static getIsActive(account) {
