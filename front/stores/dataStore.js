@@ -153,6 +153,16 @@ export const useDataStore = defineStore('data', {
       }, {})
     },
 
+    transactionsListSavings(state) {
+      return state.dashboard.transactionsList.filter((item) => {
+        let accountSourceRoleCode = get(item, 'attributes.transactions.0.accountSource.attributes.account_role.fireflyCode')
+        let accountDestinationRoleCode = get(item, 'attributes.transactions.0.accountDestination.attributes.account_role.fireflyCode')
+        return [accountSourceRoleCode, accountDestinationRoleCode].includes(Account.roleAssets.saving.fireflyCode)
+      })
+    },
+
+
+
     transactionsListExpense(state) {
       return state.dashboard.transactionsList.filter((item) => get(item, 'attributes.transactions.0.type.code') === Transaction.types.expense.code)
     },
@@ -234,7 +244,7 @@ export const useDataStore = defineStore('data', {
         code: currencyCode,
         value: rates[currencyCode],
         name: get(infoDictionary, `${currencyCode}.name`, ' - '),
-        country: get(infoDictionary, `${currencyCode}.country`, ' - ')
+        country: get(infoDictionary, `${currencyCode}.country`, ' - '),
       }))
     },
   },
