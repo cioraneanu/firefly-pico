@@ -9,6 +9,8 @@
 
       <dashboard-summary />
 
+      <dashboard-summary-savings />
+
       <dashboard-tag-totals />
 
       <dashboard-category-totals />

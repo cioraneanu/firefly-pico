@@ -21,6 +21,7 @@ import { listToTree, setLevel, sortByPath, treeToList } from '~/utils/DataUtils'
 import Tag from '~/models/Tag.js'
 import { convertCurrency, convertTransactionAmountToCurrency, convertTransactionsTotalAmountToCurrency } from '~/utils/CurrencyUtils'
 import { getExcludedTransactionFilters } from '~/utils/DashboardUtils.js'
+import { uniqBy } from 'lodash/array.js'
 
 export const useDataStore = defineStore('data', {
   state: () => {
@@ -153,15 +154,37 @@ export const useDataStore = defineStore('data', {
       }, {})
     },
 
-    transactionsListSavings(state) {
+    transactionsListSavingsIn(state) {
       return state.dashboard.transactionsList.filter((item) => {
-        let accountSourceRoleCode = get(item, 'attributes.transactions.0.accountSource.attributes.account_role.fireflyCode')
         let accountDestinationRoleCode = get(item, 'attributes.transactions.0.accountDestination.attributes.account_role.fireflyCode')
-        return [accountSourceRoleCode, accountDestinationRoleCode].includes(Account.roleAssets.saving.fireflyCode)
+        return accountDestinationRoleCode === Account.roleAssets.saving.fireflyCode
       })
     },
 
+    transactionsListSavingsOut(state) {
+      return state.dashboard.transactionsList.filter((item) => {
+        let accountSourceRoleCode = get(item, 'attributes.transactions.0.accountSource.attributes.account_role.fireflyCode')
+        return accountSourceRoleCode === Account.roleAssets.saving.fireflyCode
+      })
+    },
 
+    transactionsListSavings(state) {
+      return uniqBy([...this.transactionsListSavingsIn, ...this.transactionsListSavingsOut], 'id')
+    },
+
+    transactionsListSavingsCount(state) {
+      return this.transactionsListSavings.length
+    },
+
+    transactionsListSavingsAmount(state) {
+      let amountIn = convertTransactionsTotalAmountToCurrency(this.transactionsListSavingsIn, state.dashboardCurrency)
+      let amountOut = convertTransactionsTotalAmountToCurrency(this.transactionsListSavingsOut, state.dashboardCurrency)
+      return amountIn - amountOut
+    },
+
+    transactionsListSavingsPercentage(state) {
+      return this.transactionsListSavingsAmount * 1.0 / this.totalIncomeThisMonth * 100
+    },
 
     transactionsListExpense(state) {
       return state.dashboard.transactionsList.filter((item) => get(item, 'attributes.transactions.0.type.code') === Transaction.types.expense.code)

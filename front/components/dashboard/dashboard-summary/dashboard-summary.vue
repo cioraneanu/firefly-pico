@@ -67,13 +67,6 @@ const remainingDays = computed(() => {
   return differenceInDays(endDate.value, startOfDay(new Date())) + 1
 })
 
-// const getFormattedValue = (value) => {
-//   if (!profileStore.dashboard.showAccountAmounts) {
-//     return  '******'
-//   }
-//   return new Intl.NumberFormat('de-DE', {minimumFractionDigits: 2, maximumFractionDigits: 2}).format(value)
-// }
-
 const totalExpenseFormatted = computed(() => getFormattedValue(dataStore.totalExpenseThisMonth))
 const totalIncomeFormatted = computed(() => getFormattedValue(dataStore.totalIncomeThisMonth))
 const totalTransferFormatted = computed(() => getFormattedValue(dataStore.totalTransfersThisMonth))
