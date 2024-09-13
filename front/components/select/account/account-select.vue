@@ -81,13 +81,13 @@
 </template>
 
 <script setup>
-import { useDataStore } from '~/stores/dataStore'
-import Account from '~/models/Account'
-import { useFormAttributes } from '~/composables/useFormAttributes'
+import { useDataStore } from '~/stores/dataStore.js'
+import Account from '~/models/Account.js'
+import { useFormAttributes } from '~/composables/useFormAttributes.js'
 import { IconRefresh } from '@tabler/icons-vue'
 import { isEqual } from 'lodash/lang'
 
-import TablerIconConstants from '~/constants/TablerIconConstants'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 const dataStore = useDataStore()
 const attrs = useAttrs()

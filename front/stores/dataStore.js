@@ -269,6 +269,10 @@ export const useDataStore = defineStore('data', {
       return keyBy(state.currenciesList, 'id')
     },
 
+    defaultCurrency: (state) => {
+      return state.currenciesList.find((item) => get(item, 'attributes.default'))
+    },
+
     exchangeRatesList: (state) => {
       let infoList = get(state.exchangeRates, 'currencies') ?? []
       let infoDictionary = keyBy(infoList, 'code')

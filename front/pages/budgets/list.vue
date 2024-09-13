@@ -90,5 +90,10 @@ toolbar.init({
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })
 
+
+onMounted(() => {
+  onRefresh()
+})
+
 animateSwipeList(list)
 </script>

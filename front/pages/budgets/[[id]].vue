@@ -20,6 +20,15 @@
         />
 
         <icon-select v-model="icon" />
+
+        <budget-type-select v-model="type" :rules="[{ required: true, message: 'Type is required' }]" required />
+
+        <budget-period-select v-model="period" :rules="[{ required: true, message: 'Type is required' }]" required />
+
+        <currency-select v-model="currency" :rules="[{ required: true, message: 'Field is required' }]" required />
+
+        <app-field v-model="amount" name="Amount" label="Amount" placeholder="Amount" :icon="TablerIconConstants.cashBanknote" :rules="[{ required: true, message: 'Amount is required' }]" />
+
       </van-cell-group>
 
       <div style="margin: 16px">
@@ -45,6 +54,7 @@ import { useToolbar } from '~/composables/useToolbar'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import BudgetTransformer from '~/transformers/BudgetTransformer.js'
 import Budget from '~/models/Budget.js'
+import AccountTypeSelect from '~/components/select/account/account-type-select.vue'
 
 let dataStore = useDataStore()
 let profileStore = useProfileStore()
@@ -84,9 +94,13 @@ let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveI
   onEvent: onEvent,
 })
 
-const { name, icon } = generateChildren(item, [
+const { name, icon, type, period, currency, amount } = generateChildren(item, [
   { computed: 'name', parentKey: 'attributes.name' },
   { computed: 'icon', parentKey: `attributes.icon` },
+  { computed: 'type', parentKey: `attributes.auto_budget_type` },
+  { computed: 'period', parentKey: `attributes.auto_budget_period` },
+  { computed: 'currency', parentKey: `attributes.currency` },
+  { computed: 'amount', parentKey: `attributes.amount` },
 ])
 
 watch(name, (newValue) => {
