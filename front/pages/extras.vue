@@ -11,6 +11,8 @@
 
       <app-field-link label="Transaction templates" :icon="TablerIconConstants.transactionTemplate" @click="onGoToTransactionTemplatesList" />
 
+      <app-field-link label="Budgets" :icon="TablerIconConstants.budget" @click="onGoToBudgetsList" />
+
       <app-field-link label="Exchange rates" :icon="TablerIconConstants.exchangeRates" @click="navigateTo(RouteConstants.ROUTE_EXCHANGE_RATES)" />
 
       <!--      <app-field-link-->
@@ -37,6 +39,8 @@ const onGoToCategoriesList = async () => await navigateTo(RouteConstants.ROUTE_C
 const onGoToTagsList = async () => await navigateTo(RouteConstants.ROUTE_TAG_LIST)
 const onGoToCurrenciesList = async () => await navigateTo(RouteConstants.ROUTE_CURRENCY_LIST)
 const onGoToTransactionTemplatesList = async () => await navigateTo(RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST)
+
+const onGoToBudgetsList = async () => await navigateTo(RouteConstants.ROUTE_BUDGET_LIST)
 
 const toolbar = useToolbar()
 toolbar.init({ title: 'Extra' })

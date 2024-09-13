@@ -22,6 +22,8 @@ import Tag from '~/models/Tag.js'
 import { convertCurrency, convertTransactionAmountToCurrency, convertTransactionsTotalAmountToCurrency } from '~/utils/CurrencyUtils'
 import { getExcludedTransactionFilters } from '~/utils/DashboardUtils.js'
 import { uniqBy } from 'lodash/array.js'
+import BudgetRepository from '~/repository/BudgetRepository.js'
+import BudgetTransformer from '~/transformers/BudgetTransformer.js'
 
 export const useDataStore = defineStore('data', {
   state: () => {
@@ -41,6 +43,7 @@ export const useDataStore = defineStore('data', {
 
       transactionTemplateList: useLocalStorage('transactionTemplateList', []), // transactionTemplateList: useLocalStorage('transactionTemplateList', [], TransactionTemplateUtils.getLocalStorageSerializer()),
       categoryList: useLocalStorage('categoryList', []),
+      budgetList: useLocalStorage('budgetList', []),
       accountList: useLocalStorage('accountList', []),
       tagList: useLocalStorage('tagList', []),
       currenciesList: useLocalStorage('currenciesList', []),
@@ -60,6 +63,7 @@ export const useDataStore = defineStore('data', {
       isLoadingAccounts: false,
       isLoadingTags: false,
       isLoadingCategories: false,
+      isLoadingBudgets: false,
       isLoadingTransactionTemplates: false,
       isLoadingDashboardTransactions: false,
       isLoadingDashboardTransactionsLastWeek: false,
@@ -239,6 +243,10 @@ export const useDataStore = defineStore('data', {
       return keyBy(state.categoryList, 'id')
     },
 
+    budgetDictionary: (state) => {
+      return keyBy(state.budgetList, 'id')
+    },
+
     accountDictionary: (state) => {
       return keyBy(state.accountList, 'id')
     },
@@ -407,6 +415,13 @@ export const useDataStore = defineStore('data', {
       const list = await new CategoryRepository().getAllWithMerge()
       this.categoryList = CategoryTransformer.transformFromApiList(list)
       this.isLoadingCategories = false
+    },
+
+    async fetchBudgets() {
+      this.isLoadingBudgets = true
+      const list = await new BudgetRepository().getAllWithMerge()
+      this.budgetList = BudgetTransformer.transformFromApiList(list)
+      this.isLoadingBudgets = false
     },
 
     async fetchTags() {

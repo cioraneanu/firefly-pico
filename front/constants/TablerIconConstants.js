@@ -8,6 +8,7 @@ export const icons = {
   extras: 'IconRuler',
   settings: 'IconSettings',
   tag: 'IconTag',
+  budget: 'IconBasket',
   currency: 'IconCoin',
   transaction: 'IconCoins',
   transactionTemplate: 'IconTemplate',
