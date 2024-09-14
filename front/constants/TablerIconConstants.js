@@ -62,6 +62,9 @@ export const icons = {
   article: 'IconArticle',
   key: 'IconKey',
 
+  eyeHidden: 'IconEyeX',
+  eyeVisible: 'IconEye',
+
 
   // ------ Icon Select -----
 

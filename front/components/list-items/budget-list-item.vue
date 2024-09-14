@@ -9,8 +9,13 @@
 
           <div class="separator"></div>
 
-          <div class="second_column flex-1">
+          <div class="second_column flex-1 flex-column">
             <div v-if="displayName" class="title">{{ displayName }}</div>
+            <div class="display-flex flex-wrap gap-1">
+              <div class="tag-gray list-item-subtitle">{{ budgetType }}</div>
+              <div v-if="budgetAmount" class="tag-gray list-item-subtitle">{{ budgetPeriod }}</div>
+              <div v-if="budgetAmount" class="tag-gray list-item-subtitle">{{ budgetAmount }}</div>
+            </div>
           </div>
         </div>
       </template>
@@ -39,6 +44,10 @@ const emit = defineEmits(['onEdit', 'onDelete'])
 const dataStore = useDataStore()
 
 const displayName = computed(() => _.get(props.value, 'attributes.name', ' - '))
+const budgetType = computed(() => _.get(props.value, 'attributes.auto_budget_type.name', ' - '))
+const budgetPeriod = computed(() => _.get(props.value, 'attributes.auto_budget_period.name', ' - '))
+const budgetAmount = computed(() => _.get(props.value, 'attributes.amount', ' - '))
+
 const icon = computed(() => Budget.getIcon(props.value))
 
 const onEdit = async (e) => {

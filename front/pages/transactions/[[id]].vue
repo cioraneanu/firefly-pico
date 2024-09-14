@@ -2,16 +2,6 @@
   <div class="app-form">
     <app-top-toolbar>
       <template #right>
-        <!--                <van-button-->
-        <!--                    v-if="!itemId"-->
-        <!--                    @click="showTransactionVoice = true"-->
-        <!--                    size="small"-->
-        <!--                    class="mr-10 no-border">-->
-        <!--                  <template #icon>-->
-        <!--                    <van-icon name="audio" size="18"/>-->
-        <!--                  </template>-->
-        <!--                </van-button>-->
-
         <app-button-list-add v-if="addButtonText" @click="onNew" />
       </template>
     </app-top-toolbar>
@@ -119,6 +109,10 @@
 
       <app-button-form-save />
     </van-form>
+
+    <div class="flex-center">
+      <nuxt-link class="text-size-12" :to="RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTION_FIELDS_ORDER"> Configure fields </nuxt-link>
+    </div>
   </div>
 </template>
 
@@ -311,9 +305,13 @@ const isTypeIncome = computed(() => isEqual(type.value, Transaction.types.income
 const isTypeTransfer = computed(() => isEqual(type.value, Transaction.types.transfer))
 
 const getStyleForField = (fieldCode) => {
+  let position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
+  let field = profileStore.transactionOrderedFieldsList.find((item) => item.code === fieldCode)
+  let isVisible = field ? field.isVisible : true
+  let displayStyle = isVisible ? '' : 'display: none'
+
   if (isTypeExpense.value) {
-    let position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
-    return `order: ${position}`
+    return `order: ${position}; ${displayStyle}`
   }
 
   const fieldTypeAccountsList = [FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT, FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT]
@@ -327,7 +325,7 @@ const getStyleForField = (fieldCode) => {
     if (fieldCode === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT) {
       position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT)
     }
-    return `order: ${position}`
+    return `order: ${position}; ${displayStyle}`
   }
 
   // Transfers
@@ -336,7 +334,7 @@ const getStyleForField = (fieldCode) => {
       return `order: 0`
     }
     let position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
-    return `order: ${position}`
+    return `order: ${position}; ${displayStyle}`
   }
 
   // No order overwrite, just respect the HTML order

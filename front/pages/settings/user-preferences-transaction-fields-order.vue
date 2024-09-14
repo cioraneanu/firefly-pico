@@ -6,9 +6,13 @@
       <van-cell-group inset class="p-10">
         <div class="van-cell-fake flex-column van-cell">
           <app-repeater v-model="fieldsList" :is-list-dynamic="false" :empty-item="{ value: '' }">
-            <template #content="{ element, index }">
-              <div class="app-field m-5 pointer-events-none prevent-select">
-                <div class="van-field__body">{{ element.name }}</div>
+            <template #content="{ element, index }" >
+              <div class="app-field m-5" @click="onClickIsVisible(element)">
+                <div class="van-field__body flex-center-vertical gap-1 pointer-events-none prevent-select" >
+                  <app-icon :icon="element.icon" :size="20" />
+                  <div class="flex-1">{{ element.name }}</div>
+                  <app-icon :icon="getIsVisibleIcon(element)" :size="20"  />
+                </div>
               </div>
             </template>
           </app-repeater>
@@ -29,6 +33,7 @@ import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import { FORM_CONSTANTS_TRANSACTION_FIELDS_LIST } from '~/constants/FormConstants'
 import * as FormConstants from '~/constants/FormConstants'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
@@ -44,6 +49,19 @@ const onSave = async () => {
   await profileStore.writeProfile()
   UIUtils.showToastSuccess('User preferences saved')
   init()
+}
+
+const getIsVisibleIcon = (element) => {
+  return element.isVisible ? TablerIconConstants.eyeVisible : TablerIconConstants.eyeHidden
+}
+
+const onClickIsVisible = (element) => {
+  console.log('onClickIsVisible')
+  element.isVisible = !element.isVisible
+}
+
+const onClick = () => {
+  console.log('onClickIsVisible')
 }
 
 const init = () => {
