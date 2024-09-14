@@ -396,7 +396,8 @@ export const useDataStore = defineStore('data', {
       let async3 = this.fetchTags()
       let async4 = this.fetchTransactionTemplates()
       let async5 = this.fetchCurrencies()
-      await Promise.all([async1, async2, async3, async4, async5])
+      let async6 = this.fetchBudgets()
+      await Promise.all([async1, async2, async3, async4, async5, async6])
       this.lastSync = new Date()
     },
 

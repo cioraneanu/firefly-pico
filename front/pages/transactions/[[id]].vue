@@ -103,11 +103,9 @@
           rows="1"
           autosize
           :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_NOTES)"
-        >
-          <!--          <template #left-icon>-->
-          <!--            <app-icon :icon="TablerIconConstants.fieldText2" :size="20" />-->
-          <!--          </template>-->
-        </app-field>
+        />
+
+        <budget-select v-model="budget" :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_BUDGET)" />
       </van-cell-group>
 
       <div style="margin: 16px; position: relative">
@@ -171,7 +169,7 @@ let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveI
 const time = ref(['12', '00'])
 
 const pathKey = 'attributes.transactions.0'
-const { amount, amountForeign, date, tags, description, notes, accountSource, accountDestination, category, type } = generateChildren(item, [
+const { amount, amountForeign, date, tags, description, notes, budget, accountSource, accountDestination, category, type } = generateChildren(item, [
   { computed: 'amount', parentKey: `${pathKey}.amount` },
   { computed: 'amountForeign', parentKey: `${pathKey}.amountForeign` },
   { computed: 'date', parentKey: `${pathKey}.date` },
@@ -182,6 +180,7 @@ const { amount, amountForeign, date, tags, description, notes, accountSource, ac
   { computed: 'accountDestination', parentKey: `${pathKey}.accountDestination` },
   { computed: 'category', parentKey: `${pathKey}.category` },
   { computed: 'type', parentKey: `${pathKey}.type` },
+  { computed: 'budget', parentKey: `${pathKey}.budget` },
 ])
 
 const transactions = computed(() => _.get(item.value, 'attributes.transactions', []))

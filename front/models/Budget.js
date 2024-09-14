@@ -47,19 +47,19 @@ export default class Budget extends BaseModel {
   static get types() {
     return {
       manual: {
-        name: 'No auto-budget',
-        fireflyCode: null,
+        name: 'Manual',
+        fireflyCode: 0,
       },
       fixed: {
-        name: 'Fixed amount every period',
+        name: 'Reset every period',
         fireflyCode: 'reset',
       },
       add: {
-        name: 'Add amount every period',
+        name: 'Add every period',
         fireflyCode: 'rollover',
       },
       adjusted: {
-        name: 'Add amount every period + correct overspending',
+        name: 'Add every period - overspending',
         fireflyCode: 'adjusted',
       },
     }

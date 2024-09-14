@@ -29,13 +29,24 @@ export default class BudgetTransformer extends ApiTransformer {
     }
 
     let data = _.get(item, 'attributes')
-    return {
+    let budgetTypeCode = get(data, 'auto_budget_type.fireflyCode')
+    let hasPeriod = budgetTypeCode !== Budget.types.manual.fireflyCode
+
+    let result = {
       name: get(data, 'name', ''),
       icon: get(data, 'icon.icon'),
-      auto_budget_type: get(data, 'auto_budget_type.fireflyCode'),
-      auto_budget_period: get(data, 'auto_budget_period.fireflyCode'),
-      auto_budget_currency_id: get(data, 'currency.id'),
-      auto_budget_amount: get(data, 'amount'),
+      auto_budget_type: budgetTypeCode,
     }
+
+    if (hasPeriod) {
+      result = {
+        ...result,
+        auto_budget_period: get(data, 'auto_budget_period.fireflyCode'),
+        auto_budget_currency_id: get(data, 'currency.id'),
+        auto_budget_amount: get(data, 'amount'),
+      }
+    }
+
+    return result
   }
 }

@@ -23,12 +23,11 @@
 
         <budget-type-select v-model="type" :rules="[{ required: true, message: 'Type is required' }]" required />
 
-        <budget-period-select v-model="period" :rules="[{ required: true, message: 'Type is required' }]" required />
-
-        <currency-select v-model="currency" :rules="[{ required: true, message: 'Field is required' }]" required />
-
-        <app-field v-model="amount" name="Amount" label="Amount" placeholder="Amount" :icon="TablerIconConstants.cashBanknote" :rules="[{ required: true, message: 'Amount is required' }]" />
-
+        <template v-if="isPeriodVisible">
+          <budget-period-select v-model="period" :rules="[{ required: true, message: 'Type is required' }]" required />
+          <currency-select v-model="currency" :rules="[{ required: true, message: 'Field is required' }]" required />
+          <app-field v-model="amount" name="Amount" label="Amount" placeholder="Amount" :icon="TablerIconConstants.cashBanknote" :rules="[{ required: true, message: 'Amount is required' }]" />
+        </template>
       </van-cell-group>
 
       <div style="margin: 16px">
@@ -45,7 +44,7 @@ import { ref } from 'vue';
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
-import _ from 'lodash'
+import _, { get } from 'lodash'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
@@ -70,6 +69,8 @@ const fetchItem = () => {
   const dataStore = useDataStore()
   item.value = dataStore.budgetDictionary[itemId.value]
 }
+
+const isPeriodVisible = computed(() => get(type.value, 'fireflyCode') !== Budget.types.manual.fireflyCode)
 
 const onEvent = (event, payload) => {
   if (event === 'onPostSave') {
