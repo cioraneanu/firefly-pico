@@ -109,5 +109,15 @@ export default class Budget extends BaseModel {
 
   // --------
 
+  static getLimit(budget) {
+    if (!budget) {
+      return null
+    }
+    const dataStore = useDataStore()
+    return dataStore.budgetLimitDictionary[budget.id]
+  }
+
+
+
 }
 

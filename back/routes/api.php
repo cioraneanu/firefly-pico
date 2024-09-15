@@ -39,6 +39,9 @@ RouteUtils::makeCRUD("tags", TagController::class);
 RouteUtils::makeCRUD("currencies", CurrencyController::class);
 Route::get('currencies/exchange', [CurrencyController::class, 'exchangeRates']);
 
+Route::get('budget-limits', [BudgetController::class, 'getBudgetLimits']);
+
+
 RouteUtils::makeCRUD("transactions", TransactionController::class);
 Route::get('search/transactions', [TransactionController::class, 'getAll']);
 

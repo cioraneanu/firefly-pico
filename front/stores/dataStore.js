@@ -24,6 +24,7 @@ import { getExcludedTransactionFilters } from '~/utils/DashboardUtils.js'
 import { uniqBy } from 'lodash/array.js'
 import BudgetRepository from '~/repository/BudgetRepository.js'
 import BudgetTransformer from '~/transformers/BudgetTransformer.js'
+import BudgetLimitTransformer from '~/transformers/BudgetLimitTransformer.js'
 
 export const useDataStore = defineStore('data', {
   state: () => {
@@ -44,6 +45,7 @@ export const useDataStore = defineStore('data', {
       transactionTemplateList: useLocalStorage('transactionTemplateList', []), // transactionTemplateList: useLocalStorage('transactionTemplateList', [], TransactionTemplateUtils.getLocalStorageSerializer()),
       categoryList: useLocalStorage('categoryList', []),
       budgetList: useLocalStorage('budgetList', []),
+      budgetLimitList: useLocalStorage('budgetLimitList', []),
       accountList: useLocalStorage('accountList', []),
       tagList: useLocalStorage('tagList', []),
       currenciesList: useLocalStorage('currenciesList', []),
@@ -247,6 +249,10 @@ export const useDataStore = defineStore('data', {
       return keyBy(state.budgetList, 'id')
     },
 
+    budgetLimitDictionary: (state) => {
+      return keyBy(state.budgetLimitList, 'attributes.budget_id')
+    },
+
     accountDictionary: (state) => {
       return keyBy(state.accountList, 'id')
     },
@@ -424,10 +430,24 @@ export const useDataStore = defineStore('data', {
 
     async fetchBudgets() {
       this.isLoadingBudgets = true
-      const list = await new BudgetRepository().getAllWithMerge()
-      this.budgetList = BudgetTransformer.transformFromApiList(list)
+
+      const asyncBudget = new BudgetRepository().getAllWithMerge()
+      let fetchBudgetLimits = new BudgetRepository().getBudgetLimits
+      let asyncBudgetLimit = new BudgetRepository().getAllWithMerge({ getAll: fetchBudgetLimits })
+
+      const [budgetList, budgetLimitList] = await Promise.all([asyncBudget, asyncBudgetLimit])
+
+      this.budgetList = BudgetTransformer.transformFromApiList(budgetList)
+      this.budgetLimitList = BudgetLimitTransformer.transformFromApiList(budgetLimitList)
+
       this.isLoadingBudgets = false
     },
+
+    // async fetchBudgetLimits() {
+    //   this.isLoadingBudgetLimits = true
+    //
+    //   this.isLoadingBudgetLimits = false
+    // },
 
     async fetchTags() {
       this.isLoadingTags = true

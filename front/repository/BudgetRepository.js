@@ -8,12 +8,9 @@ export default class BudgetRepository extends BaseRepository {
     super(`api/budgets`)
   }
 
-  async getAllBudgetLimits({ filters = [], page = 1, pageSize = 50 } = {}) {
+  async getBudgetLimits() {
     const appStore = useAppStore()
-    const url = `${appStore.picoBackendURL}/api/search/transactions`
-    let searchUrl = this.getUrlForRequest({ filters, page, pageSize, url })
-    let response = await axios.get(searchUrl)
+    let response = await axios.get(`${appStore.picoBackendURL}/api/budget-limits`)
     return _.get(response, 'data', {})
   }
 }
-

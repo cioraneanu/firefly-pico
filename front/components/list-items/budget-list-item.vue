@@ -10,11 +10,14 @@
           <div class="separator"></div>
 
           <div class="second_column flex-1 flex-column">
-            <div v-if="displayName" class="title">{{ displayName }}</div>
+            <div v-if="displayName" class="title flex-center-vertical">
+              <div class="flex-1">{{ displayName }}</div>
+              <div class="text-size-12">{{ budgetLimitSpent }} / {{ budgetAmount }}</div>
+            </div>
+            <bar-chart-item-horizontal :percent="budgetLimitPercent" class="p-0 mb-10" />
             <div class="display-flex flex-wrap gap-1">
-              <div class="tag-gray list-item-subtitle">{{ budgetType }}</div>
-              <div v-if="budgetAmount" class="tag-gray list-item-subtitle">{{ budgetPeriod }}</div>
-              <div v-if="budgetAmount" class="tag-gray list-item-subtitle">{{ budgetAmount }}</div>
+              <div class="tag-gray list-item-subtitle text-size-12">{{ budgetType }}</div>
+              <div v-if="budgetAmount" class="tag-gray list-item-subtitle text-size-12">{{ budgetPeriod }}</div>
             </div>
           </div>
         </div>
@@ -28,7 +31,7 @@
 </template>
 
 <script setup>
-import _ from 'lodash'
+import _, { get } from 'lodash'
 import { useDataStore } from '~/stores/dataStore'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import TablerIconConstants from '~/constants/TablerIconConstants'
@@ -43,10 +46,14 @@ const emit = defineEmits(['onEdit', 'onDelete'])
 
 const dataStore = useDataStore()
 
+const budgetLimit = computed(() => Budget.getLimit(props.value))
+
 const displayName = computed(() => _.get(props.value, 'attributes.name', ' - '))
 const budgetType = computed(() => _.get(props.value, 'attributes.auto_budget_type.name', ' - '))
 const budgetPeriod = computed(() => _.get(props.value, 'attributes.auto_budget_period.name', ' - '))
 const budgetAmount = computed(() => _.get(props.value, 'attributes.amount', ' - '))
+const budgetLimitPercent = computed(() => get(budgetLimit.value, `attributes.percent`, 0))
+const budgetLimitSpent = computed(() => Math.abs(get(budgetLimit.value, `attributes.spent`, 0)))
 
 const icon = computed(() => Budget.getIcon(props.value))
 
