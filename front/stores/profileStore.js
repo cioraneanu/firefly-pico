@@ -12,6 +12,7 @@ import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
 import ProfileRepository from '~/repository/ProfileRepository'
 import ProfileTransformer from '~/transformers/ProfileTransformer'
 import { useAppStore } from '~/stores/appStore.js'
+import { DASHBOARD_SECTIONS_LIST } from '~/constants/DashboardConstants.js'
 
 export const useProfileStore = defineStore('profile', {
   state: () => {
@@ -30,6 +31,7 @@ export const useProfileStore = defineStore('profile', {
 
       quickValueButtons: useLocalStorage('quickValueButtons', ['-10', '-1', '+1', '+10']),
       transactionOrderedFieldsList: useLocalStorage('transactionOrderedFieldsList', FORM_CONSTANTS_TRANSACTION_FIELDS_LIST),
+      dashboardOrderedCardsList: useLocalStorage('dashboardOrderedCardsList', DASHBOARD_SECTIONS_LIST),
 
       dateFormat: useLocalStorage('dateFormat', DateUtils.FORMAT_ENGLISH_DATE),
 
@@ -77,6 +79,8 @@ export const useProfileStore = defineStore('profile', {
       responseData = ProfileTransformer.transformFromApi(responseData)
       this.$patch(responseData)
       this.isLoading = false
+
+      this.migrateOrderedLists()
     },
 
     async writeProfile() {
@@ -92,5 +96,10 @@ export const useProfileStore = defineStore('profile', {
       await new ProfileRepository().writeProfile(ProfileTransformer.transformToApi(data))
       this.isLoading = false
     },
+
+    migrateOrderedLists() {
+      // TODO: Implement me later.
+      // Check if there "transactionOrderedFieldsList" / "dashboardOrderedCardsList" received new fields
+    }
   },
 })

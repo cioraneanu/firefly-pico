@@ -43,11 +43,9 @@ export const evalMath = (value) => {
       value: '0',
     }
   }
-  console.log('1')
 
 
   try {
-    console.log('2')
 
     let sanitizedValue = sanitizeMathString(value)
     console.log('sanitize', {value, sanitizedValue})
