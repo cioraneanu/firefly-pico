@@ -4,7 +4,8 @@
       <template #title>
         <div class="list-item-container">
           <div class="first_column flex-center flex-column">
-            <app-icon :icon="icon ?? TablerIconConstants.budget" :size="TablerIconConstants.defaultSize" />
+<!--            <app-icon :icon="icon ?? TablerIconConstants.budget" :size="TablerIconConstants.defaultSize" />-->
+            <budget-icon :value="props.value" />
           </div>
 
           <div class="separator"></div>
@@ -37,6 +38,7 @@ import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import Account from '~/models/Account.js'
 import Budget from '~/models/Budget.js'
+import BudgetIcon from '~/components/budget/budget-icon.vue'
 
 const props = defineProps({
   value: Object,
@@ -44,14 +46,12 @@ const props = defineProps({
 
 const emit = defineEmits(['onEdit', 'onDelete'])
 
-const dataStore = useDataStore()
-
 const budgetLimit = computed(() => Budget.getLimit(props.value))
 
-const displayName = computed(() => _.get(props.value, 'attributes.name', ' - '))
-const budgetType = computed(() => _.get(props.value, 'attributes.auto_budget_type.name', ' - '))
-const budgetPeriod = computed(() => _.get(props.value, 'attributes.auto_budget_period.name', ' - '))
-const budgetAmount = computed(() => _.get(props.value, 'attributes.amount', ' - '))
+const displayName = computed(() => get(props.value, 'attributes.name', ' - '))
+const budgetType = computed(() => get(props.value, 'attributes.auto_budget_type.name', ' - '))
+const budgetPeriod = computed(() => get(props.value, 'attributes.auto_budget_period.name', ' - '))
+const budgetAmount = computed(() => get(props.value, 'attributes.amount', ' - '))
 const budgetLimitPercent = computed(() => get(budgetLimit.value, `attributes.percent`, 0))
 const budgetLimitSpent = computed(() => Math.abs(get(budgetLimit.value, `attributes.spent`, 0)))
 

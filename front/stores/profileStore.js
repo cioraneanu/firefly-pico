@@ -98,8 +98,17 @@ export const useProfileStore = defineStore('profile', {
     },
 
     migrateOrderedLists() {
-      // TODO: Implement me later.
-      // Check if there "transactionOrderedFieldsList" / "dashboardOrderedCardsList" received new fields
+      // If we add new fields for "transactionOrderedFieldsList" / "dashboardOrderedCardsList"
+      // which the user doesn't have in localStorage add them as well
+
+      const profileStore = useProfileStore()
+      if (profileStore.transactionOrderedFieldsList.length !== FORM_CONSTANTS_TRANSACTION_FIELDS_LIST.length) {
+        profileStore.transactionOrderedFieldsList = FORM_CONSTANTS_TRANSACTION_FIELDS_LIST
+      }
+
+      if (profileStore.dashboardOrderedCardsList.length !== DASHBOARD_SECTIONS_LIST.length) {
+        profileStore.dashboardOrderedCardsList = DASHBOARD_SECTIONS_LIST
+      }
     }
   },
 })

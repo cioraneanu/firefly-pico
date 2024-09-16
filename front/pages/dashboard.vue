@@ -10,6 +10,8 @@
 
         <dashboard-summary :style="getStyleForCard(DASHBOARD_SECTIONS.transactionSummary)" />
 
+        <dashboard-budgets :style="getStyleForCard(DASHBOARD_SECTIONS.budgets)" />
+
         <dashboard-summary-savings :style="getStyleForCard(DASHBOARD_SECTIONS.savings)" />
 
         <dashboard-tag-totals :style="getStyleForCard(DASHBOARD_SECTIONS.expensesByTag)" />
