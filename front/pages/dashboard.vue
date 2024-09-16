@@ -52,6 +52,7 @@ const onRefresh = () => {
   dataStore.fetchDashboardTransactionsForWeek()
   dataStore.fetchTransactionsWithTodos()
   dataStore.fetchExchangeRate()
+  dataStore.fetchBudgets()
 }
 
 const onRefreshDebounce = debounce(onRefresh, 200)

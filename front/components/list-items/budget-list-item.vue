@@ -15,8 +15,8 @@
               <div class="flex-1">{{ displayName }}</div>
               <div class="text-size-12">{{ budgetLimitSpent }} / {{ budgetAmount }}</div>
             </div>
-            <bar-chart-item-horizontal :percent="budgetLimitPercent" class="p-0 mb-10" />
-            <div class="display-flex flex-wrap gap-1">
+<!--            <bar-chart-item-horizontal :percent="budgetLimitPercent" class="p-0 mb-10" />-->
+            <div class="display-flex flex-wrap gap-1 mt-5">
               <div class="tag-gray list-item-subtitle text-size-12">{{ budgetType }}</div>
               <div v-if="budgetAmount" class="tag-gray list-item-subtitle text-size-12">{{ budgetPeriod }}</div>
             </div>

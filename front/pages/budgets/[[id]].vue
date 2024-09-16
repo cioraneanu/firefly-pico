@@ -7,6 +7,16 @@
     </app-top-toolbar>
 
     <van-form ref="form" @submit="saveItem" @failed="onValidationError" class="">
+
+      <van-cell-group v-if="itemId" inset>
+        <div class="van-cell-group-title">Status:</div>
+        <div class="px-3 pb-15 flex-column text-size-12">
+          <div>Spent: {{ budgetLimitSpent }} / {{ amount }}</div>
+          <div>Percent: {{ budgetLimitPercent }}</div>
+          <div>Interval: {{ budgetLimitDateStart }} -> {{ budgetLimitDateEnd }}</div>
+        </div>
+      </van-cell-group>
+
       <van-cell-group inset>
         <app-field
           v-model="name"
@@ -30,12 +40,16 @@
         </template>
       </van-cell-group>
 
+
+
       <div style="margin: 16px">
         <app-button-form-save />
 
         <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
       </div>
     </van-form>
+
+
   </div>
 </template>
 
@@ -71,6 +85,12 @@ const fetchItem = () => {
 }
 
 const isPeriodVisible = computed(() => get(type.value, 'fireflyCode') !== Budget.types.manual.fireflyCode)
+
+const budgetLimit = computed(() => Budget.getLimit(item.value))
+const budgetLimitPercent = computed(() => get(budgetLimit.value, `attributes.percent`, 0))
+const budgetLimitSpent = computed(() => Math.abs(get(budgetLimit.value, `attributes.spent`, 0)))
+const budgetLimitDateStart = computed(() => DateUtils.dateToUI(get(budgetLimit.value, `attributes.start`)))
+const budgetLimitDateEnd = computed(() => DateUtils.dateToUI(get(budgetLimit.value, `attributes.end`)))
 
 const onEvent = (event, payload) => {
   if (event === 'onPostSave') {

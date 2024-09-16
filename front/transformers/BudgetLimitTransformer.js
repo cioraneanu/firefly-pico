@@ -13,6 +13,10 @@ export default class BudgetLimitTransformer extends ApiTransformer {
       return null
     }
 
+    item.attributes.start = DateUtils.autoToDate(item.attributes.start)
+    item.attributes.end = DateUtils.autoToDate(item.attributes.end)
+
+
     item.attributes.spent = parseFloat(get(item, 'attributes.spent') ?? "0")
     item.attributes.amount = parseFloat(get(item, 'attributes.amount') ?? "0")
 
