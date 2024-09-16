@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\ProfileController;
@@ -33,9 +34,13 @@ RouteUtils::makeCRUD("transaction-templates", TransactionTemplateController::cla
 // Firefly proxied resources
 RouteUtils::makeCRUD("accounts", AccountController::class);
 RouteUtils::makeCRUD("categories", CategoryController::class);
+RouteUtils::makeCRUD("budgets", BudgetController::class);
 RouteUtils::makeCRUD("tags", TagController::class);
 RouteUtils::makeCRUD("currencies", CurrencyController::class);
 Route::get('currencies/exchange', [CurrencyController::class, 'exchangeRates']);
+
+Route::get('budget-limits', [BudgetController::class, 'getBudgetLimits']);
+
 
 RouteUtils::makeCRUD("transactions", TransactionController::class);
 Route::get('search/transactions', [TransactionController::class, 'getAll']);

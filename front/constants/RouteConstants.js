@@ -12,6 +12,7 @@ export default {
   ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTIONS: '/settings/user-preferences-transactions',
   ROUTE_SETTINGS_USER_PREFERENCES_QUICK_AMOUNTS: '/settings/user-preferences-quick-transaction-amounts',
   ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTION_FIELDS_ORDER: '/settings/user-preferences-transaction-fields-order',
+  ROUTE_SETTINGS_USER_PREFERENCES_DASHBOARD_CARDS_ORDER: '/settings/user-preferences-dashboard-cards-order',
   ROUTE_SETTINGS_NEW_TRANSACTION_DEFAULTS: '/settings/user-preferences-new-transaction-defaults',
   ROUTE_SETTINGS_USER_PREFERENCES_UI: '/settings/user-preferences-ui',
   ROUTE_SETTINGS_USER_PREFERENCES_DASHBOARD: '/settings/user-preferences-dashboard',
@@ -32,6 +33,9 @@ export default {
 
   ROUTE_CURRENCY_LIST: '/currencies/list',
   ROUTE_CURRENCY_ID: '/currencies',
+
+  ROUTE_BUDGET_LIST: '/budgets/list',
+  ROUTE_BUDGET_ID: '/budgets',
 
   isForm(routeForm, currentForm) {
     let regex = new RegExp(`${routeForm}/[0-9]+`)

@@ -48,7 +48,10 @@ import {
   IconToggleLeftFilled,
   IconListTree,
   IconSquareRoundedArrowDown,
-  IconGridPattern
+  IconGridPattern,
+  IconPercentage30,
+  IconMoneybag,
+  IconBasket
 } from '@tabler/icons-vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -101,6 +104,9 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconToggleLeftFilled', IconToggleLeftFilled)
   nuxtApp.vueApp.component('IconListTree', IconListTree)
   nuxtApp.vueApp.component('IconGridPattern', IconGridPattern)
+  nuxtApp.vueApp.component('IconPercentage30', IconPercentage30)
+  nuxtApp.vueApp.component('IconCoin', IconCoin)
+  nuxtApp.vueApp.component('IconBasket', IconBasket)
 
   // for (let iconName in tablerIcons) {
   //   nuxtApp.vueApp.component(iconName, tablerIcons[iconName])

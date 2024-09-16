@@ -5,6 +5,7 @@
     <van-form @submit="onSave" class="">
       <van-cell-group inset>
         <div class="van-cell-group-title mb-0">Config:</div>
+        <app-field-link label="Dashboard cards order" @click="onGoToDashboardCardsOrder" />
         <app-boolean label="Show accounts with 0 amount:" v-model="areEmptyAccountsVisible" />
         <app-boolean label="Show decimal places:" v-model="showDecimal" />
       </van-cell-group>
@@ -59,6 +60,9 @@ toolbar.init({
   title: 'Dashboard preferences',
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
+
+const onGoToDashboardCardsOrder = async () => await navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_DASHBOARD_CARDS_ORDER)
+
 
 onMounted(() => {
   animateSettings()

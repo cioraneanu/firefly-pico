@@ -37,6 +37,7 @@ export default class TransactionTransformer extends ApiTransformer {
       transaction.accountSource = accountsDictionary[transaction['source_id']]
       transaction.accountDestination = accountsDictionary[transaction['destination_id']]
       transaction.category = categoryDictionary[transaction['category_id']]
+      transaction.budget = dataStore.budgetDictionary[transaction['budget_id']]
       // transaction.tags = TagTransformer.transformFromApiList(transaction.tags.map(tagName => tagDictionaryByName[LanguageUtils.removeAccentsAndForceLowerCase(tagName)]))
       transaction.tags = transaction.tags.map((tagName) => {
         hasMissingTag = hasMissingTag || !tagDictionaryByName[LanguageUtils.removeAccentsAndLowerCase(tagName)]
@@ -80,6 +81,7 @@ export default class TransactionTransformer extends ApiTransformer {
       newItem.destination_id = _.get(item, 'accountDestination.id')
       newItem.destination_name = Account.getDisplayName(accountDestination)
       newItem.category_id = _.get(item, 'category.id')
+      newItem.budget_id = _.get(item, 'budget.id') ?? 0
       newItem.date = DateUtils.dateToString(item.date, DateUtils.FORMAT_ENGLISH_DATE_HOUR_MINUTE)
 
       const transactionType = Transaction.getTransactionTypeForAccounts({
@@ -99,7 +101,6 @@ export default class TransactionTransformer extends ApiTransformer {
       tags = uniq(tags)
 
       newItem.tags = tags
-
 
       return newItem
     })

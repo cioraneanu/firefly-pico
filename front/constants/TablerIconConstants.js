@@ -1,3 +1,5 @@
+import { IconCoin } from '@tabler/icons-vue'
+
 export const icons = {
   // ------ UI usage -----
   account: 'IconCreditCard',
@@ -6,6 +8,7 @@ export const icons = {
   extras: 'IconRuler',
   settings: 'IconSettings',
   tag: 'IconTag',
+  budget: 'IconBasket',
   currency: 'IconCoin',
   transaction: 'IconCoins',
   transactionTemplate: 'IconTemplate',
@@ -22,8 +25,10 @@ export const icons = {
   dashboardTotalExpenses: 'IconSquareRoundedMinus',
   dashboardTotalIncomes: 'IconSquareRoundedPlus',
   dashboardTotalTransfers: 'IconTransfer',
+  dashboardSavingsPercent: 'IconPercentage30',
   dashboardTotalSurplus: 'IconDelta',
   dashboardTransactionsCount: 'IconHash',
+  dashboardCoin: 'IconCoin',
 
   photo: 'IconWallet',
   notes: 'IconWallet',
@@ -56,6 +61,9 @@ export const icons = {
 
   article: 'IconArticle',
   key: 'IconKey',
+
+  eyeHidden: 'IconEyeX',
+  eyeVisible: 'IconEye',
 
 
   // ------ Icon Select -----

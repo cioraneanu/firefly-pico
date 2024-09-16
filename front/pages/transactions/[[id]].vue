@@ -2,16 +2,6 @@
   <div class="app-form">
     <app-top-toolbar>
       <template #right>
-        <!--                <van-button-->
-        <!--                    v-if="!itemId"-->
-        <!--                    @click="showTransactionVoice = true"-->
-        <!--                    size="small"-->
-        <!--                    class="mr-10 no-border">-->
-        <!--                  <template #icon>-->
-        <!--                    <van-icon name="audio" size="18"/>-->
-        <!--                  </template>-->
-        <!--                </van-button>-->
-
         <app-button-list-add v-if="addButtonText" @click="onNew" />
       </template>
     </app-top-toolbar>
@@ -103,11 +93,9 @@
           rows="1"
           autosize
           :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_NOTES)"
-        >
-          <!--          <template #left-icon>-->
-          <!--            <app-icon :icon="TablerIconConstants.fieldText2" :size="20" />-->
-          <!--          </template>-->
-        </app-field>
+        />
+
+        <budget-select v-model="budget" :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_BUDGET)" />
       </van-cell-group>
 
       <div style="margin: 16px; position: relative">
@@ -121,6 +109,10 @@
 
       <app-button-form-save />
     </van-form>
+
+    <div class="flex-center">
+      <nuxt-link class="text-size-12" :to="RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTION_FIELDS_ORDER"> Configure fields </nuxt-link>
+    </div>
   </div>
 </template>
 
@@ -171,7 +163,7 @@ let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveI
 const time = ref(['12', '00'])
 
 const pathKey = 'attributes.transactions.0'
-const { amount, amountForeign, date, tags, description, notes, accountSource, accountDestination, category, type } = generateChildren(item, [
+const { amount, amountForeign, date, tags, description, notes, budget, accountSource, accountDestination, category, type } = generateChildren(item, [
   { computed: 'amount', parentKey: `${pathKey}.amount` },
   { computed: 'amountForeign', parentKey: `${pathKey}.amountForeign` },
   { computed: 'date', parentKey: `${pathKey}.date` },
@@ -182,6 +174,7 @@ const { amount, amountForeign, date, tags, description, notes, accountSource, ac
   { computed: 'accountDestination', parentKey: `${pathKey}.accountDestination` },
   { computed: 'category', parentKey: `${pathKey}.category` },
   { computed: 'type', parentKey: `${pathKey}.type` },
+  { computed: 'budget', parentKey: `${pathKey}.budget` },
 ])
 
 const transactions = computed(() => _.get(item.value, 'attributes.transactions', []))
@@ -312,9 +305,13 @@ const isTypeIncome = computed(() => isEqual(type.value, Transaction.types.income
 const isTypeTransfer = computed(() => isEqual(type.value, Transaction.types.transfer))
 
 const getStyleForField = (fieldCode) => {
+  let position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
+  let field = profileStore.transactionOrderedFieldsList.find((item) => item.code === fieldCode)
+  let isVisible = field ? field.isVisible : true
+  let displayStyle = isVisible ? '' : 'display: none'
+
   if (isTypeExpense.value) {
-    let position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
-    return `order: ${position}`
+    return `order: ${position}; ${displayStyle}`
   }
 
   const fieldTypeAccountsList = [FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT, FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT]
@@ -328,7 +325,7 @@ const getStyleForField = (fieldCode) => {
     if (fieldCode === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT) {
       position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT)
     }
-    return `order: ${position}`
+    return `order: ${position}; ${displayStyle}`
   }
 
   // Transfers
@@ -337,7 +334,7 @@ const getStyleForField = (fieldCode) => {
       return `order: 0`
     }
     let position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
-    return `order: ${position}`
+    return `order: ${position}; ${displayStyle}`
   }
 
   // No order overwrite, just respect the HTML order

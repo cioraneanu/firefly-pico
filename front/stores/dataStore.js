@@ -21,6 +21,10 @@ import { listToTree, setLevel, sortByPath, treeToList } from '~/utils/DataUtils'
 import Tag from '~/models/Tag.js'
 import { convertCurrency, convertTransactionAmountToCurrency, convertTransactionsTotalAmountToCurrency } from '~/utils/CurrencyUtils'
 import { getExcludedTransactionFilters } from '~/utils/DashboardUtils.js'
+import { uniqBy } from 'lodash/array.js'
+import BudgetRepository from '~/repository/BudgetRepository.js'
+import BudgetTransformer from '~/transformers/BudgetTransformer.js'
+import BudgetLimitTransformer from '~/transformers/BudgetLimitTransformer.js'
 
 export const useDataStore = defineStore('data', {
   state: () => {
@@ -40,6 +44,8 @@ export const useDataStore = defineStore('data', {
 
       transactionTemplateList: useLocalStorage('transactionTemplateList', []), // transactionTemplateList: useLocalStorage('transactionTemplateList', [], TransactionTemplateUtils.getLocalStorageSerializer()),
       categoryList: useLocalStorage('categoryList', []),
+      budgetList: useLocalStorage('budgetList', []),
+      budgetLimitList: useLocalStorage('budgetLimitList', []),
       accountList: useLocalStorage('accountList', []),
       tagList: useLocalStorage('tagList', []),
       currenciesList: useLocalStorage('currenciesList', []),
@@ -59,6 +65,7 @@ export const useDataStore = defineStore('data', {
       isLoadingAccounts: false,
       isLoadingTags: false,
       isLoadingCategories: false,
+      isLoadingBudgets: false,
       isLoadingTransactionTemplates: false,
       isLoadingDashboardTransactions: false,
       isLoadingDashboardTransactionsLastWeek: false,
@@ -153,6 +160,41 @@ export const useDataStore = defineStore('data', {
       }, {})
     },
 
+    transactionsListSavingsIn(state) {
+      return state.dashboard.transactionsList.filter((item) => {
+        let accountDestinationRoleCode = get(item, 'attributes.transactions.0.accountDestination.attributes.account_role.fireflyCode')
+        return accountDestinationRoleCode === Account.roleAssets.saving.fireflyCode
+      })
+    },
+
+    transactionsListSavingsOut(state) {
+      return state.dashboard.transactionsList.filter((item) => {
+        let accountSourceRoleCode = get(item, 'attributes.transactions.0.accountSource.attributes.account_role.fireflyCode')
+        return accountSourceRoleCode === Account.roleAssets.saving.fireflyCode
+      })
+    },
+
+    transactionsListSavings(state) {
+      return uniqBy([...this.transactionsListSavingsIn, ...this.transactionsListSavingsOut], 'id')
+    },
+
+    transactionsListSavingsCount(state) {
+      return this.transactionsListSavings.length
+    },
+
+    transactionsListSavingsAmount(state) {
+      let amountIn = convertTransactionsTotalAmountToCurrency(this.transactionsListSavingsIn, state.dashboardCurrency)
+      let amountOut = convertTransactionsTotalAmountToCurrency(this.transactionsListSavingsOut, state.dashboardCurrency)
+      return amountIn - amountOut
+    },
+
+    transactionsListSavingsPercentage(state) {
+      if (this.totalIncomeThisMonth === 0) {
+        return 0
+      }
+      return ((this.transactionsListSavingsAmount * 1.0) / this.totalIncomeThisMonth) * 100
+    },
+
     transactionsListExpense(state) {
       return state.dashboard.transactionsList.filter((item) => get(item, 'attributes.transactions.0.type.code') === Transaction.types.expense.code)
     },
@@ -203,6 +245,14 @@ export const useDataStore = defineStore('data', {
       return keyBy(state.categoryList, 'id')
     },
 
+    budgetDictionary: (state) => {
+      return keyBy(state.budgetList, 'id')
+    },
+
+    budgetLimitDictionary: (state) => {
+      return keyBy(state.budgetLimitList, 'attributes.budget_id')
+    },
+
     accountDictionary: (state) => {
       return keyBy(state.accountList, 'id')
     },
@@ -225,6 +275,10 @@ export const useDataStore = defineStore('data', {
       return keyBy(state.currenciesList, 'id')
     },
 
+    defaultCurrency: (state) => {
+      return state.currenciesList.find((item) => get(item, 'attributes.default'))
+    },
+
     exchangeRatesList: (state) => {
       let infoList = get(state.exchangeRates, 'currencies') ?? []
       let infoDictionary = keyBy(infoList, 'code')
@@ -234,7 +288,7 @@ export const useDataStore = defineStore('data', {
         code: currencyCode,
         value: rates[currencyCode],
         name: get(infoDictionary, `${currencyCode}.name`, ' - '),
-        country: get(infoDictionary, `${currencyCode}.country`, ' - ')
+        country: get(infoDictionary, `${currencyCode}.country`, ' - '),
       }))
     },
   },
@@ -348,7 +402,8 @@ export const useDataStore = defineStore('data', {
       let async3 = this.fetchTags()
       let async4 = this.fetchTransactionTemplates()
       let async5 = this.fetchCurrencies()
-      await Promise.all([async1, async2, async3, async4, async5])
+      let async6 = this.fetchBudgets()
+      await Promise.all([async1, async2, async3, async4, async5, async6])
       this.lastSync = new Date()
     },
 
@@ -372,6 +427,27 @@ export const useDataStore = defineStore('data', {
       this.categoryList = CategoryTransformer.transformFromApiList(list)
       this.isLoadingCategories = false
     },
+
+    async fetchBudgets() {
+      this.isLoadingBudgets = true
+
+      const asyncBudget = new BudgetRepository().getAllWithMerge()
+      let fetchBudgetLimits = new BudgetRepository().getBudgetLimits
+      let asyncBudgetLimit = new BudgetRepository().getAllWithMerge({ getAll: fetchBudgetLimits })
+
+      const [budgetList, budgetLimitList] = await Promise.all([asyncBudget, asyncBudgetLimit])
+
+      this.budgetList = BudgetTransformer.transformFromApiList(budgetList)
+      this.budgetLimitList = BudgetLimitTransformer.transformFromApiList(budgetLimitList)
+
+      this.isLoadingBudgets = false
+    },
+
+    // async fetchBudgetLimits() {
+    //   this.isLoadingBudgetLimits = true
+    //
+    //   this.isLoadingBudgetLimits = false
+    // },
 
     async fetchTags() {
       this.isLoadingTags = true

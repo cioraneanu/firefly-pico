@@ -13,8 +13,7 @@
 
       <van-button @click="onToggleShowDashboardAccountValues" size="small" class="mr-10">
         <template #icon>
-          <app-icon :icon="profileStore.dashboard.showAccountAmounts ? 'IconEyeX' : 'IconEye'" :size="20" />
-          <!--              <van-icon name="eye-o"/>-->
+          <app-icon :icon="profileStore.dashboard.showAccountAmounts ? TablerIconConstants.eyeHidden : TablerIconConstants.eyeVisible" :size="20" />
         </template>
       </van-button>
     </div>
@@ -35,7 +34,9 @@
     </van-grid>
 
     <div v-if="hasHiddenAccounts" class="flex-center">
-      <div @click="toggleHiddenAccounts" class="p-5 m-5 button-link">{{ showHiddenAccounts ? 'View less...' : 'View more...' }}</div>
+      <div @click="toggleHiddenAccounts" class="p-5 m-5 button-link">
+        {{ showHiddenAccounts ? 'View less...' : 'View more...' }}
+      </div>
     </div>
 
     <div class="flex-center text-size-13 m-10 flex-wrap">

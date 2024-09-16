@@ -3,25 +3,25 @@
     <app-top-toolbar />
 
     <van-cell-group inset style="overflow: auto">
+      <div class="van-cell-group-title">Primary:</div>
       <app-field-link label="Accounts" :icon="TablerIconConstants.account" @click="onGoToAccountsList" />
-
-      <app-field-link label="Categories" :icon="TablerIconConstants.category" @click="onGoToCategoriesList" />
-
-      <app-field-link label="Tags" :icon="TablerIconConstants.tag" @click="onGoToTagsList" />
-
       <app-field-link label="Transaction templates" :icon="TablerIconConstants.transactionTemplate" @click="onGoToTransactionTemplatesList" />
+      <app-field-link label="Budgets" :icon="TablerIconConstants.budget" @click="onGoToBudgetsList" />
+    </van-cell-group>
 
+    <van-cell-group inset style="overflow: auto">
+      <div class="van-cell-group-title">Clasification:</div>
+      <app-field-link label="Tags" :icon="TablerIconConstants.tag" @click="onGoToTagsList" />
+      <app-field-link label="Categories" :icon="TablerIconConstants.category" @click="onGoToCategoriesList" />
+    </van-cell-group>
+
+    <van-cell-group inset style="overflow: auto">
+      <div class="van-cell-group-title">Extra:</div>
       <app-field-link label="Exchange rates" :icon="TablerIconConstants.exchangeRates" @click="navigateTo(RouteConstants.ROUTE_EXCHANGE_RATES)" />
-
-      <!--      <app-field-link-->
-      <!--          label="Currencies"-->
-      <!--          :icon="IconifyConstants.currency"-->
-      <!--          @click="onGoToCurrenciesList"-->
-      <!--      />-->
+      <app-field-link label="Currencies" :icon="TablerIconConstants.currency" @click="onGoToCurrenciesList" />
     </van-cell-group>
   </div>
 </template>
-
 
 <script setup>
 import { useProfileStore } from '~/stores/profileStore'
@@ -38,11 +38,12 @@ const onGoToTagsList = async () => await navigateTo(RouteConstants.ROUTE_TAG_LIS
 const onGoToCurrenciesList = async () => await navigateTo(RouteConstants.ROUTE_CURRENCY_LIST)
 const onGoToTransactionTemplatesList = async () => await navigateTo(RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST)
 
+const onGoToBudgetsList = async () => await navigateTo(RouteConstants.ROUTE_BUDGET_LIST)
+
 const toolbar = useToolbar()
 toolbar.init({ title: 'Extra' })
 
 onMounted(() => {
   animateSettings()
 })
-
 </script>

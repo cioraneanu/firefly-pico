@@ -3,17 +3,27 @@
     <app-top-toolbar />
 
     <van-pull-refresh v-model="isLoadingAccounts" @refresh="onRefresh">
-      <dashboard-accounts />
+      <div class="flex-column display-flex">
+        <dashboard-accounts :style="getStyleForCard(DASHBOARD_SECTIONS.accounts)" />
 
-      <dashboard-week-bars />
+        <dashboard-week-bars :style="getStyleForCard(DASHBOARD_SECTIONS.expensesLastWeek)" />
 
-      <dashboard-summary />
+        <dashboard-summary :style="getStyleForCard(DASHBOARD_SECTIONS.transactionSummary)" />
 
-      <dashboard-tag-totals />
+        <dashboard-budgets :style="getStyleForCard(DASHBOARD_SECTIONS.budgets)" />
 
-      <dashboard-category-totals />
+        <dashboard-summary-savings :style="getStyleForCard(DASHBOARD_SECTIONS.savings)" />
 
-      <dashboard-todo-transactions />
+        <dashboard-tag-totals :style="getStyleForCard(DASHBOARD_SECTIONS.expensesByTag)" />
+
+        <dashboard-category-totals :style="getStyleForCard(DASHBOARD_SECTIONS.expensesByCategory)" />
+
+        <dashboard-todo-transactions :style="getStyleForCard(DASHBOARD_SECTIONS.todosTransactions)" />
+
+        <div class="flex-center mt-20" style="order: 99">
+          <nuxt-link class="text-size-12" :to="RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_DASHBOARD_CARDS_ORDER"> Configure cards </nuxt-link>
+        </div>
+      </div>
     </van-pull-refresh>
   </div>
 </template>
@@ -25,6 +35,9 @@ import UIUtils from '~/utils/UIUtils.js'
 import DashboardTagTotals from '~/components/dashboard/dashboard-tag-totals/dashboard-tag-totals.vue'
 import anime from 'animejs'
 import { animateDashboard } from '~/utils/AnimationUtils.js'
+import RouteConstants from '~/constants/RouteConstants.js'
+import { FORM_CONSTANTS_TRANSACTION_FIELDS } from '~/constants/FormConstants.js'
+import { DASHBOARD_SECTIONS } from '~/constants/DashboardConstants.js'
 
 const toolbar = useToolbar()
 toolbar.init({ title: 'Dashboard' })
@@ -56,6 +69,14 @@ const isLoadingDashboard = computed(() => {
   return dataStore.isLoadingAccounts || dataStore.isLoadingDashboardTransactions || dataStore.isLoadingDashboardTransactionsLastWeek
 })
 
-UIUtils.showLoadingWhen(isLoadingDashboard)
+const getStyleForCard = (fieldCode) => {
+  let position = profileStore.dashboardOrderedCardsList.findIndex((item) => item.code === fieldCode)
+  let field = profileStore.dashboardOrderedCardsList.find((item) => item.code === fieldCode)
+  let isVisible = field ? field.isVisible : true
+  let displayStyle = isVisible ? '' : 'display: none'
 
+  return `order: ${position}; ${displayStyle}`
+}
+
+UIUtils.showLoadingWhen(isLoadingDashboard)
 </script>
