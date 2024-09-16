@@ -1,5 +1,5 @@
 <template>
-  <van-grid-item>
+  <van-grid-item @click="onGoToBudget">
     <template #icon>
       <budget-icon :value="props.value" />
     </template>
@@ -17,6 +17,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Transaction from '~/models/Transaction.js'
 import { get } from 'lodash'
 import Budget from '~/models/Budget.js'
+import RouteConstants from '~/constants/RouteConstants.js'
 
 const dataStore = useDataStore()
 
@@ -32,5 +33,13 @@ const budgetAmount = computed(() => get(props.value, 'attributes.amount', ' - ')
 const budgetLimitPercent = computed(() => get(budgetLimit.value, `attributes.percent`, 0))
 const budgetLimitSpent = computed(() => Math.abs(get(budgetLimit.value, `attributes.spent`, 0)))
 
+const onGoToBudget = async () => {
+  let budgetId = get(props.value, 'id')
+  if (!budgetId) {
+    return
+  }
+
+  await navigateTo(`${RouteConstants.ROUTE_BUDGET_ID}/${budgetId}`)
+}
 
 </script>
