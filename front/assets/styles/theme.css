@@ -992,3 +992,7 @@ img, svg {
 .transaction-foreign-amount-field .van-field__body {
     border: 1.5px solid #0288D1;
 }
+
+.budget-icon {
+    background: #eee;
+}

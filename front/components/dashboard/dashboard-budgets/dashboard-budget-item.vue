@@ -5,8 +5,9 @@
     </template>
     <template #text>
       <div class="display-flex flex-column align-items-center">
-        <div class="font-400 text-size-12 text-center text-muted">{{ displayName }}</div>
-        <div class="font-500 text-size-10 text-center">{{ budgetLimitSpent }} / {{ budgetAmount }}</div>
+        <div class="font-600 text-size-12 text-center">{{ displayName }}</div>
+        <div class="font-500 text-size-10 text-center ">{{ budgetLimitSpent }} / {{ budgetAmount }}</div>
+        <div class="font-500 text-size-10 text-center text-muted">{{ budgetLimitInterval }} </div>
       </div>
     </template>
   </van-grid-item>
@@ -18,6 +19,7 @@ import Transaction from '~/models/Transaction.js'
 import { get } from 'lodash'
 import Budget from '~/models/Budget.js'
 import RouteConstants from '~/constants/RouteConstants.js'
+import BudgetLimit from '~/models/BudgetLimit.js'
 
 const dataStore = useDataStore()
 
@@ -32,6 +34,8 @@ const budgetPeriod = computed(() => get(props.value, 'attributes.auto_budget_per
 const budgetAmount = computed(() => get(props.value, 'attributes.amount', ' - '))
 const budgetLimitPercent = computed(() => get(budgetLimit.value, `attributes.percent`, 0))
 const budgetLimitSpent = computed(() => Math.abs(get(budgetLimit.value, `attributes.spent`, 0)))
+const budgetLimitInterval = computed(() => BudgetLimit.getLimitInterval(budgetLimit.value))
+
 
 const onGoToBudget = async () => {
   let budgetId = get(props.value, 'id')

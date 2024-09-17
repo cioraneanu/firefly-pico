@@ -13,7 +13,7 @@
         <div class="px-3 pb-15 flex-column text-size-12">
           <div>Spent: {{ budgetLimitSpent }} / {{ amount }}</div>
           <div>Percent: {{ budgetLimitPercent }}</div>
-          <div>Interval: {{ budgetLimitDateStart }} -> {{ budgetLimitDateEnd }}</div>
+          <div>Interval: {{ budgetLimitInterval }}</div>
         </div>
       </van-cell-group>
 
@@ -68,6 +68,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import BudgetTransformer from '~/transformers/BudgetTransformer.js'
 import Budget from '~/models/Budget.js'
 import AccountTypeSelect from '~/components/select/account/account-type-select.vue'
+import BudgetLimit from '~/models/BudgetLimit.js'
 
 let dataStore = useDataStore()
 let profileStore = useProfileStore()
@@ -89,8 +90,7 @@ const isPeriodVisible = computed(() => get(type.value, 'fireflyCode') !== Budget
 const budgetLimit = computed(() => Budget.getLimit(item.value))
 const budgetLimitPercent = computed(() => get(budgetLimit.value, `attributes.percent`, 0))
 const budgetLimitSpent = computed(() => Math.abs(get(budgetLimit.value, `attributes.spent`, 0)))
-const budgetLimitDateStart = computed(() => DateUtils.dateToUI(get(budgetLimit.value, `attributes.start`)))
-const budgetLimitDateEnd = computed(() => DateUtils.dateToUI(get(budgetLimit.value, `attributes.end`)))
+const budgetLimitInterval = computed(() => BudgetLimit.getLimitInterval(budgetLimit.value))
 
 const onEvent = (event, payload) => {
   if (event === 'onPostSave') {
