@@ -57,6 +57,7 @@ import Category from '~/models/Category.js'
 import { get, isEqual } from 'lodash'
 import anime from 'animejs'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
+import Budget from '~/models/Budget.js'
 
 const dataStore = useDataStore()
 const route = useRoute()
@@ -139,6 +140,16 @@ let filtersDictionary = computed(() => {
       active: !!_filter.withoutCategory,
     },
     {
+      display: `Budget: ${Budget.getDisplayName(_filter.budget)}`,
+      filter: `budget_is:"${Budget.getDisplayName(_filter.budget)}"`,
+      active: !!_filter.budget,
+    },
+    {
+      display: `No budget`,
+      filter: `has_any_budget:false"`,
+      active: !!_filter.withoutBudget,
+    },
+    {
       display: `Account: ${Account.getDisplayName(_filter.account)}`,
       filter: `account_is:"${Account.getDisplayName(_filter.account)}"`,
       active: !!_filter.account,
@@ -205,6 +216,7 @@ onMounted(() => {
     excludedTag: dataStore.tagDictionaryById[get(route.query, 'excluded_tag_id')],
     transactionType: Object.values(Transaction.types).find((item) => item.code === get(route.query, 'type')),
     category: dataStore.categoryDictionary[get(route.query, 'category_id')],
+    budget: dataStore.budgetDictionary[get(route.query, 'budget_id')],
     excludedCategory: dataStore.categoryDictionary[get(route.query, 'excluded_category_id')],
     account: dataStore.accountDictionary[get(route.query, 'account_id')],
     excludedAccount: dataStore.accountDictionary[get(route.query, 'excluded_account_id')],
@@ -214,6 +226,7 @@ onMounted(() => {
     amountStart: get(route.query, 'amount_start'),
     amountEnd: get(route.query, 'amount_end'),
     withoutTag: get(route.query, 'without_tag'),
+    withoutBudget: get(route.query, 'without_budget'),
     withoutCategory: get(route.query, 'without_category'),
   }
   filters.value = urlFilters

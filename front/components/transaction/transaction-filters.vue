@@ -29,6 +29,15 @@
             <tag-select v-model="tag" :disabled="!!withoutTag" class="flex-1" :is-multi-select="false" :auto-select-parents="false" />
           </div>
 
+          <div class="display-flex van-cell-fake pl-3 align-items-baseline">
+            <div class="display-flex flex-column gap-3 align-items-center">
+              <div class="text-size-14">Without</div>
+              <app-checkbox v-model="withoutBudget" shape="square" />
+            </div>
+
+            <budget-select v-model="budget" :disabled="!!withoutBudget" class="flex-1" :is-multi-select="false" :auto-select-parents="false" />
+          </div>
+
           <account-select v-model="account" />
 
           <div class="flex-center-vertical">
@@ -69,7 +78,7 @@ import { addMonths, endOfMonth, startOfMonth } from 'date-fns'
 const modelValue = defineModel({})
 
 const localModelValue = ref({})
-const { description, dateStart, dateEnd, amountStart, amountEnd, category, withoutCategory, tag, withoutTag, account, transactionType } = generateChildren(localModelValue, [
+const { description, dateStart, dateEnd, amountStart, amountEnd, category, withoutCategory, tag, withoutTag, account, transactionType, withoutBudget, budget } = generateChildren(localModelValue, [
   'description',
   'dateStart',
   'dateEnd',
@@ -79,6 +88,8 @@ const { description, dateStart, dateEnd, amountStart, amountEnd, category, witho
   'withoutCategory',
   'withoutTag',
   'tag',
+  'withoutBudget',
+  'budget',
   'account',
   'transactionType',
 ])

@@ -15,7 +15,7 @@
           <div>Percent: {{ budgetLimitPercent }}</div>
           <div>Interval: {{ budgetLimitInterval }}</div>
         </div>
-        <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTION_FIELDS_ORDER)" />
+        <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?budget_id=${itemId}`)" />
 
       </app-card-info>
 
