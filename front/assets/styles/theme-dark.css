@@ -359,3 +359,7 @@
   background: #333;
 }
 
+.app-card-info {
+  border: 1px dashed #666;
+}
+

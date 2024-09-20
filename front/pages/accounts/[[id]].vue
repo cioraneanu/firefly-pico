@@ -6,6 +6,11 @@
       </template>
     </app-top-toolbar>
 
+    <app-card-info v-if="itemId">
+      <app-field-link :label="adjustBalanceText" :icon="TablerIconConstants.settings" @click="onAdjustBalance" />
+      <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?account_id=${itemId}`)" />
+    </app-card-info>
+
     <van-form ref="form" @submit="saveItem" @failed="onValidationError" class="">
       <van-cell-group inset>
         <app-field
@@ -124,6 +129,12 @@ watch(name, (newValue) => {
   }
   name.value = newValue
 })
+
+
+const adjustBalanceText = computed(() => `Adjust balance (${get(item.value, 'attributes.current_balance')} ${get(item.value, 'attributes.currency_symbol')})`)
+const onAdjustBalance = () => {
+  // TODO: Implement me later...
+}
 
 const toolbar = useToolbar()
 toolbar.init({

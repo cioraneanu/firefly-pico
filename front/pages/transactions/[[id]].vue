@@ -119,9 +119,11 @@
       <app-button-form-save />
     </van-form>
 
-    <div class="flex-center">
-      <nuxt-link class="text-size-12" :to="RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTION_FIELDS_ORDER"> Configure fields </nuxt-link>
-    </div>
+
+    <app-card-info style="order: 99">
+      <app-field-link label="Configure fields" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTION_FIELDS_ORDER)" />
+    </app-card-info>
+
   </div>
 </template>
 

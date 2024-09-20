@@ -996,3 +996,7 @@ img, svg {
 .budget-icon {
     background: #eee;
 }
+
+.app-card-info {
+    border: 1px dashed #777;
+}

@@ -6,9 +6,9 @@
       </template>
     </app-top-toolbar>
 
-    <!--    <van-pull-refresh-->
-    <!--        v-model="dataStore.isLoadingTags"-->
-    <!--        @refresh="onRefresh">-->
+    <app-card-info v-if="itemId">
+      <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${itemId}`)" />
+    </app-card-info>
 
     <van-form ref="form" @submit="saveItem" @failed="onValidationError" class="">
       <van-cell-group inset>

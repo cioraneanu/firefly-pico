@@ -20,9 +20,11 @@
 
         <dashboard-todo-transactions :style="getStyleForCard(DASHBOARD_SECTIONS.todosTransactions)" />
 
-        <div class="flex-center mt-20" style="order: 99">
-          <nuxt-link class="text-size-12" :to="RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_DASHBOARD_CARDS_ORDER"> Configure cards </nuxt-link>
-        </div>
+
+        <app-card-info style="order: 99">
+          <app-field-link label="Configure cards" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_DASHBOARD_CARDS_ORDER)" />
+        </app-card-info>
+
       </div>
     </van-pull-refresh>
   </div>
@@ -38,6 +40,7 @@ import { animateDashboard } from '~/utils/AnimationUtils.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import { FORM_CONSTANTS_TRANSACTION_FIELDS } from '~/constants/FormConstants.js'
 import { DASHBOARD_SECTIONS } from '~/constants/DashboardConstants.js'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 const toolbar = useToolbar()
 toolbar.init({ title: 'Dashboard' })

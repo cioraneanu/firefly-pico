@@ -16,13 +16,10 @@
 
         <van-grid :column-num="3">
           <app-config-stat :icon="TablerIconConstants.account" name="Account" :value="accountsCount" />
-
           <app-config-stat :icon="TablerIconConstants.category" name="Categories" :value="categoriesCount" />
-
           <app-config-stat :icon="TablerIconConstants.tag" name="Tags" :value="tagsCount" />
-
           <app-config-stat :icon="TablerIconConstants.transactionTemplate" name="Templates" :value="transactionTemplatesCount" />
-
+          <app-config-stat :icon="TablerIconConstants.budget" name="Budgets" :value="budgetsCount" />
           <app-config-stat :icon="TablerIconConstants.lastSync" name="Last sync" :value="lastSync" />
         </van-grid>
       </van-cell-group>
@@ -55,6 +52,7 @@ const syncProfileInDB = ref(true)
 const accountsCount = computed(() => dataStore.accountList.length)
 const categoriesCount = computed(() => dataStore.categoryList.length)
 const tagsCount = computed(() => dataStore.tagList.length)
+const budgetsCount = computed(() => dataStore.budgetList.length)
 const transactionTemplatesCount = computed(() => dataStore.transactionTemplateList.length)
 const lastSync = computed(() => {
   if (!dataStore.lastSync) {

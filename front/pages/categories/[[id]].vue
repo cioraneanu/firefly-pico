@@ -6,6 +6,11 @@
       </template>
     </app-top-toolbar>
 
+
+    <app-card-info v-if="itemId">
+      <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?category_id=${itemId}`)" />
+    </app-card-info>
+
     <van-form ref="form" @submit="saveItem" @failed="onValidationError" class="">
       <van-cell-group inset>
         <app-field v-model="name" name="Name" label="Name" rows="1" autosize :icon="TablerIconConstants.fieldText2" placeholder="Description" :rules="[{ required: true, message: 'Name is required' }]" />

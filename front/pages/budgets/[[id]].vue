@@ -8,14 +8,17 @@
 
     <van-form ref="form" @submit="saveItem" @failed="onValidationError" class="">
 
-      <van-cell-group v-if="itemId" inset>
+      <app-card-info v-if="itemId">
         <div class="van-cell-group-title">Status:</div>
         <div class="px-3 pb-15 flex-column text-size-12">
           <div>Spent: {{ budgetLimitSpent }} / {{ amount }}</div>
           <div>Percent: {{ budgetLimitPercent }}</div>
           <div>Interval: {{ budgetLimitInterval }}</div>
         </div>
-      </van-cell-group>
+        <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTION_FIELDS_ORDER)" />
+
+      </app-card-info>
+
 
       <van-cell-group inset>
         <app-field
