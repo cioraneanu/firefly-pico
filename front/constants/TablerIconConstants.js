@@ -51,6 +51,7 @@ export const icons = {
   external: 'IconExternalLink',
   cash: 'IconCash',
   cashBanknote: 'IconCashBanknote',
+  clone: 'IconCopy',
 
   fieldIcon: 'IconFavicon',
   fieldCheckbox: 'IconToggleLeftFilled',

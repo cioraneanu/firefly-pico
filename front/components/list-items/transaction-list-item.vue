@@ -30,7 +30,7 @@
             </div>
 
             <div v-if="notes && props.isDetailedMode" class="list-item-subtitle">
-              <app-icon :icon="TablerIconConstants.notes" :size="20" />
+              <app-icon :icon="TablerIconConstants.fieldText1" :size="20" />
               {{ notes }}
             </div>
 

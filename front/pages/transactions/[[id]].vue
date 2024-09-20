@@ -101,10 +101,19 @@
       <div style="margin: 16px; position: relative">
         <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
 
-        <van-button v-if="itemId && !isSplitPayment" @click="onCreateTransactionTemplate" block type="default" class="mt-2">
-          <app-icon :icon="TablerIconConstants.transactionTemplate" />
-          Make template
-        </van-button>
+        <div class="display-flex gap-1">
+          <van-button v-if="itemId && !isSplitPayment" @click="onCreateClone" block type="default" class="mt-2 flex-1">
+            <app-icon :icon="TablerIconConstants.clone" />
+            Clone
+          </van-button>
+
+          <van-button v-if="itemId && !isSplitPayment" @click="onCreateTransactionTemplate" block type="default" class="mt-2 flex-1">
+            <app-icon :icon="TablerIconConstants.transactionTemplate" />
+            Make template
+          </van-button>
+        </div>
+
+
       </div>
 
       <app-button-form-save />
@@ -138,6 +147,8 @@ import TablerIconConstants from '~/constants/TablerIconConstants'
 import { animateTransactionForm } from '~/utils/AnimationUtils.js'
 import tag from '~/models/Tag'
 import { addDays, endOfMonth, startOfMonth } from 'date-fns'
+import TransactionRepository from '~/repository/TransactionRepository.js'
+import TransactionTransformer from '~/transformers/TransactionTransformer.js'
 
 const refAmount = ref(null)
 
@@ -213,9 +224,15 @@ const onAddDay = () => {
 }
 
 const onCreateTransactionTemplate = async () => {
-  // dataStore.transactionToCopy = firstTransaction.value
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID}?transaction_id=${itemId.value}`)
 }
+const onCreateClone = async () => {
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_ID}?transaction_id=${itemId.value}`)
+}
+
+
+
+
 const onTransactionTemplateSelected = (transactionTemplate) => {
   if (!transactionTemplate) {
     item.value = new Transaction().getEmpty()
@@ -391,7 +408,31 @@ toolbar.init({
 
 onMounted(async () => {
   animateTransactionForm()
+  cloneTransactions()
 })
+
+const cloneTransactions = async () => {
+  const cloneId = get(route.query, 'transaction_id')
+  if (!cloneId) {
+    return
+  }
+
+  let cloneItem = await new TransactionRepository().getOne(cloneId)
+  cloneItem = TransactionTransformer.transformFromApi(cloneItem.data)
+  cloneItem = get(cloneItem, 'attributes.transactions.0')
+  if (!cloneItem) {
+    return
+  }
+
+  amount.value = cloneItem.amount
+  description.value = cloneItem.description
+  notes.value = cloneItem.notes
+  accountSource.value = cloneItem.accountSource
+  accountDestination.value = cloneItem.accountDestination
+  category.value = cloneItem.category
+  tags.value = cloneItem.tags
+  budget.value = cloneItem.budget
+}
 </script>
 
 <style></style>
