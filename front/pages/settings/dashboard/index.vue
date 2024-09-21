@@ -28,11 +28,11 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useProfileStore } from '~/stores/profileStore'
-import { useDataStore } from '~/stores/dataStore'
-import UIUtils from '~/utils/UIUtils'
-import { useToolbar } from '~/composables/useToolbar'
-import RouteConstants from '~/constants/RouteConstants'
+import { useProfileStore } from '~/stores/profileStore.js'
+import { useDataStore } from '~/stores/dataStore.js'
+import UIUtils from '~/utils/UIUtils.js'
+import { useToolbar } from '~/composables/useToolbar.js'
+import RouteConstants from '~/constants/RouteConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 
 const profileStore = useProfileStore()
@@ -65,7 +65,7 @@ toolbar.init({
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
 
-const onGoToDashboardCardsOrder = async () => await navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_DASHBOARD_CARDS_ORDER)
+const onGoToDashboardCardsOrder = async () => await navigateTo(RouteConstants.ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER)
 
 
 onMounted(() => {

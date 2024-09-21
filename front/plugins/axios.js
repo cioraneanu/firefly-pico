@@ -12,7 +12,6 @@ axios.interceptors.request.use(
     if (!appStore.hasAuthToken) {
       const router = useRouter()
       UIUtils.showToastError('No personal access token...')
-      // router.push(RouteConstants.ROUTE_SETTINGS_APP_CONFIG).then(r => {})
       controller.abort()
     }
 

@@ -42,7 +42,7 @@
           <template #label>
             <div class="flex-center-vertical gap-1">
               <div class="flex-1">Source account</div>
-              <van-button v-if="showSourceAccountSuggestion" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_NEW_TRANSACTION_DEFAULTS)" size="mini" class="suggestion-button"
+              <van-button v-if="showSourceAccountSuggestion" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_VALUES)" size="mini" class="suggestion-button"
                 >Set your default
               </van-button>
             </div>
@@ -121,7 +121,7 @@
 
 
     <app-card-info style="order: 99">
-      <app-field-link label="Configure fields" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTION_FIELDS_ORDER)" />
+      <app-field-link label="Configure fields" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FIELDS_ORDER)" />
     </app-card-info>
 
   </div>

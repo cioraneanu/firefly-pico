@@ -6,22 +6,13 @@ export default {
   ROUTE_EXTRAS: '/extras',
   ROUTE_DASHBOARD: '/dashboard',
 
+
   ROUTE_SETTINGS: '/settings',
-  ROUTE_SETTINGS_APP_CONFIG: '/settings/app-config',
-  ROUTE_SETTINGS_USER_PREFERENCES_DATE: '/settings/user-preferences-date',
-  ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTIONS: '/settings/user-preferences-transactions',
-  ROUTE_SETTINGS_USER_PREFERENCES_QUICK_AMOUNTS: '/settings/user-preferences-quick-transaction-amounts',
-  ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTION_FIELDS_ORDER: '/settings/user-preferences-transaction-fields-order',
-  ROUTE_SETTINGS_USER_PREFERENCES_DASHBOARD_CARDS_ORDER: '/settings/user-preferences-dashboard-cards-order',
-  ROUTE_SETTINGS_NEW_TRANSACTION_DEFAULTS: '/settings/user-preferences-new-transaction-defaults',
-  ROUTE_SETTINGS_USER_PREFERENCES_UI: '/settings/user-preferences-ui',
-  ROUTE_SETTINGS_USER_PREFERENCES_DASHBOARD: '/settings/user-preferences-dashboard',
-
-
   ROUTE_SETTINGS_SETUP: '/settings/setup',
   ROUTE_SETTINGS_UI: '/settings/ui',
   ROUTE_SETTINGS_FORMATTING: '/settings/formatting',
   ROUTE_SETTINGS_DASHBOARD: '/settings/dashboard',
+  ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER: '/settings/dashboard/cards',
   ROUTE_SETTINGS_TRANSACTION: '/settings/transactions',
   ROUTE_SETTINGS_TRANSACTION_FIELDS_ORDER: '/settings/transactions/fields',
   ROUTE_SETTINGS_TRANSACTION_DEFAULT_VALUES: '/settings/transactions/defaults',

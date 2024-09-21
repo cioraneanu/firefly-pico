@@ -22,7 +22,7 @@
 
 
         <app-card-info style="order: 99">
-          <app-field-link label="Configure cards" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_DASHBOARD_CARDS_ORDER)" />
+          <app-field-link label="Configure cards" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER)" />
         </app-card-info>
 
       </div>
