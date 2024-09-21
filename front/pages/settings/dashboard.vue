@@ -3,9 +3,13 @@
     <app-top-toolbar />
 
     <van-form @submit="onSave" class="">
+
+      <van-cell-group inset>
+        <app-field-link label="Dashboard cards order" @click="onGoToDashboardCardsOrder" />
+      </van-cell-group>
+
       <van-cell-group inset>
         <div class="van-cell-group-title mb-0">Config:</div>
-        <app-field-link label="Dashboard cards order" @click="onGoToDashboardCardsOrder" />
         <app-boolean label="Show accounts with 0 amount:" v-model="areEmptyAccountsVisible" />
         <app-boolean label="Show decimal places:" v-model="showDecimal" />
       </van-cell-group>
@@ -57,7 +61,7 @@ const onSave = async () => {
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'Dashboard preferences',
+  title: 'Dashboard settings',
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
 

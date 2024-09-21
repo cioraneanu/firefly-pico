@@ -3,18 +3,11 @@
     <app-top-toolbar />
 
     <van-cell-group inset style="overflow: auto">
-      <app-field-link label="App config" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_APP_CONFIG)" />
-
-      <app-field-link label="UI preferences" :icon="TablerIconConstants.settingsUI" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_UI)" />
-
-      <app-field-link label="Dashboard preferences" :icon="TablerIconConstants.dashboard" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_DASHBOARD)" />
-
-      <app-field-link label="Date preferences" :icon="TablerIconConstants.settingsUserPreferencesDate" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_DATE)" />
-
-      <app-field-link label="New transaction defaults" :icon="TablerIconConstants.settingsNewTransactionDefaults" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_NEW_TRANSACTION_DEFAULTS)" />
-
-      <app-field-link label="Transaction config" :icon="TablerIconConstants.settingsUserPreferences" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTIONS)" />
-
+      <app-field-link label="Setup" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_SETUP)" />
+      <app-field-link label="User interface" :icon="TablerIconConstants.settingsUI" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_UI)" />
+      <app-field-link label="Formatting" :icon="TablerIconConstants.settingsUserPreferences" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_FORMATTING)" />
+      <app-field-link label="Dashboard" :icon="TablerIconConstants.dashboard" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_DASHBOARD)" />
+      <app-field-link label="Transactions" :icon="TablerIconConstants.transaction" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION)" />
       <app-field-link label="About" :icon="TablerIconConstants.settingsAbout" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_ABOUT)" />
     </van-cell-group>
 

@@ -91,7 +91,7 @@ const onSave = async () => {
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'App settings',
+  title: 'Setup',
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
 

@@ -57,7 +57,7 @@ const onSave = async () => {
 const toolbar = useToolbar()
 toolbar.init({
   title: 'New transaction defaults',
-  backRoute: RouteConstants.ROUTE_SETTINGS,
+  backRoute: RouteConstants.ROUTE_SETTINGS_TRANSACTION,
 })
 
 onMounted(() => {

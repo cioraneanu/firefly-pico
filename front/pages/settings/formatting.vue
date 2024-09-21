@@ -4,11 +4,7 @@
 
     <van-form @submit="onSave" class="">
       <van-cell-group inset>
-        <app-boolean label="Dark theme:" v-model="darkTheme">
-          <template #icon="{ value }">
-            <app-icon :size="23" :stroke-width="2.0" :icon="value ? TablerIconConstants.darkTheme : TablerIconConstants.whiteTheme" />
-          </template>
-        </app-boolean>
+        <div class="van-cell-group-title">General:</div>
 
         <app-select
           label="Numbers formatting:"
@@ -22,17 +18,36 @@
           required
           :clearable="false"
         />
+
+        <app-select
+          label="Date format"
+          popupTitle="Select a date format"
+          v-model="dateFormat"
+          v-model:showDropdown="isDropdownDateFormatVisible"
+          :list="dateFormatList"
+          :columns="1"
+          :has-search="false"
+        />
+
+        <app-select
+          label="First day of month"
+          popupTitle="Select the first day of month"
+          v-model="firstDayOfMonth"
+          v-model:showDropdown="isDropdownFirstDayVisible"
+          :list="firstDayOfMonthList"
+          :columns="4"
+          :has-search="false"
+        />
       </van-cell-group>
 
       <van-cell-group inset>
-        <!--        <div class="van-cell-group-title">Date settings:</div>-->
+        <div class="van-cell-group-title">Casing:</div>
 
         <app-boolean label="Force transaction description lowercase:" v-model="lowerCaseTransactionDescription" />
         <app-boolean label="Force account name lowercase:" v-model="lowerCaseAccountName" />
         <app-boolean label="Force category name lowercase:" v-model="lowerCaseCategoryName" />
         <app-boolean label="Force tag name lowercase:" v-model="lowerCaseTagName" />
         <app-boolean label="Strip accents:" v-model="stripAccents" />
-
       </van-cell-group>
 
       <app-button-form-save />
@@ -57,7 +72,15 @@ const dataStore = useDataStore()
 const numberFormatList = [NUMBER_FORMAT.eu, NUMBER_FORMAT.international]
 const isDropdownNumberFormatVisible = ref(false)
 
-const darkTheme = ref(false)
+const dateFormat = ref(null)
+const dateFormatList = [DateUtils.FORMAT_ROMANIAN_DATE, DateUtils.FORMAT_ENGLISH_DATE]
+const isDropdownDateFormatVisible = ref(false)
+
+const firstDayOfMonth = ref(null)
+const firstDayOfMonthList = [...Array(27).keys()].map((item) => item + 1)
+const isDropdownFirstDayVisible = ref(false)
+
+
 const numberFormat = ref(null)
 const stripAccents = ref(false)
 const lowerCaseTransactionDescription = ref(false)
@@ -65,8 +88,11 @@ const lowerCaseAccountName = ref(false)
 const lowerCaseCategoryName = ref(false)
 const lowerCaseTagName = ref(false)
 
+
+
 const syncedSettings = [
-  { store: profileStore, path: 'darkTheme', ref: darkTheme },
+  { store: profileStore, path: 'dateFormat', ref: dateFormat },
+  { store: profileStore, path: 'dashboard.firstDayOfMonth', ref: firstDayOfMonth },
   { store: profileStore, path: 'numberFormat', ref: numberFormat },
   { store: profileStore, path: 'stripAccents', ref: stripAccents },
   { store: profileStore, path: 'lowerCaseTransactionDescription', ref: lowerCaseTransactionDescription },
@@ -77,17 +103,15 @@ const syncedSettings = [
 
 watchSettingsStore(syncedSettings)
 
-
-
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-  UIUtils.showToastSuccess('User preferences saved')
+  UIUtils.showToastSuccess('Formatting')
 }
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'UI preferences',
+  title: 'Formatting settings',
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
 
