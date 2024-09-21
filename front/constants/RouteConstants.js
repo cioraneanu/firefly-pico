@@ -16,7 +16,21 @@ export default {
   ROUTE_SETTINGS_NEW_TRANSACTION_DEFAULTS: '/settings/user-preferences-new-transaction-defaults',
   ROUTE_SETTINGS_USER_PREFERENCES_UI: '/settings/user-preferences-ui',
   ROUTE_SETTINGS_USER_PREFERENCES_DASHBOARD: '/settings/user-preferences-dashboard',
+
+
+  ROUTE_SETTINGS_SETUP: '/settings/setup',
+  ROUTE_SETTINGS_UI: '/settings/ui',
+  ROUTE_SETTINGS_FORMATTING: '/settings/formatting',
+  ROUTE_SETTINGS_DASHBOARD: '/settings/dashboard',
+  ROUTE_SETTINGS_TRANSACTION: '/settings/transactions',
+  ROUTE_SETTINGS_TRANSACTION_FIELDS_ORDER: '/settings/transactions/fields',
+  ROUTE_SETTINGS_TRANSACTION_DEFAULT_VALUES: '/settings/transactions/defaults',
+  ROUTE_SETTINGS_TRANSACTION_QUICK_AMOUNTS: '/settings/transactions/quick-amounts',
   ROUTE_SETTINGS_ABOUT: '/settings/about',
+
+
+
+
   ROUTE_EXCHANGE_RATES: '/exchange-rates',
 
   ROUTE_TRANSACTION_TEMPLATE_LIST: '/transaction-templates/list',
