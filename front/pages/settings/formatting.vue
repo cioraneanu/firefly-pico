@@ -72,7 +72,15 @@ const dataStore = useDataStore()
 const numberFormatList = [NUMBER_FORMAT.eu, NUMBER_FORMAT.international]
 const isDropdownNumberFormatVisible = ref(false)
 
-const darkTheme = ref(false)
+const dateFormat = ref(null)
+const dateFormatList = [DateUtils.FORMAT_ROMANIAN_DATE, DateUtils.FORMAT_ENGLISH_DATE]
+const isDropdownDateFormatVisible = ref(false)
+
+const firstDayOfMonth = ref(null)
+const firstDayOfMonthList = [...Array(27).keys()].map((item) => item + 1)
+const isDropdownFirstDayVisible = ref(false)
+
+
 const numberFormat = ref(null)
 const stripAccents = ref(false)
 const lowerCaseTransactionDescription = ref(false)
@@ -80,8 +88,11 @@ const lowerCaseAccountName = ref(false)
 const lowerCaseCategoryName = ref(false)
 const lowerCaseTagName = ref(false)
 
+
+
 const syncedSettings = [
-  { store: profileStore, path: 'darkTheme', ref: darkTheme },
+  { store: profileStore, path: 'dateFormat', ref: dateFormat },
+  { store: profileStore, path: 'dashboard.firstDayOfMonth', ref: firstDayOfMonth },
   { store: profileStore, path: 'numberFormat', ref: numberFormat },
   { store: profileStore, path: 'stripAccents', ref: stripAccents },
   { store: profileStore, path: 'lowerCaseTransactionDescription', ref: lowerCaseTransactionDescription },
@@ -95,12 +106,12 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-  UIUtils.showToastSuccess('User preferences saved')
+  UIUtils.showToastSuccess('Formatting')
 }
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'UI preferences',
+  title: 'Formatting settings',
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
 

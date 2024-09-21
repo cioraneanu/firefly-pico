@@ -4,7 +4,7 @@
 
     <van-form @submit="onSave" class="">
       <van-cell-group inset>
-        <div class="van-cell-group-title mb-0">Config:</div>
+<!--        <div class="van-cell-group-title mb-0">Config:</div>-->
         <app-field-link label="Default form values" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_VALUES)" />
         <app-field-link label="Amount increment buttons" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_QUICK_AMOUNTS)" />
         <app-field-link label="Transaction fields order" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FIELDS_ORDER)" />
@@ -35,16 +35,11 @@ import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js
 
 const profileStore = useProfileStore()
 
-const heroIconsList = HERO_ICONS_LIST
-const isHeroIconsDropdownVisible = ref(false)
-
-const heroIcons = ref([])
 const copyCategoryToDescription = ref(false)
 const copyTagToDescription = ref(false)
 const copyTagToCategory = ref(false)
 
 const syncedSettings = [
-  { store: profileStore, path: 'heroIcons', ref: heroIcons },
   { store: profileStore, path: 'copyCategoryToDescription', ref: copyCategoryToDescription },
   { store: profileStore, path: 'copyTagToDescription', ref: copyTagToDescription },
   { store: profileStore, path: 'copyTagToCategory', ref: copyTagToCategory },
@@ -61,7 +56,7 @@ const onSave = async () => {
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'Transaction config',
+  title: 'Transaction settings',
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
 

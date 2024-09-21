@@ -57,7 +57,7 @@ const init = () => {
 const toolbar = useToolbar()
 toolbar.init({
   title: 'Quick transaction amounts',
-  backRoute: RouteConstants.ROUTE_SETTINGS_USER_PREFERENCES_TRANSACTIONS,
+  backRoute: RouteConstants.ROUTE_SETTINGS_TRANSACTION,
 })
 
 onMounted(() => {
