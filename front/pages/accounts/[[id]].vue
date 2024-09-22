@@ -45,6 +45,9 @@
         <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
       </div>
     </van-form>
+
+
+    <account-adjust-balance :value="item" v-model:showDropdown="isAdjustBalanceVisible"/>
   </div>
 </template>
 
@@ -74,6 +77,7 @@ const resetFields = () => {
 }
 
 const form = ref(null)
+const isAdjustBalanceVisible = ref(false)
 
 const fetchItem = () => {
   const dataStore = useDataStore()
@@ -133,7 +137,7 @@ watch(name, (newValue) => {
 
 const adjustBalanceText = computed(() => `Adjust balance (${get(item.value, 'attributes.current_balance')} ${get(item.value, 'attributes.currency_symbol')})`)
 const onAdjustBalance = () => {
-  // TODO: Implement me later...
+  isAdjustBalanceVisible.value = true
 }
 
 const toolbar = useToolbar()

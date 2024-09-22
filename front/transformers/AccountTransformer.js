@@ -47,6 +47,8 @@ export default class AccountTransformer extends ApiTransformer {
       monthly_payment_date: monthlyPaymentDate,
       currency_id: get(data, 'currency.id'),
       currency_code: get(data, 'currency.attributes.code'),
+      opening_balance: get(data, 'opening_balance'),
+      opening_balance_date: get(data, 'opening_balance_date'),
 
       include_net_worth: get(data, 'include_net_worth', false),
       is_dashboard_visible: get(data, 'is_dashboard_visible', true),
