@@ -7,7 +7,7 @@
     </app-top-toolbar>
 
     <app-card-info v-if="itemId">
-      <app-field-link :label="adjustBalanceText" :icon="TablerIconConstants.settings" @click="onAdjustBalance" />
+      <app-field-link :label="adjustBalanceText" :icon="TablerIconConstants.extras" @click="onAdjustBalance" />
       <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?account_id=${itemId}`)" />
     </app-card-info>
 
@@ -46,8 +46,7 @@
       </div>
     </van-form>
 
-
-    <account-adjust-balance :value="item" v-model:showDropdown="isAdjustBalanceVisible"/>
+    <account-adjust-balance :value="item" @result="onEvent" v-model:showDropdown="isAdjustBalanceVisible" />
   </div>
 </template>
 
@@ -89,6 +88,7 @@ const onEvent = (event, payload) => {
     let newItem = get(payload, 'data.data')
     newItem = AccountTransformer.transformFromApi(newItem)
     dataStore.accountList = [newItem, ...dataStore.accountList.filter((item) => item.id !== itemId.value)]
+    item.value = newItem
   }
   if (event === 'onPostDelete') {
     dataStore.accountList = dataStore.accountList.filter((item) => item.id !== itemId.value)
@@ -133,7 +133,6 @@ watch(name, (newValue) => {
   }
   name.value = newValue
 })
-
 
 const adjustBalanceText = computed(() => `Adjust balance (${get(item.value, 'attributes.current_balance')} ${get(item.value, 'attributes.currency_symbol')})`)
 const onAdjustBalance = () => {

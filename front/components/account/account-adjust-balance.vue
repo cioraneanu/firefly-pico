@@ -4,6 +4,8 @@
       <div ref="popupRef" class="h-100 display-flex flex-column">
         <div class="van-popup-title">Adjust balance</div>
 
+        <div class="text-muted text-size-12 px-3 mt-10 text-center">This will change the account opening balance</div>
+
         <div ref="popupContentRef" class="display-flex flex-column flex-1 overflow-auto mt-20">
           <app-field label="New amount" :icon="TablerIconConstants.fieldText2" v-model="newAmount" />
           <div class="flex-1" />
@@ -23,6 +25,7 @@ import { useSwipeToDismiss } from '~/composables/useSwipeToDismiss'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import AccountRepository from '~/repository/AccountRepository.js'
 import AccountTransformer from '~/transformers/AccountTransformer.js'
+import UIUtils from '~/utils/UIUtils.js'
 
 const dataStore = useDataStore()
 
@@ -36,22 +39,24 @@ const props = defineProps({
   value: {},
 })
 
+const emits = defineEmits('result')
+
 watch(showDropdown, (newValue) => {
   newAmount.value = get(props.value, 'attributes.current_balance')
 })
 
 const onSave = async () => {
+
+  UIUtils.showToastLoading('Adjusting...')
   let accountId = get(props.value, 'id')
   let accountBody = cloneDeep(props.value)
-  let correction = parseFloat(newAmount.value) - parseFloat(get(props.value, 'attributes.current_balance'))
-  accountBody.attributes.opening_balance = parseFloat(accountBody.attributes.opening_balance) + correction
+  let amountOffset = parseFloat(newAmount.value) - parseFloat(get(props.value, 'attributes.current_balance'))
+  accountBody.attributes.opening_balance = parseFloat(accountBody.attributes.opening_balance) + amountOffset
   accountBody = AccountTransformer.transformToApi(accountBody)
   let response = await new AccountRepository().update(accountId, accountBody)
+  emits('result', 'onPostSave', response)
 
-  let newItem = get(response, 'data.data')
-  newItem = AccountTransformer.transformFromApi(newItem)
-  dataStore.accountList = [newItem, ...dataStore.accountList.filter((item) => item.id !== accountId)]
-
+  UIUtils.stopToastLoading()
   showDropdown.value = false
 }
 
