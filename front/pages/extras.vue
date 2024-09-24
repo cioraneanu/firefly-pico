@@ -10,7 +10,7 @@
     </van-cell-group>
 
     <van-cell-group inset style="overflow: auto">
-      <div class="van-cell-group-title">Clasification:</div>
+      <div class="van-cell-group-title">Classification:</div>
       <app-field-link label="Tags" :icon="TablerIconConstants.tag" @click="onGoToTagsList" />
       <app-field-link label="Categories" :icon="TablerIconConstants.category" @click="onGoToCategoriesList" />
     </van-cell-group>
