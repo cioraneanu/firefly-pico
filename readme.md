@@ -84,7 +84,8 @@ This is by no means the only / best way to do, but it's what works for me:
 - Create a tag, name it "todo", and set the "Mark as to-do" field to Yes. Add this tag to any transaction that will be edited later. Ex. You paid dinner for multiple people and some will give you the money back later. Or you buy multiple shoes and return some of them. All these transactions will show up on your dashboard.
 - Go to Settings -> New transaction defaults -> Set your default source account. 
   - (Optionally) If there are multiple users sharing an account you can create separate "tags" with their names. Then everyone can select their own for the "Auto tags" field.
-- Identify any transactions that you perform often but cannot be turned into "Reapeating transactions" because of irregularities. Create "templates" for them. That you the assistant can easily handle them as well. 
+- Identify any transactions that you perform often but cannot be turned into "Reapeating transactions" because of irregularities. Create "templates" for them. The assistant can easily handle them as well.
+- For budgets you can setup "Rules" inside Firefly III. When a transaction is created, if it has a list of tags, asign it to your desiered budget. 
 
 - Finally make the process of starting the app faster:
   - [iOS] Create a home screen shortcut: open the app in Safari -> Share icon -> Add to Homescreen. The app will also show up in you iOS global search
@@ -96,8 +97,8 @@ This is by no means the only / best way to do, but it's what works for me:
 
 
 ## 📑 Notes
-- **Pico** does NOT intend on replacing the **Firefly** GUI. My main focus is to optimize the daily interactions and leave more general config for the mother app ^_^.
 - Split transactions will show up as read-only, and you cannot create them inside **Pico**. Separate transactions make more sense to me.
+- Although I'm aiming to make **Pico** support as many functionalities as possible, some resources (like "Rules") will remain to be handled inside Firefly III.
 
 
 ## :coffee: Support
