@@ -12,7 +12,7 @@
         <div class="van-cell-group-title">Status:</div>
         <div class="px-3 pb-15 flex-column text-size-12">
           <div>Spent: {{ budgetLimitSpent }} / {{ amount }}</div>
-          <div>Percent: {{ budgetLimitPercent }}</div>
+          <div>Percent: {{ budgetLimitPercent }} %</div>
           <div>Interval: {{ budgetLimitInterval }}</div>
         </div>
         <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?budget_id=${itemId}`)" />
@@ -91,7 +91,7 @@ const fetchItem = () => {
 const isPeriodVisible = computed(() => get(type.value, 'fireflyCode') !== Budget.types.manual.fireflyCode)
 
 const budgetLimit = computed(() => Budget.getLimit(item.value))
-const budgetLimitPercent = computed(() => get(budgetLimit.value, `attributes.percent`, 0))
+const budgetLimitPercent = computed(() => get(budgetLimit.value, `attributes.percent`, 0).toFixed(2))
 const budgetLimitSpent = computed(() => Math.abs(get(budgetLimit.value, `attributes.spent`, 0)))
 const budgetLimitInterval = computed(() => BudgetLimit.getLimitInterval(budgetLimit.value))
 

@@ -6,6 +6,7 @@ import ApiTransformer from '~/transformers/ApiTransformer'
 import Icon from '~/models/Icon.js'
 import Budget from '~/models/Budget.js'
 import { useDataStore } from '~/stores/dataStore.js'
+import { roundNumber } from '~/utils/MathUtils.js'
 
 export default class BudgetLimitTransformer extends ApiTransformer {
   static transformFromApi(item) {
@@ -16,11 +17,12 @@ export default class BudgetLimitTransformer extends ApiTransformer {
     item.attributes.start = DateUtils.autoToDate(item.attributes.start)
     item.attributes.end = DateUtils.autoToDate(item.attributes.end)
 
+    item.attributes.spent = parseFloat(get(item, 'attributes.spent') ?? '0')
+    item.attributes.amount = parseFloat(get(item, 'attributes.amount') ?? '0')
 
-    item.attributes.spent = parseFloat(get(item, 'attributes.spent') ?? "0")
-    item.attributes.amount = parseFloat(get(item, 'attributes.amount') ?? "0")
+    let percent = item.attributes.spent === 0 ? 0 : (Math.abs(item.attributes.spent) * 100.0) / item.attributes.amount
+    item.attributes.percent = roundNumber(percent)
 
-    item.attributes.percent = item.attributes.spent === 0 ? 0 : (Math.abs(item.attributes.spent) * 100.0) / item.attributes.amount
     item.attributes.remaining = item.attributes.amount + item.attributes.spent
 
     return item

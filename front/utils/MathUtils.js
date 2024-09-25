@@ -44,11 +44,8 @@ export const evalMath = (value) => {
     }
   }
 
-
   try {
-
     let sanitizedValue = sanitizeMathString(value)
-    console.log('sanitize', {value, sanitizedValue})
     let newValue = evaluate(sanitizedValue).toString()
     newValue = parseFloat(newValue).toFixed(2)
     return {
@@ -76,7 +73,7 @@ export const sanitizeMathString = (value) => {
   cleaned = cleaned.replace(/([+\-*/]){2,}/g, (match) => match[match.length - 1])
 
   // Remove any trailing operators
-  cleaned = cleaned.replace(/[+\-*/]$/, '');
+  cleaned = cleaned.replace(/[+\-*/]$/, '')
   return cleaned
 }
 
@@ -97,4 +94,9 @@ export const sanitizeAmount = (inputString) => {
   return inputString.replace(regexDuplicateOperators, (match) => {
     return match.charAt(match.length - 1)
   })
+}
+
+export const roundNumber = (number, digits = 2) => {
+  let digitsNumber = Math.pow(10, digits)
+  return Math.round((number + Number.EPSILON) * digitsNumber) / digitsNumber
 }
