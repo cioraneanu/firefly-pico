@@ -48,7 +48,7 @@ const budgetLimit = computed(() => Budget.getLimit(props.value))
 const displayName = computed(() => get(props.value, 'attributes.name', ' - '))
 const budgetType = computed(() => get(props.value, 'attributes.auto_budget_type.name', ' - '))
 const budgetPeriod = computed(() => get(props.value, 'attributes.auto_budget_period.name', ' - '))
-const budgetAmount = computed(() => get(props.value, 'attributes.amount', ' - '))
+const budgetAmount = computed(() => get(props.value, 'attributes.amount', ' - ') || ' - ')
 const budgetLimitSpent = computed(() => Math.abs(get(budgetLimit.value, `attributes.spent`, 0)))
 const budgetCurrencySymbol = Budget.getCurrencySymbol(props.value)
 
