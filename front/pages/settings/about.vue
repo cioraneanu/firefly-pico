@@ -27,6 +27,7 @@
         <div>- IconPacks: <a href="https://github.com/microsoft/fluentui" target="_blank">Fluent UI System Icons</a></div>
         <div>- IconPacks: <a href="https://www.svgrepo.com/author/Laura%20Reen" target="_blank">Circle Avatar Vectors by Laura Reen</a></div>
         <div>- IconPacks: <a href="https://www.svgrepo.com/" target="_blank">SVG Repo</a></div>
+        <div>- IconPacks: <a href="https://www.freepik.com/" target="_blank">Freepik</a></div>
         <div>- Illustrations: <a href="https://undraw.co" target="_blank">unDraw</a></div>
       </div>
     </van-cell-group>
