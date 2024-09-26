@@ -2,6 +2,7 @@
   <van-grid-item @click="onGoToBudget">
     <template #icon>
       <budget-icon :value="props.value" />
+<!--      <budget-icon2 :value="props.value" />-->
     </template>
     <template #text>
       <div class="display-flex flex-column align-items-center">
