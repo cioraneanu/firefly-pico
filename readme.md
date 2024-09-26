@@ -112,9 +112,6 @@ Just like Firefly III this is licensed under the [GNU Affero General Public Lice
 - Consuming the [Firefly III](https://www.firefly-iii.org) REST API
 - With a custom UI theme based on [Vant](https://vant-ui.github.io)
 - Exchange rates powered by [Exchange Rate API](https://www.exchangerate-api.com)
-
-- IconPacks: [Tablr Icons](https://tabler.io/icons)
-- IconPacks: [Fluent UI System Icons](https://github.com/microsoft/fluentui)
-- IconPacks: [Circle Avatar Vectors by Laura Reen](https://www.svgrepo.com/author/Laura%20Reen)
-- IconPacks: [SVG Repo](https://www.svgrepo.com/)
+- IconPacks: [Tablr Icons](https://tabler.io/icons) · [Fluent UI System Icons](https://github.com/microsoft/fluentui) · [Circle Avatar Vectors by Laura Reen](https://www.svgrepo.com/author/Laura%20Reen) 
+· [SVG Repo](https://www.svgrepo.com/) · [Freepik](https://www.freepik.com/)
 - Illustrations: [unDraw](https://undraw.co)
