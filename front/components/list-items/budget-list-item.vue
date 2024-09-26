@@ -13,7 +13,7 @@
           <div class="second_column flex-1 flex-column">
             <div v-if="displayName" class="title flex-center-vertical">
               <div class="flex-1">{{ displayName }}</div>
-              <div class="text-size-12">{{ budgetLimitSpent }} / {{ budgetAmount }}</div>
+              <div class="text-size-12">{{ budgetLimitSpent }} / {{ budgetAmount }} {{ budgetCurrencySymbol }}</div>
             </div>
 <!--            <bar-chart-item-horizontal :percent="budgetLimitPercent" class="p-0 mb-10" />-->
             <div class="display-flex flex-wrap gap-1 mt-5">
@@ -33,10 +33,7 @@
 
 <script setup>
 import _, { get } from 'lodash'
-import { useDataStore } from '~/stores/dataStore'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
-import TablerIconConstants from '~/constants/TablerIconConstants'
-import Account from '~/models/Account.js'
 import Budget from '~/models/Budget.js'
 import BudgetIcon from '~/components/budget/budget-icon.vue'
 
@@ -51,11 +48,9 @@ const budgetLimit = computed(() => Budget.getLimit(props.value))
 const displayName = computed(() => get(props.value, 'attributes.name', ' - '))
 const budgetType = computed(() => get(props.value, 'attributes.auto_budget_type.name', ' - '))
 const budgetPeriod = computed(() => get(props.value, 'attributes.auto_budget_period.name', ' - '))
-const budgetAmount = computed(() => get(props.value, 'attributes.amount', ' - '))
-const budgetLimitPercent = computed(() => get(budgetLimit.value, `attributes.percent`, 0))
+const budgetAmount = computed(() => get(props.value, 'attributes.amount', ' - ') || ' - ')
 const budgetLimitSpent = computed(() => Math.abs(get(budgetLimit.value, `attributes.spent`, 0)))
-
-const icon = computed(() => Budget.getIcon(props.value))
+const budgetCurrencySymbol = Budget.getCurrencySymbol(props.value)
 
 const onEdit = async (e) => {
   emit('onEdit', props.value)

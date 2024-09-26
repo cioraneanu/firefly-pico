@@ -17,8 +17,6 @@
 </template>
 
 <script setup>
-import TablerIconConstants from '~/constants/TablerIconConstants.js'
-import Transaction from '~/models/Transaction.js'
 import DashboardBudgetItem from '~/components/dashboard/dashboard-budgets/dashboard-budget-item.vue'
 
 const dataStore = useDataStore()

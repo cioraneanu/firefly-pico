@@ -37,8 +37,15 @@ export default class Budget extends BaseModel {
 
   // --------
 
-  static getDisplayName(account) {
-    return _.get(account, 'attributes.name')
+  static getDisplayName(budget) {
+    return _.get(budget, 'attributes.name')
+  }
+
+  // --------
+
+  static getCurrencySymbol(budget) {
+    const dataStore = useDataStore()
+    return _.get(budget, 'attributes.currency.attributes.symbol', _.get(dataStore.defaultCurrency, 'attributes.symbol'));
   }
 
   // --------
