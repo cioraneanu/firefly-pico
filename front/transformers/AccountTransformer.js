@@ -36,22 +36,26 @@ export default class AccountTransformer extends ApiTransformer {
 
     let data = _.get(item, 'attributes')
     let creditCardType = get(data, 'credit_card_type') ?? Account.creditCardPaymentPlans.monthlyFull
-    let monthlyPaymentDate = get(data, 'monthly_payment_date') ?? DateUtils.dateToString(startOfMonth(new Date()), DateUtils.FORMAT_ENGLISH_DATE )
+    let monthlyPaymentDate = get(data, 'monthly_payment_date') ?? DateUtils.dateToString(startOfMonth(new Date()), DateUtils.FORMAT_ENGLISH_DATE)
+
+    // Some accounts can have 0 opening balance and null date.
+    const { opening_balance, opening_balance_date } = data
+    const openingBalance = opening_balance_date ? { opening_balance, opening_balance_date } : {}
 
     return {
       name: get(data, 'name', ''),
       icon: get(data, 'icon.icon'),
       type: get(data, 'type.fireflyCode'),
       account_role: get(data, 'account_role.fireflyCode'),
-      credit_card_type:  creditCardType,
+      credit_card_type: creditCardType,
       monthly_payment_date: monthlyPaymentDate,
       currency_id: get(data, 'currency.id'),
       currency_code: get(data, 'currency.attributes.code'),
-      opening_balance: get(data, 'opening_balance'),
-      opening_balance_date: get(data, 'opening_balance_date'),
 
       include_net_worth: get(data, 'include_net_worth', false),
       is_dashboard_visible: get(data, 'is_dashboard_visible', true),
+
+      ...openingBalance,
     }
   }
 }
