@@ -297,14 +297,24 @@ export const duoToneListIcons = [
 ]
 
 export const fluentListIcons = [
-  // { name: 'car / vehicle', icon: 'svgo-fluent-vehicle-car-profile-24-regular' },
-  // { name: 'food', icon: 'svgo-fluent-food-24-regular' },
-  // { name: 'food / pizza', icon: 'svgo-fluent-food-pizza-20-regular' },
-  // { name: 'food / toast / bread', icon: 'svgo-fluent-food-toast-20-regular' },
-  // { name: 'building / home', icon: 'svgo-fluent-building-home-16-regular' },
-  // { name: 'building / home / garage', icon: 'svgo-fluent-home-garage-20-regular' },
-  // { name: 'building / home / garage', icon: 'svgo-fluent-home-garage-20-regular' },
-  // { name: 'food / chicken', icon: 'svgo-fluent-food_chicken-leg-16-regular' },
+  { name: 'bike', icon: 'svgo-fluent-bike' },
+  { name: 'chick', icon: 'svgo-fluent-chick' },
+  { name: 'dress', icon: 'svgo-fluent-dress' },
+  { name: 'glasses', icon: 'svgo-fluent-glasses' },
+  { name: 'hat', icon: 'svgo-fluent-hat' },
+  { name: 'ice-cream', icon: 'svgo-fluent-ice-cream' },
+  { name: 'ice-cream', icon: 'svgo-fluent-ice-cream' },
+  { name: 'kid', icon: 'svgo-fluent-kid1' },
+  { name: 'kid', icon: 'svgo-fluent-kid2' },
+  { name: 'kid', icon: 'svgo-fluent-kid3' },
+  { name: 'motorbike', icon: 'svgo-fluent-motorbike' },
+  { name: 'pants', icon: 'svgo-fluent-pants' },
+  { name: 'school', icon: 'svgo-fluent-school' },
+  { name: 'scooter', icon: 'svgo-fluent-scooter' },
+  { name: 'scooter', icon: 'svgo-fluent-scooter2' },
+  { name: 'shoe', icon: 'svgo-fluent-shoe' },
+  { name: 'underwear', icon: 'svgo-fluent-underwear' },
+  { name: 'wifi internet', icon: 'svgo-fluent-wifi' },
 
   { name: 'building-24-regular', icon: 'svgo-fluent-building-24-regular' },
   { name: 'building-bank-20-regular', icon: 'svgo-fluent-building-bank-20-regular' },
@@ -336,6 +346,62 @@ export const fluentListIcons = [
 ]
 
 export const avatarListIcons = [
+  { name: 'wallet', icon: 'svgo-avatar-wallet' },
+  { name: 'wallet', icon: 'svgo-avatar-wallet2' },
+  { name: 'umbrella', icon: 'svgo-avatar-umbrella' },
+  { name: 'pouch', icon: 'svgo-avatar-pouch' },
+  { name: 'piggy', icon: 'svgo-avatar-piggy' },
+  { name: 'piggy', icon: 'svgo-avatar-piggy2' },
+  { name: 'piggy', icon: 'svgo-avatar-piggy3' },
+  { name: 'piggy', icon: 'svgo-avatar-piggy4' },
+  { name: 'phone', icon: 'svgo-avatar-phone' },
+  { name: 'education', icon: 'svgo-avatar-education' },
+  { name: 'credit card', icon: 'svgo-avatar-card' },
+  { name: 'credit card', icon: 'svgo-avatar-card2' },
+  { name: 'money pile', icon: 'svgo-avatar-money-pile' },
+  { name: 'graph', icon: 'svgo-avatar-graph' },
+  { name: 'briefcase', icon: 'svgo-avatar-briefcase' },
+  { name: 'briefcase', icon: 'svgo-avatar-briefcase2' },
+  { name: 'box', icon: 'svgo-avatar-box' },
+  { name: 'atm', icon: 'svgo-avatar-atm' },
+  { name: 'atm', icon: 'svgo-avatar-atm2' },
+  { name: 'bank', icon: 'svgo-avatar-bank' },
+  { name: 'bank', icon: 'svgo-avatar-bank2' },
+  { name: 'pot', icon: 'svgo-avatar-pot' },
+  { name: 'rainbow', icon: 'svgo-avatar-rainbow' },
+  { name: 'exchange money swap', icon: 'svgo-avatar-exchange' },
+  { name: 'bag', icon: 'svgo-avatar-bag' },
+  { name: 'bag', icon: 'svgo-avatar-bag2' },
+  { name: 'bag', icon: 'svgo-avatar-bag3' },
+  { name: 'bag', icon: 'svgo-avatar-bag4' },
+  { name: 'bag', icon: 'svgo-avatar-bag5' },
+  { name: 'coin', icon: 'svgo-avatar-coin' },
+  { name: 'coin', icon: 'svgo-avatar-coin2' },
+  { name: 'calculator', icon: 'svgo-avatar-calculator' },
+  { name: 'diamond', icon: 'svgo-avatar-diamond' },
+  { name: 'safe', icon: 'svgo-avatar-safe' },
+  { name: 'safe', icon: 'svgo-avatar-safe2' },
+  { name: 'money', icon: 'svgo-avatar-money' },
+  { name: 'money', icon: 'svgo-avatar-money2' },
+  { name: 'money', icon: 'svgo-avatar-money3' },
+  { name: 'money', icon: 'svgo-avatar-money4' },
+  { name: 'money', icon: 'svgo-avatar-money5' },
+  { name: 'money cog', icon: 'svgo-avatar-money-cog' },
+
+  { name: 'animal deer', icon: 'svgo-avatar-animal-deer' },
+  { name: 'animal deer', icon: 'svgo-avatar-animal-deer2' },
+  { name: 'animal dog', icon: 'svgo-avatar-animal-dog' },
+  { name: 'animal racoon', icon: 'svgo-avatar-animal-racoon' },
+  { name: 'animal rhino', icon: 'svgo-avatar-animal-rhino' },
+  { name: 'animal giraffe', icon: 'svgo-avatar-animal-giraffe' },
+  { name: 'animal monkey', icon: 'svgo-avatar-animal-monkey' },
+  { name: 'animal monkey', icon: 'svgo-avatar-animal-monkey2' },
+  { name: 'animal owl', icon: 'svgo-avatar-animal-owl' },
+  { name: 'animal fox', icon: 'svgo-avatar-animal-fox' },
+  { name: 'animal koala', icon: 'svgo-avatar-animal-koala' },
+  { name: 'female', icon: 'svgo-avatar-female' },
+  { name: 'male', icon: 'svgo-avatar-male' },
+
   { name: 'actor chaplin comedy', icon: 'svgo-avatar-actor-chaplin-comedy-svgrepo-com' },
   { name: 'addicted drawlove', icon: 'svgo-avatar-addicted-draw-love-svgrepo-com' },
   { name: 'afro-avatar-male-2-svgrepo-com', icon: 'svgo-avatar-afro-avatar-male-2-svgrepo-com' },
@@ -387,19 +453,6 @@ export const avatarListIcons = [
   { name: 'indian-male-man-svgrepo-com', icon: 'svgo-avatar-indian-male-man-svgrepo-com' },
   { name: 'indian-man-sikh-svgrepo-com', icon: 'svgo-avatar-indian-man-sikh-svgrepo-com' },
   { name: 'male-man-old-svgrepo-com', icon: 'svgo-avatar-male-man-old-svgrepo-com' },
-
-  //
-  // .svg
-  // .svg
-  // .svg
-  // .svg
-  // .svg
-  // .svg
-  // .svg
-  // .svg
-  // .svg
-  // .svg
-  // .svg
 
   { name: 'browser-analytics-svgrepo-com', icon: 'svgo-avatar-browser-analytics-svgrepo-com' },
   { name: 'coin-svgrepo-com', icon: 'svgo-avatar-coin-svgrepo-com' },
