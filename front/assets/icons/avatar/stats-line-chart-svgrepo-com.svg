@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+	 viewBox="0 0 512 512" xml:space="preserve">
+<polyline style="fill:#666666;" points="160,441.6 160,386.928 352,386.928 352,435.2 "/>
+<path d="M378.672,485.872H133.328c-13.936,0-25.328-11.392-25.328-25.328l0,0c0-13.936,11.392-25.328,25.328-25.328h245.328
+	c13.936,0,25.328,11.392,25.328,25.328l0,0C404,474.464,392.608,485.872,378.672,485.872z"/>
+<path style="fill:#E04F5F;" d="M480,346.128H32c-17.6,0-32-14.4-32-32v-256c0-17.6,14.4-32,32-32h448c17.6,0,32,14.4,32,32v256
+	C512,331.728,497.6,346.128,480,346.128z"/>
+<g>
+	<polygon style="fill:#FFFFFF;" points="103.088,236.496 91.776,225.184 179.392,137.584 311.04,209.408 414.096,129.264 
+		423.904,141.888 312.576,228.464 182.24,157.376 	"/>
+	<circle style="fill:#FFFFFF;" cx="421.568" cy="135.568" r="24.176"/>
+	<circle style="fill:#FFFFFF;" cx="97.44" cy="237.168" r="24.176"/>
+	<circle style="fill:#FFFFFF;" cx="178.928" cy="148.208" r="24.176"/>
+	<circle style="fill:#FFFFFF;" cx="311.808" cy="217.424" r="24.176"/>
+</g>
+</svg>

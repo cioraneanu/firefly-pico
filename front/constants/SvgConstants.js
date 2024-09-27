@@ -388,6 +388,7 @@ export const avatarListIcons = [
   { name: 'money', icon: 'svgo-avatar-money5' },
   { name: 'money cog', icon: 'svgo-avatar-money-cog' },
 
+  { name: 'animal bear', icon: 'svgo-avatar-bear-svgrepo-com' },
   { name: 'animal deer', icon: 'svgo-avatar-animal-deer' },
   { name: 'animal deer', icon: 'svgo-avatar-animal-deer2' },
   { name: 'animal dog', icon: 'svgo-avatar-animal-dog' },
@@ -401,6 +402,37 @@ export const avatarListIcons = [
   { name: 'animal koala', icon: 'svgo-avatar-animal-koala' },
   { name: 'female', icon: 'svgo-avatar-female' },
   { name: 'male', icon: 'svgo-avatar-male' },
+
+
+  { name: 'credit card', icon: 'svgo-avatar-bank-card-svgrepo-com' },
+  { name: 'credit card', icon: 'svgo-avatar-bank-finance-business-money-card-svgrepo-com' },
+  { name: 'bank', icon: 'svgo-avatar-bank-svgrepo-com' },
+
+  { name: 'chart stocks market graph', icon: 'svgo-avatar-bar-chart-bars-chart-svgrepo-com' },
+  { name: 'chart stocks market graph', icon: 'svgo-avatar-bar-chart-graph-svgrepo-com' },
+  { name: 'chart stocks market graph', icon: 'svgo-avatar-chart-bar-chart-svgrepo-com' },
+  { name: 'chart stocks market graph', icon: 'svgo-avatar-chart-decreasing-svgrepo-com' },
+  { name: 'chart stocks market graph', icon: 'svgo-avatar-chart-graphic-svgrepo-com' },
+  { name: 'chart stocks market graph', icon: 'svgo-avatar-line-chart-svgrepo-com' },
+  { name: 'chart stocks market graph', icon: 'svgo-avatar-statistics-graph-svgrepo-com' },
+  { name: 'chart stocks market graph', icon: 'svgo-avatar-stats-line-chart-svgrepo-com' },
+  { name: 'chart stocks market graph pyramid', icon: 'svgo-avatar-pyramid-chart-graph-svgrepo-com' },
+  { name: 'chart stocks market graph pie', icon: 'svgo-avatar-pie-chart-svgrepo-com' },
+  { name: 'crypto', icon: 'svgo-avatar-bitcoin-svgrepo-com' },
+  { name: 'calendar', icon: 'svgo-avatar-calendar-svgrepo-com' },
+  { name: 'coordinate travel map', icon: 'svgo-avatar-coordinate-svgrepo-com' },
+  { name: 'coordinate travel map', icon: 'svgo-avatar-globe-svgrepo-com' },
+  { name: 'diamond ring', icon: 'svgo-avatar-diamond-ring-diamond-svgrepo-com' },
+  { name: 'ball ring sports footbal', icon: 'svgo-avatar-football-svgrepo-com' },
+  { name: 'help heart love health', icon: 'svgo-avatar-heart-red-svgrepo-com' },
+  { name: 'help save water safety', icon: 'svgo-avatar-help-desk-svgrepo-com' },
+  { name: 'prize medal contest', icon: 'svgo-avatar-medal-gold-svgrepo-com' },
+  { name: 'shopping bag basket', icon: 'svgo-avatar-shopping-bag-svgrepo-com' },
+  { name: 'shopping bag basket', icon: 'svgo-avatar-shopping-basket-svgrepo-com' },
+  { name: 'star win prize', icon: 'svgo-avatar-star-gold-orange-svgrepo-com' },
+  { name: 'bullseye hit prize game', icon: 'svgo-avatar-target-hit-aim-svgrepo-com' },
+
+
 
   { name: 'actor chaplin comedy', icon: 'svgo-avatar-actor-chaplin-comedy-svgrepo-com' },
   { name: 'addicted drawlove', icon: 'svgo-avatar-addicted-draw-love-svgrepo-com' },
