@@ -16,7 +16,7 @@ const props = defineProps({
 
 const icon = computed(() => Budget.getIcon(props.value))
 const budgetLimit = computed(() => Budget.getLimit(props.value))
-const budgetLimitPercent = computed(() => get(budgetLimit.value, `attributes.percent`) ?? 0)
+const budgetLimitPercent = computed(() => Math.min(get(budgetLimit.value, `attributes.percent`) ?? 0, 100))
 
 let colorsList = [
   // { start: 0, end: Infinity, colorWhite: '#E53935', colorDark: '#E53935' },
