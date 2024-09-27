@@ -2,13 +2,12 @@
   <van-grid-item @click="onGoToBudget">
     <template #icon>
       <budget-icon :value="props.value" />
-<!--      <budget-icon2 :value="props.value" />-->
     </template>
     <template #text>
       <div class="display-flex flex-column align-items-center">
         <div class="font-600 text-size-12 text-center">{{ displayName }}</div>
-        <div class="font-500 text-size-10 text-center ">{{ getFormattedValue(budgetLimitSpent) }} / {{ getFormattedValue(budgetAmount) }} {{ budgetCurrencySymbol }}</div>
-        <div class="font-500 text-size-10 text-center text-muted">{{ budgetLimitInterval }} </div>
+        <div class="font-500 text-size-10 text-center">{{ getFormattedValue(budgetLimitSpent) }} / {{ getFormattedValue(budgetAmount) }} {{ budgetCurrencySymbol }}</div>
+        <div class="font-500 text-size-10 text-center text-muted">{{ budgetLimitInterval }}</div>
       </div>
     </template>
   </van-grid-item>
@@ -42,5 +41,4 @@ const onGoToBudget = async () => {
 
   await navigateTo(`${RouteConstants.ROUTE_BUDGET_ID}/${budgetId}`)
 }
-
 </script>
