@@ -6,7 +6,7 @@
     <template #text>
       <div class="display-flex flex-column align-items-center">
         <div class="font-600 text-size-12 text-center">{{ displayName }}</div>
-        <div class="font-500 text-size-10 text-center">{{ getFormattedValue(budgetLimitSpent) }} / {{ getFormattedValue(budgetAmount) }} {{ budgetCurrencySymbol }}</div>
+        <div class="font-500 text-size-10 text-center">{{ getFormattedValue(budgetLimitSpent) }} / {{ getFormattedValue(budgetLimitAmount) }} {{ budgetCurrencySymbol }}</div>
         <div class="font-500 text-size-10 text-center text-muted">{{ budgetLimitInterval }}</div>
       </div>
     </template>
@@ -28,8 +28,8 @@ const props = defineProps({
 
 const budgetLimit = computed(() => Budget.getLimit(props.value))
 const displayName = computed(() => get(props.value, 'attributes.name', ' - '))
-const budgetAmount = computed(() => get(props.value, 'attributes.amount', ' - '))
 const budgetLimitSpent = computed(() => Math.abs(get(budgetLimit.value, `attributes.spent`, 0)))
+const budgetLimitAmount = computed(() => get(budgetLimit.value, 'attributes.amount') ?? 0)
 const budgetLimitInterval = computed(() => BudgetLimit.getLimitInterval(budgetLimit.value))
 const budgetCurrencySymbol = computed(() => Budget.getCurrencySymbol(props.value))
 
