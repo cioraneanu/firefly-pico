@@ -13,7 +13,7 @@
           <div class="second_column flex-1 flex-column">
             <div v-if="displayName" class="title flex-center-vertical">
               <div class="flex-1">{{ displayName }}</div>
-              <div class="text-size-12">{{ budgetLimitSpent }} / {{ budgetAmount }} {{ budgetCurrencySymbol }}</div>
+              <div class="text-size-12">{{ budgetLimitSpent }} / {{ budgetLimitAmount }} {{ budgetCurrencySymbol }}</div>
             </div>
 <!--            <bar-chart-item-horizontal :percent="budgetLimitPercent" class="p-0 mb-10" />-->
             <div class="display-flex flex-wrap gap-1 mt-5">
@@ -50,7 +50,8 @@ const budgetType = computed(() => get(props.value, 'attributes.auto_budget_type.
 const budgetPeriod = computed(() => get(props.value, 'attributes.auto_budget_period.name', ' - '))
 const budgetAmount = computed(() => get(props.value, 'attributes.amount', ' - ') || ' - ')
 const budgetLimitSpent = computed(() => Math.abs(get(budgetLimit.value, `attributes.spent`, 0)))
-const budgetCurrencySymbol = Budget.getCurrencySymbol(props.value)
+const budgetLimitAmount = computed(() => get(budgetLimit.value, 'attributes.amount') ?? 0)
+const budgetCurrencySymbol = computed(() => Budget.getCurrencySymbol(props.value))
 
 const onEdit = async (e) => {
   emit('onEdit', props.value)

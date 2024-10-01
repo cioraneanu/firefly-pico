@@ -31,7 +31,7 @@ const displayName = computed(() => get(props.value, 'attributes.name', ' - '))
 const budgetAmount = computed(() => get(props.value, 'attributes.amount', ' - '))
 const budgetLimitSpent = computed(() => Math.abs(get(budgetLimit.value, `attributes.spent`, 0)))
 const budgetLimitInterval = computed(() => BudgetLimit.getLimitInterval(budgetLimit.value))
-const budgetCurrencySymbol = Budget.getCurrencySymbol(props.value)
+const budgetCurrencySymbol = computed(() => Budget.getCurrencySymbol(props.value))
 
 const onGoToBudget = async () => {
   let budgetId = get(props.value, 'id')
