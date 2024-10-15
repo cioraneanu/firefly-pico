@@ -28,21 +28,21 @@
             <!--              <div class="ml-20 text-size-12 font-weight-400 text-muted"> {{ extraNames }}</div>-->
             <!--            </div>-->
 
-            <div v-if="displayedAccountNames.length > 0" class="flex-column">
-              <div v-for="displayedAccount in displayedAccountNames" class="list-item-subtitle">
-                <app-icon :icon="TablerIconConstants.account" :size="20" />
-                <span>{{ displayedAccount }}</span>
+            <div v-if="displayedAccounts.length > 0" class="flex-column">
+              <div v-for="displayedAccount in displayedAccounts" class="list-item-subtitle">
+                <app-icon :icon="Account.getIcon(displayedAccount) ?? TablerIconConstants.account" :size="20" />
+                <span>{{ Account.getDisplayName(displayedAccount) }}</span>
               </div>
             </div>
 
             <div v-if="description" class="list-item-subtitle">
               <app-icon :icon="TablerIconConstants.description" :size="20" />
-              {{ category }}
+              {{ description }}
             </div>
 
             <div v-if="category" class="list-item-subtitle">
-              <app-icon :icon="TablerIconConstants.category" :size="20" />
-              {{ category }}
+              <app-icon :icon="Category.getIcon(category) ?? TablerIconConstants.category" :size="20" />
+              {{ Category.getDisplayName(category) }}
             </div>
 
             <div v-if="notes" class="list-item-subtitle">
@@ -75,9 +75,10 @@
 </template>
 
 <script setup>
-import _, { get, isEqual } from 'lodash'
+import _, { get } from 'lodash'
 
-import Transaction from '~/models/Transaction'
+import Account from '~/models/Account'
+import Category from '~/models/Category'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import Tag from '~/models/Tag.js'
@@ -100,7 +101,7 @@ const extraNames = computed(() =>
 const description = computed(() => _.get(props.value, 'description', ' - '))
 const notes = computed(() => _.get(props.value, 'notes', ' - '))
 
-const category = computed(() => _.get(props.value, 'category.attributes.name'))
+const category = computed(() => _.get(props.value, 'category'))
 const tags = computed(() => get(props.value, 'tags', []))
 const visibleTags = computed(() => {
   return tags.value.slice(0, 4)
@@ -109,27 +110,11 @@ const visibleTags = computed(() => {
 const transactionAmount = computed(() => get(props.value, 'amount'))
 const transactionCurrency = computed(() => _.get(props.value, 'currency_symbol'))
 
-// const transactionCurrency = computed(() => _.get(firstTransaction.value, 'currency_symbol', ' - '))
+const sourceAccount = computed(() => _.get(props.value, 'account_source'))
+const destinationAccount = computed(() => _.get(props.value, 'account_destination'))
 
-// const isTypeExpense = computed(() => transactionType.value === Transaction.types.TYPE_EXPENSE)
-// const isTypeIncome = computed(() => transactionType.value === Transaction.types.TYPE_INCOME)
-// const isTypeTransfer = computed(() => transactionType.value === Transaction.types.TYPE_TRANSFER)
-
-const isTypeExpense = computed(() => isEqual(transactionType.value, Transaction.types.expense))
-const isTypeIncome = computed(() => isEqual(transactionType.value, Transaction.types.income))
-const isTypeTransfer = computed(() => isEqual(transactionType.value, Transaction.types.transfer))
-
-const sourceAccountName = computed(() => _.get(props.value, 'account_source.attributes.name'))
-const destinationAccountName = computed(() => _.get(props.value, 'account_destination.attributes.name'))
-
-const displayedAccountNames = computed(() => {
-  if (isTypeExpense.value) {
-    return [destinationAccountName.value].filter((item) => !!item)
-  }
-  if (isTypeIncome.value) {
-    return [sourceAccountName.value].filter((item) => !!item)
-  }
-  return [sourceAccountName.value, destinationAccountName.value].filter((item) => !!item)
+const displayedAccounts = computed(() => {
+  return [sourceAccount.value, destinationAccount.value].filter((item) => !!item)
 })
 
 const onEdit = async (e) => {
