@@ -13,14 +13,14 @@
 
           <div class="second_column flex-1">
             <div class="flex-center-vertical gap-2">
-              <transaction-type-dot :transactionType="transactionType"/>
+              <transaction-type-dot :transactionType="transactionType" />
               <div v-if="description" class="list-item-title">{{ description }}</div>
             </div>
 
             <div class="flex-column">
-              <div v-for="displayedAccount in displayedAccountNames" class="list-item-subtitle">
-                <app-icon :icon="TablerIconConstants.account" :size="20" />
-                <span>{{ displayedAccount }}</span>
+              <div v-for="displayedAccount in displayedAccounts" class="list-item-subtitle">
+                <app-icon :icon="Account.getIcon(displayedAccount)" :size="20" />
+                <span>{{ Account.getDisplayName(displayedAccount) }}</span>
               </div>
             </div>
 
@@ -107,14 +107,14 @@ const transactionType = computed(() => _.get(firstTransaction.value, 'type', ' -
 
 const isSplitPayment = computed(() => transactions.value.length > 1)
 
-const displayedAccountNames = computed(() => {
+const displayedAccounts = computed(() => {
   if (isTransactionExpense.value) {
-    return [sourceAccountName.value]
+    return [sourceAccount.value]
   }
   if (isTransactionIncome.value) {
-    return [destinationAccountName.value]
+    return [destinationAccount.value]
   }
-  return [sourceAccountName.value, destinationAccountName.value]
+  return [sourceAccount.value, destinationAccount.value]
 })
 
 const description = computed(() => _.get(firstTransaction.value, 'description', ' - '))
@@ -147,7 +147,6 @@ const isTransactionExpense = computed(() => isEqual(transactionType.value, Trans
 const isTransactionIncome = computed(() => isEqual(transactionType.value, Transaction.types.income))
 const isTransactionTransfer = computed(() => isEqual(transactionType.value, Transaction.types.transfer))
 
-
 const date = computed(() => DateUtils.autoToDate(_.get(firstTransaction.value, 'date')))
 const dateFormatted = computed(() => DateUtils.dateToUI(date.value))
 const dateMonth = computed(() => (date.value ? format(date.value, 'LLL').toUpperCase() : ''))
@@ -156,20 +155,15 @@ const dateDayOfMonth = computed(() => {
   return date.value ? format(date.value, 'dd') : ''
 })
 
-const sourceAccountName = computed(() => _.get(firstTransaction.value, 'source_name'))
-const destinationAccountName = computed(() => _.get(firstTransaction.value, 'destination_name'))
-
 const destinationAccount = computed(() => {
   let destinationId = get(firstTransaction.value, 'destination_id')
   return get(dataStore.accountDictionary, destinationId)
 })
-const destinationAccountIcon = computed(() => Account.getIcon(destinationAccount.value))
 
 const sourceAccount = computed(() => {
   let sourceId = get(firstTransaction.value, 'source_id')
   return get(dataStore.accountDictionary, sourceId)
 })
-const sourceAccountIcon = computed(() => Account.getIcon(sourceAccount.value))
 
 const onEdit = async (e) => {
   emit('onEdit', props.value)
@@ -183,7 +177,7 @@ const heroIcon = computed(() => {
   // let heroTagIcon =  get(tags.value, '0.attributes.icon.icon')
   let sortedTags = sortByPath(tags.value, 'attributes.parent_id', false)
   let heroTagIcon = get(sortedTags, '0.attributes.icon.icon')
-  let heroAccountIcon = isTransactionExpense.value ? sourceAccountIcon.value : destinationAccountIcon.value
+  let heroAccountIcon = isTransactionExpense.value ? Account.getIcon(sourceAccount.value) : Account.getIcon(destinationAccount.value)
 
   let listOfIcons = [heroTagIcon, heroAccountIcon]
   return listOfIcons.filter((item) => !!item)
