@@ -35,8 +35,12 @@ class Category extends BaseModel {
 
   // --------
 
-  static getDisplayName(account) {
-    return _.get(account, 'attributes.name')
+  static getDisplayName(category) {
+    return _.get(category, 'attributes.name')
+  }
+
+  static getIcon(category) {
+    return _.get(category, 'attributes.icon.icon')
   }
 }
 
