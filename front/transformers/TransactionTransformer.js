@@ -80,7 +80,7 @@ export default class TransactionTransformer extends ApiTransformer {
       newItem.source_name = Account.getDisplayName(accountSource)
       newItem.destination_id = _.get(item, 'accountDestination.id')
       newItem.destination_name = Account.getDisplayName(accountDestination)
-      newItem.category_id = _.get(item, 'category.id')
+      newItem.category_id = _.get(item, 'category.id') ?? null
       newItem.budget_id = _.get(item, 'budget.id') ?? 0
       newItem.date = DateUtils.dateToString(item.date, DateUtils.FORMAT_ENGLISH_DATE_HOUR_MINUTE)
 
