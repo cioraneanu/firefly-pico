@@ -19,7 +19,7 @@
 
             <div class="flex-column">
               <div v-for="displayedAccount in displayedAccounts" class="list-item-subtitle">
-                <app-icon :icon="Account.getIcon(displayedAccount)" :size="20" />
+                <app-icon :icon="Account.getIcon(displayedAccount) ?? TablerIconConstants.account" :size="20" />
                 <span>{{ Account.getDisplayName(displayedAccount) }}</span>
               </div>
             </div>
