@@ -25,8 +25,8 @@
             </div>
 
             <div v-if="category && props.isDetailedMode" class="list-item-subtitle">
-              <app-icon :icon="TablerIconConstants.category" :size="20" />
-              {{ category }}
+              <app-icon :icon="Category.getIcon(category) ?? TablerIconConstants.category" :size="20" />
+              {{ Category.getDisplayName(category) }}
             </div>
 
             <div v-if="notes && props.isDetailedMode" class="list-item-subtitle">
@@ -80,6 +80,7 @@
 
 <script setup>
 import _, { get, isEqual } from 'lodash'
+import Category from '../../models/Category.js'
 import DateUtils from '~/utils/DateUtils'
 import { format } from 'date-fns'
 import Transaction from '~/models/Transaction'
@@ -117,7 +118,7 @@ const displayedAccountNames = computed(() => {
 })
 
 const description = computed(() => _.get(firstTransaction.value, 'description', ' - '))
-const category = computed(() => _.get(firstTransaction.value, 'category.attributes.name'))
+const category = computed(() => _.get(firstTransaction.value, 'category'))
 const notes = computed(() => _.get(firstTransaction.value, 'notes', ' - '))
 // const tags = computed(() => {
 //   let list = firstTransaction.value.tags ?? []
