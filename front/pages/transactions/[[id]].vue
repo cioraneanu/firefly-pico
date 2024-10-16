@@ -112,18 +112,14 @@
             Make template
           </van-button>
         </div>
-
-
       </div>
 
       <app-button-form-save />
     </van-form>
 
-
     <app-card-info style="order: 99">
       <app-field-link label="Configure fields" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FIELDS_ORDER)" />
     </app-card-info>
-
   </div>
 </template>
 
@@ -232,9 +228,6 @@ const onCreateClone = async () => {
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_ID}?transaction_id=${itemId.value}`)
 }
 
-
-
-
 const onTransactionTemplateSelected = (transactionTemplate) => {
   if (!transactionTemplate) {
     item.value = new Transaction().getEmpty()
@@ -290,10 +283,16 @@ watch(tags, async (newValue) => {
   }
 })
 
-const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemplate: transactionTemplate, amount: newAmount, description: newDescription }) => {
+const resetFormFields = () => {
+  accountSource.value = isTypeIncome.value ? profileStore.defaultAccountDestination : profileStore.defaultAccountSource
+  accountDestination.value = isTypeIncome.value ? profileStore.defaultAccountSource : profileStore.defaultAccountDestination
   tags.value = []
   category.value = null
   description.value = ''
+}
+
+const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemplate: transactionTemplate, amount: newAmount, description: newDescription }) => {
+  resetFormFields()
 
   if (newTag) {
     tags.value = Tag.getTagWithParents(newTag)

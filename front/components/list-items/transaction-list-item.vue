@@ -13,7 +13,7 @@
 
           <div class="second_column flex-1">
             <div class="flex-center-vertical gap-2">
-              <transaction-type-dot :transactionType="transactionType" />
+              <transaction-type-dot :transactionType="transactionType" class="ml-5" />
               <div v-if="description" class="list-item-title">{{ description }}</div>
             </div>
 
@@ -42,7 +42,7 @@
             </div>
 
             <div v-if="isSplitPayment && props.isDetailedMode">
-              <van-tag class="" type="warning"> Split payment </van-tag>
+              <van-tag class="" type="warning"> Split payment</van-tag>
             </div>
           </div>
 
