@@ -20,6 +20,12 @@
       <app-field-link label="Exchange rates" :icon="TablerIconConstants.exchangeRates" @click="navigateTo(RouteConstants.ROUTE_EXCHANGE_RATES)" />
       <app-field-link label="Currencies" :icon="TablerIconConstants.currency" @click="onGoToCurrenciesList" />
     </van-cell-group>
+
+    <van-cell-group inset style="overflow: auto">
+      <div class="van-cell-group-title">Debug:</div>
+      <app-field-link label="Action picker" :icon="TablerIconConstants.article" @click="showActionSheet" />
+    </van-cell-group>
+
   </div>
 </template>
 
@@ -29,6 +35,7 @@ import RouteConstants from '~/constants/RouteConstants'
 import { useToolbar } from '~/composables/useToolbar'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import { onMounted } from 'vue'
+import { useActionSheet } from '~/composables/useActionSheet.js'
 
 const onNavigateToCalendar = async () => await navigateTo(RouteConstants.ROUTE_CALENDAR)
 const onNavigateToTransactionTemplate = async () => await navigateTo(RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST)
@@ -39,6 +46,17 @@ const onGoToCurrenciesList = async () => await navigateTo(RouteConstants.ROUTE_C
 const onGoToTransactionTemplatesList = async () => await navigateTo(RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST)
 
 const onGoToBudgetsList = async () => await navigateTo(RouteConstants.ROUTE_BUDGET_LIST)
+
+
+const actionSheet = useActionSheet();
+
+const showActionSheet = () => {
+  actionSheet.show([
+    { name: 'Option 1', callback: () => console.log('Option 1 selected') },
+    { name: 'Option 2', callback: () => console.log('Option 2 selected') },
+    { name: 'Cancel', callback: () => console.log('Cancelled') },
+  ]);
+};
 
 const toolbar = useToolbar()
 toolbar.init({ title: 'Extra' })
