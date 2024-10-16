@@ -50,7 +50,7 @@ export default class TransactionTemplateTransformer extends ApiTransformer {
       notes: get(item, 'notes'),
       account_source_id: get(item, 'account_source.id'),
       account_destination_id: get(item, 'account_destination.id'),
-      category_id: get(item, 'category.id'),
+      category_id: get(item, 'category.id') ?? null,
       tags: (item.tags ?? []).map((item) => item.id),
       type: get(transactionType, 'fireflyCode'),
       // tags
