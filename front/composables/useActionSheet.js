@@ -1,38 +1,43 @@
-import { ref, h } from 'vue'
+import { ref, h, render } from 'vue'
 import { ActionSheet } from 'vant'
-import { createApp } from 'vue'
+import 'vant/lib/action-sheet/index.css'
 
 export function useActionSheet() {
   const isVisible = ref(false)
   const actions = ref([])
-  let actionSheetInstance = null
+  let container = null
+  let actionSheet = null
 
   const show = (newActions) => {
     actions.value = newActions
-    isVisible.value = true
 
-    if (!actionSheetInstance) {
-      const app = createApp({
-        setup() {
-          return () =>
-            h(ActionSheet, {
-              show: isVisible.value,
-              actions: actions.value,
-              onSelect: (action) => {
-                if (action.callback) action.callback()
-                isVisible.value = false
-              },
-              onCancel: () => {
-                isVisible.value = false
-              },
-            })
-        },
-      })
-
-      const container = document.createElement('div')
+    if (!actionSheet) {
+      container = document.createElement('div')
       document.body.appendChild(container)
-      actionSheetInstance = app.mount(container)
+
+      watchEffect(() => {
+        console.log('watchEffect')
+        actionSheet = h(ActionSheet, {
+          show: isVisible.value,
+          'onUpdate:show': (newValue) => {
+            isVisible.value = newValue
+          },
+          cancelText: "Cancel",
+          actions: actions.value,
+          onSelect: (action) => {
+            if (action.callback) action.callback()
+            // isVisible.value = false
+          },
+          // onCancel: () => {
+          //   isVisible.value = false
+          // },
+        })
+
+        render(actionSheet, container)
+      })
     }
+
+    isVisible.value = true
   }
 
   return {
