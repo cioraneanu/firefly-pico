@@ -8,7 +8,6 @@ export function useActionSheet() {
   let container = null
   let actionSheet = null
 
-
   const show = (newActions) => {
     actions.value = newActions
 
@@ -32,7 +31,9 @@ export function useActionSheet() {
         isVisible.value = newValue
       },
       cancelText: 'Cancel',
-      actions: actions.value
+      actions: actions.value,
+    }, {
+      action: ({ action, index }) => h('div', `${action.name}`)
     })
 
     render(actionSheet, container)
