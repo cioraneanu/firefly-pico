@@ -1,5 +1,6 @@
 import { ref, h, render } from 'vue'
-import { ActionSheet } from 'vant'
+// import { ActionSheet } from 'vant'
+import AppActionSheet from '~/components/ui-kit/app-action-sheet.vue'
 import 'vant/lib/action-sheet/index.css'
 
 export function useActionSheet() {
@@ -25,7 +26,7 @@ export function useActionSheet() {
   }
 
   const renderActionSheet = () => {
-    actionSheet = h(ActionSheet, {
+    actionSheet = h(AppActionSheet, {
       show: isVisible.value,
       'onUpdate:show': (newValue) => {
         isVisible.value = newValue
