@@ -1,13 +1,12 @@
 <template>
-  <van-action-sheet v-model:show="show" :actions="actions" :close-on-click-overlay="true" :close-on-click-action="true">
-    <template #description>
-      <!--      TODO: Find solution. Sadly using this component with h() render function doesnt work for app-icon because of dynamic component usage.... -->
-      <app-icon :icon="TablerIconConstants.account" :size="20" />
-      Debug
-    </template>
+  <van-action-sheet v-model:show="show" :actions="actions" :close-on-click-overlay="true" :close-on-click-action="true" title="Select an option">
+<!--    <template #description>-->
+<!--      &lt;!&ndash;      TODO: Find solution. Sadly using this component with h() render function doesnt work for app-icon because of dynamic component usage.... &ndash;&gt;-->
+<!--      <app-icon :icon="TablerIconConstants.account" :size="20" />-->
+<!--      Debug-->
+<!--    </template>-->
     <template #action="{ action, index }">
       <div class="flex-center">
-<!--        <app-icon :icon="TablerIconConstants.account" :size="20" />-->
         <div>{{ action.name }}</div>
       </div>
     </template>

@@ -3,7 +3,7 @@
     <div class="van-cell-group-title">Expenses by tags:</div>
     <div class="display-flex flex-column ml-15 mr-15">
       <table>
-        <tr v-for="bar in barsList" @click="onClick(bar)">
+        <tr v-for="bar in barsList" @click="onShowActionSheet(bar)">
           <td style="width: 1%">
             <div class="flex-center-vertical gap-1 my-1">
               <app-icon :icon="Tag.getIcon(bar.tag) ?? TablerIconConstants.tag" :size="20" />
@@ -32,6 +32,7 @@ import Transaction from '~/models/Transaction.js'
 import Tag from '~/models/Tag.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
+import { useActionSheet } from '~/composables/useActionSheet.js'
 
 const dataStore = useDataStore()
 
@@ -55,17 +56,30 @@ const barsList = computed(() => {
   return bars.sort((a, b) => b.percent - a.percent).slice(0, 15)
 })
 
-const onClick = async ({tag_id, tag}) => {
+const actionSheet = useActionSheet()
+const onShowActionSheet = ({ tag }) => {
+  actionSheet.show([
+    { name: 'Edit tag', callback: () => onGoToTag(tag) },
+    { name: 'Show transactions', callback: () => onGoToTransactions(tag) },
+  ])
+}
+
+const onGoToTag = async (tag) => {
+  if (tag) {
+    await navigateTo(`${RouteConstants.ROUTE_TAG_ID}/${tag.id}`)
+  }
+}
+
+const onGoToTransactions = async (tag) => {
   const startDate = DateUtils.dateToString(dataStore.dashboardDateStart)
   const endDate = DateUtils.dateToString(dataStore.dashboardDateEnd)
   let excludedUrl = getExcludedTransactionUrl()
-
 
   if (!tag) {
     await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_tag=true&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}${excludedUrl}`)
     return
   }
 
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${tag_id}&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}${excludedUrl}`)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${tag.id}&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}${excludedUrl}`)
 }
 </script>
