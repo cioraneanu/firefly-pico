@@ -19,7 +19,7 @@
     </div>
 
     <van-grid :column-num="2">
-      <van-grid-item v-for="account in visibleDashboardAccounts" :key="account.id" @click="onGoToTransactions(account)" icon="photo-o">
+      <van-grid-item v-for="account in visibleDashboardAccounts" :key="account.id" @click="onShowActionSheet(account)">
         <template #icon>
           <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="24" />
         </template>
@@ -62,6 +62,7 @@ import Account from '~/models/Account.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import { IconCash } from '@tabler/icons-vue'
 import { getFormattedValue } from '~/utils/MathUtils.js'
+import { useActionSheet } from '~/composables/useActionSheet.js'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
@@ -101,10 +102,23 @@ const onToggleTotalCurrency = () => {
   dataStore.dashboardCurrency = dataStore.dashboardAccountsCurrencyList[newIndex]
 }
 
+const actionSheet = useActionSheet()
+const onShowActionSheet = (account) => {
+  actionSheet.show([
+    { name: 'Edit account', callback: () => onGoToAccount(account) },
+    { name: 'Show transactions', callback: () => onGoToTransactions(account) },
+  ])
+}
+
 const onGoToTransactions = async (account) => {
-  if (!account) {
-    return
+  if (account) {
+    await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?account_id=${account.id}`)
   }
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?account_id=${account.id}`)
+}
+
+const onGoToAccount = async (account) => {
+  if (account) {
+    await navigateTo(`${RouteConstants.ROUTE_ACCOUNT_ID}/${account.id}`)
+  }
 }
 </script>

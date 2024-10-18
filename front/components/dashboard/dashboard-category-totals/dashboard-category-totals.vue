@@ -3,7 +3,7 @@
     <div class="van-cell-group-title">Expenses by categories:</div>
     <div class="display-flex flex-column ml-15 mr-15">
       <table>
-        <tr v-for="bar in barsList" @click="onClick(bar)">
+        <tr v-for="bar in barsList" @click="onShowActionSheet(bar)">
           <td style="width: 1%">
             <div class="flex-center-vertical gap-1 my-1">
               <app-icon :icon="Category.getIcon(bar.category) ?? TablerIconConstants.category" :size="20" />
@@ -32,6 +32,7 @@ import Transaction from '~/models/Transaction.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Category from '~/models/Category.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
+import { useActionSheet } from '~/composables/useActionSheet.js'
 
 const dataStore = useDataStore()
 
@@ -58,17 +59,30 @@ const getBarColor = (bar) => {
   return '#F06292'
 }
 
-const onClick = async (bar) => {
+
+const actionSheet = useActionSheet()
+const onShowActionSheet = ({ category }) => {
+  actionSheet.show([
+    { name: 'Edit category', callback: () => onGoToCategory(category) },
+    { name: 'Show transactions', callback: () => onGoToTransactions(category) },
+  ])
+}
+
+const onGoToCategory = async (category) => {
+  if (category) {
+    await navigateTo(`${RouteConstants.ROUTE_CATEGORY_ID}/${category.id}`)
+  }
+}
+const onGoToTransactions = async (category) => {
   const startDate = DateUtils.dateToString(dataStore.dashboardDateStart)
   const endDate = DateUtils.dateToString(dataStore.dashboardDateEnd)
-  let categoryId = get(bar, 'category.id')
   let excludedUrl = getExcludedTransactionUrl()
 
-  if (!categoryId) {
+  if (!category) {
     await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_category=true&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}${excludedUrl}`)
     return
   }
 
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?category_id=${categoryId}&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}${excludedUrl}`)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?category_id=${category.id}&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}${excludedUrl}`)
 }
 </script>

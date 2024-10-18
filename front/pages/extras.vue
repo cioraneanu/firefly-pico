@@ -20,6 +20,7 @@
       <app-field-link label="Exchange rates" :icon="TablerIconConstants.exchangeRates" @click="navigateTo(RouteConstants.ROUTE_EXCHANGE_RATES)" />
       <app-field-link label="Currencies" :icon="TablerIconConstants.currency" @click="onGoToCurrenciesList" />
     </van-cell-group>
+
   </div>
 </template>
 
@@ -29,6 +30,7 @@ import RouteConstants from '~/constants/RouteConstants'
 import { useToolbar } from '~/composables/useToolbar'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import { onMounted } from 'vue'
+import { useActionSheet } from '~/composables/useActionSheet.js'
 
 const onNavigateToCalendar = async () => await navigateTo(RouteConstants.ROUTE_CALENDAR)
 const onNavigateToTransactionTemplate = async () => await navigateTo(RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST)
@@ -39,6 +41,7 @@ const onGoToCurrenciesList = async () => await navigateTo(RouteConstants.ROUTE_C
 const onGoToTransactionTemplatesList = async () => await navigateTo(RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST)
 
 const onGoToBudgetsList = async () => await navigateTo(RouteConstants.ROUTE_BUDGET_LIST)
+
 
 const toolbar = useToolbar()
 toolbar.init({ title: 'Extra' })
