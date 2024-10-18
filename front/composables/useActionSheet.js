@@ -31,7 +31,6 @@ export function useActionSheet() {
       'onUpdate:show': (newValue) => {
         isVisible.value = newValue
       },
-      cancelText: 'Cancel',
       actions: actions.value,
     }, {
       action: ({ action, index }) => h('div', `${action.name}`)
