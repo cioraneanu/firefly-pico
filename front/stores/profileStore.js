@@ -13,6 +13,7 @@ import ProfileRepository from '~/repository/ProfileRepository'
 import ProfileTransformer from '~/transformers/ProfileTransformer'
 import { useAppStore } from '~/stores/appStore.js'
 import { DASHBOARD_SECTIONS_LIST } from '~/constants/DashboardConstants.js'
+import Page from '~/models/Page.js'
 
 export const useProfileStore = defineStore('profile', {
   state: () => {
@@ -21,6 +22,7 @@ export const useProfileStore = defineStore('profile', {
       loadingMessage: 'Loading...',
 
       darkTheme: useLocalStorage('darkTheme', false),
+      startingPage: useLocalStorage('startingPage', Page.types.transactionNew),
 
       defaultAccountSource: useLocalStorage('defaultAccountSource', null, { serializer: StorageSerializers.object }),
       defaultAccountDestination: useLocalStorage('defaultAccountDestination', null, { serializer: StorageSerializers.object }),

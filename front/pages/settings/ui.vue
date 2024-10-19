@@ -11,6 +11,8 @@
             <app-icon :size="23" :stroke-width="2.0" :icon="value ? TablerIconConstants.darkTheme : TablerIconConstants.whiteTheme" />
           </template>
         </app-boolean>
+
+        <page-select v-model="startingPage"></page-select>
       </van-cell-group>
 
       <van-cell-group inset>
@@ -55,6 +57,7 @@ const dataStore = useDataStore()
 
 const themeText = computed(() => (darkTheme.value ? 'Dark' : 'Light'))
 const darkTheme = ref(false)
+const startingPage = ref(null)
 
 const heroIconsList = HERO_ICONS_LIST
 const isHeroIconsDropdownVisible = ref(false)
@@ -63,6 +66,7 @@ const heroIcons = ref([])
 const syncedSettings = [
   { store: profileStore, path: 'darkTheme', ref: darkTheme },
   { store: profileStore, path: 'heroIcons', ref: heroIcons },
+  { store: profileStore, path: 'startingPage', ref: startingPage },
 ]
 
 watchSettingsStore(syncedSettings)
