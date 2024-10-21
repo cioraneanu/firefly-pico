@@ -1,13 +1,27 @@
 #!/bin/sh
 
 while true; do
-    if nc -z -w 5 $DB_HOST $DB_PORT; then
-        echo "Successfully connected to DB"
-        break
+    # Check if $DB_HOST is a Unix socket (starts with "/")
+    if echo "$DB_HOST" | grep -q "^/"; then
+        # Unix socket connection
+        if [ -S "$DB_HOST" ]; then
+            echo "Successfully connected to DB via Unix socket: $DB_HOST"
+            break
+        else
+            echo "Failed to connect to DB via Unix socket: $DB_HOST. Retrying in 10 seconds..."
+        fi
     else
-        echo "Failed to connect to DB. Retrying in 10 seconds..."
-        sleep 10
+        # TCP connection
+        if nc -z -w 5 $DB_HOST $DB_PORT; then
+            echo "Successfully connected to DB via TCP: $DB_HOST:$DB_PORT"
+            break
+        else
+            echo "Failed to connect to DB via TCP: $DB_HOST:$DB_PORT. Retrying in 10 seconds..."
+        fi
     fi
+
+    # Wait before retrying
+    sleep 10
 done
 
 php /var/www/html/artisan migrate --isolated --force
