@@ -32,6 +32,7 @@ RUN apk add --no-cache \
     php82-dom \
     php82-pdo_mysql \
     php82-pdo_pgsql \
+    php82-pdo_sqlite \
     php82-tokenizer
 RUN ln -s /usr/bin/php82 /usr/bin/php
 
