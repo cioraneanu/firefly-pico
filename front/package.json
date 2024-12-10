@@ -17,30 +17,30 @@
     "lint:prettier:fix": "prettier --write --list-different ."
   },
   "devDependencies": {
-    "@faker-js/faker": "^9.0.3",
-    "@nuxt/eslint": "^0.5.7",
+    "@faker-js/faker": "^9.3.0",
+    "@nuxt/eslint": "^0.7.2",
     "@nuxtjs/device": "^3.2.4",
     "@vant/nuxt": "^1.0.6",
-    "@vite-pwa/nuxt": "^0.10.5",
+    "@vite-pwa/nuxt": "^0.10.6",
     "eslint-config-prettier": "^9.1.0",
-    "nuxt": "3.13.0",
-    "nuxt-svgo": "^4.0.6",
-    "prettier": "^3.3.3"
+    "nuxt": "^3.13.0",
+    "nuxt-svgo": "^4.0.9",
+    "prettier": "^3.4.2"
   },
   "dependencies": {
-    "@pinia/nuxt": "^0.5.4",
-    "@tabler/icons-vue": "3.18.0",
+    "@pinia/nuxt": "^0.9.0",
+    "@tabler/icons-vue": "3.24.0",
     "@vant/touch-emulator": "^1.4.0",
-    "@vueuse/core": "^11.1.0",
+    "@vueuse/core": "^12.0.0",
     "@vueuse/gesture": "^2.0.0",
     "animejs": "^3.2.2",
-    "axios": "^1.7.7",
+    "axios": "^1.7.9",
     "date-fns": "^4.1.0",
     "fuse.js": "^7.0.0",
     "lodash": "^4.17.21",
-    "mathjs": "^13.1.1",
-    "pinia": "^2.2.2",
-    "vant": "^4.9.7",
+    "mathjs": "^14.0.0",
+    "pinia": "^2.3.0",
+    "vant": "^4.9.10",
     "vuedraggable": "^4.1.0"
   },
   "overrides": {
