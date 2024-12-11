@@ -12,7 +12,7 @@
 
     <transaction-type-tabs v-model="type" class="mx-3 mt-1 mb-1" />
 
-    <van-form class="transaction-form-group" ref="form" @submit="saveItem" @failed="onValidationError">
+    <van-form :name="formName" class="transaction-form-group" ref="form" @submit="saveItem" @failed="onValidationError">
       <van-cell-group inset class="mt-0 flex-column display-flex">
         <template #title v-if="isSplitPayment">
           <div>
@@ -28,6 +28,7 @@
           :currencyForeign="destinationCurrencyCode"
           :isForeignAmountVisible="isForeignAmountVisible"
           ref="refAmount"
+          name="amount"
           :rules="[{ required: true, message: 'Amount is required' }]"
           :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_AMOUNT)"
         />
@@ -62,6 +63,7 @@
         <app-field
           v-model="description"
           label="Description"
+          name="description"
           type="textarea"
           rows="1"
           autosize
@@ -75,7 +77,12 @@
         <tag-select v-model="tags" :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_TAG)" />
 
         <div :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DATE)">
-          <app-date-time-grid v-model="date" :rules="[{ required: true, message: 'Date is required' }]" required />
+          <app-date-time-grid
+              v-model="date"
+              name="date"
+              :rules="[{ required: true, message: 'Date is required' }]"
+              required
+          />
 
           <div class="px-3 flex-center-vertical gap-1">
             <van-button size="small" @click="onSubDay">-1 day</van-button>
@@ -160,7 +167,7 @@ const form = ref(null)
 const showTransactionVoice = ref(false)
 // const selectedTransactionTemplate = ref(null)
 
-let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError } = useForm({
+let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
   titleAdd: 'Add transaction',
   titleEdit: 'Edit transaction',

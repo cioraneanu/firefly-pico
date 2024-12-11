@@ -9,15 +9,15 @@
     <transaction-type-tabs v-model="type" class="mx-3 mt-3 mb-2" />
 
     <!--    @submit="onSave"-->
-    <van-form class="transaction-form-group" ref="form" @submit="saveItem" @failed="onValidationError">
+    <van-form ref="form" :name="formName" class="transaction-form-group" @submit="saveItem" @failed="onValidationError">
       <van-cell-group inset>
-        <app-field v-model="name" :icon="TablerIconConstants.fieldText2" label="Name" placeholder="Name" required :rules="[{ required: true, message: 'Name is required' }]" />
+        <app-field v-model="name" :icon="TablerIconConstants.fieldText2" label="Name" placeholder="Name" name="name" required :rules="[{ required: true, message: 'Name is required' }]" />
 
         <div class="van-cell-fake flex-column van-cell">
           <span>Extra names (assistant findable):</span>
           <app-repeater v-model="extra_names" :empty-item="{ value: '' }">
             <template #content="{ element, index }">
-              <app-field placeholder="Name" v-model="element.value" class="compact" required :rules="[{ required: true, message: 'Name is required' }]" />
+              <app-field placeholder="Name" v-model="element.value" class="compact" :name="`extra-name-${index}`" required :rules="[{ required: true, message: 'Name is required' }]" />
             </template>
           </app-repeater>
         </div>
@@ -86,7 +86,7 @@ const onEvent = (event, payload) => {
   }
 }
 
-let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError } = useForm({
+let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
   titleAdd: 'Add template',
   titleEdit: 'Edit template',

@@ -11,7 +11,7 @@
       <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?account_id=${itemId}`)" />
     </app-card-info>
 
-    <van-form ref="form" @submit="saveItem" @failed="onValidationError" class="">
+    <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
       <van-cell-group inset>
         <app-field
           v-model="name"
@@ -29,11 +29,11 @@
 
         <icon-select v-model="icon" :list="avatarListIcons" />
 
-        <currency-select v-model="currency" :rules="[{ required: true, message: 'Field is required' }]" required />
+        <currency-select v-model="currency" name="curerency" :rules="[{ required: true, message: 'Field is required' }]" required />
 
-        <account-type-select v-model="type" :rules="[{ required: true, message: 'Type is required' }]" required />
+        <account-type-select v-model="type" name="accountType" :rules="[{ required: true, message: 'Type is required' }]" required />
 
-        <account-role-select v-if="isRoleVisible" v-model="role" :rules="[{ required: true, message: 'Role is required' }]" required />
+        <account-role-select v-if="isRoleVisible" v-model="role" name="accountRoleSelect" :rules="[{ required: true, message: 'Role is required' }]" required />
 
         <app-boolean v-model="includeNetWorth" label="Is include in net worth" />
 
@@ -95,7 +95,7 @@ const onEvent = (event, payload) => {
   }
 }
 
-let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError } = useForm({
+let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
   titleAdd: 'Add account',
   titleEdit: 'Edit account',

@@ -10,9 +10,9 @@
       <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${itemId}`)" />
     </app-card-info>
 
-    <van-form ref="form" @submit="saveItem" @failed="onValidationError" class="">
+    <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
       <van-cell-group inset>
-        <app-field v-model="tag" name="Name" label="Name" rows="1" autosize :icon="TablerIconConstants.fieldText2" placeholder="Description" :rules="[{ required: true, message: 'Name is required' }]" required />
+        <app-field v-model="tag" name="name" label="Name" rows="1" autosize :icon="TablerIconConstants.fieldText2" placeholder="Description" :rules="[{ required: true, message: 'Name is required' }]" required />
 
         <tag-select label="Parent tag" v-model="parentTag" :isMultiSelect="false" />
 
@@ -106,7 +106,7 @@ const resetFields = () => {
   tag.value = ''
 }
 
-let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError } = useForm({
+let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
   titleAdd: 'Add tag',
   titleEdit: 'Edit tag',

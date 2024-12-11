@@ -21,6 +21,8 @@ export function useForm(props) {
   const title = computed(() => (route.params.id ? titleEdit : titleAdd))
 
   let itemId = ref(null)
+  let formName = ref(`form-${crypto.randomUUID()}`)
+
   // let itemId = computed(() => route.params.id)
 
   watch(
@@ -148,8 +150,24 @@ export function useForm(props) {
     resetFields()
   }
 
-  const onValidationError = () => {
+  const onValidationError = (errorInfo) => {
     UIUtils.showToastError('Form has invalid values. Check the red fields :)')
+    scrollToError(errorInfo)
+  }
+
+  const scrollToError = (errorInfo) => {
+    let errorFields = (errorInfo.errors ?? []).map((item) => item.name).filter((item) => item)
+    const formElement = document.querySelector(`.van-form[name="${formName.value}"]`)
+    if (!formElement) {
+      return
+    }
+
+    let topField = errorFields
+    .map((item) => formElement.querySelector(`[name="${item}"]`))
+    .filter((item) => item)
+    .reduce((result, item) => (item.offsetTop > (result.offsetTop ?? 0) ? item : result))
+
+    topField?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
 
   onMounted(async () => {
@@ -175,5 +193,6 @@ export function useForm(props) {
     saveItem,
     onDelete,
     onValidationError,
+    formName,
   }
 }
