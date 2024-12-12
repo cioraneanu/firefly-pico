@@ -12,6 +12,10 @@
           <!--          <div class="separator"></div>-->
 
           <div class="second_column flex-1">
+            <div v-if="isSplitPayment && props.isDetailedMode" class="mt-1 display-flex">
+              <transaction-split-badge />
+            </div>
+
             <div class="flex-center-vertical gap-2">
               <transaction-type-dot :transactionType="transactionType" class="ml-5" />
               <div v-if="description" class="list-item-title">{{ description }}</div>
@@ -24,9 +28,11 @@
               </div>
             </div>
 
-            <div v-if="category && props.isDetailedMode" class="list-item-subtitle">
-              <app-icon :icon="Category.getIcon(category) ?? TablerIconConstants.category" :size="20" />
-              {{ Category.getDisplayName(category) }}
+            <div v-if="categories && props.isDetailedMode" class="list-item-subtitle gap-2">
+              <div v-for="category in categories">
+                <app-icon :icon="Category.getIcon(category) ?? TablerIconConstants.category" :size="20" />
+                {{ Category.getDisplayName(category) }}
+              </div>
             </div>
 
             <div v-if="notes && props.isDetailedMode" class="list-item-subtitle">
@@ -40,33 +46,16 @@
                 <div class="list-item-subtitle ml-5">{{ Tag.getDisplayNameEllipsized(tag, 10) }}</div>
               </div>
             </div>
-
-            <div v-if="isSplitPayment && props.isDetailedMode">
-              <van-tag class="" type="warning"> Split payment</van-tag>
-            </div>
           </div>
-
-          <!--          <div class="separator"></div>-->
 
           <div class="third_column">
             <div class="font-weight-700 text-size-16">{{ transactionAmount }} {{ transactionCurrency }}</div>
 
             <transaction-list-item-hero-icon v-if="props.isDetailedMode" :value="props.value" />
 
-            <!--            <div-->
-            <!--                v-if="heroIcon.length > 0 && props.isDetailedMode"-->
-            <!--                class="hero-icons-section gap-1 flex-center-vertical">-->
-            <!--              <app-icon-->
-            <!--                  v-for="(icon, index) in heroIcon"-->
-            <!--                  :icon="icon"-->
-            <!--                  :size="30"/>-->
-            <!--            </div>-->
-
             <div class="flex-center-vertical text-muted text-size-12">
               {{ dateFormatted }}
             </div>
-
-            <!--            <div v-if="props.isDetailedMode" class="day-of-week" style="margin-top: -2px">{{ dateWeekdayName }}</div>-->
           </div>
         </div>
       </template>
@@ -89,6 +78,8 @@ import TablerIconConstants from '~/constants/TablerIconConstants'
 import Tag from '../../models/Tag.js'
 import Account from '~/models/Account.js'
 import TransactionListItemHeroIcon from '~/components/list-items/transaction-list-item-hero-icon.vue'
+import { uniqBy } from 'lodash/array.js'
+import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
 
 const props = defineProps({
   value: Object,
@@ -118,15 +109,22 @@ const displayedAccounts = computed(() => {
 })
 
 const description = computed(() => _.get(firstTransaction.value, 'description', ' - '))
-const category = computed(() => _.get(firstTransaction.value, 'category'))
+// const category = computed(() => _.get(firstTransaction.value, 'category'))
+const categories = computed(() => {
+  return transactions.value
+    .map((item) => item.category)
+    .flat()
+    .filter(Boolean)
+    .uniqBy('id')
+})
 const notes = computed(() => _.get(firstTransaction.value, 'notes', ' - '))
-// const tags = computed(() => {
-//   let list = firstTransaction.value.tags ?? []
-//   return list.map(item => `${get(item, 'attributes.tag')}`)
-// })
 
 const tags = computed(() => {
-  return firstTransaction.value.tags ?? []
+  return transactions.value
+    .map((item) => item.tags)
+    .flat()
+    .filter(Boolean)
+    .uniqBy('id')
 })
 
 const isTodo = computed(() => tags.value.some((tag) => get(tag, 'attributes.is_todo')))

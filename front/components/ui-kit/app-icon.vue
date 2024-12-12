@@ -19,7 +19,7 @@ const props = defineProps({
   },
 })
 
-const style = computed(() => `width: ${props.size}px`)
+const style = computed(() => `width: ${props.size}px; height: ${props.size}px`)
 
 const isColorInvertable = computed(() => {
   if (Icon.isTypeTabler(props.icon) || Icon.isTypeAvatar(props.icon)) {
@@ -29,4 +29,3 @@ const isColorInvertable = computed(() => {
 })
 </script>
 
-<style></style>

@@ -92,7 +92,7 @@
       </div>
     </template>
 
-    <table v-if="showQuickButtons" class="transaction-amount-table-buttons">
+    <table v-if="showQuickButtons && !disabled" class="transaction-amount-table-buttons">
       <tbody>
         <tr>
           <td v-for="quickButton in quickButtons">
@@ -146,6 +146,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  disabled: {
+    type: Boolean,
+    default: false
+  }
 })
 
 const transactionInputClass = computed(() => {

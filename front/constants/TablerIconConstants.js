@@ -65,6 +65,7 @@ export const icons = {
 
   eyeHidden: 'IconEyeX',
   eyeVisible: 'IconEye',
+  lock: 'IconLock',
 
 
   // ------ Icon Select -----

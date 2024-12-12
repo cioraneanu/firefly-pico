@@ -363,3 +363,7 @@
   border: 1px dashed #666;
 }
 
+
+.van-theme-dark .split-transaction-badge {
+  background: #B71C1C;
+}

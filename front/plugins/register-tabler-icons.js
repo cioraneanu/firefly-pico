@@ -52,7 +52,8 @@ import {
   IconPercentage30,
   IconMoneybag,
   IconBasket,
-  IconCopy
+  IconCopy,
+  IconLock
 } from '@tabler/icons-vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -109,6 +110,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconCoin', IconCoin)
   nuxtApp.vueApp.component('IconBasket', IconBasket)
   nuxtApp.vueApp.component('IconCopy', IconCopy)
+  nuxtApp.vueApp.component('IconLock', IconLock)
 
   // for (let iconName in tablerIcons) {
   //   nuxtApp.vueApp.component(iconName, tablerIcons[iconName])
