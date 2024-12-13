@@ -18,7 +18,6 @@ import { useDataStore } from '~/stores/dataStore'
 import DateUtils from '~/utils/DateUtils'
 import { nextTick } from 'vue'
 import { addDays, startOfDay } from 'date-fns'
-import { evaluate } from 'mathjs'
 
 const dataStore = useDataStore()
 

@@ -1,5 +1,4 @@
 import BaseRepository from '~/repository/BaseRepository'
-import { faker } from '@faker-js/faker'
 import axios from 'axios'
 import _ from 'lodash'
 import { useProfileStore } from '~/stores/profileStore'

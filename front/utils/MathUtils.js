@@ -1,4 +1,5 @@
-import { evaluate } from 'mathjs'
+// import { evaluate } from 'mathjs'
+import { Parser } from 'expr-eval'
 
 export const NUMBER_FORMAT = {
   eu: { name: '1234.56 -> 1.234,56', code: 'de-DE' },
@@ -34,6 +35,7 @@ export const isStringAMathExpression = (value) => {
 
   return /^[\d\s()+\-*/.^%]*$/.test(value)
 }
+const parser = new Parser()
 
 export const evalMath = (value) => {
   if (!value || value === '') {
@@ -46,8 +48,7 @@ export const evalMath = (value) => {
 
   try {
     let sanitizedValue = sanitizeMathString(value)
-    let newValue = evaluate(sanitizedValue).toString()
-    newValue = parseFloat(newValue).toFixed(2)
+    let newValue = parser.evaluate(sanitizedValue).toFixed(2)
     return {
       wasSuccessful: true,
       hasChanged: newValue !== value,

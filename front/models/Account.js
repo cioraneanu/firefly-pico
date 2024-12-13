@@ -31,6 +31,10 @@ class Account extends BaseModel {
   // ------------
 
   getFake(id) {
+
+    if (process.env.NODE_ENV === 'production') {
+      return {}
+    }
     return {
       type: 'accounts',
       id: id,

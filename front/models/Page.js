@@ -1,4 +1,3 @@
-import { faker } from '@faker-js/faker'
 import BaseModel from '~/models/BaseModel'
 import AccountTransformer from '~/transformers/AccountTransformer'
 import AccountRepository from '~/repository/AccountRepository'

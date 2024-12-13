@@ -1,5 +1,4 @@
 import BaseRepository from '~/repository/BaseRepository'
-import { faker } from '@faker-js/faker'
 import BaseModel from '~/models/BaseModel'
 import _, { get } from 'lodash'
 import CurrencyTransformer from '~/transformers/CurrencyTransformer'
