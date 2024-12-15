@@ -5,6 +5,13 @@ import pkg from './package.json'
 const appName = 'Firefly Pico'
 const appDescription = 'Firefly III companion app.'
 export default defineNuxtConfig({
+
+  nitro: {
+    compressPublicAssets: {
+      gzip: true,
+      brotli: true
+    }
+  },
   runtimeConfig: {
     public: {
       version: pkg.version,

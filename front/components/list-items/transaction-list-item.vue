@@ -108,7 +108,7 @@ const displayedAccounts = computed(() => {
   return [sourceAccount.value, destinationAccount.value]
 })
 
-const description = computed(() => _.get(firstTransaction.value, 'description', ' - '))
+const description = computed(() => get(props.value, 'attributes.group_title') ?? get(firstTransaction.value, 'description') ?? ' - ')
 // const category = computed(() => _.get(firstTransaction.value, 'category'))
 const categories = computed(() => {
   return transactions.value
