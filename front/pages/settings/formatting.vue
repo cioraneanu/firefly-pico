@@ -106,7 +106,7 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-  UIUtils.showToastSuccess('Formatting')
+  UIUtils.showToastSuccess('Settings saved')
 }
 
 const toolbar = useToolbar()

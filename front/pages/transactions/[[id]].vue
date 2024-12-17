@@ -294,12 +294,15 @@ const resetFormFields = () => {
   description.value = ''
 }
 
-const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemplate: transactionTemplate, amount: newAmount, description: newDescription }) => {
+const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemplate: transactionTemplate, amount: newAmount, description: newDescription, isTodo: newIsTodo }) => {
   resetFormFields()
 
   if (newTag) {
     tags.value = Tag.getTagWithParents(newTag)
-    // tags.value = [newTag]
+  }
+
+  if (newIsTodo && dataStore.tagTodo) {
+    tags.value = [...tags.value, dataStore.tagTodo]
   }
 
   if (newCategory) {
