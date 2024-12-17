@@ -53,7 +53,8 @@ import {
   IconMoneybag,
   IconBasket,
   IconCopy,
-  IconLock
+  IconLock,
+  IconMessageChatbot
 } from '@tabler/icons-vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -111,6 +112,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconBasket', IconBasket)
   nuxtApp.vueApp.component('IconCopy', IconCopy)
   nuxtApp.vueApp.component('IconLock', IconLock)
+  nuxtApp.vueApp.component('IconMessageChatbot', IconMessageChatbot)
 
   // for (let iconName in tablerIcons) {
   //   nuxtApp.vueApp.component(iconName, tablerIcons[iconName])

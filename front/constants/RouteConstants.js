@@ -10,6 +10,7 @@ export default {
   ROUTE_SETTINGS: '/settings',
   ROUTE_SETTINGS_SETUP: '/settings/setup',
   ROUTE_SETTINGS_UI: '/settings/ui',
+  ROUTE_SETTINGS_ASSISTANT: '/settings/assistant',
   ROUTE_SETTINGS_FORMATTING: '/settings/formatting',
   ROUTE_SETTINGS_DASHBOARD: '/settings/dashboard',
   ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER: '/settings/dashboard/cards',

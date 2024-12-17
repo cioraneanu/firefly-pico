@@ -24,6 +24,8 @@ export const useProfileStore = defineStore('profile', {
       darkTheme: useLocalStorage('darkTheme', false),
       startingPage: useLocalStorage('startingPage', Page.types.transactionNew),
 
+      assistantTodoTagMatcher: useLocalStorage('assistantTodoTagMatcher', '!!'),
+
       defaultAccountSource: useLocalStorage('defaultAccountSource', null, { serializer: StorageSerializers.object }),
       defaultAccountDestination: useLocalStorage('defaultAccountDestination', null, { serializer: StorageSerializers.object }),
       defaultCategory: useLocalStorage('defaultCategory', null, { serializer: StorageSerializers.object }),

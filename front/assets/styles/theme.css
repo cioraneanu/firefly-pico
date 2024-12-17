@@ -725,7 +725,7 @@ body {
 
 .assistant-tag {
     padding: 10px;
-    box-shadow: 0 4px 15px 0 rgba(45, 54, 65, 0.75);
+    box-shadow: 0 2px 6px 0px rgba(45, 54, 65, 0.45);
     display: flex;
     align-items: center;
     gap: 5px;

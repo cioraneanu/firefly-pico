@@ -42,7 +42,6 @@
 
           <template v-if="foundTag">
             <van-tag round class="assistant-tag" size="medium" type="primary">
-              <!--              <app-icon :icon="TablerIconConstants.tag" color="#fff" class="" :size="15"/>-->
               <span>Tag</span>
               <span>|</span>
               {{ Tag.getDisplayNameEllipsized(foundTag) }}
@@ -51,7 +50,6 @@
 
           <template v-if="foundCategory">
             <van-tag round class="assistant-tag" size="medium" type="primary">
-              <!--              <app-icon :icon="TablerIconConstants.category" color="#fff" class="mr-5" :size="15"/>-->
               <span>Category:</span>
               <span>|</span>
               {{ Category.getDisplayName(foundCategory) }}
@@ -74,7 +72,12 @@
             </van-tag>
           </template>
 
-          <!--          <div class="flex-1" />-->
+          <template v-if="isTodo">
+            <div class="assistant-tag tag-todo">
+              <span>Todo</span>
+            </div>
+          </template>
+
         </div>
       </template>
     </div>
@@ -112,6 +115,7 @@ const foundTag = ref(null)
 const foundTemplate = ref(null)
 const foundAmount = ref(null)
 const foundDescription = ref(null)
+const isTodo = ref(false)
 
 const hasAmount = computed(() => {
   return foundAmount.value && foundAmount.value > 0
@@ -179,11 +183,15 @@ const processAssistantText = () => {
 
   text = RomanianLanguageUtils.fixBadWordNumbers(text)
   text = text.replace(',', '.')
-  // let words = text.split(' ')
+
+  isTodo.value = profileStore.assistantTodoTagMatcher && text.endsWith(profileStore.assistantTodoTagMatcher)
+  text = isTodo.value ? text.slice(0, text.length - profileStore.assistantTodoTagMatcher.length) : text
 
   // 3 groups: <template> <amount> <description>
   const regex = /^(\D+)?(?:\s*(\d[\.\d\s\+\-\*\/]*))?(?:\s+(.*))?$/
   const match = text.match(regex)
+
+  console.log('text', { text, match })
 
   let searchWords = match[1] || ''
   searchWords = LanguageUtils.removeAccents(searchWords).trim()
@@ -191,7 +199,6 @@ const processAssistantText = () => {
   let numerical = match[2]
   let { wasSuccessful, value } = evalMath(numerical)
   foundAmount.value = numerical && wasSuccessful ? value : null
-
 
   foundDescription.value = match[3] || ''
 
@@ -265,13 +272,14 @@ const onShow = () => {
   show.value = true
 }
 
-watch([foundTemplate, foundTag, foundCategory, foundAmount, foundDescription], ([newTemplate, newTag, newCategory, newAmount, foundDescription]) => {
+watch([foundTemplate, foundTag, foundCategory, foundAmount, foundDescription, isTodo], ([newTemplate, newTag, newCategory, newAmount, newDescription, newIsTodo]) => {
   emit('change', {
     transactionTemplate: newTemplate,
     amount: newAmount,
     tag: newTag,
     category: newCategory,
-    description: foundDescription,
+    description: newDescription,
+    isTodo: newIsTodo,
   })
 
   // If you selected a template and didn't write anything => write the text
