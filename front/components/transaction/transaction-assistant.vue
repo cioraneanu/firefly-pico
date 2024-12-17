@@ -186,7 +186,7 @@ const processAssistantText = () => {
   const match = text.match(regex)
 
   let searchWords = match[1] || ''
-  searchWords = LanguageUtils.removeAccents(searchWords)
+  searchWords = LanguageUtils.removeAccents(searchWords).trim()
 
   let numerical = match[2]
   let { wasSuccessful, value } = evalMath(numerical)
@@ -263,13 +263,6 @@ const onClear = () => {
 
 const onShow = () => {
   show.value = true
-  // let a1 = 'dsadsa22'
-  // let a2 = '232'
-  // let a3 = '232+22*3'
-  //
-  // let r1 = isStringAMathExpression(a1)
-  // let r2 = isStringAMathExpression(a2)
-  // let r3 = isStringAMathExpression(a3)
 }
 
 watch([foundTemplate, foundTag, foundCategory, foundAmount, foundDescription], ([newTemplate, newTag, newCategory, newAmount, foundDescription]) => {
