@@ -62,6 +62,7 @@ export const icons = {
   fieldText1: 'IconBlockquote',
   fieldText2: 'IconWriting',
 
+
   article: 'IconArticle',
   key: 'IconKey',
 

@@ -6,7 +6,7 @@
       <app-field-link label="Setup" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_SETUP)" />
       <app-field-link label="User interface" :icon="TablerIconConstants.settingsUI" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_UI)" />
       <app-field-link label="Assistant" :icon="TablerIconConstants.assistant" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_ASSISTANT)" />
-      <app-field-link label="Formatting" :icon="TablerIconConstants.settingsUserPreferences" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_FORMATTING)" />
+      <app-field-link label="Formatting" :icon="TablerIconConstants.fieldText1" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_FORMATTING)" />
       <app-field-link label="Dashboard" :icon="TablerIconConstants.dashboard" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_DASHBOARD)" />
       <app-field-link label="Transactions" :icon="TablerIconConstants.transaction" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION)" />
       <app-field-link label="About" :icon="TablerIconConstants.settingsAbout" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_ABOUT)" />

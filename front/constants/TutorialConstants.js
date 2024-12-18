@@ -3,11 +3,25 @@ export const TUTORIAL_CONSTANTS = {
     title: 'Transaction assistant',
     body: `
       <p>Easily create transactions by typing text here (or using your phone's dictation).</p>
-      <p>Expected format: "[Name of tag / category / template] [amount] [description]"</p>
-      <p>This searches your tags, categories and transaction-templates. It supports entering just part of the name and even getting some of the letters wrong.</p>
-      <p>The "amount" part supports mathematical expressions(<code>Ex. 100/4+24*7</code>). Numbers separated by a space get automatically added up.</p>
-      <div>Examples</div>
-      <p><code>"template 23" <br> "templ 12 22 33" <br> "tmplat 12+2*3"<br> "tmplat 12+2*3 custom description"</code></p>
+      <p>Expected format:<br> <b>[search]&nbsp; [amount?]&nbsp; [description?]&nbsp; [todo?]</b></p>
+      <p>1. The <b>search</b> looks in the name of your tags, categories and transaction-templates. It supports entering just part of the name and even getting some of the letters wrong.<br><code> elct => electricity</code></p>
+      <p>2. The <b>amount</b> supports mathematical expressions. Numbers separated by a space get automatically added up.</p>
+      <p>3. The <b>description</b> is optional. Use this to overwrite the default tag name.</p>
+      <p>4. The <b>todo</b> makes it easy to add the user defined "todo-tag" by appending a custom string(default "!!"). This can be changed in "Settings"</p>
+      
+      <p><b>Examples</b><br>
+      "electricity" = tag<br>
+      "swimming" = template <br><br>
+      
+      <code>
+      electricity 23<br> 
+      elc 12*2+33<br> 
+      elc 12+2*3 custom description<br> 
+      elc 25 !!<br>
+      swim<br> 
+    
+      </code>
+      </p>
     `,
   },
 

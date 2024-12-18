@@ -2,28 +2,22 @@
 
 Easily turn words into a transaction. You can even use phone's dictation for a hands free experience :loudspeaker:
 
-Expected format: ```[Tag / category / template] [amount?] [description?]"```
+### Format
+`[Tag / category / template] [amount?] [description?] [todo?]`
 
-
- - All _words_ until the first numerical value is the "**search phrase**". This phrase is searched in your list  of Tags, Categories and Templates. It supports entering just part of the name and even getting some of the letters wrong (fuzzy search).
-If multiple matches are found the priority is `Templates > Tags > Categories`.
-
-
-- The "**amount**" part can be a single or multiple numbers. Multiple numbers separated by a space get automatically added up
-`Ex. electr 20 10 1` => `electricity 31`
-This field supports decimal values and mathematical expressions (just make sure to not use spaces): `Ex. 100/4+24.5*6`.
-<br> This field is optional. If you have a Template, that has the amount set, you can omit this and only write the 
-template name. Specifying it overwrite the Template amount.
-
-
-- The "description" is the phrase found after the numerical part. It is also optional and will also overwrite any
-Template description if one is provided. 
-
-<h3>Summary</h3>
+1. The <b>search</b> looks in the name of your tags, categories and transaction-templates. It supports entering just part of the name and even getting some of the letters wrong.<br><code> elct => electricity</code>
+2. The <b>amount</b> supports mathematical expressions. Numbers separated by a space get automatically added up.</p>
+3. The <b>description</b> is optional. Using this will overwrite the default value (tag name / template description).</p>
+4. The <b>todo</b> makes it easy to add your custom "todo-tag" by appending a custom string (default "!!"). This can be changed in "Settings"</p>
+      
+### Examples
+"electricity" = tag<br>
+"swimming" = template <br><br>
 
 ```
-template 23
-templ 12 22 33
-tmplat 12+2*3
-tmplat 12+2*3 custom description
+electricity 23 
+elc 12*2+33 
+elc 12+2*3 custom description 
+elc 25 !!
+swim
 ```
