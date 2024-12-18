@@ -83,6 +83,10 @@ class Transaction extends BaseModel {
 
   // -----
 
+  static getTypeCode(transaction) {
+    return get(transaction, 'attributes.transactions.0.type.code')
+  }
+
   static getAmount(transaction) {
     let transactionSplits = _.get(transaction, 'attributes.transactions', [])
     return transactionSplits.reduce((result, item) => {

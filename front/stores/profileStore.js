@@ -46,6 +46,8 @@ export const useProfileStore = defineStore('profile', {
       showTagSelectAsGrid: useLocalStorage('showTagSelectAsGrid', true),
 
       numberFormat: useLocalStorage('numberFormat', NUMBER_FORMAT.eu),
+      weekStartsOn: useLocalStorage('weekStartsOn', 0),
+
       lowerCaseTransactionDescription: useLocalStorage('lowerCaseTransactionDescription', false),
       lowerCaseAccountName: useLocalStorage('lowerCaseAccountName', false),
       lowerCaseCategoryName: useLocalStorage('lowerCaseCategoryName', true),
