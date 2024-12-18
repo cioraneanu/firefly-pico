@@ -6,7 +6,7 @@
       <van-cell-group inset>
         <div class="van-cell-group-title">General:</div>
 
-        <app-field left-icon="link-o" v-model="assistantTodoTagMatcher" label="Trailing substring to auto add the todo tag" :rules="[{ required: true, message: 'This field is required' }]" required />
+        <app-field :icon="TablerIconConstants.fieldText2" v-model="assistantTodoTagMatcher" label="Substring which adds the todo tag" :rules="[{ required: true, message: 'This field is required' }]" required />
       </van-cell-group>
 
       <app-button-form-save />
