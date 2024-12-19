@@ -21,7 +21,7 @@
       </div>
 
       <div class="display-flex flex-wrap gap-1">
-        <div v-for="appliedFilter in filtersDisplayList" class="app-tag van-tag van-tag--round van-tag--medium van-tag--primary">
+        <div v-for="appliedFilter in filtersDisplayList" class="tag-filter">
           <icon-filter size="14" :stroke-width="1.9" />
           <span class="ml-5">{{ appliedFilter }}</span>
         </div>

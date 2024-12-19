@@ -1050,3 +1050,15 @@ img, svg {
     top: 56px;
     z-index: 99;
 }
+
+.tag-filter {
+    border-radius: 10px;
+    background: #333 !important;
+    padding: 4px 11px !important;
+    color: white;
+    font-size: 12px;
+    font-weight: 400;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
