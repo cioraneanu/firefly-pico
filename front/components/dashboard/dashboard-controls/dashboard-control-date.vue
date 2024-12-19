@@ -1,5 +1,5 @@
 <template>
-  <van-cell-group inset class="dashboard-control-date">
+  <van-cell-group inset class="dashboard-control-date" :style="style">
     <div class="flex-center-vertical gap-2">
       <app-icon :icon="TablerIconConstants.leftArrow" @click="onPreviousMonth" :size="24" class="m-10" />
       <div class="flex-1 flex-center text-size-14 font-weight-600">{{ rangeTitle }}</div>
@@ -11,6 +11,7 @@
 <script setup>
 import { addMonths } from 'date-fns'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import { useWindowScroll } from '@vueuse/core'
 
 const dataStore = useDataStore()
 
@@ -25,6 +26,11 @@ const onNextMonth = () => {
 const onPreviousMonth = () => {
   dataStore.dashboard.month = addMonths(dataStore.dashboard.month, -1)
 }
+
+const { y } = useWindowScroll()
+const style = computed(() => {
+  return y.value > 20 ? `box-shadow: rgba(60, 64, 67, 0.1) 0px 1px 2px 0px, rgba(60, 64, 67, 0.05) 0px 1px 3px 1px;` : ``
+})
 
 watch(
   () => dataStore.dashboard.month,

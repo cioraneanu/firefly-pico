@@ -1,7 +1,7 @@
 <template>
   <td :class="tdClass" :style="dayStyle" :data-date="formattedDate">
     <div class="day-frame">
-      <template v-if="dayOfMonth">
+      <template v-if="isVisible">
         <div class="day-number text-unselectable">{{ dayOfMonth }}</div>
         <div v-if="amountIncome" class="text-success text-size-10">{{ amountIncome }}</div>
         <div v-if="amountExpense" class="text-danger text-size-10">{{ amountExpense }}</div>
@@ -20,23 +20,20 @@ import { getFormattedValue } from '~/utils/MathUtils.js'
 
 const props = defineProps({
   day: {},
-  month: {},
+  isVisible: {
+    default: true,
+  },
 })
 const dataStore = useDataStore()
 
-const isEnabled = computed(() => isSameMonth(props.day, props.month))
-const formattedDate = computed(() => (isEnabled ? format(props.day, 'yyyy-MM-dd') : null))
-const dayOfMonth = computed(() => (isEnabled.value ? getDate(props.day) : null))
+const formattedDate = computed(() => (props.isVisible ? format(props.day, 'yyyy-MM-dd') : null))
+const dayOfMonth = computed(() => (props.isVisible ? getDate(props.day) : null))
 
 const tdClass = computed(() => {
   return {
     day: true,
     'day-weekend': isWeekend(props.day),
     'day-today': isToday(props.day),
-    'day-disabled': isSameMonth(props.day, props.month),
-
-    'day-past': isBefore(props.day, props.month),
-    'day-future': isAfter(props.day, props.month),
   }
 })
 
@@ -59,7 +56,7 @@ const dayStyle = computed(() => {
   // In case we ever need to have cells with different heights
   let dayHeight = 50
   return {
-    'height': `${dayHeight}px`,
+    height: `${dayHeight}px`,
   }
 })
 </script>
