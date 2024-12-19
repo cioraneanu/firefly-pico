@@ -1,5 +1,5 @@
 <template>
-  <van-cell-group inset style="overflow: auto">
+  <van-cell-group inset >
     <dashboard-calendar-month />
   </van-cell-group>
 </template>

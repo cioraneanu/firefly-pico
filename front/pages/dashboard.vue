@@ -4,7 +4,10 @@
 
     <van-pull-refresh v-model="isLoadingAccounts" @refresh="onRefresh">
       <div class="flex-column display-flex">
+        <dashboard-control-date />
+
         <dashboard-calendar />
+
         <dashboard-accounts :style="getStyleForCard(DASHBOARD_SECTIONS.accounts)" />
 
         <dashboard-week-bars :style="getStyleForCard(DASHBOARD_SECTIONS.expensesLastWeek)" />

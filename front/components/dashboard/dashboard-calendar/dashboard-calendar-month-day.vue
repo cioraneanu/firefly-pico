@@ -5,6 +5,7 @@
         <div class="day-number text-unselectable">{{ dayOfMonth }}</div>
         <div v-if="amountIncome" class="text-success text-size-10">{{ amountIncome }}</div>
         <div v-if="amountExpense" class="text-danger text-size-10">{{ amountExpense }}</div>
+        <div v-if="amountTransfer" class="text-primary text-size-10">{{ amountTransfer }}</div>
       </template>
     </div>
   </td>
@@ -15,6 +16,7 @@ import { format, getDate, isAfter, isBefore, isMonday, isSameDay, isSameMonth, i
 import { computed } from 'vue'
 import Transaction from '~/models/Transaction.js'
 import { get } from 'lodash'
+import { getFormattedValue } from '~/utils/MathUtils.js'
 
 const props = defineProps({
   day: {},
@@ -39,19 +41,25 @@ const tdClass = computed(() => {
 })
 
 const amountIncome = computed(() => {
-  return get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.income.code}`)
+  let value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.income.code}`)
+  return value ? getFormattedValue(value) : null
 })
 
 const amountExpense = computed(() => {
-  console.log('amountExpense', dataStore.dashboardCalendarTransactionsByDate)
-  return get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.expense.code}`)
+  let value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.expense.code}`)
+  return value ? getFormattedValue(value) : null
+})
+
+const amountTransfer = computed(() => {
+  let value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.transfer.code}`)
+  return value ? getFormattedValue(value) : null
 })
 
 const dayStyle = computed(() => {
   // In case we ever need to have cells with different heights
-  let dayHeight = 70
+  let dayHeight = 50
   return {
-    height: `${dayHeight}px`,
+    'height': `${dayHeight}px`,
   }
 })
 </script>

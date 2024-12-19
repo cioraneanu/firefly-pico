@@ -1017,6 +1017,8 @@ img, svg {
     display: flex;
     flex-direction: column;
     align-items: center;
+    height: 100%;
+    padding-bottom: 5px;
 }
 
 .day-today .day-number {
@@ -1031,4 +1033,21 @@ img, svg {
     display: flex;
     align-items: center;
     justify-content: center;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.funky-calendar td {
+    width: calc(100% / 7);
+}
+
+.van-pull-refresh {
+    overflow: unset !important;
+}
+
+.dashboard-control-date {
+    position: sticky;
+    top: 60px;
+    z-index: 99;
+    box-shadow: rgba(60, 64, 67, 0.1) 0px 1px 2px 0px, rgba(60, 64, 67, 0.05) 0px 1px 3px 1px;
 }
