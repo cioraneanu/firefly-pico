@@ -6,7 +6,7 @@
       <div class="flex-column display-flex">
         <dashboard-control-date />
 
-        <dashboard-calendar />
+        <dashboard-calendar :style="getStyleForCard(DASHBOARD_SECTIONS.calendar)" />
 
         <dashboard-accounts :style="getStyleForCard(DASHBOARD_SECTIONS.accounts)" />
 
