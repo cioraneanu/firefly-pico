@@ -1,5 +1,5 @@
 <template>
-  <td :class="tdClass" :style="dayStyle" :data-date="formattedDate">
+  <td :class="tdClass" :style="dayStyle" :data-date="formattedDate" @click="onClick">
     <div class="day-frame">
       <template v-if="isVisible">
         <div class="day-number text-unselectable">{{ dayOfMonth }}</div>
@@ -17,6 +17,8 @@ import { computed } from 'vue'
 import Transaction from '~/models/Transaction.js'
 import { get } from 'lodash'
 import { getFormattedValue } from '~/utils/MathUtils.js'
+import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
+import RouteConstants from '~/constants/RouteConstants.js'
 
 const props = defineProps({
   day: {},
@@ -59,4 +61,10 @@ const dayStyle = computed(() => {
     height: `${dayHeight}px`,
   }
 })
+
+const onClick = async () => {
+  let excludedUrl = getExcludedTransactionUrl()
+  let date = DateUtils.dateToString(props.day)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?date_start=${date}&date_end=${date}${excludedUrl}`)
+}
 </script>
