@@ -1,5 +1,5 @@
 <template>
-  <van-cell-group inset style="overflow: auto">
+  <van-cell-group inset >
     <div class="van-cell-group-title">Expenses this week:</div>
     <div class="display-flex">
       <div class="flex-1" />

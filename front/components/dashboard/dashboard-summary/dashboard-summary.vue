@@ -1,10 +1,10 @@
 <template>
-  <van-cell-group inset style="overflow: auto">
-    <div class="flex-center-vertical gap-2">
-      <app-icon :icon="TablerIconConstants.leftArrow" @click="onPreviousMonth" :size="24" class="m-20" />
-      <div class="flex-1 flex-center text-size-14 font-weight-600">{{ rangeTitle }}</div>
-      <app-icon :icon="TablerIconConstants.rightArrow" @click="onNextMonth" :size="24" class="m-20" />
-    </div>
+  <van-cell-group inset >
+<!--    <div class="flex-center-vertical gap-2">-->
+<!--      <app-icon :icon="TablerIconConstants.leftArrow" @click="onPreviousMonth" :size="24" class="m-20" />-->
+<!--      <div class="flex-1 flex-center text-size-14 font-weight-600">{{ rangeTitle }}</div>-->
+<!--      <app-icon :icon="TablerIconConstants.rightArrow" @click="onNextMonth" :size="24" class="m-20" />-->
+<!--    </div>-->
 
     <van-grid :column-num="3">
       <dashboard-summary-card

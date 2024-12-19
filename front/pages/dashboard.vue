@@ -4,6 +4,10 @@
 
     <van-pull-refresh v-model="isLoadingAccounts" @refresh="onRefresh">
       <div class="flex-column display-flex">
+        <dashboard-control-date />
+
+        <dashboard-calendar :style="getStyleForCard(DASHBOARD_SECTIONS.calendar)" />
+
         <dashboard-accounts :style="getStyleForCard(DASHBOARD_SECTIONS.accounts)" />
 
         <dashboard-week-bars :style="getStyleForCard(DASHBOARD_SECTIONS.expensesLastWeek)" />
@@ -20,11 +24,9 @@
 
         <dashboard-todo-transactions :style="getStyleForCard(DASHBOARD_SECTIONS.todosTransactions)" />
 
-
         <app-card-info style="order: 99">
           <app-field-link label="Configure cards" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER)" />
         </app-card-info>
-
       </div>
     </van-pull-refresh>
   </div>

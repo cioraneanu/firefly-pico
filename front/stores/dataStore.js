@@ -149,6 +149,25 @@ export const useDataStore = defineStore('data', {
       return state.dashboard.transactionsList.slice(0, 3)
     },
 
+    dashboardCalendarTransactionsByDate(state) {
+      return state.dashboard.transactionsList.reduce((result, transaction) => {
+        const date = DateUtils.dateToString(Transaction.getDate(transaction))
+        if (!(date in result)) {
+          result[date] = {
+            [Transaction.types.expense.code]: 0,
+            [Transaction.types.income.code]: 0,
+            [Transaction.types.transfer.code]: 0,
+          }
+        }
+
+        let transactionTypeCode = Transaction.getTypeCode(transaction)
+        let amount = convertTransactionAmountToCurrency(transaction, state.dashboardCurrency)
+        result[date][transactionTypeCode] += amount
+
+        return result
+      }, {})
+    },
+
     dashboardExpenseByDay(state) {
       return state.dashboard.transactionsListLastWeek.reduce((result, transaction) => {
         const date = DateUtils.dateToString(Transaction.getDate(transaction))

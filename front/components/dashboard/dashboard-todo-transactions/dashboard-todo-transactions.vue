@@ -1,5 +1,5 @@
 <template>
-  <van-cell-group inset style="overflow: auto">
+  <van-cell-group inset >
     <div class="van-cell-group-title flex-center-vertical">
       <div class="flex-1">Todo transactions:</div>
 
