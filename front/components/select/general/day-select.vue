@@ -21,12 +21,21 @@ import { format, startOfWeek, addDays } from 'date-fns'
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 
-// TODO: Convert it to just the day index
-const modelValue = defineModel()
+// Internally use { value ,name }, externally emit just the value as int
+const modelValue = defineModel({
+  set: (value) => {
+    return value.value
+  },
+  get: (value) => {
+    return list.value.find((item) => item.value === value)
+  },
+})
 
-const list = Array.from({ length: 7 }, (_, i) => {
-  const date = addDays(startOfWeek(new Date()), i)
-  return { value: i, name: format(date, 'EEEE') }
+const list = computed(() => {
+  return Array.from({ length: 7 }, (_, i) => {
+    const date = addDays(startOfWeek(new Date(), { weekStartsOn: 0 }), i)
+    return { value: i, name: format(date, 'EEEE') }
+  })
 })
 
 const showDropdown = ref(null)
