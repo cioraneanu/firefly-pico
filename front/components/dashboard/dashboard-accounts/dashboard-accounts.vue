@@ -1,5 +1,5 @@
 <template>
-  <van-cell-group inset style="overflow: auto">
+  <van-cell-group inset >
     <div class="flex-center-vertical">
       <div class="van-cell-group-title">Total balance:</div>
       <div class="flex-1" />
