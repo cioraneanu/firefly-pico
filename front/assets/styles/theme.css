@@ -1013,6 +1013,44 @@ img, svg {
     line-height: 16px;
 }
 
+.day-frame {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+    padding-bottom: 5px;
+}
+
+.day-today .day-number {
+    background: #42a5f5;
+    color: white;
+    border-radius: 50%;
+    padding: 2px 5px;
+    aspect-ratio: 1/1;
+}
+
+.day-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 13px;
+}
+
+.funky-calendar td {
+    width: calc(100% / 7);
+}
+
+.van-pull-refresh {
+    overflow: unset !important;
+}
+
+.dashboard-control-date {
+    position: sticky;
+    top: 56px;
+    z-index: 99;
+}
+
 .tag-filter {
     border-radius: 10px;
     background: #333 !important;

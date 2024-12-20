@@ -7,9 +7,11 @@ export const DASHBOARD_SECTIONS = {
   expensesByTag: 'expensesByTag',
   expensesByCategory: 'expensesByCategory',
   todosTransactions: 'todoTransactions',
+  calendar: 'calendar',
 }
 
 export const DASHBOARD_SECTIONS_LIST = [
+  { code: DASHBOARD_SECTIONS.calendar, name: 'Calendar', isVisible: true },
   { code: DASHBOARD_SECTIONS.accounts, name: 'Accounts summary', isVisible: true },
   { code: DASHBOARD_SECTIONS.expensesLastWeek, name: 'Expenses this week', isVisible: true },
   { code: DASHBOARD_SECTIONS.transactionSummary, name: 'Transactions summary', isVisible: true },
