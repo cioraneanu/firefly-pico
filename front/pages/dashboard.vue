@@ -3,7 +3,7 @@
     <app-top-toolbar />
 
     <van-pull-refresh v-model="isLoadingAccounts" @refresh="onRefresh">
-      <div class="flex-column display-flex">
+      <div ref="dashboard" class="flex-column display-flex">
         <dashboard-control-date />
 
         <dashboard-calendar :style="getStyleForCard(DASHBOARD_SECTIONS.calendar)" />
@@ -43,6 +43,8 @@ import RouteConstants from '~/constants/RouteConstants.js'
 import { FORM_CONSTANTS_TRANSACTION_FIELDS } from '~/constants/FormConstants.js'
 import { DASHBOARD_SECTIONS } from '~/constants/DashboardConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import { useSwipe } from '@vueuse/core'
+import { addMonths } from 'date-fns'
 
 const toolbar = useToolbar()
 toolbar.init({ title: 'Dashboard' })
@@ -83,6 +85,29 @@ const getStyleForCard = (fieldCode) => {
 
   return `order: ${position}; ${displayStyle}`
 }
+
+const dashboard = ref(null)
+let swipeStartAt = null
+const { lengthX } = useSwipe(dashboard, {
+  disableTextSelect: true,
+
+  onSwipeStart(e) {
+    swipeStartAt = e.timeStamp
+  },
+  onSwipeEnd(e, direction) {
+    let duration = e.timeStamp - swipeStartAt
+    let velocity = Math.abs(lengthX.value) / duration
+
+    if (lengthX.value > 100 && velocity >= 0.5) {
+      dataStore.dashboard.month = addMonths(dataStore.dashboard.month, -1)
+    }
+
+    if (lengthX.value < -100 && velocity >= 0.5) {
+      dataStore.dashboard.month = addMonths(dataStore.dashboard.month, 1)
+    }
+
+  },
+})
 
 UIUtils.showLoadingWhen(isLoadingDashboard)
 </script>

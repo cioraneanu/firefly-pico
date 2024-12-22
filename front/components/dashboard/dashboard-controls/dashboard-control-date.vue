@@ -1,11 +1,16 @@
 <template>
-  <van-cell-group inset class="dashboard-control-date" :style="style">
+  <van-cell-group inset class="dashboard-control-date" :style="style" @click="onChooseMonth">
     <div class="flex-center-vertical gap-2">
-      <app-icon :icon="TablerIconConstants.leftArrow" @click="onPreviousMonth" :size="24" class="m-10" />
+      <app-icon :icon="TablerIconConstants.leftArrow" @click.stop="onPreviousMonth" :size="24" class="m-10" />
       <div class="flex-1 flex-center text-size-14 font-weight-600">{{ rangeTitle }}</div>
-      <app-icon :icon="TablerIconConstants.rightArrow" @click="onNextMonth" :size="24" class="m-10" />
+      <app-icon :icon="TablerIconConstants.rightArrow" @click.stop="onNextMonth" :size="24" class="m-10" />
     </div>
   </van-cell-group>
+
+  <app-month-year
+      v-model="dataStore.dashboard.month"
+      v-model:showDropdown="showDropdown"
+  />
 </template>
 
 <script setup>
@@ -31,6 +36,12 @@ const { y } = useWindowScroll()
 const style = computed(() => {
   return y.value > 20 ? `box-shadow: rgba(60, 64, 67, 0.1) 0px 1px 2px 0px, rgba(60, 64, 67, 0.05) 0px 1px 3px 1px;` : ``
 })
+
+const showDropdown = ref(false)
+
+const onChooseMonth = () => {
+  // showDropdown.value = true
+}
 
 watch(
   () => dataStore.dashboard.month,
