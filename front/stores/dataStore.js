@@ -9,7 +9,7 @@ import AccountTransformer from '~/transformers/AccountTransformer'
 import TransactionTemplateRepository from '~/repository/TransactionTemplateRepository'
 import CurrencyRepository from '~/repository/CurrencyRepository'
 import { useProfileStore } from '~/stores/profileStore'
-import { addMonths, differenceInHours, startOfDay, startOfMonth, subDays, subMonths, subYears } from 'date-fns'
+import { addMonths, differenceInHours, setDate, startOfDay, startOfMonth, subDays, subMonths, subYears } from 'date-fns'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
 import TagTransformer from '~/transformers/TagTransformer'
 import TransactionTemplateTransformer from '~/transformers/TransactionTemplateTransformer'
@@ -137,8 +137,7 @@ export const useDataStore = defineStore('data', {
 
     dashboardDateStart(state) {
       const profileStore = useProfileStore()
-      let dateCurrentMonth = startOfDay(state.dashboard.month).setDate(profileStore.dashboard.firstDayOfMonth)
-      return dateCurrentMonth > new Date() ? subMonths(dateCurrentMonth, 1) : dateCurrentMonth
+      return setDate(startOfDay(state.dashboard.month), profileStore.dashboard.firstDayOfMonth)
     },
 
     dashboardDateEnd(state) {
@@ -332,7 +331,12 @@ export const useDataStore = defineStore('data', {
 
       // let filters = [{ field: 'query', value: filtersBackendList.value.join(' ') }]
 
-      let filters = [{ field: 'query', value: `tag_is:"${Tag.getDisplayNameEllipsized(this.tagTodo)}"` }]
+      let filters = [
+        {
+          field: 'query',
+          value: `tag_is:"${Tag.getDisplayNameEllipsized(this.tagTodo)}"`,
+        },
+      ]
       let list = await new TransactionRepository().searchTransaction({ filters })
       list = get(list, 'data') ?? []
       this.dashboard.transactionsWithTodo = TransactionTransformer.transformFromApiList(list)
