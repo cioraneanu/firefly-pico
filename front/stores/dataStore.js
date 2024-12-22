@@ -314,7 +314,6 @@ export const useDataStore = defineStore('data', {
       // let filters = [{ field: 'query', value: filtersBackendList.value.join(' ') }]
 
       let filters = [{ field: 'query', value: `tag_is:"${Tag.getDisplayNameEllipsized(this.tagTodo)}"` }]
-
       let list = await new TransactionRepository().searchTransaction({ filters })
       list = get(list, 'data') ?? []
       this.dashboard.transactionsWithTodo = TransactionTransformer.transformFromApiList(list)

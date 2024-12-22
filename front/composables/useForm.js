@@ -21,7 +21,8 @@ export function useForm(props) {
   const title = computed(() => (route.params.id ? titleEdit : titleAdd))
 
   let itemId = ref(null)
-  let formName = ref(`form-${crypto.randomUUID()}`)
+  let formName = ref(`form-${crypto.randomUUID ? crypto.randomUUID() : Utils.getGUID()}`)
+
 
   // let itemId = computed(() => route.params.id)
 
