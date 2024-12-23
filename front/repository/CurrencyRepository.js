@@ -11,8 +11,10 @@ class CurrencyRepository extends BaseRepository {
     return await axios.put(`${this.getUrl()}/${data.code}`, data)
   }
 
-  async delete(id, data) {
-    return await axios.delete(`${this.getUrl()}/${data.code}`)
+  async delete(id) {
+    let dataStore = useDataStore()
+    let currencyCode = dataStore.currencyDictionary[id]?.attributes?.code
+    return await axios.delete(`${this.getUrl()}/${currencyCode}`)
   }
 
   async getCurrencyExchange() {
