@@ -131,7 +131,8 @@ export function useForm(props) {
   const onDelete = async () => {
     let result = await UIUtils.showDeleteConfirmation('Delete confirmation', 'Are you sure you want to delete this?')
     if (result) {
-      let response = await repository.delete(itemId.value)
+      let newItem = transformer ? transformer.transformToApi(item.value) : item.value
+      let response = await repository.delete(itemId.value, newItem)
       if (ResponseUtils.isSuccess(response)) {
         onEvent ? onEvent('onPostDelete', response) : null
         await navigateTo(routeList)

@@ -36,7 +36,15 @@ RouteUtils::makeCRUD("accounts", AccountController::class);
 RouteUtils::makeCRUD("categories", CategoryController::class);
 RouteUtils::makeCRUD("budgets", BudgetController::class);
 RouteUtils::makeCRUD("tags", TagController::class);
-RouteUtils::makeCRUD("currencies", CurrencyController::class);
+
+// RouteUtils::makeCRUD("currencies", CurrencyController::class);
+
+Route::get("currencies/{id}", [CurrencyController::class, 'getOne'])->where('id', '[0-9]+');
+Route::get("currencies", [CurrencyController::class, 'getAll']);
+Route::post("currencies", [CurrencyController::class, 'create']);
+Route::put("currencies/{code}", [CurrencyController::class, 'update']);
+Route::delete("currencies/{code}", [CurrencyController::class, 'delete']);
+
 Route::get('currencies/exchange', [CurrencyController::class, 'exchangeRates']);
 
 Route::get('budget-limits', [BudgetController::class, 'getBudgetLimits']);
