@@ -219,9 +219,6 @@ onMounted(() => {
   filters.value = TransactionFilterUtils.getFiltersFromURL()
 })
 
-const getFilterValueFromDictionary = (value, dictionary) => {
-  return value.split(',').map((item) => dictionary[item])
-}
 
 animateSwipeList(list)
 </script>

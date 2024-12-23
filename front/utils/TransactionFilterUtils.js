@@ -1,8 +1,9 @@
 import { get } from 'lodash'
 import Transaction from '~/models/Transaction.js'
 
-export default class TransactionFilterUtils {
-  static getFiltersFromURL() {
+export default {
+
+  getFiltersFromURL() {
     let dataStore = useDataStore()
     const route = useRoute()
 
@@ -25,10 +26,10 @@ export default class TransactionFilterUtils {
       withoutBudget: get(route.query, 'without_budget'),
       withoutCategory: get(route.query, 'without_category'),
     }
-  }
+  },
 
 
-  static getFilterValueFromDictionary = (value, dictionary) => {
+  getFilterValueFromDictionary (value, dictionary) {
     return value.split(',').map((item) => dictionary[item])
   }
 }
