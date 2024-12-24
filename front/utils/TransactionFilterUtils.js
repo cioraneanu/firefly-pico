@@ -3,6 +3,8 @@ import Transaction from '~/models/Transaction.js'
 
 export default {
 
+
+
   getFiltersFromURL() {
     let dataStore = useDataStore()
     const route = useRoute()
@@ -28,8 +30,7 @@ export default {
     }
   },
 
-
-  getFilterValueFromDictionary (value, dictionary) {
-    return value.split(',').map((item) => dictionary[item])
-  }
+  getFilterValueFromDictionary(value, dictionary) {
+    return value ? value.split(',').map((item) => dictionary[item]) : null
+  },
 }
