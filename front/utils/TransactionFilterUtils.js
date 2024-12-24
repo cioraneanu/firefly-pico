@@ -1,8 +1,42 @@
 import { get } from 'lodash'
 import Transaction from '~/models/Transaction.js'
+import Tag from '~/models/Tag.js'
 
 export default {
 
+  filters: {
+    description: {
+      displayName: 'Description',
+      filterName: 'description_contains',
+      displayValue: (item) => item.description,
+      filterValue: (item) => item.description
+    },
+    transactionType: {
+      displayName: 'Type',
+      filterName: 'type',
+      displayValue: (item) => get(item, 'transactionType.name'),
+      filterValue: (item) => get(item, 'transactionType.fireflyCode')
+    },
+    tag: {
+      displayName: 'Tag',
+      filterName: 'tag_id',
+      displayValue: (item) => Tag.getDisplayNameEllipsized(item.tag),
+      filterValue: (item) => get(item, 'tag.id')
+    },
+    excludeTag: {
+      displayName: '- Tag',
+      filterName: '-tag_id',
+      displayValue: (item) => Tag.getDisplayNameEllipsized(item.excludedTag),
+      filterValue: (item) => get(item, 'excludedTag.id')
+    },
+    noTag: {
+      displayName: 'No tags',
+      filterName: 'has_any_tag',
+      filterValue: (item) => item.withoutTag ? false : null
+    },
+
+
+  },
 
 
   getFiltersFromURL() {
