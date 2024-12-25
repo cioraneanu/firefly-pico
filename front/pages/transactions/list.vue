@@ -98,94 +98,7 @@ const formClass = computed(() => ({
 let filters = ref({})
 
 let filtersDictionary = computed(() => {
-  let result = TransactionFilterUtils.getActiveFilters(filters.value)
-  console.log('filters', { filters: filters.value, result })
-  return result
-  // return [
-  //   {
-  //     display: `Description: ${_filter.description}`,
-  //     filter: `description_contains:"${_filter.description}"`,
-  //     active: !isStringEmpty(_filter.description),
-  //   },
-  //   {
-  //     display: `Type: ${get(_filter, 'transactionType.name')}`,
-  //     filter: `type:"${get(_filter, 'transactionType.fireflyCode')}"`,
-  //     active: !!_filter.transactionType,
-  //   },
-  //   {
-  //     display: `Tag: ${Tag.getDisplayNameEllipsized(_filter.tag)}`,
-  //     filter: `tag_is:"${Tag.getDisplayNameEllipsized(_filter.tag)}"`,
-  //     active: !!_filter.tag,
-  //   },
-  //   {
-  //     display: `- Tag: ${Tag.getDisplayNameEllipsized(_filter.excludedTag)}`,
-  //     filter: `-tag_is:"${Tag.getDisplayNameEllipsized(_filter.excludedTag)}"`,
-  //     active: !!_filter.excludedTag,
-  //   },
-  //   {
-  //     display: `No tags`,
-  //     filter: `has_any_tag:false"`,
-  //     active: !!_filter.withoutTag,
-  //   },
-  //   {
-  //     display: `Category: ${Category.getDisplayName(_filter.category)}`,
-  //     filter: `category_is:"${Category.getDisplayName(_filter.category)}"`,
-  //     active: !!_filter.category,
-  //   },
-  //   {
-  //     display: `- Category: ${Category.getDisplayName(_filter.excludedCategory)}`,
-  //     filter: `-category_is:"${Category.getDisplayName(_filter.excludedCategory)}"`,
-  //     active: !!_filter.excludedCategory,
-  //   },
-  //   {
-  //     display: `No category`,
-  //     filter: `has_any_category:false"`,
-  //     active: !!_filter.withoutCategory,
-  //   },
-  //   {
-  //     display: `Budget: ${Budget.getDisplayName(_filter.budget)}`,
-  //     filter: `budget_is:"${Budget.getDisplayName(_filter.budget)}"`,
-  //     active: !!_filter.budget,
-  //   },
-  //   {
-  //     display: `No budget`,
-  //     filter: `has_any_budget:false"`,
-  //     active: !!_filter.withoutBudget,
-  //   },
-  //   {
-  //     display: `Account: ${Account.getDisplayName(_filter.account)}`,
-  //     filter: `account_is:"${Account.getDisplayName(_filter.account)}"`,
-  //     active: !!_filter.account,
-  //   },
-  //   {
-  //     display: `- Account: ${Account.getDisplayName(_filter.excludedAccount)}`,
-  //     filter: `-account_is:"${Account.getDisplayName(_filter.excludedAccount)}"`,
-  //     active: !!_filter.excludedAccount,
-  //   },
-  //   {
-  //     display: `Amount > ${_filter.amountStart}`,
-  //     filter: `more:"${_filter.amountStart}"`,
-  //     active: !!_filter.amountStart,
-  //   },
-  //   {
-  //     display: `Amount < ${_filter.amountEnd}`,
-  //     filter: `less:"${_filter.amountEnd}"`,
-  //     active: !!_filter.amountEnd,
-  //   },
-  //   {
-  //     display: `Date > ${DateUtils.dateToUI(_filter.dateStart)}`,
-  //     filter: `date_after:"${DateUtils.dateToString(_filter.dateStart)}"`,
-  //     active: !!_filter.dateStart,
-  //   },
-  //   {
-  //     display: `Date < ${DateUtils.dateToUI(_filter.dateEnd)}`,
-  //     filter: `date_before:"${DateUtils.dateToString(_filter.dateEnd)}"`,
-  //     active: !!_filter.dateEnd,
-  //   },
-  // ].map((item) => {
-  //   item.filter = item.filter.replace(/(\w+):"([^"]+)"/g, (match, key, content) => `${key}:"${encodeURIComponent(content)}"`)
-  //   return item
-  // })
+  return TransactionFilterUtils.getActiveFilters(filters.value)
 })
 
 let filtersDisplayList = computed(() => {
@@ -211,9 +124,7 @@ const onClearFilters = () => {
 const toolbar = useToolbar()
 toolbar.init({
   title: 'Transactions list',
-  // subtitle: 'bla'
   subtitle: computed(() => `${listTotalCount.value} Items`),
-  // backRoute: RouteConstants.ROUTE_EXTRAS,
 })
 
 onMounted(() => {

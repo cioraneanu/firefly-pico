@@ -38,7 +38,7 @@
             <budget-select v-model="budget" :disabled="!!withoutBudget" class="flex-1" :is-multi-select="false" :auto-select-parents="false" />
           </div>
 
-          <account-select v-model="account" />
+          <account-select v-model="account" :isMultiSelect="true" />
 
           <div class="flex-center-vertical">
             <app-date class="flex-1" v-model="dateStart" label="Date after" />

@@ -7,12 +7,16 @@ import Account from '~/models/Account.js'
 
 export default {
   filters: {
+    id: {
+      displayName: 'Id',
+      filterName: 'id',
+      bagKey: 'id',
+      displayValue: (item) => ellipsizeText(item, 100),
+    },
     description: {
       displayName: 'Description',
       filterName: 'description_contains',
       bagKey: 'description',
-      // displayValue: (item) => item,
-      // filterValue: (item) => item,
     },
     transactionType: {
       displayName: 'Type',
@@ -23,17 +27,17 @@ export default {
     },
     tag: {
       displayName: 'Tag',
-      filterName: 'tag_id',
+      filterName: 'tag_is',
       bagKey: 'tag',
       displayValue: (item) => Tag.getDisplayNameEllipsized(item),
-      filterValue: (item) => get(item, 'id'),
+      filterValue: (item) => Tag.getDisplayName(item),
     },
     excludeTag: {
       displayName: '- Tag',
-      filterName: '-tag_id',
+      filterName: '-tag_is',
       bagKey: 'excludedTag',
       displayValue: (item) => Tag.getDisplayNameEllipsized(item),
-      filterValue: (item) => get(item, 'id'),
+      filterValue: (item) => Tag.getDisplayName(item),
     },
     noTag: {
       displayName: 'No tags',
@@ -43,17 +47,17 @@ export default {
     },
     category: {
       displayName: 'Category',
-      filterName: 'category_id',
+      filterName: 'category_is',
       bagKey: 'category',
       displayValue: (item) => Category.getDisplayName(item),
-      filterValue: (item) => get(item, 'id'),
+      filterValue: (item) => Category.getDisplayName(item),
     },
     exceptCategory: {
       displayName: ' -Category',
-      filterName: '-category_id',
+      filterName: '-category_is',
       bagKey: 'excludedCategory',
       displayValue: (item) => Category.getDisplayName(item),
-      filterValue: (item) => get(item, 'id'),
+      filterValue: (item) => Category.getDisplayName(item),
     },
     noCategory: {
       displayName: 'No category',
@@ -81,62 +85,47 @@ export default {
       displayValue: (item) => Account.getDisplayName(item),
       filterValue: (item) => item?.id,
     },
-
-    // {
-    //   display: `- Account: ${Account.getDisplayName(_filter.excludedAccount)}`,
-    //     filter: `-account_is:"${Account.getDisplayName(_filter.excludedAccount)}"`,
-    //   active: !!_filter.excludedAccount,
-    // },
-    // {
-    //   display: `Amount > ${_filter.amountStart}`,
-    //     filter: `more:"${_filter.amountStart}"`,
-    //   active: !!_filter.amountStart,
-    // },
-    // {
-    //   display: `Amount < ${_filter.amountEnd}`,
-    //     filter: `less:"${_filter.amountEnd}"`,
-    //   active: !!_filter.amountEnd,
-    // },
-    // {
-    //   display: `Date > ${DateUtils.dateToUI(_filter.dateStart)}`,
-    //     filter: `date_after:"${DateUtils.dateToString(_filter.dateStart)}"`,
-    //   active: !!_filter.dateStart,
-    // },
-    // {
-    //   display: `Date < ${DateUtils.dateToUI(_filter.dateEnd)}`,
-    //     filter: `date_before:"${DateUtils.dateToString(_filter.dateEnd)}"`,
-    //   active: !!_filter.dateEnd,
-    // },
+    exceptAccount: {
+      displayName: '- Account',
+      filterName: '-account_id',
+      bagKey: 'excludedAccount',
+      displayValue: (item) => Account.getDisplayName(item),
+      filterValue: (item) => item?.id,
+    },
+    amountMore: {
+      displayName: 'Amount >',
+      filterName: 'more',
+      bagKey: 'amountStart',
+    },
+    amountLess: {
+      displayName: 'Amount <',
+      filterName: 'less',
+      bagKey: 'amountEnd',
+    },
+    dateAfter: {
+      displayName: 'Date >',
+      filterName: 'date_after',
+      bagKey: 'dateStart',
+      displayValue: (item) => DateUtils.dateToUI(item),
+      filterValue: (item) => DateUtils.dateToString(item)
+    },
+    dateBefore: {
+      displayName: 'Date <',
+      filterName: 'date_before',
+      bagKey: 'dateEnd',
+      displayValue: (item) => DateUtils.dateToUI(item),
+      filterValue: (item) => DateUtils.dateToString(item)
+    },
   },
 
-  getActiveFilters(filterBag) {
-    return Object.values(this.filters)
-      .map((item) => {
-        let value = get(filterBag, item.bagKey)
-        if (!value) {
-          return null
-        }
-        let displayValue = item.displayValue ? (isArray(value) ? value.map((singleValue) => item.displayValue(singleValue)) : item.displayValue(value)) : value
-        let filterValue = item.filterValue ? (isArray(value) ? value.map((singleValue) => item.filterValue(singleValue)) : item.filterValue(value)) : value
 
-        return {
-          ...item,
-          displayValue,
-          filterValue,
-        }
-      })
-      .filter((item) => !!item?.filterValue)
-      .map((item) => ({
-        display: `${item.displayName}: ${item.displayValue}`,
-        filter: `${item.filterName}:${item.filterValue}`,
-      }))
-  },
 
   getFiltersFromURL() {
     let dataStore = useDataStore()
     const route = useRoute()
 
     return {
+      id: get(route.query, 'id'),
       tag: dataStore.tagDictionaryById[get(route.query, 'tag_id')],
       excludedTag: dataStore.tagDictionaryById[get(route.query, 'excluded_tag_id')],
       transactionType: Object.values(Transaction.types).find((item) => item.code === get(route.query, 'type')),
@@ -155,6 +144,30 @@ export default {
       withoutBudget: get(route.query, 'without_budget'),
       withoutCategory: get(route.query, 'without_category'),
     }
+  },
+
+
+  getActiveFilters(filterBag) {
+    return Object.values(this.filters)
+    .map((item) => {
+      let value = get(filterBag, item.bagKey)
+      if (!value) {
+        return null
+      }
+      let displayValue = item.displayValue ? (isArray(value) ? value.map((singleValue) => item.displayValue(singleValue)) : item.displayValue(value)) : value
+      let filterValue = item.filterValue ? (isArray(value) ? value.map((singleValue) => item.filterValue(singleValue)) : item.filterValue(value)) : value
+
+      return {
+        ...item,
+        displayValue,
+        filterValue,
+      }
+    })
+    .filter((item) => !!item?.filterValue)
+    .map((item) => ({
+      display: `${item.displayName}: ${item.displayValue}`,
+      filter: `${item.filterName}:${item.filterValue}`,
+    }))
   },
 
   getFilterValueFromDictionary(value, dictionary) {

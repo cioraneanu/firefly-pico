@@ -1,5 +1,5 @@
 <template>
-  <van-cell-group inset >
+  <van-cell-group inset @click="onNavigate">
     <div class="van-cell-group-title">Savings summary:</div>
 
     <van-grid :column-num="3">
@@ -13,6 +13,7 @@
 </template>
 <script setup>
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import RouteConstants from '~/constants/RouteConstants.js'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
@@ -23,4 +24,8 @@ const savingsAmountClass = computed(() => (dataStore.transactionsListSavingsAmou
 const savingsPercentFormatted = computed(() => {
   return `${Math.trunc(dataStore.transactionsListSavingsPercentage)} %`
 })
+const onNavigate = async () => {
+  let transactionIds = dataStore.transactionsListSavings.map(item => item.id).join(',')
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?id=${transactionIds}`)
+}
 </script>
