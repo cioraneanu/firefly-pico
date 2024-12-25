@@ -58,6 +58,7 @@ import { get, isEqual } from 'lodash'
 import anime from 'animejs'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import Budget from '~/models/Budget.js'
+import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
 
 const dataStore = useDataStore()
 const route = useRoute()
@@ -97,100 +98,15 @@ const formClass = computed(() => ({
 let filters = ref({})
 
 let filtersDictionary = computed(() => {
-  const _filter = filters.value
-  return [
-    {
-      display: `Description: ${_filter.description}`,
-      filter: `description_contains:"${_filter.description}"`,
-      active: !isStringEmpty(_filter.description),
-    },
-    {
-      display: `Type: ${get(_filter, 'transactionType.name')}`,
-      filter: `type:"${get(_filter, 'transactionType.fireflyCode')}"`,
-      active: !!_filter.transactionType,
-    },
-    {
-      display: `Tag: ${Tag.getDisplayNameEllipsized(_filter.tag)}`,
-      filter: `tag_is:"${Tag.getDisplayNameEllipsized(_filter.tag)}"`,
-      active: !!_filter.tag,
-    },
-    {
-      display: `- Tag: ${Tag.getDisplayNameEllipsized(_filter.excludedTag)}`,
-      filter: `-tag_is:"${Tag.getDisplayNameEllipsized(_filter.excludedTag)}"`,
-      active: !!_filter.excludedTag,
-    },
-    {
-      display: `No tags`,
-      filter: `has_any_tag:false"`,
-      active: !!_filter.withoutTag,
-    },
-    {
-      display: `Category: ${Category.getDisplayName(_filter.category)}`,
-      filter: `category_is:"${Category.getDisplayName(_filter.category)}"`,
-      active: !!_filter.category,
-    },
-    {
-      display: `- Category: ${Category.getDisplayName(_filter.excludedCategory)}`,
-      filter: `-category_is:"${Category.getDisplayName(_filter.excludedCategory)}"`,
-      active: !!_filter.excludedCategory,
-    },
-    {
-      display: `No category`,
-      filter: `has_any_category:false"`,
-      active: !!_filter.withoutCategory,
-    },
-    {
-      display: `Budget: ${Budget.getDisplayName(_filter.budget)}`,
-      filter: `budget_is:"${Budget.getDisplayName(_filter.budget)}"`,
-      active: !!_filter.budget,
-    },
-    {
-      display: `No budget`,
-      filter: `has_any_budget:false"`,
-      active: !!_filter.withoutBudget,
-    },
-    {
-      display: `Account: ${Account.getDisplayName(_filter.account)}`,
-      filter: `account_is:"${Account.getDisplayName(_filter.account)}"`,
-      active: !!_filter.account,
-    },
-    {
-      display: `- Account: ${Account.getDisplayName(_filter.excludedAccount)}`,
-      filter: `-account_is:"${Account.getDisplayName(_filter.excludedAccount)}"`,
-      active: !!_filter.excludedAccount,
-    },
-    {
-      display: `Amount > ${_filter.amountStart}`,
-      filter: `more:"${_filter.amountStart}"`,
-      active: !!_filter.amountStart,
-    },
-    {
-      display: `Amount < ${_filter.amountEnd}`,
-      filter: `less:"${_filter.amountEnd}"`,
-      active: !!_filter.amountEnd,
-    },
-    {
-      display: `Date > ${DateUtils.dateToUI(_filter.dateStart)}`,
-      filter: `date_after:"${DateUtils.dateToString(_filter.dateStart)}"`,
-      active: !!_filter.dateStart,
-    },
-    {
-      display: `Date < ${DateUtils.dateToUI(_filter.dateEnd)}`,
-      filter: `date_before:"${DateUtils.dateToString(_filter.dateEnd)}"`,
-      active: !!_filter.dateEnd,
-    },
-  ].map((item) => {
-    item.filter = item.filter.replace(/(\w+):"([^"]+)"/g, (match, key, content) => `${key}:"${encodeURIComponent(content)}"`)
-    return item
-  })
+  return TransactionFilterUtils.getActiveFilters(filters.value)
 })
 
 let filtersDisplayList = computed(() => {
-  return filtersDictionary.value.filter((item) => item.active).map((item) => item.display)
+  return filtersDictionary.value.map((item) => item.display)
 })
 
 let filtersBackendList = computed(() => {
-  return filtersDictionary.value.filter((item) => item.active).map((item) => item.filter)
+  return filtersDictionary.value.map((item) => item.filter)
 })
 
 watch(filtersBackendList, (newValue, oldValue) => {
@@ -208,31 +124,11 @@ const onClearFilters = () => {
 const toolbar = useToolbar()
 toolbar.init({
   title: 'Transactions list',
-  // subtitle: 'bla'
   subtitle: computed(() => `${listTotalCount.value} Items`),
-  // backRoute: RouteConstants.ROUTE_EXTRAS,
 })
 
 onMounted(() => {
-  let urlFilters = {
-    tag: dataStore.tagDictionaryById[get(route.query, 'tag_id')],
-    excludedTag: dataStore.tagDictionaryById[get(route.query, 'excluded_tag_id')],
-    transactionType: Object.values(Transaction.types).find((item) => item.code === get(route.query, 'type')),
-    category: dataStore.categoryDictionary[get(route.query, 'category_id')],
-    budget: dataStore.budgetDictionary[get(route.query, 'budget_id')],
-    excludedCategory: dataStore.categoryDictionary[get(route.query, 'excluded_category_id')],
-    account: dataStore.accountDictionary[get(route.query, 'account_id')],
-    excludedAccount: dataStore.accountDictionary[get(route.query, 'excluded_account_id')],
-    description: get(route.query, 'description'),
-    dateStart: DateUtils.stringToDate(get(route.query, 'date_start')),
-    dateEnd: DateUtils.stringToDate(get(route.query, 'date_end')),
-    amountStart: get(route.query, 'amount_start'),
-    amountEnd: get(route.query, 'amount_end'),
-    withoutTag: get(route.query, 'without_tag'),
-    withoutBudget: get(route.query, 'without_budget'),
-    withoutCategory: get(route.query, 'without_category'),
-  }
-  filters.value = urlFilters
+  filters.value = TransactionFilterUtils.getFiltersFromURL()
 })
 
 animateSwipeList(list)
