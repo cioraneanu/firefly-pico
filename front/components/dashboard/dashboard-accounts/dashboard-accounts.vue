@@ -2,20 +2,6 @@
   <van-cell-group inset >
     <div class="flex-center-vertical">
       <div class="van-cell-group-title">Total balance:</div>
-      <div class="flex-1" />
-
-      <van-button v-if="hasMultipleCurrencies" @click="onToggleTotalCurrency" size="small" class="mr-10">
-        <template #icon>
-          <app-icon :icon="TablerIconConstants.transaction" :size="20" />
-          {{ dataStore.dashboardCurrency }}
-        </template>
-      </van-button>
-
-      <van-button @click="onToggleShowDashboardAccountValues" size="small" class="mr-10">
-        <template #icon>
-          <app-icon :icon="profileStore.dashboard.showAccountAmounts ? TablerIconConstants.eyeHidden : TablerIconConstants.eyeVisible" :size="20" />
-        </template>
-      </van-button>
     </div>
 
     <van-grid :column-num="2">
@@ -83,9 +69,6 @@ const accountTotal = computed(() => {
   return getFormattedValue(dataStore.dashboardAccountsEstimatedTotal)
 })
 
-const onToggleShowDashboardAccountValues = async () => {
-  profileStore.dashboard.showAccountAmounts = !profileStore.dashboard.showAccountAmounts
-}
 
 const getAccountAmount = (account) => {
   return `${getFormattedValue(Account.getBalance(account))} ${Account.getCurrency(account)}`
@@ -93,14 +76,6 @@ const getAccountAmount = (account) => {
 
 const hasMultipleCurrencies = computed(() => dataStore.dashboardAccountsCurrencyList.length > 1)
 
-const onToggleTotalCurrency = () => {
-  if (dataStore.dashboardAccountsCurrencyList.length === 0) {
-    return
-  }
-  let index = dataStore.dashboardAccountsCurrencyList.indexOf(dataStore.dashboardCurrency)
-  let newIndex = (index + 1) % dataStore.dashboardAccountsCurrencyList.length
-  dataStore.dashboardCurrency = dataStore.dashboardAccountsCurrencyList[newIndex]
-}
 
 const actionSheet = useActionSheet()
 const onShowActionSheet = (account) => {

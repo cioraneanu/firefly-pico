@@ -4,7 +4,7 @@
 
     <van-pull-refresh v-model="isLoadingAccounts" @refresh="onRefresh">
       <div ref="dashboard" class="flex-column display-flex">
-        <dashboard-control-date />
+        <dashboard-control />
 
         <dashboard-calendar :style="getStyleForCard(DASHBOARD_SECTIONS.calendar)" />
 
@@ -45,6 +45,7 @@ import { DASHBOARD_SECTIONS } from '~/constants/DashboardConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { useSwipe } from '@vueuse/core'
 import { addMonths } from 'date-fns'
+import DashboardControlButtons from '~/components/dashboard/dashboard-controls/dashboard-control-buttons.vue'
 
 const toolbar = useToolbar()
 toolbar.init({ title: 'Dashboard' })
