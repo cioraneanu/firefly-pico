@@ -1,17 +1,20 @@
 <template>
-    <van-cell-group inset class="dashboard-control-date" :style="style" @click="onChooseMonth">
-      <div class="flex-center-vertical gap-2">
-        <app-icon :icon="TablerIconConstants.leftArrow" @click.stop="onPreviousMonth" :size="24" class="m-10" />
-        <div class="flex-1 flex-center flex-column my-2">
-          <div class="text-size-14 font-weight-600">{{ rangeTitle }}</div>
-          <dashboard-control-buttons />
-        </div>
+  <van-cell-group inset class="dashboard-control-date" :style="style" @click="onChooseMonth">
+    <div class="flex-center-vertical gap-2">
+      <app-icon :icon="TablerIconConstants.leftArrow" @click.stop="onPreviousMonth" :size="24" class="m-10" />
 
-        <app-icon :icon="TablerIconConstants.rightArrow" @click.stop="onNextMonth" :size="24" class="m-10" />
+      <div class="flex-1 flex-center flex-column my-2">
+        <div class="text-size-14 font-weight-600">{{ rangeTitle }}</div>
+        <transition name="fade">
+          <dashboard-control-buttons v-if="y < 20" />
+        </transition>
       </div>
-    </van-cell-group>
 
-    <app-month-year v-model="dataStore.dashboard.month" v-model:showDropdown="showDropdown" />
+      <app-icon :icon="TablerIconConstants.rightArrow" @click.stop="onNextMonth" :size="24" class="m-10" />
+    </div>
+  </van-cell-group>
+
+  <app-month-year v-model="dataStore.dashboard.month" v-model:showDropdown="showDropdown" />
 </template>
 
 <script setup>

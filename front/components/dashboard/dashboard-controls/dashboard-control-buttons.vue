@@ -1,5 +1,6 @@
 <template>
   <div class="text-size-14 flex-center-vertical gap-1">
+    <span class="text-muted text-size-12">Controls:</span>
     <div class="app-button-small" v-if="hasMultipleCurrencies" @click="onToggleTotalCurrency">
       <app-icon :icon="TablerIconConstants.transaction" :size="14" />
       {{ dataStore.dashboardCurrency }}
