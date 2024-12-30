@@ -54,7 +54,7 @@ import TransactionRepository from '~/repository/TransactionRepository'
 import Tag from '~/models/Tag.js'
 import Account from '~/models/Account.js'
 import Category from '~/models/Category.js'
-import { get, isEqual } from 'lodash'
+import { cloneDeep, get, isEqual } from 'lodash'
 import anime from 'animejs'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import Budget from '~/models/Budget.js'
@@ -129,6 +129,10 @@ toolbar.init({
 
 onMounted(() => {
   filters.value = TransactionFilterUtils.getFiltersFromURL()
+
+  if (!TransactionFilterUtils.filterHasValues(filters.value)) {
+    filters.value = TransactionFilterUtils.getPredefinedFilters()
+  }
 })
 
 animateSwipeList(list)

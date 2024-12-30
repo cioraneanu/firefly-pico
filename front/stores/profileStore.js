@@ -33,6 +33,10 @@ export const useProfileStore = defineStore('profile', {
       defaultTags: useLocalStorage('defaultTags', [], { serializer: StorageSerializers.object }),
       autoAddedTags: useLocalStorage('autoAddedTags', [], { serializer: StorageSerializers.object }),
 
+      transactionListDefaultFilterAccount: useLocalStorage('transactionListDefaultFilterAccount', null, { serializer: StorageSerializers.object }),
+      transactionListDefaultFilterDateStart: useLocalStorage('transactionListDefaultFilterDateStart', null),
+      transactionListDefaultFilterDateEnd: useLocalStorage('transactionListDefaultFilterDateEnd', null),
+
       quickValueButtons: useLocalStorage('quickValueButtons', ['-10', '-1', '+1', '+10']),
       transactionOrderedFieldsList: useLocalStorage('transactionOrderedFieldsList', FORM_CONSTANTS_TRANSACTION_FIELDS_LIST),
       dashboardOrderedCardsList: useLocalStorage('dashboardOrderedCardsList', DASHBOARD_SECTIONS_LIST),
@@ -115,6 +119,6 @@ export const useProfileStore = defineStore('profile', {
       if (profileStore.dashboardOrderedCardsList.length !== DASHBOARD_SECTIONS_LIST.length) {
         profileStore.dashboardOrderedCardsList = DASHBOARD_SECTIONS_LIST
       }
-    }
+    },
   },
 })

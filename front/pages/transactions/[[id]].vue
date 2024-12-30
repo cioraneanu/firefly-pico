@@ -43,7 +43,7 @@
           <template #label>
             <div class="flex-center-vertical gap-1">
               <div class="flex-1">Source account</div>
-              <van-button v-if="showSourceAccountSuggestion" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_VALUES)" size="mini" class="suggestion-button"
+              <van-button v-if="showSourceAccountSuggestion" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_FORM_VALUES)" size="mini" class="suggestion-button"
                 >Set your default
               </van-button>
             </div>

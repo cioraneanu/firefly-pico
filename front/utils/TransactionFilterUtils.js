@@ -4,6 +4,7 @@ import Tag from '~/models/Tag.js'
 import Category from '~/models/Category.js'
 import Budget from '~/models/Budget.js'
 import Account from '~/models/Account.js'
+import { useProfileStore } from '~/stores/profileStore.js'
 
 export default {
   filters: {
@@ -107,18 +108,16 @@ export default {
       filterName: 'date_after',
       bagKey: 'dateStart',
       displayValue: (item) => DateUtils.dateToUI(item),
-      filterValue: (item) => DateUtils.dateToString(item)
+      filterValue: (item) => DateUtils.dateToString(item),
     },
     dateBefore: {
       displayName: 'Date <',
       filterName: 'date_before',
       bagKey: 'dateEnd',
       displayValue: (item) => DateUtils.dateToUI(item),
-      filterValue: (item) => DateUtils.dateToString(item)
+      filterValue: (item) => DateUtils.dateToString(item),
     },
   },
-
-
 
   getFiltersFromURL() {
     let dataStore = useDataStore()
@@ -146,28 +145,41 @@ export default {
     }
   },
 
+  getPredefinedFilters() {
+    let profileStore = useProfileStore()
+
+    return {
+      account: profileStore.transactionListDefaultFilterAccount,
+      dateStart: profileStore.transactionListDefaultFilterDateStart,
+      dateEnd: profileStore.transactionListDefaultFilterDateEnd,
+    }
+  },
+
+  filterHasValues(filterBag) {
+    return Object.values(filterBag).some((item) => !!item)
+  },
 
   getActiveFilters(filterBag) {
     return Object.values(this.filters)
-    .map((item) => {
-      let value = get(filterBag, item.bagKey)
-      if (!value) {
-        return null
-      }
-      let displayValue = item.displayValue ? (isArray(value) ? value.map((singleValue) => item.displayValue(singleValue)) : item.displayValue(value)) : value
-      let filterValue = item.filterValue ? (isArray(value) ? value.map((singleValue) => item.filterValue(singleValue)) : item.filterValue(value)) : value
+      .map((item) => {
+        let value = get(filterBag, item.bagKey)
+        if (!value) {
+          return null
+        }
+        let displayValue = item.displayValue ? (isArray(value) ? value.map((singleValue) => item.displayValue(singleValue)) : item.displayValue(value)) : value
+        let filterValue = item.filterValue ? (isArray(value) ? value.map((singleValue) => item.filterValue(singleValue)) : item.filterValue(value)) : value
 
-      return {
-        ...item,
-        displayValue,
-        filterValue,
-      }
-    })
-    .filter((item) => !!item?.filterValue)
-    .map((item) => ({
-      display: `${item.displayName}: ${item.displayValue}`,
-      filter: `${item.filterName}:${item.filterValue}`,
-    }))
+        return {
+          ...item,
+          displayValue,
+          filterValue,
+        }
+      })
+      .filter((item) => !!item?.filterValue)
+      .map((item) => ({
+        display: `${item.displayName}: ${item.displayValue}`,
+        filter: `${item.filterName}:${item.filterValue}`,
+      }))
   },
 
   getFilterValueFromDictionary(value, dictionary) {

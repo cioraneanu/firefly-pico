@@ -5,7 +5,8 @@
     <van-form @submit="onSave" class="">
       <van-cell-group inset>
 <!--        <div class="van-cell-group-title mb-0">Config:</div>-->
-        <app-field-link label="Default form values" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_VALUES)" />
+        <app-field-link label="Default form values" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_FORM_VALUES)" />
+        <app-field-link label="Default list filters" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_LIST_FILTERS)" />
         <app-field-link label="Amount increment buttons" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_QUICK_AMOUNTS)" />
         <app-field-link label="Transaction fields order" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FIELDS_ORDER)" />
       </van-cell-group>

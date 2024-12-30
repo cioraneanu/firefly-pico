@@ -16,7 +16,8 @@ export default {
   ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER: '/settings/dashboard/cards',
   ROUTE_SETTINGS_TRANSACTION: '/settings/transactions',
   ROUTE_SETTINGS_TRANSACTION_FIELDS_ORDER: '/settings/transactions/fields',
-  ROUTE_SETTINGS_TRANSACTION_DEFAULT_VALUES: '/settings/transactions/defaults',
+  ROUTE_SETTINGS_TRANSACTION_DEFAULT_FORM_VALUES: '/settings/transactions/default-form-values',
+  ROUTE_SETTINGS_TRANSACTION_DEFAULT_LIST_FILTERS: '/settings/transactions/default-list-filters',
   ROUTE_SETTINGS_TRANSACTION_QUICK_AMOUNTS: '/settings/transactions/quick-amounts',
   ROUTE_SETTINGS_ABOUT: '/settings/about',
 
