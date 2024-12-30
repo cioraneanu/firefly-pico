@@ -63,6 +63,11 @@ export function useToolbar() {
   }
 
   const onBack = () => {
+    const router = useRouter()
+    if (router.options.history.state.back) {
+      router.back()
+      return
+    }
     if (onBackButton && onBackButton instanceof Function) {
       onBackButton()
     }

@@ -9,7 +9,7 @@
           <br>
           Ex. Show only transactions after the start of the current year.
         </div>
-        <account-select v-model="account" label="Source account" />
+        <account-select v-model="account" label="Account" />
         <div class="flex-center-vertical">
           <app-date class="flex-1" v-model="dateStart" label="Date after" />
           <app-date class="flex-1" v-model="dateEnd" label="Date before" />
