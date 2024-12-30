@@ -29,6 +29,8 @@
           :has-search="false"
         />
 
+        <day-select v-model="weekStartsOn" />
+
         <app-select
           label="First day of month"
           popupTitle="Select the first day of month"
@@ -65,6 +67,7 @@ import RouteConstants from '~/constants/RouteConstants'
 import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
+import DaySelect from '~/components/select/general/day-select.vue'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
@@ -73,13 +76,14 @@ const numberFormatList = [NUMBER_FORMAT.eu, NUMBER_FORMAT.international]
 const isDropdownNumberFormatVisible = ref(false)
 
 const dateFormat = ref(null)
+const weekStartsOn = ref(null)
 const dateFormatList = [DateUtils.FORMAT_ROMANIAN_DATE, DateUtils.FORMAT_ENGLISH_DATE]
 const isDropdownDateFormatVisible = ref(false)
+const isDropdownWeekStartsOnVisible = ref(false)
 
 const firstDayOfMonth = ref(null)
 const firstDayOfMonthList = [...Array(27).keys()].map((item) => item + 1)
 const isDropdownFirstDayVisible = ref(false)
-
 
 const numberFormat = ref(null)
 const stripAccents = ref(false)
@@ -88,10 +92,9 @@ const lowerCaseAccountName = ref(false)
 const lowerCaseCategoryName = ref(false)
 const lowerCaseTagName = ref(false)
 
-
-
 const syncedSettings = [
   { store: profileStore, path: 'dateFormat', ref: dateFormat },
+  { store: profileStore, path: 'weekStartsOn', ref: weekStartsOn },
   { store: profileStore, path: 'dashboard.firstDayOfMonth', ref: firstDayOfMonth },
   { store: profileStore, path: 'numberFormat', ref: numberFormat },
   { store: profileStore, path: 'stripAccents', ref: stripAccents },

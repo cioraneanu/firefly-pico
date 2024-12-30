@@ -8,7 +8,7 @@
 
     <div class="mb-10" />
 
-    <transaction-assistant v-if="!itemId" @change="onAssistant" />
+    <transaction-assistant v-if="!itemId" @change="onAssistant" @keyup.enter="saveItem" />
 
     <transaction-type-tabs v-model="type" class="mx-3 mt-1 mb-1" />
 

@@ -59,7 +59,7 @@ class BaseControllerFirefly extends BaseController
 
     public function getHttpClient()
     {
-        return Http::withHeaders($this->getHeaders());
+        return Http::withHeaders($this->getHeaders())->connectTimeout(10)->timeout(10);
     }
 
     // -------------------------------------

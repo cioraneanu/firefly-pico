@@ -1,5 +1,5 @@
 {
-  "version": "1.5.0",
+  "version": "1.6.0",
   "private": true,
   "scripts": {
     "start": "npm run dev -- -o",
@@ -40,7 +40,7 @@
     "fuse.js": "^7.0.0",
     "lodash": "^4.17.21",
     "pinia": "^2.3.0",
-    "vant": "^4.9.10",
+    "vant": "^4.9.15",
     "vuedraggable": "^4.1.0"
   },
   "overrides": {

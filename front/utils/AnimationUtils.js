@@ -82,3 +82,32 @@ export async function animateSaveButton() {
     duration: 700,
   })
 }
+
+
+export async function animateOnNext (element) {
+  await nextTick()
+
+  console.log('animateOnNext', { element})
+  anime({
+    targets: element,
+    duration: 100,
+    translateX: [0, 10],
+    direction: 'alternate',
+    delay: 0,
+    easing: 'easeOutSine'
+  })
+}
+
+export async function animateOnPrevious (element) {
+  await nextTick()
+
+  anime({
+    targets: element,
+    translateX: [0, -10,],
+    duration: 100,
+    direction: 'alternate',
+    delay: 0,
+    easing: 'easeOutSine'
+
+  })
+}

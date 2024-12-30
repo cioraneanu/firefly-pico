@@ -63,10 +63,10 @@ const onEvent = (event, payload) => {
   if (event === 'onPostSave') {
     let newItem = _.get(payload, 'data.data')
     newItem = CurrencyTransformer.transformFromApi(newItem)
-    dataStore.currencyList = [newItem, ...dataStore.currencyList.filter((item) => item.id !== itemId.value)]
+    dataStore.currenciesList = [newItem, ...dataStore.currenciesList.filter((item) => item.id !== itemId.value)]
   }
   if (event === 'onPostDelete') {
-    dataStore.currencyList = dataStore.currencyList.filter((item) => item.id !== itemId.value)
+    dataStore.currenciesList = dataStore.currenciesList.filter((item) => item.id !== itemId.value)
   }
 }
 
