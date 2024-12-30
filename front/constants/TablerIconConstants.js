@@ -70,6 +70,12 @@ export const icons = {
   eyeVisible: 'IconEye',
   lock: 'IconLock',
 
+  filter: 'IconFilter',
+  search: 'IconAdjustmentsAlt',
+  form: 'IconForms',
+  order: 'IconMenuOrder',
+  amountButtons: 'IconBusinessplan',
+
 
   // ------ Icon Select -----
 

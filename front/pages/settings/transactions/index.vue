@@ -4,11 +4,11 @@
 
     <van-form @submit="onSave" class="">
       <van-cell-group inset>
-<!--        <div class="van-cell-group-title mb-0">Config:</div>-->
-        <app-field-link label="Default form values" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_FORM_VALUES)" />
-        <app-field-link label="Default list filters" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_LIST_FILTERS)" />
-        <app-field-link label="Amount increment buttons" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_QUICK_AMOUNTS)" />
-        <app-field-link label="Transaction fields order" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FIELDS_ORDER)" />
+        <!--        <div class="van-cell-group-title mb-0">Config:</div>-->
+        <app-field-link :icon="TablerIconConstants.form" label="Default form values" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_FORM_VALUES)" />
+        <app-field-link :icon="TablerIconConstants.search" label="Default list filters" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_LIST_FILTERS)" />
+        <app-field-link :icon="TablerIconConstants.amountButtons" label="Amount increment buttons" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_QUICK_AMOUNTS)" />
+        <app-field-link :icon="TablerIconConstants.order" label="Transaction fields order" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FIELDS_ORDER)" />
       </van-cell-group>
 
       <van-cell-group inset>
@@ -33,6 +33,7 @@ import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import { HERO_ICONS_LIST } from '~/constants/TransactionConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 const profileStore = useProfileStore()
 
@@ -53,7 +54,6 @@ const onSave = async () => {
   await profileStore.writeProfile()
   UIUtils.showToastSuccess('User preferences saved')
 }
-
 
 const toolbar = useToolbar()
 toolbar.init({

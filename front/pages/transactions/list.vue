@@ -5,7 +5,7 @@
         <div>
           <van-button @click="onShowFilters" size="small" class="mr-10 no-border">
             <template #icon>
-              <icon-adjustments-alt size="20" :stroke-width="1.9" />
+              <app-icon :icon="TablerIconConstants.search" size="20" :stroke="1.9" />
             </template>
           </van-button>
 
@@ -22,7 +22,8 @@
 
       <div class="display-flex flex-wrap gap-1">
         <div v-for="appliedFilter in filtersDisplayList" class="tag-filter">
-          <icon-filter size="14" :stroke-width="1.9" />
+          <app-icon :icon="TablerIconConstants.filter" size="14" :stroke="1.9" />
+
           <span class="ml-5">{{ appliedFilter }}</span>
         </div>
       </div>
@@ -48,7 +49,7 @@ import { useList } from '~/composables/useList'
 import Transaction from '~/models/Transaction'
 import { useToolbar } from '~/composables/useToolbar'
 import EmptyList from '~/components/general/empty-list.vue'
-import { IconAdjustmentsAlt, IconFilter } from '@tabler/icons-vue'
+// import { IconAdjustmentsAlt, IconFilter } from '@tabler/icons-vue'
 import { ref } from 'vue'
 import TransactionRepository from '~/repository/TransactionRepository'
 import Tag from '~/models/Tag.js'
@@ -59,6 +60,7 @@ import anime from 'animejs'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import Budget from '~/models/Budget.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 const dataStore = useDataStore()
 const route = useRoute()
