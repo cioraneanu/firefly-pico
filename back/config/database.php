@@ -74,8 +74,12 @@ return [
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
-            'search_path' => 'public',
-            'sslmode' => 'prefer',
+            'search_path' => env('PGSQL_SCHEMA', 'public'),
+            'schema' => env('PGSQL_SCHEMA', 'public'),
+            'sslmode' => env('PGSQL_SSL_MODE', 'prefer'),
+            'sslcert' => env('PGSQL_SSL_CERT', ''),
+            'sslkey' => env('PGSQL_SSL_KEY', ''),
+            'sslrootcert' => env('PGSQL_SSL_ROOT_CERT'),
         ],
 
         'sqlsrv' => [
