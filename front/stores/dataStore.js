@@ -126,7 +126,8 @@ export const useDataStore = defineStore('data', {
 
     dashboardExpensesByTag(state) {
       return this.transactionsListExpense.reduce((result, transaction) => {
-        let targetTag = Transaction.getTags(transaction).find((tag) => get(tag, 'attributes.parent_id') === null)
+        let tags = Transaction.getTags(transaction)
+        let targetTag = tags.find((tag) => !get(tag, 'attributes.parent_id')) ?? head(tags)
         let tagId = get(targetTag, 'id', 0)
 
         let oldTotal = get(result, tagId, 0)
@@ -137,7 +138,8 @@ export const useDataStore = defineStore('data', {
 
     dashboardDateStart(state) {
       const profileStore = useProfileStore()
-      return setDate(startOfDay(state.dashboard.month), profileStore.dashboard.firstDayOfMonth)
+      let result = setDate(startOfDay(state.dashboard.month), profileStore.dashboard.firstDayOfMonth)
+      return result > new Date() ? subMonths(result, 1) : result
     },
 
     dashboardDateEnd(state) {
