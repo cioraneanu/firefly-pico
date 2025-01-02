@@ -87,7 +87,6 @@ export async function animateSaveButton() {
 export async function animateOnNext (element) {
   await nextTick()
 
-  console.log('animateOnNext', { element})
   anime({
     targets: element,
     duration: 100,

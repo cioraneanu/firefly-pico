@@ -9,7 +9,7 @@ import AccountTransformer from '~/transformers/AccountTransformer'
 import TransactionTemplateRepository from '~/repository/TransactionTemplateRepository'
 import CurrencyRepository from '~/repository/CurrencyRepository'
 import { useProfileStore } from '~/stores/profileStore'
-import { addMonths, differenceInHours, setDate, startOfDay, startOfMonth, subDays, subMonths, subYears } from 'date-fns'
+import { addMonths, differenceInHours, getDate, getDay, isBefore, setDate, startOfDay, startOfMonth, subDays, subMonths, subYears } from 'date-fns'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
 import TagTransformer from '~/transformers/TagTransformer'
 import TransactionTemplateTransformer from '~/transformers/TransactionTemplateTransformer'
@@ -32,8 +32,8 @@ export const useDataStore = defineStore('data', {
       isLoading: false,
 
       dashboard: {
-        // Here we hold all transactions implied in stats => Last 7 days or current month whichever is smaller
-        month: startOfMonth(new Date()),
+        // month: startOfMonth(new Date()),
+        month: null,
         transactionsList: [],
         transactionsListLastWeek: [],
         transactionsWithTodo: [],
@@ -138,12 +138,12 @@ export const useDataStore = defineStore('data', {
 
     dashboardDateStart(state) {
       const profileStore = useProfileStore()
-      let result = setDate(startOfDay(state.dashboard.month), profileStore.dashboard.firstDayOfMonth)
-      return result > new Date() ? subMonths(result, 1) : result
+      return setDate(subMonths(this.dashboardDateEnd, 1), profileStore.dashboard.firstDayOfMonth)
     },
 
     dashboardDateEnd(state) {
-      return subDays(addMonths(this.dashboardDateStart, 1), 1)
+      const profileStore = useProfileStore()
+      return subDays(setDate(state.dashboard.month, profileStore.dashboard.firstDayOfMonth), 1)
     },
 
     transactionsLatest(state) {
@@ -491,6 +491,14 @@ export const useDataStore = defineStore('data', {
 
     async fetchCurrencies() {
       this.currenciesList = await new CurrencyRepository().getAllWithMerge()
+    },
+
+    async init() {
+      let profileStore = useProfileStore()
+      let now = new Date()
+      let dashboardMonth = startOfMonth(new Date())
+      let monthToSub = getDate(now) > profileStore.dashboard.firstDayOfMonth ? 1 : 0
+      this.dashboard.month = subMonths(dashboardMonth, monthToSub)
     },
 
     // -----

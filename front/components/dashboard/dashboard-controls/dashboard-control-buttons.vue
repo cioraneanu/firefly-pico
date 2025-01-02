@@ -15,8 +15,6 @@
 <script setup>
 import { addMonths } from 'date-fns'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
-import { useWindowScroll } from '@vueuse/core'
-import { animateOnNext, animateOnPrevious } from '~/utils/AnimationUtils.js'
 
 const dataStore = useDataStore()
 const profileStore = useProfileStore()

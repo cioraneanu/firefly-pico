@@ -28,6 +28,7 @@ onMounted(async () => {
     navigateTo(`${RouteConstants.ROUTE_SETTINGS_SETUP}`)
     return
   }
+  await dataStore.init()
 
   appStore.fetchLatestAppVersion()
   await profileStore.fetchProfile()
