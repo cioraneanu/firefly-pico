@@ -9,7 +9,7 @@ import AccountTransformer from '~/transformers/AccountTransformer'
 import TransactionTemplateRepository from '~/repository/TransactionTemplateRepository'
 import CurrencyRepository from '~/repository/CurrencyRepository'
 import { useProfileStore } from '~/stores/profileStore'
-import { addMonths, differenceInHours, getDate, getDay, isBefore, setDate, startOfDay, startOfMonth, subDays, subMonths, subYears } from 'date-fns'
+import { addMonths, differenceInHours, getDate, getDay, isBefore, isSameMonth, setDate, startOfDay, startOfMonth, subDays, subMonths, subYears } from 'date-fns'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
 import TagTransformer from '~/transformers/TagTransformer'
 import TransactionTemplateTransformer from '~/transformers/TransactionTemplateTransformer'
@@ -138,12 +138,17 @@ export const useDataStore = defineStore('data', {
 
     dashboardDateStart(state) {
       const profileStore = useProfileStore()
-      return setDate(subMonths(this.dashboardDateEnd, 1), profileStore.dashboard.firstDayOfMonth)
+      if (!state.dashboard.month) {
+        return null
+      }
+      return setDate(state.dashboard.month, profileStore.dashboard.firstDayOfMonth)
     },
 
     dashboardDateEnd(state) {
-      const profileStore = useProfileStore()
-      return subDays(setDate(state.dashboard.month, profileStore.dashboard.firstDayOfMonth), 1)
+      if (!state.dashboard.month) {
+        return null
+      }
+      return subDays(addMonths(this.dashboardDateStart, 1), 1)
     },
 
     transactionsLatest(state) {
@@ -497,7 +502,7 @@ export const useDataStore = defineStore('data', {
       let profileStore = useProfileStore()
       let now = new Date()
       let dashboardMonth = startOfMonth(new Date())
-      let monthToSub = getDate(now) > profileStore.dashboard.firstDayOfMonth ? 1 : 0
+      let monthToSub = getDate(now) < profileStore.dashboard.firstDayOfMonth ? 1 : 0
       this.dashboard.month = subMonths(dashboardMonth, monthToSub)
     },
 

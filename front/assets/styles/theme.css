@@ -1025,8 +1025,8 @@ img, svg {
     background: #42a5f5;
     color: white;
     border-radius: 50%;
-    padding: 2px 5px;
-    aspect-ratio: 1/1;
+    padding: 0px 8px;
+    aspect-ratio: 1/1 !important;
 }
 
 .day-number {
