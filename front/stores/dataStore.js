@@ -9,7 +9,7 @@ import AccountTransformer from '~/transformers/AccountTransformer'
 import TransactionTemplateRepository from '~/repository/TransactionTemplateRepository'
 import CurrencyRepository from '~/repository/CurrencyRepository'
 import { useProfileStore } from '~/stores/profileStore'
-import { addMonths, differenceInHours, getDate, getDay, isBefore, isSameMonth, setDate, startOfDay, startOfMonth, subDays, subMonths, subYears } from 'date-fns'
+import { addMonths, differenceInHours, getDate, setDate, startOfDay, startOfMonth, subDays, subMonths, subYears } from 'date-fns'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
 import TagTransformer from '~/transformers/TagTransformer'
 import TransactionTemplateTransformer from '~/transformers/TransactionTemplateTransformer'
@@ -115,10 +115,15 @@ export const useDataStore = defineStore('data', {
 
     dashboardExpensesByCategory(state) {
       return this.transactionsListExpense.reduce((result, transaction) => {
-        let categoryId = Transaction.getCategoryId(transaction)
+        const splits = Transaction.getSplits(transaction)
+        for (let i = 0; i < splits.length; i++) {
+          const split = splits[i]
 
-        let oldTotal = get(result, categoryId, 0)
-        result[categoryId] = oldTotal + convertTransactionAmountToCurrency(transaction, state.dashboardCurrency)
+          const categoryId = split.category_id
+
+          const oldTotal = get(result, categoryId, 0)
+          result[categoryId] = oldTotal + convertCurrency(split.amount, split.currency_code, state.dashboardCurrency)
+        }
 
         return result
       }, {})
@@ -320,12 +325,6 @@ export const useDataStore = defineStore('data', {
 
   actions: {
     async fetchExchangeRate() {
-      let exchangeDate = get(this.exchangeRates, 'date')
-      exchangeDate = DateUtils.stringToDate(exchangeDate)
-      // if (isToday(exchangeDate)) {
-      //   return
-      // }
-
       this.isLoadingExchangeRates = true
       this.exchangeRates = await new CurrencyRepository().getCurrencyExchange()
       this.isLoadingExchangeRates = false
