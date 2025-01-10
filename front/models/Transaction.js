@@ -107,6 +107,10 @@ class Transaction extends BaseModel {
     return get(transaction, 'attributes.transactions.0.category_id', 0)
   }
 
+  static getSplits(transaction) {
+    return get(transaction, 'attributes.transactions', [])
+  }
+
   static getAmountFormatted(transaction) {
     return this.getAmount(transaction).toFixed(2)
   }
