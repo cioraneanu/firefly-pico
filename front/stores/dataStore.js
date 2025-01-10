@@ -116,11 +116,8 @@ export const useDataStore = defineStore('data', {
     dashboardExpensesByCategory(state) {
       return this.transactionsListExpense.reduce((result, transaction) => {
         const splits = Transaction.getSplits(transaction)
-        for (let i = 0; i < splits.length; i++) {
-          const split = splits[i]
-
+        for (let split of splits) {
           const categoryId = split.category_id
-
           const oldTotal = get(result, categoryId, 0)
           result[categoryId] = oldTotal + convertCurrency(split.amount, split.currency_code, state.dashboardCurrency)
         }
