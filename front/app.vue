@@ -22,6 +22,10 @@ let profileStore = useProfileStore()
 let appStore = useAppStore()
 
 const theme = computed(() => (profileStore.darkTheme ? 'dark' : 'white'))
+const pwaColor = computed(() => (profileStore.darkTheme ? '#000000' : '#ffffff'))
+useHead({
+  meta: [{ name: 'theme-color', content: pwaColor }],
+})
 
 onMounted(async () => {
   if (!appStore.authToken) {
@@ -34,7 +38,6 @@ onMounted(async () => {
   await profileStore.fetchProfile()
   await dataStore.syncEverythingIfOld()
 })
-
 
 const { isLoading } = storeToRefs(dataStore)
 UIUtils.showLoadingWhen(isLoading)
