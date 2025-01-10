@@ -22,7 +22,7 @@ let profileStore = useProfileStore()
 let appStore = useAppStore()
 
 const theme = computed(() => (profileStore.darkTheme ? 'dark' : 'white'))
-const pwaColor = computed(() => (profileStore.darkTheme ? '#000000' : '#ffffff'))
+const pwaColor = computed(() => (profileStore.darkTheme ? '#1c1c1e' : '#ffffff'))
 useHead({
   meta: [{ name: 'theme-color', content: pwaColor }],
 })
