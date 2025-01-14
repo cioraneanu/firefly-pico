@@ -16,7 +16,7 @@ export function useKeyboard() {
 
     const windowHeight = Math.max(window.innerHeight, document.documentElement.clientHeight)
     keyboardHeight.value = Math.max(windowHeight - visualViewport.height, 0)
-    isKeyboardVisible.value = keyboardHeight.value > 0
+    isKeyboardVisible.value = keyboardHeight.value > 2  // Initially was 0, bumped it a little since visualViewport.height is not integer
 
     debug.value = {
       innerH: window.innerHeight,
