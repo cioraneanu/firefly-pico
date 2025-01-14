@@ -1,5 +1,5 @@
 <template>
-  <van-cell-group inset >
+  <van-cell-group inset>
     <div class="van-cell-group-title">Expenses by categories:</div>
     <div class="display-flex flex-column ml-15 mr-15">
       <table>
@@ -7,7 +7,7 @@
           <td style="width: 1%">
             <div class="flex-center-vertical gap-1 my-1">
               <app-icon :icon="Category.getIcon(bar.category) ?? TablerIconConstants.category" :size="20" />
-              <span class="text-size-12 font-weight-400">{{ bar.label }}</span>
+              <span class="text-size-12 font-weight-400 flex-1">{{ Category.getDisplayNameEllipsized(bar.category, 25) }}</span>
             </div>
           </td>
 
@@ -58,7 +58,6 @@ const barsList = computed(() => {
 const getBarColor = (bar) => {
   return '#F06292'
 }
-
 
 const actionSheet = useActionSheet()
 const onShowActionSheet = ({ category }) => {
