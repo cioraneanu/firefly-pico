@@ -54,11 +54,16 @@ const amountTransfer = computed(() => {
   return value ? getFormattedValue(value) : null
 })
 
+const isCellEmpty = computed(() => {
+  return !amountIncome.value && !amountExpense.value && !amountTransfer.value
+})
+
 const dayStyle = computed(() => {
   // In case we ever need to have cells with different heights
-  let dayHeight = 50
-  return {
-    height: `${dayHeight}px`,
+  if (isCellEmpty.value) {
+    return {
+      height: `50px`,
+    }
   }
 })
 
