@@ -7,7 +7,7 @@
           <td style="width: 1%">
             <div class="flex-center-vertical gap-1 my-1">
               <app-icon :icon="Tag.getIcon(bar.tag) ?? TablerIconConstants.tag" :size="20" />
-              <span class="text-size-12 font-weight-400">{{ bar.label }}</span>
+              <span class="text-size-12 font-weight-400 flex-1">{{ Tag.getDisplayNameEllipsized(bar.tag, 25) }}</span>
             </div>
           </td>
 
