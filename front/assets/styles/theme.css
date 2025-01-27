@@ -1024,8 +1024,8 @@ img, svg {
 .day-today .day-number {
     background: #42a5f5;
     color: white;
-    border-radius: 50%;
-    padding: 0px 8px;
+    border-radius: 5px;
+    padding: 0px 5px;
     aspect-ratio: 1/1 !important;
 }
 
@@ -1039,6 +1039,7 @@ img, svg {
 
 .funky-calendar td {
     width: calc(100% / 7);
+    vertical-align: top;
 }
 
 .van-pull-refresh {
