@@ -178,7 +178,7 @@ export default {
       .filter((item) => !!item?.filterValue)
       .map((item) => ({
         display: `${item.displayName}: ${item.displayValue}`,
-        filter: `${item.filterName}:${item.filterValue}`,
+        filter: `${item.filterName}:"${encodeURIComponent(item.filterValue)}"`,
       }))
   },
 
