@@ -9,6 +9,8 @@
         <app-field left-icon="link-o" v-model="picoBackendURL" label="Pico backend URL" :rules="[{ required: true, message: 'This field is required' }]" required />
         <settings-token-field v-model="authToken" required />
         <app-boolean left-icon="points" label="Sync settings across devices via token" v-model="syncProfileInDB" />
+        <app-field v-model="daysBetweenFullSync" label='Days between full sync of "Extras"' :rules="[{ required: true, message: 'This field is required' }]" required />
+
       </van-cell-group>
 
       <van-cell-group inset>
@@ -48,6 +50,7 @@ const dataStore = useDataStore()
 const authToken = ref('')
 const picoBackendURL = ref('')
 const syncProfileInDB = ref(true)
+const daysBetweenFullSync = ref(4)
 
 const accountsCount = computed(() => dataStore.accountList.length)
 const categoriesCount = computed(() => dataStore.categoryList.length)
@@ -65,6 +68,7 @@ onMounted(() => {
   authToken.value = appStore.authToken
   picoBackendURL.value = appStore.picoBackendURL
   syncProfileInDB.value = appStore.syncProfileInDB
+  daysBetweenFullSync.value = appStore.daysBetweenFullSync
 })
 
 const onSave = async () => {
@@ -73,6 +77,7 @@ const onSave = async () => {
   appStore.authToken = authToken.value
   appStore.picoBackendURL = picoBackendURL.value
   appStore.syncProfileInDB = syncProfileInDB.value
+  appStore.daysBetweenFullSync = daysBetweenFullSync.value
 
   UIUtils.showToastLoading('Verifying...')
   let userResponse = await new UserRepository().getUser()

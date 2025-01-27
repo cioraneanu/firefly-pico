@@ -9,7 +9,7 @@ import AccountTransformer from '~/transformers/AccountTransformer'
 import TransactionTemplateRepository from '~/repository/TransactionTemplateRepository'
 import CurrencyRepository from '~/repository/CurrencyRepository'
 import { useProfileStore } from '~/stores/profileStore'
-import { addMonths, differenceInHours, getDate, setDate, startOfDay, startOfMonth, subDays, subMonths, subYears } from 'date-fns'
+import { addMonths, differenceInDays, differenceInHours, getDate, setDate, startOfDay, startOfMonth, subDays, subMonths, subYears } from 'date-fns'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
 import TagTransformer from '~/transformers/TagTransformer'
 import TransactionTemplateTransformer from '~/transformers/TransactionTemplateTransformer'
@@ -391,7 +391,9 @@ export const useDataStore = defineStore('data', {
       let lastSyncTime = this.lastSync ?? subYears(new Date(), 1)
       let now = new Date()
 
-      if (differenceInHours(now, lastSyncTime) < 24) {
+      const appStore = useAppStore()
+
+      if (differenceInDays(now, lastSyncTime) < appStore.daysBetweenFullSync) {
         return
       }
 

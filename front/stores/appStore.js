@@ -14,6 +14,7 @@ export const useAppStore = defineStore('app', {
       authToken: useLocalStorage('authToken', ''),
       picoBackendURL: useLocalStorage('picoBackendURL', defaultUrl),
       syncProfileInDB: useLocalStorage('syncProfileInDB', true),
+      daysBetweenFullSync: useLocalStorage('daysBetweenFullSync', 4),
 
       currentAppVersion: runtimeConfig.public.version,
       queryTimeout: runtimeConfig.public.queryTimeout,
