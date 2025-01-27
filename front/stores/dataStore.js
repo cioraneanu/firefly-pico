@@ -256,6 +256,27 @@ export const useDataStore = defineStore('data', {
 
     // -------
 
+    // TODO: Actually compute the currency exchanges
+
+    budgetLimitTotal(state) {
+      return state.budgetLimitList.reduce((result, budgetLimit) => {
+        return result + get(budgetLimit, 'attributes.amount', 0)
+      }, 0)
+    },
+
+    budgetLimitSpent(state) {
+      return Math.abs(
+        state.budgetLimitList.reduce((result, budgetLimit) => {
+          return result + get(budgetLimit, 'attributes.spent', 0)
+        }, 0),
+      )
+    },
+    budgetLimitRemaining(state) {
+      return this.budgetLimitTotal - this.budgetLimitSpent
+    },
+
+    // -------
+
     tagTodo(state) {
       return state.tagList.find((tag) => get(tag, 'attributes.is_todo'))
     },
@@ -470,12 +491,6 @@ export const useDataStore = defineStore('data', {
 
       this.isLoadingBudgets = false
     },
-
-    // async fetchBudgetLimits() {
-    //   this.isLoadingBudgetLimits = true
-    //
-    //   this.isLoadingBudgetLimits = false
-    // },
 
     async fetchTags() {
       this.isLoadingTags = true

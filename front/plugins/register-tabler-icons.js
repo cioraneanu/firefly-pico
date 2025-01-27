@@ -59,7 +59,8 @@ import {
   IconFilter,
   IconForms,
   IconMenuOrder,
-  IconBusinessplan
+  IconBusinessplan,
+  IconCalendarDollar
 } from '@tabler/icons-vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -113,7 +114,6 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconListTree', IconListTree)
   nuxtApp.vueApp.component('IconGridPattern', IconGridPattern)
   nuxtApp.vueApp.component('IconPercentage30', IconPercentage30)
-  nuxtApp.vueApp.component('IconCoin', IconCoin)
   nuxtApp.vueApp.component('IconBasket', IconBasket)
   nuxtApp.vueApp.component('IconCopy', IconCopy)
   nuxtApp.vueApp.component('IconLock', IconLock)
@@ -123,6 +123,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconForms', IconForms)
   nuxtApp.vueApp.component('IconMenuOrder', IconMenuOrder)
   nuxtApp.vueApp.component('IconBusinessplan', IconBusinessplan)
+  nuxtApp.vueApp.component('IconCalendarDollar', IconCalendarDollar)
 
   // for (let iconName in tablerIcons) {
   //   nuxtApp.vueApp.component(iconName, tablerIcons[iconName])
