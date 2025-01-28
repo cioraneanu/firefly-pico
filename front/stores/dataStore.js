@@ -37,6 +37,7 @@ export const useDataStore = defineStore('data', {
         transactionsList: [],
         transactionsListLastWeek: [],
         transactionsWithTodo: [],
+        tagsWidgetModeOnlyRootTag: useLocalStorage('tagsWidgetModeOnlyRootTag', true),
       },
 
       exchangeRates: useLocalStorage('exchangeRates', {}),
@@ -129,11 +130,13 @@ export const useDataStore = defineStore('data', {
     dashboardExpensesByTag(state) {
       return this.transactionsListExpense.reduce((result, transaction) => {
         let tags = Transaction.getTags(transaction)
-        let targetTag = tags.find((tag) => !get(tag, 'attributes.parent_id')) ?? head(tags)
-        let tagId = get(targetTag, 'id', 0)
-
-        let oldTotal = get(result, tagId, 0)
-        result[tagId] = oldTotal + convertTransactionAmountToCurrency(transaction, state.dashboardCurrency)
+        let rootTag = tags.find((tag) => !get(tag, 'attributes.parent_id')) ?? head(tags)
+        let targetTags = state.dashboard.tagsWidgetModeOnlyRootTag ? [rootTag] : tags
+        for (let targetTag of targetTags) {
+          let tagId = get(targetTag, 'id', 0)
+          let oldTotal = get(result, tagId, 0)
+          result[tagId] = oldTotal + convertTransactionAmountToCurrency(transaction, state.dashboardCurrency)
+        }
         return result
       }, {})
     },

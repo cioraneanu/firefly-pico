@@ -1,6 +1,11 @@
 <template>
-  <van-cell-group inset >
-    <div class="van-cell-group-title">Expenses by tags:</div>
+  <van-cell-group inset>
+    <div class="van-cell-group-title flex-center-vertical">
+      <div class="flex-1">Expenses by tags:</div>
+      <div>
+        <van-button size="small" @click="onToggleTagMode">{{ tagModeDisplayName }}</van-button>
+      </div>
+    </div>
     <div class="display-flex flex-column ml-15 mr-15">
       <table>
         <tr v-for="bar in barsList" @click="onShowActionSheet(bar)">
@@ -35,6 +40,12 @@ import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
 import { useActionSheet } from '~/composables/useActionSheet.js'
 
 const dataStore = useDataStore()
+
+const onToggleTagMode = () => {
+  dataStore.dashboard.tagsWidgetModeOnlyRootTag = !dataStore.dashboard.tagsWidgetModeOnlyRootTag
+}
+
+const tagModeDisplayName = computed(() => (dataStore.dashboard.tagsWidgetModeOnlyRootTag ? 'One root tag' : 'All tags'))
 
 const barsList = computed(() => {
   const tagTotalDictionary = dataStore.dashboardExpensesByTag
