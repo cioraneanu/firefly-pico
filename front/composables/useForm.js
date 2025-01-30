@@ -15,7 +15,7 @@ export function useForm(props) {
   const repository = model.getRepository()
 
   // let dataStore = useDataStore()
-  // let profileStore = useProfileStore()
+  let profileStore = useProfileStore()
   const route = useRoute()
 
   const title = computed(() => (route.params.id ? titleEdit : titleAdd))
@@ -111,18 +111,21 @@ export function useForm(props) {
     } else {
       response = await repository.insert(newItem)
     }
+    isLoading.value = false
 
     if (ResponseUtils.isSuccess(response)) {
       UIUtils.showToastSuccess('Success')
-      let responseId = _.get(response, 'data.data.id')
-      itemId.value = _.get(response, 'data.data.id')
       onEvent ? onEvent('onPostSave', response) : null
-      isLoading.value = false
-      await navigateTo(`${routeForm}/${responseId}`)
-    } else {
-      isLoading.value = false
-      // let errorMessage = _.get(response, 'data.message')
-      // UIUtils.showToastError(`Unexpected error. ${errorMessage}`)
+
+      // Should reset form
+      if (!newItemId && profileStore.resetFormOnCreate) {
+        item.value = model.getEmpty()
+        resetFields ? resetFields() : null
+      } else {
+        let responseId = _.get(response, 'data.data.id')
+        itemId.value = _.get(response, 'data.data.id')
+        await navigateTo(`${routeForm}/${responseId}`)
+      }
     }
 
     return response
@@ -146,8 +149,8 @@ export function useForm(props) {
       return
     }
 
-    // We are in the process of adding a new transaction, clear all fields
-    resetFields()
+    // Call external reset function if user provided one...
+    resetFields ? resetFields() : null
   }
 
   const onValidationError = (errorInfo) => {
@@ -163,9 +166,9 @@ export function useForm(props) {
     }
 
     let topField = errorFields
-    .map((item) => formElement.querySelector(`[name="${item}"]`))
-    .filter((item) => item)
-    .reduce((result, item) => (item.offsetTop > (result.offsetTop ?? 0) ? item : result))
+      .map((item) => formElement.querySelector(`[name="${item}"]`))
+      .filter((item) => item)
+      .reduce((result, item) => (item.offsetTop > (result.offsetTop ?? 0) ? item : result))
 
     topField?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }

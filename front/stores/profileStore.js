@@ -23,6 +23,7 @@ export const useProfileStore = defineStore('profile', {
 
       darkTheme: useLocalStorage('darkTheme', false),
       startingPage: useLocalStorage('startingPage', Page.types.transactionNew),
+      resetFormOnCreate: useLocalStorage('resetFormOnCreate', false),
 
       assistantTodoTagMatcher: useLocalStorage('assistantTodoTagMatcher', '!!'),
 

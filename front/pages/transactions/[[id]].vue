@@ -8,13 +8,12 @@
 
     <div class="mb-10" />
 
-    <transaction-assistant v-if="!itemId" @change="onAssistant" @keyup.enter="saveItem" />
+    <transaction-assistant v-if="!itemId" @change="onAssistant" @keyup.enter="saveItem" v-model="assistantText" />
 
     <transaction-type-tabs v-model="type" class="mx-3 mt-1 mb-1" />
 
     <van-form :disabled="isSplitTransaction" :name="formName" class="transaction-form-group" ref="form" @submit="saveItem" @failed="onValidationError">
       <van-cell-group inset class="mt-0 flex-column display-flex">
-
         <div v-if="isSplitTransaction" class="display-flex ml-3 mt-3">
           <transaction-split-badge />
         </div>
@@ -160,8 +159,7 @@ let profileStore = useProfileStore()
 const route = useRoute()
 
 const form = ref(null)
-const showTransactionVoice = ref(false)
-// const selectedTransactionTemplate = ref(null)
+const assistantText = ref('')
 
 let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
@@ -170,9 +168,11 @@ let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveI
   routeList: RouteConstants.ROUTE_TRANSACTION_LIST,
   routeForm: RouteConstants.ROUTE_TRANSACTION_ID,
   model: new Transaction(),
+  resetFields: () => {
+    assistantText.value = ''
+  },
 })
 
-const time = ref(['12', '00'])
 
 const pathKey = 'attributes.transactions.0'
 const { amount, amountForeign, date, tags, description, notes, budget, accountSource, accountDestination, category, type } = generateChildren(item, [
@@ -190,12 +190,9 @@ const { amount, amountForeign, date, tags, description, notes, budget, accountSo
 ])
 
 const transactions = computed(() => _.get(item.value, 'attributes.transactions', []))
-const firstTransaction = computed(() => _.head(transactions.value))
 const isSplitTransaction = computed(() => transactions.value.length > 1)
 const accountSourceAllowedTypes = computed(() => Account.getAccountTypesForTransactionTypeSource(type.value))
 const accountDestinationAllowedTypes = computed(() => Account.getAccountTypesForTransactionTypeDestination(type.value))
-// const accountSourceAllowedTypes = computed(() => [])
-// const accountDestinationAllowedTypes = computed(() => [])
 
 // ------------------------------------
 
@@ -268,7 +265,7 @@ watch(tags, async (newValue) => {
 
   if (profileStore.copyTagToDescription && isStringEmpty(description.value)) {
     // The first one is the one with the highest level
-    description.value = head(sortedTagNames)
+    description.value = head(sortedTagNames) ?? ''
   }
 
   if (profileStore.copyTagToCategory && !category.value) {

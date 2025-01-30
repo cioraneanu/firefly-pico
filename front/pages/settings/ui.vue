@@ -13,6 +13,9 @@
         </app-boolean>
 
         <page-select v-model="startingPage"></page-select>
+
+        <app-boolean v-model="resetFormOnCreate" label="Reset forms after creation" />
+
       </van-cell-group>
 
       <van-cell-group inset>
@@ -58,6 +61,7 @@ const dataStore = useDataStore()
 const themeText = computed(() => (darkTheme.value ? 'Dark' : 'Light'))
 const darkTheme = ref(false)
 const startingPage = ref(null)
+const resetFormOnCreate = ref(false)
 
 const heroIconsList = HERO_ICONS_LIST
 const isHeroIconsDropdownVisible = ref(false)
@@ -67,6 +71,7 @@ const syncedSettings = [
   { store: profileStore, path: 'darkTheme', ref: darkTheme },
   { store: profileStore, path: 'heroIcons', ref: heroIcons },
   { store: profileStore, path: 'startingPage', ref: startingPage },
+  { store: profileStore, path: 'resetFormOnCreate', ref: resetFormOnCreate },
 ]
 
 watchSettingsStore(syncedSettings)

@@ -14,7 +14,6 @@
           class="van-cell-no-padding compact flex-1"
           v-model="assistantText"
           label=""
-          type="textarea"
           placeholder="Assistant..."
           rows="1"
           autosize
@@ -107,7 +106,8 @@ const profileStore = useProfileStore()
 const emit = defineEmits(['change'])
 const show = ref(false)
 
-const assistantText = ref('')
+// const assistantText = ref('')
+const assistantText = defineModel()
 const assistantTextField = ref(null)
 
 const foundCategory = ref(null)
@@ -190,8 +190,6 @@ const processAssistantText = () => {
   // 3 groups: <template> <amount> <description>
   const regex = /^(\D+)?(?:\s*(\d[\.\d\s\+\-\*\/]*))?(?:\s+(.*))?$/
   const match = text.match(regex)
-
-  console.log('text', { text, match })
 
   let searchWords = match[1] || ''
   searchWords = LanguageUtils.removeAccents(searchWords).trim()
