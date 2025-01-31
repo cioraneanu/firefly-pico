@@ -15,8 +15,6 @@ source of auth truth and it makes the user's life easier because he doesn't need
 Firefly API. It has a separate DB in which it only keeps the Firefly primary key and the new columns (like icons).
 <div align="center"><img src="images/architecture.png"></div>
 
-- All app settings are stored in local storage and not in the DB. This make it easy for multiple users to have different preferences, but 
-it also means that changing the browser will require to re-add your token + settings.
+- All app settings are stored in **localStorage** for fast availability and also persisted in the DB linked to your Access Token. This means that reusing the token on 2 devices will also sync your settings.   
 
-- Tags, accounts, categories and templates are also stored in local storage for having them instantly available throught the application.
-They are resynced every 24 hours but you can manually resync them with a pull to refresh from the individual list, or resync everything via  `Settings -> App config -> Save`
+- Tags, accounts, categories, budgets and templates are also stored in **localStorage**. They are resynced every `N days` which is configurable in `Settings`. You can manually resync them with a pull to refresh from the individual list, or resync everything via  `Settings -> App config -> Save`
