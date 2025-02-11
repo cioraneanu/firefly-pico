@@ -67,12 +67,20 @@ export default class TransactionTransformer extends ApiTransformer {
     newTransactions = newTransactions.map((item) => {
       const accountSource = _.get(item, 'accountSource')
       const accountDestination = _.get(item, 'accountDestination')
-      const hasDifferentCurrencies = accountSource && accountDestination && Account.getCurrencyId(accountSource) !== Account.getCurrencyId(accountDestination)
 
       let newItem = {}
       newItem.amount = _.get(item, 'amount', 0)
-      newItem.foreign_amount = hasDifferentCurrencies ? _.get(item, 'amountForeign', 0) : null
-      newItem.foreign_currency_id = hasDifferentCurrencies ? Account.getCurrencyId(accountDestination) : null
+
+      newItem.foreign_amount = _.get(item, 'amountForeign', 0)
+      newItem.foreign_currency_id = _.get(item, 'foreign_currency_id')
+      if (newItem.foreign_amount && !newItem.foreign_currency_id) {
+        const defaultForeignCurrencyId = _.get(profileStore.defaultForeignCurrency, 'id', null)
+        if (defaultForeignCurrencyId && accountSource && (defaultForeignCurrencyId !== Account.getCurrencyId(accountSource))) {
+          newItem.foreign_currency_id = defaultForeignCurrencyId
+        } else {
+          newItem.foreign_amount = null
+        }
+      }
 
       newItem.description = get(item, 'description', '')
       newItem.notes = _.get(item, 'notes')

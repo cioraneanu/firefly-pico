@@ -147,10 +147,10 @@ class Account extends BaseModel {
       return null
     }
     return {
-      code : get(account, 'attributes.currency_code'),
-      decimalPlaces : get(account, 'attributes.currency_decimal_places'),
-      id : get(account, 'attributes.currency_id'),
-      symbol : get(account, 'attributes.currency_symbol'),
+      code: get(account, 'attributes.currency_code'),
+      decimalPlaces: get(account, 'attributes.currency_decimal_places'),
+      id: get(account, 'attributes.currency_id'),
+      symbol: get(account, 'attributes.currency_symbol'),
     }
   }
 

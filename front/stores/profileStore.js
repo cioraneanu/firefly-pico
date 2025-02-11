@@ -30,6 +30,7 @@ export const useProfileStore = defineStore('profile', {
       defaultAccountSource: useLocalStorage('defaultAccountSource', null, { serializer: StorageSerializers.object }),
       defaultAccountDestination: useLocalStorage('defaultAccountDestination', null, { serializer: StorageSerializers.object }),
       defaultCategory: useLocalStorage('defaultCategory', null, { serializer: StorageSerializers.object }),
+      defaultForeignCurrency: useLocalStorage('defaultForeignCurrency', null, { serializer: StorageSerializers.object }),
 
       defaultTags: useLocalStorage('defaultTags', [], { serializer: StorageSerializers.object }),
       autoAddedTags: useLocalStorage('autoAddedTags', [], { serializer: StorageSerializers.object }),

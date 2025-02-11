@@ -3,6 +3,7 @@
     <!--    Amount field    -->
     <div>
       <van-field
+        required
         v-model="modelValue"
         placeholder="Amount"
         @click="() => inputAmount.focus()"
@@ -10,6 +11,7 @@
         class="flex-center-vertical app-field transaction-amount-field"
         v-bind="attrs"
         label-align="top"
+        :rules="[{ required: true, message: 'Amount is required' }]"
       >
         <template #left-icon>
           <app-icon :icon="TablerIconConstants.cashBanknote" :size="20" />
@@ -75,7 +77,7 @@
           </template>
 
           <template #right-icon>
-            {{ props.currencyForeign ? props.currencyForeign.symbol : '' }}
+            {{ currencyForeign.symbol }}
           </template>
 
           <template #input>
@@ -138,9 +140,9 @@ const props = defineProps({
     type: Object,
     default: null,
   },
-  currencyForeign: {
-    type: Object,
-    default: null,
+  currencyForeignId: {
+    type: String,
+    default: '',
   },
   isForeignAmountVisible: {
     type: Boolean,
@@ -151,6 +153,11 @@ const props = defineProps({
     default: false,
   },
 })
+
+const currencyForeign = computed(() => {
+  const currency = dataStore.currenciesList.find(currency => currency.id === props.currencyForeignId);
+  return currency ? currency.attributes : null;
+});
 
 const transactionInputClass = computed(() => {
   return {
@@ -214,7 +221,7 @@ const getConversionError = () => {
   if (!props.currency) {
     return 'Source currency is required!'
   }
-  if (!props.currencyForeign) {
+  if (!currencyForeign.value) {
     return 'Foreign currency is required!'
   }
 }
@@ -229,14 +236,14 @@ const convertAmountToForeign = () => {
   if (!isConversionValid()) {
     return
   }
-  modelValueForeign.value = convertCurrency(modelValue.value, props.currency.code, props.currencyForeign.code).toFixed(2)
+  modelValueForeign.value = convertCurrency(modelValue.value, props.currency.code, currencyForeign.value.code).toFixed(2)
 }
 
 const convertForeignToAmount = () => {
   if (!isConversionValid()) {
     return
   }
-  modelValue.value = convertCurrency(modelValueForeign.value, props.currencyForeign.code, props.currency.code).toFixed(2)
+  modelValue.value = convertCurrency(modelValueForeign.value, currencyForeign.value.code, props.currency.code).toFixed(2)
 }
 
 onMounted(() => {

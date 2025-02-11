@@ -13,6 +13,8 @@
         <tag-select v-model="defaultTags" label="Default tags (only preselected)" />
 
         <tag-select v-model="autoAddedTags" label="Auto tags (appended after creation)" />
+
+        <currency-select v-model="defaultForeignCurrency" label="Default foreign currency for Expense transactions" />
       </van-cell-group>
 
       <app-button-form-save />
@@ -37,6 +39,7 @@ const defaultAccountDestination = ref(null)
 const defaultCategory = ref(null)
 const defaultTags = ref([])
 const autoAddedTags = ref([])
+const defaultForeignCurrency = ref([])
 
 const syncedSettings = [
   { store: profileStore, path: 'defaultAccountSource', ref: defaultAccountSource },
@@ -44,6 +47,7 @@ const syncedSettings = [
   { store: profileStore, path: 'defaultCategory', ref: defaultCategory },
   { store: profileStore, path: 'defaultTags', ref: defaultTags },
   { store: profileStore, path: 'autoAddedTags', ref: autoAddedTags },
+  { store: profileStore, path: 'defaultForeignCurrency', ref: defaultForeignCurrency },
 ]
 
 watchSettingsStore(syncedSettings)

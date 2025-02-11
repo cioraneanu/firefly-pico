@@ -19,15 +19,13 @@
         </div>
 
         <transaction-amount-field
-          required
           v-model="amount"
           v-model:foreign="amountForeign"
           :currency="sourceCurrency"
-          :currencyForeign="destinationCurrency"
+          :currencyForeignId="currencyForeignId"
           :isForeignAmountVisible="isForeignAmountVisible"
           ref="refAmount"
           name="amount"
-          :rules="[{ required: true, message: 'Amount is required' }]"
           :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_AMOUNT)"
           :disabled="isSplitTransaction"
         />
@@ -175,7 +173,7 @@ let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveI
 
 
 const pathKey = 'attributes.transactions.0'
-const { amount, amountForeign, date, tags, description, notes, budget, accountSource, accountDestination, category, type } = generateChildren(item, [
+const { amount, amountForeign, date, tags, description, notes, budget, accountSource, accountDestination, category, type, foreignCurrencyId } = generateChildren(item, [
   { computed: 'amount', parentKey: `${pathKey}.amount` },
   { computed: 'amountForeign', parentKey: `${pathKey}.amountForeign` },
   { computed: 'date', parentKey: `${pathKey}.date` },
@@ -187,6 +185,7 @@ const { amount, amountForeign, date, tags, description, notes, budget, accountSo
   { computed: 'category', parentKey: `${pathKey}.category` },
   { computed: 'type', parentKey: `${pathKey}.type` },
   { computed: 'budget', parentKey: `${pathKey}.budget` },
+  { computed: 'foreignCurrencyId', parentKey: `${pathKey}.foreignCurrencyId` },
 ])
 
 const transactions = computed(() => _.get(item.value, 'attributes.transactions', []))
@@ -197,9 +196,11 @@ const accountDestinationAllowedTypes = computed(() => Account.getAccountTypesFor
 // ------------------------------------
 
 const sourceCurrency = computed(() => Account.getCurrency(accountSource.value))
-const destinationCurrency = computed(() => Account.getCurrency(accountDestination.value))
+const currencyForeignId = computed(() => {
+  return foreignCurrencyId.value ? foreignCurrencyId.value : get(profileStore.defaultForeignCurrency, 'id', null)
+})
 const isForeignAmountVisible = computed(() => {
-  return accountSource.value && accountDestination.value && sourceCurrency.value.id !== destinationCurrency.value.id
+  return accountSource.value && currencyForeignId.value && sourceCurrency.value.id !== currencyForeignId.value
 })
 
 //
