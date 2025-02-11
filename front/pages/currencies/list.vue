@@ -8,7 +8,7 @@
 
     <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
       <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
-        <currency-list-item v-for="item in list" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
+        <currency-list-item v-for="item in sortedList" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
       </van-list>
     </van-pull-refresh>
   </div>
@@ -58,6 +58,18 @@ const onLoadMore = async () => {
   const dataStore = useDataStore()
   list.value = dataStore.currenciesList
 }
+
+const sortedList = computed(() =>
+  [...dataStore.currenciesList].sort((a, b) => {
+    if (a.attributes?.default !== b.attributes?.default) {
+      return b.attributes?.default - a.attributes?.default;
+    }
+    if (a.attributes?.enabled !== b.attributes?.enabled) {
+      return b.attributes?.enabled - a.attributes?.enabled;
+    }
+    return a.attributes?.code.localeCompare(b.attributes?.code);
+  })
+);
 
 // -----
 
