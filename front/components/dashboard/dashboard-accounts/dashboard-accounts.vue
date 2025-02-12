@@ -71,7 +71,7 @@ const accountTotal = computed(() => {
 
 
 const getAccountAmount = (account) => {
-  return `${getFormattedValue(Account.getBalance(account))} ${Account.getCurrency(account)}`
+  return `${getFormattedValue(Account.getBalance(account))} ${Account.getCurrency(account).symbol}`
 }
 
 const hasMultipleCurrencies = computed(() => dataStore.dashboardAccountsCurrencyList.length > 1)

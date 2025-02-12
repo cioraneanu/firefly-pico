@@ -17,7 +17,7 @@
 
         <template #right-icon>
           <div class="flex-center-vertical gap-2">
-            {{ props.currency }}
+            {{ props.currency ? props.currency.symbol : '' }}
           </div>
         </template>
 
@@ -75,7 +75,7 @@
           </template>
 
           <template #right-icon>
-            {{ props.currencyForeign }}
+            {{ props.currencyForeign ? props.currencyForeign.symbol : '' }}
           </template>
 
           <template #input>
@@ -135,12 +135,12 @@ const props = defineProps({
     default: true,
   },
   currency: {
-    type: String,
-    default: '',
+    type: Object,
+    default: null,
   },
   currencyForeign: {
-    type: String,
-    default: '',
+    type: Object,
+    default: null,
   },
   isForeignAmountVisible: {
     type: Boolean,
@@ -210,12 +210,32 @@ const onOperation = async (operation) => {
   moveInputCursorToEnd(input, modelValue)
 }
 
+const convertAmountHasError = () => {
+  if (!props.currency) {
+    return { message: 'Source account is required!' }
+  }
+  if (!props.currencyForeign) {
+    return { message: 'Foreign currency is not found!' }
+  }
+  return null
+}
+
 const convertAmountToForeign = () => {
-  modelValueForeign.value = convertCurrency(modelValue.value, 'RON', 'EUR').toFixed(2)
+  const error = convertAmountHasError()
+  if (error) {
+    UIUtils.showToastError(error.message)
+    return
+  }
+  modelValueForeign.value = convertCurrency(modelValue.value, props.currency.code, props.currencyForeign.code).toFixed(2)
 }
 
 const convertForeignToAmount = () => {
-  modelValue.value = convertCurrency(modelValueForeign.value, 'EUR', 'RON').toFixed(2)
+  const error = convertAmountHasError()
+  if (error) {
+    UIUtils.showToastError(error.message)
+    return
+  }
+  modelValue.value = convertCurrency(modelValueForeign.value, props.currencyForeign.code, props.currency.code).toFixed(2)
 }
 
 onMounted(() => {

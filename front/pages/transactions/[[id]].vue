@@ -22,8 +22,8 @@
           required
           v-model="amount"
           v-model:foreign="amountForeign"
-          :currency="sourceCurrencyCode"
-          :currencyForeign="destinationCurrencyCode"
+          :currency="sourceCurrency"
+          :currencyForeign="destinationCurrency"
           :isForeignAmountVisible="isForeignAmountVisible"
           ref="refAmount"
           name="amount"
@@ -196,10 +196,11 @@ const accountDestinationAllowedTypes = computed(() => Account.getAccountTypesFor
 
 // ------------------------------------
 
-const sourceCurrencyCode = computed(() => get(accountSource.value, 'attributes.currency_symbol', ''))
-const destinationCurrencyCode = computed(() => get(accountDestination.value, 'attributes.currency_symbol', ''))
+const sourceCurrency = computed(() => Account.getCurrency(accountSource.value))
+const destinationCurrency = computed(() => Account.getCurrency(accountDestination.value))
 const isForeignAmountVisible = computed(() => {
-  return accountSource.value && accountDestination.value && sourceCurrencyCode.value !== destinationCurrencyCode.value
+  console.log(accountSource.value)
+  return accountSource.value && accountDestination.value && sourceCurrency.value.id !== destinationCurrency.value.id
 })
 
 //
