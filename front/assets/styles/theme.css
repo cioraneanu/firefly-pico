@@ -621,6 +621,10 @@ body {
     color: #000;
 }
 
+.list-item-disabled {
+    color: #999 !important;
+}
+
 .app-date-time .van-cell {
     padding: 0px !important;
 }

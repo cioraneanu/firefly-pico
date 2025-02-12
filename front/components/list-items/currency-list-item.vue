@@ -2,9 +2,9 @@
   <van-swipe-cell ref="swipeCell" v-bind="clickWithoutSwipe">
     <van-cell>
       <template #title>
-        <div class="list-item-container">
+        <div class="list-item-container" :class="itemClass">
           <div class="first_column flex-center flex-column">
-            <app-icon :icon="TablerIconConstants.currency" :size="TablerIconConstants.sizeItemList" />
+            <app-icon :icon="TablerIconConstants.currency" :size="TablerIconConstants.sizeItemList" :class="itemClass" />
           </div>
 
           <div class="separator"></div>
@@ -37,6 +37,10 @@ const emit = defineEmits(['onEdit', 'onDelete'])
 const dataStore = useDataStore()
 
 const displayName = computed(() => _.get(props.value, 'attributes.name', ' - '))
+
+const itemClass = computed(() => ({
+  'list-item-disabled': !_.get(props.value, 'attributes.enabled', true)
+}))
 
 const onEdit = async (e) => {
   emit('onEdit', props.value)

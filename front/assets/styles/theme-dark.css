@@ -256,6 +256,10 @@
   color: var(--van-cell-text-color);
 }
 
+.van-theme-dark .list-item-disabled {
+  color: #707070;
+}
+
 /*.van-theme-dark .fake-input {*/
 /*  background: var(--van-background-2-5);*/
 /*}*/
