@@ -143,7 +143,15 @@ class Account extends BaseModel {
   }
 
   static getCurrency(account) {
-    return get(account, 'attributes.currency_symbol')
+    if (!account) {
+      return null
+    }
+    return {
+      code : get(account, 'attributes.currency_code'),
+      decimalPlaces : get(account, 'attributes.currency_decimal_places'),
+      id : get(account, 'attributes.currency_id'),
+      symbol : get(account, 'attributes.currency_symbol'),
+    }
   }
 
   static getCurrencyId(account) {
@@ -165,7 +173,7 @@ class Account extends BaseModel {
       maximumFractionDigits: digits,
     }).format(amount)
 
-    return `${amount} ${this.getCurrency(account)}`
+    return `${amount} ${this.getCurrency(account).symbol}`
   }
 
   static getIsActive(account) {
