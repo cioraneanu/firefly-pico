@@ -210,11 +210,31 @@ const onOperation = async (operation) => {
   moveInputCursorToEnd(input, modelValue)
 }
 
+const convertAmountHasError = () => {
+  if (!props.currency) {
+    return { message: 'Source account is required!' }
+  }
+  if (!props.currencyForeign) {
+    return { message: 'Foreign currency is not found!' }
+  }
+  return null
+}
+
 const convertAmountToForeign = () => {
+  const error = convertAmountHasError()
+  if (error) {
+    UIUtils.showToastError(error.message)
+    return
+  }
   modelValueForeign.value = convertCurrency(modelValue.value, props.currency.code, props.currencyForeign.code).toFixed(2)
 }
 
 const convertForeignToAmount = () => {
+  const error = convertAmountHasError()
+  if (error) {
+    UIUtils.showToastError(error.message)
+    return
+  }
   modelValue.value = convertCurrency(modelValueForeign.value, props.currencyForeign.code, props.currency.code).toFixed(2)
 }
 
