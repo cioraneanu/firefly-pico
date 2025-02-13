@@ -148,8 +148,8 @@ const props = defineProps({
   },
   disabled: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const transactionInputClass = computed(() => {
@@ -210,29 +210,30 @@ const onOperation = async (operation) => {
   moveInputCursorToEnd(input, modelValue)
 }
 
-const convertAmountHasError = () => {
+const getConversionError = () => {
   if (!props.currency) {
-    return { message: 'Source account is required!' }
+    return 'Source currency is required!'
   }
   if (!props.currencyForeign) {
-    return { message: 'Foreign currency is not found!' }
+    return 'Foreign currency is required!'
   }
-  return null
+}
+
+const isConversionValid = () => {
+  let error = getConversionError()
+  error ? UIUtils.showToastError(error) : null
+  return !error
 }
 
 const convertAmountToForeign = () => {
-  const error = convertAmountHasError()
-  if (error) {
-    UIUtils.showToastError(error.message)
+  if (!isConversionValid()) {
     return
   }
   modelValueForeign.value = convertCurrency(modelValue.value, props.currency.code, props.currencyForeign.code).toFixed(2)
 }
 
 const convertForeignToAmount = () => {
-  const error = convertAmountHasError()
-  if (error) {
-    UIUtils.showToastError(error.message)
+  if (!isConversionValid()) {
     return
   }
   modelValue.value = convertCurrency(modelValueForeign.value, props.currencyForeign.code, props.currency.code).toFixed(2)

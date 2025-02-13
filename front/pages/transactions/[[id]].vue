@@ -199,7 +199,6 @@ const accountDestinationAllowedTypes = computed(() => Account.getAccountTypesFor
 const sourceCurrency = computed(() => Account.getCurrency(accountSource.value))
 const destinationCurrency = computed(() => Account.getCurrency(accountDestination.value))
 const isForeignAmountVisible = computed(() => {
-  console.log(accountSource.value)
   return accountSource.value && accountDestination.value && sourceCurrency.value.id !== destinationCurrency.value.id
 })
 
