@@ -32,6 +32,7 @@ export default class TransactionTransformer extends ApiTransformer {
       transaction.amount = Transaction.formatAmount(_.get(transaction, 'amount', 0))
       transaction.amountForeign = Transaction.formatAmount(_.get(transaction, 'foreign_amount', 0))
       transaction.foreignCurrencyId = get(transaction, 'foreign_currency_id')
+      transaction.foreignCurrency = transaction.foreignCurrencyId ? dataStore.currencyDictionary[transaction.foreignCurrencyId] : null
 
       transaction.date = DateUtils.autoToDate(transaction.date)
       transaction.accountSource = accountsDictionary[transaction['source_id']]
@@ -72,15 +73,7 @@ export default class TransactionTransformer extends ApiTransformer {
       newItem.amount = _.get(item, 'amount', 0)
 
       newItem.foreign_amount = _.get(item, 'amountForeign', 0)
-      newItem.foreign_currency_id = _.get(item, 'foreign_currency_id')
-      if (newItem.foreign_amount && !newItem.foreign_currency_id) {
-        const defaultForeignCurrencyId = _.get(profileStore.defaultForeignCurrency, 'id', null)
-        if (defaultForeignCurrencyId && accountSource && (defaultForeignCurrencyId !== Account.getCurrencyId(accountSource))) {
-          newItem.foreign_currency_id = defaultForeignCurrencyId
-        } else {
-          newItem.foreign_amount = null
-        }
-      }
+      newItem.foreign_currency_id = _.get(item, 'foreignCurrency.id')
 
       newItem.description = get(item, 'description', '')
       newItem.notes = _.get(item, 'notes')

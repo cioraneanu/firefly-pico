@@ -4,7 +4,7 @@
     <div>
       <van-field
         required
-        v-model="modelValue"
+        v-model="amount"
         placeholder="Amount"
         @click="() => inputAmount.focus()"
         label="Amount"
@@ -25,7 +25,7 @@
 
         <template #input>
           <input
-            v-model="modelValue"
+            v-model="amount"
             @focus="onFocus"
             @blur="onBlur"
             ref="inputAmount"
@@ -64,7 +64,7 @@
         <!--      <app-icon :icon="SvgConstants.custom.exchange" style="width: 22px; margin-left: 16px" />-->
 
         <van-field
-          v-model="modelValueForeign"
+          v-model="amountForeign"
           placeholder="Foreign amount "
           @click="() => inputAmountForeign.focus()"
           label="Foreign amount"
@@ -82,7 +82,7 @@
 
           <template #input>
             <input
-              v-model="modelValueForeign"
+              v-model="amountForeign"
               ref="inputAmountForeign"
               style="width: 100%; border: none; background: transparent; height: 24px"
               type="text"
@@ -128,8 +128,10 @@ const profileStore = useProfileStore()
 const dataStore = useDataStore()
 const attrs = useAttrs()
 
-const modelValue = defineModel()
-const modelValueForeign = defineModel('foreign')
+const amount = defineModel('amount')
+const amountForeign = defineModel('amountForeign')
+const currencyForeign = defineModel('currencyForeign')
+// const modelValueForeign = defineModel('foreign')
 
 const props = defineProps({
   showQuickButtons: {
@@ -140,10 +142,6 @@ const props = defineProps({
     type: Object,
     default: null,
   },
-  currencyForeignId: {
-    type: String,
-    default: '',
-  },
   isForeignAmountVisible: {
     type: Boolean,
     default: false,
@@ -153,11 +151,6 @@ const props = defineProps({
     default: false,
   },
 })
-
-const currencyForeign = computed(() => {
-  const currency = dataStore.currenciesList.find(currency => currency.id === props.currencyForeignId);
-  return currency ? currency.attributes : null;
-});
 
 const transactionInputClass = computed(() => {
   return {
@@ -174,9 +167,9 @@ const quickButtons = profileStore.quickValueButtons
 const operatorsList = ref(['+', '-', '*', '/'])
 
 const onQuickButton = async (quickButton) => {
-  let value = !modelValue.value || modelValue.value === '' ? '0' : modelValue.value
+  let value = !amount.value || amount.value === '' ? '0' : amount.value
   value = parseInt(value)
-  modelValue.value = `${value + parseInt(quickButton)}`
+  amount.value = `${value + parseInt(quickButton)}`
 }
 
 const onFocus = () => {
@@ -185,7 +178,7 @@ const onFocus = () => {
 
 const onBlur = async () => {
   isInputFocused.value = false
-  modelValue.value = await evaluateModelValue(modelValue.value)
+  amount.value = await evaluateModelValue(amount.value)
 
   // On iOS if you hide the keyboard via the "Done" button, onBlur gets called but it's not actually blurred. This is a temp fix...
   inputAmount.value?.blur()
@@ -208,13 +201,13 @@ const evaluateModelValue = async (amount) => {
   return value
 }
 
-watch(modelValue, (newValue) => {
-  modelValue.value = sanitizeAmount(newValue)
+watch(amount, (newValue) => {
+  amount.value = sanitizeAmount(newValue)
 })
 
 const onOperation = async (operation) => {
-  modelValue.value = sanitizeAmount(modelValue.value + operation)
-  moveInputCursorToEnd(input, modelValue)
+  amount.value = sanitizeAmount(amount.value + operation)
+  moveInputCursorToEnd(input, amount)
 }
 
 const getConversionError = () => {
@@ -236,14 +229,14 @@ const convertAmountToForeign = () => {
   if (!isConversionValid()) {
     return
   }
-  modelValueForeign.value = convertCurrency(modelValue.value, props.currency.code, currencyForeign.value.code).toFixed(2)
+  amountForeign.value = convertCurrency(amount.value, props.currency.code, currencyForeign.value.code).toFixed(2)
 }
 
 const convertForeignToAmount = () => {
   if (!isConversionValid()) {
     return
   }
-  modelValue.value = convertCurrency(modelValueForeign.value, currencyForeign.value.code, props.currency.code).toFixed(2)
+  amount.value = convertCurrency(amountForeign.value, currencyForeign.value.code, props.currency.code).toFixed(2)
 }
 
 onMounted(() => {
