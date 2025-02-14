@@ -198,9 +198,9 @@ const accountDestinationAllowedTypes = computed(() => Account.getAccountTypesFor
 const sourceCurrency = computed(() => Account.getCurrency(accountSource.value))
 
 const isForeignAmountVisible = computed(() => {
-  // TODO: Write me later
-  return true
-  // return accountSource.value && currencyForeignId.value && sourceCurrency.value.id !== currencyForeignId.value
+  let newTransactionWithDefaultCurrency = !itemId.value && profileStore.defaultForeignCurrency
+  let accountsHaveDifferentCurrencies = accountSource.value && accountDestination.value && Account.getCurrency(accountSource.value) !== Account.getCurrency(accountDestination.value)
+  return !!(newTransactionWithDefaultCurrency ||  accountsHaveDifferentCurrencies || currencyForeign.value)
 })
 
 //
