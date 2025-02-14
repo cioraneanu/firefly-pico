@@ -73,7 +73,7 @@ export default class TransactionTransformer extends ApiTransformer {
       newItem.amount = _.get(item, 'amount', 0)
 
       newItem.foreign_amount = _.get(item, 'amountForeign', 0)
-      newItem.foreign_currency_id = _.get(item, 'foreignCurrency.id')
+      newItem.foreign_currency_id = _.get(item, 'currencyForeign.id')
 
       newItem.description = get(item, 'description', '')
       newItem.notes = _.get(item, 'notes')
