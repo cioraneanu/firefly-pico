@@ -76,6 +76,7 @@
 
           <template #right-icon>
             {{ currencyForeignSymbol }}
+            <currency-dropdown v-model="currencyForeign" />
           </template>
 
           <template #input>
@@ -91,7 +92,6 @@
         </van-field>
       </div>
 
-      <currency-select label="DEMO! Foreign currency (Will be replaced with currency-dropdown)" v-model="currencyForeign" />
     </template>
 
     <table v-if="showQuickButtons && !disabled" class="transaction-amount-table-buttons">

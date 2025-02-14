@@ -1,7 +1,11 @@
 <template>
-  <van-popover v-model:show="showPopover" theme="dark" :actions="actions">
+  <van-popover v-model:show="showPopover" :actions="list" @select="onSelect">
     <template #reference>
-      <van-button type="primary">{{  }}</van-button>
+      <van-button type="success" size="small">{{ currencyCode }}</van-button>
+    </template>
+
+    <template #action="{ action }">
+      {{ Currency.getCode(action) }}
     </template>
   </van-popover>
 </template>
@@ -21,8 +25,7 @@ const showPopover = ref(false)
 const modelValue = defineModel()
 let list = ref([])
 
-
-const currencyCode = computed(() => {})
+const currencyCode = computed(() => Currency.getCode(modelValue.value))
 
 // ------ Methods ------
 
@@ -30,16 +33,8 @@ onMounted(async () => {
   list.value = dataStore.currenciesList.filter((item) => get(item, 'attributes.enabled'))
 })
 
-const getDisplayValue = (value) => {
-  return Currency.getDisplayName(value)
-}
-
-const isLoading = ref(false)
-UIUtils.showLoadingWhen(isLoading)
-const onRefresh = async () => {
-  isLoading.value = true
-  await dataStore.fetchCurrencies()
-  isLoading.value = false
+const onSelect = (item) => {
+  modelValue.value = item
 }
 </script>
 
