@@ -21,7 +21,7 @@
         <transaction-amount-field
           v-model:amount="amount"
           v-model:amountForeign="amountForeign"
-          v-model:currencyForeign="amountForeign"
+          v-model:currencyForeign="currencyForeign"
           :currency="sourceCurrency"
           :isForeignAmountVisible="isForeignAmountVisible"
           ref="refAmount"
@@ -173,9 +173,10 @@ let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveI
 
 
 const pathKey = 'attributes.transactions.0'
-const { amount, amountForeign, date, tags, description, notes, budget, accountSource, accountDestination, category, type, foreignCurrency } = generateChildren(item, [
+const { amount, amountForeign, date, tags, description, notes, budget, accountSource, accountDestination, category, type, currencyForeign } = generateChildren(item, [
   { computed: 'amount', parentKey: `${pathKey}.amount` },
   { computed: 'amountForeign', parentKey: `${pathKey}.amountForeign` },
+  { computed: 'currencyForeign', parentKey: `${pathKey}.currencyForeign` },
   { computed: 'date', parentKey: `${pathKey}.date` },
   { computed: 'tags', parentKey: `${pathKey}.tags` },
   { computed: 'description', parentKey: `${pathKey}.description` },
@@ -185,7 +186,6 @@ const { amount, amountForeign, date, tags, description, notes, budget, accountSo
   { computed: 'category', parentKey: `${pathKey}.category` },
   { computed: 'type', parentKey: `${pathKey}.type` },
   { computed: 'budget', parentKey: `${pathKey}.budget` },
-  { computed: 'foreignCurrency', parentKey: `${pathKey}.foreignCurrency` },
 ])
 
 const transactions = computed(() => _.get(item.value, 'attributes.transactions', []))

@@ -19,7 +19,7 @@
 
         <template #right-icon>
           <div class="flex-center-vertical gap-2">
-            {{ props.currency ? props.currency.symbol : '' }}
+            {{ currencySymbol ?? '' }}
           </div>
         </template>
 
@@ -61,8 +61,6 @@
 
       <!--    Foreign amount field    -->
       <div class="flex-center-vertical">
-        <!--      <app-icon :icon="SvgConstants.custom.exchange" style="width: 22px; margin-left: 16px" />-->
-
         <van-field
           v-model="amountForeign"
           placeholder="Foreign amount "
@@ -77,7 +75,7 @@
           </template>
 
           <template #right-icon>
-            {{ currencyForeign.symbol }}
+            {{ currencyForeignSymbol }}
           </template>
 
           <template #input>
@@ -92,6 +90,8 @@
           </template>
         </van-field>
       </div>
+
+      <currency-select label="DEMO! Foreign currency (Will be replaced with currency-dropdown)" v-model="currencyForeign" />
     </template>
 
     <table v-if="showQuickButtons && !disabled" class="transaction-amount-table-buttons">
@@ -123,6 +123,8 @@ import { useDataStore } from '~/stores/dataStore'
 import { moveInputCursorToEnd, sleep } from '~/utils/VueUtils'
 import { evalMath, removeEndOperators, sanitizeAmount } from '~/utils/MathUtils'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import { get } from 'lodash'
+import Currency from '~/models/Currency.js'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
@@ -131,7 +133,6 @@ const attrs = useAttrs()
 const amount = defineModel('amount')
 const amountForeign = defineModel('amountForeign')
 const currencyForeign = defineModel('currencyForeign')
-// const modelValueForeign = defineModel('foreign')
 
 const props = defineProps({
   showQuickButtons: {
@@ -151,6 +152,12 @@ const props = defineProps({
     default: false,
   },
 })
+
+const currencySymbol = computed(() => Currency.getSymbol(props.currency))
+const currencyForeignSymbol = computed(() => Currency.getSymbol(currencyForeign.value))
+
+const currencyCode = computed(() => Currency.getCode(props.currency))
+const currencyForeignCode = computed(() => Currency.getCode(currencyForeign.value))
 
 const transactionInputClass = computed(() => {
   return {
@@ -229,14 +236,14 @@ const convertAmountToForeign = () => {
   if (!isConversionValid()) {
     return
   }
-  amountForeign.value = convertCurrency(amount.value, props.currency.code, currencyForeign.value.code).toFixed(2)
+  amountForeign.value = convertCurrency(amount.value, currencyCode.value, currencyForeignCode.value).toFixed(2)
 }
 
 const convertForeignToAmount = () => {
   if (!isConversionValid()) {
     return
   }
-  amount.value = convertCurrency(amountForeign.value, currencyForeign.value.code, props.currency.code).toFixed(2)
+  amount.value = convertCurrency(amountForeign.value, currencyForeignCode.value, currencyCode.value).toFixed(2)
 }
 
 onMounted(() => {

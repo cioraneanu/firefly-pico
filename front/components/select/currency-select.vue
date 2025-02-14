@@ -57,25 +57,12 @@ const filteredList = computed(() => {
   })
 })
 
-// const categoryList = computed(() => {
-//   if (search.value.length === 0) {
-//     return dataStore.categoryList
-//   }
-//   return dataStore.categoryList.filter(item => {
-//     return Currency.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
-//   })
-// })
-
 // ------ Methods ------
 
 onMounted(async () => {
   list.value = dataStore.currenciesList.filter((item) => get(item, 'attributes.enabled'))
 })
 
-const onSelectCell = (value) => {
-  modelValue.value = value
-  showDropdown.value = false
-}
 
 const getDisplayValue = (value) => {
   return Currency.getDisplayName(value)
