@@ -31,7 +31,6 @@ class Account extends BaseModel {
   // ------------
 
   getFake(id) {
-
     if (process.env.NODE_ENV === 'production') {
       return {}
     }
@@ -146,16 +145,7 @@ class Account extends BaseModel {
     if (!account) {
       return null
     }
-    return {
-      code : get(account, 'attributes.currency_code'),
-      decimalPlaces : get(account, 'attributes.currency_decimal_places'),
-      id : get(account, 'attributes.currency_id'),
-      symbol : get(account, 'attributes.currency_symbol'),
-    }
-  }
-
-  static getCurrencyId(account) {
-    return get(account, 'attributes.currency_id')
+    return get(account, 'attributes.currency')
   }
 
   static getBalance(account) {

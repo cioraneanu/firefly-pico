@@ -44,6 +44,7 @@ class Transaction extends BaseModel {
             accountDestination: profileStore.defaultAccountDestination,
             type: type,
             category: profileStore.defaultCategory,
+            currencyForeign: profileStore.defaultForeignCurrency
           },
         ],
       },

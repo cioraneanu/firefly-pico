@@ -19,15 +19,13 @@
         </div>
 
         <transaction-amount-field
-          required
-          v-model="amount"
-          v-model:foreign="amountForeign"
+          v-model:amount="amount"
+          v-model:amountForeign="amountForeign"
+          v-model:currencyForeign="currencyForeign"
           :currency="sourceCurrency"
-          :currencyForeign="destinationCurrency"
           :isForeignAmountVisible="isForeignAmountVisible"
           ref="refAmount"
           name="amount"
-          :rules="[{ required: true, message: 'Amount is required' }]"
           :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_AMOUNT)"
           :disabled="isSplitTransaction"
         />
@@ -175,9 +173,10 @@ let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveI
 
 
 const pathKey = 'attributes.transactions.0'
-const { amount, amountForeign, date, tags, description, notes, budget, accountSource, accountDestination, category, type } = generateChildren(item, [
+const { amount, amountForeign, date, tags, description, notes, budget, accountSource, accountDestination, category, type, currencyForeign } = generateChildren(item, [
   { computed: 'amount', parentKey: `${pathKey}.amount` },
   { computed: 'amountForeign', parentKey: `${pathKey}.amountForeign` },
+  { computed: 'currencyForeign', parentKey: `${pathKey}.currencyForeign` },
   { computed: 'date', parentKey: `${pathKey}.date` },
   { computed: 'tags', parentKey: `${pathKey}.tags` },
   { computed: 'description', parentKey: `${pathKey}.description` },
@@ -197,9 +196,11 @@ const accountDestinationAllowedTypes = computed(() => Account.getAccountTypesFor
 // ------------------------------------
 
 const sourceCurrency = computed(() => Account.getCurrency(accountSource.value))
-const destinationCurrency = computed(() => Account.getCurrency(accountDestination.value))
+
 const isForeignAmountVisible = computed(() => {
-  return accountSource.value && accountDestination.value && sourceCurrency.value.id !== destinationCurrency.value.id
+  let newTransactionWithDefaultCurrency = !itemId.value && profileStore.defaultForeignCurrency
+  let accountsHaveDifferentCurrencies = accountSource.value && accountDestination.value && Account.getCurrency(accountSource.value) !== Account.getCurrency(accountDestination.value)
+  return !!(newTransactionWithDefaultCurrency ||  accountsHaveDifferentCurrencies || currencyForeign.value)
 })
 
 //

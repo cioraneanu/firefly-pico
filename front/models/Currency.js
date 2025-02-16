@@ -35,10 +35,20 @@ class Currency extends BaseModel {
 
   // --------
 
-  static getDisplayName(account) {
-    const name = get(account, 'attributes.name')
-    const symbol = get(account, 'attributes.symbol')
-    return `${name}, ${symbol}`
+  static getSymbol(currency) {
+    return get(currency, 'attributes.symbol')
+  }
+
+  static getCode(currency) {
+    return get(currency, 'attributes.code')
+  }
+
+  static getName(currency) {
+    return get(currency, 'attributes.name')
+  }
+
+  static getDisplayName(currency) {
+    return `${this.getName(currency)}, ${this.getSymbol(currency)}`
   }
 }
 

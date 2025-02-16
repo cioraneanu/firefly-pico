@@ -3,13 +3,15 @@
     <!--    Amount field    -->
     <div>
       <van-field
-        v-model="modelValue"
+        required
+        v-model="amount"
         placeholder="Amount"
         @click="() => inputAmount.focus()"
         label="Amount"
         class="flex-center-vertical app-field transaction-amount-field"
         v-bind="attrs"
         label-align="top"
+        :rules="[{ required: true, message: 'Amount is required' }]"
       >
         <template #left-icon>
           <app-icon :icon="TablerIconConstants.cashBanknote" :size="20" />
@@ -17,13 +19,13 @@
 
         <template #right-icon>
           <div class="flex-center-vertical gap-2">
-            {{ props.currency ? props.currency.symbol : '' }}
+            {{ currencySymbol ?? '' }}
           </div>
         </template>
 
         <template #input>
           <input
-            v-model="modelValue"
+            v-model="amount"
             @focus="onFocus"
             @blur="onBlur"
             ref="inputAmount"
@@ -59,10 +61,8 @@
 
       <!--    Foreign amount field    -->
       <div class="flex-center-vertical">
-        <!--      <app-icon :icon="SvgConstants.custom.exchange" style="width: 22px; margin-left: 16px" />-->
-
         <van-field
-          v-model="modelValueForeign"
+          v-model="amountForeign"
           placeholder="Foreign amount "
           @click="() => inputAmountForeign.focus()"
           label="Foreign amount"
@@ -75,12 +75,13 @@
           </template>
 
           <template #right-icon>
-            {{ props.currencyForeign ? props.currencyForeign.symbol : '' }}
+            {{ currencyForeignSymbol }}
+            <currency-dropdown v-model="currencyForeign" />
           </template>
 
           <template #input>
             <input
-              v-model="modelValueForeign"
+              v-model="amountForeign"
               ref="inputAmountForeign"
               style="width: 100%; border: none; background: transparent; height: 24px"
               type="text"
@@ -90,6 +91,7 @@
           </template>
         </van-field>
       </div>
+
     </template>
 
     <table v-if="showQuickButtons && !disabled" class="transaction-amount-table-buttons">
@@ -121,13 +123,16 @@ import { useDataStore } from '~/stores/dataStore'
 import { moveInputCursorToEnd, sleep } from '~/utils/VueUtils'
 import { evalMath, removeEndOperators, sanitizeAmount } from '~/utils/MathUtils'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import { get } from 'lodash'
+import Currency from '~/models/Currency.js'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
 const attrs = useAttrs()
 
-const modelValue = defineModel()
-const modelValueForeign = defineModel('foreign')
+const amount = defineModel('amount')
+const amountForeign = defineModel('amountForeign')
+const currencyForeign = defineModel('currencyForeign')
 
 const props = defineProps({
   showQuickButtons: {
@@ -135,10 +140,6 @@ const props = defineProps({
     default: true,
   },
   currency: {
-    type: Object,
-    default: null,
-  },
-  currencyForeign: {
     type: Object,
     default: null,
   },
@@ -151,6 +152,12 @@ const props = defineProps({
     default: false,
   },
 })
+
+const currencySymbol = computed(() => Currency.getSymbol(props.currency))
+const currencyForeignSymbol = computed(() => Currency.getSymbol(currencyForeign.value))
+
+const currencyCode = computed(() => Currency.getCode(props.currency))
+const currencyForeignCode = computed(() => Currency.getCode(currencyForeign.value))
 
 const transactionInputClass = computed(() => {
   return {
@@ -167,9 +174,9 @@ const quickButtons = profileStore.quickValueButtons
 const operatorsList = ref(['+', '-', '*', '/'])
 
 const onQuickButton = async (quickButton) => {
-  let value = !modelValue.value || modelValue.value === '' ? '0' : modelValue.value
+  let value = !amount.value || amount.value === '' ? '0' : amount.value
   value = parseInt(value)
-  modelValue.value = `${value + parseInt(quickButton)}`
+  amount.value = `${value + parseInt(quickButton)}`
 }
 
 const onFocus = () => {
@@ -178,7 +185,7 @@ const onFocus = () => {
 
 const onBlur = async () => {
   isInputFocused.value = false
-  modelValue.value = await evaluateModelValue(modelValue.value)
+  amount.value = await evaluateModelValue(amount.value)
 
   // On iOS if you hide the keyboard via the "Done" button, onBlur gets called but it's not actually blurred. This is a temp fix...
   inputAmount.value?.blur()
@@ -201,20 +208,20 @@ const evaluateModelValue = async (amount) => {
   return value
 }
 
-watch(modelValue, (newValue) => {
-  modelValue.value = sanitizeAmount(newValue)
+watch(amount, (newValue) => {
+  amount.value = sanitizeAmount(newValue)
 })
 
 const onOperation = async (operation) => {
-  modelValue.value = sanitizeAmount(modelValue.value + operation)
-  moveInputCursorToEnd(input, modelValue)
+  amount.value = sanitizeAmount(amount.value + operation)
+  moveInputCursorToEnd(input, amount)
 }
 
 const getConversionError = () => {
   if (!props.currency) {
     return 'Source currency is required!'
   }
-  if (!props.currencyForeign) {
+  if (!currencyForeign.value) {
     return 'Foreign currency is required!'
   }
 }
@@ -229,14 +236,14 @@ const convertAmountToForeign = () => {
   if (!isConversionValid()) {
     return
   }
-  modelValueForeign.value = convertCurrency(modelValue.value, props.currency.code, props.currencyForeign.code).toFixed(2)
+  amountForeign.value = convertCurrency(amount.value, currencyCode.value, currencyForeignCode.value).toFixed(2)
 }
 
 const convertForeignToAmount = () => {
   if (!isConversionValid()) {
     return
   }
-  modelValue.value = convertCurrency(modelValueForeign.value, props.currencyForeign.code, props.currency.code).toFixed(2)
+  amount.value = convertCurrency(amountForeign.value, currencyForeignCode.value, currencyCode.value).toFixed(2)
 }
 
 onMounted(() => {
