@@ -43,6 +43,7 @@ import RouteConstants from '~/constants/RouteConstants'
 import AppConfigStat from '~/components/settings/app-config-stat.vue'
 import UserRepository from '~/repository/UserRepository'
 import TablerIconConstants from '~/constants/TablerIconConstants'
+import { get } from 'lodash'
 
 const appStore = useAppStore()
 const dataStore = useDataStore()
@@ -83,10 +84,19 @@ const onSave = async () => {
   let userResponse = await new UserRepository().getUser()
   UIUtils.stopToastLoading()
 
+
   if (!ResponseUtils.isSuccess(userResponse)) {
-    UIUtils.showToastError('The provided endpoint + token is not correct.')
+    UIUtils.showToastError('The provided endpoint is not correct.')
     return
   }
+
+  let userId = get(userResponse, 'data.data.id')
+  if (!userId) {
+    UIUtils.showToastError('The provided token is not correct or expired.')
+    return
+  }
+
+
 
   UIUtils.showToastLoading('Fetching...')
   await dataStore.syncEverything()
