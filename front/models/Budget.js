@@ -1,7 +1,7 @@
 import BaseModel from '~/models/BaseModel'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
 import CategoryRepository from '~/repository/CategoryRepository'
-import _ from 'lodash'
+import _, { get } from 'lodash'
 import BudgetTransformer from '~/transformers/BudgetTransformer.js'
 import BudgetRepository from '~/repository/BudgetRepository.js'
 import { useDataStore } from '~/stores/dataStore.js'
@@ -23,16 +23,15 @@ export default class Budget extends BaseModel {
         icon: null,
         auto_budget_type: Budget.types.fixed,
         auto_budget_period: Budget.periods.monthly,
-        currency: dataStore.defaultCurrency
-      }
+        currency: dataStore.defaultCurrency,
+      },
     }
   }
 
   // ------------
 
   getFake(id) {
-    return {
-    }
+    return {}
   }
 
   // --------
@@ -45,11 +44,10 @@ export default class Budget extends BaseModel {
 
   static getCurrencySymbol(budget) {
     const dataStore = useDataStore()
-    return _.get(budget, 'attributes.currency.attributes.symbol', _.get(dataStore.defaultCurrency, 'attributes.symbol'));
+    return _.get(budget, 'attributes.currency.attributes.symbol', get(dataStore.defaultCurrency, 'attributes.symbol'))
   }
 
   // --------
-
 
   static get types() {
     return {
@@ -79,7 +77,6 @@ export default class Budget extends BaseModel {
   // --------
 
   // --------
-
 
   static get periods() {
     return {
@@ -123,8 +120,4 @@ export default class Budget extends BaseModel {
     const dataStore = useDataStore()
     return dataStore.budgetLimitDictionary[budget.id]
   }
-
-
-
 }
-

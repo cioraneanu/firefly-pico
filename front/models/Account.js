@@ -5,6 +5,7 @@ import AccountRepository from '~/repository/AccountRepository'
 import _, { get } from 'lodash'
 import Transaction from '~/models/Transaction'
 import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
+import Currency from '~/models/Currency.js'
 
 class Account extends BaseModel {
   getTransformer() {
@@ -148,6 +149,11 @@ class Account extends BaseModel {
     return get(account, 'attributes.currency')
   }
 
+  static getCurrencySymbol(account) {
+    let currency = this.getCurrency(account)
+    return Currency.getSymbol(currency)
+  }
+
   static getBalance(account) {
     return get(account, 'attributes.current_balance')
   }
@@ -163,7 +169,7 @@ class Account extends BaseModel {
       maximumFractionDigits: digits,
     }).format(amount)
 
-    return `${amount} ${this.getCurrency(account).symbol}`
+    return `${amount} ${this.getCurrencySymbol(account)}`
   }
 
   static getIsActive(account) {
