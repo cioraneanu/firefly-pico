@@ -75,7 +75,6 @@
           </template>
 
           <template #right-icon>
-            {{ currencyForeignSymbol }}
             <currency-dropdown v-model="currencyForeign" />
           </template>
 

@@ -1,7 +1,10 @@
 <template>
   <van-popover v-model:show="showPopover" :actions="list" @select="onSelect">
     <template #reference>
-      <van-button type="success" size="small">{{ currencyCode }}</van-button>
+      <div class="flex-center-vertical gap-1">
+        {{ currencyCode }}
+        <icon-caret-down :size="18" />
+      </div>
     </template>
 
     <template #action="{ action }">
@@ -14,13 +17,10 @@
 import _, { get } from 'lodash'
 import { useDataStore } from '~/stores/dataStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
-import { IconRefresh } from '@tabler/icons-vue'
-
+import { IconCaretDown } from '@tabler/icons-vue'
 import Currency from '~/models/Currency'
-import TablerIconConstants from '~/constants/TablerIconConstants'
 
 const dataStore = useDataStore()
-
 const showPopover = ref(false)
 const modelValue = defineModel()
 let list = ref([])
