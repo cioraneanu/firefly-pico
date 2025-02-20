@@ -424,19 +424,9 @@ const cloneTransactions = async () => {
 
   let cloneItem = await new TransactionRepository().getOne(cloneId)
   cloneItem = TransactionTransformer.transformFromApi(cloneItem.data)
-  cloneItem = get(cloneItem, 'attributes.transactions.0')
-  if (!cloneItem) {
-    return
-  }
 
-  amount.value = cloneItem.amount
-  description.value = cloneItem.description
-  notes.value = cloneItem.notes
-  accountSource.value = cloneItem.accountSource
-  accountDestination.value = cloneItem.accountDestination
-  category.value = cloneItem.category
-  tags.value = cloneItem.tags
-  budget.value = cloneItem.budget
+  delete cloneItem.id
+  item.value = cloneItem
 }
 </script>
 
