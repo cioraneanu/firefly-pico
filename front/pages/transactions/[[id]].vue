@@ -8,7 +8,7 @@
 
     <div class="mb-10" />
 
-    <transaction-assistant v-if="!itemId" @change="onAssistant" @keyup.enter="saveItem" v-model="assistantText" />
+    <transaction-assistant v-if="!itemId && !isCloning" @change="onAssistant" @keyup.enter="saveItem" v-model="assistantText" />
 
     <transaction-type-tabs v-model="type" class="mx-3 mt-1 mb-1" />
 
@@ -159,10 +159,8 @@ const route = useRoute()
 const form = ref(null)
 const assistantText = ref('')
 
-let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+let { itemId, item, isEmpty, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
-  titleAdd: 'Add transaction',
-  titleEdit: 'Edit transaction',
   routeList: RouteConstants.ROUTE_TRANSACTION_LIST,
   routeForm: RouteConstants.ROUTE_TRANSACTION_ID,
   model: new Transaction(),
@@ -170,7 +168,6 @@ let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveI
     assistantText.value = ''
   },
 })
-
 
 const pathKey = 'attributes.transactions.0'
 const { amount, amountForeign, date, tags, description, notes, budget, accountSource, accountDestination, category, type, currencyForeign } = generateChildren(item, [
@@ -200,7 +197,7 @@ const sourceCurrency = computed(() => Account.getCurrency(accountSource.value))
 const isForeignAmountVisible = computed(() => {
   let newTransactionWithDefaultCurrency = !itemId.value && profileStore.defaultForeignCurrency
   let accountsHaveDifferentCurrencies = accountSource.value && accountDestination.value && Account.getCurrency(accountSource.value) !== Account.getCurrency(accountDestination.value)
-  return !!(newTransactionWithDefaultCurrency ||  accountsHaveDifferentCurrencies || currencyForeign.value)
+  return !!(newTransactionWithDefaultCurrency || accountsHaveDifferentCurrencies || currencyForeign.value)
 })
 
 //
@@ -403,6 +400,12 @@ watch(description, (newValue) => {
 })
 
 const showSourceAccountSuggestion = computed(() => !profileStore.defaultAccountSource && !accountSource.value)
+
+const isCloning = computed(() => !!get(route.query, 'transaction_id'))
+
+const title = computed(() => {
+  return isCloning.value ? 'Clone transaction' : itemId.value ? 'Edit transaction' : 'Add transaction'
+})
 
 const toolbar = useToolbar()
 toolbar.init({
