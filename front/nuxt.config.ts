@@ -1,16 +1,26 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 // @ts-ignore
 import pkg from './package.json'
+import { supportedLanguages } from './i18n'
 
 const appName = 'Firefly Pico'
 const appDescription = 'Firefly III companion app.'
 export default defineNuxtConfig({
 
+  i18n: {
+    vueI18n: './i18n/i18n.config.js',
+    langDir: 'locales',
+    locales: supportedLanguages,
+    defaultLocale: 'en',
+    lazy: true,
+    strategy: 'no_prefix'
+  },
+
   nitro: {
     compressPublicAssets: {
       gzip: true,
-      brotli: true
-    }
+      brotli: true,
+    },
   },
   runtimeConfig: {
     public: {
@@ -65,7 +75,9 @@ export default defineNuxtConfig({
     // transpile: ['vuetify'],
   },
 
-  modules: ['@vite-pwa/nuxt', '@nuxtjs/device', '@pinia/nuxt', '@vant/nuxt', 'nuxt-svgo', '@nuxt/eslint'],
+  modules: ['@vite-pwa/nuxt', '@nuxtjs/device', '@pinia/nuxt', '@vant/nuxt', 'nuxt-svgo', '@nuxt/eslint', '@nuxtjs/i18n'],
+
+
 
   svgo: {
     defaultImport: 'component',
@@ -73,7 +85,6 @@ export default defineNuxtConfig({
     // autoImportPath: './assets/icons/duotone-line',
     // global: true,
   },
-
   app: {
     // pageTransition: { name: 'page', mode: 'out-in' },
     head: {
@@ -82,7 +93,6 @@ export default defineNuxtConfig({
       viewport: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover',
     },
   },
-
   pwa: {
     registerType: 'autoUpdate',
     manifest: {
@@ -111,6 +121,5 @@ export default defineNuxtConfig({
       type: 'module',
     },
   },
-
   compatibilityDate: '2024-07-26',
 })
