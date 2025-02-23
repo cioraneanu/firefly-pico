@@ -1,9 +1,9 @@
 <template>
   <app-select
-    :label="label"
+    :label="label ?? $t('tags')"
     v-model="modelValue"
     class=""
-    popupTitle="Select tags"
+    :popupTitle="$t('tags_select')"
     v-model:showDropdown="showDropdown"
     v-model:search="search"
     :list="filteredList"
@@ -69,7 +69,6 @@ const { showTagSelectAsGrid } = storeToRefs(profileStore)
 const props = defineProps({
   label: {
     type: String,
-    default: 'Tags',
   },
   isMultiSelect: {
     default: true,

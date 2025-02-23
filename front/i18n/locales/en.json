@@ -1,13 +1,45 @@
 {
+  "new": "New",
+  "items": "items",
+  "description": "Description",
+  "transaction_type": "Transaction type",
+  "transaction_type_popup": "Select a transaction type",
+  "without": "Without",
+  "category": "Category",
+  "category_select": "Select a category",
+  "tags": "Tags",
+  "tags_select": "Select tags",
+  "budget": "Budget",
+  "budget_select": "Select a budget",
+  "account": "Account",
+  "account_select": "Select an account",
+  "select_is_empty": "No selection...",
+  "date_after": "Date after",
+  "date_before": "Date before",
+  "sub_month": "-1 month",
+  "this_month": "-1 month",
+  "add_month": "-1 month",
+  "amount_min": "Amount min",
+  "amount_max": "Amount max",
   "ui": {
-    "theme": "Theme2"
+    "theme": "Theme"
+  },
+  "toolbar": {
+    "home": "Home",
+    "transactions": "Transactions",
+    "extras": "Extras",
+    "settings": "Settings"
   },
   "filters": {
     "clear": "Clear",
-    "applied_filters": "Applied filters"
+    "applied_filters": "Applied filters",
+    "apply_filters": "Apply filters",
+    "transaction_filters": "Transaction filters"
   },
   "transaction": {
     "title_list": "Transactions list",
-    "split_transaction": "Split transaction"
+    "split_transaction": "Split transaction",
+    "assistant": "Assistant",
+    "assistant_format": "Format = [template | tag?] [amount?] [description?]"
   }
 }

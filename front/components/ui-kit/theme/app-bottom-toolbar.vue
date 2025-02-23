@@ -1,7 +1,7 @@
 <template>
   <van-tabbar v-if="!isKeyboardVisible" v-model="activeTab" :safe-area-inset-bottom="true" :fixed="true">
     <van-tabbar-item :name="tabConstants.dashboard" @click="onChange(tabConstants.dashboard)">
-      Home
+      {{ $t('toolbar.home') }}
       <template #icon="{ active }">
         <!--        <IconDeviceDesktopAnalytics />-->
         <app-icon :icon="TablerIconConstants.dashboard" :size="20" :stroke="getStrokeWidth(active)" />
@@ -9,7 +9,7 @@
     </van-tabbar-item>
 
     <van-tabbar-item :name="tabConstants.transactionList" @click="onChange(tabConstants.transactionList)">
-      Transactions
+      {{ $t('toolbar.transactions') }}
       <template #icon="{ active }">
         <app-icon :icon="TablerIconConstants.transaction" :size="20" :stroke="getStrokeWidth(active)" />
       </template>
@@ -22,14 +22,15 @@
     </van-tabbar-item>
 
     <van-tabbar-item :name="tabConstants.extras" @click="onChange(tabConstants.extras)">
-      Extras
+      {{ $t('toolbar.extras') }}
+
       <template #icon="{ active }">
         <app-icon :icon="TablerIconConstants.extras" :size="20" :stroke="getStrokeWidth(active)" />
       </template>
     </van-tabbar-item>
 
     <van-tabbar-item :name="tabConstants.settings" :dot="appStore.isNewVersionAvailable" @click="onChange(tabConstants.settings)">
-      Settings
+      {{ $t('toolbar.settings') }}
       <template #icon="{ active }">
         <app-icon :icon="TablerIconConstants.settings" :size="20" :stroke="getStrokeWidth(active)" />
       </template>
@@ -60,9 +61,7 @@ const tabConstants = {
 }
 const activeTab = ref(null)
 
-
 const { isKeyboardVisible } = useKeyboard()
-
 
 watch(
   () => route.path,

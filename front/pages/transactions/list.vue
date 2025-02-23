@@ -126,7 +126,7 @@ const { t } = useI18n()
 const toolbar = useToolbar()
 toolbar.init({
   title: t('transaction.title_list'),
-  subtitle: computed(() => `${listTotalCount.value} Items`),
+  subtitle: computed(() => `${listTotalCount.value} ${t('items')}`),
 })
 
 onMounted(() => {

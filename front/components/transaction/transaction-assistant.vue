@@ -1,11 +1,10 @@
 <template>
   <div class="vant-card flex-column mt-5">
     <div class="vant-card-title flex-center-vertical gap-1">
-      Assistant
-      <!--      <app-icon icon="svgo-speed1" :size="20"/>-->
+      {{ $t('transaction.assistant') }}
       <app-tutorial v-bind="TUTORIAL_CONSTANTS.assistant" />
     </div>
-    <div class="text-size-12 text-muted mb-5">Format = [template | tag?] [amount?] [description?]</div>
+    <div class="text-size-12 text-muted mb-5">{{ $t('transaction.assistant_format') }}</div>
 
     <div class="display-flex flex-column">
       <div class="flex-center-vertical gap-2">
@@ -14,7 +13,7 @@
           class="van-cell-no-padding compact flex-1"
           v-model="assistantText"
           label=""
-          placeholder="Assistant..."
+          :placeholder="`${$t('transaction.assistant')} ...`"
           rows="1"
           autosize
           :clearable="true"

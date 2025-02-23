@@ -14,7 +14,7 @@
       <!--      <template #input v-if="isMultiSelect">-->
       <template #input>
         <slot name="input">
-          <div v-if="isEmpty" class="text-placeholder">No selection...</div>
+          <div v-if="isEmpty" class="text-placeholder">{{ $t('select_is_empty') }}</div>
           <div class="display-flex flex-wrap" style="gap: 4px">
             <div v-for="item in modelValueList" class="app-select-option-tag flex-center-vertical gap-2">
               <slot name="inputItemContent" :item="item">

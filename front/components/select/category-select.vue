@@ -1,8 +1,8 @@
 <template>
   <app-select
-    :label="label"
+    :label="label ?? $t('category')"
     class=""
-    popupTitle="Select a category"
+    :popupTitle="$t('category_select')"
     v-model="modelValue"
     v-model:showDropdown="showDropdown"
     v-model:search="search"
@@ -11,7 +11,6 @@
     :getDisplayValue="getDisplayValue"
     v-bind="dynamicAttrs"
   >
-
     <template #left-icon>
       <app-icon :icon="TablerIconConstants.category" :size="20" />
     </template>
@@ -48,10 +47,11 @@ const dataStore = useDataStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 
+const { t } = useI18n()
+
 const props = defineProps({
   label: {
     type: String,
-    default: 'Category',
   },
 })
 

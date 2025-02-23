@@ -1,8 +1,8 @@
 <template>
   <app-select
-    :label="label"
+    :label="label ?? $t('budget')"
     class=""
-    popupTitle="Select a budget"
+    :popupTitle="$t('budget_select')"
     v-model="modelValue"
     v-model:showDropdown="showDropdown"
     v-model:search="search"
@@ -50,8 +50,7 @@ const { dynamicAttrs } = useFormAttributes(attrs)
 
 const props = defineProps({
   label: {
-    type: String,
-    default: 'Budget',
+    type: String
   },
 })
 
