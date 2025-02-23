@@ -3,14 +3,6 @@
     <van-cell :class="cellClass">
       <template #title>
         <div class="display-flex transaction-card prevent-select align-items-lg-stretch">
-          <!--          <div class="first_column flex-center flex-column">-->
-          <!--            <div class="font-700 text-size-14">{{ dateDayOfMonth }}</div>-->
-          <!--            <div class="font-500 text-size-12" style="margin-top: -5px">{{ dateMonth }}</div>-->
-          <!--            <div class="day-of-week" style="margin-top: -2px">{{ dateWeekdayName }}</div>-->
-          <!--          </div>-->
-
-          <!--          <div class="separator"></div>-->
-
           <div class="second_column flex-1">
             <div v-if="isSplitPayment && props.isDetailedMode" class="mt-1 display-flex">
               <transaction-split-badge />
