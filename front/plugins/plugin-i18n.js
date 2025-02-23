@@ -6,8 +6,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   watch(
     () => useProfileStore().language,
     (newValue) => {
-      console.log('watch plugin,', { newValue })
-      // setLocale(newValue)
+      nuxtApp.$i18n.setLocale(newValue)
     },
     { immediate: true },
   )

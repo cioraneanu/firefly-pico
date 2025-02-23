@@ -80,22 +80,11 @@ const syncedSettings = [
 
 watchSettingsStore(syncedSettings)
 
-const { setLocale } = useI18n()
-
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-
-  // Change the language
-  setLocale(language.value)
-
   UIUtils.showToastSuccess('User preferences saved')
 }
-
-watch(language, (newValue) => {
-  console.log('Change lang', { newValue })
-  setLocale(newValue)
-}, {immediate: true})
 
 const toolbar = useToolbar()
 toolbar.init({
