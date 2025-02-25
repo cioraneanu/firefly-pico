@@ -5,9 +5,9 @@
       <van-field
         required
         v-model="amount"
-        placeholder="Amount"
+        :label="$t('amount')"
+        :placeholder="$t('amount')"
         @click="() => inputAmount.focus()"
-        label="Amount"
         class="flex-center-vertical app-field transaction-amount-field"
         v-bind="attrs"
         label-align="top"

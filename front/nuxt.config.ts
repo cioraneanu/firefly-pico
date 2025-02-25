@@ -13,7 +13,10 @@ export default defineNuxtConfig({
     locales: supportedLanguages,
     defaultLocale: 'en',
     lazy: true,
-    strategy: 'no_prefix'
+    strategy: 'no_prefix',
+    compilation: {
+      strictMessage: false,
+    },
   },
 
   nitro: {

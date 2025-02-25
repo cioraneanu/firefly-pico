@@ -32,14 +32,14 @@
 
         <account-select
           v-model="accountSource"
-          label="Source account"
+          :label="$t('transaction.source_account')"
           :allowed-types="accountSourceAllowedTypes"
           :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT)"
           v-bind="accountSourceBinding"
         >
           <template #label>
             <div class="flex-center-vertical gap-1">
-              <div class="flex-1">Source account</div>
+              <div class="flex-1">{{ $t('transaction.source_account') }}</div>
               <van-button v-if="showSourceAccountSuggestion" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_FORM_VALUES)" size="mini" class="suggestion-button"
                 >Set your default
               </van-button>
@@ -49,7 +49,7 @@
 
         <account-select
           v-model="accountDestination"
-          label="Destination account"
+          :label="$t('transaction.destination_account')"
           :allowed-types="accountDestinationAllowedTypes"
           :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT)"
           v-bind="accountDestinationBinding"
@@ -59,7 +59,7 @@
 
         <app-field
           v-model="description"
-          label="Description"
+          :label="$t('description')"
           name="description"
           type="textarea"
           rows="1"
@@ -77,17 +77,17 @@
           <app-date-time-grid v-model="date" name="date" :rules="[{ required: true, message: 'Date is required' }]" required />
 
           <div v-if="!isSplitTransaction" class="px-3 flex-center-vertical gap-1">
-            <van-button size="small" @click="onSubDay">-1 day</van-button>
-            <van-button size="small" @click="onToday">Today</van-button>
-            <van-button size="small" @click="onAddDay">+1 day</van-button>
+            <van-button size="small" @click="onSubDay">{{ $t('sub_day') }}</van-button>
+            <van-button size="small" @click="onToday">{{ $t('today') }}</van-button>
+            <van-button size="small" @click="onAddDay">{{ $t('add_day') }}</van-button>
           </div>
         </div>
 
         <app-field
           v-model="notes"
           :icon="TablerIconConstants.fieldText1"
-          label="Notes"
-          placeholder="No notes..."
+          :label="$t('notes')"
+          :placeholder="$t('notes')"
           type="textarea"
           rows="1"
           autosize
@@ -103,12 +103,12 @@
         <div class="display-flex gap-1">
           <van-button v-if="itemId && !isSplitTransaction" @click="onCreateClone" block type="default" class="mt-2 flex-1">
             <app-icon :icon="TablerIconConstants.clone" />
-            Clone
+            {{ $t('clone') }}
           </van-button>
 
           <van-button v-if="itemId && !isSplitTransaction" @click="onCreateTransactionTemplate" block type="default" class="mt-2 flex-1">
             <app-icon :icon="TablerIconConstants.transactionTemplate" />
-            Make template
+            {{ $t('transaction.make_template') }}
           </van-button>
         </div>
       </div>
@@ -117,7 +117,7 @@
     </van-form>
 
     <app-card-info style="order: 99">
-      <app-field-link label="Configure fields" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FIELDS_ORDER)" />
+      <app-field-link :label="$t('transaction.configure_fields')" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FIELDS_ORDER)" />
     </app-card-info>
   </div>
 </template>
@@ -147,6 +147,7 @@ import { addDays, endOfMonth, startOfMonth } from 'date-fns'
 import TransactionRepository from '~/repository/TransactionRepository.js'
 import TransactionTransformer from '~/transformers/TransactionTransformer.js'
 import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
+import { useI18n } from '#imports'
 
 const refAmount = ref(null)
 
@@ -403,8 +404,9 @@ const showSourceAccountSuggestion = computed(() => !profileStore.defaultAccountS
 
 const isCloning = computed(() => !!get(route.query, 'transaction_id'))
 
+const { t } = useI18n()
 const title = computed(() => {
-  return isCloning.value ? 'Clone transaction' : itemId.value ? 'Edit transaction' : 'Add transaction'
+  return isCloning.value ? t('transaction.title_clone_transaction') : itemId.value ? t('transaction.title_edit_transaction') : t('transaction.title_add_transaction')
 })
 
 const toolbar = useToolbar()

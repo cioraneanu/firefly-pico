@@ -2,7 +2,7 @@
   <div class="app-button-save flex-center-vertical gap-2" :style="style">
     <slot name="left"></slot>
     <van-button round type="primary" native-type="submit" class="flex-1 shadow-depth2">
-      {{ label }}
+      {{ label ?? $t('save') }}
 
       <!--    1000 debug attempts to get the save button to stick above the mobile Keyboard -->
       <template v-if="false">
@@ -23,9 +23,7 @@ import anime from 'animejs'
 import { animateSaveButton } from '~/utils/AnimationUtils.js'
 
 const props = defineProps({
-  label: {
-    default: 'Save',
-  },
+  label: {},
   bottom: {
     default: '+ 20px',
   },

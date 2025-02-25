@@ -1,12 +1,72 @@
 {
+  "new": "Nou",
+  "save": "Salvează",
+  "delete": "Șterge",
+  "clone": "Clonează",
+  "loading": "Se încarcă...",
+  "items": "articole",
+  "description": "Descriere",
+  "notes": "Notițe",
+  "transaction_type": "Tip tranzacție",
+  "transaction_type_popup": "Selectează un tip de tranzacție",
+  "without": "Fără",
+  "template": "Șablon",
+  "category": "Categorie",
+  "category_select": "Selectează o categorie",
+  "tag": "Etichetă",
+  "tags": "Etichete",
+  "todo": "De făcut",
+  "tags_select": "Selectează etichete",
+  "budget": "Buget",
+  "budget_select": "Selectează un buget",
+  "account": "Cont",
+  "account_select": "Selectează un cont",
+  "select_is_empty": "Nicio selecție...",
+  "date": "Dată",
+  "date_after": "Dată după",
+  "date_before": "Dată înainte",
+  "sub_month": "-1 lună",
+  "this_month": "Luna aceasta",
+  "add_month": "+1 lună",
+  "sub_day": "-1 zi",
+  "today": "Astăzi",
+  "add_day": "+1 zi",
+  "amount": "Sumă",
+  "amount_min": "Suma minimă",
+  "amount_max": "Suma maximă",
   "ui": {
-    "theme": "Temă 1"
+    "theme": "Temă"
+  },
+  "toolbar": {
+    "home": "Acasă",
+    "transactions": "Tranzacții",
+    "extras": "Extra",
+    "settings": "Setări"
   },
   "filters": {
-    "clear": "Clear",
-    "applied_filters": "Applied filters"
+    "clear": "Șterge",
+    "applied_filters": "Filtre aplicate",
+    "apply_filters": "Aplică filtre",
+    "transaction_filters": "Filtre tranzacții"
   },
   "transaction": {
-    "split_transaction": "Split transaction"
+    "title_list": "Lista tranzacțiilor",
+    "split_transaction": "Împarte tranzacția",
+    "assistant": "Asistent",
+    "assistant_format": "Format = [șablon / etichetă?] [sumă?] [descriere?]",
+    "assistant_tutorial_title": "Asistent tranzacții",
+    "assistant_tutorial_body": "\n      <p>Creează rapid tranzacții tastând text aici (sau folosind dictarea de pe telefon).</p>\n      <p>Format așteptat:<br> <b>[căutare]&nbsp; [sumă?]&nbsp; [descriere?]&nbsp; [de făcut?]</b></p>\n      <p>1. <b>Căutarea</b> verifică numele etichetelor, categoriilor și șabloanelor de tranzacții. Poți introduce doar o parte din nume sau chiar greși câteva litere.<br><code> elct => electricitate</code></p>\n      <p>2. <b>Suma</b> suportă expresii matematice. Numerele separate prin spațiu sunt adunate automat.</p>\n      <p>3. <b>Descrierea</b> este opțională. Folosește-o pentru a suprascrie numele implicit al etichetei.</p>\n      <p>4. <b>De făcut</b> adaugă ușor eticheta definită de utilizator „de făcut” prin adăugarea unui șir personalizat (implicit „!!”). Acest lucru poate fi modificat în „Setări”.</p>\n      \n      <p><b>Exemple</b><br>\n      \"electricitate\" = etichetă<br>\n      \"înot\" = șablon <br><br>\n      \n      <code>\n      electricitate 23<br> \n      elc 12*2+33<br> \n      elc 12+2*3 descriere personalizată<br> \n      elc 25 !!<br>\n      înot<br> \n      </code>\n      </p>\n    ",
+    "type": {
+      "expense": "Cheltuială",
+      "income": "Venit",
+      "transfer": "Transfer"
+    },
+    "source_account": "Cont sursă",
+    "destination_account": "Cont destinație",
+    "make_template": "Crează șablon",
+    "configure_fields": "Configurare câmpuri",
+    "title_clone_transaction": "Clonează tranzacție",
+    "title_edit_transaction": "Modifică tranzacție",
+    "title_add_transaction": "Adaugă tranzacție"
   }
 }
