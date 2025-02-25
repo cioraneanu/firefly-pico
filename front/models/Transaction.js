@@ -61,17 +61,17 @@ class Transaction extends BaseModel {
   static get types() {
     return {
       expense: {
-        name: 'Expense',
+        t: 'transaction.type.expense',
         code: 'expense',
         fireflyCode: 'withdrawal',
       },
       income: {
-        name: 'Income',
+        t: 'transaction.type.income',
         code: 'income',
         fireflyCode: 'deposit',
       },
       transfer: {
-        name: 'Transfer',
+        t: 'transaction.type.transfer',
         code: 'transfer',
         fireflyCode: 'transfer',
       },

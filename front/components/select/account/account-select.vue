@@ -1,8 +1,8 @@
 <template>
   <app-select
-    :label="label"
+    :label="label ?? $t('account')"
+    :popupTitle="$t('account_select')"
     class=""
-    popupTitle="Select an account"
     v-model="modelValue"
     v-model:showDropdown="showDropdown"
     v-model:search="search"
@@ -96,7 +96,6 @@ const { dynamicAttrs } = useFormAttributes(attrs)
 const props = defineProps({
   label: {
     type: String,
-    default: 'Account',
   },
   allowedTypes: {
     default: () => Account.typesList(),

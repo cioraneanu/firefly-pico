@@ -4,7 +4,7 @@
 
     <van-form @submit="onSave" class="">
       <van-cell-group inset>
-        <div class="van-cell-group-title mb-0">Theme:</div>
+        <div class="van-cell-group-title mb-0">{{ $t('ui.theme') }}:</div>
 
         <app-boolean :label="themeText" v-model="darkTheme">
           <template #icon="{ value }">
@@ -12,10 +12,11 @@
           </template>
         </app-boolean>
 
+        <language-select v-model="language"></language-select>
+
         <page-select v-model="startingPage"></page-select>
 
         <app-boolean v-model="resetFormOnCreate" label="Reset forms after creation" />
-
       </van-cell-group>
 
       <van-cell-group inset>
@@ -54,6 +55,7 @@ import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 import { HERO_ICONS_LIST } from '~/constants/TransactionConstants.js'
+import LanguageSelect from '~/components/select/general/language-select.vue'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
@@ -61,6 +63,7 @@ const dataStore = useDataStore()
 const themeText = computed(() => (darkTheme.value ? 'Dark' : 'Light'))
 const darkTheme = ref(false)
 const startingPage = ref(null)
+const language = ref(null)
 const resetFormOnCreate = ref(false)
 
 const heroIconsList = HERO_ICONS_LIST
@@ -69,6 +72,7 @@ const heroIcons = ref([])
 
 const syncedSettings = [
   { store: profileStore, path: 'darkTheme', ref: darkTheme },
+  { store: profileStore, path: 'language', ref: language },
   { store: profileStore, path: 'heroIcons', ref: heroIcons },
   { store: profileStore, path: 'startingPage', ref: startingPage },
   { store: profileStore, path: 'resetFormOnCreate', ref: resetFormOnCreate },

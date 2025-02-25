@@ -2,18 +2,18 @@
   <van-popup v-model:show="showDropdown" round position="bottom" :style="style">
     <div class="h-100 display-flex flex-column qqq">
       <div class="flex-center-vertical m-10 mb-0">
-        <div class="flex-1 text-center font-weight-600 text-size-18">Transaction filters</div>
+        <div class="flex-1 text-center font-weight-600 text-size-18">{{ $t('filters.transaction_filters') }}</div>
       </div>
 
       <div ref="popupContentRef" class="flex-1 flex-column overflow-auto color" style="padding-bottom: 100px">
         <van-form @submit="onApplyFilters">
-          <app-field class="flex-1" v-model="description" label="Description" placeholder="Description" />
+          <app-field class="flex-1" v-model="description" :label="$t('description')" :placeholder="$t('description')" />
 
           <transaction-type-select v-model="transactionType" />
 
           <div class="display-flex van-cell-fake pl-3 align-items-baseline">
             <div class="display-flex flex-column gap-3 align-items-center">
-              <div class="text-size-14">Without</div>
+              <div class="text-size-14">{{ $t('without') }}</div>
               <app-checkbox v-model="withoutCategory" shape="square" />
             </div>
 
@@ -22,7 +22,7 @@
 
           <div class="display-flex van-cell-fake pl-3 align-items-baseline">
             <div class="display-flex flex-column gap-3 align-items-center">
-              <div class="text-size-14">Without</div>
+              <div class="text-size-14">{{ $t('without') }}</div>
               <app-checkbox v-model="withoutTag" shape="square" />
             </div>
 
@@ -31,7 +31,7 @@
 
           <div class="display-flex van-cell-fake pl-3 align-items-baseline">
             <div class="display-flex flex-column gap-3 align-items-center">
-              <div class="text-size-14">Without</div>
+              <div class="text-size-14">{{ $t('without') }}</div>
               <app-checkbox v-model="withoutBudget" shape="square" />
             </div>
 
@@ -41,25 +41,24 @@
           <account-select v-model="account" :isMultiSelect="true" />
 
           <div class="flex-center-vertical">
-            <app-date class="flex-1" v-model="dateStart" label="Date after" />
-
-            <app-date class="flex-1" v-model="dateEnd" label="Date before" />
+            <app-date class="flex-1" v-model="dateStart" :label="$t('date_after')" />
+            <app-date class="flex-1" v-model="dateEnd" :label="$t('date_before')" />
           </div>
 
           <div class="px-3 flex-center-vertical gap-1">
-            <van-button size="small" @click="onSubMonth">-1 month</van-button>
-            <van-button size="small" @click="onCurrentMonth">This month</van-button>
-            <van-button size="small" @click="onAddMonth">+1 month</van-button>
+            <van-button size="small" @click="onSubMonth">{{ $t('sub_month') }}</van-button>
+            <van-button size="small" @click="onCurrentMonth">{{ $t('this_month') }}</van-button>
+            <van-button size="small" @click="onAddMonth">{{ $t('add_month') }}</van-button>
           </div>
 
           <div class="display-flex">
-            <app-field class="flex-1" v-model="amountStart" label="Amount min" placeholder="Amount min" />
-            <app-field class="flex-1" v-model="amountEnd" label="Amount max" placeholder="Amount max" />
+            <app-field class="flex-1" v-model="amountStart" :label="$t('amount_min')" :placeholder="$t('amount_min')" />
+            <app-field class="flex-1" v-model="amountEnd" :label="$t('amount_max')" :placeholder="$t('amount_max')" />
           </div>
 
-          <app-button-form-save label="Apply filters" bottom=" - var(--van-tabbar-height) + 20px">
+          <app-button-form-save :label="$t('filters.apply_filters')" bottom=" - var(--van-tabbar-height) + 20px">
             <template #left>
-              <van-button v-if="isFiltered" @click="onClearFilters" round> Clear </van-button>
+              <van-button v-if="isFiltered" @click="onClearFilters" round>{{ $t('filters.clear') }}</van-button>
             </template>
           </app-button-form-save>
         </van-form>

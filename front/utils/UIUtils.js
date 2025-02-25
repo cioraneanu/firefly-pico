@@ -49,8 +49,9 @@ class UIUtils {
 
   static showLoadingWhen(isLoading) {
     const profileStore = useProfileStore()
+    const { t } = useI18n()
     watch(isLoading, (newValue) => {
-      profileStore.loadingMessage = "Loading..."
+      profileStore.loadingMessage = t('loading')
       profileStore.isLoading = newValue
     })
   }

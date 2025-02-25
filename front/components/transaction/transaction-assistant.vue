@@ -1,11 +1,11 @@
 <template>
   <div class="vant-card flex-column mt-5">
     <div class="vant-card-title flex-center-vertical gap-1">
-      Assistant
-      <!--      <app-icon icon="svgo-speed1" :size="20"/>-->
-      <app-tutorial v-bind="TUTORIAL_CONSTANTS.assistant" />
+      {{ $t('transaction.assistant') }}
+      <!--      <app-tutorial v-bind="TUTORIAL_CONSTANTS.assistant" />-->
+      <app-tutorial :title="$t('transaction.assistant_tutorial_title')" :body="$t('transaction.assistant_tutorial_body')" />
     </div>
-    <div class="text-size-12 text-muted mb-5">Format = [template | tag?] [amount?] [description?]</div>
+    <div class="text-size-12 text-muted mb-5">{{ $t('transaction.assistant_format') }}</div>
 
     <div class="display-flex flex-column">
       <div class="flex-center-vertical gap-2">
@@ -14,7 +14,7 @@
           class="van-cell-no-padding compact flex-1"
           v-model="assistantText"
           label=""
-          placeholder="Assistant..."
+          :placeholder="`${$t('transaction.assistant')} ...`"
           rows="1"
           autosize
           :clearable="true"
@@ -33,7 +33,7 @@
           <template v-if="foundTemplate">
             <van-tag round class="assistant-tag" size="medium" type="primary">
               <!--              <app-icon :icon="TablerIconConstants.transactionTemplate" color="#fff" class="mr-5" :size="15"/>-->
-              <span>Template</span>
+              <span>{{ $t('template') }}</span>
               <span>|</span>
               {{ TransactionTemplate.getDisplayName(foundTemplate) }}
             </van-tag>
@@ -41,7 +41,7 @@
 
           <template v-if="foundTag">
             <van-tag round class="assistant-tag" size="medium" type="primary">
-              <span>Tag</span>
+              <span>{{ $t('tag') }}</span>
               <span>|</span>
               {{ Tag.getDisplayNameEllipsized(foundTag) }}
             </van-tag>
@@ -49,7 +49,7 @@
 
           <template v-if="foundCategory">
             <van-tag round class="assistant-tag" size="medium" type="primary">
-              <span>Category:</span>
+              <span>{{ $t('category') }}:</span>
               <span>|</span>
               {{ Category.getDisplayName(foundCategory) }}
             </van-tag>
@@ -57,7 +57,7 @@
 
           <template v-if="foundAmount">
             <van-tag class="assistant-tag" round size="medium" type="primary">
-              <span>Amount</span>
+              <span>{{ $t('amount') }}</span>
               <span>|</span>
               <span>{{ foundAmount }}</span>
             </van-tag>
@@ -65,7 +65,7 @@
 
           <template v-if="foundDescription">
             <van-tag class="assistant-tag" round size="medium" type="primary">
-              <span>Description</span>
+              <span>{{ $t('description') }}</span>
               <span>|</span>
               <span>{{ ellipsizeText(foundDescription, 20) }}</span>
             </van-tag>
@@ -73,10 +73,9 @@
 
           <template v-if="isTodo">
             <div class="assistant-tag tag-todo">
-              <span>Todo</span>
+              <span>{{ $t('todo') }}</span>
             </div>
           </template>
-
         </div>
       </template>
     </div>

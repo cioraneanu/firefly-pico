@@ -1,7 +1,7 @@
 <template>
   <div class="transaction-type-container">
-    <div @click="onClick(item)" :class="getItemClass(item)" v-for="item in list">
-      <span>{{ item.name }}</span>
+    <div v-for="item in list" @click="onClick(item)" :class="getItemClass(item)">
+      <span>{{ $t(item.t) }}</span>
       <span class="type-indicator"></span>
     </div>
   </div>

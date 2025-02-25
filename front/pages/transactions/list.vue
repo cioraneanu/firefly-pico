@@ -16,8 +16,8 @@
 
     <div class="applied-filters-container" v-if="filtersDisplayList.length > 0">
       <div class="flex-center-vertical">
-        <div class="title flex-1">Applied filters</div>
-        <van-button @click="onClearFilters" size="small" class=""> Clear</van-button>
+        <div class="title flex-1">{{ $t('transactions.list.applied_filters') }}</div>
+        <van-button @click="onClearFilters" size="small" class="">{{ $t('filters.clear') }}</van-button>
       </div>
 
       <div class="display-flex flex-wrap gap-1">
@@ -80,8 +80,7 @@ const onCustomGetAll = async ({ page, pageSize }) => {
   })
 }
 
-const { title, isLoading, isFinished, isRefreshing, page, pageSize, totalPages, listTotalCount, list, isEmpty, listPagination, onAdd, onEdit, onDelete, onLoadMore, onRefresh } = useList({
-  title: 'Transactions list',
+const { isLoading, isFinished, isRefreshing, page, pageSize, totalPages, listTotalCount, list, isEmpty, listPagination, onAdd, onEdit, onDelete, onLoadMore, onRefresh } = useList({
   routeList: RouteConstants.ROUTE_TRANSACTION_LIST,
   routeForm: RouteConstants.ROUTE_TRANSACTION_ID,
   model: new Transaction(),
@@ -123,10 +122,11 @@ const onClearFilters = () => {
 }
 // let filtersList = computed()
 
+const { t } = useI18n()
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'Transactions list',
-  subtitle: computed(() => `${listTotalCount.value} Items`),
+  title: t('transaction.title_list'),
+  subtitle: computed(() => `${listTotalCount.value} ${t('items')}`),
 })
 
 onMounted(() => {
