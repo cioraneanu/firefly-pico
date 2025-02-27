@@ -1,10 +1,6 @@
 <template>
-  <van-cell-group inset >
-<!--    <div class="flex-center-vertical gap-2">-->
-<!--      <app-icon :icon="TablerIconConstants.leftArrow" @click="onPreviousMonth" :size="24" class="m-20" />-->
-<!--      <div class="flex-1 flex-center text-size-14 font-weight-600">{{ rangeTitle }}</div>-->
-<!--      <app-icon :icon="TablerIconConstants.rightArrow" @click="onNextMonth" :size="24" class="m-20" />-->
-<!--    </div>-->
+  <van-cell-group inset>
+    <div class="van-cell-group-title">Transactions summary:</div>
 
     <van-grid :column-num="3">
       <dashboard-summary-card
@@ -32,10 +28,15 @@
       />
 
       <dashboard-summary-card :icon="TablerIconConstants.dashboardTotalSurplus" title="Surplus" :subtitle="totalSurplusFormatted" subtitleClass="" />
-
       <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" title="Transactions" :subtitle="dataStore.totalTransactionsCount" subtitleClass="" />
-
       <dashboard-summary-card :icon="TablerIconConstants.account" title="Days remaining" :subtitle="remainingDays" />
+    </van-grid>
+
+    <div class="van-cell-group-title">Savings summary:</div>
+    <van-grid :column-num="3" @click="onNavigate">
+      <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" title="Transactions" :subtitle="dataStore.transactionsListSavingsCount" subtitleClass="" />
+      <dashboard-summary-card :icon="TablerIconConstants.dashboardCoin" title="Amount" :subtitle="transactionsListSavingsAmount" :subtitleClass="savingsAmountClass" />
+      <dashboard-summary-card :icon="TablerIconConstants.dashboardSavingsPercent" title="Percentage" :subtitle="savingsPercentFormatted" subtitleClass="text-primary" />
     </van-grid>
   </van-cell-group>
 </template>
@@ -93,4 +94,15 @@ watch(
     dataStore.fetchDashboardTransactionsForInterval()
   },
 )
+
+const transactionsListSavingsAmount = computed(() => getFormattedValue(dataStore.transactionsListSavingsAmount))
+const savingsAmountClass = computed(() => (dataStore.transactionsListSavingsAmount > 0 ? 'text-success' : 'text-danger'))
+
+const savingsPercentFormatted = computed(() => {
+  return `${Math.trunc(dataStore.transactionsListSavingsPercentage)} %`
+})
+const onNavigate = async () => {
+  let transactionIds = dataStore.transactionsListSavings.map((item) => item.id).join(',')
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?id=${transactionIds}`)
+}
 </script>
