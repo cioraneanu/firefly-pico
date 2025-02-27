@@ -1,16 +1,18 @@
-import { flags } from '~/constants/SvgConstants.js'
+// import { flags } from '~/constants/SvgConstants.js'
 
 export const supportedLanguages = [
   {
     code: 'en',
     file: 'en.json',
     displayName: 'English',
-    icon: flags.en
+    icon: 'svgo-flags-en',
+    // icon: flags.en
   },
   {
     code: 'ro',
     file: 'ro.json',
     displayName: 'Română',
-    icon:flags.ro
+    icon: 'svgo-flags-ro',
+    // icon: flags.ro,
   },
 ]
