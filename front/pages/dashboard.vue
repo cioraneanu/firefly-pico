@@ -100,11 +100,11 @@ const { lengthX } = useSwipe(dashboard, {
     let velocity = Math.abs(lengthX.value) / duration
 
     if (lengthX.value > 100 && velocity >= 0.5) {
-      dataStore.dashboard.month = addMonths(dataStore.dashboard.month, -1)
+      dataStore.dashboard.month = addMonths(dataStore.dashboard.month, 1)
     }
 
     if (lengthX.value < -100 && velocity >= 0.5) {
-      dataStore.dashboard.month = addMonths(dataStore.dashboard.month, 1)
+      dataStore.dashboard.month = addMonths(dataStore.dashboard.month, -1)
     }
 
   },
