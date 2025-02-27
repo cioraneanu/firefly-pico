@@ -263,14 +263,18 @@ export const useDataStore = defineStore('data', {
 
     budgetLimitTotal(state) {
       return state.budgetLimitList.reduce((result, budgetLimit) => {
-        return result + get(budgetLimit, 'attributes.amount', 0)
+        let budgetAmount =  get(budgetLimit, 'attributes.amount') ?? 0
+        let budgetCurrencyCode =  get(budgetLimit, 'attributes.currency_code')
+        return result + convertCurrency(budgetAmount, budgetCurrencyCode, state.dashboardCurrency)
       }, 0)
     },
 
     budgetLimitSpent(state) {
       return Math.abs(
         state.budgetLimitList.reduce((result, budgetLimit) => {
-          return result + get(budgetLimit, 'attributes.spent', 0)
+          let budgetAmount =  get(budgetLimit, 'attributes.spent') ?? 0
+          let budgetCurrencyCode =  get(budgetLimit, 'attributes.currency_code')
+          return result + convertCurrency(budgetAmount, budgetCurrencyCode, state.dashboardCurrency)
         }, 0),
       )
     },

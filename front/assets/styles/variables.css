@@ -1,5 +1,6 @@
 :root {
   --black: #000;
+  --semi-black: #888;
   --max-device-width: 800px;
   --van-tabbar-z-index: 10 !important;
 
@@ -30,6 +31,8 @@
 
 .van-theme-dark {
   --black: #fff;
+  --semi-black: #aaa;
+
   --van-background-2-5: #2f2f2f;
   /*--primary-action: #2f2f2f;*/
   --primary-action: #00a261dd;

@@ -1,7 +1,7 @@
 <template>
-  <div class="app-chip display-flex gap-1">
-    <div v-if="title" class="title">{{ title }}</div>
-    <div v-if="subtitle" class="subtitle text-muted">{{ subtitle }}</div>
+  <div class="app-chip display-flex flex-column align-items-center">
+    <div v-if="title" class="title font-600">{{ title }}</div>
+    <div v-if="subtitle" class="subtitle">{{ subtitle }}</div>
   </div>
 </template>
 

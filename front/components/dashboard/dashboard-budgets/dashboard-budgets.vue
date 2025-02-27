@@ -4,9 +4,9 @@
 
     <template v-if="hasBudgets">
       <div class="flex-center-vertical justify-content-center flex-wrap gap-2 m-2">
-        <app-chip :title="`Budgeted: ${dataStore.budgetLimitTotal}`" />
-        <app-chip :title="`Spent: ${dataStore.budgetLimitSpent}`" />
-        <app-chip :title="`Remaining: ${dataStore.budgetLimitRemaining}`" />
+        <app-chip :title="`Budgeted:`" :subtitle="budgetLimitTotalFormatted" />
+        <app-chip :title="`Spent:`" :subtitle="budgetLimitSpentFormatted" />
+        <app-chip :title="`Remaining:`" :subtitle="budgetLimitRemainingFormatted" />
       </div>
 
       <van-grid :column-num="3">
@@ -29,4 +29,8 @@ const dataStore = useDataStore()
 
 const budgetList = dataStore.budgetList
 const hasBudgets = computed(() => budgetList.length > 0)
+
+const budgetLimitTotalFormatted = computed(() => `${getFormattedValue(dataStore.budgetLimitTotal)} ${dataStore.dashboardCurrency}`)
+const budgetLimitSpentFormatted = computed(() => `${getFormattedValue(dataStore.budgetLimitSpent)} ${dataStore.dashboardCurrency}`)
+const budgetLimitRemainingFormatted = computed(() => `${getFormattedValue(dataStore.budgetLimitRemaining) } ${dataStore.dashboardCurrency}`)
 </script>
