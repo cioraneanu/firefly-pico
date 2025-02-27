@@ -3,13 +3,11 @@
     <div class="van-cell-group-title">Budgets:</div>
 
     <template v-if="hasBudgets">
-      <van-grid :column-num="3">
-        <dashboard-summary-card :icon="TablerIconConstants.budgetLimit" title="Budgeted" :subtitle="dataStore.budgetLimitTotal" subtitleClass="text-success" />
-        <dashboard-summary-card :icon="TablerIconConstants.budgetLimit" title="Spent" :subtitle="dataStore.budgetLimitSpent" subtitleClass="text-danger" />
-        <dashboard-summary-card :icon="TablerIconConstants.budgetLimit" title="Remaining" :subtitle="dataStore.budgetLimitRemaining" subtitleClass="text-primary" />
-      </van-grid>
-
-      <div class="bg-primary" style="height: 1px;" />
+      <div class="flex-center-vertical justify-content-center flex-wrap gap-2 m-2">
+        <app-chip :title="`Budgeted: ${dataStore.budgetLimitTotal}`" />
+        <app-chip :title="`Spent: ${dataStore.budgetLimitSpent}`" />
+        <app-chip :title="`Remaining: ${dataStore.budgetLimitRemaining}`" />
+      </div>
 
       <van-grid :column-num="3">
         <dashboard-budget-item v-for="budget in budgetList" :value="budget" />
@@ -25,11 +23,10 @@ import DashboardBudgetItem from '~/components/dashboard/dashboard-budgets/dashbo
 import { get } from 'lodash'
 import Transaction from '~/models/Transaction.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import AppChip from '~/components/ui-kit/app-chip.vue'
 
 const dataStore = useDataStore()
 
 const budgetList = dataStore.budgetList
 const hasBudgets = computed(() => budgetList.length > 0)
-
-
 </script>

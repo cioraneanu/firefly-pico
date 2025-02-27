@@ -1077,3 +1077,20 @@ img, svg {
     gap: 3px;
     padding: 3px 5px;
 }
+
+.app-chip {
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+    border-radius: 15px;
+    padding: 2px 6px;
+    border: 1px solid var(--black);
+}
+
+.app-chip .title {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.app-chip .subtitle {
+    font-size: 12px;
+    font-weight: 400;
+}
