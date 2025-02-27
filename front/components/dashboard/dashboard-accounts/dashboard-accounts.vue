@@ -1,5 +1,5 @@
 <template>
-  <van-cell-group inset >
+  <van-cell-group inset>
     <div class="flex-center-vertical">
       <div class="van-cell-group-title">Total balance:</div>
     </div>
@@ -22,6 +22,7 @@
     <div v-if="hasHiddenAccounts" class="flex-center">
       <div @click="toggleHiddenAccounts" class="p-5 m-5 button-link">
         {{ showHiddenAccounts ? 'View less...' : 'View more...' }}
+        <component :is="showHiddenAccounts ? IconLibraryMinus : IconLibraryPlus" :size="20" :stroke="1.7" />
       </div>
     </div>
 
@@ -46,7 +47,7 @@
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Account from '~/models/Account.js'
 import RouteConstants from '~/constants/RouteConstants.js'
-import { IconCash } from '@tabler/icons-vue'
+import { IconCash, IconLibraryPlus, IconLibraryMinus } from '@tabler/icons-vue'
 import { getFormattedValue } from '~/utils/MathUtils.js'
 import { useActionSheet } from '~/composables/useActionSheet.js'
 
@@ -69,13 +70,11 @@ const accountTotal = computed(() => {
   return getFormattedValue(dataStore.dashboardAccountsEstimatedTotal)
 })
 
-
 const getAccountAmount = (account) => {
   return `${getFormattedValue(Account.getBalance(account))} ${Account.getCurrencySymbol(account)}`
 }
 
 const hasMultipleCurrencies = computed(() => dataStore.dashboardAccountsCurrencyList.length > 1)
-
 
 const actionSheet = useActionSheet()
 const onShowActionSheet = (account) => {
