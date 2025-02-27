@@ -500,6 +500,11 @@ export const avatarListIcons = [
   { name: 'wallet-svgrepo-com', icon: 'svgo-avatar-wallet-svgrepo-com' },
 ]
 
+export const flags = {
+  ro: 'svgo-flags-ro',
+  en: 'svgo-flags-en'
+}
+
 export const custom = {
   exchange: 'svgo-custom-exchange',
 }

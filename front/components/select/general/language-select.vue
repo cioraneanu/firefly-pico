@@ -1,20 +1,17 @@
 <template>
-  <app-select
-    label="Language select"
-    popupTitle="Select your language"
-    v-model="modelValue"
-    v-model:showDropdown="showDropdown"
-    :list="list"
-    :columns="1"
-    v-bind="dynamicAttrs"
-    :has-search="false"
-  >
-    <template #item="{item}">
-      {{ item.displayName}}
+  <app-select label="Language select" popupTitle="Select your language" v-model="modelValue" v-model:showDropdown="showDropdown" :list="list" :columns="1" v-bind="dynamicAttrs" :has-search="false">
+    <template #item="{ item }">
+      <div class="flex-center-vertical gap-2">
+        <app-icon :icon="item.icon" :size="24" />
+        {{ item.displayName }}
+      </div>
     </template>
 
-    <template #inputItemContent="{item}">
-      {{ item.displayName}}
+    <template #inputItemContent="{ item }">
+      <div class="flex-center-vertical gap-2">
+        <app-icon :icon="item.icon" :size="18" />
+        {{ item.displayName }}
+      </div>
     </template>
   </app-select>
 </template>
