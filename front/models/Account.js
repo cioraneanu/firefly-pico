@@ -7,7 +7,7 @@ import Transaction from '~/models/Transaction'
 import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
 import Currency from '~/models/Currency.js'
 
-class Account extends BaseModel {
+export default class Account extends BaseModel {
   getTransformer() {
     return AccountTransformer
   }
@@ -21,8 +21,8 @@ class Account extends BaseModel {
       attributes: {
         name: '',
         icon: null,
-        type: null,
-        role: null,
+        type: Account.types.asset,
+        account_role: Account.roleAssets.default,
         include_net_worth: true,
         is_dashboard_visible: true,
       },
@@ -223,6 +223,4 @@ class Account extends BaseModel {
   }
 }
 
-export default Account
 
-export {}
