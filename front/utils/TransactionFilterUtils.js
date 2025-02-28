@@ -22,9 +22,10 @@ export default {
       bagKey: 'description',
     },
     transactionType: {
+      bagKey: 'transactionType',
+      // TODO: Probably a good idea to just merge displayName+displayValue and filterName+filterValue into a single function.
       displayName: 'Type',
       filterName: 'type',
-      bagKey: 'transactionType',
       displayValue: (item) => translate(item?.t),
       filterValue: (item) => get(item, 'fireflyCode'),
     },
@@ -106,14 +107,16 @@ export default {
       bagKey: 'amountEnd',
     },
     dateAfter: {
-      displayName: 'Date >',
+      displayName: 'Date',
+      displaySeparator: '>',
       filterName: 'date_after',
       bagKey: 'dateStart',
       displayValue: (item) => DateUtils.dateToUI(item),
       filterValue: (item) => DateUtils.dateToString(item),
     },
     dateBefore: {
-      displayName: 'Date <',
+      displayName: 'Date',
+      displaySeparator: '<',
       filterName: 'date_before',
       bagKey: 'dateEnd',
       displayValue: (item) => DateUtils.dateToUI(item),
@@ -179,7 +182,7 @@ export default {
       })
       .filter((item) => !!item?.filterValue)
       .map((item) => ({
-        display: `${item.displayName}: ${item.displayValue}`,
+        display: `${item.displayName} ${item.displaySeparator ?? ":"} ${item.displayValue}`,
         filter: `${item.filterName}:"${encodeURIComponent(item.filterValue)}"`,
       }))
   },
