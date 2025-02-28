@@ -194,7 +194,8 @@ const onSelectCell = (item) => {
     }
     modelValue.value = newValue
   } else {
-    modelValue.value = isEqual(modelValue.value, item) ? null : item
+    let sameOptionClicked =  isEqual(modelValue.value, item)
+    modelValue.value = sameOptionClicked ? ( isClearable.value ? null:  item ) : item
     showDropdown.value = false
   }
 }

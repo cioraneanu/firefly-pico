@@ -1,5 +1,15 @@
 <template>
-  <app-select label="Language select" popupTitle="Select your language" v-model="modelValue" v-model:showDropdown="showDropdown" :list="list" :columns="1" v-bind="dynamicAttrs" :has-search="false">
+  <app-select
+    label="Language select"
+    popupTitle="Select your language"
+    v-model="modelValue"
+    v-model:showDropdown="showDropdown"
+    :list="list"
+    :columns="1"
+    v-bind="dynamicAttrs"
+    :has-search="false"
+    :clearable="false"
+  >
     <template #item="{ item }">
       <div class="flex-center-vertical gap-2">
         <app-icon :icon="item.icon" :size="24" />
