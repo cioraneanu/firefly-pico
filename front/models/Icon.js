@@ -33,6 +33,10 @@ export default class Icon extends BaseModel {
     return iconName?.startsWith('svgo-avatar')
   }
 
+  static isTypeFlag(iconName) {
+    return iconName?.startsWith('svgo-flags')
+  }
+
   static isTypeDuo(iconName) {
     return iconName?.startsWith('svgo-duo')
   }

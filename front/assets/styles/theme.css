@@ -650,6 +650,11 @@ body {
     padding: 8px 12px;
 }
 
+.van-grid-item__text {
+    text-align: center;
+    word-break: break-word;
+}
+
 .app-date-time-grid .van-grid-item__text {
     font-size: 16px;
     font-weight: 600;
