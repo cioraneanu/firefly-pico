@@ -65,12 +65,6 @@ export const transactionListFieldsConfig = {
     icon: TablerIconConstants.account,
     isVisible: true,
   },
-  tags: {
-    code: 'tags',
-    name: 'Tags',
-    icon: TablerIconConstants.tag,
-    isVisible: true,
-  },
   category: {
     code: 'category',
     name: 'Category',
@@ -81,6 +75,12 @@ export const transactionListFieldsConfig = {
     code: 'notes',
     name: 'Notes',
     icon: TablerIconConstants.fieldText1,
+    isVisible: true,
+  },
+  tags: {
+    code: 'tags',
+    name: 'Tags',
+    icon: TablerIconConstants.tag,
     isVisible: true,
   },
   // budget: {
