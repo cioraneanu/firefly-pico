@@ -1,7 +1,7 @@
 <template>
   <app-select
-    label="Language select"
-    popupTitle="Select your language"
+    :label="$t('language_select.label')"
+    :popupTitle="$t('language_select.title')"
     v-model="modelValue"
     v-model:showDropdown="showDropdown"
     :list="list"

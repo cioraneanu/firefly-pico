@@ -4,24 +4,24 @@
 
     <van-form @submit="onSave" class="">
       <van-cell-group inset>
-        <div class="van-cell-group-title">General:</div>
+        <div class="van-cell-group-title">{{ $t('settings.general') }}:</div>
 
         <app-select
-          label="Numbers formatting:"
-          popupTitle="Select preferred numbers formatting"
+          :label="$t('settings.formatting.numbers_format') + ':'"
+          :popupTitle="$t('settings.formatting.select_numbers_format')"
           v-model="numberFormat"
           v-model:showDropdown="isDropdownNumberFormatVisible"
           :list="numberFormatList"
           :columns="1"
           :has-search="false"
-          :rules="[{ required: true, message: 'This field is required' }]"
+          :rules="[{ required: true, message: $t('settings.required_field') }]"
           required
           :clearable="false"
         />
 
         <app-select
-          label="Date format"
-          popupTitle="Select a date format"
+          :label="$t('settings.formatting.date_format')"
+          :popupTitle="$t('settings.formatting.select_date_format')"
           v-model="dateFormat"
           v-model:showDropdown="isDropdownDateFormatVisible"
           :list="dateFormatList"
@@ -32,8 +32,8 @@
         <day-select v-model="weekStartsOn" />
 
         <app-select
-          label="First day of month"
-          popupTitle="Select the first day of month"
+          :label="$t('settings.formatting.first_day_of_month')"
+          :popupTitle="$t('settings.formatting.select_first_day_of_month')"
           v-model="firstDayOfMonth"
           v-model:showDropdown="isDropdownFirstDayVisible"
           :list="firstDayOfMonthList"
@@ -43,13 +43,13 @@
       </van-cell-group>
 
       <van-cell-group inset>
-        <div class="van-cell-group-title">Casing:</div>
+        <div class="van-cell-group-title">{{ $t('settings.formatting.casing') }}:</div>
 
-        <app-boolean label="Force transaction description lowercase:" v-model="lowerCaseTransactionDescription" />
-        <app-boolean label="Force account name lowercase:" v-model="lowerCaseAccountName" />
-        <app-boolean label="Force category name lowercase:" v-model="lowerCaseCategoryName" />
-        <app-boolean label="Force tag name lowercase:" v-model="lowerCaseTagName" />
-        <app-boolean label="Strip accents:" v-model="stripAccents" />
+        <app-boolean :label="$t('settings.formatting.force_transaction_description_lowercase')" v-model="lowerCaseTransactionDescription" />
+        <app-boolean :label="$t('settings.formatting.force_account_name_lowercase')" v-model="lowerCaseAccountName" />
+        <app-boolean :label="$t('settings.formatting.force_category_name_lowercase')" v-model="lowerCaseCategoryName" />
+        <app-boolean :label="$t('settings.formatting.force_tag_name_lowercase')" v-model="lowerCaseTagName" />
+        <app-boolean :label="$t('settings.formatting.strip_accents')" v-model="stripAccents" />
       </van-cell-group>
 
       <app-button-form-save />
@@ -69,6 +69,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 import DaySelect from '~/components/select/general/day-select.vue'
 
+const { t } = useI18n()
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
@@ -109,12 +110,12 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-  UIUtils.showToastSuccess('Settings saved')
+  UIUtils.showToastSuccess(t('settings.settings_saved'))
 }
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'Formatting settings',
+  title: t('settings.formatting.title'),
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
 

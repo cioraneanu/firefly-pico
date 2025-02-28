@@ -1,5 +1,6 @@
 <template>
-  <app-select label="Starting page" v-model="modelValue" v-model:showDropdown="showDropdown" :list="list" :columns="1" v-bind="dynamicAttrs" :has-search="false" />
+  <app-select :label="$t('page_select.label')" :popupTitle="$t('page_select.title')" v-model="modelValue"
+    v-model:showDropdown="showDropdown" :list="list" :columns="1" v-bind="dynamicAttrs" :has-search="false" />
 </template>
 
 <script setup>
