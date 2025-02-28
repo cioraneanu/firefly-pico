@@ -5,6 +5,8 @@ import Category from '~/models/Category.js'
 import Budget from '~/models/Budget.js'
 import Account from '~/models/Account.js'
 import { useProfileStore } from '~/stores/profileStore.js'
+import { translate } from '~/plugins/plugin-i18n.js'
+
 
 export default {
   filters: {
@@ -23,7 +25,7 @@ export default {
       displayName: 'Type',
       filterName: 'type',
       bagKey: 'transactionType',
-      displayValue: (item) => get(item, 'name'),
+      displayValue: (item) => translate(item?.t),
       filterValue: (item) => get(item, 'fireflyCode'),
     },
     tag: {

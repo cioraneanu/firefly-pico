@@ -16,14 +16,13 @@
 
     <div class="applied-filters-container" v-if="filtersDisplayList.length > 0">
       <div class="flex-center-vertical">
-        <div class="title flex-1">{{ $t('transactions.list.applied_filters') }}</div>
+        <div class="title flex-1">{{ $t('filters.applied_filters') }}</div>
         <van-button @click="onClearFilters" size="small" class="">{{ $t('filters.clear') }}</van-button>
       </div>
 
       <div class="display-flex flex-wrap gap-1">
         <div v-for="appliedFilter in filtersDisplayList" class="tag-filter">
           <app-icon :icon="TablerIconConstants.filter" size="14" :stroke="1.9" />
-
           <span class="ml-5">{{ appliedFilter }}</span>
         </div>
       </div>
