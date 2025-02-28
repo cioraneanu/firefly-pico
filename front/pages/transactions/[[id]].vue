@@ -325,8 +325,8 @@ const isTypeIncome = computed(() => isEqual(type.value, Transaction.types.income
 const isTypeTransfer = computed(() => isEqual(type.value, Transaction.types.transfer))
 
 const getStyleForField = (fieldCode) => {
-  let position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
-  let field = profileStore.transactionOrderedFieldsList.find((item) => item.code === fieldCode)
+  let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
+  let field = profileStore.transactionFormFieldsConfig.find((item) => item.code === fieldCode)
   let isVisible = field ? field.isVisible : true
   let displayStyle = isVisible ? '' : 'display: none'
 
@@ -338,12 +338,12 @@ const getStyleForField = (fieldCode) => {
 
   // Should be same as income, but reverse the position on source with destination
   if (isTypeIncome.value) {
-    let position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
+    let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
     if (fieldCode === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT) {
-      position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT)
+      position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT)
     }
     if (fieldCode === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT) {
-      position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT)
+      position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT)
     }
     return `order: ${position}; ${displayStyle}`
   }
@@ -353,7 +353,7 @@ const getStyleForField = (fieldCode) => {
     if (fieldTypeAccountsList.includes(fieldCode)) {
       return `order: 0`
     }
-    let position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
+    let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
     return `order: ${position}; ${displayStyle}`
   }
 

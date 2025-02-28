@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import * as LanguageConstants from '~/constants/LanguageConstants'
 import DateUtils from '~/utils/DateUtils'
-import { FORM_CONSTANTS_TRANSACTION_FIELDS_LIST } from '~/constants/FormConstants'
+import { TRANSACTION_FORM_FIELDS_LIST, TRANSACTION_LIST_FIELDS_LIST } from '~/constants/FormConstants'
 import ResponseUtils from '~/utils/ResponseUtils'
 import { compareVersionStrings } from '~/utils/DataUtils'
 import InfoRepository from '~/repository/InfoRepository.js'
@@ -41,8 +41,10 @@ export const useProfileStore = defineStore('profile', {
       transactionListDefaultFilterDateEnd: useLocalStorage('transactionListDefaultFilterDateEnd', null),
 
       quickValueButtons: useLocalStorage('quickValueButtons', ['-10', '-1', '+1', '+10']),
-      transactionOrderedFieldsList: useLocalStorage('transactionOrderedFieldsList', FORM_CONSTANTS_TRANSACTION_FIELDS_LIST),
-      dashboardOrderedCardsList: useLocalStorage('dashboardOrderedCardsList', DASHBOARD_SECTIONS_LIST),
+
+      transactionFormFieldsConfig: useLocalStorage('transactionFormFieldsConfig', TRANSACTION_FORM_FIELDS_LIST),
+      transactionListFieldsConfig: useLocalStorage('transactionListFieldsConfig', TRANSACTION_FORM_FIELDS_LIST),
+      dashboardWidgetsConfig: useLocalStorage('dashboardWidgetsConfig', DASHBOARD_SECTIONS_LIST),
 
       dateFormat: useLocalStorage('dateFormat', DateUtils.FORMAT_ENGLISH_DATE),
 
@@ -111,16 +113,20 @@ export const useProfileStore = defineStore('profile', {
     },
 
     migrateOrderedLists() {
-      // If we add new fields for "transactionOrderedFieldsList" / "dashboardOrderedCardsList"
+      // If we add new fields for "transactionFormFieldsConfig" / "dashboardWidgetsConfig"
       // which the user doesn't have in localStorage add them as well
 
       const profileStore = useProfileStore()
-      if (profileStore.transactionOrderedFieldsList.length !== FORM_CONSTANTS_TRANSACTION_FIELDS_LIST.length) {
-        profileStore.transactionOrderedFieldsList = FORM_CONSTANTS_TRANSACTION_FIELDS_LIST
+      if (profileStore.transactionFormFieldsConfig.length !== TRANSACTION_FORM_FIELDS_LIST.length) {
+        profileStore.transactionFormFieldsConfig = TRANSACTION_FORM_FIELDS_LIST
       }
 
-      if (profileStore.dashboardOrderedCardsList.length !== DASHBOARD_SECTIONS_LIST.length) {
-        profileStore.dashboardOrderedCardsList = DASHBOARD_SECTIONS_LIST
+      if (profileStore.transactionListFieldsConfig.length !== TRANSACTION_LIST_FIELDS_LIST.length) {
+        profileStore.transactionListFieldsConfig = TRANSACTION_LIST_FIELDS_LIST
+      }
+
+      if (profileStore.dashboardWidgetsConfig.length !== DASHBOARD_SECTIONS_LIST.length) {
+        profileStore.dashboardWidgetsConfig = DASHBOARD_SECTIONS_LIST
       }
     },
   },

@@ -77,8 +77,8 @@ const isLoadingDashboard = computed(() => {
 })
 
 const getStyleForCard = (fieldCode) => {
-  let position = profileStore.dashboardOrderedCardsList.findIndex((item) => item.code === fieldCode)
-  let field = profileStore.dashboardOrderedCardsList.find((item) => item.code === fieldCode)
+  let position = profileStore.dashboardWidgetsConfig.findIndex((item) => item.code === fieldCode)
+  let field = profileStore.dashboardWidgetsConfig.find((item) => item.code === fieldCode)
   let isVisible = field ? field.isVisible : true
   let displayStyle = isVisible ? '' : 'display: none'
 

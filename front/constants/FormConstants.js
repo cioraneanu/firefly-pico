@@ -12,7 +12,7 @@ export const FORM_CONSTANTS_TRANSACTION_FIELDS = {
   TRANSACTION_FORM_FIELD_NOTES: 'TRANSACTION_FORM_FIELD_NOTES',
 }
 
-export const FORM_CONSTANTS_TRANSACTION_FIELDS_LIST = [
+export const TRANSACTION_FORM_FIELDS_LIST = [
   {
     code: FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_AMOUNT,
     name: 'Amount',
@@ -67,6 +67,37 @@ export const FORM_CONSTANTS_TRANSACTION_FIELDS_LIST = [
     icon: TablerIconConstants.budget,
     isVisible: true,
   },
+]
+export const TRANSACTION_LIST_FIELDS_LIST = [
+  {
+    code: 'accounts',
+    name: 'Accounts',
+    icon: TablerIconConstants.account,
+    isVisible: true,
+  },
+  {
+    code: 'tags',
+    name: 'Tags',
+    icon: TablerIconConstants.tag,
+    isVisible: true,
+  },
+  {
+    code: 'category',
+    name: 'Category',
+    icon: TablerIconConstants.category,
+    isVisible: true,
+  },
+  {
+    code: 'notes',
+    name: 'Notes',
+    icon: TablerIconConstants.fieldText1,
+    isVisible: true,
+  },
+  // {
+  //   code: 'budget',
+  //   name: 'Budget',
+  //   isVisible: true,
+  // },
 ]
 
 export const TRANSACTION_LIST_ITEM_BIG_ICON_FIELDS = {

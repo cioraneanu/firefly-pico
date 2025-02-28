@@ -8,7 +8,8 @@
         <app-field-link :icon="TablerIconConstants.form" label="Default form values" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_FORM_VALUES)" />
         <app-field-link :icon="TablerIconConstants.search" label="Default list filters" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_LIST_FILTERS)" />
         <app-field-link :icon="TablerIconConstants.amountButtons" label="Amount increment buttons" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_QUICK_AMOUNTS)" />
-        <app-field-link :icon="TablerIconConstants.order" label="Transaction fields order" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FIELDS_ORDER)" />
+        <app-field-link :icon="TablerIconConstants.order" label="Configure form fields" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FORM_FIELDS)" />
+        <app-field-link :icon="TablerIconConstants.order" label="Configure list fields" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_LIST_FIELDS)" />
       </van-cell-group>
 
       <van-cell-group inset>

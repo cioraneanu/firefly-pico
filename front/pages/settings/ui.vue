@@ -19,27 +19,6 @@
         <app-boolean v-model="resetFormOnCreate" label="Reset forms after creation" />
       </van-cell-group>
 
-      <van-cell-group inset>
-        <div class="van-cell-group-title mb-0">Transaction list:</div>
-
-        <app-select
-          popupTitle="Select what Hero Icons to show"
-          v-model="heroIcons"
-          v-model:showDropdown="isHeroIconsDropdownVisible"
-          :list="heroIconsList"
-          :is-multi-select="true"
-          :columns="1"
-          :has-search="false"
-        >
-          <template #label>
-            <div class="flex-center-vertical">
-              <div class="">Hero Icons</div>
-              <span class="info ml-5">(Right side card in the list)</span>
-            </div>
-          </template>
-        </app-select>
-      </van-cell-group>
-
       <app-button-form-save />
     </van-form>
   </div>
@@ -54,7 +33,6 @@ import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
-import { HERO_ICONS_LIST } from '~/constants/TransactionConstants.js'
 import LanguageSelect from '~/components/select/general/language-select.vue'
 
 const profileStore = useProfileStore()
@@ -66,14 +44,11 @@ const startingPage = ref(null)
 const language = ref(null)
 const resetFormOnCreate = ref(false)
 
-const heroIconsList = HERO_ICONS_LIST
-const isHeroIconsDropdownVisible = ref(false)
-const heroIcons = ref([])
+
 
 const syncedSettings = [
   { store: profileStore, path: 'darkTheme', ref: darkTheme },
   { store: profileStore, path: 'language', ref: language },
-  { store: profileStore, path: 'heroIcons', ref: heroIcons },
   { store: profileStore, path: 'startingPage', ref: startingPage },
   { store: profileStore, path: 'resetFormOnCreate', ref: resetFormOnCreate },
 ]

@@ -3,8 +3,8 @@
     <app-top-toolbar />
 
     <van-form @submit="onSave" class="">
-      <van-cell-group inset class="p-10">
-        <div class="van-cell-fake flex-column van-cell">
+      <van-cell-group inset class="">
+        <div class="flex-column van-cell p-10">
           <app-repeater v-model="fieldsList" :is-list-dynamic="false" :empty-item="{ value: '' }">
             <template #content="{ element, index }" >
               <div class="app-field m-5" @click="onClickIsVisible(element)">
@@ -31,7 +31,7 @@ import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
-import { FORM_CONSTANTS_TRANSACTION_FIELDS_LIST } from '~/constants/FormConstants'
+import { TRANSACTION_FORM_FIELDS_LIST } from '~/constants/FormConstants'
 import * as FormConstants from '~/constants/FormConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
@@ -45,7 +45,7 @@ onMounted(() => {
 })
 
 const onSave = async () => {
-  profileStore.transactionOrderedFieldsList = fieldsList.value
+  profileStore.transactionFormFieldsConfig = fieldsList.value
   await profileStore.writeProfile()
   UIUtils.showToastSuccess('User preferences saved')
   init()
@@ -61,13 +61,13 @@ const onClickIsVisible = (element) => {
 
 
 const init = () => {
-  let isListOk = profileStore.transactionOrderedFieldsList.length === FORM_CONSTANTS_TRANSACTION_FIELDS_LIST.length
-  fieldsList.value = isListOk ? profileStore.transactionOrderedFieldsList : FORM_CONSTANTS_TRANSACTION_FIELDS_LIST
+  let isListOk = profileStore.transactionFormFieldsConfig.length === TRANSACTION_FORM_FIELDS_LIST.length
+  fieldsList.value = isListOk ? profileStore.transactionFormFieldsConfig : TRANSACTION_FORM_FIELDS_LIST
 }
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'Transaction fields order',
+  title: 'Set form fields',
   backRoute: RouteConstants.ROUTE_SETTINGS_TRANSACTION,
 })
 
