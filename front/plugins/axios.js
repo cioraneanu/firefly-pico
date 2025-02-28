@@ -24,19 +24,52 @@ axios.interceptors.request.use(
   },
 )
 
+const MAX_RETRIES = 2
+
+const retryRequest = async (error) => {
+  const isTimeout = error.code === 'ECONNABORTED' || error.message.includes('timeout')
+  if (!isTimeout) {
+    return
+  }
+
+  const config = error.config
+  if (!config?.retry) {
+    config.retry = 0
+  }
+
+  // Check if we should retry (timeout or network error)
+  // console.log('isTimeout', { isTimeout, error })
+
+  if (config.retry >= MAX_RETRIES) {
+    return
+  }
+
+  config.retry += 1
+  const delay = 1000 * Math.pow(2, config.retry - 1)
+  // console.log(`Retrying request (${config.retry}/${MAX_RETRIES}) after ${delay}ms`)
+
+  // Wait before retrying
+  await sleep(delay)
+
+  // Return the new axios request
+  return axios(config)
+}
+
 axios.interceptors.response.use(
   function (response) {
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
     return response
   },
-  function (error) {
+  async function (error) {
     let errorMessage = get(error, 'response.data.message') ?? get(error, 'message')
 
     if (errorMessage) {
       UIUtils.showToastError(`Error: ${errorMessage}`, 4000)
     }
-    // return Promise.reject(error)
+
+    await retryRequest(error)
+
     return Promise.resolve(error.response)
   },
 )
