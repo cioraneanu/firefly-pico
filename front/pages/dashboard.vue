@@ -38,7 +38,6 @@ import DashboardTagTotals from '~/components/dashboard/dashboard-tag-totals/dash
 import anime from 'animejs'
 import { animateDashboard } from '~/utils/AnimationUtils.js'
 import RouteConstants from '~/constants/RouteConstants.js'
-import { FORM_CONSTANTS_TRANSACTION_FIELDS } from '~/constants/FormConstants.js'
 import { DASHBOARD_SECTIONS } from '~/constants/DashboardConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { useSwipe } from '@vueuse/core'

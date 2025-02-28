@@ -70,10 +70,8 @@ import TablerIconConstants from '~/constants/TablerIconConstants'
 import Tag from '../../models/Tag.js'
 import Account from '~/models/Account.js'
 import TransactionListItemHeroIcon from '~/components/list-items/transaction-list-item-hero-icon.vue'
-import { uniqBy } from 'lodash/array.js'
 import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
-import { DASHBOARD_SECTIONS } from '~/constants/DashboardConstants.js'
-import { TRANSACTION_LIST_FIELDS_LIST, transactionListFieldsConfig, transactionListFieldsConfigList } from '~/constants/FormConstants.js'
+import { transactionListFieldsConfig } from '~/constants/TransactionConstants.js'
 
 const props = defineProps({
   value: Object,

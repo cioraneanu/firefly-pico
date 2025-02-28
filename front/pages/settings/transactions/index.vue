@@ -32,7 +32,6 @@ import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
-import { HERO_ICONS_LIST } from '~/constants/TransactionConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
