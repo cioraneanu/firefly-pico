@@ -38,7 +38,6 @@ import DashboardTagTotals from '~/components/dashboard/dashboard-tag-totals/dash
 import anime from 'animejs'
 import { animateDashboard } from '~/utils/AnimationUtils.js'
 import RouteConstants from '~/constants/RouteConstants.js'
-import { FORM_CONSTANTS_TRANSACTION_FIELDS } from '~/constants/FormConstants.js'
 import { DASHBOARD_SECTIONS } from '~/constants/DashboardConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { useSwipe } from '@vueuse/core'
@@ -77,8 +76,8 @@ const isLoadingDashboard = computed(() => {
 })
 
 const getStyleForCard = (fieldCode) => {
-  let position = profileStore.dashboardOrderedCardsList.findIndex((item) => item.code === fieldCode)
-  let field = profileStore.dashboardOrderedCardsList.find((item) => item.code === fieldCode)
+  let position = profileStore.dashboardWidgetsConfig.findIndex((item) => item.code === fieldCode)
+  let field = profileStore.dashboardWidgetsConfig.find((item) => item.code === fieldCode)
   let isVisible = field ? field.isVisible : true
   let displayStyle = isVisible ? '' : 'display: none'
 

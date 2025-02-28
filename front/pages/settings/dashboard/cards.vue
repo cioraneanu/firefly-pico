@@ -44,7 +44,7 @@ onMounted(() => {
 })
 
 const onSave = async () => {
-  profileStore.dashboardOrderedCardsList = fieldsList.value
+  profileStore.dashboardWidgetsConfig = fieldsList.value
   await profileStore.writeProfile()
   UIUtils.showToastSuccess('User preferences saved')
   init()
@@ -59,8 +59,8 @@ const onClickIsVisible = (element) => {
 }
 
 const init = () => {
-  let isListOk = profileStore.dashboardOrderedCardsList.length === DASHBOARD_SECTIONS_LIST.length
-  fieldsList.value = isListOk ? profileStore.dashboardOrderedCardsList : DASHBOARD_SECTIONS_LIST
+  let isListOk = profileStore.dashboardWidgetsConfig.length === DASHBOARD_SECTIONS_LIST.length
+  fieldsList.value = isListOk ? profileStore.dashboardWidgetsConfig : DASHBOARD_SECTIONS_LIST
 }
 
 const toolbar = useToolbar()

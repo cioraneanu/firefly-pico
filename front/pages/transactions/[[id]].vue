@@ -26,7 +26,7 @@
           :isForeignAmountVisible="isForeignAmountVisible"
           ref="refAmount"
           name="amount"
-          :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_AMOUNT)"
+          :style="getStyleForField(transactionFormFieldsConfig.amount)"
           :disabled="isSplitTransaction"
         />
 
@@ -34,7 +34,7 @@
           v-model="accountSource"
           :label="$t('transaction.source_account')"
           :allowed-types="accountSourceAllowedTypes"
-          :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT)"
+          :style="getStyleForField(transactionFormFieldsConfig.sourceAccount)"
           v-bind="accountSourceBinding"
         >
           <template #label>
@@ -51,11 +51,11 @@
           v-model="accountDestination"
           :label="$t('transaction.destination_account')"
           :allowed-types="accountDestinationAllowedTypes"
-          :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT)"
+          :style="getStyleForField(transactionFormFieldsConfig.destinationAccount)"
           v-bind="accountDestinationBinding"
         />
 
-        <category-select v-model="category" :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_CATEGORY)" />
+        <category-select v-model="category" :style="getStyleForField(transactionFormFieldsConfig.category)" />
 
         <app-field
           v-model="description"
@@ -68,12 +68,12 @@
           placeholder="Description"
           :rules="[{ required: true, message: 'Description is required' }]"
           required
-          :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESCRIPTION)"
+          :style="getStyleForField(transactionFormFieldsConfig.description)"
         />
 
-        <tag-select v-model="tags" :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_TAG)" />
+        <tag-select v-model="tags" :style="getStyleForField(transactionFormFieldsConfig.tags)" />
 
-        <div :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DATE)">
+        <div :style="getStyleForField(transactionFormFieldsConfig.date)">
           <app-date-time-grid v-model="date" name="date" :rules="[{ required: true, message: 'Date is required' }]" required />
 
           <div v-if="!isSplitTransaction" class="px-3 flex-center-vertical gap-1">
@@ -91,10 +91,10 @@
           type="textarea"
           rows="1"
           autosize
-          :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_NOTES)"
+          :style="getStyleForField(transactionFormFieldsConfig.notes)"
         />
 
-        <budget-select v-model="budget" :style="getStyleForField(FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_BUDGET)" />
+        <budget-select v-model="budget" :style="getStyleForField(transactionFormFieldsConfig.budget)" />
       </van-cell-group>
 
       <div style="margin: 16px; position: relative">
@@ -117,7 +117,7 @@
     </van-form>
 
     <app-card-info style="order: 99">
-      <app-field-link :label="$t('transaction.configure_fields')" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FIELDS_ORDER)" />
+      <app-field-link :label="$t('transaction.configure_fields')" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FORM_FIELDS)" />
     </app-card-info>
   </div>
 </template>
@@ -137,7 +137,6 @@ import Transaction from '~/models/Transaction'
 import { useToolbar } from '~/composables/useToolbar'
 import TagSelect from '~/components/select/tag-select.vue'
 import Category from '~/models/Category'
-import { FORM_CONSTANTS_TRANSACTION_FIELDS } from '~/constants/FormConstants'
 import Tag from '~/models/Tag'
 import { isStringEmpty } from '~/utils/DataUtils'
 import TablerIconConstants from '~/constants/TablerIconConstants'
@@ -148,6 +147,7 @@ import TransactionRepository from '~/repository/TransactionRepository.js'
 import TransactionTransformer from '~/transformers/TransactionTransformer.js'
 import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
 import { useI18n } from '#imports'
+import { transactionFormFieldsConfig } from '~/constants/TransactionConstants.js'
 
 const refAmount = ref(null)
 
@@ -324,9 +324,9 @@ const isTypeExpense = computed(() => isEqual(type.value, Transaction.types.expen
 const isTypeIncome = computed(() => isEqual(type.value, Transaction.types.income))
 const isTypeTransfer = computed(() => isEqual(type.value, Transaction.types.transfer))
 
-const getStyleForField = (fieldCode) => {
-  let position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
-  let field = profileStore.transactionOrderedFieldsList.find((item) => item.code === fieldCode)
+const getStyleForField = (code) => {
+  let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === code)
+  let field = profileStore.transactionFormFieldsConfig.find((item) => item.code === code)
   let isVisible = field ? field.isVisible : true
   let displayStyle = isVisible ? '' : 'display: none'
 
@@ -334,26 +334,24 @@ const getStyleForField = (fieldCode) => {
     return `order: ${position}; ${displayStyle}`
   }
 
-  const fieldTypeAccountsList = [FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT, FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT]
-
   // Should be same as income, but reverse the position on source with destination
   if (isTypeIncome.value) {
-    let position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
-    if (fieldCode === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT) {
-      position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT)
+    let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === code)
+    if (code === transactionFormFieldsConfig.sourceAccount.code) {
+      position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === transactionFormFieldsConfig.destinationAccount.code)
     }
-    if (fieldCode === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_DESTINATION_ACCOUNT) {
-      position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === FORM_CONSTANTS_TRANSACTION_FIELDS.TRANSACTION_FORM_FIELD_SOURCE_ACCOUNT)
+    if (code === transactionFormFieldsConfig.destinationAccount.code) {
+      position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === transactionFormFieldsConfig.sourceAccount.code)
     }
     return `order: ${position}; ${displayStyle}`
   }
 
   // Transfers
   if (isTypeTransfer.value) {
-    if (fieldTypeAccountsList.includes(fieldCode)) {
+    if ([transactionFormFieldsConfig.sourceAccount.code, transactionFormFieldsConfig.destinationAccount.code].includes(code)) {
       return `order: 0`
     }
-    let position = profileStore.transactionOrderedFieldsList.findIndex((item) => item.code === fieldCode)
+    let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === code)
     return `order: ${position}; ${displayStyle}`
   }
 

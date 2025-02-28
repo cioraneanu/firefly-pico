@@ -27,7 +27,7 @@ import { format } from 'date-fns'
 import Account from '~/models/Account.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Transaction from '~/models/Transaction.js'
-import { HERO_ICONS } from '~/constants/TransactionConstants.js'
+import { transactionListHeroIconConfig } from '~/constants/TransactionConstants.js'
 
 const props = defineProps({
   value: Object,
@@ -83,11 +83,12 @@ const categoryIcon = computed(() => {
   return get(category, 'attributes.icon.icon') ?? TablerIconConstants.category
 })
 
-const isAccountIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === HERO_ICONS.account))
-const isTagIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === HERO_ICONS.tag) && !isEmpty(tags.value))
-const isCategoryIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === HERO_ICONS.category))
-const isWeekdayIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === HERO_ICONS.dayOfWeek))
-const isHourIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === HERO_ICONS.hour))
+const isAccountIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIconConfig.account.code))
+const isTagIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIconConfig.tags.code) && !isEmpty(tags.value))
+const isCategoryIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIconConfig.category.code))
+const isWeekdayIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIconConfig.dayOfWeek.code))
+const isHourIconVisible = computed(() => false)
+// const isHourIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === HERO_ICONS.hour))
 
 const isAnyIconVisible = computed(() => {
   return isAccountIconVisible.value || isTagIconVisible.value || isCategoryIconVisible.value || isWeekdayIconVisible || isHourIconVisible

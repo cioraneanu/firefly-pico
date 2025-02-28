@@ -13,26 +13,26 @@
               <div v-if="description" class="list-item-title">{{ description }}</div>
             </div>
 
-            <div class="flex-column">
+            <div class="flex-column" :style="getStyleForField(transactionListFieldsConfig.accounts)">
               <div v-for="displayedAccount in displayedAccounts" class="list-item-subtitle">
                 <app-icon :icon="Account.getIcon(displayedAccount) ?? TablerIconConstants.account" :size="20" />
                 <span>{{ Account.getDisplayName(displayedAccount) }}</span>
               </div>
             </div>
 
-            <div v-if="categories && props.isDetailedMode" class="list-item-subtitle gap-2">
+            <div v-if="categories && props.isDetailedMode" class="list-item-subtitle gap-2" :style="getStyleForField(transactionListFieldsConfig.category)">
               <div v-for="category in categories">
                 <app-icon :icon="Category.getIcon(category) ?? TablerIconConstants.category" :size="20" />
                 {{ Category.getDisplayName(category) }}
               </div>
             </div>
 
-            <div v-if="notes && props.isDetailedMode" class="list-item-subtitle">
+            <div v-if="notes && props.isDetailedMode" class="list-item-subtitle" :style="getStyleForField(transactionListFieldsConfig.notes)">
               <app-icon :icon="TablerIconConstants.fieldText1" :size="20" />
               {{ notes }}
             </div>
 
-            <div v-if="tags && props.isDetailedMode" class="tags-container">
+            <div v-if="tags && props.isDetailedMode" class="tags-container" :style="getStyleForField(transactionListFieldsConfig.tags)">
               <div v-for="tag in visibleTags" class="tag">
                 <app-icon :icon="Tag.getIcon(tag) ?? TablerIconConstants.tag" :size="14" />
                 <div class="list-item-subtitle ml-5">{{ Tag.getDisplayNameEllipsized(tag, 10) }}</div>
@@ -70,8 +70,8 @@ import TablerIconConstants from '~/constants/TablerIconConstants'
 import Tag from '../../models/Tag.js'
 import Account from '~/models/Account.js'
 import TransactionListItemHeroIcon from '~/components/list-items/transaction-list-item-hero-icon.vue'
-import { uniqBy } from 'lodash/array.js'
 import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
+import { transactionListFieldsConfig } from '~/constants/TransactionConstants.js'
 
 const props = defineProps({
   value: Object,
@@ -155,6 +155,16 @@ const sourceAccount = computed(() => {
   return get(dataStore.accountDictionary, sourceId)
 })
 
+const profileStore = useProfileStore()
+const getStyleForField = ({ code }) => {
+  let position = profileStore.transactionListFieldsConfig.findIndex((item) => item.code === code)
+  let field = profileStore.transactionListFieldsConfig.find((item) => item.code === code)
+  let isVisible = field ? field.isVisible : true
+  let displayStyle = isVisible ? '' : 'display: none'
+
+  return `order: ${position}; ${displayStyle}`
+}
+
 const onEdit = async (e) => {
   emit('onEdit', props.value)
 }
@@ -162,16 +172,6 @@ const onEdit = async (e) => {
 const onDelete = async () => {
   emit('onDelete', props.value)
 }
-
-const heroIcon = computed(() => {
-  // let heroTagIcon =  get(tags.value, '0.attributes.icon.icon')
-  let sortedTags = sortByPath(tags.value, 'attributes.parent_id', false)
-  let heroTagIcon = get(sortedTags, '0.attributes.icon.icon')
-  let heroAccountIcon = isTransactionExpense.value ? Account.getIcon(sourceAccount.value) : Account.getIcon(destinationAccount.value)
-
-  let listOfIcons = [heroTagIcon, heroAccountIcon]
-  return listOfIcons.filter((item) => !!item)
-})
 
 const swipeCell = ref(null)
 const clickWithoutSwipe = useClickWithoutSwipe({ swipeCell: swipeCell, onClick: onEdit })
