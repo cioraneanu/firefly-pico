@@ -55,11 +55,9 @@ import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
-import { TRANSACTION_LIST_FIELDS_LIST } from '~/constants/FormConstants'
-import * as FormConstants from '~/constants/FormConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
-import { HERO_ICONS_LIST } from '~/constants/TransactionConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
+import { transactionListHeroIconConfigList, transactionListFieldsConfigList } from '~/constants/TransactionConstants.js'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
@@ -81,13 +79,13 @@ const onClickIsVisible = (element) => {
 }
 
 const init = () => {
-  let isListOk = profileStore.transactionListFieldsConfig.length === TRANSACTION_LIST_FIELDS_LIST.length
-  fieldsList.value = isListOk ? profileStore.transactionListFieldsConfig : TRANSACTION_LIST_FIELDS_LIST
+  let isListOk = profileStore.transactionListFieldsConfig.length === transactionListFieldsConfigList.length
+  fieldsList.value = isListOk ? profileStore.transactionListFieldsConfig : transactionListFieldsConfigList
 }
 
 // ----- Hero Icons ----
 
-const heroIconsList = HERO_ICONS_LIST
+const heroIconsList = transactionListHeroIconConfigList
 const isHeroIconsDropdownVisible = ref(false)
 const heroIcons = ref([])
 

@@ -31,9 +31,8 @@ import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
-import { TRANSACTION_FORM_FIELDS_LIST } from '~/constants/FormConstants'
-import * as FormConstants from '~/constants/FormConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import { transactionFormFieldsConfigList } from '~/constants/TransactionConstants.js'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
@@ -61,8 +60,8 @@ const onClickIsVisible = (element) => {
 
 
 const init = () => {
-  let isListOk = profileStore.transactionFormFieldsConfig.length === TRANSACTION_FORM_FIELDS_LIST.length
-  fieldsList.value = isListOk ? profileStore.transactionFormFieldsConfig : TRANSACTION_FORM_FIELDS_LIST
+  let isListOk = profileStore.transactionFormFieldsConfig.length === transactionFormFieldsConfigList.length
+  fieldsList.value = isListOk ? profileStore.transactionFormFieldsConfig : transactionFormFieldsConfigList
 }
 
 const toolbar = useToolbar()
