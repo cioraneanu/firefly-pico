@@ -34,9 +34,6 @@
   "amount": "Amount",
   "amount_min": "Amount min",
   "amount_max": "Amount max",
-  "ui": {
-    "theme": "Theme"
-  },
   "toolbar": {
     "home": "Home",
     "transactions": "Transactions",
@@ -68,5 +65,80 @@
     "title_clone_transaction": "Clone transaction",
     "title_edit_transaction": "Edit transaction",
     "title_add_transaction": "Add transaction"
+  },
+  "settings": {
+    "settings_title": "Settings",
+    "general": "General",
+    "required_field": "This field is required",
+    "settings_saved": "Settings saved",
+    "setup_entry": "Setup",
+    "setup": {
+      "title": "Setup",
+      "pico_backend_url": "Pico backend URL",
+      "sync_settings_via_token": "Sync settings across devices via token",
+      "days_between_sync": "Days between full sync of \"Extras\"",
+      "loaded_data_stats": "Loaded data stats",
+      "account": "Account",
+      "categories": "Categories",
+      "tags": "Tags",
+      "templates": "Templates",
+      "budgets": "Budgets",
+      "last_sync": "Last sync",
+      "verifying": "Verifying...",
+      "invalid_endpoint": "The provided endpoint is not correct.",
+      "invalid_token": "The provided token is not correct or expired.",
+      "fetching": "Fetching..."
+    },
+    "ui_entry": "User interface",
+    "ui": {
+      "theme": "Theme",
+      "title": "UI settings",
+      "reset_forms_after_creation": "Reset forms after creation",
+      "transaction_list": "Transaction list",
+      "select_hero_icons": "Select what Hero Icons to show",
+      "hero_icons": "Hero Icons",
+      "right_side_card": "(Right side card in the list)",
+      "dark": "Dark",
+      "light": "Light",
+      "user_preferences_saved": "User preferences saved"
+    },
+    "assistant_entry": "Assistant",
+    "assistant": {
+      "title": "Assistant settings",
+      "substring_todo_tag": "Substring which adds the todo tag"
+    },
+    "formatting_entry": "Formatting",
+    "formatting": {
+      "title": "Formatting settings",
+      "numbers_format": "Numbers formatting",
+      "select_numbers_format": "Select preferred numbers formatting",
+      "date_format": "Date format",
+      "select_date_format": "Select a date format",
+      "first_day_of_month": "First day of month",
+      "select_first_day_of_month": "Select the first day of month",
+      "casing": "Casing",
+      "force_transaction_description_lowercase": "Force transaction description lowercase",
+      "force_account_name_lowercase": "Force account name lowercase",
+      "force_category_name_lowercase": "Force category name lowercase",
+      "force_tag_name_lowercase": "Force tag name lowercase",
+      "strip_accents": "Strip accents"
+    },
+    "dashboard_entry": "Dashboard",
+    "transactions_entry": "Transactions",
+    "about_entry": "About",
+    "version": "Version",
+    "new_version_available": "New version available"
+  },
+  "page_select": {
+    "label": "Starting page",
+    "title": "Select your starting page"
+  },
+  "language_select": {
+    "title": "Select your language",
+    "label": "Language"
+  },
+  "day_select": {
+    "label": "First day of the week",
+    "title": "Select the first day of the week"
   }
 }

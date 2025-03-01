@@ -4,7 +4,7 @@
 
     <van-form @submit="onSave" class="">
       <van-cell-group inset>
-        <div class="van-cell-group-title mb-0">{{ $t('ui.theme') }}:</div>
+        <div class="van-cell-group-title mb-0">{{ $t('settings.ui.theme') }}:</div>
 
         <app-boolean :label="themeText" v-model="darkTheme">
           <template #icon="{ value }">
@@ -16,7 +16,7 @@
 
         <page-select v-model="startingPage"></page-select>
 
-        <app-boolean v-model="resetFormOnCreate" label="Reset forms after creation" />
+        <app-boolean v-model="resetFormOnCreate" :label="$t('settings.ui.reset_forms_after_creation')" />
       </van-cell-group>
 
       <app-button-form-save />
@@ -35,10 +35,11 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 import LanguageSelect from '~/components/select/general/language-select.vue'
 
+const { t } = useI18n()
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
-const themeText = computed(() => (darkTheme.value ? 'Dark' : 'Light'))
+const themeText = computed(() => (darkTheme.value ? t('settings.ui.dark') : t('settings.ui.light')))
 const darkTheme = ref(false)
 const startingPage = ref(null)
 const language = ref(null)
@@ -58,12 +59,12 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-  UIUtils.showToastSuccess('User preferences saved')
+  UIUtils.showToastSuccess(t('settings.ui.user_preferences_saved'))
 }
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'UI settings',
+  title: t('settings.ui.title'),
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
 

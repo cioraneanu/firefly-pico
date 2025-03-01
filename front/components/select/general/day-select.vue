@@ -1,7 +1,7 @@
 <template>
   <app-select
-    label="First day of the week"
-    popupTitle="Select the first day of the week"
+    :label="$t('day_select.label')"
+    :popupTitle="$t('day_select.title')"
     v-model="modelValue"
     v-model:showDropdown="showDropdown"
     :list="list"
