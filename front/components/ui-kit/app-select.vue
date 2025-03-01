@@ -43,11 +43,7 @@
               <template v-for="(item, index) in list" :key="index">
                 <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
                   <template #default>
-                    <slot name="item" :item="item">
-                      <!--                      <div class="">-->
-                      <!--                      {{ getDisplayName(item) }}-->
-                      <!--                      </div>-->
-
+                    <slot name="item" :item="item" :isActive="isItemSelected(item)">
                       <app-select-option :text="getDisplayName(item)" />
                     </slot>
                   </template>
@@ -77,6 +73,7 @@ const popupRef = ref(null)
 const popupContentRef = ref(null)
 
 const isItemSelected = (option) => {
+  console.log('isItemSelected', { option,modelValue: modelValue.value, result: isEqual(modelValue.value, option) })
   if (!modelValue.value) {
     return false
   }
