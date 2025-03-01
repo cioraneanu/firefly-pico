@@ -198,8 +198,13 @@ const sourceCurrency = computed(() => Account.getCurrency(accountSource.value))
 
 const isForeignAmountVisible = computed(() => {
   let newTransactionWithDefaultCurrency = !itemId.value && (profileStore.defaultForeignCurrency || profileStore.isForeignCurrencyAlwaysVisible)
-  let accountsHaveDifferentCurrencies = accountSource.value && accountDestination.value && Account.getCurrency(accountSource.value) !== Account.getCurrency(accountDestination.value)
-  return !!(newTransactionWithDefaultCurrency || accountsHaveDifferentCurrencies || currencyForeign.value)
+  let areTypeAssetsWithDifferentCurrencies =
+    accountSource.value &&
+    accountDestination.value &&
+    Account.getType(accountSource.value)?.fireflyCode === Account.types.asset.fireflyCode &&
+    Account.getType(accountDestination.value)?.fireflyCode === Account.types.asset.fireflyCode &&
+    Account.getCurrency(accountSource.value)?.id !== Account.getCurrency(accountDestination.value)?.id
+  return !!(newTransactionWithDefaultCurrency || areTypeAssetsWithDifferentCurrencies || currencyForeign.value)
 })
 
 //
