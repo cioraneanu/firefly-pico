@@ -7,17 +7,18 @@ import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
 
 export default class Page {
   static get types() {
+    // TODO: Before i18n this was {name, code} and persisted in localStorage as such. Probably need a migration?
     return {
       transactionNew: {
-        name: 'New transaction',
+        t: 'settings.ui.pages.new_transacation',
         code: 'transaction',
       },
       transactionList: {
-        name: 'Transaction list',
+        t: 'settings.ui.pages.transacation_list',
         code: 'transactionList',
       },
       dashboard: {
-        name: 'Dashboard',
+        t: 'settings.ui.pages.dashboard',
         code: 'dashboard',
       },
     }

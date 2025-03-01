@@ -68,5 +68,85 @@
     "title_clone_transaction": "Clonează tranzacție",
     "title_edit_transaction": "Modifică tranzacție",
     "title_add_transaction": "Adaugă tranzacție"
+  },
+  "settings": {
+    "settings_title": "Setări",
+    "general": "General",
+    "required_field": "Acest câmp este obligatoriu",
+    "settings_saved": "Setările au fost salvate",
+    "setup_entry": "Configurare",
+    "setup": {
+      "title": "Configurare",
+      "pico_backend_url": "URL backend Pico",
+      "sync_settings_via_token": "Sincronizează setările între dispozitive prin token",
+      "days_between_sync": "Zile între sincronizările complete ale „Extras”",
+      "loaded_data_stats": "Statistici date încărcate",
+      "account": "Cont",
+      "categories": "Categorii",
+      "tags": "Etichete",
+      "templates": "Șabloane",
+      "budgets": "Bugete",
+      "last_sync": "Ultima sincronizare",
+      "verifying": "Se verifică...",
+      "invalid_endpoint": "Endpoint-ul furnizat nu este corect.",
+      "invalid_token": "Token-ul furnizat nu este corect sau a expirat.",
+      "fetching": "Se preia..."
+    },
+    "ui_entry": "Interfață utilizator",
+    "ui": {
+      "theme": "Temă",
+      "title": "Setări UI",
+      "reset_forms_after_creation": "Resetează formularele după creare",
+      "transaction_list": "Lista tranzacțiilor",
+      "select_hero_icons": "Selectează ce icoane Hero să afișezi",
+      "hero_icons": "Icoane Hero",
+      "right_side_card": "(Cardul din partea dreaptă a listei)",
+      "dark": "Temă neagră",
+      "light": "Temă albă",
+      "user_preferences_saved": "Preferințele au fost salvate",
+      "pages": {
+        "new_transacation": "Creare tranzacție",
+        "transacation_list": "Listă tranzacții",
+        "dashboard": "Dashboard"
+      }
+    },
+    "assistant_entry": "Asistent",
+    "assistant": {
+      "title": "Setări asistent",
+      "substring_todo_tag": "Text care adaugă eticheta de sarcină"
+    },
+    "formatting_entry": "Formatare",
+    "formatting": {
+      "title": "Setări formatare",
+      "numbers_format": "Formatare numere",
+      "select_numbers_format": "Selectează formatarea preferată a numerelor",
+      "date_format": "Format dată",
+      "select_date_format": "Selectează un format de dată",
+      "first_day_of_month": "Prima zi a lunii",
+      "select_first_day_of_month": "Selectează prima zi a lunii",
+      "casing": "Majuscule",
+      "force_transaction_description_lowercase": "Forțează descrierea tranzacției cu litere mici",
+      "force_account_name_lowercase": "Forțează numele contului cu litere mici",
+      "force_category_name_lowercase": "Forțează numele categoriei cu litere mici",
+      "force_tag_name_lowercase": "Forțează numele etichetei cu litere mici",
+      "strip_accents": "Elimină accentele"
+    },
+    "dashboard_entry": "Tablou de bord",
+    "transactions_entry": "Tranzacții",
+    "about_entry": "Despre",
+    "version": "Versiune",
+    "new_version_available": "O nouă versiune este disponibilă"
+  },
+  "page_select": {
+    "label": "Pagina de start",
+    "title": "Selectează pagina de start"
+  },
+  "language_select": {
+    "title": "Selectează limba",
+    "label": "Limbă"
+  },
+  "day_select": {
+    "label": "Prima zi a săptămânii",
+    "title": "Selectează prima zi a săptămânii"
   }
 }

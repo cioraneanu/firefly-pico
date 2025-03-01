@@ -100,7 +100,12 @@
       "right_side_card": "(Right side card in the list)",
       "dark": "Dark",
       "light": "Light",
-      "user_preferences_saved": "User preferences saved"
+      "user_preferences_saved": "User preferences saved",
+      "pages": {
+        "new_transacation": "New transaction",
+        "transacation_list": "Transactions list",
+        "dashboard": "Dashboard"
+      }
     },
     "assistant_entry": "Assistant",
     "assistant": {

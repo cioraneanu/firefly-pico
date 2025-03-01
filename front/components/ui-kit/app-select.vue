@@ -73,7 +73,6 @@ const popupRef = ref(null)
 const popupContentRef = ref(null)
 
 const isItemSelected = (option) => {
-  console.log('isItemSelected', { option,modelValue: modelValue.value, result: isEqual(modelValue.value, option) })
   if (!modelValue.value) {
     return false
   }
