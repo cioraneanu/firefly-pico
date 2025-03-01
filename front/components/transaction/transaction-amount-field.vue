@@ -3,15 +3,13 @@
     <!--    Amount field    -->
     <div>
       <van-field
-        required
         v-model="amount"
         :label="$t('amount')"
         :placeholder="$t('amount')"
         @click="() => inputAmount.focus()"
         class="flex-center-vertical app-field transaction-amount-field"
-        v-bind="attrs"
+        v-bind="amountBindings"
         label-align="top"
-        :rules="[{ required: true, message: 'Amount is required' }]"
       >
         <template #left-icon>
           <app-icon :icon="TablerIconConstants.cashBanknote" :size="20" />
@@ -90,7 +88,6 @@
           </template>
         </van-field>
       </div>
-
     </template>
 
     <table v-if="showQuickButtons && !disabled" class="transaction-amount-table-buttons">
@@ -128,6 +125,17 @@ import Currency from '~/models/Currency.js'
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
 const attrs = useAttrs()
+const amountBindings = computed(() => {
+  return {
+    ...attrs,
+    ...(props.isAmountRequired
+      ? {
+          required: true,
+          rules: [{ required: true, message: 'Amount is required' }],
+        }
+      : {}),
+  }
+})
 
 const amount = defineModel('amount')
 const amountForeign = defineModel('amountForeign')
@@ -147,6 +155,10 @@ const props = defineProps({
     default: false,
   },
   disabled: {
+    type: Boolean,
+    default: false,
+  },
+  isAmountRequired: {
     type: Boolean,
     default: false,
   },

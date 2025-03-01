@@ -72,8 +72,12 @@ export default class TransactionTransformer extends ApiTransformer {
       let newItem = {}
       newItem.amount = _.get(item, 'amount', 0)
 
-      newItem.foreign_amount = _.get(item, 'amountForeign', 0)
-      newItem.foreign_currency_id = _.get(item, 'currencyForeign.id')
+      let foreignAmount = get(item, 'amountForeign', 0)
+      let foreignCurrency = get(item, 'currencyForeign.id')
+      if (foreignAmount > 0 && foreignCurrency) {
+        newItem.foreign_amount = _.get(item, 'amountForeign', 0)
+        newItem.foreign_currency_id = _.get(item, 'currencyForeign.id')
+      }
 
       newItem.description = get(item, 'description', '')
       newItem.notes = _.get(item, 'notes')

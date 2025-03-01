@@ -14,7 +14,7 @@
 
         <tag-select v-model="autoAddedTags" label="Auto tags (appended after creation)" />
 
-        <currency-select v-model="defaultForeignCurrency" label="Default foreign currency for Expense transactions" />
+        <currency-select v-model="defaultForeignCurrency" label="Foreign currency for expenses" />
       </van-cell-group>
 
       <app-button-form-save />

@@ -10,6 +10,11 @@
     :getDisplayValue="getDisplayValue"
     v-bind="dynamicAttrs"
   >
+
+    <template #left-icon>
+      <app-icon :icon="TablerIconConstants.currency" :size="20" />
+    </template>
+
     <template #top-right>
       <van-button size="small" @click="onRefresh" class="">
         <app-icon :icon="TablerIconConstants.refresh" :stroke="1.7" size="14" />

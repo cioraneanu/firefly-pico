@@ -28,6 +28,7 @@
           name="amount"
           :style="getStyleForField(transactionFormFieldsConfig.amount)"
           :disabled="isSplitTransaction"
+          :isAmountRequired="true"
         />
 
         <account-select
