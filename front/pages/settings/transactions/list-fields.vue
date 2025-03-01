@@ -7,7 +7,6 @@
         <div class="van-cell-group-title mb-0">Fields:</div>
 
         <div class="flex-column van-cell p-10">
-
           <app-repeater v-model="fieldsList" :is-list-dynamic="false" :empty-item="{ value: '' }">
             <template #content="{ element, index }">
               <div class="app-field m-5" @click="onClickIsVisible(element)">
@@ -23,7 +22,6 @@
       </van-cell-group>
 
       <van-cell-group inset>
-
         <app-select
           popupTitle="Select what Hero Icons to show"
           v-model="heroIcons"
@@ -41,7 +39,6 @@
           </template>
         </app-select>
       </van-cell-group>
-
 
       <app-button-form-save />
     </van-form>
@@ -68,8 +65,6 @@ onMounted(() => {
   init()
 })
 
-
-
 const getIsVisibleIcon = (element) => {
   return element.isVisible ? TablerIconConstants.eyeVisible : TablerIconConstants.eyeHidden
 }
@@ -89,10 +84,7 @@ const heroIconsList = transactionListHeroIconConfigList
 const isHeroIconsDropdownVisible = ref(false)
 const heroIcons = ref([])
 
-
-const syncedSettings = [
-  { store: profileStore, path: 'heroIcons', ref: heroIcons },
-]
+const syncedSettings = [{ store: profileStore, path: 'heroIcons', ref: heroIcons }]
 
 watchSettingsStore(syncedSettings)
 // -----
@@ -110,7 +102,6 @@ toolbar.init({
   title: 'Set list fields',
   backRoute: RouteConstants.ROUTE_SETTINGS_TRANSACTION,
 })
-
 
 onMounted(() => {
   animateSettings()

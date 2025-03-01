@@ -36,6 +36,10 @@ export const useProfileStore = defineStore('profile', {
       transactionListDefaultFilterDateStart: useLocalStorage('transactionListDefaultFilterDateStart', null),
       transactionListDefaultFilterDateEnd: useLocalStorage('transactionListDefaultFilterDateEnd', null),
 
+      isForeignCurrencyAlwaysVisible: useLocalStorage('isForeignCurrencyAlwaysVisible', false),
+
+
+
       quickValueButtons: useLocalStorage('quickValueButtons', ['-10', '-1', '+1', '+10']),
 
       transactionFormFieldsConfig: useLocalStorage('transactionFormFieldsConfig', transactionFormFieldsConfigList),

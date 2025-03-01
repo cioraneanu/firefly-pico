@@ -19,6 +19,10 @@
         </div>
       </van-cell-group>
 
+      <van-cell-group inset>
+        <app-boolean v-model="isForeignCurrencyAlwaysVisible" label="Always show foreign currency field" />
+      </van-cell-group>
+
       <app-button-form-save />
     </van-form>
   </div>
@@ -32,7 +36,8 @@ import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
-import { transactionFormFieldsConfigList } from '~/constants/TransactionConstants.js'
+import { transactionFormFieldsConfigList, transactionListHeroIconConfigList } from '~/constants/TransactionConstants.js'
+import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
@@ -43,8 +48,13 @@ onMounted(() => {
   init()
 })
 
+const isForeignCurrencyAlwaysVisible = ref(false)
+const syncedSettings = [{ store: profileStore, path: 'isForeignCurrencyAlwaysVisible', ref: isForeignCurrencyAlwaysVisible }]
+watchSettingsStore(syncedSettings)
+
 const onSave = async () => {
   profileStore.transactionFormFieldsConfig = fieldsList.value
+  saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
   UIUtils.showToastSuccess('User preferences saved')
   init()
