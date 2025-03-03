@@ -38,7 +38,7 @@
     </div>
 
     <div v-if="hasMultipleCurrencies" class="flex-center text-size-13 mb-3 gap-1">
-      <span class="font-700">~{{ accountTotal }} {{ dataStore.dashboardCurrency }}</span>
+      <span class="font-700">~{{ accountTotal }} {{ Currency.getCode(dataStore.dashboardCurrency)  }}</span>
     </div>
   </van-cell-group>
 </template>
@@ -50,6 +50,7 @@ import RouteConstants from '~/constants/RouteConstants.js'
 import { IconCash, IconLibraryPlus, IconLibraryMinus } from '@tabler/icons-vue'
 import { getFormattedValue } from '~/utils/MathUtils.js'
 import { useActionSheet } from '~/composables/useActionSheet.js'
+import Currency from '../../../models/Currency.js'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
