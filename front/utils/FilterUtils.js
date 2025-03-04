@@ -20,7 +20,7 @@ export const getActiveFilters = (filterDefinition, filterBag) => {
       return {
         filter: encodeURIComponent(item.filter(bagKeyValue)),
         display: item.display(bagKeyValue),
-        toUrl: item.toUrl?.(bagKeyValue),
+        toUrl: item.toUrl?.(bagKeyValue) ?? `${item.bagKey}=${bagKeyValue}`,
       }
     })
     .filter((item) => !!item)
@@ -31,7 +31,7 @@ export const getFiltersFromURL = (filterDefinition) => {
   const route = useRoute()
 
   return filterDefinition.reduce((result, item) => {
-    let urlValue = item.fromUrl?.()
+    let urlValue = item.fromUrl?.() ?? route.query?.[item.bagKey]
     if (!urlValue) {
       return result
     }

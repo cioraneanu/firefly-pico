@@ -98,17 +98,17 @@ const formClass = computed(() => ({
 
 let filters = ref({})
 
-let filtersDictionary = computed(() => {
+let activeFilters = computed(() => {
   let filterDefinitions = Object.values(TransactionFilterUtils.filters)
   return getActiveFilters(filterDefinitions,filters.value)
 })
 
 let filtersDisplayList = computed(() => {
-  return filtersDictionary.value.map((item) => item.display)
+  return activeFilters.value.map((item) => item.display)
 })
 
 let filtersBackendList = computed(() => {
-  return filtersDictionary.value.map((item) => item.filter)
+  return activeFilters.value.map((item) => item.filter)
 })
 
 watch(filtersBackendList, (newValue, oldValue) => {
@@ -122,7 +122,7 @@ watch(filters, (newValue, oldValue) => {
   if (isEqual(newValue, oldValue)) {
     return
   }
-  saveToUrl(filtersDictionary.value)
+  saveToUrl(activeFilters.value)
 })
 
 const onClearFilters = () => {
