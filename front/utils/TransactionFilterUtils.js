@@ -7,41 +7,43 @@ import Account from '~/models/Account.js'
 import { useProfileStore } from '~/stores/profileStore.js'
 import { translate } from '~/plugins/plugin-i18n.js'
 
+const route = useRoute()
 
 export default {
+  /*
+    - bagKey = property inside the filters ref where to get the value from
+    - filter = string to add to the backend request which returns filtered data
+    - display = string to show in the badges of applied filters
+    - toUrl = string to add to the VueRouter url when this filter is applied. If missing will default to `${bagKey}=${filter}`
+    - fromUrl = function that reads from the VueRouter url and return a value that will be written at the bagKey.
+   */
   filters: {
     id: {
-      displayName: 'Id',
-      filterName: 'id',
       bagKey: 'id',
-      displayValue: (item) => ellipsizeText(item, 100),
+      filter: (item) => `id=${item}`,
+      display: (item) => `ID: ${ellipsizeText(item, 100)}`,
     },
     description: {
-      displayName: 'Description',
-      filterName: 'description_contains',
       bagKey: 'description',
+      filter: (item) => `description_contains=${item}`,
+      display: (item) => `Description: ${item}`,
     },
     transactionType: {
       bagKey: 'transactionType',
-      // TODO: Probably a good idea to just merge displayName+displayValue and filterName+filterValue into a single function.
-      displayName: 'Type',
-      filterName: 'type',
-      displayValue: (item) => translate(item?.t),
-      filterValue: (item) => get(item, 'fireflyCode'),
+      filter: (item) => `type:"${item?.fireflyCode}"`,
+      display: (item) => `Type: ${translate(item?.t)}`,
+      toUrl: (item) => `type=${item?.code}`,
+      fromUrl: () => Object.values(Transaction.types).find((type) => type.code === route.query?.type),
     },
     tag: {
-      displayName: 'Tag',
-      filterName: 'tag_is',
       bagKey: 'tag',
-      displayValue: (item) => Tag.getDisplayNameEllipsized(item),
-      filterValue: (item) => Tag.getDisplayName(item),
+      filter: (item) => `tag_is:"${Tag.getDisplayName(item)}"`,
+      display: (item) => `Tag: ${Tag.getDisplayNameEllipsized(item)}`,
     },
     excludeTag: {
-      displayName: '- Tag',
-      filterName: '-tag_is',
       bagKey: 'excludedTag',
-      displayValue: (item) => Tag.getDisplayNameEllipsized(item),
-      filterValue: (item) => Tag.getDisplayName(item),
+      filter: (item) => `-tag_is=${Tag.getDisplayName(item)}`,
+      display: (item) => `- Tag: ${Tag.getDisplayNameEllipsized(item)}`,
     },
     noTag: {
       displayName: 'No tags',
@@ -124,32 +126,6 @@ export default {
     },
   },
 
-  getFiltersFromURL() {
-    let dataStore = useDataStore()
-    const route = useRoute()
-
-    return {
-      id: get(route.query, 'id'),
-      tag: dataStore.tagDictionaryById[get(route.query, 'tag_id')],
-      excludedTag: dataStore.tagDictionaryById[get(route.query, 'excluded_tag_id')],
-      transactionType: Object.values(Transaction.types).find((item) => item.code === get(route.query, 'type')),
-      category: dataStore.categoryDictionary[get(route.query, 'category_id')],
-      budget: dataStore.budgetDictionary[get(route.query, 'budget_id')],
-      excludedCategory: dataStore.categoryDictionary[get(route.query, 'excluded_category_id')],
-      // account: dataStore.accountDictionary[get(route.query, 'account_id')],
-      account: this.getFilterValueFromDictionary(get(route.query, 'account_id'), dataStore.accountDictionary),
-      excludedAccount: dataStore.accountDictionary[get(route.query, 'excluded_account_id')],
-      description: get(route.query, 'description'),
-      dateStart: DateUtils.stringToDate(get(route.query, 'date_start')),
-      dateEnd: DateUtils.stringToDate(get(route.query, 'date_end')),
-      amountStart: get(route.query, 'amount_start'),
-      amountEnd: get(route.query, 'amount_end'),
-      withoutTag: get(route.query, 'without_tag'),
-      withoutBudget: get(route.query, 'without_budget'),
-      withoutCategory: get(route.query, 'without_category'),
-    }
-  },
-
   getPredefinedFilters() {
     let profileStore = useProfileStore()
 
@@ -160,34 +136,7 @@ export default {
     }
   },
 
-  filterHasValues(filterBag) {
-    return Object.values(filterBag).some((item) => !!item)
-  },
-
-  getActiveFilters(filterBag) {
-    return Object.values(this.filters)
-      .map((item) => {
-        let value = get(filterBag, item.bagKey)
-        if (!value) {
-          return null
-        }
-        let displayValue = item.displayValue ? (isArray(value) ? value.map((singleValue) => item.displayValue(singleValue)) : item.displayValue(value)) : value
-        let filterValue = item.filterValue ? (isArray(value) ? value.map((singleValue) => item.filterValue(singleValue)) : item.filterValue(value)) : value
-
-        return {
-          ...item,
-          displayValue,
-          filterValue,
-        }
-      })
-      .filter((item) => !!item?.filterValue)
-      .map((item) => ({
-        display: `${item.displayName} ${item.displaySeparator ?? ":"} ${item.displayValue}`,
-        filter: `${item.filterName}:"${encodeURIComponent(item.filterValue)}"`,
-      }))
-  },
-
-  getFilterValueFromDictionary(value, dictionary) {
+  getValuesFromDictionary(value, dictionary) {
     return value ? value.split(',').map((item) => dictionary[item]) : null
   },
 }
