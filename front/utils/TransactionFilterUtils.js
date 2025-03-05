@@ -77,13 +77,13 @@ export default {
     },
     account: {
       bagKey: 'account',
-      filter: (item) => `account_id:"${item.map(account => account.id)}"`,
+      filter: (item) => `account_id:"${item.map((account) => account.id)}"`,
       display: (item) => `Account: ${Account.getDisplayName(item)}`,
     },
     exceptAccount: {
       bagKey: 'excludedAccount',
-      filter: (item) => `-account_id:"${item.map(account => account.id).join(',')}"`,
-      display: (item) => `- Account: ${item.map(account => Account.getDisplayName(account)).join(',')}`,
+      filter: (item) => `-account_id:"${item.map((account) => account.id).join(',')}"`,
+      display: (item) => `- Account: ${item.map((account) => Account.getDisplayName(account)).join(',')}`,
     },
     amountMore: {
       bagKey: 'amountStart',
@@ -98,12 +98,16 @@ export default {
     dateAfter: {
       bagKey: 'dateStart',
       filter: (item) => `date_after:${DateUtils.dateToString(item)}`,
-      display: (item) => `Date >  ${DateUtils.dateToUI(item)}`,
+      display: (item) => `Date > ${DateUtils.dateToUI(item)}`,
+      toUrl: (item) => `date_start=${DateUtils.dateToString(item)}`,
+      fromUrl: () => DateUtils.stringToDate(route.query?.date_start),
     },
     dateBefore: {
       bagKey: 'dateEnd',
       filter: (item) => `date_before:${DateUtils.dateToString(item)}`,
       display: (item) => `Date <  ${DateUtils.dateToUI(item)}`,
+      toUrl: (item) => `date_end=${DateUtils.dateToString(item)}`,
+      fromUrl: () => DateUtils.stringToDate(route.query?.date_end),
     },
   },
 
