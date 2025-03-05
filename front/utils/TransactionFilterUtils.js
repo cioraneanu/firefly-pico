@@ -7,7 +7,6 @@ import Account from '~/models/Account.js'
 import { useProfileStore } from '~/stores/profileStore.js'
 import { translate } from '~/plugins/plugin-i18n.js'
 
-const route = useRoute()
 
 export default {
   /*
@@ -33,7 +32,7 @@ export default {
       filter: (item) => `type:"${item?.fireflyCode}"`,
       display: (item) => `Type: ${translate(item?.t)}`,
       toUrl: (item) => `type=${item?.code}`,
-      fromUrl: () => Object.values(Transaction.types).find((type) => type.code === route.query?.type),
+      fromUrl: () => Object.values(Transaction.types).find((type) => type.code === useRoute().query?.type),
     },
     tag: {
       bagKey: 'tag',
@@ -54,6 +53,8 @@ export default {
       bagKey: 'category',
       filter: (item) => `category_is:"${Category.getDisplayName(item)}"`,
       display: (item) => `Category: ${Category.getDisplayName(item)}`,
+      toUrl: (item) => `category_id=${item.id}`,
+      fromUrl: () => useDataStore().categoryDictionary[useRoute().query?.category_id],
     },
     exceptCategory: {
       bagKey: 'excludedCategory',
@@ -100,14 +101,14 @@ export default {
       filter: (item) => `date_after:${DateUtils.dateToString(item)}`,
       display: (item) => `Date > ${DateUtils.dateToUI(item)}`,
       toUrl: (item) => `date_start=${DateUtils.dateToString(item)}`,
-      fromUrl: () => DateUtils.stringToDate(route.query?.date_start),
+      fromUrl: () => DateUtils.stringToDate(useRoute().query?.date_start),
     },
     dateBefore: {
       bagKey: 'dateEnd',
       filter: (item) => `date_before:${DateUtils.dateToString(item)}`,
       display: (item) => `Date <  ${DateUtils.dateToUI(item)}`,
       toUrl: (item) => `date_end=${DateUtils.dateToString(item)}`,
-      fromUrl: () => DateUtils.stringToDate(route.query?.date_end),
+      fromUrl: () => DateUtils.stringToDate(useRoute().query?.date_end),
     },
   },
 

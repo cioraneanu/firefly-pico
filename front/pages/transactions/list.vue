@@ -100,7 +100,7 @@ let filters = ref({})
 
 let activeFilters = computed(() => {
   let filterDefinitions = Object.values(TransactionFilterUtils.filters)
-  return getActiveFilters(filterDefinitions,filters.value)
+  return getActiveFilters(filterDefinitions, filters.value)
 })
 
 let filtersDisplayList = computed(() => {
@@ -122,8 +122,7 @@ watch(filters, (newValue, oldValue) => {
   if (isEqual(newValue, oldValue)) {
     return
   }
-  console.log('saveToUrl', activeFilters.value)
-  // saveToUrl(activeFilters.value)
+  saveToUrl(activeFilters.value)
 })
 
 const onClearFilters = () => {
@@ -141,11 +140,8 @@ toolbar.init({
 onMounted(() => {
   let filterDefinitions = Object.values(TransactionFilterUtils.filters)
   filters.value = getFiltersFromURL(filterDefinitions)
-  console.log('filterValues1', filters.value)
-
 
   if (!filterBagHasValues(filters.value)) {
-    console.log('filterValues2')
     filters.value = TransactionFilterUtils.getPredefinedFilters()
   }
 })

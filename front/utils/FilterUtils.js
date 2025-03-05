@@ -29,12 +29,9 @@ export const getActiveFilters = (filterDefinition, filterBag) => {
 export const getFiltersFromURL = (filterDefinition) => {
   let dataStore = useDataStore()
   const route = useRoute()
-  console.log('routerFullPath', cloneDeep(route.fullPath))
-
 
   return filterDefinition.reduce((result, item) => {
     let urlValue = item.fromUrl?.() ?? route.query?.[item.bagKey]
-    console.log('debug', {urlValue, item, route})
     if (!urlValue) {
       return result
     }
