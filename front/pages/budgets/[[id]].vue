@@ -15,7 +15,7 @@
           <div>Percent: {{ budgetLimitPercent }} %</div>
           <div>Interval: {{ budgetLimitInterval }}</div>
         </div>
-        <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?budget_id=${itemId}`)" />
+        <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
 
       </app-card-info>
 
@@ -136,6 +136,11 @@ watch(name, (newValue) => {
   }
   name.value = newValue
 })
+
+const onNavigateToTransactionsList = async () => {
+  let filters = TransactionFilterUtils.filters.budget.toUrl(item.value)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
+}
 
 const toolbar = useToolbar()
 toolbar.init({

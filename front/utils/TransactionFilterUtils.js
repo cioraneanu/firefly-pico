@@ -7,7 +7,6 @@ import Account from '~/models/Account.js'
 import { useProfileStore } from '~/stores/profileStore.js'
 import { translate } from '~/plugins/plugin-i18n.js'
 
-
 export default {
   /*
     - bagKey = property inside the filters ref where to get the value from
@@ -21,6 +20,8 @@ export default {
       bagKey: 'id',
       filter: (item) => `id:${item}`,
       display: (item) => `ID: ${ellipsizeText(item, 100)}`,
+      toUrl: (item) => `id=${item}`,
+      fromUrl: () => useRoute().query?.id,
     },
     description: {
       bagKey: 'description',
@@ -34,21 +35,6 @@ export default {
       toUrl: (item) => `type=${item?.code}`,
       fromUrl: () => Object.values(Transaction.types).find((type) => type.code === useRoute().query?.type),
     },
-    tag: {
-      bagKey: 'tag',
-      filter: (item) => `tag_is:"${Tag.getDisplayName(item)}"`,
-      display: (item) => `Tag: ${Tag.getDisplayNameEllipsized(item)}`,
-    },
-    excludeTag: {
-      bagKey: 'excludedTag',
-      filter: (item) => `-tag_is:"${Tag.getDisplayName(item)}"`,
-      display: (item) => `- Tag: ${Tag.getDisplayNameEllipsized(item)}`,
-    },
-    noTag: {
-      bagKey: 'withoutTag',
-      filter: (item) => `has_any_tag:false`,
-      display: (item) => `No tags`,
-    },
     category: {
       bagKey: 'category',
       filter: (item) => `category_is:"${Category.getDisplayName(item)}"`,
@@ -60,41 +46,70 @@ export default {
       bagKey: 'excludedCategory',
       filter: (item) => `-category_is:"${Category.getDisplayName(item)}"`,
       display: (item) => `- Category: ${Category.getDisplayName(item)}`,
+      toUrl: (item) => `exclude_category_id=${item.id}`,
+      fromUrl: () => useDataStore().categoryDictionary[useRoute().query?.exclude_category_id],
     },
     noCategory: {
       bagKey: 'withoutCategory',
       filter: (item) => `has_any_category:false`,
       display: (item) => `No category`,
+      toUrl: (item) => `without_category=true`,
+      fromUrl: () => useRoute().query?.without_category,
+    },
+    tag: {
+      bagKey: 'tag',
+      filter: (item) => `tag_is:"${Tag.getDisplayName(item)}"`,
+      display: (item) => `Tag: ${Tag.getDisplayNameEllipsized(item)}`,
+      toUrl: (item) => `tag_id=${item.id}`,
+      fromUrl: () => useDataStore().tagDictionaryById[useRoute().query?.tag_id],
+    },
+    excludeTag: {
+      bagKey: 'excludedTag',
+      filter: (item) => `-tag_is:"${Tag.getDisplayName(item)}"`,
+      display: (item) => `- Tag: ${Tag.getDisplayNameEllipsized(item)}`,
+      toUrl: (item) => `exclude_tag_id=${item.id}`,
+      fromUrl: () => useDataStore().tagDictionaryById[useRoute().query?.exclude_tag_id],
+    },
+    noTag: {
+      bagKey: 'withoutTag',
+      filter: (item) => `has_any_tag:false`,
+      display: (item) => `No tags`,
+      toUrl: (item) => `without_tag=true`,
+      fromUrl: () => useRoute().query?.without_tag,
     },
     budget: {
       bagKey: 'budget',
       filter: (item) => `budget_is:"${Budget.getDisplayName(item)}"`,
       display: (item) => `Budget: ${Budget.getDisplayName(item)}`,
+      toUrl: (item) => `budget_id=${item.id}`,
+      fromUrl: () => useDataStore().budgetDictionary[useRoute().query?.budget_id],
     },
     noBudget: {
       bagKey: 'withoutBudget',
       filter: (item) => `has_any_budget:false`,
       display: (item) => `No budget`,
+      toUrl: (item) => `without_budget=true`,
+      fromUrl: () => useRoute().query?.without_budget,
     },
     account: {
       bagKey: 'account',
       filter: (item) => `account_id:"${item.map((account) => account.id)}"`,
-      display: (item) => `Account: ${Account.getDisplayName(item)}`,
+      display: (item) => `Account: ${item.map(Account.getDisplayName).join(', ')}`,
+      toUrl: (item) => `account_id=${item.map((account) => account.id)}`,
+      fromUrl: () => {
+        let accountIds = useRoute().query?.account_id
+        return accountIds ? accountIds.split(',').map((accountId) => useDataStore().accountDictionary[accountId]) : null
+      },
     },
     exceptAccount: {
       bagKey: 'excludedAccount',
       filter: (item) => `-account_id:"${item.map((account) => account.id).join(',')}"`,
       display: (item) => `- Account: ${item.map((account) => Account.getDisplayName(account)).join(',')}`,
-    },
-    amountMore: {
-      bagKey: 'amountStart',
-      filter: (item) => `more:${item}`,
-      display: (item) => `Amount > ${item}`,
-    },
-    amountLess: {
-      bagKey: 'amountEnd',
-      filter: (item) => `less:${item}`,
-      display: (item) => `Amount < ${item}`,
+      toUrl: (item) => `exclude_account_id=${item.map((account) => account.id)}`,
+      fromUrl: () => {
+        let accountIds = useRoute().query?.exclude_account_id
+        return accountIds ? accountIds.split(',').map((accountId) => useDataStore().accountDictionary[accountId]) : null
+      },
     },
     dateAfter: {
       bagKey: 'dateStart',
@@ -109,6 +124,20 @@ export default {
       display: (item) => `Date <  ${DateUtils.dateToUI(item)}`,
       toUrl: (item) => `date_end=${DateUtils.dateToString(item)}`,
       fromUrl: () => DateUtils.stringToDate(useRoute().query?.date_end),
+    },
+    amountMore: {
+      bagKey: 'amountStart',
+      filter: (item) => `more:${item}`,
+      display: (item) => `Amount > ${item}`,
+      toUrl: (item) => `amount_start=${item}`,
+      fromUrl: () => useRoute().query?.amount_start,
+    },
+    amountLess: {
+      bagKey: 'amountEnd',
+      filter: (item) => `less:${item}`,
+      display: (item) => `Amount < ${item}`,
+      toUrl: (item) => `amount_end=${item}`,
+      fromUrl: () => useRoute().query?.amount_end,
     },
   },
 

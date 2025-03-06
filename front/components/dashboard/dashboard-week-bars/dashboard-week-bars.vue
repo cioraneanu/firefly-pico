@@ -49,8 +49,5 @@ const onClick = async (bar) => {
     TransactionFilterUtils.filters.transactionType.toUrl(Transaction.types.expense),
   ].join('&')
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}${excludedUrl}`)
-
-  // const date = DateUtils.dateToString(bar.date)
-  // await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?date_start=${date}&date_end=${date}&type=${Transaction.types.expense.code}${excludedUrl}`)
 }
 </script>

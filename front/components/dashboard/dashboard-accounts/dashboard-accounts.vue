@@ -87,7 +87,8 @@ const onShowActionSheet = (account) => {
 
 const onGoToTransactions = async (account) => {
   if (account) {
-    await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?account_id=${account.id}`)
+    let filters = TransactionFilterUtils.filters.account.toUrl([account])
+    await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
   }
 }
 
