@@ -54,7 +54,7 @@ const { isLoading, isFinished, isRefreshing, list, isEmpty, onAdd, onEdit, onDel
 const search = ref('')
 const isSearchVisible = ref(true)
 
-const visibleAccountTypes = ref(Object.values(Account.types).map((account) => account.order))
+const visibleAccountTypes = ref(Object.values(Account.types).map((account) => account.name))
 
 const filteredList = computed(() => {
   if (search.value.length === 0) {
@@ -65,8 +65,8 @@ const filteredList = computed(() => {
 
 const accountsGroupList = computed(() => {
   const groupedAccounts = filteredList.value.reduce((result, account) => {
-    const type = get(Account.getType(account), 'name')
-    result[type] = [...(result[type] ?? []), account]
+    const typeName = get(Account.getType(account), 'name')
+    result[typeName] = [...(result[typeName] ?? []), account]
     return result
   }, {})
 
