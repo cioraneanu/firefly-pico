@@ -8,7 +8,7 @@
 
     <app-card-info v-if="itemId">
       <app-field-link :label="adjustBalanceText" :icon="TablerIconConstants.extras" @click="onAdjustBalance" />
-      <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?account_id=${itemId}`)" />
+      <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
     </app-card-info>
 
     <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
@@ -139,6 +139,11 @@ const accountCurrency = computed(() => get(item.value, 'attributes.currency_symb
 const adjustBalanceText = computed(() => `Adjust balance (${accountBalance.value} ${accountCurrency.value})`)
 const onAdjustBalance = () => {
   isAdjustBalanceVisible.value = true
+}
+
+const onNavigateToTransactionsList = async () => {
+  let filters = TransactionFilterUtils.filters.account.toUrl([item.value])
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
 }
 
 const toolbar = useToolbar()

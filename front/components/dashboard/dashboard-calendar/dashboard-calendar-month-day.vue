@@ -69,7 +69,10 @@ const dayStyle = computed(() => {
 
 const onClick = async () => {
   let excludedUrl = getExcludedTransactionUrl()
-  let date = DateUtils.dateToString(props.day)
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?date_start=${date}&date_end=${date}${excludedUrl}`)
+  let filters = [
+    TransactionFilterUtils.filters.dateAfter.toUrl(props.day),
+    TransactionFilterUtils.filters.dateBefore.toUrl(props.day),
+  ].join('&')
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}${excludedUrl}`)
 }
 </script>

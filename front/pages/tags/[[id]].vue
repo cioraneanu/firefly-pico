@@ -7,7 +7,7 @@
     </app-top-toolbar>
 
     <app-card-info v-if="itemId">
-      <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${itemId}`)" />
+      <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
     </app-card-info>
 
     <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
@@ -27,21 +27,6 @@
           </template>
         </app-boolean>
 
-        <!--        <app-icon-select-new-->
-        <!--            v-model="icon"-->
-        <!--        />-->
-
-        <!--        <icon-select-->
-        <!--            v-model="icon"-->
-        <!--        />-->
-
-        <!--        <app-field-->
-        <!--            v-model="icon"-->
-        <!--            name="Icon"-->
-        <!--            label="Icon"-->
-        <!--            left-icon="notes-o"-->
-        <!--            placeholder="Icon"-->
-        <!--        />-->
       </van-cell-group>
 
       <div style="margin: 16px">
@@ -132,9 +117,12 @@ toolbar.init({
   backRoute: RouteConstants.ROUTE_TAG_LIST,
 })
 
-const onRefresh = () => {
-  dataStore.fetchTags()
+const onNavigateToTransactionsList = async () => {
+  let filters = TransactionFilterUtils.filters.tag.toUrl(item.value)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
 }
+
+
 
 watch(tag, (newValue) => {
   if (profileStore.lowerCaseTagName) {

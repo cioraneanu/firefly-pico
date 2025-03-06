@@ -8,7 +8,7 @@
 
 
     <app-card-info v-if="itemId">
-      <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?category_id=${itemId}`)" />
+      <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
     </app-card-info>
 
     <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
@@ -94,6 +94,11 @@ watch(name, (newValue) => {
   }
   name.value = newValue
 })
+
+const onNavigateToTransactionsList = async () => {
+  let filters = TransactionFilterUtils.filters.category.toUrl(item.value)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
+}
 
 const toolbar = useToolbar()
 toolbar.init({

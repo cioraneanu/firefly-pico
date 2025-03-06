@@ -1,5 +1,5 @@
 <template>
-  <van-cell-group inset >
+  <van-cell-group inset>
     <div class="van-cell-group-title">Expenses this week:</div>
     <div class="display-flex">
       <div class="flex-1" />
@@ -42,8 +42,12 @@ const barsList = computed(() => {
 })
 
 const onClick = async (bar) => {
-  const date = DateUtils.dateToString(bar.date)
   let excludedUrl = getExcludedTransactionUrl()
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?date_start=${date}&date_end=${date}&type=${Transaction.types.expense.code}${excludedUrl}`)
+  let filters = [
+    TransactionFilterUtils.filters.dateAfter.toUrl(bar.date),
+    TransactionFilterUtils.filters.dateBefore.toUrl(bar.date),
+    TransactionFilterUtils.filters.transactionType.toUrl(Transaction.types.expense),
+  ].join('&')
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}${excludedUrl}`)
 }
 </script>

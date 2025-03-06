@@ -4,7 +4,7 @@
 
     <van-grid :column-num="3">
       <dashboard-summary-card
-        @click="onGoToTransactionsByType(Transaction.types.income.code)"
+        @click="onGoToTransactionsByType(Transaction.types.income)"
         :icon="TablerIconConstants.dashboardTotalIncomes"
         title="Income"
         :subtitle="totalIncomeFormatted"
@@ -12,7 +12,7 @@
       />
 
       <dashboard-summary-card
-        @click="onGoToTransactionsByType(Transaction.types.expense.code)"
+        @click="onGoToTransactionsByType(Transaction.types.expense)"
         :icon="TablerIconConstants.dashboardTotalExpenses"
         title="Expense"
         :subtitle="totalExpenseFormatted"
@@ -20,7 +20,7 @@
       />
 
       <dashboard-summary-card
-        @click="onGoToTransactionsByType(Transaction.types.transfer.code)"
+        @click="onGoToTransactionsByType(Transaction.types.transfer)"
         :icon="TablerIconConstants.dashboardTotalTransfers"
         title="Transfers"
         :subtitle="totalTransferFormatted"
@@ -33,7 +33,7 @@
     </van-grid>
 
     <div class="van-cell-group-title">Savings summary:</div>
-    <van-grid :column-num="3" @click="onNavigate">
+    <van-grid :column-num="3" @click="onNavigateToTransactionSavings">
       <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" title="Transactions" :subtitle="dataStore.transactionsListSavingsCount" subtitleClass="" />
       <dashboard-summary-card :icon="TablerIconConstants.dashboardCoin" title="Amount" :subtitle="transactionsListSavingsAmount" :subtitleClass="savingsAmountClass" />
       <dashboard-summary-card :icon="TablerIconConstants.dashboardSavingsPercent" title="Percentage" :subtitle="savingsPercentFormatted" subtitleClass="text-primary" />
@@ -73,12 +73,15 @@ const totalIncomeFormatted = computed(() => getFormattedValue(dataStore.totalInc
 const totalTransferFormatted = computed(() => getFormattedValue(dataStore.totalTransfersThisMonth))
 const totalSurplusFormatted = computed(() => getFormattedValue(dataStore.totalSurplusThisMonth))
 
-const onGoToTransactionsByType = async (type) => {
-  const startDate = DateUtils.dateToString(dataStore.dashboardDateStart)
-  const endDate = DateUtils.dateToString(dataStore.dashboardDateEnd)
+const onGoToTransactionsByType = async (transactionType) => {
   let excludedUrl = getExcludedTransactionUrl()
+  let filters = [
+    TransactionFilterUtils.filters.transactionType.toUrl(transactionType),
+    TransactionFilterUtils.filters.dateAfter.toUrl(dataStore.dashboardDateStart),
+    TransactionFilterUtils.filters.dateBefore.toUrl(dataStore.dashboardDateEnd),
+  ].join('&')
 
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?type=${type}&date_start=${startDate}&date_end=${endDate}${excludedUrl}`)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}${excludedUrl}`)
 }
 
 const onNextMonth = () => {
@@ -101,8 +104,12 @@ const savingsAmountClass = computed(() => (dataStore.transactionsListSavingsAmou
 const savingsPercentFormatted = computed(() => {
   return `${Math.trunc(dataStore.transactionsListSavingsPercentage)} %`
 })
-const onNavigate = async () => {
+const onNavigateToTransactionSavings = async () => {
+  if (dataStore.transactionsListSavings.length === 0) {
+    return
+  }
   let transactionIds = dataStore.transactionsListSavings.map((item) => item.id).join(',')
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?id=${transactionIds}`)
+  let filters = TransactionFilterUtils.filters.id.toUrl(transactionIds)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
 }
 </script>

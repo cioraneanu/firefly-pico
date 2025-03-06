@@ -60,6 +60,7 @@ import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import Budget from '~/models/Budget.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import { filterBagHasValues, getActiveFilters, getFiltersFromURL, saveToUrl } from '~/utils/FilterUtils.js'
 
 const dataStore = useDataStore()
 const route = useRoute()
@@ -97,16 +98,17 @@ const formClass = computed(() => ({
 
 let filters = ref({})
 
-let filtersDictionary = computed(() => {
-  return TransactionFilterUtils.getActiveFilters(filters.value)
+let activeFilters = computed(() => {
+  let filterDefinitions = Object.values(TransactionFilterUtils.filters)
+  return getActiveFilters(filterDefinitions, filters.value)
 })
 
 let filtersDisplayList = computed(() => {
-  return filtersDictionary.value.map((item) => item.display)
+  return activeFilters.value.map((item) => item.display)
 })
 
 let filtersBackendList = computed(() => {
-  return filtersDictionary.value.map((item) => item.filter)
+  return activeFilters.value.map((item) => item.filter)
 })
 
 watch(filtersBackendList, (newValue, oldValue) => {
@@ -114,6 +116,13 @@ watch(filtersBackendList, (newValue, oldValue) => {
     return
   }
   onRefresh()
+})
+
+watch(filters, (newValue, oldValue) => {
+  if (isEqual(newValue, oldValue)) {
+    return
+  }
+  saveToUrl(activeFilters.value)
 })
 
 const onClearFilters = () => {
@@ -129,9 +138,10 @@ toolbar.init({
 })
 
 onMounted(() => {
-  filters.value = TransactionFilterUtils.getFiltersFromURL()
+  let filterDefinitions = Object.values(TransactionFilterUtils.filters)
+  filters.value = getFiltersFromURL(filterDefinitions)
 
-  if (!TransactionFilterUtils.filterHasValues(filters.value)) {
+  if (!filterBagHasValues(filters.value)) {
     filters.value = TransactionFilterUtils.getPredefinedFilters()
   }
 })
