@@ -54,7 +54,7 @@ const { isLoading, isFinished, isRefreshing, list, isEmpty, onAdd, onEdit, onDel
 const search = ref('')
 const isSearchVisible = ref(true)
 
-const visibleAccountTypes = ref(Object.values(Account.types).map((account) => account.name))
+const visibleAccountTypes = ref(Object.values(Account.types).map((account) => account.order))
 
 const filteredList = computed(() => {
   if (search.value.length === 0) {

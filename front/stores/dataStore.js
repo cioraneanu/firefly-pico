@@ -472,7 +472,7 @@ export const useDataStore = defineStore('data', {
       this.isLoadingAccounts = true
       let list = await new AccountRepository().getAllWithMerge()
       // const allowedTypes = Object.values(Account.types).map(item => item.fireflyCode)
-      const allowedTypes = [Account.types.asset, Account.types.expense, Account.types.revenue].map((item) => item.fireflyCode)
+      const allowedTypes = [Account.types.asset, Account.types.expense, Account.types.revenue, Account.types.liability].map((item) => item.fireflyCode)
       list = list.filter((item) => allowedTypes.includes(get(item, 'attributes.type')))
       this.accountList = AccountTransformer.transformFromApiList(list)
       this.isLoadingAccounts = false

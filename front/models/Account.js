@@ -84,21 +84,31 @@ export default class Account extends BaseModel {
 
   static get types() {
     return {
-      cash: {
-        name: 'Cash',
-        fireflyCode: 'cash',
-      },
       asset: {
+        order: 1,
         name: 'Asset',
         fireflyCode: 'asset',
       },
+      revenue: {
+        order: 2,
+        name: 'Revenue',
+        fireflyCode: 'revenue',
+      },
       expense: {
+        order: 3,
         name: 'Expense',
         fireflyCode: 'expense',
       },
-      revenue: {
-        name: 'Revenue',
-        fireflyCode: 'revenue',
+
+      liability: {
+        order: 4,
+        name: 'Liability',
+        fireflyCode: 'liabilities',
+      },
+      cash: {
+        order: 5,
+        name: 'Cash',
+        fireflyCode: 'cash',
       },
     }
   }
