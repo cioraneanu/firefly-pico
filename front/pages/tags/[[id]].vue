@@ -27,21 +27,6 @@
           </template>
         </app-boolean>
 
-        <!--        <app-icon-select-new-->
-        <!--            v-model="icon"-->
-        <!--        />-->
-
-        <!--        <icon-select-->
-        <!--            v-model="icon"-->
-        <!--        />-->
-
-        <!--        <app-field-->
-        <!--            v-model="icon"-->
-        <!--            name="Icon"-->
-        <!--            label="Icon"-->
-        <!--            left-icon="notes-o"-->
-        <!--            placeholder="Icon"-->
-        <!--        />-->
       </van-cell-group>
 
       <div style="margin: 16px">
