@@ -33,7 +33,7 @@
     <template #popup="{ onSelectCell }">
       <div class="display-flex flex-column h-100">
         <template v-if="showAssets">
-          <span class="account-select-section-title">Personal accounts</span>
+          <span class="account-select-section-title">Asset accounts</span>
           <van-grid>
             <template v-for="(item, index) in assetAccountList" :key="index">
               <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
@@ -60,6 +60,18 @@
           <span class="account-select-section-title">Income accounts</span>
           <van-grid>
             <template v-for="(item, index) in incomeAccountList" :key="index">
+              <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
+                <template #default>
+                  <app-select-option :text="Account.getDisplayName(item)" :icon="Account.getIcon(item) ?? TablerIconConstants.account" />
+                </template>
+              </van-grid-item>
+            </template>
+          </van-grid>
+        </template>
+        <template v-if="showLiabilities">
+          <span class="account-select-section-title">Liability accounts</span>
+          <van-grid>
+            <template v-for="(item, index) in liabilityAccountList" :key="index">
               <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
                 <template #default>
                   <app-select-option :text="Account.getDisplayName(item)" :icon="Account.getIcon(item) ?? TablerIconConstants.account" />
@@ -120,13 +132,16 @@ const accountList = computed(() => {
   })
 })
 
+// TODO: Make a dictionary / list of accounts grouped by type. Could also remove the repetitive HTML with a v-for
 const expenseAccountList = computed(() => accountList.value.filter((item) => isEqual(Account.getType(item), Account.types.expense)))
 const assetAccountList = computed(() => accountList.value.filter((item) => isEqual(Account.getType(item), Account.types.asset)))
 const incomeAccountList = computed(() => accountList.value.filter((item) => isEqual(Account.getType(item), Account.types.revenue)))
+const liabilityAccountList = computed(() => accountList.value.filter((item) => isEqual(Account.getType(item), Account.types.liability)))
 
 const showAssets = computed(() => props.allowedTypes.some((item) => isEqual(item, Account.types.asset)) && assetAccountList.value.length > 0)
 const showExpense = computed(() => props.allowedTypes.some((item) => isEqual(item, Account.types.expense)) && expenseAccountList.value.length > 0)
 const showIncome = computed(() => props.allowedTypes.some((item) => isEqual(item, Account.types.revenue)) && incomeAccountList.value.length > 0)
+const showLiabilities = computed(() => props.allowedTypes.some((item) => isEqual(item, Account.types.liability)) && incomeAccountList.value.length > 0)
 
 // ------ Methods ------
 
