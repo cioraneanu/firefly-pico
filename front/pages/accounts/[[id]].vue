@@ -32,8 +32,16 @@
         <currency-select v-model="currency" name="curerency" :rules="[{ required: true, message: 'Field is required' }]" required />
 
         <account-type-select v-model="type" name="accountType" :rules="[{ required: true, message: 'Type is required' }]" required />
-
         <account-role-select v-if="isRoleVisible" v-model="role" name="accountRoleSelect" :rules="[{ required: true, message: 'Role is required' }]" required />
+
+        <account-liability-type-select v-if="isLiability" v-model="liabilityType" name="accountLiabilityType" :rules="[{ required: true, message: 'Liability type is required' }]" required />
+        <account-liability-direction-select
+          v-if="isLiability"
+          v-model="liabilityDirection"
+          name="accountLiabilityDirection"
+          :rules="[{ required: true, message: 'Liability direction is required' }]"
+          required
+        />
 
         <app-boolean v-model="includeNetWorth" label="Is include in net worth" />
 
@@ -112,17 +120,20 @@ let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveI
 const pathKey = 'attributes'
 
 // const name = ref("")
-const { name, type, role, currency, icon, includeNetWorth, isDashboardVisible } = generateChildren(item, [
+const { name, type, role, currency, icon, includeNetWorth, isDashboardVisible, liabilityType, liabilityDirection } = generateChildren(item, [
   { computed: 'name', parentKey: `${pathKey}.name` },
   { computed: 'icon', parentKey: `${pathKey}.icon` },
   { computed: 'type', parentKey: `${pathKey}.type` },
   { computed: 'role', parentKey: `${pathKey}.account_role` },
+  { computed: 'liabilityType', parentKey: `${pathKey}.liability_type` },
+  { computed: 'liabilityDirection', parentKey: `${pathKey}.liability_direction` },
   { computed: 'currency', parentKey: `${pathKey}.currency` },
   { computed: 'includeNetWorth', parentKey: `${pathKey}.include_net_worth` },
   { computed: 'isDashboardVisible', parentKey: `${pathKey}.is_dashboard_visible` },
 ])
 
 const isRoleVisible = computed(() => get(type.value, 'fireflyCode') === Account.types.asset.fireflyCode)
+const isLiability = computed(() => get(type.value, 'fireflyCode') === Account.types.liability.fireflyCode)
 
 watch(name, (newValue) => {
   if (profileStore.lowerCaseAccountName) {

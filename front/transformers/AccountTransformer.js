@@ -19,6 +19,8 @@ export default class AccountTransformer extends ApiTransformer {
 
     item.attributes.account_role = Account.roleAssetsList().find((role) => role.fireflyCode === item.attributes.account_role)
     item.attributes.type = Account.typesList().find((type) => type.fireflyCode === item.attributes.type)
+    item.attributes.liability_type = Account.liabilityTypesList().find((type) => type.fireflyCode === item.attributes.liability_type)
+    item.attributes.liability_direction = Account.liabilityDirectionsList().find((type) => type.fireflyCode === item.attributes.liability_direction)
 
     let currencyId = get(item, 'attributes.currency_id')
     item.attributes.currency = currencyDictionary[currencyId]
@@ -51,6 +53,10 @@ export default class AccountTransformer extends ApiTransformer {
       monthly_payment_date: monthlyPaymentDate,
       currency_id: get(data, 'currency.id'),
       currency_code: get(data, 'currency.attributes.code'),
+
+      liability_type: get(data, 'liability_type.fireflyCode'),
+      liability_direction: get(data, 'liability_direction.fireflyCode'),
+
 
       include_net_worth: get(data, 'include_net_worth', false),
       is_dashboard_visible: get(data, 'is_dashboard_visible', true),

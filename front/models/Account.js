@@ -84,21 +84,31 @@ export default class Account extends BaseModel {
 
   static get types() {
     return {
-      cash: {
-        name: 'Cash',
-        fireflyCode: 'cash',
-      },
       asset: {
+        order: 1,
         name: 'Asset',
         fireflyCode: 'asset',
       },
+      revenue: {
+        order: 2,
+        name: 'Revenue',
+        fireflyCode: 'revenue',
+      },
       expense: {
+        order: 3,
         name: 'Expense',
         fireflyCode: 'expense',
       },
-      revenue: {
-        name: 'Revenue',
-        fireflyCode: 'revenue',
+
+      liability: {
+        order: 4,
+        name: 'Liability',
+        fireflyCode: 'liabilities',
+      },
+      cash: {
+        order: 5,
+        name: 'Cash',
+        fireflyCode: 'cash',
       },
     }
   }
@@ -137,6 +147,47 @@ export default class Account extends BaseModel {
   static roleAssetsList() {
     return Object.values(this.roleAssets)
   }
+
+  // ------------
+  static get liabilityType() {
+    return {
+      debt: {
+        name: 'Debt',
+        fireflyCode: 'debt',
+      },
+      loan: {
+        name: 'Loan',
+        fireflyCode: 'loan',
+      },
+      mortgage: {
+        name: 'Mortgage',
+        fireflyCode: 'mortgage',
+      },
+    }
+  }
+
+  static liabilityTypesList() {
+    return Object.values(this.liabilityType)
+  }
+
+  static get liabilityDirection() {
+    return {
+      debit: {
+        name: 'I owe this to somebody else',
+        fireflyCode: 'debit',
+      },
+      credit: {
+        name: 'I am own this debt',
+        fireflyCode: 'credit',
+      },
+    }
+  }
+
+  static liabilityDirectionsList() {
+    return Object.values(this.liabilityDirection)
+  }
+
+  // ------------
 
   static getDisplayName(account) {
     return _.get(account, 'attributes.name')
@@ -197,9 +248,9 @@ export default class Account extends BaseModel {
     }
     switch (transactionTypeCode) {
       case Transaction.types.income.code:
-        return [Account.types.revenue]
+        return [Account.types.revenue, Account.types.liability]
       case Transaction.types.expense.code:
-        return [Account.types.asset, Account.types.cash]
+        return [Account.types.asset, Account.types.cash, Account.types.liability]
       case Transaction.types.transfer.code:
         return [Account.types.asset]
     }
@@ -213,14 +264,12 @@ export default class Account extends BaseModel {
     }
     switch (transactionTypeCode) {
       case Transaction.types.income.code:
-        return [Account.types.asset, Account.types.cash]
+        return [Account.types.asset, Account.types.cash, Account.types.liability]
       case Transaction.types.expense.code:
-        return [Account.types.expense]
+        return [Account.types.expense, Account.types.liability]
       case Transaction.types.transfer.code:
-        return [Account.types.asset]
+        return [Account.types.asset, Account.types.liability]
     }
     return []
   }
 }
-
-

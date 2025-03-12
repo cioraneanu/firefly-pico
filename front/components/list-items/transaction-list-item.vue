@@ -91,13 +91,7 @@ const transactionType = computed(() => _.get(firstTransaction.value, 'type', ' -
 const isSplitPayment = computed(() => transactions.value.length > 1)
 
 const displayedAccounts = computed(() => {
-  if (isTransactionExpense.value) {
-    return [sourceAccount.value]
-  }
-  if (isTransactionIncome.value) {
-    return [destinationAccount.value]
-  }
-  return [sourceAccount.value, destinationAccount.value]
+  return [sourceAccount.value, destinationAccount.value].filter(item => !!item)
 })
 
 const description = computed(() => get(props.value, 'attributes.group_title') ?? get(firstTransaction.value, 'description') ?? ' - ')

@@ -79,11 +79,10 @@ export const useDataStore = defineStore('data', {
     dashboardAccounts(state) {
       const profileStore = useProfileStore()
       return state.accountList.filter((account) => {
+        const isTypeAssetOrLiability = [Account.types.asset.fireflyCode, Account.types.liability.fireflyCode].includes(Account.getType(account)?.fireflyCode)
+
         return (
-          isEqual(Account.getType(account), Account.types.asset) &&
-          Account.getIsActive(account) &&
-          Account.getIsIncludedInNetWorth(account) &&
-          (Account.getBalance(account) != 0 || profileStore.dashboard.areEmptyAccountsVisible)
+          isTypeAssetOrLiability && Account.getIsActive(account) && Account.getIsIncludedInNetWorth(account) && (Account.getBalance(account) != 0 || profileStore.dashboard.areEmptyAccountsVisible)
         )
       })
     },
@@ -114,7 +113,7 @@ export const useDataStore = defineStore('data', {
       return Object.keys(this.dashboardAccountsTotalByCurrency)
         .reduce((result, currencyCode) => {
           const currencyAmount = this.dashboardAccountsTotalByCurrency[currencyCode]
-          return result + convertCurrency(currencyAmount, currencyCode, Currency.getCode(state.dashboardCurrency) )
+          return result + convertCurrency(currencyAmount, currencyCode, Currency.getCode(state.dashboardCurrency))
         }, 0)
         .toFixed(2)
     },
@@ -268,8 +267,8 @@ export const useDataStore = defineStore('data', {
 
     budgetLimitTotal(state) {
       return state.budgetLimitList.reduce((result, budgetLimit) => {
-        let budgetAmount =  get(budgetLimit, 'attributes.amount') ?? 0
-        let budgetCurrencyCode =  get(budgetLimit, 'attributes.currency_code')
+        let budgetAmount = get(budgetLimit, 'attributes.amount') ?? 0
+        let budgetCurrencyCode = get(budgetLimit, 'attributes.currency_code')
         return result + convertCurrency(budgetAmount, budgetCurrencyCode, Currency.getCode(state.dashboardCurrency))
       }, 0)
     },
@@ -277,8 +276,8 @@ export const useDataStore = defineStore('data', {
     budgetLimitSpent(state) {
       return Math.abs(
         state.budgetLimitList.reduce((result, budgetLimit) => {
-          let budgetAmount =  get(budgetLimit, 'attributes.spent') ?? 0
-          let budgetCurrencyCode =  get(budgetLimit, 'attributes.currency_code')
+          let budgetAmount = get(budgetLimit, 'attributes.spent') ?? 0
+          let budgetCurrencyCode = get(budgetLimit, 'attributes.currency_code')
           return result + convertCurrency(budgetAmount, budgetCurrencyCode, Currency.getCode(state.dashboardCurrency))
         }, 0),
       )
@@ -472,13 +471,13 @@ export const useDataStore = defineStore('data', {
       this.isLoadingAccounts = true
       let list = await new AccountRepository().getAllWithMerge()
       // const allowedTypes = Object.values(Account.types).map(item => item.fireflyCode)
-      const allowedTypes = [Account.types.asset, Account.types.expense, Account.types.revenue].map((item) => item.fireflyCode)
+      const allowedTypes = [Account.types.asset, Account.types.expense, Account.types.revenue, Account.types.liability].map((item) => item.fireflyCode)
       list = list.filter((item) => allowedTypes.includes(get(item, 'attributes.type')))
       this.accountList = AccountTransformer.transformFromApiList(list)
       this.isLoadingAccounts = false
 
       if (!this.dashboardCurrency?.id) {
-        let currencies =  list.map(item => get(item, 'attributes.currency')).filter(item => !!item)
+        let currencies = list.map((item) => get(item, 'attributes.currency')).filter((item) => !!item)
         this.dashboardCurrency = head(currencies)
       }
     },
