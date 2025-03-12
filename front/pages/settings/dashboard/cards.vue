@@ -33,7 +33,9 @@ import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { DASHBOARD_SECTIONS_LIST } from '~/constants/DashboardConstants.js'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
@@ -46,7 +48,7 @@ onMounted(() => {
 const onSave = async () => {
   profileStore.dashboardWidgetsConfig = fieldsList.value
   await profileStore.writeProfile()
-  UIUtils.showToastSuccess('User preferences saved')
+  UIUtils.showToastSuccess(t('settings.user_preferences_saved'))
   init()
 }
 
@@ -65,7 +67,7 @@ const init = () => {
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'Dashboard cards order',
+  title: t('settings.dashboard.cards_order'),
   backRoute: RouteConstants.ROUTE_DASHBOARD,
 })
 

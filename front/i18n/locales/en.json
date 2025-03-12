@@ -7,6 +7,11 @@
   "items": "items",
   "description": "Description",
   "notes": "Notes",
+  "ok": "OK",
+  "copy": "Copy",
+  "paste": "Paste",
+  "copied": "Copied",
+  "pasted": "Pasted",
   "transaction_type": "Transaction type",
   "transaction_type_popup": "Select a transaction type",
   "without": "Without",
@@ -20,7 +25,6 @@
   "budget": "Budget",
   "budget_select": "Select a budget",
   "account": "Account",
-  "account_select": "Select an account",
   "select_is_empty": "No selection...",
   "date": "Date",
   "date_after": "Date after",
@@ -72,6 +76,7 @@
     "required_field": "This field is required",
     "settings_saved": "Settings saved",
     "setup_entry": "Setup",
+    "user_preferences_saved": "User preferences saved",
     "setup": {
       "title": "Setup",
       "pico_backend_url": "Pico backend URL",
@@ -100,7 +105,6 @@
       "right_side_card": "(Right side card in the list)",
       "dark": "Dark",
       "light": "Light",
-      "user_preferences_saved": "User preferences saved",
       "pages": {
         "new_transacation": "New transaction",
         "transacation_list": "Transactions list",
@@ -128,11 +132,87 @@
       "force_tag_name_lowercase": "Force tag name lowercase",
       "strip_accents": "Strip accents"
     },
-    "dashboard_entry": "Dashboard",
     "transactions_entry": "Transactions",
+    "transactions": {
+      "title": "Transaction settings",
+      "default_form_values_entry": "Default form values",
+      "default_list_filters_entry": "Default list filters",
+      "amount_increment_buttons": "Amount increment buttons",
+      "configure_form_fields": "Configure form fields",
+      "configure_list_fields": "Configure list fields",
+      "watchers": "Watchers",
+      "watchers_info": "Applies only while creating a transaction",
+      "copy_tag_to_description": "When I select a Tag copy it into Description",
+      "copy_tag_to_category": "When I select a Tag copy it into Category",
+      "copy_category_to_description": "When I select a Category copy it into Description",
+      "quick_amounts": {
+        "title": "Quick transaction amounts",
+        "value": "Value"
+      },
+      "list_fields": {
+        "title": "Set list fields",
+        "fields": "Fields",
+        "select_hero_icons": "Select what Hero Icons to show",
+        "hero_icons": "Hero Icons",
+        "right_side_card": "(Right side card in the list)"
+      },
+      "form_fields": {
+        "title": "Set form fields",
+        "always_show_foreign_currency": "Always show foreign currency field"
+      },
+      "default_list_filters": {
+        "title": "Transaction list default filters",
+        "info": "It is recommended to use these filters only if you have a large amount of transactions which results in a slow list load. Ex. Show only transactions after the start of the current year.",
+        "account": "Account",
+        "date_after": "Date after",
+        "date_before": "Date before"
+      },
+      "default_form_values": {
+        "title": "New transaction defaults",
+        "default_source_account": "Default source account",
+        "default_destination_account": "Default destination account",
+        "default_category": "Default category",
+        "default_tags": "Default tags (only preselected)",
+        "auto_tags": "Auto tags (appended after creation)",
+        "foreign_currency": "Foreign currency for expenses"
+      }
+    },
     "about_entry": "About",
     "version": "Version",
-    "new_version_available": "New version available"
+    "new_version_available": "New version available",
+    "dashboard_entry": "Dashboard",
+    "dashboard": {
+      "title": "Dashboard settings",
+      "cards_order": "Dashboard cards order",
+      "config": "Config",
+      "show_empty_accounts": "Show accounts with 0 amount",
+      "show_decimal_places": "Show decimal places",
+      "transaction_exclusion": "Transaction exclusion"
+    },
+    "token": {
+      "label": "Personal access token",
+      "placeholder": "Personal token"
+    }
+  },
+  "about": {
+    "title": "About",
+    "info": "Info",
+    "items_list_deleted": "- Items in a list can be deleted with a horizontal swipe",
+    "list_updated": "- A list can be updated via pull to refresh",
+    "popups_dismissed": "- Popups that appear from the bottom can be dismissed with a swipe down gesture",
+    "dashboard_clickable": "- On the dashboard most of the icons and chart bars are clickable.",
+    "credits": "Credits",
+    "developed_by": "- Developed by Mihai Cioraneanu - <a href=\"REPO_URL\">GitHub</a>",
+    "using_laravel_nuxt": "- Using <a href=\"https://laravel.com/\" target=\"_blank\">Laravel</a> and <a href=\"https://nuxt.com/\" target=\"_blank\">Nuxt</a>",
+    "consuming_firefly": "- Consuming the <a href=\"https://www.firefly-iii.org\" target=\"_blank\">Firefly III</a> REST API",
+    "ui_theme_vant": "- With a UI theme based on <a href=\"https://vant-ui.github.io\" target=\"_blank\">Vant</a>",
+    "exchange_rate_api": "- Exchange rate by <a href=\"https://www.exchangerate-api.com\">Exchange Rate API</a>",
+    "iconpacks_tabler": "- IconPacks: <a href=\"https://tabler.io/icons\" target=\"_blank\">Tabler Icons</a>",
+    "iconpacks_fluent": "- IconPacks: <a href=\"https://github.com/microsoft/fluentui\" target=\"_blank\">Fluent UI System Icons</a>",
+    "iconpacks_circle_avatar": "- IconPacks: <a href=\"https://www.svgrepo.com/author/Laura%20Reen\" target=\"_blank\">Circle Avatar Vectors by Laura Reen</a>",
+    "iconpacks_svg_repo": "- IconPacks: <a href=\"https://www.svgrepo.com/\" target=\"_blank\">SVG Repo</a>",
+    "iconpacks_freepik": "- IconPacks: <a href=\"https://www.freepik.com/\" target=\"_blank\">Freepik</a>",
+    "illustrations_undraw": "- Illustrations: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>"
   },
   "page_select": {
     "label": "Starting page",
@@ -145,5 +225,16 @@
   "day_select": {
     "label": "First day of the week",
     "title": "Select the first day of the week"
+  },
+  "account_select": {
+    "title": "Select an account",
+    "asset_accounts": "Asset accounts",
+    "expense_accounts": "Expense accounts",
+    "income_accounts": "Income accounts",
+    "liability_accounts": "Liability accounts",
+    "no_accounts": "No accounts"
+  },
+  "currency_select": {
+    "title": "Select a currency"
   }
 }

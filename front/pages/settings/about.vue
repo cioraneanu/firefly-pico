@@ -3,32 +3,32 @@
     <app-top-toolbar />
 
     <van-cell-group inset>
-      <div class="van-cell-group-title mb-0">Info</div>
+      <div class="van-cell-group-title mb-0">{{ $t('about.info') }}</div>
 
       <div class="text-muted text-size-12 p-20 pt-10">
-        <div>- Items in a list can be deleted with a horizontal swipe</div>
-        <div>- A list can be updated via pull to refresh</div>
-        <div>- Popups that appear from the bottom can be dismissed with a swipe down gesture</div>
-        <div>- On the dashboard most of the icons and chart bars are clickable.</div>
+        <div v-html="$t('about.items_list_deleted')"></div>
+        <div v-html="$t('about.list_updated')"></div>
+        <div v-html="$t('about.popups_dismissed')"></div>
+        <div v-html="$t('about.dashboard_clickable')"></div>
       </div>
     </van-cell-group>
 
     <van-cell-group inset>
-      <div class="van-cell-group-title mb-0">Credits</div>
+      <div class="van-cell-group-title mb-0">{{ $t('about.credits') }}</div>
       <div class="text-muted text-size-12 p-20 pt-10">
-        <div>- Developed by Mihai Cioraneanu - <a :href="REPO_URL">GitHub</a></div>
+        <div v-html="$t('about.developed_by')"></div>
         <br />
-        <div>- Using <a href="https://laravel.com/" target="_blank">Laravel</a> and <a href="https://nuxt.com/" target="_blank">Nuxt</a></div>
-        <div>- Consuming the <a href="https://www.firefly-iii.org" target="_blank">Firefly III</a> REST API</div>
-        <div>- With a UI theme based on <a href="https://vant-ui.github.io" target="_blank">Vant</a></div>
-        <div>- Exchange rate by <a href="https://www.exchangerate-api.com">Exchange Rate API</a></div>
+        <div v-html="$t('about.using_laravel_nuxt')"></div>
+        <div v-html="$t('about.consuming_firefly')"></div>
+        <div v-html="$t('about.ui_theme_vant')"></div>
+        <div v-html="$t('about.exchange_rate_api')"></div>
         <br />
-        <div>- IconPacks: <a href="https://tabler.io/icons" target="_blank">Tabler Icons</a></div>
-        <div>- IconPacks: <a href="https://github.com/microsoft/fluentui" target="_blank">Fluent UI System Icons</a></div>
-        <div>- IconPacks: <a href="https://www.svgrepo.com/author/Laura%20Reen" target="_blank">Circle Avatar Vectors by Laura Reen</a></div>
-        <div>- IconPacks: <a href="https://www.svgrepo.com/" target="_blank">SVG Repo</a></div>
-        <div>- IconPacks: <a href="https://www.freepik.com/" target="_blank">Freepik</a></div>
-        <div>- Illustrations: <a href="https://undraw.co" target="_blank">unDraw</a></div>
+        <div v-html="$t('about.iconpacks_tabler')"></div>
+        <div v-html="$t('about.iconpacks_fluent')"></div>
+        <div v-html="$t('about.iconpacks_circle_avatar')"></div>
+        <div v-html="$t('about.iconpacks_svg_repo')"></div>
+        <div v-html="$t('about.iconpacks_freepik')"></div>
+        <div v-html="$t('about.illustrations_undraw')"></div>
       </div>
     </van-cell-group>
   </div>
@@ -41,13 +41,15 @@ import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import { REPO_URL } from '~/constants/Constants'
 import { onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'About',
+  title: t('about.title'),
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
 

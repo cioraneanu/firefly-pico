@@ -4,7 +4,7 @@
 
     <van-form @submit="onSave" class="">
       <van-cell-group inset class="">
-        <div class="van-cell-group-title mb-0">Fields:</div>
+        <div class="van-cell-group-title mb-0">{{ $t('settings.transactions.list_fields.fields') }}:</div>
 
         <div class="flex-column van-cell p-10">
           <app-repeater v-model="fieldsList" :is-list-dynamic="false" :empty-item="{ value: '' }">
@@ -23,7 +23,7 @@
 
       <van-cell-group inset>
         <app-select
-          popupTitle="Select what Hero Icons to show"
+          :popupTitle="$t('settings.transactions.list_fields.select_hero_icons')"
           v-model="heroIcons"
           v-model:showDropdown="isHeroIconsDropdownVisible"
           :list="heroIconsList"
@@ -33,8 +33,8 @@
         >
           <template #label>
             <div class="flex-center-vertical">
-              <div class="">Hero Icons</div>
-              <span class="info ml-5">(Right side card in the list)</span>
+              <div class="">{{ $t('settings.transactions.list_fields.hero_icons') }}</div>
+              <span class="info ml-5">{{ $t('settings.transactions.list_fields.right_side_card') }}</span>
             </div>
           </template>
         </app-select>
@@ -55,7 +55,9 @@ import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 import { transactionListHeroIconConfigList, transactionListFieldsConfigList } from '~/constants/TransactionConstants.js'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
@@ -93,13 +95,13 @@ const onSave = async () => {
   profileStore.transactionListFieldsConfig = fieldsList.value
   saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-  UIUtils.showToastSuccess('User preferences saved')
+  UIUtils.showToastSuccess(t('settings.user_preferences_saved'))
   init()
 }
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'Set list fields',
+  title: t('settings.transactions.list_fields.title'),
   backRoute: RouteConstants.ROUTE_SETTINGS_TRANSACTION,
 })
 

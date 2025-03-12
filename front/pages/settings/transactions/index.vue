@@ -4,20 +4,27 @@
 
     <van-form @submit="onSave" class="">
       <van-cell-group inset>
-        <!--        <div class="van-cell-group-title mb-0">Config:</div>-->
-        <app-field-link :icon="TablerIconConstants.form" label="Default form values" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_FORM_VALUES)" />
-        <app-field-link :icon="TablerIconConstants.search" label="Default list filters" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_LIST_FILTERS)" />
-        <app-field-link :icon="TablerIconConstants.amountButtons" label="Amount increment buttons" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_QUICK_AMOUNTS)" />
-        <app-field-link :icon="TablerIconConstants.order" label="Configure form fields" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FORM_FIELDS)" />
-        <app-field-link :icon="TablerIconConstants.order" label="Configure list fields" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_LIST_FIELDS)" />
+        <app-field-link :icon="TablerIconConstants.form" :label="$t('settings.transactions.default_form_values_entry')" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_FORM_VALUES)" />
+        <app-field-link
+          :icon="TablerIconConstants.search"
+          :label="$t('settings.transactions.default_list_filters_entry')"
+          @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_LIST_FILTERS)"
+        />
+        <app-field-link
+          :icon="TablerIconConstants.amountButtons"
+          :label="$t('settings.transactions.amount_increment_buttons')"
+          @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_QUICK_AMOUNTS)"
+        />
+        <app-field-link :icon="TablerIconConstants.order" :label="$t('settings.transactions.configure_form_fields')" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FORM_FIELDS)" />
+        <app-field-link :icon="TablerIconConstants.order" :label="$t('settings.transactions.configure_list_fields')" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_LIST_FIELDS)" />
       </van-cell-group>
 
       <van-cell-group inset>
-        <div class="van-cell-group-title mb-0">Watchers:</div>
-        <div class="info">Applies only while creating a transaction</div>
-        <app-boolean v-model="copyTagToDescription" label="When I select a Tag copy it into Description" />
-        <app-boolean v-model="copyTagToCategory" label="When I select a Tag copy it into Category" />
-        <app-boolean v-model="copyCategoryToDescription" label="When I select a Category copy it into Description" />
+        <div class="van-cell-group-title mb-0">{{ $t('settings.transactions.watchers') }}:</div>
+        <div class="info">{{ $t('settings.transactions.watchers_info') }}</div>
+        <app-boolean v-model="copyTagToDescription" :label="$t('settings.transactions.copy_tag_to_description')" />
+        <app-boolean v-model="copyTagToCategory" :label="$t('settings.transactions.copy_tag_to_category')" />
+        <app-boolean v-model="copyCategoryToDescription" :label="$t('settings.transactions.copy_category_to_description')" />
       </van-cell-group>
 
       <app-button-form-save />
@@ -34,7 +41,9 @@ import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const profileStore = useProfileStore()
 
 const copyCategoryToDescription = ref(false)
@@ -52,12 +61,12 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-  UIUtils.showToastSuccess('User preferences saved')
+  UIUtils.showToastSuccess(t('settings.user_preferences_saved'))
 }
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'Transaction settings',
+  title: t('settings.transactions.title'),
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
 

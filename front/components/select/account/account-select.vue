@@ -1,7 +1,7 @@
 <template>
   <app-select
     :label="label ?? $t('account')"
-    :popupTitle="$t('account_select')"
+    :popupTitle="$t('account_select.title')"
     class=""
     v-model="modelValue"
     v-model:showDropdown="showDropdown"
@@ -12,7 +12,6 @@
     :getDisplayValue="getDisplayValue"
     v-bind="dynamicAttrs"
   >
-
     <template #left-icon>
       <app-icon :icon="TablerIconConstants.account" :size="20" />
     </template>
@@ -33,7 +32,7 @@
     <template #popup="{ onSelectCell }">
       <div class="display-flex flex-column h-100">
         <template v-if="showAssets">
-          <span class="account-select-section-title">Asset accounts</span>
+          <span class="account-select-section-title">{{ $t('account_select.asset_accounts') }}</span>
           <van-grid>
             <template v-for="(item, index) in assetAccountList" :key="index">
               <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
@@ -45,7 +44,7 @@
           </van-grid>
         </template>
         <template v-if="showExpense">
-          <span class="account-select-section-title">Expense accounts</span>
+          <span class="account-select-section-title">{{ $t('account_select.expense_accounts') }}</span>
           <van-grid>
             <template v-for="(item, index) in expenseAccountList" :key="index">
               <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
@@ -57,7 +56,7 @@
           </van-grid>
         </template>
         <template v-if="showIncome">
-          <span class="account-select-section-title">Income accounts</span>
+          <span class="account-select-section-title">{{ $t('account_select.income_accounts') }}</span>
           <van-grid>
             <template v-for="(item, index) in incomeAccountList" :key="index">
               <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
@@ -69,7 +68,7 @@
           </van-grid>
         </template>
         <template v-if="showLiabilities">
-          <span class="account-select-section-title">Liability accounts</span>
+          <span class="account-select-section-title">{{ $t('account_select.liability_accounts') }}</span>
           <van-grid>
             <template v-for="(item, index) in liabilityAccountList" :key="index">
               <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
@@ -81,7 +80,7 @@
           </van-grid>
         </template>
         <template v-if="!showAssets && !showExpense && !showIncome">
-          <div class="flex-center text-muted text-size-12">No accounts</div>
+          <div class="flex-center text-muted text-size-12">{{ $t('account_select.no_accounts') }}</div>
         </template>
       </div>
     </template>
@@ -98,9 +97,11 @@ import Account from '~/models/Account.js'
 import { useFormAttributes } from '~/composables/useFormAttributes.js'
 import { IconRefresh } from '@tabler/icons-vue'
 import { isEqual } from 'lodash/lang'
+import { useI18n } from 'vue-i18n'
 
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
+const { t } = useI18n()
 const dataStore = useDataStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)

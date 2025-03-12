@@ -1,23 +1,23 @@
 <template>
   <div>
-    <van-field is-link readonly class="app-field" label-align="top" :model-value="modelValue" :label="label" placeholder="Personal token" @click="showDialog = true">
+    <van-field is-link readonly class="app-field" label-align="top" :model-value="modelValue" :label="computedLabel" :placeholder="$t('settings.token.placeholder')" @click="showDialog = true">
       <template #left-icon>
         <app-icon :icon="TablerIconConstants.key" :size="20" />
       </template>
     </van-field>
 
-    <van-dialog confirm-button-text="OK" width="100%" style="margin: 20px; max-height: 500px" v-model:show="showDialog">
+    <van-dialog :confirm-button-text="$t('ok')" width="100%" style="margin: 20px; max-height: 500px" v-model:show="showDialog">
       <div class="p-20">
-        <app-field type="textarea" left-icon="eye-o" v-model="modelValue" label="Personal access token" :rules="[{ required: true, message: 'This field is required' }]" />
+        <app-field type="textarea" left-icon="eye-o" v-model="modelValue" :label="$t('settings.token.label')" :rules="[{ required: true, message: $t('settings.required_field') }]" />
 
         <div class="flex-center gap-1 mt-3">
           <van-button size="small" @click="onCopy">
-            Copy
+            {{ $t('copy') }}
             <icon-copy :size="20" :stroke-width="1.8" />
           </van-button>
 
           <van-button size="small" @click="onPaste">
-            Paste
+            {{ $t('paste') }}
             <icon-clipboard :size="20" :stroke-width="1.8" />
           </van-button>
         </div>
@@ -33,26 +33,30 @@ import DateUtils from '~/utils/DateUtils'
 import { addDays, startOfDay } from 'date-fns'
 import { IconClipboard, IconCopy } from '@tabler/icons-vue'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const dataStore = useDataStore()
 
 const props = defineProps({
   label: {
     type: String,
-    default: 'Personal token',
+    default: '',
   },
 })
 const modelValue = defineModel()
 const showDialog = ref(false)
 
+const computedLabel = computed(() => props.label || t('settings.token.label'))
+
 const onCopy = () => {
   navigator.clipboard.writeText(modelValue.value)
-  UIUtils.showToastSuccess('Copied')
+  UIUtils.showToastSuccess(t('copied'))
 }
 const onPaste = async () => {
   const text = await navigator.clipboard.readText()
   modelValue.value = text
-  UIUtils.showToastSuccess('Pasted')
+  UIUtils.showToastSuccess(t('pasted'))
 }
 </script>
 

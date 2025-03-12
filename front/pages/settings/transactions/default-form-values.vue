@@ -4,17 +4,17 @@
 
     <van-form @submit="onSave" class="">
       <van-cell-group inset>
-        <account-select v-model="defaultAccountSource" label="Default source account" />
+        <account-select v-model="defaultAccountSource" :label="$t('settings.transactions.default_form_values.default_source_account')" />
 
-        <account-select v-model="defaultAccountDestination" label="Default destination account" />
+        <account-select v-model="defaultAccountDestination" :label="$t('settings.transactions.default_form_values.default_destination_account')" />
 
-        <category-select v-model="defaultCategory" label="Default category" />
+        <category-select v-model="defaultCategory" :label="$t('settings.transactions.default_form_values.default_category')" />
 
-        <tag-select v-model="defaultTags" label="Default tags (only preselected)" />
+        <tag-select v-model="defaultTags" :label="$t('settings.transactions.default_form_values.default_tags')" />
 
-        <tag-select v-model="autoAddedTags" label="Auto tags (appended after creation)" />
+        <tag-select v-model="autoAddedTags" :label="$t('settings.transactions.default_form_values.auto_tags')" />
 
-        <currency-select v-model="defaultForeignCurrency" label="Foreign currency for expenses" />
+        <currency-select v-model="defaultForeignCurrency" :label="$t('settings.transactions.default_form_values.foreign_currency')" />
       </van-cell-group>
 
       <app-button-form-save />
@@ -30,7 +30,9 @@ import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
@@ -55,12 +57,12 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-  UIUtils.showToastSuccess('User preferences saved')
+  UIUtils.showToastSuccess(t('settings.user_preferences_saved'))
 }
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'New transaction defaults',
+  title: t('settings.transactions.default_form_values.title'),
   backRoute: RouteConstants.ROUTE_SETTINGS_TRANSACTION,
 })
 
