@@ -15,4 +15,11 @@ export const supportedLanguages = [
     icon: 'svgo-flags-ro',
     // icon: flags.ro,
   },
+  {
+    code: 'zh-CN',
+    file: 'zh-CN.json',
+    displayName: '简体中文',
+    // icon: 'svgo-flags-zh-CN',
+    // icon: flags.ro,
+  },
 ]
