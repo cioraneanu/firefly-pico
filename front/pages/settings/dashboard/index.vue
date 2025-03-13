@@ -3,19 +3,18 @@
     <app-top-toolbar />
 
     <van-form @submit="onSave" class="">
-
       <van-cell-group inset>
-        <app-field-link label="Dashboard cards order" @click="onGoToDashboardCardsOrder" />
+        <app-field-link :label="$t('settings.dashboard.cards_order')" @click="onGoToDashboardCardsOrder" />
       </van-cell-group>
 
       <van-cell-group inset>
-        <div class="van-cell-group-title mb-0">Config:</div>
-        <app-boolean label="Show accounts with 0 amount:" v-model="areEmptyAccountsVisible" />
-        <app-boolean label="Show decimal places:" v-model="showDecimal" />
+        <div class="van-cell-group-title mb-0">{{ $t('settings.dashboard.config') }}:</div>
+        <app-boolean :label="$t('settings.dashboard.show_empty_accounts')" v-model="areEmptyAccountsVisible" />
+        <app-boolean :label="$t('settings.dashboard.show_decimal_places')" v-model="showDecimal" />
       </van-cell-group>
 
       <van-cell-group inset>
-        <div class="van-cell-group-title mb-0">Transaction exclusion:</div>
+        <div class="van-cell-group-title mb-0">{{ $t('settings.dashboard.transaction_exclusion') }}:</div>
         <account-select v-model="excludedAccountsList" :isMultiSelect="true" />
         <category-select v-model="excludedCategoriesList" :isMultiSelect="true" />
         <tag-select v-model="excludedTagsList" :isMultiSelect="true" :autoSelectParents="false" />
@@ -34,7 +33,9 @@ import UIUtils from '~/utils/UIUtils.js'
 import { useToolbar } from '~/composables/useToolbar.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const profileStore = useProfileStore()
 
 const areEmptyAccountsVisible = ref(false)
@@ -56,17 +57,16 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-  UIUtils.showToastSuccess('User preferences saved')
+  UIUtils.showToastSuccess(t('settings.settings_saved'))
 }
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'Dashboard settings',
+  title: t('settings.dashboard.title'),
   backRoute: RouteConstants.ROUTE_SETTINGS,
 })
 
 const onGoToDashboardCardsOrder = async () => await navigateTo(RouteConstants.ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER)
-
 
 onMounted(() => {
   animateSettings()

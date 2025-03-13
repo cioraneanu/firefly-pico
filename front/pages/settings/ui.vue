@@ -59,7 +59,7 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-  UIUtils.showToastSuccess(t('settings.ui.user_preferences_saved'))
+  UIUtils.showToastSuccess(t('settings.user_preferences_saved'))
 }
 
 const toolbar = useToolbar()

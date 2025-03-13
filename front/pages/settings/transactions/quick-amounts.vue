@@ -7,7 +7,7 @@
         <div class="van-cell-fake flex-column van-cell">
           <app-repeater v-model="quickAmountValues" :empty-item="{ value: '' }">
             <template #content="{ element, index }">
-              <app-field placeholder="Value" v-model="element.value" inputmode="decimal" />
+              <app-field :placeholder="$t('settings.transactions.quick_amounts.value')" v-model="element.value" inputmode="decimal" />
             </template>
           </app-repeater>
         </div>
@@ -25,7 +25,9 @@ import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
@@ -44,7 +46,7 @@ const onSave = async () => {
 
   await profileStore.writeProfile()
 
-  UIUtils.showToastSuccess('User preferences saved')
+  UIUtils.showToastSuccess(t('settings.user_preferences_saved'))
   init()
 }
 
@@ -56,7 +58,7 @@ const init = () => {
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'Quick transaction amounts',
+  title: t('settings.transactions.quick_amounts.title'),
   backRoute: RouteConstants.ROUTE_SETTINGS_TRANSACTION,
 })
 

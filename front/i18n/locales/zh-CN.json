@@ -1,0 +1,240 @@
+{
+    "new": "新建",
+    "save": "保存",
+    "delete": "删除",
+    "clone": "克隆",
+    "loading": "加载中...",
+    "items": "项目",
+    "description": "描述",
+    "notes": "备注",
+    "ok": "确定",
+    "copy": "复制",
+    "paste": "粘贴",
+    "copied": "已复制",
+    "pasted": "已粘贴",
+    "transaction_type": "交易类型",
+    "transaction_type_popup": "选择交易类型",
+    "without": "无",
+    "template": "模板",
+    "category": "类别",
+    "category_select": "选择类别",
+    "tag": "标签",
+    "tags": "标签",
+    "todo": "待办",
+    "tags_select": "选择标签",
+    "budget": "预算",
+    "budget_select": "选择预算",
+    "account": "账户",
+    "select_is_empty": "无选择...",
+    "date": "日期",
+    "date_after": "日期之后",
+    "date_before": "日期之前",
+    "sub_month": "-1 个月",
+    "this_month": "本月",
+    "add_month": "+1 个月",
+    "sub_day": "-1 天",
+    "today": "今天",
+    "add_day": "+1 天",
+    "amount": "金额",
+    "amount_min": "最小金额",
+    "amount_max": "最大金额",
+    "toolbar": {
+        "home": "首页",
+        "transactions": "交易",
+        "extras": "额外",
+        "settings": "设置"
+    },
+    "filters": {
+        "clear": "清除",
+        "applied_filters": "已应用的过滤器",
+        "apply_filters": "应用过滤器",
+        "transaction_filters": "交易过滤器"
+    },
+    "transaction": {
+        "title_list": "交易列表",
+        "split_transaction": "拆分交易",
+        "assistant": "助手",
+        "assistant_format": "格式 = [模板 / 标签?] [金额?] [描述?]",
+        "assistant_tutorial_title": "交易助手",
+        "assistant_tutorial_body": "\n      <p>通过在此输入文本（或使用手机的听写功能）轻松创建交易。</p>\n      <p>预期格式：<br> <b>[搜索]&nbsp; [金额?]&nbsp; [描述?]&nbsp; [待办?]</b></p>\n      <p>1. <b>搜索</b>会在标签、类别和交易模板的名称中查找。支持仅输入部分名称，甚至输入错误的字母。<br><code> elct => electricity</code></p>\n      <p>2. <b>金额</b>支持数学表达式。用空格分隔的数字会自动相加。</p>\n      <p>3. <b>描述</b>是可选的。使用此选项覆盖默认标签名称。</p>\n      <p>4. <b>待办</b>使添加用户定义的“待办标签”变得容易，只需附加一个自定义字符串（默认“!!”）。可以在“设置”中更改。</p>\n      \n      <p><b>示例</b><br>\n      “electricity” = 标签<br>\n      “swimming” = 模板 <br><br>\n      \n      <code>\n      electricity 23<br> \n      elc 12*2+33<br> \n      elc 12+2*3 自定义描述<br> \n      elc 25 !!<br>\n      swim<br> \n    \n      </code>\n      </p>\n    ",
+        "type": {
+            "expense": "支出",
+            "income": "收入",
+            "transfer": "转账"
+        },
+        "source_account": "源账户",
+        "destination_account": "目标账户",
+        "make_template": "创建模板",
+        "configure_fields": "配置字段",
+        "title_clone_transaction": "克隆交易",
+        "title_edit_transaction": "编辑交易",
+        "title_add_transaction": "添加交易"
+    },
+    "settings": {
+        "settings_title": "设置",
+        "general": "常规",
+        "required_field": "此字段为必填项",
+        "settings_saved": "设置已保存",
+        "setup_entry": "设置",
+        "user_preferences_saved": "用户偏好已保存",
+        "setup": {
+            "title": "设置",
+            "pico_backend_url": "Pico 后端 URL",
+            "sync_settings_via_token": "通过令牌同步设置",
+            "days_between_sync": "“额外”完全同步的天数",
+            "loaded_data_stats": "已加载数据统计",
+            "account": "账户",
+            "categories": "类别",
+            "tags": "标签",
+            "templates": "模板",
+            "budgets": "预算",
+            "last_sync": "上次同步",
+            "verifying": "验证中...",
+            "invalid_endpoint": "提供的端点不正确。",
+            "invalid_token": "提供的令牌不正确或已过期。",
+            "fetching": "获取中..."
+        },
+        "ui_entry": "用户界面",
+        "ui": {
+            "theme": "主题",
+            "title": "UI 设置",
+            "reset_forms_after_creation": "创建后重置表单",
+            "transaction_list": "交易列表",
+            "select_hero_icons": "选择要显示的 Hero 图标",
+            "hero_icons": "Hero 图标",
+            "right_side_card": "（列表右侧卡片）",
+            "dark": "暗色",
+            "light": "亮色",
+            "pages": {
+                "new_transacation": "新交易",
+                "transacation_list": "交易列表",
+                "dashboard": "仪表板"
+            }
+        },
+        "assistant_entry": "助手",
+        "assistant": {
+            "title": "助手设置",
+            "substring_todo_tag": "添加待办标签的子字符串"
+        },
+        "formatting_entry": "格式化",
+        "formatting": {
+            "title": "格式化设置",
+            "numbers_format": "数字格式",
+            "select_numbers_format": "选择首选数字格式",
+            "date_format": "日期格式",
+            "select_date_format": "选择日期格式",
+            "first_day_of_month": "每月的第一天",
+            "select_first_day_of_month": "选择每月的第一天",
+            "casing": "大小写",
+            "force_transaction_description_lowercase": "强制交易描述小写",
+            "force_account_name_lowercase": "强制账户名称小写",
+            "force_category_name_lowercase": "强制类别名称小写",
+            "force_tag_name_lowercase": "强制标签名称小写",
+            "strip_accents": "去除重音符号"
+        },
+        "transactions_entry": "交易",
+        "transactions": {
+            "title": "交易设置",
+            "default_form_values_entry": "默认表单值",
+            "default_list_filters_entry": "默认列表过滤器",
+            "amount_increment_buttons": "金额增量按钮",
+            "configure_form_fields": "配置表单字段",
+            "configure_list_fields": "配置列表字段",
+            "watchers": "观察者",
+            "watchers_info": "仅在创建交易时适用",
+            "copy_tag_to_description": "选择标签时将其复制到描述中",
+            "copy_tag_to_category": "选择标签时将其复制到类别中",
+            "copy_category_to_description": "选择类别时将其复制到描述中",
+            "quick_amounts": {
+                "title": "快速交易金额",
+                "value": "值"
+            },
+            "list_fields": {
+                "title": "设置列表字段",
+                "fields": "字段",
+                "select_hero_icons": "选择要显示的 Hero 图标",
+                "hero_icons": "Hero 图标",
+                "right_side_card": "（列表右侧卡片）"
+            },
+            "form_fields": {
+                "title": "设置表单字段",
+                "always_show_foreign_currency": "始终显示外币字段"
+            },
+            "default_list_filters": {
+                "title": "交易列表默认过滤器",
+                "info": "建议仅在交易量大且导致列表加载缓慢时使用这些过滤器。例如，仅显示当前年初之后的交易。",
+                "account": "账户",
+                "date_after": "日期之后",
+                "date_before": "日期之前"
+            },
+            "default_form_values": {
+                "title": "新交易默认值",
+                "default_source_account": "默认源账户",
+                "default_destination_account": "默认目标账户",
+                "default_category": "默认类别",
+                "default_tags": "默认标签（仅预选）",
+                "auto_tags": "自动标签（创建后附加）",
+                "foreign_currency": "支出的外币"
+            }
+        },
+        "token": {
+            "label": "个人访问令牌",
+            "placeholder": "个人令牌"
+        },
+        "about_entry": "关于",
+        "version": "版本",
+        "new_version_available": "有新版本可用",
+        "dashboard_entry": "仪表板",
+        "dashboard": {
+            "title": "仪表板设置",
+            "cards_order": "仪表板卡片顺序",
+            "config": "配置",
+            "show_empty_accounts": "显示金额为 0 的账户",
+            "show_decimal_places": "显示小数位",
+            "transaction_exclusion": "交易排除"
+        }
+    },
+    "about": {
+        "title": "关于",
+        "info": "信息",
+        "items_list_deleted": "- 列表中的项目可以通过水平滑动删除",
+        "list_updated": "- 列表可以通过下拉刷新更新",
+        "popups_dismissed": "- 从底部出现的弹出窗口可以通过向下滑动手势关闭",
+        "dashboard_clickable": "- 在仪表板上，大多数图标和图表条都是可点击的。",
+        "credits": "鸣谢",
+        "developed_by": "- 由 Mihai Cioraneanu 开发 - <a href=\"REPO_URL\">GitHub</a>",
+        "using_laravel_nuxt": "- 使用 <a href=\"https://laravel.com/\" target=\"_blank\">Laravel</a> 和 <a href=\"https://nuxt.com/\" target=\"_blank\">Nuxt</a>",
+        "consuming_firefly": "- 使用 <a href=\"https://www.firefly-iii.org\" target=\"_blank\">Firefly III</a> REST API",
+        "ui_theme_vant": "- 基于 <a href=\"https://vant-ui.github.io\" target=\"_blank\">Vant</a> 的 UI 主题",
+        "exchange_rate_api": "- 由 <a href=\"https://www.exchangerate-api.com\">Exchange Rate API</a> 提供汇率",
+        "iconpacks_tabler": "- 图标包：<a href=\"https://tabler.io/icons\" target=\"_blank\">Tabler Icons</a>",
+        "iconpacks_fluent": "- 图标包：<a href=\"https://github.com/microsoft/fluentui\" target=\"_blank\">Fluent UI System Icons</a>",
+        "iconpacks_circle_avatar": "- 图标包：<a href=\"https://www.svgrepo.com/author/Laura%20Reen\" target=\"_blank\">Circle Avatar Vectors by Laura Reen</a>",
+        "iconpacks_svg_repo": "- 图标包：<a href=\"https://www.svgrepo.com/\" target=\"_blank\">SVG Repo</a>",
+        "iconpacks_freepik": "- 图标包：<a href=\"https://www.freepik.com/\" target=\"_blank\">Freepik</a>",
+        "illustrations_undraw": "- 插图：<a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>"
+    },
+    "page_select": {
+        "label": "起始页面",
+        "title": "选择您的起始页面"
+    },
+    "language_select": {
+        "title": "选择您的语言",
+        "label": "语言"
+    },
+    "day_select": {
+        "label": "一周的第一天",
+        "title": "选择一周的第一天"
+    },
+    "account_select": {
+        "title": "选择账户",
+        "asset_accounts": "资产账户",
+        "expense_accounts": "支出账户",
+        "income_accounts": "收入账户",
+        "liability_accounts": "负债账户",
+        "no_accounts": "无账户"
+    },
+    "currency_select": {
+        "title": "选择货币"
+    }
+}

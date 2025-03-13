@@ -1,7 +1,7 @@
 <template>
   <app-select
-    :label="label"
-    popupTitle="Select a currency"
+    :label="computedLabel"
+    :popupTitle="$t('currency_select.title')"
     v-model="modelValue"
     v-model:showDropdown="showDropdown"
     v-model:search="search"
@@ -10,7 +10,6 @@
     :getDisplayValue="getDisplayValue"
     v-bind="dynamicAttrs"
   >
-
     <template #left-icon>
       <app-icon :icon="TablerIconConstants.currency" :size="20" />
     </template>
@@ -32,10 +31,12 @@ import _, { get } from 'lodash'
 import { useDataStore } from '~/stores/dataStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import { IconRefresh } from '@tabler/icons-vue'
+import { useI18n } from 'vue-i18n'
 
 import Currency from '~/models/Currency'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 
+const { t } = useI18n()
 const dataStore = useDataStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
@@ -43,13 +44,15 @@ const { dynamicAttrs } = useFormAttributes(attrs)
 const props = defineProps({
   label: {
     type: String,
-    default: 'Currency',
+    default: '',
   },
 })
 
 const modelValue = defineModel()
 const showDropdown = ref(false)
 const search = ref('')
+
+const computedLabel = computed(() => props.label || t('currency'))
 
 let list = ref([])
 
@@ -67,7 +70,6 @@ const filteredList = computed(() => {
 onMounted(async () => {
   list.value = dataStore.currenciesList.filter((item) => get(item, 'attributes.enabled'))
 })
-
 
 const getDisplayValue = (value) => {
   return Currency.getDisplayName(value)
