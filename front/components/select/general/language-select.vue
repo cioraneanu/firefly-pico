@@ -5,7 +5,7 @@
     v-model="modelValue"
     v-model:showDropdown="showDropdown"
     :list="list"
-    :columns="1"
+    :columns="3"
     v-bind="dynamicAttrs"
     :has-search="false"
     :clearable="false"

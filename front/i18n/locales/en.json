@@ -76,7 +76,6 @@
     "required_field": "This field is required",
     "settings_saved": "Settings saved",
     "setup_entry": "Setup",
-    "user_preferences_saved": "User preferences saved",
     "setup": {
       "title": "Setup",
       "pico_backend_url": "Pico backend URL",
@@ -162,10 +161,7 @@
       },
       "default_list_filters": {
         "title": "Transaction list default filters",
-        "info": "It is recommended to use these filters only if you have a large amount of transactions which results in a slow list load. Ex. Show only transactions after the start of the current year.",
-        "account": "Account",
-        "date_after": "Date after",
-        "date_before": "Date before"
+        "info": "It is recommended to use these filters only if you have a large amount of transactions which results in a slow list load. Ex. Show only transactions after the start of the current year."
       },
       "default_form_values": {
         "title": "New transaction defaults",
@@ -202,7 +198,7 @@
     "popups_dismissed": "- Popups that appear from the bottom can be dismissed with a swipe down gesture",
     "dashboard_clickable": "- On the dashboard most of the icons and chart bars are clickable.",
     "credits": "Credits",
-    "developed_by": "- Developed by Mihai Cioraneanu - <a href=\"REPO_URL\">GitHub</a>",
+    "developed_by": "- Developed by Mihai Cioraneanu - <a href=\"{url}\">GitHub</a>",
     "using_laravel_nuxt": "- Using <a href=\"https://laravel.com/\" target=\"_blank\">Laravel</a> and <a href=\"https://nuxt.com/\" target=\"_blank\">Nuxt</a>",
     "consuming_firefly": "- Consuming the <a href=\"https://www.firefly-iii.org\" target=\"_blank\">Firefly III</a> REST API",
     "ui_theme_vant": "- With a UI theme based on <a href=\"https://vant-ui.github.io\" target=\"_blank\">Vant</a>",

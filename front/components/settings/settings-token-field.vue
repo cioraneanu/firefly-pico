@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-field is-link readonly class="app-field" label-align="top" :model-value="modelValue" :label="computedLabel" :placeholder="$t('settings.token.placeholder')" @click="showDialog = true">
+    <van-field is-link readonly class="app-field" label-align="top" :model-value="modelValue" :label="props.label ?? $t('settings.token.label')" :placeholder="$t('settings.token.placeholder')" @click="showDialog = true">
       <template #left-icon>
         <app-icon :icon="TablerIconConstants.key" :size="20" />
       </template>
@@ -41,13 +41,10 @@ const dataStore = useDataStore()
 const props = defineProps({
   label: {
     type: String,
-    default: '',
   },
 })
 const modelValue = defineModel()
 const showDialog = ref(false)
-
-const computedLabel = computed(() => props.label || t('settings.token.label'))
 
 const onCopy = () => {
   navigator.clipboard.writeText(modelValue.value)

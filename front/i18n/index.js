@@ -6,20 +6,19 @@ export const supportedLanguages = [
     file: 'en.json',
     displayName: 'English',
     icon: 'svgo-flags-en',
-    // icon: flags.en
   },
   {
     code: 'ro',
     file: 'ro.json',
     displayName: 'Română',
     icon: 'svgo-flags-ro',
-    // icon: flags.ro,
   },
   {
     code: 'zh-CN',
     file: 'zh-CN.json',
     displayName: '简体中文',
-    // icon: 'svgo-flags-zh-CN',
+    icon: 'svgo-flags-cn',
+
     // icon: flags.ro,
   },
 ]

@@ -48,7 +48,7 @@ onMounted(() => {
 const onSave = async () => {
   profileStore.dashboardWidgetsConfig = fieldsList.value
   await profileStore.writeProfile()
-  UIUtils.showToastSuccess(t('settings.user_preferences_saved'))
+  UIUtils.showToastSuccess(t('settings.settings_saved'))
   init()
 }
 

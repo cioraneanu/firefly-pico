@@ -97,11 +97,9 @@ import Account from '~/models/Account.js'
 import { useFormAttributes } from '~/composables/useFormAttributes.js'
 import { IconRefresh } from '@tabler/icons-vue'
 import { isEqual } from 'lodash/lang'
-import { useI18n } from 'vue-i18n'
 
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
-const { t } = useI18n()
 const dataStore = useDataStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)

@@ -7,10 +7,10 @@
         <div class="text-muted text-size-12 font-400 p-3">
           {{ $t('settings.transactions.default_list_filters.info') }}
         </div>
-        <account-select v-model="account" :label="$t('settings.transactions.default_list_filters.account')" />
+        <account-select v-model="account" :label="$t('account')" />
         <div class="flex-center-vertical">
-          <app-date class="flex-1" v-model="dateStart" :label="$t('settings.transactions.default_list_filters.date_after')" />
-          <app-date class="flex-1" v-model="dateEnd" :label="$t('settings.transactions.default_list_filters.date_before')" />
+          <app-date class="flex-1" v-model="dateStart" :label="$t('date_after')" />
+          <app-date class="flex-1" v-model="dateEnd" :label="$t('date_before')" />
         </div>
       </van-cell-group>
 
@@ -48,7 +48,7 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-  UIUtils.showToastSuccess(t('settings.user_preferences_saved'))
+  UIUtils.showToastSuccess(t('settings.settings_saved'))
 }
 
 const toolbar = useToolbar()

@@ -58,7 +58,7 @@ const onSave = async () => {
   profileStore.transactionFormFieldsConfig = fieldsList.value
   saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-  UIUtils.showToastSuccess(t('settings.user_preferences_saved'))
+  UIUtils.showToastSuccess(t('settings.settings_saved'))
   init()
 }
 

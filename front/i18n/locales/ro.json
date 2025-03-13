@@ -4,9 +4,14 @@
   "delete": "Șterge",
   "clone": "Clonează",
   "loading": "Se încarcă...",
-  "items": "articole",
+  "items": "elemente",
   "description": "Descriere",
-  "notes": "Notițe",
+  "notes": "Note",
+  "ok": "OK",
+  "copy": "Copiază",
+  "paste": "Lipește",
+  "copied": "Copiat",
+  "pasted": "Lipit",
   "transaction_type": "Tip tranzacție",
   "transaction_type_popup": "Selectează un tip de tranzacție",
   "without": "Fără",
@@ -20,23 +25,19 @@
   "budget": "Buget",
   "budget_select": "Selectează un buget",
   "account": "Cont",
-  "account_select": "Selectează un cont",
   "select_is_empty": "Nicio selecție...",
   "date": "Dată",
-  "date_after": "Dată după",
-  "date_before": "Dată înainte",
+  "date_after": "Data după",
+  "date_before": "Data înainte",
   "sub_month": "-1 lună",
-  "this_month": "Luna aceasta",
-  "add_month": "+1 lună",
+  "this_month": "-1 lună",
+  "add_month": "-1 lună",
   "sub_day": "-1 zi",
   "today": "Astăzi",
   "add_day": "+1 zi",
   "amount": "Sumă",
-  "amount_min": "Suma minimă",
-  "amount_max": "Suma maximă",
-  "ui": {
-    "theme": "Temă"
-  },
+  "amount_min": "Sumă minimă",
+  "amount_max": "Sumă maximă",
   "toolbar": {
     "home": "Acasă",
     "transactions": "Tranzacții",
@@ -55,7 +56,7 @@
     "assistant": "Asistent",
     "assistant_format": "Format = [șablon / etichetă?] [sumă?] [descriere?]",
     "assistant_tutorial_title": "Asistent tranzacții",
-    "assistant_tutorial_body": "\n      <p>Creează rapid tranzacții tastând text aici (sau folosind dictarea de pe telefon).</p>\n      <p>Format așteptat:<br> <b>[căutare]&nbsp; [sumă?]&nbsp; [descriere?]&nbsp; [de făcut?]</b></p>\n      <p>1. <b>Căutarea</b> verifică numele etichetelor, categoriilor și șabloanelor de tranzacții. Poți introduce doar o parte din nume sau chiar greși câteva litere.<br><code> elct => electricitate</code></p>\n      <p>2. <b>Suma</b> suportă expresii matematice. Numerele separate prin spațiu sunt adunate automat.</p>\n      <p>3. <b>Descrierea</b> este opțională. Folosește-o pentru a suprascrie numele implicit al etichetei.</p>\n      <p>4. <b>De făcut</b> adaugă ușor eticheta definită de utilizator „de făcut” prin adăugarea unui șir personalizat (implicit „!!”). Acest lucru poate fi modificat în „Setări”.</p>\n      \n      <p><b>Exemple</b><br>\n      \"electricitate\" = etichetă<br>\n      \"înot\" = șablon <br><br>\n      \n      <code>\n      electricitate 23<br> \n      elc 12*2+33<br> \n      elc 12+2*3 descriere personalizată<br> \n      elc 25 !!<br>\n      înot<br> \n      </code>\n      </p>\n    ",
+    "assistant_tutorial_body": "\n      <p>Creează ușor tranzacții prin tastarea textului aici (sau folosind dictarea telefonului).</p>\n      <p>Format așteptat:<br> <b>[căutare]&nbsp; [sumă?]&nbsp; [descriere?]&nbsp; [de făcut?]</b></p>\n      <p>1. <b>Căutarea</b> caută în numele etichetelor, categoriilor și șabloanelor de tranzacții. Suportă introducerea doar a unei părți din nume și chiar și greșirea unor litere.<br><code> elct => electricitate</code></p>\n      <p>2. <b>Suma</b> suportă expresii matematice. Numerele separate de un spațiu sunt adunate automat.</p>\n      <p>3. <b>Descrierea</b> este opțională. Folosește-o pentru a suprascrie numele implicit al etichetei.</p>\n      <p>4. <b>De făcut</b> face ușoară adăugarea etichetei definite de utilizator \"de făcut\" prin adăugarea unui șir personalizat (implicit \"!!\"). Acesta poate fi schimbat în \"Setări\"</p>\n      \n      <p><b>Exemple</b><br>\n      \"electricitate\" = etichetă<br>\n      \"înot\" = șablon <br><br>\n      \n      <code>\n      electricitate 23<br> \n      elc 12*2+33<br> \n      elc 12+2*3 descriere personalizată<br> \n      elc 25 !!<br>\n      înot<br> \n    \n      </code>\n      </p>\n    ",
     "type": {
       "expense": "Cheltuială",
       "income": "Venit",
@@ -63,23 +64,23 @@
     },
     "source_account": "Cont sursă",
     "destination_account": "Cont destinație",
-    "make_template": "Crează șablon",
-    "configure_fields": "Configurare câmpuri",
-    "title_clone_transaction": "Clonează tranzacție",
-    "title_edit_transaction": "Modifică tranzacție",
+    "make_template": "Creează șablon",
+    "configure_fields": "Configurează câmpuri",
+    "title_clone_transaction": "Clonează tranzacția",
+    "title_edit_transaction": "Editează tranzacția",
     "title_add_transaction": "Adaugă tranzacție"
   },
   "settings": {
     "settings_title": "Setări",
     "general": "General",
     "required_field": "Acest câmp este obligatoriu",
-    "settings_saved": "Setările au fost salvate",
+    "settings_saved": "Setări salvate",
     "setup_entry": "Configurare",
     "setup": {
       "title": "Configurare",
       "pico_backend_url": "URL backend Pico",
       "sync_settings_via_token": "Sincronizează setările între dispozitive prin token",
-      "days_between_sync": "Zile între sincronizările complete ale „Extras”",
+      "days_between_sync": "Zile între sincronizarea completă a \"Extra\"",
       "loaded_data_stats": "Statistici date încărcate",
       "account": "Cont",
       "categories": "Categorii",
@@ -90,63 +91,146 @@
       "verifying": "Se verifică...",
       "invalid_endpoint": "Endpoint-ul furnizat nu este corect.",
       "invalid_token": "Token-ul furnizat nu este corect sau a expirat.",
-      "fetching": "Se preia..."
+      "fetching": "Se obține..."
     },
-    "ui_entry": "Interfață utilizator",
+    "ui_entry": "Interfața utilizatorului",
     "ui": {
       "theme": "Temă",
       "title": "Setări UI",
       "reset_forms_after_creation": "Resetează formularele după creare",
       "transaction_list": "Lista tranzacțiilor",
-      "select_hero_icons": "Selectează ce icoane Hero să afișezi",
-      "hero_icons": "Icoane Hero",
-      "right_side_card": "(Cardul din partea dreaptă a listei)",
-      "dark": "Temă neagră",
-      "light": "Temă albă",
-      "user_preferences_saved": "Preferințele au fost salvate",
+      "select_hero_icons": "Selectează ce iconițe Hero să fie afișate",
+      "hero_icons": "Iconițe Hero",
+      "right_side_card": "(Card în partea dreaptă a listei)",
+      "dark": "Întunecat",
+      "light": "Luminos",
       "pages": {
-        "new_transacation": "Creare tranzacție",
-        "transacation_list": "Listă tranzacții",
-        "dashboard": "Dashboard"
+        "new_transacation": "Tranzacție nouă",
+        "transacation_list": "Lista tranzacțiilor",
+        "dashboard": "Tablou de bord"
       }
     },
     "assistant_entry": "Asistent",
     "assistant": {
       "title": "Setări asistent",
-      "substring_todo_tag": "Text care adaugă eticheta de sarcină"
+      "substring_todo_tag": "Subșir care adaugă eticheta de făcut"
     },
     "formatting_entry": "Formatare",
     "formatting": {
       "title": "Setări formatare",
       "numbers_format": "Formatare numere",
-      "select_numbers_format": "Selectează formatarea preferată a numerelor",
+      "select_numbers_format": "Selectează formatarea preferată pentru numere",
       "date_format": "Format dată",
       "select_date_format": "Selectează un format de dată",
       "first_day_of_month": "Prima zi a lunii",
       "select_first_day_of_month": "Selectează prima zi a lunii",
-      "casing": "Majuscule",
+      "casing": "Caz litere",
       "force_transaction_description_lowercase": "Forțează descrierea tranzacției cu litere mici",
       "force_account_name_lowercase": "Forțează numele contului cu litere mici",
       "force_category_name_lowercase": "Forțează numele categoriei cu litere mici",
       "force_tag_name_lowercase": "Forțează numele etichetei cu litere mici",
       "strip_accents": "Elimină accentele"
     },
-    "dashboard_entry": "Tablou de bord",
     "transactions_entry": "Tranzacții",
+    "transactions": {
+      "title": "Setări tranzacții",
+      "default_form_values_entry": "Valori implicite formular",
+      "default_list_filters_entry": "Filtre implicite listă",
+      "amount_increment_buttons": "Butoane incrementare sumă",
+      "configure_form_fields": "Configurează câmpuri formular",
+      "configure_list_fields": "Configurează câmpuri listă",
+      "watchers": "Observatori",
+      "watchers_info": "Se aplică doar în timpul creării unei tranzacții",
+      "copy_tag_to_description": "Când selectez o Etichetă, copiază în Descriere",
+      "copy_tag_to_category": "Când selectez o Etichetă, copiază în Categorie",
+      "copy_category_to_description": "Când selectez o Categorie, copiază în Descriere",
+      "quick_amounts": {
+        "title": "Sume rapide tranzacții",
+        "value": "Valoare"
+      },
+      "list_fields": {
+        "title": "Setează câmpuri listă",
+        "fields": "Câmpuri",
+        "select_hero_icons": "Selectează ce iconițe Hero să fie afișate",
+        "hero_icons": "Iconițe Hero",
+        "right_side_card": "(Card în partea dreaptă a listei)"
+      },
+      "form_fields": {
+        "title": "Setează câmpuri formular",
+        "always_show_foreign_currency": "Arată întotdeauna câmpul pentru valuta străină"
+      },
+      "default_list_filters": {
+        "title": "Filtre implicite listă tranzacții",
+        "info": "Este recomandat să folosești aceste filtre doar dacă ai un număr mare de tranzacții care rezultă într-o încărcare lentă a listei. Ex. Arată doar tranzacțiile după începutul anului curent.",
+      },
+      "default_form_values": {
+        "title": "Valori implicite tranzacție nouă",
+        "default_source_account": "Cont sursă implicit",
+        "default_destination_account": "Cont destinație implicit",
+        "default_category": "Categorie implicită",
+        "default_tags": "Etichete implicite (doar preselectate)",
+        "auto_tags": "Etichete automate (adăugate după creare)",
+        "foreign_currency": "Valută străină pentru cheltuieli"
+      }
+    },
     "about_entry": "Despre",
     "version": "Versiune",
-    "new_version_available": "O nouă versiune este disponibilă"
+    "new_version_available": "Versiune nouă disponibilă",
+    "dashboard_entry": "Tablou de bord",
+    "dashboard": {
+      "title": "Setări tablou de bord",
+      "cards_order": "Ordinea cardurilor tabloului de bord",
+      "config": "Configurație",
+      "show_empty_accounts": "Arată conturile cu suma 0",
+      "show_decimal_places": "Arată zecimale",
+      "transaction_exclusion": "Excludere tranzacții"
+    },
+    "token": {
+      "label": "Token de acces personal",
+      "placeholder": "Token personal"
+    }
+  },
+  "about": {
+    "title": "Despre",
+    "info": "Informații",
+    "items_list_deleted": "- Elementele dintr-o listă pot fi șterse cu o glisare orizontală",
+    "list_updated": "- O listă poate fi actualizată prin tragere în jos pentru reîmprospătare",
+    "popups_dismissed": "- Ferestrele pop-up care apar din partea de jos pot fi închise cu un gest de glisare în jos",
+    "dashboard_clickable": "- Pe tabloul de bord, majoritatea pictogramelor și barelor de grafic sunt interactive.",
+    "credits": "Credite",
+    "developed_by": "- Dezvoltat de Mihai Cioraneanu - <a href=\"{url}\">GitHub</a>",
+    "using_laravel_nuxt": "- Folosind <a href=\"https://laravel.com/\" target=\"_blank\">Laravel</a> și <a href=\"https://nuxt.com/\" target=\"_blank\">Nuxt</a>",
+    "consuming_firefly": "- Consumă API-ul REST <a href=\"https://www.firefly-iii.org\" target=\"_blank\">Firefly III</a>",
+    "ui_theme_vant": "- Cu o temă UI bazată pe <a href=\"https://vant-ui.github.io\" target=\"_blank\">Vant</a>",
+    "exchange_rate_api": "- Curs de schimb de la <a href=\"https://www.exchangerate-api.com\">Exchange Rate API</a>",
+    "iconpacks_tabler": "- Pachete de iconițe: <a href=\"https://tabler.io/icons\" target=\"_blank\">Tabler Icons</a>",
+    "iconpacks_fluent": "- Pachete de iconițe: <a href=\"https://github.com/microsoft/fluentui\" target=\"_blank\">Fluent UI System Icons</a>",
+    "iconpacks_circle_avatar": "- Pachete de iconițe: <a href=\"https://www.svgrepo.com/author/Laura%20Reen\" target=\"_blank\">Circle Avatar Vectors de Laura Reen</a>",
+    "iconpacks_svg_repo": "- Pachete de iconițe: <a href=\"https://www.svgrepo.com/\" target=\"_blank\">SVG Repo</a>",
+    "iconpacks_freepik": "- Pachete de iconițe: <a href=\"https://www.freepik.com/\" target=\"_blank\">Freepik</a>",
+    "illustrations_undraw": "- Ilustrații: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>"
   },
   "page_select": {
-    "label": "Pagina de start",
-    "title": "Selectează pagina de start"
+    "label": "Pagină de start",
+    "title": "Selectează pagina ta de start"
   },
   "language_select": {
-    "title": "Selectează limba",
+    "title": "Selectează limba ta",
     "label": "Limbă"
   },
   "day_select": {
     "label": "Prima zi a săptămânii",
     "title": "Selectează prima zi a săptămânii"
+  },
+  "account_select": {
+    "title": "Selectează un cont",
+    "asset_accounts": "Conturi de active",
+    "expense_accounts": "Conturi de cheltuieli",
+    "income_accounts": "Conturi de venit",
+    "liability_accounts": "Conturi de datorii",
+    "no_accounts": "Niciun cont"
+  },
+  "currency_select": {
+    "title": "Selectează o valută"
   }
 }

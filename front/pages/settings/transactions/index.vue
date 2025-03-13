@@ -4,7 +4,11 @@
 
     <van-form @submit="onSave" class="">
       <van-cell-group inset>
-        <app-field-link :icon="TablerIconConstants.form" :label="$t('settings.transactions.default_form_values_entry')" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_FORM_VALUES)" />
+        <app-field-link
+          :icon="TablerIconConstants.form"
+          :label="$t('settings.transactions.default_form_values_entry')"
+          @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_FORM_VALUES)"
+        />
         <app-field-link
           :icon="TablerIconConstants.search"
           :label="$t('settings.transactions.default_list_filters_entry')"
@@ -61,7 +65,7 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   await profileStore.writeProfile()
-  UIUtils.showToastSuccess(t('settings.user_preferences_saved'))
+  UIUtils.showToastSuccess(t('settings.settings_saved'))
 }
 
 const toolbar = useToolbar()
