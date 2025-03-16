@@ -10,6 +10,7 @@ import ProfileTransformer from '~/transformers/ProfileTransformer'
 import { useAppStore } from '~/stores/appStore.js'
 import { DASHBOARD_SECTIONS_LIST } from '~/constants/DashboardConstants.js'
 import Page from '~/models/Page.js'
+import { migrateType } from '~/utils/MigrateUtils.js'
 
 export const useProfileStore = defineStore('profile', {
   state: () => {
@@ -37,8 +38,6 @@ export const useProfileStore = defineStore('profile', {
       transactionListDefaultFilterDateEnd: useLocalStorage('transactionListDefaultFilterDateEnd', null),
 
       isForeignCurrencyAlwaysVisible: useLocalStorage('isForeignCurrencyAlwaysVisible', false),
-
-
 
       quickValueButtons: useLocalStorage('quickValueButtons', ['-10', '-1', '+1', '+10']),
 
@@ -92,7 +91,7 @@ export const useProfileStore = defineStore('profile', {
       this.$patch(responseData)
       this.isLoading = false
 
-      this.migrateOrderedLists()
+      this.migrateProfile()
     },
 
     async writeProfile() {
@@ -109,10 +108,9 @@ export const useProfileStore = defineStore('profile', {
       this.isLoading = false
     },
 
-    migrateOrderedLists() {
+    migrateProfile() {
       // If we add new fields for "transactionFormFieldsConfig" / "dashboardWidgetsConfig"
       // which the user doesn't have in localStorage add them as well
-
       const profileStore = useProfileStore()
       if (profileStore.transactionFormFieldsConfig.length !== transactionFormFieldsConfigList.length) {
         profileStore.transactionFormFieldsConfig = transactionFormFieldsConfigList
@@ -125,6 +123,9 @@ export const useProfileStore = defineStore('profile', {
       if (profileStore.dashboardWidgetsConfig.length !== DASHBOARD_SECTIONS_LIST.length) {
         profileStore.dashboardWidgetsConfig = DASHBOARD_SECTIONS_LIST
       }
+
+      // If we changed the content of fixed lists update user settings (ex we removed "name" and added "t" to support translations)
+      this.startingPage = migrateType(this.startingPage, Page.typesList())
     },
   },
 })
