@@ -8,7 +8,7 @@ import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
 import ProfileRepository from '~/repository/ProfileRepository'
 import ProfileTransformer from '~/transformers/ProfileTransformer'
 import { useAppStore } from '~/stores/appStore.js'
-import { DASHBOARD_SECTIONS_LIST } from '~/constants/DashboardConstants.js'
+import { dashboardCardList } from '~/constants/DashboardConstants.js'
 import Page from '~/models/Page.js'
 import { migrateType } from '~/utils/MigrateUtils.js'
 
@@ -43,7 +43,7 @@ export const useProfileStore = defineStore('profile', {
 
       transactionFormFieldsConfig: useLocalStorage('transactionFormFieldsConfig', transactionFormFieldsConfigList),
       transactionListFieldsConfig: useLocalStorage('transactionListFieldsConfig', transactionListFieldsConfigList),
-      dashboardWidgetsConfig: useLocalStorage('dashboardWidgetsConfig', DASHBOARD_SECTIONS_LIST),
+      dashboardWidgetsConfig: useLocalStorage('dashboardWidgetsConfig', dashboardCardList),
 
       dateFormat: useLocalStorage('dateFormat', DateUtils.FORMAT_ENGLISH_DATE),
 
@@ -120,9 +120,7 @@ export const useProfileStore = defineStore('profile', {
         profileStore.transactionListFieldsConfig = transactionListFieldsConfigList
       }
 
-      if (profileStore.dashboardWidgetsConfig.length !== DASHBOARD_SECTIONS_LIST.length) {
-        profileStore.dashboardWidgetsConfig = DASHBOARD_SECTIONS_LIST
-      }
+      profileStore.dashboardWidgetsConfig = migrateTypeList(profileStore.dashboardWidgetsConfig, dashboardCardList)
 
       // If we changed the content of fixed lists update user settings (ex we removed "name" and added "t" to support translations)
       this.startingPage = migrateType(this.startingPage, Page.typesList())

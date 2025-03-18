@@ -1,22 +1,12 @@
-export const DASHBOARD_SECTIONS = {
-  accounts: 'accounts',
-  expensesLastWeek: 'expensesLastWeek',
-  transactionSummary: 'transactionSummary',
-  budgets: 'budgets',
-  savings: 'savings',
-  expensesByTag: 'expensesByTag',
-  expensesByCategory: 'expensesByCategory',
-  todosTransactions: 'todoTransactions',
-  calendar: 'calendar',
+export const dashboardCard = {
+  calendar: { t: 'calendar', code: 'calendar', isVisible: true },
+  accounts: { t: 'settings.dashboard.cards.accounts_summary', code: 'accounts', isVisible: true },
+  expensesLastWeek: { t: 'settings.dashboard.cards.expenses_this_week', code: 'expensesLastWeek', isVisible: true },
+  transactionsSummary: { t: 'settings.dashboard.cards.transactions_summary', code: 'transactionSummary', isVisible: true },
+  budgets: { t: 'budgets', code: 'budgets', isVisible: true },
+  expensesByTag: { t: 'settings.dashboard.cards.expenses_by_tag', code: 'expensesByTag', isVisible: true },
+  expensesByCategory: { t: 'settings.dashboard.cards.expenses_by_category', code: 'expensesByCategory', isVisible: true },
+  todoTransactions: { t: 'settings.dashboard.cards.todo_transactions', code: 'todoTransactions', isVisible: true },
 }
 
-export const DASHBOARD_SECTIONS_LIST = [
-  { code: DASHBOARD_SECTIONS.calendar, name: 'Calendar', isVisible: true },
-  { code: DASHBOARD_SECTIONS.accounts, name: 'Accounts summary', isVisible: true },
-  { code: DASHBOARD_SECTIONS.expensesLastWeek, name: 'Expenses this week', isVisible: true },
-  { code: DASHBOARD_SECTIONS.transactionSummary, name: 'Transactions summary', isVisible: true },
-  { code: DASHBOARD_SECTIONS.budgets, name: 'Budgets', isVisible: true },
-  { code: DASHBOARD_SECTIONS.expensesByTag, name: 'Expenses by tags', isVisible: true },
-  { code: DASHBOARD_SECTIONS.expensesByCategory, name: 'Expenses by categories', isVisible: true },
-  { code: DASHBOARD_SECTIONS.todosTransactions, name: 'Todo transactions', isVisible: true },
-]
+export const dashboardCardList = Object.values(dashboardCard)

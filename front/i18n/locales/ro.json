@@ -23,9 +23,11 @@
   "todo": "De făcut",
   "tags_select": "Selectează etichete",
   "budget": "Buget",
+  "budgets": "Bugete",
   "budget_select": "Selectează un buget",
   "account": "Cont",
   "select_is_empty": "Nicio selecție...",
+  "calendar": "Calendar",
   "date": "Dată",
   "date_after": "Data după",
   "date_before": "Data înainte",
@@ -183,7 +185,15 @@
       "config": "Configurație",
       "show_empty_accounts": "Arată conturile cu suma 0",
       "show_decimal_places": "Arată zecimale",
-      "transaction_exclusion": "Excludere tranzacții"
+      "transaction_exclusion": "Excludere tranzacții",
+      "cards":{
+        "accounts_summary": "Rezumat conturi",
+        "expenses_this_week": "Cheltuieli ultima săptămână",
+        "transactions_summary": "Rezumat tranzacții",
+        "expenses_by_tag": "Cheltuieli grupate pe etichete",
+        "expenses_by_category": "Cheltuieli grupate pe categorii",
+        "todo_transactions": "Tranzacții în așteptare"
+      }
     },
     "token": {
       "label": "Token de acces personal",

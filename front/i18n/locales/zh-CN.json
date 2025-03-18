@@ -23,9 +23,11 @@
   "todo": "待办",
   "tags_select": "选择标签",
   "budget": "预算",
+  "budgets": "预算",
   "budget_select": "选择预算",
   "account": "账户",
   "select_is_empty": "无选择...",
+  "calendar": "Calendar",
   "date": "日期",
   "date_after": "日期之后",
   "date_before": "日期之前",
@@ -161,7 +163,7 @@
       },
       "default_list_filters": {
         "title": "交易列表默认过滤器",
-        "info": "建议仅在交易量大且导致列表加载缓慢时使用这些过滤器。例如，仅显示当前年初之后的交易。",
+        "info": "建议仅在交易量大且导致列表加载缓慢时使用这些过滤器。例如，仅显示当前年初之后的交易。"
       },
       "default_form_values": {
         "title": "新交易默认值",
@@ -187,7 +189,15 @@
       "config": "配置",
       "show_empty_accounts": "显示金额为 0 的账户",
       "show_decimal_places": "显示小数位",
-      "transaction_exclusion": "交易排除"
+      "transaction_exclusion": "交易排除",
+      "cards": {
+        "accounts_summary": "账户摘要",
+        "expenses_this_week": "本周支出",
+        "transactions_summary": "交易摘要",
+        "expenses_by_tag": "按标签分类的支出",
+        "expenses_by_category": "按类别分类的支出",
+        "todo_transactions": "待处理交易"
+      }
     }
   },
   "about": {

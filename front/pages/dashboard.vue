@@ -6,21 +6,21 @@
       <div ref="dashboard" class="flex-column display-flex">
         <dashboard-control />
 
-        <dashboard-calendar :style="getStyleForCard(DASHBOARD_SECTIONS.calendar)" />
+        <dashboard-calendar :style="getStyleForCard(dashboardCard.calendar)" />
 
-        <dashboard-accounts :style="getStyleForCard(DASHBOARD_SECTIONS.accounts)" />
+        <dashboard-accounts :style="getStyleForCard(dashboardCard.accounts)" />
 
-        <dashboard-week-bars :style="getStyleForCard(DASHBOARD_SECTIONS.expensesLastWeek)" />
+        <dashboard-week-bars :style="getStyleForCard(dashboardCard.expensesLastWeek)" />
 
-        <dashboard-summary :style="getStyleForCard(DASHBOARD_SECTIONS.transactionSummary)" />
+        <dashboard-summary :style="getStyleForCard(dashboardCard.transactionsSummary)" />
 
-        <dashboard-budgets :style="getStyleForCard(DASHBOARD_SECTIONS.budgets)" />
+        <dashboard-budgets :style="getStyleForCard(dashboardCard.budgets)" />
 
-        <dashboard-tag-totals :style="getStyleForCard(DASHBOARD_SECTIONS.expensesByTag)" />
+        <dashboard-tag-totals :style="getStyleForCard(dashboardCard.expensesByTag)" />
 
-        <dashboard-category-totals :style="getStyleForCard(DASHBOARD_SECTIONS.expensesByCategory)" />
+        <dashboard-category-totals :style="getStyleForCard(dashboardCard.expensesByCategory)" />
 
-        <dashboard-todo-transactions :style="getStyleForCard(DASHBOARD_SECTIONS.todosTransactions)" />
+        <dashboard-todo-transactions :style="getStyleForCard(dashboardCard.todoTransactions)" />
 
         <app-card-info style="order: 99">
           <app-field-link label="Configure cards" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER)" />
@@ -38,7 +38,7 @@ import DashboardTagTotals from '~/components/dashboard/dashboard-tag-totals/dash
 import anime from 'animejs'
 import { animateDashboard } from '~/utils/AnimationUtils.js'
 import RouteConstants from '~/constants/RouteConstants.js'
-import { DASHBOARD_SECTIONS } from '~/constants/DashboardConstants.js'
+import { dashboardCard } from '~/constants/DashboardConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { useSwipe } from '@vueuse/core'
 import { addMonths } from 'date-fns'
@@ -75,9 +75,10 @@ const isLoadingDashboard = computed(() => {
   return dataStore.isLoadingAccounts || dataStore.isLoadingDashboardTransactions || dataStore.isLoadingDashboardTransactionsLastWeek
 })
 
-const getStyleForCard = (fieldCode) => {
-  let position = profileStore.dashboardWidgetsConfig.findIndex((item) => item.code === fieldCode)
-  let field = profileStore.dashboardWidgetsConfig.find((item) => item.code === fieldCode)
+const getStyleForCard = (dashboardCard) => {
+  let cardCode = dashboardCard.code
+  let position = profileStore.dashboardWidgetsConfig.findIndex((item) => item.code === cardCode)
+  let field = profileStore.dashboardWidgetsConfig.find((item) => item.code === cardCode)
   let isVisible = field ? field.isVisible : true
   let displayStyle = isVisible ? '' : 'display: none'
 

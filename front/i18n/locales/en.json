@@ -23,9 +23,11 @@
   "todo": "Todo",
   "tags_select": "Select tags",
   "budget": "Budget",
+  "budgets": "Bugets",
   "budget_select": "Select a budget",
   "account": "Account",
   "select_is_empty": "No selection...",
+  "calendar": "Calendar",
   "date": "Date",
   "date_after": "Date after",
   "date_before": "Date before",
@@ -183,7 +185,15 @@
       "config": "Config",
       "show_empty_accounts": "Show accounts with 0 amount",
       "show_decimal_places": "Show decimal places",
-      "transaction_exclusion": "Transaction exclusion"
+      "transaction_exclusion": "Transaction exclusion",
+      "cards":{
+        "accounts_summary": "Accounts summary",
+        "expenses_this_week": "Expenses this week",
+        "transactions_summary": "Transactions summary",
+        "expenses_by_tag": "Expenses by tags",
+        "expenses_by_category": "Expenses by categories",
+        "todo_transactions": "Todo transactions"
+      }
     },
     "token": {
       "label": "Personal access token",

@@ -10,7 +10,7 @@
               <div class="app-field m-5" @click="onClickIsVisible(element)">
                 <div class="van-field__body flex-center-vertical gap-1 pointer-events-none prevent-select">
                   <app-icon :icon="element.icon" :size="20" />
-                  <div class="flex-1">{{ element.name }}</div>
+                  <div class="flex-1">{{ element.t ? $t(element.t) : element.name }}</div>
                   <app-icon :icon="getIsVisibleIcon(element)" :size="20" />
                 </div>
               </div>
@@ -32,7 +32,7 @@ import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
-import { DASHBOARD_SECTIONS_LIST } from '~/constants/DashboardConstants.js'
+import { dashboardCardList } from '~/constants/DashboardConstants.js'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -61,8 +61,8 @@ const onClickIsVisible = (element) => {
 }
 
 const init = () => {
-  let isListOk = profileStore.dashboardWidgetsConfig.length === DASHBOARD_SECTIONS_LIST.length
-  fieldsList.value = isListOk ? profileStore.dashboardWidgetsConfig : DASHBOARD_SECTIONS_LIST
+  let isListOk = profileStore.dashboardWidgetsConfig.length === dashboardCardList.length
+  fieldsList.value = isListOk ? profileStore.dashboardWidgetsConfig : dashboardCardList
 }
 
 const toolbar = useToolbar()
