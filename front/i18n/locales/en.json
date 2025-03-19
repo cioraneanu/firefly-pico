@@ -2,6 +2,8 @@
   "new": "New",
   "save": "Save",
   "delete": "Delete",
+  "search": "Search",
+  "search_placeholder": "Search...",
   "clone": "Clone",
   "loading": "Loading...",
   "items": "items",
@@ -242,5 +244,8 @@
   },
   "currency_select": {
     "title": "Select a currency"
+  },
+  "validation": {
+    "required": "Field is required"
   }
 }

@@ -67,7 +67,7 @@
           autosize
           :icon="TablerIconConstants.fieldText2"
           placeholder="Description"
-          :rules="[{ required: true, message: 'Description is required' }]"
+          :rules="[rule.required()]"
           required
           :style="getStyleForField(transactionFormFieldsConfig.description)"
         />
@@ -75,7 +75,7 @@
         <tag-select v-model="tags" :style="getStyleForField(transactionFormFieldsConfig.tags)" />
 
         <div :style="getStyleForField(transactionFormFieldsConfig.date)">
-          <app-date-time-grid v-model="date" name="date" :rules="[{ required: true, message: 'Date is required' }]" required />
+          <app-date-time-grid v-model="date" name="date" :rules="[rule.required()]" required />
 
           <div v-if="!isSplitTransaction" class="px-3 flex-center-vertical gap-1">
             <van-button size="small" @click="onSubDay">{{ $t('sub_day') }}</van-button>
@@ -123,8 +123,6 @@
   </div>
 </template>
 
-import { ref } from 'vue';
-
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
@@ -149,6 +147,7 @@ import TransactionTransformer from '~/transformers/TransactionTransformer.js'
 import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
 import { useI18n } from '#imports'
 import { transactionFormFieldsConfig } from '~/constants/TransactionConstants.js'
+import { rule } from '~/utils/ValidationUtils.js'
 
 const refAmount = ref(null)
 

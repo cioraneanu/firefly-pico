@@ -10,7 +10,7 @@
               <div class="app-field m-5" @click="onClickIsVisible(element)">
                 <div class="van-field__body flex-center-vertical gap-1 pointer-events-none prevent-select">
                   <app-icon :icon="element.icon" :size="20" />
-                  <div class="flex-1">{{ element.t ? $t(element.t) : element.name }}</div>
+                  <div class="flex-1 text-size-14">{{ element.t ? $t(element.t) : element.name }}</div>
                   <app-icon :icon="getIsVisibleIcon(element)" :size="20" />
                 </div>
               </div>

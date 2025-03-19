@@ -2,6 +2,8 @@
   "new": "Nou",
   "save": "Salvează",
   "delete": "Șterge",
+  "search": "Caută",
+  "search_placeholder": "Caută...",
   "clone": "Clonează",
   "loading": "Se încarcă...",
   "items": "elemente",
@@ -242,5 +244,8 @@
   },
   "currency_select": {
     "title": "Selectează o valută"
+  },
+  "validation": {
+    "required": "Câmpul este obligatoriu"
   }
 }

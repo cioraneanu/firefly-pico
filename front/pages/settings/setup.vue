@@ -6,10 +6,10 @@
       <van-cell-group inset>
         <!--        <div class="van-cell-group-title">Setup</div>-->
 
-        <app-field left-icon="link-o" v-model="picoBackendURL" :label="$t('settings.setup.pico_backend_url')" :rules="[{ required: true, message: $t('settings.required_field') }]" required />
+        <app-field left-icon="link-o" v-model="picoBackendURL" :label="$t('settings.setup.pico_backend_url')" :rules="[rule.required()]" required />
         <settings-token-field v-model="authToken" required />
         <app-boolean left-icon="points" :label="$t('settings.setup.sync_settings_via_token')" v-model="syncProfileInDB" />
-        <app-field v-model="daysBetweenFullSync" :label="$t('settings.setup.days_between_sync')" :rules="[{ required: true, message: $t('settings.required_field') }]" required />
+        <app-field v-model="daysBetweenFullSync" :label="$t('settings.setup.days_between_sync')" :rules="[rule.required()]" required />
       </van-cell-group>
 
       <van-cell-group inset>
@@ -43,6 +43,7 @@ import AppConfigStat from '~/components/settings/app-config-stat.vue'
 import UserRepository from '~/repository/UserRepository'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import { get } from 'lodash'
+import { rule } from '~/utils/ValidationUtils.js'
 
 const appStore = useAppStore()
 const dataStore = useDataStore()

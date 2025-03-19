@@ -29,17 +29,17 @@
           autosize
           :icon="TablerIconConstants.fieldText2"
           placeholder="Description"
-          :rules="[{ required: true, message: 'Name is required' }]"
+          :rules="[rule.required()]"
         />
 
         <icon-select v-model="icon" />
 
-        <budget-type-select v-model="type" name="budgetType" :rules="[{ required: true, message: 'Type is required' }]" required />
+        <budget-type-select v-model="type" name="budgetType" :rules="[rule.required()]" required />
 
         <template v-if="isPeriodVisible">
-          <budget-period-select v-model="period" name="budgetPeriod" :rules="[{ required: true, message: 'Type is required' }]" required />
-          <currency-select v-model="currency" name="currency" :rules="[{ required: true, message: 'Field is required' }]" required />
-          <app-field v-model="amount" name="amount" label="Amount" placeholder="Amount" :icon="TablerIconConstants.cashBanknote" :rules="[{ required: true, message: 'Amount is required' }]" />
+          <budget-period-select v-model="period" name="budgetPeriod" :rules="[rule.required()]" required />
+          <currency-select v-model="currency" name="currency" :rules="[rule.required()]" required />
+          <app-field v-model="amount" name="amount" label="Amount" placeholder="Amount" :icon="TablerIconConstants.cashBanknote" :rules="[rule.required()]" />
         </template>
       </van-cell-group>
 
@@ -72,6 +72,7 @@ import BudgetTransformer from '~/transformers/BudgetTransformer.js'
 import Budget from '~/models/Budget.js'
 import AccountTypeSelect from '~/components/select/account/account-type-select.vue'
 import BudgetLimit from '~/models/BudgetLimit.js'
+import { rule } from '~/utils/ValidationUtils.js'
 
 let dataStore = useDataStore()
 let profileStore = useProfileStore()

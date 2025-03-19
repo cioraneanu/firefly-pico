@@ -22,24 +22,24 @@
           autosize
           :icon="TablerIconConstants.fieldText2"
           placeholder="Description"
-          :rules="[{ required: true, message: 'Name is required' }]"
+          :rules="[rule.required()]"
           required
         >
         </app-field>
 
         <icon-select v-model="icon" :list="avatarListIcons" />
 
-        <currency-select v-model="currency" name="curerency" :rules="[{ required: true, message: 'Field is required' }]" required />
+        <currency-select v-model="currency" name="curerency" :rules="[rule.required()]" required />
 
-        <account-type-select v-model="type" name="accountType" :rules="[{ required: true, message: 'Type is required' }]" required />
-        <account-role-select v-if="isRoleVisible" v-model="role" name="accountRoleSelect" :rules="[{ required: true, message: 'Role is required' }]" required />
+        <account-type-select v-model="type" name="accountType" :rules="[rule.required()]" required />
+        <account-role-select v-if="isRoleVisible" v-model="role" name="accountRoleSelect" :rules="[rule.required()]" required />
 
-        <account-liability-type-select v-if="isLiability" v-model="liabilityType" name="accountLiabilityType" :rules="[{ required: true, message: 'Liability type is required' }]" required />
+        <account-liability-type-select v-if="isLiability" v-model="liabilityType" name="accountLiabilityType" :rules="[rule.required()]" required />
         <account-liability-direction-select
           v-if="isLiability"
           v-model="liabilityDirection"
           name="accountLiabilityDirection"
-          :rules="[{ required: true, message: 'Liability direction is required' }]"
+          :rules="[rule.required()]"
           required
         />
 
@@ -74,6 +74,7 @@ import AccountTransformer from '~/transformers/AccountTransformer'
 import { useToolbar } from '~/composables/useToolbar'
 import { avatarListIcons } from '~/constants/SvgConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import { rule } from '~/utils/ValidationUtils.js'
 
 let dataStore = useDataStore()
 let profileStore = useProfileStore()

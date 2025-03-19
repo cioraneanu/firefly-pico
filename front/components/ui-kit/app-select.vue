@@ -32,7 +32,7 @@
         <div v-if="props.popupTitle" class="van-popup-title">{{ props.popupTitle }}</div>
 
         <div v-if="hasSearch" style="margin-right: 12px" class="p-1 flex-center-vertical gap-1">
-          <van-search v-model="search" placeholder="Search..." class="flex-1" />
+          <van-search v-model="search" :placeholder="$t('search_placeholder')" class="flex-1" />
 
           <slot name="top-right"></slot>
         </div>

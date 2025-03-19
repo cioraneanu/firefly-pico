@@ -8,7 +8,7 @@
 
     <van-dialog :confirm-button-text="$t('ok')" width="100%" style="margin: 20px; max-height: 500px" v-model:show="showDialog">
       <div class="p-20">
-        <app-field type="textarea" left-icon="eye-o" v-model="modelValue" :label="$t('settings.token.label')" :rules="[{ required: true, message: $t('settings.required_field') }]" />
+        <app-field type="textarea" left-icon="eye-o" v-model="modelValue" :label="$t('settings.token.label')" :rules="[rule.required()]" />
 
         <div class="flex-center gap-1 mt-3">
           <van-button size="small" @click="onCopy">
@@ -34,6 +34,7 @@ import { addDays, startOfDay } from 'date-fns'
 import { IconClipboard, IconCopy } from '@tabler/icons-vue'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { useI18n } from 'vue-i18n'
+import { rule } from '~/utils/ValidationUtils.js'
 
 const { t } = useI18n()
 const dataStore = useDataStore()

@@ -10,7 +10,7 @@
           :icon="TablerIconConstants.fieldText2"
           v-model="assistantTodoTagMatcher"
           :label="$t('settings.assistant.substring_todo_tag')"
-          :rules="[{ required: true, message: $t('settings.required_field') }]"
+          :rules="[rule.required()]"
           required
         />
       </van-cell-group>
@@ -30,6 +30,7 @@ import RouteConstants from '~/constants/RouteConstants'
 import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
+import { rule } from '~/utils/ValidationUtils.js'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()

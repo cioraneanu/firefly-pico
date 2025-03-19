@@ -12,7 +12,7 @@
 
     <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
       <van-cell-group inset>
-        <app-field v-model="tag" name="name" label="Name" rows="1" autosize :icon="TablerIconConstants.fieldText2" placeholder="Description" :rules="[{ required: true, message: 'Name is required' }]" required />
+        <app-field v-model="tag" name="name" label="Name" rows="1" autosize :icon="TablerIconConstants.fieldText2" placeholder="Description" :rules="[rule.required()]" required />
 
         <tag-select label="Parent tag" v-model="parentTag" :isMultiSelect="false" />
 
@@ -56,6 +56,7 @@ import TagTransformer from '~/transformers/TagTransformer'
 import TagSelect from '~/components/select/tag-select.vue'
 import { TUTORIAL_CONSTANTS } from '~/constants/TutorialConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import { rule } from '~/utils/ValidationUtils.js'
 
 let dataStore = useDataStore()
 let profileStore = useProfileStore()

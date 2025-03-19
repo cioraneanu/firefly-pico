@@ -2,6 +2,8 @@
   "new": "新建",
   "save": "保存",
   "delete": "删除",
+  "search": "搜索",
+  "search_placeholder": "搜索...",
   "clone": "克隆",
   "loading": "加载中...",
   "items": "项目",
@@ -242,5 +244,8 @@
   },
   "currency_select": {
     "title": "选择货币"
+  },
+  "validation": {
+    "required": "必填字段"
   }
 }

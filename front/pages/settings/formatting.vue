@@ -14,7 +14,7 @@
           :list="numberFormatList"
           :columns="1"
           :has-search="false"
-          :rules="[{ required: true, message: $t('settings.required_field') }]"
+          :rules="[rule.required()]"
           required
           :clearable="false"
         />
@@ -68,6 +68,7 @@ import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 import DaySelect from '~/components/select/general/day-select.vue'
+import { rule } from '~/utils/ValidationUtils.js'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
