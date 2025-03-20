@@ -4,7 +4,7 @@
 
     <van-form @submit="onSave" class="">
       <van-cell-group inset>
-        <app-field-link :label="$t('settings.dashboard.cards_order')" @click="onGoToDashboardCardsOrder" />
+        <app-field-link :icon="TablerIconConstants.order" :label="$t('settings.dashboard.cards_order')" @click="onGoToDashboardCardsOrder" />
       </van-cell-group>
 
       <van-cell-group inset>
@@ -34,6 +34,7 @@ import { useToolbar } from '~/composables/useToolbar.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 import { useI18n } from 'vue-i18n'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()

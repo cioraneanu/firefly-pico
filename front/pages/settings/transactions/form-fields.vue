@@ -10,7 +10,7 @@
               <div class="app-field m-5" @click="onClickIsVisible(element)">
                 <div class="van-field__body flex-center-vertical gap-1 pointer-events-none prevent-select">
                   <app-icon :icon="element.icon" :size="20" />
-                  <div class="flex-1">{{ element.name }}</div>
+                  <div class="flex-1 text-size-14">{{ element.t ? $t(element.t) : element.name }}</div>
                   <app-icon :icon="getIsVisibleIcon(element)" :size="20" />
                 </div>
               </div>
@@ -36,7 +36,7 @@ import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
-import { transactionFormFieldsConfigList, transactionListHeroIconConfigList } from '~/constants/TransactionConstants.js'
+import { transactionFormFieldList, transactionListHeroIconList } from '~/constants/TransactionConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 import { useI18n } from 'vue-i18n'
 
@@ -71,8 +71,8 @@ const onClickIsVisible = (element) => {
 }
 
 const init = () => {
-  let isListOk = profileStore.transactionFormFieldsConfig.length === transactionFormFieldsConfigList.length
-  fieldsList.value = isListOk ? profileStore.transactionFormFieldsConfig : transactionFormFieldsConfigList
+  let isListOk = profileStore.transactionFormFieldsConfig.length === transactionFormFieldList.length
+  fieldsList.value = isListOk ? profileStore.transactionFormFieldsConfig : transactionFormFieldList
 }
 
 const toolbar = useToolbar()

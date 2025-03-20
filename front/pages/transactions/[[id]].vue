@@ -26,7 +26,7 @@
           :isForeignAmountVisible="isForeignAmountVisible"
           ref="refAmount"
           name="amount"
-          :style="getStyleForField(transactionFormFieldsConfig.amount)"
+          :style="getStyleForField(transactionFormField.amount)"
           :disabled="isSplitTransaction"
           :isAmountRequired="true"
         />
@@ -35,7 +35,7 @@
           v-model="accountSource"
           :label="$t('transaction.source_account')"
           :allowed-types="accountSourceAllowedTypes"
-          :style="getStyleForField(transactionFormFieldsConfig.sourceAccount)"
+          :style="getStyleForField(transactionFormField.sourceAccount)"
           v-bind="accountSourceBinding"
         >
           <template #label>
@@ -52,11 +52,11 @@
           v-model="accountDestination"
           :label="$t('transaction.destination_account')"
           :allowed-types="accountDestinationAllowedTypes"
-          :style="getStyleForField(transactionFormFieldsConfig.destinationAccount)"
+          :style="getStyleForField(transactionFormField.destinationAccount)"
           v-bind="accountDestinationBinding"
         />
 
-        <category-select v-model="category" :style="getStyleForField(transactionFormFieldsConfig.category)" />
+        <category-select v-model="category" :style="getStyleForField(transactionFormField.category)" />
 
         <app-field
           v-model="description"
@@ -69,12 +69,12 @@
           placeholder="Description"
           :rules="[rule.required()]"
           required
-          :style="getStyleForField(transactionFormFieldsConfig.description)"
+          :style="getStyleForField(transactionFormField.description)"
         />
 
-        <tag-select v-model="tags" :style="getStyleForField(transactionFormFieldsConfig.tags)" />
+        <tag-select v-model="tags" :style="getStyleForField(transactionFormField.tags)" />
 
-        <div :style="getStyleForField(transactionFormFieldsConfig.date)">
+        <div :style="getStyleForField(transactionFormField.date)">
           <app-date-time-grid v-model="date" name="date" :rules="[rule.required()]" required />
 
           <div v-if="!isSplitTransaction" class="px-3 flex-center-vertical gap-1">
@@ -92,10 +92,10 @@
           type="textarea"
           rows="1"
           autosize
-          :style="getStyleForField(transactionFormFieldsConfig.notes)"
+          :style="getStyleForField(transactionFormField.notes)"
         />
 
-        <budget-select v-model="budget" :style="getStyleForField(transactionFormFieldsConfig.budget)" />
+        <budget-select v-model="budget" :style="getStyleForField(transactionFormField.budget)" />
       </van-cell-group>
 
       <div style="margin: 16px; position: relative">
@@ -146,7 +146,7 @@ import TransactionRepository from '~/repository/TransactionRepository.js'
 import TransactionTransformer from '~/transformers/TransactionTransformer.js'
 import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
 import { useI18n } from '#imports'
-import { transactionFormFieldsConfig } from '~/constants/TransactionConstants.js'
+import { transactionFormField } from '~/constants/TransactionConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
 
 const refAmount = ref(null)
@@ -342,18 +342,18 @@ const getStyleForField = (code) => {
   // Should be same as income, but reverse the position on source with destination
   if (isTypeIncome.value) {
     let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === code)
-    if (code === transactionFormFieldsConfig.sourceAccount.code) {
-      position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === transactionFormFieldsConfig.destinationAccount.code)
+    if (code === transactionFormField.sourceAccount.code) {
+      position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === transactionFormField.destinationAccount.code)
     }
-    if (code === transactionFormFieldsConfig.destinationAccount.code) {
-      position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === transactionFormFieldsConfig.sourceAccount.code)
+    if (code === transactionFormField.destinationAccount.code) {
+      position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === transactionFormField.sourceAccount.code)
     }
     return `order: ${position}; ${displayStyle}`
   }
 
   // Transfers
   if (isTypeTransfer.value) {
-    if ([transactionFormFieldsConfig.sourceAccount.code, transactionFormFieldsConfig.destinationAccount.code].includes(code)) {
+    if ([transactionFormField.sourceAccount.code, transactionFormField.destinationAccount.code].includes(code)) {
       return `order: 0`
     }
     let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === code)

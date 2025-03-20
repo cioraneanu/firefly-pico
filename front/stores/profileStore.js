@@ -3,7 +3,7 @@ import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import * as LanguageConstants from '~/constants/LanguageConstants'
 import DateUtils from '~/utils/DateUtils'
 import { cloneDeep, get, omit } from 'lodash'
-import { transactionFormFieldsConfigList, transactionListFieldsConfigList, transactionListHeroIconConfig } from '~/constants/TransactionConstants.js'
+import { transactionFormFieldList, transactionListFieldList, transactionListHeroIcon, transactionListHeroIconList } from '~/constants/TransactionConstants.js'
 import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
 import ProfileRepository from '~/repository/ProfileRepository'
 import ProfileTransformer from '~/transformers/ProfileTransformer'
@@ -41,8 +41,8 @@ export const useProfileStore = defineStore('profile', {
 
       quickValueButtons: useLocalStorage('quickValueButtons', ['-10', '-1', '+1', '+10']),
 
-      transactionFormFieldsConfig: useLocalStorage('transactionFormFieldsConfig', transactionFormFieldsConfigList),
-      transactionListFieldsConfig: useLocalStorage('transactionListFieldsConfig', transactionListFieldsConfigList),
+      transactionFormFieldsConfig: useLocalStorage('transactionFormFieldsConfig', transactionFormFieldList),
+      transactionListFieldsConfig: useLocalStorage('transactionListFieldsConfig', transactionListFieldList),
       dashboardWidgetsConfig: useLocalStorage('dashboardWidgetsConfig', dashboardCardList),
 
       dateFormat: useLocalStorage('dateFormat', DateUtils.FORMAT_ENGLISH_DATE),
@@ -62,7 +62,7 @@ export const useProfileStore = defineStore('profile', {
       lowerCaseTagName: useLocalStorage('lowerCaseTagName', true),
       stripAccents: useLocalStorage('stripAccents', true),
 
-      heroIcons: useLocalStorage('heroIcons', [transactionListHeroIconConfig.tags, transactionListHeroIconConfig.account]),
+      heroIcons: useLocalStorage('heroIcons', [transactionListHeroIcon.tags, transactionListHeroIcon.account]),
 
       dashboard: {
         firstDayOfMonth: useLocalStorage('firstDayOfMonth', 1),
@@ -112,15 +112,10 @@ export const useProfileStore = defineStore('profile', {
       // If we add new fields for "transactionFormFieldsConfig" / "dashboardWidgetsConfig"
       // which the user doesn't have in localStorage add them as well
       const profileStore = useProfileStore()
-      if (profileStore.transactionFormFieldsConfig.length !== transactionFormFieldsConfigList.length) {
-        profileStore.transactionFormFieldsConfig = transactionFormFieldsConfigList
-      }
-
-      if (profileStore.transactionListFieldsConfig.length !== transactionListFieldsConfigList.length) {
-        profileStore.transactionListFieldsConfig = transactionListFieldsConfigList
-      }
-
+      profileStore.transactionFormFieldsConfig = migrateTypeList(profileStore.transactionFormFieldsConfig, transactionFormFieldList)
+      profileStore.transactionListFieldsConfig = migrateTypeList(profileStore.transactionListFieldsConfig, transactionListFieldList)
       profileStore.dashboardWidgetsConfig = migrateTypeList(profileStore.dashboardWidgetsConfig, dashboardCardList)
+      // profileStore.heroIcons = migrateTypeList(profileStore.heroIcons, transactionListHeroIconList)
 
       // If we changed the content of fixed lists update user settings (ex we removed "name" and added "t" to support translations)
       this.startingPage = migrateType(this.startingPage, Page.typesList())

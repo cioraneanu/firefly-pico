@@ -20,7 +20,7 @@
           @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_QUICK_AMOUNTS)"
         />
         <app-field-link :icon="TablerIconConstants.order" :label="$t('settings.transactions.configure_form_fields')" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FORM_FIELDS)" />
-        <app-field-link :icon="TablerIconConstants.order" :label="$t('settings.transactions.configure_list_fields')" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_LIST_FIELDS)" />
+        <app-field-link :icon="TablerIconConstants.list" :label="$t('settings.transactions.configure_list_fields')" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_LIST_FIELDS)" />
       </van-cell-group>
 
       <van-cell-group inset>

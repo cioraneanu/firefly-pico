@@ -1,85 +1,84 @@
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
-export const transactionFormFieldsConfig = {
+export const transactionFormField = {
   amount: {
+    t: 'amount',
     code: 'amount',
-    name: 'Amount',
     icon: TablerIconConstants.cashBanknote,
     isVisible: true,
   },
   sourceAccount: {
+    t: 'transaction.source_account',
     code: 'sourceAccount',
-    name: 'Source account',
     icon: TablerIconConstants.account,
     isVisible: true,
   },
   tags: {
+    t: 'tags',
     code: 'tags',
-    name: 'Tags',
     icon: TablerIconConstants.tag,
     isVisible: true,
   },
   description: {
+    t: 'description',
     code: 'description',
-    name: 'Description',
     icon: TablerIconConstants.fieldText2,
     isVisible: true,
   },
   category: {
+    t: 'category',
     code: 'category',
-    name: 'Category',
     icon: TablerIconConstants.category,
     isVisible: true,
   },
   date: {
+    t: 'Date',
     code: 'date',
-    name: 'Date',
     icon: TablerIconConstants.settingsUserPreferencesDate,
     isVisible: true,
   },
   notes: {
+    t: 'Notes',
     code: 'notes',
-    name: 'Notes',
     icon: TablerIconConstants.fieldText1,
     isVisible: true,
   },
   destinationAccount: {
+    t: 'transaction.destination_account',
     code: 'destinationAccount',
-    name: 'Destination account',
     icon: TablerIconConstants.account,
     isVisible: true,
   },
   budget: {
+    t: 'budget',
     code: 'budget',
-    name: 'Budget',
     icon: TablerIconConstants.budget,
     isVisible: true,
   },
 }
 
-
-export const transactionListFieldsConfig = {
+export const transactionListField = {
   accounts: {
+    t: 'accounts',
     code: 'accounts',
-    name: 'Accounts',
     icon: TablerIconConstants.account,
     isVisible: true,
   },
   category: {
+    t: 'category',
     code: 'category',
-    name: 'Category',
     icon: TablerIconConstants.category,
     isVisible: true,
   },
   notes: {
+    t: 'notes',
     code: 'notes',
-    name: 'Notes',
     icon: TablerIconConstants.fieldText1,
     isVisible: true,
   },
   tags: {
+    t: 'tags',
     code: 'tags',
-    name: 'Tags',
     icon: TablerIconConstants.tag,
     isVisible: true,
   },
@@ -90,25 +89,13 @@ export const transactionListFieldsConfig = {
   // },
 }
 
-// export const transactionListHeroIconConfig = {
-//   account: { code: 'account', name: 'Account icon' },
-//   tags: { code: 'tags', name: 'Tag icon' },
-//   category: { code: 'category', name: 'Category icon' },
-// }
-
-export const transactionListHeroIconConfig = {
-  dayOfWeek: { code: 'dayOfWeek', name: 'Day of week' },
-  account: { code: 'account', name: 'Account' },
-  tags: { code: 'tags', name: 'Tag' },
-  category: { code: 'category', name: 'Category' },
+export const transactionListHeroIcon = {
+  dayOfWeek: { code: 'dayOfWeek', t: 'day_of_week' },
+  account: { code: 'account', t: 'account' },
+  tags: { code: 'tags', t: 'tag' },
+  category: { code: 'category', t: 'category' },
 }
 
-
-export const transactionListFieldsConfigList = Object.values(transactionListFieldsConfig)
-
-export const transactionListHeroIconConfigList = Object.values(transactionListHeroIconConfig)
-export const transactionFormFieldsConfigList = Object.values(transactionFormFieldsConfig)
-
-
-
-
+export const transactionListFieldList = Object.values(transactionListField)
+export const transactionListHeroIconList = Object.values(transactionListHeroIcon)
+export const transactionFormFieldList = Object.values(transactionFormField)

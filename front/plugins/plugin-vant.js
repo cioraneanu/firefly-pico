@@ -20,7 +20,6 @@ export default defineNuxtPlugin((nuxtApp) => {
       }
       let locale = localeDictionary[newValue] || enUS
       Locale.use(newValue, locale)
-      console.log('vant', {newValue, locale})
     },
     { immediate: true },
   )

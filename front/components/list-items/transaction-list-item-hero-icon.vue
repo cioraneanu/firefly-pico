@@ -27,7 +27,7 @@ import { format } from 'date-fns'
 import Account from '~/models/Account.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Transaction from '~/models/Transaction.js'
-import { transactionListHeroIconConfig } from '~/constants/TransactionConstants.js'
+import { transactionListHeroIcon } from '~/constants/TransactionConstants.js'
 
 const props = defineProps({
   value: Object,
@@ -83,10 +83,10 @@ const categoryIcon = computed(() => {
   return get(category, 'attributes.icon.icon') ?? TablerIconConstants.category
 })
 
-const isAccountIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIconConfig.account.code))
-const isTagIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIconConfig.tags.code) && !isEmpty(tags.value))
-const isCategoryIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIconConfig.category.code))
-const isWeekdayIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIconConfig.dayOfWeek.code))
+const isAccountIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIcon.account.code))
+const isTagIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIcon.tags.code) && !isEmpty(tags.value))
+const isCategoryIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIcon.category.code))
+const isWeekdayIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIcon.dayOfWeek.code))
 const isHourIconVisible = computed(() => false)
 // const isHourIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === HERO_ICONS.hour))
 

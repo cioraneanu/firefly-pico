@@ -13,26 +13,26 @@
               <div v-if="description" class="list-item-title">{{ description }}</div>
             </div>
 
-            <div class="flex-column" :style="getStyleForField(transactionListFieldsConfig.accounts)">
+            <div class="flex-column" :style="getStyleForField(transactionListField.accounts)">
               <div v-for="displayedAccount in displayedAccounts" class="list-item-subtitle">
                 <app-icon :icon="Account.getIcon(displayedAccount) ?? TablerIconConstants.account" :size="20" />
                 <span>{{ Account.getDisplayName(displayedAccount) }}</span>
               </div>
             </div>
 
-            <div v-if="categories && props.isDetailedMode" class="list-item-subtitle gap-2" :style="getStyleForField(transactionListFieldsConfig.category)">
+            <div v-if="categories && props.isDetailedMode" class="list-item-subtitle gap-2" :style="getStyleForField(transactionListField.category)">
               <div v-for="category in categories">
                 <app-icon :icon="Category.getIcon(category) ?? TablerIconConstants.category" :size="20" />
                 {{ Category.getDisplayName(category) }}
               </div>
             </div>
 
-            <div v-if="notes && props.isDetailedMode" class="list-item-subtitle" :style="getStyleForField(transactionListFieldsConfig.notes)">
+            <div v-if="notes && props.isDetailedMode" class="list-item-subtitle" :style="getStyleForField(transactionListField.notes)">
               <app-icon :icon="TablerIconConstants.fieldText1" :size="20" />
               {{ notes }}
             </div>
 
-            <div v-if="tags && props.isDetailedMode" class="tags-container" :style="getStyleForField(transactionListFieldsConfig.tags)">
+            <div v-if="tags && props.isDetailedMode" class="tags-container" :style="getStyleForField(transactionListField.tags)">
               <div v-for="tag in visibleTags" class="tag">
                 <app-icon :icon="Tag.getIcon(tag) ?? TablerIconConstants.tag" :size="14" />
                 <div class="list-item-subtitle ml-5">{{ Tag.getDisplayNameEllipsized(tag, 10) }}</div>
@@ -71,7 +71,7 @@ import Tag from '../../models/Tag.js'
 import Account from '~/models/Account.js'
 import TransactionListItemHeroIcon from '~/components/list-items/transaction-list-item-hero-icon.vue'
 import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
-import { transactionListFieldsConfig } from '~/constants/TransactionConstants.js'
+import { transactionListField } from '~/constants/TransactionConstants.js'
 
 const props = defineProps({
   value: Object,

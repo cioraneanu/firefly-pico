@@ -4,23 +4,6 @@
     <draggable v-model="modelValue" handle=".app-repeater-handle" class="w-100" itemKey="id">
       <template #item="{ element, index }">
         <div>
-          <!--          <van-swipe-cell>-->
-          <!--            <div class="flex-center-vertical">-->
-          <!--              <div v-if="!disabled && isDraggable" class="p-2 app-repeater-handle">-->
-          <!--                <Icon name="pepicons-pop:grab-handle" size="20" class=""/>-->
-          <!--              </div>-->
-
-          <!--              <div class="flex-1">-->
-          <!--                <slot name="content" v-bind="{ index, element, removeItemAtIndex }"/>-->
-          <!--              </div>-->
-          <!--            </div>-->
-
-          <!--            <template #right>-->
-          <!--              <van-button square type="danger" text="Delete" />-->
-          <!--              <van-button square type="primary" text="Collect" />-->
-          <!--            </template>-->
-          <!--          </van-swipe-cell>-->
-
           <div class="flex-center-vertical">
             <div v-if="!disabled && isDraggable" class="p-1 app-repeater-handle">
               <app-icon :icon="TablerIconConstants.repeaterHandler" :size="20" />
@@ -41,7 +24,7 @@
         <div>
           <div class="app-repeater-no-values" v-if="isListEmpty">No values set. Use the 'add' button.</div>
           <div v-if="!props.disabled && props.isListDynamic">
-            <van-button class="w-100" style="border: 1px dashed #888" @click="addItem"> Add </van-button>
+            <van-button class="w-100" style="border: 1px dashed #888" @click="addItem"> {{ $t('add') }}</van-button>
           </div>
         </div>
       </template>

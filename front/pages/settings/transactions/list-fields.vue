@@ -12,7 +12,7 @@
               <div class="app-field m-5" @click="onClickIsVisible(element)">
                 <div class="van-field__body flex-center-vertical gap-1 pointer-events-none prevent-select">
                   <app-icon v-if="element.icon" :icon="element.icon" :size="20" />
-                  <div class="flex-1">{{ element.name }}</div>
+                  <div class="flex-1 text-size-14">{{ element.t ? $t(element.t) : element.name }}</div>
                   <app-icon :icon="getIsVisibleIcon(element)" :size="20" />
                 </div>
               </div>
@@ -30,7 +30,7 @@
           :is-multi-select="true"
           :columns="1"
           :has-search="false"
-        >
+          :get-display-value="getDisplayValueHero">
           <template #label>
             <div class="flex-center-vertical">
               <div class="">{{ $t('settings.transactions.list_fields.hero_icons') }}</div>
@@ -54,7 +54,7 @@ import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
-import { transactionListHeroIconConfigList, transactionListFieldsConfigList } from '~/constants/TransactionConstants.js'
+import { transactionListHeroIconList, transactionListFieldList } from '~/constants/TransactionConstants.js'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -76,15 +76,16 @@ const onClickIsVisible = (element) => {
 }
 
 const init = () => {
-  let isListOk = profileStore.transactionListFieldsConfig.length === transactionListFieldsConfigList.length
-  fieldsList.value = isListOk ? profileStore.transactionListFieldsConfig : transactionListFieldsConfigList
+  let isListOk = profileStore.transactionListFieldsConfig.length === transactionListFieldList.length
+  fieldsList.value = isListOk ? profileStore.transactionListFieldsConfig : transactionListFieldList
 }
 
 // ----- Hero Icons ----
 
-const heroIconsList = transactionListHeroIconConfigList
+const heroIconsList = transactionListHeroIconList
 const isHeroIconsDropdownVisible = ref(false)
 const heroIcons = ref([])
+const getDisplayValueHero = (item) => item.t ? t(item.t) : item.name
 
 const syncedSettings = [{ store: profileStore, path: 'heroIcons', ref: heroIcons }]
 

@@ -75,6 +75,7 @@ export const icons = {
   search: 'IconAdjustmentsAlt',
   form: 'IconForms',
   order: 'IconMenuOrder',
+  list: 'IconListDetails',
   amountButtons: 'IconBusinessplan',
 
 
