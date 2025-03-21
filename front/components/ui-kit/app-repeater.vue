@@ -22,7 +22,7 @@
 
       <template #footer>
         <div>
-          <div class="app-repeater-no-values" v-if="isListEmpty">No values set. Use the 'add' button.</div>
+          <div class="app-repeater-no-values" v-if="isListEmpty">{{ $t('repeater_no_values') }}</div>
           <div v-if="!props.disabled && props.isListDynamic">
             <van-button class="w-100" style="border: 1px dashed #888" @click="addItem"> {{ $t('add') }}</van-button>
           </div>

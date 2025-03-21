@@ -1,5 +1,5 @@
 <template>
-  <van-search v-model="modelValue" :placeholder="$t('search')" />
+  <van-search v-model="modelValue" :placeholder="$t('search_placeholder')" />
 </template>
 
 <script setup>

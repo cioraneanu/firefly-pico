@@ -8,6 +8,7 @@
   "clone": "Clonează",
   "loading": "Se încarcă...",
   "items": "elemente",
+  "name": "Nume",
   "description": "Descriere",
   "notes": "Note",
   "ok": "OK",
@@ -19,6 +20,7 @@
   "transaction_type_popup": "Selectează un tip de tranzacție",
   "without": "Fără",
   "template": "Șablon",
+  "templates": "Șabloane",
   "category": "Categorie",
   "categories": "Categorii",
   "category_select": "Selectează o categorie",
@@ -263,15 +265,22 @@
   "icon_select": "Selectați o iconiță",
   "icon_empty": "Fără iconiță",
   "list": "Listă",
+  "repeater_no_values": "Nicio valoare. Apăsați botonul 'adaugă'.",
   "account_page": {
     "title_add": "Adaugă cont",
     "title_edit": "Editează cont",
     "adjust_balance": "Corectare total",
-    "account_type": "Tip cont",
-    "account_role": "Rol cont",
+    "account_type": "Tip",
+    "account_role": "Rol",
     "liability_type": "Tip datorie",
     "liability_direction": "Direcție datorie",
     "include_net_worth": "Include în averea netă",
-    "visible_on_dashboard": "Este vizibil pe Dashboard"
+    "visible_on_dashboard": "Este vizibil pe Dashboard",
+    "balance": "Total"
+  },
+  "transaction_template_page": {
+    "title_add": "Adaugă șablon",
+    "title_edit": "Editează șablon",
+    "extra_names": "Nume suplimentare (găsit de asistent):"
   }
 }

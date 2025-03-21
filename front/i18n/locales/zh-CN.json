@@ -8,6 +8,7 @@
   "clone": "克隆",
   "loading": "加载中...",
   "items": "项目",
+  "name": "姓名",
   "description": "描述",
   "notes": "备注",
   "ok": "确定",
@@ -19,6 +20,7 @@
   "transaction_type_popup": "选择交易类型",
   "without": "无",
   "template": "模板",
+  "templates": "模板",
   "category": "类别",
   "categories": "类别",
   "category_select": "选择类别",
@@ -263,6 +265,7 @@
   "icon_select": "选择图标",
   "icon_empty": "无图标",
   "list": "列表",
+  "repeater_no_values": "未设置值。使用“添加”按钮。",
   "account_page": {
     "title_add": "添加账户",
     "title_edit": "编辑账户",
@@ -272,6 +275,12 @@
     "liability_type": "负债类型",
     "liability_direction": "负债进/出",
     "include_net_worth": "是否计入净资产",
-    "visible_on_dashboard": "是否在仪表板上显示"
+    "visible_on_dashboard": "是否在仪表板上显示",
+    "balance": "平衡"
+  },
+  "transaction_template_page": {
+    "title_add": "添加模板",
+    "title_edit": "编辑模板",
+    "extra_names": "额外名称（助手可找到）："
   }
 }

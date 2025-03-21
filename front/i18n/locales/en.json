@@ -8,6 +8,7 @@
   "clone": "Clone",
   "loading": "Loading...",
   "items": "items",
+  "name": "Name",
   "description": "Description",
   "notes": "Notes",
   "ok": "OK",
@@ -19,6 +20,7 @@
   "transaction_type_popup": "Select a transaction type",
   "without": "Without",
   "template": "Template",
+  "templates": "Templates",
   "category": "Category",
   "categories": "Categories",
   "category_select": "Select a category",
@@ -263,15 +265,22 @@
   "icon_select": "Select an icon",
   "icon_empty": "No icon",
   "list": "List",
+  "repeater_no_values": "No values set. Use the 'add' button.",
   "account_page": {
     "title_add": "Add account",
     "title_edit": "Edit account",
     "adjust_balance": "Adjust balance",
-    "account_type": "Account type",
-    "account_role": "Account type",
+    "account_type": "Type",
+    "account_role": "Role",
     "liability_type": "Liability type",
     "liability_direction": "Liability in/out",
     "include_net_worth": "Is included in net worth",
-    "visible_on_dashboard": "Is visible on Dashboard"
+    "visible_on_dashboard": "Is visible on Dashboard",
+    "balance": "Balance"
+  },
+  "transaction_template_page": {
+    "title_add": "Add template",
+    "title_edit": "Edit template",
+    "extra_names": "Extra names (assistant findable):"
   }
 }

@@ -50,8 +50,7 @@ const filteredList = computed(() => {
 })
 
 
-const { title, isLoading, isFinished, isRefreshing, page, pageSize, totalPages, listTotalCount, list, isEmpty, onAdd, onEdit, onDelete } = useList({
-  title: 'Transaction templates list',
+const { isLoading, isFinished, isRefreshing, page, pageSize, totalPages, listTotalCount, list, isEmpty, onAdd, onEdit, onDelete } = useList({
   routeList: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST,
   routeForm: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID,
   model: new TransactionTemplate(),
@@ -86,8 +85,10 @@ onMounted(() => {})
 // ----
 
 const toolbar = useToolbar()
+const { t } = useI18n()
+
 toolbar.init({
-  title: 'Templates list',
+  title: t('templates'),
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })
 

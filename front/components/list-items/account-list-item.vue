@@ -16,12 +16,12 @@
             </div>
 
             <div class="subtitle display-flex flex-wrap gap-2">
-              <span class="tag-gray list-item-subtitle" v-if="accountType">Type: {{ accountType }}</span>
-              <span class="tag-gray list-item-subtitle" v-if="accountRole">Role: {{ accountRole }}</span>
+              <span class="tag-gray list-item-subtitle" v-if="accountType">{{ $t('account_page.account_type') }}: {{ accountType }}</span>
+              <span class="tag-gray list-item-subtitle" v-if="accountRole">{{ $t('account_page.account_role') }}: {{ accountRole }}</span>
             </div>
 
             <div class="display-flex">
-              <span class="tag-gray list-item-subtitle mt-5">Balance: {{ accountBalance }}</span>
+              <span class="tag-gray list-item-subtitle mt-5">{{ $t('account_page.balance') }}: {{ accountBalance }}</span>
             </div>
           </div>
 

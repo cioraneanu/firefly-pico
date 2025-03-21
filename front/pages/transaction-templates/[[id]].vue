@@ -11,10 +11,10 @@
     <!--    @submit="onSave"-->
     <van-form ref="form" :name="formName" class="transaction-form-group" @submit="saveItem" @failed="onValidationError">
       <van-cell-group inset>
-        <app-field v-model="name" :icon="TablerIconConstants.fieldText2" label="Name" placeholder="Name" name="name" required :rules="[rule.required()]" />
+        <app-field v-model="name" :icon="TablerIconConstants.fieldText2" :label="$t('name')" name="name" required :rules="[rule.required()]" />
 
         <div class="van-cell-fake flex-column van-cell">
-          <span>Extra names (assistant findable):</span>
+          <span>{{ $t('transaction_template_page.extra_names') }}</span>
           <app-repeater v-model="extra_names" :empty-item="{ value: '' }">
             <template #content="{ element, index }">
               <app-field placeholder="Name" v-model="element.value" class="compact" :name="`extra-name-${index}`" required :rules="[rule.required()]" />
@@ -24,17 +24,17 @@
 
         <transaction-amount-field v-model="amount" ref="refAmount" />
 
-        <account-select v-model="account_source" label="Source account" :allowed-types="accountSourceAllowedTypes" />
+        <account-select v-model="account_source" :label="$t('transaction.source_account')" :allowed-types="accountSourceAllowedTypes" />
 
-        <account-select v-model="account_destination" label="Destination account" :allowed-types="accountDestinationAllowedTypes" />
+        <account-select v-model="account_destination" :label="$t('transaction.destination_account')" :allowed-types="accountDestinationAllowedTypes" />
 
-        <app-field v-model="description" label="Description" :icon="TablerIconConstants.fieldText2" type="textarea" rows="1" autosize placeholder="Description" />
+        <app-field v-model="description" :label="$t('description')" :icon="TablerIconConstants.fieldText2" type="textarea" rows="1" autosize placeholder="Description" />
 
         <category-select v-model="category" />
 
         <tag-select v-model="tags" />
 
-        <app-field v-model="notes" label="Notes" placeholder="Notes" type="textarea" :icon="TablerIconConstants.fieldText1" rows="1" autosize />
+        <app-field v-model="notes" :label="$t('notes')" type="textarea" :icon="TablerIconConstants.fieldText1" rows="1" autosize />
       </van-cell-group>
 
       <div style="margin: 16px">
@@ -73,6 +73,8 @@ const refAmount = ref(null)
 let dataStore = useDataStore()
 let profileStore = useProfileStore()
 const route = useRoute()
+const { t } = useI18n()
+
 
 const form = ref(null)
 
@@ -87,10 +89,8 @@ const onEvent = (event, payload) => {
   }
 }
 
-let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+let { itemId, item, isEmpty, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
-  titleAdd: 'Add template',
-  titleEdit: 'Edit template',
   routeList: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST,
   routeForm: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID,
   model: new TransactionTemplate(),
@@ -142,7 +142,7 @@ onMounted(async () => {
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: title,
+  title:  itemId.value ? t('transaction_template_page.title_edit') : t('transaction_template_page.title_add'),
   leftText: 'List',
   backRoute: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST,
 })
