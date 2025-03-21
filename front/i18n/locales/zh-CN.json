@@ -20,6 +20,7 @@
   "without": "无",
   "template": "模板",
   "category": "类别",
+  "categories": "类别",
   "category_select": "选择类别",
   "tag": "标签",
   "tags": "标签",
@@ -250,5 +251,27 @@
   },
   "validation": {
     "required": "必填字段"
+  },
+  "primary": "主要",
+  "classification": "分类",
+  "extra": "额外",
+  "exchange_rates": "汇率",
+  "currency": "货币",
+  "currencies": "货币种类",
+  "show_transactions": "显示交易",
+  "icon": "图标",
+  "icon_select": "选择图标",
+  "icon_empty": "无图标",
+  "list": "列表",
+  "account_page": {
+    "title_add": "添加账户",
+    "title_edit": "编辑账户",
+    "adjust_balance": "调整余额",
+    "account_type": "账户类型",
+    "account_role": "账户角色",
+    "liability_type": "负债类型",
+    "liability_direction": "负债进/出",
+    "include_net_worth": "是否计入净资产",
+    "visible_on_dashboard": "是否在仪表板上显示"
   }
 }

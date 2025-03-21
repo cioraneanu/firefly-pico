@@ -105,8 +105,9 @@ const onLoadMore = () => {
 // }
 
 const toolbar = useToolbar()
+const { t } = useI18n()
 toolbar.init({
-  title: 'Accounts list',
+  title: t('accounts'),
   titleIcon: TablerIconConstants.account,
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })

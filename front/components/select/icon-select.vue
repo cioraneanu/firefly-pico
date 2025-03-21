@@ -1,7 +1,7 @@
 <template>
   <app-select
-    :label="label"
-    popupTitle="Select an icon"
+    :label="label ?? $t('icon')"
+    :popupTitle="$t('icon_select')"
     v-model="modelValue"
     v-model:showDropdown="showDropdown"
     v-model:search="search"
@@ -15,7 +15,7 @@
     </template>
 
     <template #input>
-      <div v-if="!modelValue" class="text-muted">No icon</div>
+      <div v-if="!modelValue" class="text-muted"> {{ $t('icon_empty') }} </div>
       <app-icon v-else :icon="modelValue.icon" style="width: 25px"/>
     </template>
 
@@ -42,7 +42,6 @@ const { dynamicAttrs } = useFormAttributes(attrs)
 const props = defineProps({
   label: {
     type: String,
-    default: 'Icon select',
   },
   list: {},
 })

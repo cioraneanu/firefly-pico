@@ -8,7 +8,7 @@
 
     <app-card-info v-if="itemId">
       <app-field-link :label="adjustBalanceText" :icon="TablerIconConstants.extras" @click="onAdjustBalance" />
-      <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
+      <app-field-link :label="$t('show_transactions')" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
     </app-card-info>
 
     <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
@@ -16,12 +16,11 @@
         <app-field
           v-model="name"
           name="Description"
-          label="Description"
+          :label="$t('description')"
           type="textarea"
           rows="1"
           autosize
           :icon="TablerIconConstants.fieldText2"
-          placeholder="Description"
           :rules="[rule.required()]"
           required
         >
@@ -35,17 +34,11 @@
         <account-role-select v-if="isRoleVisible" v-model="role" name="accountRoleSelect" :rules="[rule.required()]" required />
 
         <account-liability-type-select v-if="isLiability" v-model="liabilityType" name="accountLiabilityType" :rules="[rule.required()]" required />
-        <account-liability-direction-select
-          v-if="isLiability"
-          v-model="liabilityDirection"
-          name="accountLiabilityDirection"
-          :rules="[rule.required()]"
-          required
-        />
+        <account-liability-direction-select v-if="isLiability" v-model="liabilityDirection" name="accountLiabilityDirection" :rules="[rule.required()]" required />
 
-        <app-boolean v-model="includeNetWorth" label="Is include in net worth" />
+        <app-boolean v-model="includeNetWorth" :label="$t('account_page.include_net_worth')" />
 
-        <app-boolean v-model="isDashboardVisible" label="Is visible on Dashboard" />
+        <app-boolean v-model="isDashboardVisible" :label="$t('account_page.visible_on_dashboard')" />
       </van-cell-group>
 
       <div style="margin: 16px" class="">
@@ -79,6 +72,7 @@ import { rule } from '~/utils/ValidationUtils.js'
 let dataStore = useDataStore()
 let profileStore = useProfileStore()
 const route = useRoute()
+const { t } = useI18n()
 
 const resetFields = () => {
   // name.value = ''
@@ -104,10 +98,8 @@ const onEvent = (event, payload) => {
   }
 }
 
-let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+let { itemId, item, isEmpty, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
-  titleAdd: 'Add account',
-  titleEdit: 'Edit account',
   routeList: RouteConstants.ROUTE_ACCOUNT_LIST,
   routeForm: RouteConstants.ROUTE_ACCOUNT_ID,
   model: new Account(),
@@ -148,7 +140,7 @@ watch(name, (newValue) => {
 
 const accountBalance = computed(() => get(item.value, 'attributes.current_balance'))
 const accountCurrency = computed(() => get(item.value, 'attributes.currency_symbol') ?? '')
-const adjustBalanceText = computed(() => `Adjust balance (${accountBalance.value} ${accountCurrency.value})`)
+const adjustBalanceText = computed(() => `${t('account_page.adjust_balance')} (${accountBalance.value} ${accountCurrency.value})`)
 const onAdjustBalance = () => {
   isAdjustBalanceVisible.value = true
 }
@@ -160,8 +152,8 @@ const onNavigateToTransactionsList = async () => {
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: title,
-  leftText: 'List',
+  title:  itemId.value ? t('account_page.title_edit') : t('account_page.title_add'),
+  leftText: t('list'),
   backRoute: RouteConstants.ROUTE_ACCOUNT_LIST,
 })
 </script>

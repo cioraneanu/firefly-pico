@@ -20,6 +20,7 @@
   "without": "Fără",
   "template": "Șablon",
   "category": "Categorie",
+  "categories": "Categorii",
   "category_select": "Selectează o categorie",
   "tag": "Etichetă",
   "tags": "Etichete",
@@ -250,5 +251,27 @@
   },
   "validation": {
     "required": "Câmpul este obligatoriu"
+  },
+  "primary": "Principale",
+  "classification": "Clasificare",
+  "extra": "Extra",
+  "exchange_rates": "Rate de schimb",
+  "currency": "Monedă",
+  "currencies": "Monede",
+  "show_transactions": "Afișare tranzacții",
+  "icon": "Iconiță",
+  "icon_select": "Selectați o iconiță",
+  "icon_empty": "Fără iconiță",
+  "list": "Listă",
+  "account_page": {
+    "title_add": "Adaugă cont",
+    "title_edit": "Editează cont",
+    "adjust_balance": "Corectare total",
+    "account_type": "Tip cont",
+    "account_role": "Rol cont",
+    "liability_type": "Tip datorie",
+    "liability_direction": "Direcție datorie",
+    "include_net_worth": "Include în averea netă",
+    "visible_on_dashboard": "Este vizibil pe Dashboard"
   }
 }

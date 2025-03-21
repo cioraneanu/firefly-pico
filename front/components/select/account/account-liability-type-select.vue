@@ -1,5 +1,5 @@
 <template>
-  <app-select label="Liability type" popupTitle="Select liability type" v-model="modelValue" v-model:showDropdown="showDropdown" :list="list" :columns="1" v-bind="dynamicAttrs" :has-search="false">
+  <app-select :label="$t('account_page.liability_type')" popupTitle="Select liability type" v-model="modelValue" v-model:showDropdown="showDropdown" :list="list" :columns="1" v-bind="dynamicAttrs" :has-search="false">
     <template #left-icon>
       <app-icon :icon="TablerIconConstants.fieldSelect2" :size="20" />
     </template>

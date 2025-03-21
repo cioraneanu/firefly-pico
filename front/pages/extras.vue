@@ -3,24 +3,23 @@
     <app-top-toolbar />
 
     <van-cell-group inset style="overflow: auto">
-      <div class="van-cell-group-title">Primary:</div>
-      <app-field-link label="Accounts" :icon="TablerIconConstants.account" @click="onGoToAccountsList" />
-      <app-field-link label="Transaction templates" :icon="TablerIconConstants.transactionTemplate" @click="onGoToTransactionTemplatesList" />
-      <app-field-link label="Budgets" :icon="TablerIconConstants.budget" @click="onGoToBudgetsList" />
+      <div class="van-cell-group-title">{{ $t('primary') }}:</div>
+      <app-field-link :label="$t('accounts')" :icon="TablerIconConstants.account" @click="onGoToAccountsList" />
+      <app-field-link :label="$t('template')" :icon="TablerIconConstants.transactionTemplate" @click="onGoToTransactionTemplatesList" />
+      <app-field-link :label="$t('budgets')" :icon="TablerIconConstants.budget" @click="onGoToBudgetsList" />
     </van-cell-group>
 
     <van-cell-group inset style="overflow: auto">
-      <div class="van-cell-group-title">Classification:</div>
-      <app-field-link label="Tags" :icon="TablerIconConstants.tag" @click="onGoToTagsList" />
-      <app-field-link label="Categories" :icon="TablerIconConstants.category" @click="onGoToCategoriesList" />
+      <div class="van-cell-group-title">{{ $t('classification') }}:</div>
+      <app-field-link :label="$t('tags')" :icon="TablerIconConstants.tag" @click="onGoToTagsList" />
+      <app-field-link :label="$t('categories')" :icon="TablerIconConstants.category" @click="onGoToCategoriesList" />
     </van-cell-group>
 
     <van-cell-group inset style="overflow: auto">
-      <div class="van-cell-group-title">Extra:</div>
-      <app-field-link label="Exchange rates" :icon="TablerIconConstants.exchangeRates" @click="navigateTo(RouteConstants.ROUTE_EXCHANGE_RATES)" />
-      <app-field-link label="Currencies" :icon="TablerIconConstants.currency" @click="onGoToCurrenciesList" />
+      <div class="van-cell-group-title">{{ $t('extra') }}:</div>
+      <app-field-link :label="$t('exchange_rates')" :icon="TablerIconConstants.exchangeRates" @click="navigateTo(RouteConstants.ROUTE_EXCHANGE_RATES)" />
+      <app-field-link :label="$t('currencies')" :icon="TablerIconConstants.currency" @click="onGoToCurrenciesList" />
     </van-cell-group>
-
   </div>
 </template>
 
@@ -42,9 +41,9 @@ const onGoToTransactionTemplatesList = async () => await navigateTo(RouteConstan
 
 const onGoToBudgetsList = async () => await navigateTo(RouteConstants.ROUTE_BUDGET_LIST)
 
-
 const toolbar = useToolbar()
-toolbar.init({ title: 'Extra' })
+const { t } = useI18n()
+toolbar.init({ title: t('toolbar.extras') })
 
 onMounted(() => {
   animateSettings()

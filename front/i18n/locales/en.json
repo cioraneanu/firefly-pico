@@ -20,6 +20,7 @@
   "without": "Without",
   "template": "Template",
   "category": "Category",
+  "categories": "Categories",
   "category_select": "Select a category",
   "tag": "Tag",
   "tags": "Tags",
@@ -250,5 +251,27 @@
   },
   "validation": {
     "required": "Field is required"
+  },
+  "primary": "Primary",
+  "classification": "Classification",
+  "extra": "Extra",
+  "exchange_rates": "Exchange rates",
+  "currency": "Currency",
+  "currencies": "Currencies",
+  "show_transactions": "Show transactions",
+  "icon": "Icon",
+  "icon_select": "Select an icon",
+  "icon_empty": "No icon",
+  "list": "List",
+  "account_page": {
+    "title_add": "Add account",
+    "title_edit": "Edit account",
+    "adjust_balance": "Adjust balance",
+    "account_type": "Account type",
+    "account_role": "Account type",
+    "liability_type": "Liability type",
+    "liability_direction": "Liability in/out",
+    "include_net_worth": "Is included in net worth",
+    "visible_on_dashboard": "Is visible on Dashboard"
   }
 }
