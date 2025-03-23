@@ -113,7 +113,7 @@ class Transaction extends BaseModel {
   }
 
   static getAmountFormatted(transaction) {
-    return this.getAmount(transaction).toFixed(2)
+    return parseFloat(getAmount(transaction).toFixed(10))
   }
 
   static getDate(transaction) {
@@ -121,7 +121,7 @@ class Transaction extends BaseModel {
   }
 
   static formatAmount(amount) {
-    return (Math.round(amount * 100) / 100).toFixed(2)
+    return parseFloat(( Math.round(amount * 10000000000) / 10000000000 ).toFixed(10))
   }
 
   static getTransactionTypeForAccounts({ source, destination }) {

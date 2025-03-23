@@ -168,7 +168,24 @@ class CurrencyUtils
         ["code" => "YER", "name" => "Yemeni Rial", "country" => "Yemen"],
         ["code" => "ZAR", "name" => "South African Rand", "country" => "South Africa"],
         ["code" => "ZMW", "name" => "Zambian Kwacha", "country" => "Zambia"],
-        ["code" => "ZWL", "name" => "Zimbabwean Dollar", "country" => "Zimbabwe"]
+        ["code" => "ZWL", "name" => "Zimbabwean Dollar", "country" => "Zimbabwe"],
+
+        //Cryptocurrencies
+        ["code" => "BTC", "name" => "Bitcoin", "country" => "-"],
+        ["code" => "ETH", "name" => "Ethereum", "country" => "-"],
+        ["code" => "XRP", "name" => "Ripple XRP", "country" => "-"],
+        ["code" => "ADA", "name" => "Cardano", "country" => "-"],
+        ["code" => "DOT", "name" => "Polkadot", "country" => "-"],
+        ["code" => "BTC", "name" => "Bitcoin", "country" => "-"],
+        ["code" => "BNB", "name" => "Binance", "country" => "-"],
+        ["code" => "LTC", "name" => "Litecoin", "country" => "-"],
+
+        //Precious Metals
+        ["code" => "XAU", "name" => "Gold", "country" => "-"],
+        ["code" => "XAG", "name" => "Silver", "country" => "-"],
+        ["code" => "XPT", "name" => "Platinum", "country" => "-"],
+        ["code" => "XPD", "name" => "Palladium", "country" => "-"]
+
     ];
 
 }

@@ -6,7 +6,7 @@
     <template #text>
       <div class="display-flex flex-column align-items-center">
         <div class="font-600 text-size-12 text-center">{{ displayName }}</div>
-        <div class="font-500 text-size-10 text-center">{{ getFormattedValue(budgetLimitSpent) }} / {{ getFormattedValue(budgetLimitAmount) }} {{ budgetCurrencySymbol }}</div>
+        <div class="font-500 text-size-10 text-center">{{ getFormattedValue(budgetLimitSpent,true) }} / {{ getFormattedValue(budgetLimitAmount,true) }} {{ budgetCurrencySymbol }}</div>
         <div class="font-500 text-size-10 text-center text-muted">{{ budgetLimitInterval }}</div>
       </div>
     </template>

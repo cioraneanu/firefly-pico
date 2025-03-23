@@ -45,6 +45,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { addMonths, differenceInDays, startOfDay, subDays, subMonths } from 'date-fns'
 import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
+import { getFormattedValue } from '~/utils/MathUtils.js'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
@@ -68,10 +69,10 @@ const remainingDays = computed(() => {
   return differenceInDays(endDate.value, startOfDay(new Date())) + 1
 })
 
-const totalExpenseFormatted = computed(() => getFormattedValue(dataStore.totalExpenseThisMonth))
-const totalIncomeFormatted = computed(() => getFormattedValue(dataStore.totalIncomeThisMonth))
-const totalTransferFormatted = computed(() => getFormattedValue(dataStore.totalTransfersThisMonth))
-const totalSurplusFormatted = computed(() => getFormattedValue(dataStore.totalSurplusThisMonth))
+const totalExpenseFormatted = computed(() => getFormattedValue(dataStore.totalExpenseThisMonth,true))
+const totalIncomeFormatted = computed(() => getFormattedValue(dataStore.totalIncomeThisMonth,true))
+const totalTransferFormatted = computed(() => getFormattedValue(dataStore.totalTransfersThisMonth,true))
+const totalSurplusFormatted = computed(() => getFormattedValue(dataStore.totalSurplusThisMonth,true))
 
 const onGoToTransactionsByType = async (transactionType) => {
   let excludedUrl = getExcludedTransactionUrl()

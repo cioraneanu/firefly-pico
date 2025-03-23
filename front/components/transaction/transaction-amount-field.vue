@@ -247,14 +247,14 @@ const convertAmountToForeign = () => {
   if (!isConversionValid()) {
     return
   }
-  amountForeign.value = convertCurrency(amount.value, currencyCode.value, currencyForeignCode.value).toFixed(2)
+  amountForeign.value = parseFloat(convertCurrency(amount.value, currencyCode.value, currencyForeignCode.value).toFixed(10))
 }
 
 const convertForeignToAmount = () => {
   if (!isConversionValid()) {
     return
   }
-  amount.value = convertCurrency(amountForeign.value, currencyForeignCode.value, currencyCode.value).toFixed(2)
+  amount.value = parseFloat(convertCurrency(amountForeign.value, currencyForeignCode.value, currencyCode.value).toFixed(10))
 }
 
 onMounted(() => {

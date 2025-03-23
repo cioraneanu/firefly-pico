@@ -41,17 +41,17 @@ const tdClass = computed(() => {
 
 const amountIncome = computed(() => {
   let value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.income.code}`)
-  return value ? getFormattedValue(value) : null
+  return value ? getFormattedValue(value,true) : null
 })
 
 const amountExpense = computed(() => {
   let value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.expense.code}`)
-  return value ? getFormattedValue(value) : null
+  return value ? getFormattedValue(value,true) : null
 })
 
 const amountTransfer = computed(() => {
   let value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.transfer.code}`)
-  return value ? getFormattedValue(value) : null
+  return value ? getFormattedValue(value,true) : null
 })
 
 const isCellEmpty = computed(() => {

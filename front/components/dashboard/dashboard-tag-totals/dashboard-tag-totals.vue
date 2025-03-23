@@ -38,6 +38,7 @@ import Tag from '~/models/Tag.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
 import { useActionSheet } from '~/composables/useActionSheet.js'
+import { getFormattedValue } from '~/utils/MathUtils.js'
 
 const dataStore = useDataStore()
 
@@ -60,7 +61,7 @@ const barsList = computed(() => {
       tag: tag,
       tag_id: tagId,
       label: tag ? Tag.getDisplayNameEllipsized(tag) : 'Not set',
-      value: getFormattedValue(amount, 0),
+      value: getFormattedValue(amount,true),
       percent: percent,
     }
   })

@@ -33,6 +33,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Category from '~/models/Category.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
 import { useActionSheet } from '~/composables/useActionSheet.js'
+import { getFormattedValue } from '~/utils/MathUtils.js'
 
 const dataStore = useDataStore()
 
@@ -48,7 +49,7 @@ const barsList = computed(() => {
     return {
       category: category,
       label: category ? Category.getDisplayName(category) : 'Not set',
-      value: getFormattedValue(amount, 0),
+      value: getFormattedValue(amount, true),
       percent: percent,
     }
   })

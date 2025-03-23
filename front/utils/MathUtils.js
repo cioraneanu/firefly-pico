@@ -6,18 +6,19 @@ export const NUMBER_FORMAT = {
   international: { name: '1234.56 -> 1,234.56', code: 'en-EN' },
 }
 
-export const getFormattedValue = (value, digits = 0) => {
+export const getFormattedValue = (value, trim = false, minDigits = 0, maxDigits = 0 ) => {
   const profileStore = useProfileStore()
   if (!profileStore.dashboard.showAccountAmounts) {
     return '******'
   }
   if (profileStore.dashboard.showDecimal) {
-    digits = 2
+    minDigits = 2
+    maxDigits = (trim)?2:10
   }
   let numberFormatCode = profileStore.numberFormat.code ?? NUMBER_FORMAT.eu.code
   return new Intl.NumberFormat(numberFormatCode, {
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
+    minimumFractionDigits: minDigits,
+    maximumFractionDigits: maxDigits,
   }).format(value)
 }
 
@@ -48,7 +49,7 @@ export const evalMath = (value) => {
 
   try {
     let sanitizedValue = sanitizeMathString(value)
-    let newValue = parser.evaluate(sanitizedValue).toFixed(2)
+    let newValue = parseFloat(parser.evaluate(sanitizedValue).toFixed(10))
     return {
       wasSuccessful: true,
       hasChanged: newValue !== value,

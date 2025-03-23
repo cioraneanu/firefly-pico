@@ -114,8 +114,7 @@ export const useDataStore = defineStore('data', {
         .reduce((result, currencyCode) => {
           const currencyAmount = this.dashboardAccountsTotalByCurrency[currencyCode]
           return result + convertCurrency(currencyAmount, currencyCode, Currency.getCode(state.dashboardCurrency))
-        }, 0)
-        .toFixed(2)
+        }, 0).toFixed(2)
     },
 
     dashboardExpensesByCategory(state) {
@@ -219,7 +218,7 @@ export const useDataStore = defineStore('data', {
     transactionsListSavingsAmount(state) {
       let amountIn = convertTransactionsTotalAmountToCurrency(this.transactionsListSavingsIn, Currency.getCode(state.dashboardCurrency))
       let amountOut = convertTransactionsTotalAmountToCurrency(this.transactionsListSavingsOut, Currency.getCode(state.dashboardCurrency))
-      return amountIn - amountOut
+      return (amountIn - amountOut).toFixed(2)
     },
 
     transactionsListSavingsPercentage(state) {

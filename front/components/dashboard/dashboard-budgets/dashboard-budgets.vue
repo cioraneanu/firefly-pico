@@ -24,13 +24,14 @@ import { get } from 'lodash'
 import Transaction from '~/models/Transaction.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import AppChip from '~/components/ui-kit/app-chip.vue'
+import { getFormattedValue } from '~/utils/MathUtils.js'
 
 const dataStore = useDataStore()
 
 const budgetList = dataStore.budgetList
 const hasBudgets = computed(() => budgetList.length > 0)
 
-const budgetLimitTotalFormatted = computed(() => `${getFormattedValue(dataStore.budgetLimitTotal)} ${dataStore.dashboardCurrencyCode}`)
-const budgetLimitSpentFormatted = computed(() => `${getFormattedValue(dataStore.budgetLimitSpent)} ${dataStore.dashboardCurrencyCode}`)
-const budgetLimitRemainingFormatted = computed(() => `${getFormattedValue(dataStore.budgetLimitRemaining) } ${dataStore.dashboardCurrencyCode}`)
+const budgetLimitTotalFormatted = computed(() => `${getFormattedValue(dataStore.budgetLimitTotal,true)} ${dataStore.dashboardCurrencyCode}`)
+const budgetLimitSpentFormatted = computed(() => `${getFormattedValue(dataStore.budgetLimitSpent,true)} ${dataStore.dashboardCurrencyCode}`)
+const budgetLimitRemainingFormatted = computed(() => `${getFormattedValue(dataStore.budgetLimitRemaining,true) } ${dataStore.dashboardCurrencyCode}`)
 </script>

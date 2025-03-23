@@ -16,6 +16,7 @@ import { get } from 'lodash'
 import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
+import { getFormattedValue } from '~/utils/MathUtils.js'
 
 const dataStore = useDataStore()
 
@@ -35,7 +36,7 @@ const barsList = computed(() => {
     return {
       date: date,
       label: weekdayName,
-      value: getFormattedValue(amount, 0),
+      value: getFormattedValue(amount,true),
       percent: percent,
     }
   })
