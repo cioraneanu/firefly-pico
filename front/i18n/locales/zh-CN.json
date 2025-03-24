@@ -9,6 +9,8 @@
   "loading": "加载中...",
   "items": "项目",
   "name": "姓名",
+  "code": "代码",
+  "symbol": "象征",
   "description": "描述",
   "notes": "备注",
   "ok": "确定",
@@ -16,6 +18,7 @@
   "paste": "粘贴",
   "copied": "已复制",
   "pasted": "已粘贴",
+  "status": "地位",
   "transaction_type": "交易类型",
   "transaction_type_popup": "选择交易类型",
   "without": "无",
@@ -282,5 +285,28 @@
     "title_add": "添加模板",
     "title_edit": "编辑模板",
     "extra_names": "额外名称（助手可找到）："
+  },
+  "tag_page": {
+    "title_add": "添加标签",
+    "title_edit": "编辑标签",
+    "parent_tag": "父标签",
+    "mark_as_todo": "标记为待办"
+  },
+  "category_page": {
+    "title_add": "添加类别",
+    "title_edit": "编辑类别"
+  },
+  "currency_page": {
+    "title_add": "添加货币",
+    "title_edit": "编辑货币"
+  },
+  "budget_page": {
+    "title_add": "添加预算",
+    "title_edit": "编辑预算",
+    "spent": "已花费",
+    "percent": "百分比",
+    "interval": "间隔",
+    "type": "预算类型",
+    "period": "预算周期"
   }
 }

@@ -8,11 +8,11 @@
 
     <van-form ref="form" @submit="saveItem" @failed="onValidationError" class="">
       <van-cell-group inset>
-        <app-field v-model="name" name="Name" label="Name" placeholder="Name" :rules="[{ required: true, message: 'Field is required' }]" />
+        <app-field v-model="name" name="Name" :label="$t('name')" :rules="[{ required: true, message: 'Field is required' }]" />
 
-        <app-field v-model="code" name="Code" label="Code" placeholder="Code" :rules="[{ required: true, message: 'Field is required' }]" />
+        <app-field v-model="code" name="Code" :label="$t('code')" :rules="[{ required: true, message: 'Field is required' }]" />
 
-        <app-field v-model="symbol" name="Symbol" label="Symbol" placeholder="Symbol" :rules="[{ required: true, message: 'Field is required' }]" />
+        <app-field v-model="symbol" name="Symbol" :label="$t('symbol')" :rules="[{ required: true, message: 'Field is required' }]" />
       </van-cell-group>
 
       <div style="margin: 16px">
@@ -72,8 +72,6 @@ const onEvent = (event, payload) => {
 
 let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError } = useForm({
   form: form,
-  titleAdd: 'Add currency',
-  titleEdit: 'Edit currency',
   routeList: RouteConstants.ROUTE_CURRENCY_LIST,
   routeForm: RouteConstants.ROUTE_CURRENCY_ID,
   model: new Currency(),
@@ -92,9 +90,9 @@ const { name, code, symbol, decimal_places, isEnabled, isDefault } = generateChi
 ])
 
 const toolbar = useToolbar()
+const { t } = useI18n()
 toolbar.init({
-  title: title,
-  leftText: 'List',
+  title: itemId.value ? t('currency_page.title_edit') : t('currency_page.title_add'),
   backRoute: RouteConstants.ROUTE_CURRENCY_LIST,
 })
 </script>

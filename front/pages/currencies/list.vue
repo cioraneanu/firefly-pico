@@ -27,9 +27,6 @@ import Currency from '~/models/Currency'
 
 let dataStore = useDataStore()
 
-// let list = computed(() => dataStore.accountList)
-// let formRoute = RouteConstants.ROUTE_ACCOUNT_ID
-
 const onEvent = (event, payload) => {
   if (event === 'onPostDelete') {
     dataStore.currenciesList = dataStore.currenciesList.filter((item) => item.id !== payload.id)
@@ -62,20 +59,22 @@ const onLoadMore = async () => {
 const sortedList = computed(() =>
   [...dataStore.currenciesList].sort((a, b) => {
     if (a.attributes?.default !== b.attributes?.default) {
-      return b.attributes?.default - a.attributes?.default;
+      return b.attributes?.default - a.attributes?.default
     }
     if (a.attributes?.enabled !== b.attributes?.enabled) {
-      return b.attributes?.enabled - a.attributes?.enabled;
+      return b.attributes?.enabled - a.attributes?.enabled
     }
-    return a.attributes?.code.localeCompare(b.attributes?.code);
-  })
-);
+    return a.attributes?.code.localeCompare(b.attributes?.code)
+  }),
+)
 
 // -----
 
 const toolbar = useToolbar()
+const { t } = useI18n()
+
 toolbar.init({
-  title: 'Currencies list',
+  title: t('currencies'),
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })
 </script>

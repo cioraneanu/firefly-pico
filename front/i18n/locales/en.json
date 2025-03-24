@@ -9,6 +9,8 @@
   "loading": "Loading...",
   "items": "items",
   "name": "Name",
+  "code": "Code",
+  "symbol": "Symbol",
   "description": "Description",
   "notes": "Notes",
   "ok": "OK",
@@ -16,6 +18,7 @@
   "paste": "Paste",
   "copied": "Copied",
   "pasted": "Pasted",
+  "status": "Status",
   "transaction_type": "Transaction type",
   "transaction_type_popup": "Select a transaction type",
   "without": "Without",
@@ -282,5 +285,28 @@
     "title_add": "Add template",
     "title_edit": "Edit template",
     "extra_names": "Extra names (assistant findable):"
+  },
+  "tag_page": {
+    "title_add": "Add tag",
+    "title_edit": "Edit tag",
+    "parent_tag": "Parent tag",
+    "mark_as_todo": "Mark as to-do"
+  },
+  "category_page": {
+    "title_add": "Add category",
+    "title_edit": "Edit category"
+  },
+  "currency_page": {
+    "title_add": "Add currency",
+    "title_edit": "Edit currency"
+  },
+  "budget_page": {
+    "title_add": "Add budget",
+    "title_edit": "Edit budget",
+    "spent": "Spent",
+    "percent": "Percent",
+    "interval": "Interval",
+    "type": "Budget type",
+    "period": "Budget period"
   }
 }

@@ -214,13 +214,13 @@ export default class Account extends BaseModel {
     let digits = profileStore.dashboard.showDecimal ? 2 : 0
     let numberFormatCode = profileStore.numberFormat.code ?? NUMBER_FORMAT.eu.code
     let amount = this.getBalance(account)
-
     amount = new Intl.NumberFormat(numberFormatCode, {
       minimumFractionDigits: digits,
       maximumFractionDigits: digits,
     }).format(amount)
 
-    return `${amount} ${this.getCurrencySymbol(account)}`
+    let currency = this.getCurrencySymbol(account)
+    return [amount, currency].filter(item => !!item).join(' ')
   }
 
   static getIsActive(account) {
