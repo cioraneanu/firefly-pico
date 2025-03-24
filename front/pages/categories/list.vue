@@ -31,8 +31,6 @@ import { animateSwipeList } from '~/utils/AnimationUtils.js'
 
 let dataStore = useDataStore()
 
-// let list = computed(() => dataStore.accountList)
-// let formRoute = RouteConstants.ROUTE_ACCOUNT_ID
 
 const onEvent = (event, payload) => {
   if (event === 'onPostDelete') {
@@ -52,7 +50,6 @@ const filteredList = computed(() => {
 })
 
 const { isLoading, isFinished, isRefreshing, page, pageSize, totalPages, listTotalCount, list, isEmpty, onAdd, onEdit, onDelete } = useList({
-  title: 'Categories list',
   routeList: RouteConstants.ROUTE_CATEGORY_LIST,
   routeForm: RouteConstants.ROUTE_CATEGORY_ID,
   model: new Category(),
@@ -85,8 +82,10 @@ const onLoadMore = () => {
 // -----
 
 const toolbar = useToolbar()
+const { t } = useI18n()
+
 toolbar.init({
-  title: 'Categories list',
+  title: t('categories'),
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })
 

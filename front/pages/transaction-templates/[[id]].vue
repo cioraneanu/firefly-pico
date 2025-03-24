@@ -143,7 +143,6 @@ onMounted(async () => {
 const toolbar = useToolbar()
 toolbar.init({
   title:  itemId.value ? t('transaction_template_page.title_edit') : t('transaction_template_page.title_add'),
-  leftText: 'List',
   backRoute: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST,
 })
 </script>

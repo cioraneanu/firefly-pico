@@ -9,6 +9,8 @@
   "loading": "Se încarcă...",
   "items": "elemente",
   "name": "Nume",
+  "code": "Cod",
+  "symbol": "Simbol",
   "description": "Descriere",
   "notes": "Note",
   "ok": "OK",
@@ -16,6 +18,7 @@
   "paste": "Lipește",
   "copied": "Copiat",
   "pasted": "Lipit",
+  "status": "Status",
   "transaction_type": "Tip tranzacție",
   "transaction_type_popup": "Selectează un tip de tranzacție",
   "without": "Fără",
@@ -282,5 +285,28 @@
     "title_add": "Adaugă șablon",
     "title_edit": "Editează șablon",
     "extra_names": "Nume suplimentare (găsit de asistent):"
+  },
+  "tag_page": {
+    "title_add": "Adaugă etichetă",
+    "title_edit": "Editează etichetă",
+    "parent_tag": "Etichetă părinte",
+    "mark_as_todo": "Marchează ca 'de făcut'"
+  },
+  "category_page": {
+    "title_add": "Adaugă categorie",
+    "title_edit": "Editează categorie"
+  },
+  "currency_page": {
+    "title_add": "Adaugă monedă",
+    "title_edit": "Editează monedă"
+  },
+  "budget_page": {
+    "title_add": "Adaugă buget",
+    "title_edit": "Editează buget",
+    "spent": "Cheltuit",
+    "percent": "Procent",
+    "interval": "Interval",
+    "type": "Tip buget",
+    "period": "Perioadă buget"
   }
 }

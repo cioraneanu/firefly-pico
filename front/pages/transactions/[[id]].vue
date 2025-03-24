@@ -415,7 +415,6 @@ const title = computed(() => {
 const toolbar = useToolbar()
 toolbar.init({
   title: title,
-  leftText: 'List',
   backRoute: RouteConstants.ROUTE_TRANSACTION_LIST,
 })
 
