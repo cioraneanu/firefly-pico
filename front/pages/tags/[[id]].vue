@@ -7,26 +7,25 @@
     </app-top-toolbar>
 
     <app-card-info v-if="itemId">
-      <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
+      <app-field-link :label="$t('show_transactions')" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
     </app-card-info>
 
     <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
       <van-cell-group inset>
-        <app-field v-model="tag" name="name" label="Name" rows="1" autosize :icon="TablerIconConstants.fieldText2" placeholder="Description" :rules="[rule.required()]" required />
+        <app-field v-model="tag" name="name" :label="$t('name')" rows="1" autosize :icon="TablerIconConstants.fieldText2" :rules="[rule.required()]" required />
 
-        <tag-select label="Parent tag" v-model="parentTag" :isMultiSelect="false" />
+        <tag-select :label="$t('tag_page.parent_tag')" v-model="parentTag" :isMultiSelect="false" />
 
         <icon-select v-model="icon" />
 
-        <app-boolean label="Mark as to-do" v-model="isTodo">
+        <app-boolean v-model="isTodo">
           <template #label>
             <div class="flex-center-vertical gap-1">
-              <div class="flex-1">Mark as to-do</div>
+              <div class="flex-1">{{ $t('tag_page.mark_as_todo') }}</div>
               <app-tutorial v-bind="TUTORIAL_CONSTANTS.todoTag" />
             </div>
           </template>
         </app-boolean>
-
       </van-cell-group>
 
       <div style="margin: 16px">
@@ -92,10 +91,8 @@ const resetFields = () => {
   tag.value = ''
 }
 
-let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+let { itemId, item, isEmpty, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
-  titleAdd: 'Add tag',
-  titleEdit: 'Edit tag',
   routeList: RouteConstants.ROUTE_TAG_LIST,
   routeForm: RouteConstants.ROUTE_TAG_ID,
   model: new Tag(),
@@ -112,9 +109,10 @@ const { tag, parentTag, icon, isTodo } = generateChildren(item, [
 ])
 
 const toolbar = useToolbar()
+const { t } = useI18n()
+
 toolbar.init({
-  title: title,
-  leftText: 'List',
+  title: itemId.value ? t('tag_page.title_edit') : t('tag_page.title_add'),
   backRoute: RouteConstants.ROUTE_TAG_LIST,
 })
 
@@ -122,8 +120,6 @@ const onNavigateToTransactionsList = async () => {
   let filters = TransactionFilterUtils.filters.tag.toUrl(item.value)
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
 }
-
-
 
 watch(tag, (newValue) => {
   if (profileStore.lowerCaseTagName) {

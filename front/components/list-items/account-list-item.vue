@@ -4,7 +4,7 @@
       <template #title>
         <div class="list-item-container">
           <div class="first_column flex-center flex-column">
-            <app-icon :icon="icon ?? TablerIconConstants.account" :size="32" />
+            <app-icon :icon="icon ?? TablerIconConstants.account" :size="32"  :badge="accountBadge" />
             <!--            <span class="badge2"> {{ currencySymbol }}</span>-->
           </div>
 
@@ -56,6 +56,7 @@ const accountType = computed(() => _.get(props.value, 'attributes.type.name', ' 
 const accountRole = computed(() => _.get(props.value, 'attributes.account_role.name'))
 const currencySymbol = computed(() => _.get(props.value, 'attributes.currency_code'))
 const accountBalance = computed(() => Account.getBalanceWithCurrency(props.value))
+const accountBadge = computed(() => Account.getBadge(props.value))
 const icon = computed(() => Account.getIcon(props.value))
 
 const onEdit = async (e) => {

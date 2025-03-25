@@ -25,6 +25,7 @@ export default class AccountTransformer extends ApiTransformer {
     let currencyId = get(item, 'attributes.currency_id')
     item.attributes.currency = currencyDictionary[currencyId]
     item.attributes.icon = Icon.getIcon(get(item, 'attributes.icon'))
+    item.attributes.badge = get(item, 'attributes.badge', null)
 
     item.attributes.is_dashboard_visible = get(item, 'attributes.is_dashboard_visible', true)
 
@@ -47,6 +48,7 @@ export default class AccountTransformer extends ApiTransformer {
     return {
       name: get(data, 'name', ''),
       icon: get(data, 'icon.icon'),
+      badge: get(data, 'badge', null),
       type: get(data, 'type.fireflyCode'),
       account_role: get(data, 'account_role.fireflyCode'),
       credit_card_type: creditCardType,

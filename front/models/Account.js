@@ -193,6 +193,17 @@ export default class Account extends BaseModel {
     return _.get(account, 'attributes.name')
   }
 
+  static getBadge(account) {
+    const badge = _.get(account, 'attributes.badge')
+    if (!badge) {
+      return null
+    }
+    if (badge.length >= 1) {
+      return badge.toUpperCase()
+    }
+    return null
+  }
+
   static getCurrency(account) {
     if (!account) {
       return null
@@ -214,13 +225,13 @@ export default class Account extends BaseModel {
     let digits = profileStore.dashboard.showDecimal ? 2 : 0
     let numberFormatCode = profileStore.numberFormat.code ?? NUMBER_FORMAT.eu.code
     let amount = this.getBalance(account)
-
     amount = new Intl.NumberFormat(numberFormatCode, {
       minimumFractionDigits: digits,
       maximumFractionDigits: digits,
     }).format(amount)
 
-    return `${amount} ${this.getCurrencySymbol(account)}`
+    let currency = this.getCurrencySymbol(account)
+    return [amount, currency].filter(item => !!item).join(' ')
   }
 
   static getIsActive(account) {

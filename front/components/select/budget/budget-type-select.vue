@@ -1,5 +1,5 @@
 <template>
-  <app-select label="Budget type" popupTitle="Select an account type" v-model="modelValue" v-model:showDropdown="showDropdown" :list="list" :columns="1" v-bind="dynamicAttrs" :has-search="false">
+  <app-select :label="$t('budget_page.type')" :popupTitle="$t('budget_page.type')" v-model="modelValue" v-model:showDropdown="showDropdown" :list="list" :columns="1" v-bind="dynamicAttrs" :has-search="false">
     <template #left-icon>
       <app-icon :icon="TablerIconConstants.fieldSelect2" :size="20" />
     </template>

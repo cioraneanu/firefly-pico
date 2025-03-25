@@ -25,6 +25,12 @@ export const transactionFormField = {
     icon: TablerIconConstants.fieldText2,
     isVisible: true,
   },
+  badge: {
+    t: 'badge',
+    code: 'badge',
+    icon: TablerIconConstants.tag,
+    isVisible: true,
+  },
   category: {
     t: 'category',
     code: 'category',

@@ -82,8 +82,10 @@ const onLoadMore = () => {
 }
 
 const toolbar = useToolbar()
+const { t } = useI18n()
+
 toolbar.init({
-  title: 'Tags list',
+  title: t('tags'),
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })
 

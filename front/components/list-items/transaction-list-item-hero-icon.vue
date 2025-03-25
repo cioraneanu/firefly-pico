@@ -1,7 +1,7 @@
 <template>
   <div v-if="isAnyIconVisible" class="hero-icons-section gap-1 flex-center-vertical">
     <template v-if="isAccountIconVisible">
-      <app-icon v-for="accountIcon in accountIcons" :icon="accountIcon" :size="30" />
+      <app-icon v-for="accountProp in accountProps" :icon="accountProp.icon" :badge="accountProp.badge" :size="30" />
     </template>
 
     <template v-if="isTagIconVisible">
@@ -58,20 +58,33 @@ const time = computed(() => (date.value ? format(date.value, 'HH:mm') : ''))
 const timeHour = computed(() => (date.value ? format(date.value, 'HH') : ''))
 const timeMinute = computed(() => (date.value ? format(date.value, 'mm') : ''))
 
-const accountIcons = computed(() => {
+const accountProps = computed(() => {
   const destinationAccount = get(dataStore.accountDictionary, get(firstTransaction.value, 'destination_id'))
   const destinationAccountIcon = Account.getIcon(destinationAccount) ?? TablerIconConstants.account
+  const destinationAccountBadge = Account.getBadge(destinationAccount) ?? null
 
   const sourceAccount = get(dataStore.accountDictionary, get(firstTransaction.value, 'source_id'))
   const sourceAccountIcon = Account.getIcon(sourceAccount) ?? TablerIconConstants.account
+  const sourceAccountBadge = Account.getBadge(sourceAccount) ?? null
 
   if (isTypeExpense.value) {
-    return [sourceAccountIcon]
+    return [{
+      icon: sourceAccountIcon,
+      badge: sourceAccountBadge,
+    }]
   }
   if (isTypeIncome.value) {
-    return [destinationAccountIcon]
+    return [{
+      icon: destinationAccountIcon,
+      badge: destinationAccountBadge,
+    }]
   }
-  return [sourceAccountIcon, destinationAccountIcon]
+  return [
+    { icon: sourceAccountIcon, 
+      badge: sourceAccountBadge } , 
+    { icon: destinationAccountIcon,
+      badge: destinationAccountBadge,
+  }]
 })
 
 const tagIcon = computed(() => {

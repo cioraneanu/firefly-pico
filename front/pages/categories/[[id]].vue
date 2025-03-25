@@ -6,14 +6,13 @@
       </template>
     </app-top-toolbar>
 
-
     <app-card-info v-if="itemId">
-      <app-field-link label="Show transactions" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
+      <app-field-link :label="$t('show_transactions')" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
     </app-card-info>
 
     <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
       <van-cell-group inset>
-        <app-field v-model="name" name="name" label="Name" rows="1" autosize :icon="TablerIconConstants.fieldText2" placeholder="Description" :rules="[rule.required()]" />
+        <app-field v-model="name" name="name" :label="$t('name')" rows="1" autosize :icon="TablerIconConstants.fieldText2" :rules="[rule.required()]" />
 
         <icon-select v-model="icon" />
       </van-cell-group>
@@ -102,9 +101,10 @@ const onNavigateToTransactionsList = async () => {
 }
 
 const toolbar = useToolbar()
+const { t } = useI18n()
+
 toolbar.init({
-  title: title,
-  leftText: 'List',
+  title: itemId.value ? t('category_page.title_edit') : t('category_page.title_add'),
   backRoute: RouteConstants.ROUTE_CATEGORY_LIST,
 })
 </script>

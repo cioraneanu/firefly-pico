@@ -418,7 +418,6 @@ export const avatarListIcons = [
   { name: 'chart stocks market graph', icon: 'svgo-avatar-stats-line-chart-svgrepo-com' },
   { name: 'chart stocks market graph pyramid', icon: 'svgo-avatar-pyramid-chart-graph-svgrepo-com' },
   { name: 'chart stocks market graph pie', icon: 'svgo-avatar-pie-chart-svgrepo-com' },
-  { name: 'crypto', icon: 'svgo-avatar-bitcoin-svgrepo-com' },
   { name: 'calendar', icon: 'svgo-avatar-calendar-svgrepo-com' },
   { name: 'coordinate travel map', icon: 'svgo-avatar-coordinate-svgrepo-com' },
   { name: 'coordinate travel map', icon: 'svgo-avatar-globe-svgrepo-com' },
@@ -432,7 +431,16 @@ export const avatarListIcons = [
   { name: 'star win prize', icon: 'svgo-avatar-star-gold-orange-svgrepo-com' },
   { name: 'bullseye hit prize game', icon: 'svgo-avatar-target-hit-aim-svgrepo-com' },
 
+  { name: 'revolut', icon: 'svgo-avatar-revolut-svgrepo-com' },
+  { name: 'revolut blue', icon: 'svgo-avatar-revolut-blue-svgrepo-com' },
+  { name: 'revolut purple', icon: 'svgo-avatar-revolut-purple-svgrepo-com' },
+  { name: 'revolut yellow', icon: 'svgo-avatar-revolut-yellow-svgrepo-com' },
 
+  //Cryptocurrencies
+  { name: 'bitcoin', icon: 'svgo-avatar-bitcoin-svgrepo-com' },
+  { name: 'ethereum', icon: 'svgo-avatar-eth-svgrepo-com' },
+  { name: 'cardano', icon: 'svgo-avatar-cardano-svgrepo-com' },
+  { name: 'xrp', icon: 'svgo-avatar-xrp-svgrepo-com' },
 
   { name: 'actor chaplin comedy', icon: 'svgo-avatar-actor-chaplin-comedy-svgrepo-com' },
   { name: 'addicted drawlove', icon: 'svgo-avatar-addicted-draw-love-svgrepo-com' },

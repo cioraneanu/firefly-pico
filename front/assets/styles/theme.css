@@ -358,6 +358,27 @@ body {
     /* Firefox */
 }
 
+.icon-badge {
+    position: absolute;
+    top: -0.5em;
+    right: -0.5em;
+    background-color: #42a5f5;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-container{
+    position: relative;
+    display: inline-block;
+}
+
 .van-tabbar {
     z-index: 9;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,

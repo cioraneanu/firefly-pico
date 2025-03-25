@@ -7,7 +7,7 @@
     <van-grid :column-num="2">
       <van-grid-item v-for="account in visibleDashboardAccounts" :key="account.id" @click="onShowActionSheet(account)">
         <template #icon>
-          <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="24" />
+          <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="24" :badge="Account.getBadge(account)" />
         </template>
 
         <template #text>

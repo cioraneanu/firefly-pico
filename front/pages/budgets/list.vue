@@ -84,9 +84,10 @@ const onLoadMore = () => {
 
 // -----
 
+const { t } = useI18n()
 const toolbar = useToolbar()
 toolbar.init({
-  title: 'Budgets list',
+  title: t('budgets'),
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })
 

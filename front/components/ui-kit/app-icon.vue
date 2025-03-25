@@ -1,5 +1,8 @@
-<template>
-  <component :is="props.icon" :fontControlled="false" :style="style" :stroke-width="props.stroke" class="svg-icon" :color-invertable="isColorInvertable" />
+<template >
+  <div class="icon-container">
+    <component :is="props.icon" :style="style" :fontControlled="false" :stroke-width="props.stroke" class="svg-icon" :color-invertable="isColorInvertable" />
+    <span v-if="props.badge" class="icon-badge">{{ props.badge }}</span>
+  </div>
 </template>
 
 <script setup>
@@ -12,7 +15,10 @@ const props = defineProps({
   size: {
     default: 25,
   },
-
+  badge: {
+    type: String,
+    default: null,
+  },
   // Only for TablerIcons
   stroke: {
     default: 1.7,

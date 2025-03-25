@@ -17,8 +17,8 @@
     </template>
 
     <template #inputItemContent="{ item }">
-      <div class="flex-center">
-        <app-icon :icon="Account.getIcon(item) ?? TablerIconConstants.account" :size="20" />
+      <div class="flex-center gap-2">
+        <app-icon :badge="Account.getBadge(item)" :icon="Account.getIcon(item) ?? TablerIconConstants.account" :size="20" />
         <span class="font-weight-400 text-size-12">{{ getDisplayValue(item) }}</span>
       </div>
     </template>
@@ -37,7 +37,7 @@
             <template v-for="(item, index) in assetAccountList" :key="index">
               <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
                 <template #default>
-                  <app-select-option :text="Account.getDisplayName(item)" :icon="Account.getIcon(item) ?? TablerIconConstants.account" />
+                  <app-select-option :text="Account.getDisplayName(item)" :badge="Account.getBadge(item)" :icon="Account.getIcon(item) ?? TablerIconConstants.account" />
                 </template>
               </van-grid-item>
             </template>
@@ -49,7 +49,7 @@
             <template v-for="(item, index) in expenseAccountList" :key="index">
               <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
                 <template #default>
-                  <app-select-option :text="Account.getDisplayName(item)" :icon="Account.getIcon(item) ?? TablerIconConstants.account" />
+                  <app-select-option :text="Account.getDisplayName(item)" :badge="Account.getBadge(item)" :icon="Account.getIcon(item) ?? TablerIconConstants.account" />
                 </template>
               </van-grid-item>
             </template>
@@ -61,7 +61,7 @@
             <template v-for="(item, index) in incomeAccountList" :key="index">
               <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
                 <template #default>
-                  <app-select-option :text="Account.getDisplayName(item)" :icon="Account.getIcon(item) ?? TablerIconConstants.account" />
+                  <app-select-option :text="Account.getDisplayName(item)" :badge="Account.getBadge(item)" :icon="Account.getIcon(item) ?? TablerIconConstants.account" />
                 </template>
               </van-grid-item>
             </template>
@@ -73,7 +73,7 @@
             <template v-for="(item, index) in liabilityAccountList" :key="index">
               <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
                 <template #default>
-                  <app-select-option :text="Account.getDisplayName(item)" :icon="Account.getIcon(item) ?? TablerIconConstants.account" />
+                  <app-select-option :text="Account.getDisplayName(item)" :badge="Account.getBadge(item)" :icon="Account.getIcon(item) ?? TablerIconConstants.account" />
                 </template>
               </van-grid-item>
             </template>

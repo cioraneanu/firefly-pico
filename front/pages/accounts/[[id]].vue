@@ -26,6 +26,17 @@
         >
         </app-field>
 
+        <app-field
+          v-model="badge"
+          name="badge"
+          :label="$t('badge')"
+          type="textarea"
+          rows="1"
+          maxlength="2"
+          autosize
+          :icon="TablerIconConstants.tag"
+        ></app-field>
+
         <icon-select v-model="icon" :list="avatarListIcons" />
 
         <currency-select v-model="currency" name="curerency" :rules="[rule.required()]" required />
@@ -113,8 +124,9 @@ let { itemId, item, isEmpty, addButtonText, isLoading, onClickBack, saveItem, on
 const pathKey = 'attributes'
 
 // const name = ref("")
-const { name, type, role, currency, icon, includeNetWorth, isDashboardVisible, liabilityType, liabilityDirection } = generateChildren(item, [
+const { name, badge, type, role, currency, icon, includeNetWorth, isDashboardVisible, liabilityType, liabilityDirection } = generateChildren(item, [
   { computed: 'name', parentKey: `${pathKey}.name` },
+  { computed: 'badge', parentKey: `${pathKey}.badge` },
   { computed: 'icon', parentKey: `${pathKey}.icon` },
   { computed: 'type', parentKey: `${pathKey}.type` },
   { computed: 'role', parentKey: `${pathKey}.account_role` },
