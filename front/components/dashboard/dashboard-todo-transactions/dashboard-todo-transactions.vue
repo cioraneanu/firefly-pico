@@ -1,9 +1,9 @@
 <template>
-  <van-cell-group inset >
+  <van-cell-group inset>
     <div class="van-cell-group-title flex-center-vertical">
-      <div class="flex-1">Todo transactions:</div>
+      <div class="flex-1">{{ $t('settings.dashboard.cards.todo_transactions') }}:</div>
 
-      <van-button v-if="dataStore.tagTodo" size="small" @click="onGoToTodos">Todos: {{ dataStore.dashboard.transactionsWithTodo.length }}</van-button>
+      <van-button v-if="dataStore.tagTodo" size="small" @click="onGoToTodos">{{ $t('todo') }}: {{ dataStore.dashboard.transactionsWithTodo.length }}</van-button>
       <div v-else class="flex-center-vertical gap-1">
         <span class="text-muted text-size-10 font-weight-400"> No "todo" tag </span>
         <app-tutorial v-bind="TUTORIAL_CONSTANTS.todoTag" />

@@ -1,7 +1,7 @@
 <template>
   <van-cell-group inset>
     <div class="van-cell-group-title flex-center-vertical">
-      <div class="flex-1">Expenses by tags:</div>
+      <div class="flex-1">{{ $t('dashboard.expenses_by_tags.title') }}:</div>
       <div>
         <van-button size="small" @click="onToggleTagMode">{{ tagModeDisplayName }}</van-button>
       </div>
@@ -40,12 +40,13 @@ import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
 import { useActionSheet } from '~/composables/useActionSheet.js'
 
 const dataStore = useDataStore()
+const { t } = useI18n()
 
 const onToggleTagMode = () => {
   dataStore.dashboard.tagsWidgetModeOnlyRootTag = !dataStore.dashboard.tagsWidgetModeOnlyRootTag
 }
 
-const tagModeDisplayName = computed(() => (dataStore.dashboard.tagsWidgetModeOnlyRootTag ? 'One root tag' : 'All tags'))
+const tagModeDisplayName = computed(() => (dataStore.dashboard.tagsWidgetModeOnlyRootTag ? t('dashboard.expenses_by_tags.one_root_tag') : t('dashboard.expenses_by_tags.all_tags')))
 
 const barsList = computed(() => {
   const tagTotalDictionary = dataStore.dashboardExpensesByTag
@@ -59,7 +60,7 @@ const barsList = computed(() => {
     return {
       tag: tag,
       tag_id: tagId,
-      label: tag ? Tag.getDisplayNameEllipsized(tag) : 'Not set',
+      label: tag ? Tag.getDisplayNameEllipsized(tag) : t('not_set'),
       value: getFormattedValue(amount, 0),
       percent: percent,
     }

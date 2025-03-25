@@ -1,6 +1,6 @@
 <template>
   <van-cell-group inset>
-    <div class="van-cell-group-title">Expenses this week:</div>
+    <div class="van-cell-group-title">{{ $t('dashboard.expenses_week') }}:</div>
     <div class="display-flex">
       <div class="flex-1" />
 
@@ -12,7 +12,7 @@
 </template>
 <script setup>
 import { eachDayOfInterval, format, startOfDay, subDays } from 'date-fns'
-import { get } from 'lodash'
+import { capitalize, get } from 'lodash'
 import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
@@ -28,7 +28,7 @@ const barsList = computed(() => {
     end: startOfDay(new Date()),
   })
   return daysList.map((date) => {
-    const weekdayName = format(date, 'E')
+    const weekdayName = capitalize(format(date, 'E'))
     const amount = get(dataStore.dashboardExpenseByDay, DateUtils.dateToString(date), 0)
     const percent = (amount / maxAmount) * 100
 

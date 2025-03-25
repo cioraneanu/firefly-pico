@@ -6,6 +6,7 @@
   "search": "Search",
   "search_placeholder": "Search...",
   "clone": "Clone",
+  "not_set": "Not set",
   "loading": "Loading...",
   "items": "items",
   "name": "Name",
@@ -20,7 +21,6 @@
   "pasted": "Pasted",
   "status": "Status",
   "transaction_type": "Transaction type",
-  "transaction_type_popup": "Select a transaction type",
   "without": "Without",
   "template": "Template",
   "templates": "Templates",
@@ -36,6 +36,7 @@
   "budget_select": "Select a budget",
   "account": "Account",
   "accounts": "Accounts",
+  "total": "Total",
   "select_is_empty": "No selection...",
   "calendar": "Calendar",
   "date": "Date",
@@ -197,7 +198,7 @@
       "show_empty_accounts": "Show accounts with 0 amount",
       "show_decimal_places": "Show decimal places",
       "transaction_exclusion": "Transaction exclusion",
-      "cards":{
+      "cards": {
         "accounts_summary": "Accounts summary",
         "expenses_this_week": "Expenses this week",
         "transactions_summary": "Transactions summary",
@@ -268,6 +269,7 @@
   "icon_select": "Select an icon",
   "icon_empty": "No icon",
   "list": "List",
+  "percentage": "Percentage",
   "repeater_no_values": "No values set. Use the 'add' button.",
   "account_page": {
     "title_add": "Add account",
@@ -308,5 +310,29 @@
     "interval": "Interval",
     "type": "Budget type",
     "period": "Budget period"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "controls": "Controls",
+    "account_total": "Total balance",
+    "expenses_week": "Expenses this week",
+    "transactions_summary": {
+      "title": "Transactions summary",
+      "surplus": "Surplus",
+      "days_remaining": "Days remaining",
+      "savings_summary": "Savings summary"
+    },
+    "budget": {
+      "spent": "Spent",
+      "budgeted": "Budgeted",
+      "remaining": "Remaining"
+    },
+    "expenses_by_tags": {
+      "title": "Expenses by tags",
+      "all_tags": "All tags",
+      "one_root_tag": "One root tag"
+    },
+    "expenses_by_categories": "Expenses by categories",
+    "configure_cards": "Configure cards"
   }
 }

@@ -1,12 +1,12 @@
 <template>
   <van-cell-group inset>
-    <div class="van-cell-group-title">Budgets:</div>
+    <div class="van-cell-group-title">{{ $t('budgets') }}:</div>
 
     <template v-if="hasBudgets">
       <div class="flex-center-vertical justify-content-center flex-wrap gap-2 m-2">
-        <app-chip :title="`Budgeted:`" :subtitle="budgetLimitTotalFormatted" />
-        <app-chip :title="`Spent:`" :subtitle="budgetLimitSpentFormatted" />
-        <app-chip :title="`Remaining:`" :subtitle="budgetLimitRemainingFormatted" />
+        <app-chip :title="`${$t('dashboard.budget.budgeted')}:`" :subtitle="budgetLimitTotalFormatted" />
+        <app-chip :title="`${$t('dashboard.budget.spent')}:`" :subtitle="budgetLimitSpentFormatted" />
+        <app-chip :title="`${$t('dashboard.budget.remaining')}:`" :subtitle="budgetLimitRemainingFormatted" />
       </div>
 
       <van-grid :column-num="3">
@@ -26,6 +26,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import AppChip from '~/components/ui-kit/app-chip.vue'
 
 const dataStore = useDataStore()
+// const { t } = useI18n()
 
 const budgetList = dataStore.budgetList
 const hasBudgets = computed(() => budgetList.length > 0)

@@ -1,7 +1,7 @@
 <template>
   <van-cell-group inset>
     <div class="flex-center-vertical">
-      <div class="van-cell-group-title">Total balance:</div>
+      <div class="van-cell-group-title">{{ $t('dashboard.account_total') }}:</div>
     </div>
 
     <van-grid :column-num="2">
@@ -29,7 +29,7 @@
     <div class="flex-center text-size-13 m-10 flex-wrap">
       <div class="flex-center text-size-13 me-1">
         <icon-cash class="text-muted" :size="24" :stroke="1.5" />
-        <span class="font-400 text-muted">Total: </span>
+        <span class="font-400 text-muted">{{ $t('total')}}: </span>
       </div>
 
       <span v-for="(totalValue, totalCurrency) in dataStore.dashboardAccountsTotalByCurrency" class="font-700 ms-1 mx-1 app-select-option-tag">

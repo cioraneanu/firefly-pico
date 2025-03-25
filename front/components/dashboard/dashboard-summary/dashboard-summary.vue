@@ -1,12 +1,12 @@
 <template>
   <van-cell-group inset>
-    <div class="van-cell-group-title">Transactions summary:</div>
+    <div class="van-cell-group-title">{{ $t('dashboard.transactions_summary.title') }}:</div>
 
     <van-grid :column-num="3">
       <dashboard-summary-card
         @click="onGoToTransactionsByType(Transaction.types.income)"
         :icon="TablerIconConstants.dashboardTotalIncomes"
-        title="Income"
+        :title="$t('transaction.type.income')"
         :subtitle="totalIncomeFormatted"
         subtitleClass="text-success"
       />
@@ -14,7 +14,7 @@
       <dashboard-summary-card
         @click="onGoToTransactionsByType(Transaction.types.expense)"
         :icon="TablerIconConstants.dashboardTotalExpenses"
-        title="Expense"
+        :title="$t('transaction.type.expense')"
         :subtitle="totalExpenseFormatted"
         subtitleClass="text-danger"
       />
@@ -22,21 +22,21 @@
       <dashboard-summary-card
         @click="onGoToTransactionsByType(Transaction.types.transfer)"
         :icon="TablerIconConstants.dashboardTotalTransfers"
-        title="Transfers"
+        :title="$t('transaction.type.transfer')"
         :subtitle="totalTransferFormatted"
         subtitleClass="text-primary"
       />
 
       <dashboard-summary-card :icon="TablerIconConstants.dashboardTotalSurplus" title="Surplus" :subtitle="totalSurplusFormatted" subtitleClass="" />
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" title="Transactions" :subtitle="dataStore.totalTransactionsCount" subtitleClass="" />
-      <dashboard-summary-card :icon="TablerIconConstants.account" title="Days remaining" :subtitle="remainingDays" />
+      <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" :title="$t('toolbar.transactions')" :subtitle="dataStore.totalTransactionsCount" subtitleClass="" />
+      <dashboard-summary-card :icon="TablerIconConstants.account" :title="$t('dashboard.transactions_summary.days_remaining')" :subtitle="remainingDays" />
     </van-grid>
 
-    <div class="van-cell-group-title">Savings summary:</div>
+    <div class="van-cell-group-title">{{ $t('dashboard.transactions_summary.savings_summary') }}:</div>
     <van-grid :column-num="3" @click="onNavigateToTransactionSavings">
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" title="Transactions" :subtitle="dataStore.transactionsListSavingsCount" subtitleClass="" />
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardCoin" title="Amount" :subtitle="transactionsListSavingsAmount" :subtitleClass="savingsAmountClass" />
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardSavingsPercent" title="Percentage" :subtitle="savingsPercentFormatted" subtitleClass="text-primary" />
+      <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" :title="$t('toolbar.transactions')" :subtitle="dataStore.transactionsListSavingsCount" subtitleClass="" />
+      <dashboard-summary-card :icon="TablerIconConstants.dashboardCoin" :title="$t('amount')" :subtitle="transactionsListSavingsAmount" :subtitleClass="savingsAmountClass" />
+      <dashboard-summary-card :icon="TablerIconConstants.dashboardSavingsPercent" :title="$t('percentage')" :subtitle="savingsPercentFormatted" subtitleClass="text-primary" />
     </van-grid>
   </van-cell-group>
 </template>

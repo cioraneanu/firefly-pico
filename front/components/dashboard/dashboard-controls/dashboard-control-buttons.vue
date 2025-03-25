@@ -1,6 +1,6 @@
 <template>
   <div class="text-size-14 flex-center-vertical gap-1">
-    <span class="text-muted text-size-12">Controls:</span>
+    <span class="text-muted text-size-12">{{ $t('dashboard.controls') }}:</span>
     <div class="app-button-small" @click="onToggleTotalCurrency">
       <app-icon :icon="TablerIconConstants.transaction" :size="14" />
       {{ dataStore.dashboardCurrencyCode }}

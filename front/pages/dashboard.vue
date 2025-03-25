@@ -23,7 +23,7 @@
         <dashboard-todo-transactions :style="getStyleForCard(dashboardCard.todoTransactions)" />
 
         <app-card-info style="order: 99">
-          <app-field-link label="Configure cards" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER)" />
+          <app-field-link :label="$t('dashboard.configure_cards')" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER)" />
         </app-card-info>
       </div>
     </van-pull-refresh>
@@ -43,9 +43,6 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { useSwipe } from '@vueuse/core'
 import { addMonths } from 'date-fns'
 import DashboardControlButtons from '~/components/dashboard/dashboard-controls/dashboard-control-buttons.vue'
-
-const toolbar = useToolbar()
-toolbar.init({ title: 'Dashboard' })
 
 const dataStore = useDataStore()
 const profileStore = useProfileStore()
@@ -104,9 +101,12 @@ const { lengthX } = useSwipe(dashboard, {
     if (lengthX.value < -100 && velocity >= 0.5) {
       dataStore.dashboard.month = addMonths(dataStore.dashboard.month, -1)
     }
-
   },
 })
+
+const toolbar = useToolbar()
+const { t } = useI18n()
+toolbar.init({ title: t('dashboard.title') })
 
 UIUtils.showLoadingWhen(isLoadingDashboard)
 </script>

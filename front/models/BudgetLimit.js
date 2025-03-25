@@ -1,7 +1,7 @@
 import BaseModel from '~/models/BaseModel'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
 import CategoryRepository from '~/repository/CategoryRepository'
-import _, { get } from 'lodash'
+import _, { capitalize, get } from 'lodash'
 import BudgetTransformer from '~/transformers/BudgetTransformer.js'
 import BudgetRepository from '~/repository/BudgetRepository.js'
 import { useDataStore } from '~/stores/dataStore.js'
@@ -18,7 +18,7 @@ export default class BudgetLimit extends BaseModel {
 
     // Monthly
     if (isSameDay(startOfMonth(start), start) && isSameDay(endOfMonth(end), end) && isSameMonth(start, end)) {
-      return DateUtils.dateToString(start, 'MMM yyyy')
+      return capitalize(DateUtils.dateToString(start, 'MMM yyyy'))
     }
 
     // Yearly

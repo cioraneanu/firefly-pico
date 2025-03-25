@@ -32,9 +32,9 @@ const month = computed(() => startOfMonth(props.start))
 
 const dayNames = Array.from({ length: 7 }, (_, i) => {
   const date = addDays(startOfWeek(new Date()), i)
-  return format(date, 'EEEEEE')
+  return capitalize(format(date, 'EEEEEE'))
 })
-const monthName = computed(() => capitalize(props.start.toLocaleString('en-EN', { month: 'long' })))
+const monthName = computed(() => capitalize(format(props.start, 'MMMM')))
 const yearName = computed(() => props.start.getFullYear())
 
 const calendar = computed(() => {

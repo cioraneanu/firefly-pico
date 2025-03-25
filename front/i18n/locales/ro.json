@@ -6,6 +6,7 @@
   "search": "Caută",
   "search_placeholder": "Caută...",
   "clone": "Clonează",
+  "not_set": "Nesetat",
   "loading": "Se încarcă...",
   "items": "elemente",
   "name": "Nume",
@@ -20,7 +21,6 @@
   "pasted": "Lipit",
   "status": "Status",
   "transaction_type": "Tip tranzacție",
-  "transaction_type_popup": "Selectează un tip de tranzacție",
   "without": "Fără",
   "template": "Șablon",
   "templates": "Șabloane",
@@ -36,6 +36,7 @@
   "budget_select": "Selectează un buget",
   "account": "Cont",
   "accounts": "Conturi",
+  "total": "Total",
   "select_is_empty": "Nicio selecție...",
   "calendar": "Calendar",
   "date": "Dată",
@@ -174,7 +175,7 @@
       },
       "default_list_filters": {
         "title": "Filtre implicite listă tranzacții",
-        "info": "Este recomandat să folosești aceste filtre doar dacă ai un număr mare de tranzacții care rezultă într-o încărcare lentă a listei. Ex. Arată doar tranzacțiile după începutul anului curent.",
+        "info": "Este recomandat să folosești aceste filtre doar dacă ai un număr mare de tranzacții care rezultă într-o încărcare lentă a listei. Ex. Arată doar tranzacțiile după începutul anului curent."
       },
       "default_form_values": {
         "title": "Valori implicite tranzacție nouă",
@@ -197,7 +198,7 @@
       "show_empty_accounts": "Arată conturile cu suma 0",
       "show_decimal_places": "Arată zecimale",
       "transaction_exclusion": "Excludere tranzacții",
-      "cards":{
+      "cards": {
         "accounts_summary": "Rezumat conturi",
         "expenses_this_week": "Cheltuieli ultima săptămână",
         "transactions_summary": "Rezumat tranzacții",
@@ -268,6 +269,7 @@
   "icon_select": "Selectați o iconiță",
   "icon_empty": "Fără iconiță",
   "list": "Listă",
+  "percentage": "Procent",
   "repeater_no_values": "Nicio valoare. Apăsați botonul 'adaugă'.",
   "account_page": {
     "title_add": "Adaugă cont",
@@ -308,5 +310,29 @@
     "interval": "Interval",
     "type": "Tip buget",
     "period": "Perioadă buget"
+  },
+  "dashboard": {
+    "title": "Rezumat",
+    "controls": "Actiuni",
+    "account_total": "Total conturi",
+    "expenses_week": "Cheltuieli ultima săptămână",
+    "transactions_summary": {
+      "title": "Rezumat tranzacții",
+      "surplus": "Surplus",
+      "days_remaining": "Zile rămase",
+      "savings_summary": "Rezumat economii"
+    },
+    "budget": {
+      "spent": "Cheltuit",
+      "budgeted": "Bugetat",
+      "remaining": "Rămas"
+    },
+    "expenses_by_tags": {
+      "title": "Cheltuieli pe etichete",
+      "all_tags": "Toate etichetele",
+      "one_root_tag": "O etichetă părinte"
+    },
+    "expenses_by_categories": "Cheltuieli pe categorii",
+    "configure_cards": "Configurare secțiuni"
   }
 }

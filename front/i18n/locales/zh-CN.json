@@ -6,6 +6,7 @@
   "search": "搜索",
   "search_placeholder": "搜索...",
   "clone": "克隆",
+  "not_set": "未设置",
   "loading": "加载中...",
   "items": "项目",
   "name": "姓名",
@@ -20,7 +21,6 @@
   "pasted": "已粘贴",
   "status": "地位",
   "transaction_type": "交易类型",
-  "transaction_type_popup": "选择交易类型",
   "without": "无",
   "template": "模板",
   "templates": "模板",
@@ -36,6 +36,7 @@
   "budget_select": "选择预算",
   "account": "账户",
   "accounts": "帐户",
+  "total": "全部的",
   "select_is_empty": "无选择...",
   "calendar": "Calendar",
   "date": "日期",
@@ -268,6 +269,7 @@
   "icon_select": "选择图标",
   "icon_empty": "无图标",
   "list": "列表",
+  "percentage": "百分比",
   "repeater_no_values": "未设置值。使用“添加”按钮。",
   "account_page": {
     "title_add": "添加账户",
@@ -308,5 +310,29 @@
     "interval": "间隔",
     "type": "预算类型",
     "period": "预算周期"
+  },
+  "dashboard": {
+    "title": "仪表板",
+    "controls": "控制",
+    "account_total": "总余额",
+    "expenses_week": "本周支出",
+    "transactions_summary": {
+      "title": "交易摘要",
+      "surplus": "盈余",
+      "days_remaining": "剩余天数",
+      "savings_summary": "储蓄摘要"
+    },
+    "budget": {
+      "spent": "花费",
+      "budgeted": "已预算",
+      "remaining": "其余的"
+    },
+    "expenses_by_tags": {
+      "title": "按标签分类的费用",
+      "all_tags": "所有标签",
+      "one_root_tag": "一个根标签"
+    },
+    "expenses_by_categories": "费用分类",
+    "configure_cards": "配置卡"
   }
 }

@@ -1,6 +1,6 @@
 <template>
   <van-cell-group inset>
-    <div class="van-cell-group-title">Expenses by categories:</div>
+    <div class="van-cell-group-title">{{ $t('dashboard.expenses_by_categories') }}:</div>
     <div class="display-flex flex-column ml-15 mr-15">
       <table>
         <tr v-for="bar in barsList" @click="onShowActionSheet(bar)">
@@ -35,6 +35,7 @@ import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
 import { useActionSheet } from '~/composables/useActionSheet.js'
 
 const dataStore = useDataStore()
+const { t } = useI18n()
 
 const barsList = computed(() => {
   let dictionary = dataStore.dashboardExpensesByCategory
@@ -47,7 +48,7 @@ const barsList = computed(() => {
     const percent = (amount / maxAmount) * 100
     return {
       category: category,
-      label: category ? Category.getDisplayName(category) : 'Not set',
+      label: category ? Category.getDisplayName(category) : t('not_set'),
       value: getFormattedValue(amount, 0),
       percent: percent,
     }
