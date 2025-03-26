@@ -32,16 +32,30 @@ class CurrencyController extends BaseControllerFirefly
         $date = Carbon::now()->startOfDay()->format("Y-m-d");
         $cacheKey = "exchange_$date";
         return Cache::remember($cacheKey, 60 * 60 * 24 * 5, function () {
-            $response = Http::get("https://open.er-api.com/v6/latest/USD");
-            if ($response->status() !== self::HTTP_CODE_OK) {
-                return null;
+            $rates = collect();
+            $updatedAt = null;
+
+            // Fetch rates from ExchangeRate API
+            $exchangeRateAPIResponse = Http::get("https://open.er-api.com/v6/latest/USD");
+
+            if ($exchangeRateAPIResponse->status() === self::HTTP_CODE_OK) {
+                $exchangeRateAPIBody = $exchangeRateAPIResponse->json();
+                $exchangeRateAPIRates = collect(fget($exchangeRateAPIBody, 'rates'));
+                $rates = $rates->merge($exchangeRateAPIRates);
+                $updatedAt = Carbon::parse(fget($exchangeRateAPIBody, 'time_last_update_utc'))->startOfDay()->format("Y-m-d");
             }
 
-            $body = $response->json();
-            $rates = fget($body, 'rates');
+
+            // Fetch rates from FXRates API
+            $fxRatesAPIResponse = Http::get("https://api.fxratesapi.com/latest");
+            if ($fxRatesAPIResponse->status() === self::HTTP_CODE_OK) {
+                $fxRates = collect(fget($fxRatesAPIResponse->json(), 'rates'));
+                // Merge rates, prioritizing rates from the first API
+                $rates = $fxRates->merge($rates);
+            }
 
             return [
-                'date' => Carbon::parse(fget($body, 'time_last_update_utc'))->startOfDay()->format("Y-m-d"),
+                'date' => $updatedAt,
                 'rates' => $rates,
                 'currencies' => CurrencyUtils::CURRENCIES
             ];

@@ -48,7 +48,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Account from '~/models/Account.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import { IconCash, IconLibraryPlus, IconLibraryMinus } from '@tabler/icons-vue'
-import { getFormattedValue } from '~/utils/MathUtils.js'
+import { getFormattedValue } from '~/utils/NumberUtils.js'
 import { useActionSheet } from '~/composables/useActionSheet.js'
 import Currency from '../../../models/Currency.js'
 

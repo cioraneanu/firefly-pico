@@ -18,7 +18,7 @@ import { get } from 'lodash'
 import Budget from '~/models/Budget.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import BudgetLimit from '~/models/BudgetLimit.js'
-import { getFormattedValue } from '~/utils/MathUtils.js'
+import { getFormattedValue } from '~/utils/NumberUtils.js'
 
 const dataStore = useDataStore()
 

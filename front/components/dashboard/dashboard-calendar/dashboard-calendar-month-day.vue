@@ -16,7 +16,7 @@ import { format, getDate, isAfter, isBefore, isMonday, isSameDay, isSameMonth, i
 import { computed } from 'vue'
 import Transaction from '~/models/Transaction.js'
 import { get } from 'lodash'
-import { getFormattedValue } from '~/utils/MathUtils.js'
+import { getFormattedValue } from '~/utils/NumberUtils.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 
