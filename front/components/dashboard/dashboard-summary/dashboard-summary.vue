@@ -68,10 +68,10 @@ const remainingDays = computed(() => {
   return differenceInDays(endDate.value, startOfDay(new Date())) + 1
 })
 
-const totalExpenseFormatted = computed(() => getFormattedValue(dataStore.totalExpenseThisMonth))
-const totalIncomeFormatted = computed(() => getFormattedValue(dataStore.totalIncomeThisMonth))
-const totalTransferFormatted = computed(() => getFormattedValue(dataStore.totalTransfersThisMonth))
-const totalSurplusFormatted = computed(() => getFormattedValue(dataStore.totalSurplusThisMonth))
+const totalExpenseFormatted = computed(() => formatNumberForDashboard(dataStore.totalExpenseThisMonth))
+const totalIncomeFormatted = computed(() => formatNumberForDashboard(dataStore.totalIncomeThisMonth))
+const totalTransferFormatted = computed(() => formatNumberForDashboard(dataStore.totalTransfersThisMonth))
+const totalSurplusFormatted = computed(() => formatNumberForDashboard(dataStore.totalSurplusThisMonth))
 
 const onGoToTransactionsByType = async (transactionType) => {
   let excludedUrl = getExcludedTransactionUrl()
@@ -98,7 +98,7 @@ watch(
   },
 )
 
-const transactionsListSavingsAmount = computed(() => getFormattedValue(dataStore.transactionsListSavingsAmount))
+const transactionsListSavingsAmount = computed(() => formatNumberForDashboard(dataStore.transactionsListSavingsAmount))
 const savingsAmountClass = computed(() => (dataStore.transactionsListSavingsAmount > 0 ? 'text-success' : 'text-danger'))
 
 const savingsPercentFormatted = computed(() => {

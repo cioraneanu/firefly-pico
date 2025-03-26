@@ -33,7 +33,7 @@
       </div>
 
       <span v-for="(totalValue, totalCurrency) in dataStore.dashboardAccountsTotalByCurrency" class="font-700 ms-1 mx-1 app-select-option-tag">
-        {{ getFormattedValue(totalValue) }} {{ totalCurrency }}
+        {{ formatNumberForDashboard(totalValue) }} {{ totalCurrency }}
       </span>
     </div>
 
@@ -48,7 +48,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Account from '~/models/Account.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import { IconCash, IconLibraryPlus, IconLibraryMinus } from '@tabler/icons-vue'
-import { getFormattedValue } from '~/utils/NumberUtils.js'
+import { formatNumberForDashboard } from '~/utils/NumberUtils.js'
 import { useActionSheet } from '~/composables/useActionSheet.js'
 import Currency from '../../../models/Currency.js'
 
@@ -68,11 +68,11 @@ const visibleDashboardAccounts = computed(() => {
 const hasHiddenAccounts = computed(() => dataStore.dashboardAccounts.some((account) => !Account.getIsVisibleOnDashboard(account)))
 
 const accountTotal = computed(() => {
-  return getFormattedValue(dataStore.dashboardAccountsEstimatedTotal)
+  return formatNumberForDashboard(dataStore.dashboardAccountsEstimatedTotal)
 })
 
 const getAccountAmount = (account) => {
-  return `${getFormattedValue(Account.getBalance(account))} ${Account.getCurrencySymbol(account)}`
+  return `${formatNumberForDashboard(Account.getBalance(account))} ${Account.getCurrencySymbol(account)}`
 }
 
 const hasMultipleCurrencies = computed(() => dataStore.dashboardAccountsCurrencyList.length > 1)

@@ -61,7 +61,7 @@ const barsList = computed(() => {
       tag: tag,
       tag_id: tagId,
       label: tag ? Tag.getDisplayNameEllipsized(tag) : t('not_set'),
-      value: getFormattedValue(amount, 0),
+      value: formatNumberForDashboard(amount),
       percent: percent,
     }
   })

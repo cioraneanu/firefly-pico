@@ -16,7 +16,7 @@ import { format, getDate, isAfter, isBefore, isMonday, isSameDay, isSameMonth, i
 import { computed } from 'vue'
 import Transaction from '~/models/Transaction.js'
 import { get } from 'lodash'
-import { getFormattedValue } from '~/utils/NumberUtils.js'
+import { formatNumberForDashboard } from '~/utils/NumberUtils.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 
@@ -41,17 +41,17 @@ const tdClass = computed(() => {
 
 const amountIncome = computed(() => {
   let value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.income.code}`)
-  return value ? getFormattedValue(value) : null
+  return value ? formatNumberForDashboard(value) : null
 })
 
 const amountExpense = computed(() => {
   let value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.expense.code}`)
-  return value ? getFormattedValue(value) : null
+  return value ? formatNumberForDashboard(value) : null
 })
 
 const amountTransfer = computed(() => {
   let value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.transfer.code}`)
-  return value ? getFormattedValue(value) : null
+  return value ? formatNumberForDashboard(value) : null
 })
 
 const isCellEmpty = computed(() => {

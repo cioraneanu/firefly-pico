@@ -13,6 +13,17 @@ export const formatNumber = (value, digits) => {
   }).format(value)
 }
 
+export const formatNumberForDashboard = (value) => {
+  const profileStore = useProfileStore()
+  if (!profileStore.dashboard.showAccountAmounts) {
+    return '******'
+  }
+  let digits = profileStore.dashboard.showDecimal ? 2 : 0
+  return formatNumber(value, digits)
+}
+
+
+// TODO: Deprecated method. Remove later
 export const getFormattedValue = (value, digits = 0) => {
   const profileStore = useProfileStore()
   if (!profileStore.dashboard.showAccountAmounts) {
