@@ -47,6 +47,10 @@ class Currency extends BaseModel {
     return get(currency, 'attributes.name')
   }
 
+  static getDecimalPlaces(currency) {
+    return get(currency, 'attributes.decimal_places')
+  }
+
   static getDisplayName(currency) {
     return `${this.getName(currency)}, ${this.getSymbol(currency)}`
   }

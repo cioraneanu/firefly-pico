@@ -300,7 +300,8 @@
   },
   "currency_page": {
     "title_add": "Add currency",
-    "title_edit": "Edit currency"
+    "title_edit": "Edit currency",
+    "decimal_places": "Decimal places"
   },
   "budget_page": {
     "title_add": "Add budget",
@@ -310,6 +311,9 @@
     "interval": "Interval",
     "type": "Budget type",
     "period": "Budget period"
+  },
+  "exchange_rate_page": {
+    "relative_to_usd": "Relative to USD"
   },
   "dashboard": {
     "title": "Dashboard",

@@ -300,7 +300,8 @@
   },
   "currency_page": {
     "title_add": "Adaugă monedă",
-    "title_edit": "Editează monedă"
+    "title_edit": "Editează monedă",
+    "decimal_places": "Zecimale"
   },
   "budget_page": {
     "title_add": "Adaugă buget",
@@ -310,6 +311,9 @@
     "interval": "Interval",
     "type": "Tip buget",
     "period": "Perioadă buget"
+  },
+  "exchange_rate_page": {
+    "relative_to_usd": "Relativ la USD"
   },
   "dashboard": {
     "title": "Rezumat",
