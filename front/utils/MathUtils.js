@@ -1,40 +1,5 @@
-// import { evaluate } from 'mathjs'
 import { Parser } from 'expr-eval'
 
-export const NUMBER_FORMAT = {
-  eu: { name: '1234.56 -> 1.234,56', code: 'de-DE' },
-  international: { name: '1234.56 -> 1,234.56', code: 'en-EN' },
-}
-
-export const getFormattedValue = (value, digits = 0) => {
-  const profileStore = useProfileStore()
-  if (!profileStore.dashboard.showAccountAmounts) {
-    return '******'
-  }
-  if (profileStore.dashboard.showDecimal) {
-    digits = 2
-  }
-  let numberFormatCode = profileStore.numberFormat.code ?? NUMBER_FORMAT.eu.code
-  return new Intl.NumberFormat(numberFormatCode, {
-    minimumFractionDigits: digits,
-    maximumFractionDigits: digits,
-  }).format(value)
-}
-
-export const isStringANumber = (value) => {
-  if (!value || value === '' || value === ' ') {
-    return false
-  }
-  return !isNaN(value)
-}
-
-export const isStringAMathExpression = (value) => {
-  if (!value || value === '' || value === ' ') {
-    return false
-  }
-
-  return /^[\d\s()+\-*/.^%]*$/.test(value)
-}
 const parser = new Parser()
 
 export const evalMath = (value) => {
@@ -48,7 +13,7 @@ export const evalMath = (value) => {
 
   try {
     let sanitizedValue = sanitizeMathString(value)
-    let newValue = parser.evaluate(sanitizedValue).toFixed(2)
+    let newValue = parser.evaluate(sanitizedValue)
     return {
       wasSuccessful: true,
       hasChanged: newValue !== value,

@@ -121,7 +121,8 @@ class Transaction extends BaseModel {
   }
 
   static formatAmount(amount) {
-    return (Math.round(amount * 100) / 100).toFixed(2)
+    // return (Math.round(amount * 100) / 100).toFixed(2)
+    return amount
   }
 
   static getTransactionTypeForAccounts({ source, destination }) {

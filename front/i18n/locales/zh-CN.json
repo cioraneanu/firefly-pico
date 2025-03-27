@@ -300,7 +300,8 @@
   },
   "currency_page": {
     "title_add": "添加货币",
-    "title_edit": "编辑货币"
+    "title_edit": "编辑货币",
+    "decimal_places": "小数位"
   },
   "budget_page": {
     "title_add": "添加预算",
@@ -310,6 +311,9 @@
     "interval": "间隔",
     "type": "预算类型",
     "period": "预算周期"
+  },
+  "exchange_rate_page": {
+    "relative_to_usd": "相对于美元"
   },
   "dashboard": {
     "title": "仪表板",

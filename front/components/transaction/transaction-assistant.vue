@@ -195,7 +195,7 @@ const processAssistantText = () => {
 
   let numerical = match[2]
   let { wasSuccessful, value } = evalMath(numerical)
-  foundAmount.value = numerical && wasSuccessful ? value : null
+  foundAmount.value = numerical && wasSuccessful ? value.toString() : null
 
   foundDescription.value = match[3] || ''
 

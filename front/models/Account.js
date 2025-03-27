@@ -4,7 +4,7 @@ import AccountTransformer from '~/transformers/AccountTransformer'
 import AccountRepository from '~/repository/AccountRepository'
 import _, { get } from 'lodash'
 import Transaction from '~/models/Transaction'
-import { NUMBER_FORMAT } from '~/utils/MathUtils.js'
+import { NUMBER_FORMAT } from '~/utils/NumberUtils.js'
 import Currency from '~/models/Currency.js'
 
 export default class Account extends BaseModel {

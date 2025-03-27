@@ -49,7 +49,7 @@ const barsList = computed(() => {
     return {
       category: category,
       label: category ? Category.getDisplayName(category) : t('not_set'),
-      value: getFormattedValue(amount, 0),
+      value: formatNumberForDashboard(amount),
       percent: percent,
     }
   })
