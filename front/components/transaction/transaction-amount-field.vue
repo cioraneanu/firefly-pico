@@ -170,6 +170,9 @@ const currencyForeignSymbol = computed(() => Currency.getSymbol(currencyForeign.
 const currencyCode = computed(() => Currency.getCode(props.currency))
 const currencyForeignCode = computed(() => Currency.getCode(currencyForeign.value))
 
+const currencyDecimalPlaces = computed(() => Currency.getDecimalPlaces(props.currency))
+const currencyForeignDecimalPlaces = computed(() => Currency.getDecimalPlaces(currencyForeign.value))
+
 const transactionInputClass = computed(() => {
   return {
     transactionAmountField: true,
@@ -196,7 +199,7 @@ const onFocus = () => {
 
 const onBlur = async () => {
   isInputFocused.value = false
-  amount.value = await evaluateModelValue(amount.value)
+  amount.value = (await evaluateModelValue(amount.value)).toFixed(currencyDecimalPlaces.value)
 
   // On iOS if you hide the keyboard via the "Done" button, onBlur gets called but it's not actually blurred. This is a temp fix...
   inputAmount.value?.blur()
@@ -247,14 +250,14 @@ const convertAmountToForeign = () => {
   if (!isConversionValid()) {
     return
   }
-  amountForeign.value = convertCurrency(amount.value, currencyCode.value, currencyForeignCode.value).toFixed(2)
+  amountForeign.value = convertCurrency(amount.value, currencyCode.value, currencyForeignCode.value).toFixed(currencyForeignDecimalPlaces.value)
 }
 
 const convertForeignToAmount = () => {
   if (!isConversionValid()) {
     return
   }
-  amount.value = convertCurrency(amountForeign.value, currencyForeignCode.value, currencyCode.value).toFixed(2)
+  amount.value = convertCurrency(amountForeign.value, currencyForeignCode.value, currencyCode.value).toFixed(currencyDecimalPlaces.value)
 }
 
 onMounted(() => {

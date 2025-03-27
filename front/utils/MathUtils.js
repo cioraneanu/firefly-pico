@@ -2,7 +2,7 @@ import { Parser } from 'expr-eval'
 
 const parser = new Parser()
 
-export const evalMath = (value, decimals = 2) => {
+export const evalMath = (value) => {
   if (!value || value === '') {
     return {
       wasSuccessful: true,
@@ -13,7 +13,7 @@ export const evalMath = (value, decimals = 2) => {
 
   try {
     let sanitizedValue = sanitizeMathString(value)
-    let newValue = parser.evaluate(sanitizedValue).toFixed(decimals)
+    let newValue = parser.evaluate(sanitizedValue)
     return {
       wasSuccessful: true,
       hasChanged: newValue !== value,
