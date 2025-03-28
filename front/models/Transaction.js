@@ -4,6 +4,7 @@ import TransactionRepository from '~/repository/TransactionRepository'
 import { useProfileStore } from '~/stores/profileStore'
 import Account from '~/models/Account'
 import _, { get, isEqual } from 'lodash'
+import Currency from '~/models/Currency.js'
 
 class Transaction extends BaseModel {
   getTransformer() {
@@ -44,7 +45,7 @@ class Transaction extends BaseModel {
             accountDestination: profileStore.defaultAccountDestination,
             type: type,
             category: profileStore.defaultCategory,
-            currencyForeign: profileStore.defaultForeignCurrency
+            currencyForeign: profileStore.defaultForeignCurrency,
           },
         ],
       },
@@ -97,11 +98,17 @@ class Transaction extends BaseModel {
   }
 
   static getCurrency(transaction) {
+    return get(transaction, 'attributes.transactions.0.currency', [])
+  }
+
+  static getCurrencyCode(transaction) {
     return get(transaction, 'attributes.transactions.0.currency_code', [])
   }
 
   static getTags(transaction) {
-    return get(transaction, 'attributes.transactions', []).map(item => item.tags).flat()
+    return get(transaction, 'attributes.transactions', [])
+      .map((item) => item.tags)
+      .flat()
   }
 
   static getCategoryId(transaction) {
@@ -113,7 +120,9 @@ class Transaction extends BaseModel {
   }
 
   static getAmountFormatted(transaction) {
-    return this.getAmount(transaction).toFixed(2)
+    let currency = this.getCurrency(transaction)
+    let digits = Currency.getDecimalPlaces(currency)
+    return this.getAmount(transaction).toFixed(digits)
   }
 
   static getDate(transaction) {

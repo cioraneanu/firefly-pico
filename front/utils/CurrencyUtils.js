@@ -11,8 +11,7 @@ export function convertCurrency(amount, fromCurrency, toCurrency) {
 
 export function convertTransactionAmountToCurrency(transaction, accountCurrency) {
   const amount = Transaction.getAmount(transaction)
-  const currency = Transaction.getCurrency(transaction)
-
+  const currency = Transaction.getCurrencyCode(transaction)
   return convertCurrency(amount, currency, accountCurrency)
 }
 

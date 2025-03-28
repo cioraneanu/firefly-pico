@@ -24,7 +24,6 @@
               <span class="tag-gray list-item-subtitle mt-5">{{ $t('account_page.balance') }}: {{ accountBalance }}</span>
             </div>
           </div>
-
         </div>
       </template>
     </van-cell>
@@ -36,7 +35,7 @@
 </template>
 
 <script setup>
-import _, { get } from 'lodash'
+import { get } from 'lodash'
 import { useDataStore } from '~/stores/dataStore'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import TablerIconConstants from '~/constants/TablerIconConstants'
@@ -48,13 +47,16 @@ const props = defineProps({
 
 const emit = defineEmits(['onEdit', 'onDelete'])
 
-const dataStore = useDataStore()
+const { t } = useI18n()
 
-const displayName = computed(() => _.get(props.value, 'attributes.name', ' - '))
+const displayName = computed(() => get(props.value, 'attributes.name', ' - '))
 
-const accountType = computed(() => _.get(props.value, 'attributes.type.name', ' - '))
-const accountRole = computed(() => _.get(props.value, 'attributes.account_role.name'))
-const currencySymbol = computed(() => _.get(props.value, 'attributes.currency_code'))
+const accountType = computed(() => t(get(props.value, 'attributes.type.t')))
+const accountRole = computed(() => {
+  let translate = get(props.value, 'attributes.account_role.t')
+  return translate ? t(translate) : null
+})
+const currencySymbol = computed(() => get(props.value, 'attributes.currency_code'))
 const accountBalance = computed(() => Account.getBalanceWithCurrency(props.value))
 const icon = computed(() => Account.getIcon(props.value))
 

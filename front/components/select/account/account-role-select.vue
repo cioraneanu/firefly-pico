@@ -1,5 +1,15 @@
 <template>
-  <app-select :label="$t('account_page.account_role')" popupTitle="Select an account role" v-model="modelValue" v-model:showDropdown="showDropdown" :list="list" :columns="1" v-bind="dynamicAttrs" :has-search="false">
+  <app-select
+    :label="$t('account_page.account_role')"
+    popupTitle="Select an account role"
+    v-model="modelValue"
+    v-model:showDropdown="showDropdown"
+    :list="list"
+    :columns="1"
+    v-bind="dynamicAttrs"
+    :has-search="false"
+    :getDisplayValue="getDisplayValue"
+  >
     <template #left-icon>
       <app-icon :icon="TablerIconConstants.fieldSelect2" :size="20" />
     </template>
@@ -17,4 +27,7 @@ const modelValue = defineModel()
 
 const list = Account.roleAssetsList()
 const showDropdown = ref(null)
+
+const { t } = useI18n()
+const getDisplayValue = (item) => (item.t ? t(item.t) : item.name)
 </script>

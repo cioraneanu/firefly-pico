@@ -124,7 +124,7 @@ const visibleTags = computed(() => {
 
 // const transactionAmount = computed(() => _.get(props.value, 'attributes.transactions.0.amount', ' - '))
 
-const transactionAmount = computed(() => Transaction.getAmount(props.value))
+const transactionAmount = computed(() => Transaction.getAmountFormatted(props.value))
 const transactionCurrency = computed(() => _.get(firstTransaction.value, 'currency_symbol', ' - '))
 
 const isTransactionExpense = computed(() => isEqual(transactionType.value, Transaction.types.expense))

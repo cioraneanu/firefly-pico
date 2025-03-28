@@ -8,6 +8,7 @@
     :columns="1"
     v-bind="dynamicAttrs"
     :has-search="false"
+    :getDisplayValue="getDisplayValue"
   >
     <template #left-icon>
       <app-icon :icon="TablerIconConstants.fieldSelect2" :size="20" />
@@ -26,4 +27,7 @@ const modelValue = defineModel()
 
 const list = Account.liabilityDirectionsList()
 const showDropdown = ref(null)
+
+const { t } = useI18n()
+const getDisplayValue = (item) => (item.t ? t(item.t) : item.name)
 </script>

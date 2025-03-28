@@ -31,8 +31,12 @@ export default class TransactionTransformer extends ApiTransformer {
 
       transaction.amount = Transaction.formatAmount(_.get(transaction, 'amount', 0))
       transaction.amountForeign = Transaction.formatAmount(_.get(transaction, 'foreign_amount', 0))
+
       let currencyForeignId = get(transaction, 'foreign_currency_id')
       transaction.currencyForeign = currencyForeignId ? dataStore.currencyDictionary[currencyForeignId] : null
+
+      let currencyId = get(transaction, 'currency_id')
+      transaction.currency = currencyId ? dataStore.currencyDictionary[currencyId] : null
 
       transaction.date = DateUtils.autoToDate(transaction.date)
       transaction.accountSource = accountsDictionary[transaction['source_id']]

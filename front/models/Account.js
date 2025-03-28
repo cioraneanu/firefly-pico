@@ -87,27 +87,31 @@ export default class Account extends BaseModel {
       asset: {
         order: 1,
         name: 'Asset',
+        t: 'account_page.account_type_asset',
         fireflyCode: 'asset',
       },
       revenue: {
         order: 2,
         name: 'Revenue',
+        t: 'account_page.account_type_revenue',
         fireflyCode: 'revenue',
       },
       expense: {
         order: 3,
         name: 'Expense',
+        t: 'account_page.account_type_expense',
         fireflyCode: 'expense',
       },
-
       liability: {
         order: 4,
         name: 'Liability',
+        t: 'account_page.account_type_liability',
         fireflyCode: 'liabilities',
       },
       cash: {
         order: 5,
         name: 'Cash',
+        t: 'account_page.account_type_cash',
         fireflyCode: 'cash',
       },
     }
@@ -123,22 +127,27 @@ export default class Account extends BaseModel {
     return {
       default: {
         name: 'Default',
+        t: 'account_page.account_role_default',
         fireflyCode: 'defaultAsset',
       },
       shared: {
         name: 'Shared',
+        t: 'account_page.account_role_shared',
         fireflyCode: 'sharedAsset',
       },
       saving: {
         name: 'Savings',
+        t: 'account_page.account_role_savings',
         fireflyCode: 'savingAsset',
       },
       creditCard: {
         name: 'Credit card',
+        t: 'account_page.account_role_credit_card',
         fireflyCode: 'ccAsset',
       },
       cash: {
         name: 'Cash',
+        t: 'account_page.account_type_cash',
         fireflyCode: 'cashWalletAsset',
       },
     }
@@ -220,7 +229,7 @@ export default class Account extends BaseModel {
     }).format(amount)
 
     let currency = this.getCurrencySymbol(account)
-    return [amount, currency].filter(item => !!item).join(' ')
+    return [amount, currency].filter((item) => !!item).join(' ')
   }
 
   static getIsActive(account) {
