@@ -22,7 +22,7 @@
           </app-repeater>
         </div>
 
-        <transaction-amount-field v-model="amount" ref="refAmount" />
+        <transaction-amount-field v-model:amount="amount" ref="refAmount" />
 
         <account-select v-model="account_source" :label="$t('transaction.source_account')" :allowed-types="accountSourceAllowedTypes" />
 
@@ -74,7 +74,6 @@ let dataStore = useDataStore()
 let profileStore = useProfileStore()
 const route = useRoute()
 const { t } = useI18n()
-
 
 const form = ref(null)
 
@@ -142,7 +141,7 @@ onMounted(async () => {
 
 const toolbar = useToolbar()
 toolbar.init({
-  title:  itemId.value ? t('transaction_template_page.title_edit') : t('transaction_template_page.title_add'),
+  title: itemId.value ? t('transaction_template_page.title_edit') : t('transaction_template_page.title_add'),
   backRoute: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST,
 })
 </script>

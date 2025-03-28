@@ -14,7 +14,8 @@ export default class TransactionTemplateTransformer extends ApiTransformer {
     const categoryDictionary = dataStore.categoryDictionary
     const tagDictionaryById = dataStore.tagDictionaryById
 
-    item.amount = Transaction.formatAmount(get(item, 'amount', 0))
+    // item.amount = Transaction.formatAmountForCurrency(get(item, 'amount', 0))
+    item.amount = item.amount ?? '0'
 
     // item.date = DateUtils.autoToDate(item.date)
     item.account_source = accountsDictionary[item['account_source_id']]

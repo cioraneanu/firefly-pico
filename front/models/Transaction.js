@@ -129,9 +129,9 @@ class Transaction extends BaseModel {
     return get(transaction, 'attributes.transactions.0.date')
   }
 
-  static formatAmount(amount) {
-    // return (Math.round(amount * 100) / 100).toFixed(2)
-    return amount
+  static formatAmountForCurrency(amount, currency) {
+    let decimals = Currency.getDecimalPlaces(currency) ?? 2
+    return parseFloat(amount).toFixed(decimals)
   }
 
   static getTransactionTypeForAccounts({ source, destination }) {

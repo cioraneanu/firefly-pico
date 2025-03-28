@@ -29,15 +29,14 @@ export default class TransactionTransformer extends ApiTransformer {
       let hasMissingCategory = transaction['category_id'] && !categoryDictionary[transaction['category_id']]
       let hasMissingTag = false
 
-      transaction.amount = Transaction.formatAmount(_.get(transaction, 'amount', 0))
-      transaction.amountForeign = Transaction.formatAmount(_.get(transaction, 'foreign_amount', 0))
-
       let currencyForeignId = get(transaction, 'foreign_currency_id')
       transaction.currencyForeign = currencyForeignId ? dataStore.currencyDictionary[currencyForeignId] : null
 
       let currencyId = get(transaction, 'currency_id')
       transaction.currency = currencyId ? dataStore.currencyDictionary[currencyId] : null
 
+      transaction.amount = Transaction.formatAmountForCurrency(transaction?.amount, transaction.currency)
+      transaction.amountForeign = Transaction.formatAmountForCurrency(transaction?.foreign_amount, transaction.currencyForeign)
       transaction.date = DateUtils.autoToDate(transaction.date)
       transaction.accountSource = accountsDictionary[transaction['source_id']]
       transaction.accountDestination = accountsDictionary[transaction['destination_id']]
