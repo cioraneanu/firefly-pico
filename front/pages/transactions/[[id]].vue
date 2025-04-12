@@ -232,18 +232,21 @@ const onCreateClone = async () => {
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_ID}?transaction_id=${itemId.value}`)
 }
 
-const onTransactionTemplateSelected = (transactionTemplate) => {
+const onTransactionTemplateSelected = async (transactionTemplate) => {
   if (!transactionTemplate) {
     item.value = new Transaction().getEmpty()
     return
   }
   type.value = transactionTemplate.type
+  // We have a watch on type that swaps source/destination accounts for type Income. We don't want anything reversed when using templates
+  // Maybe in the future remove the nextTick below rework the logic inside the watch...
+  await nextTick()
   amount.value = transactionTemplate.amount
-  if (!accountSource.value) {
+  if (transactionTemplate.account_source_id) {
     accountSource.value = dataStore.accountDictionary[transactionTemplate.account_source_id]
   }
 
-  if (!accountDestination.value) {
+  if (transactionTemplate.account_destination_id) {
     accountDestination.value = dataStore.accountDictionary[transactionTemplate.account_destination_id]
   }
   description.value = transactionTemplate.description
@@ -394,6 +397,7 @@ watch(type, (newValue, oldValue) => {
 })
 
 watch(description, (newValue) => {
+  newValue = newValue ?? ''
   if (profileStore.lowerCaseTransactionDescription) {
     newValue = newValue.toLowerCase()
   }

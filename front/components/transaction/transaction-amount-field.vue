@@ -199,7 +199,10 @@ const onFocus = () => {
 
 const onBlur = async () => {
   isInputFocused.value = false
-  amount.value = (await evaluateModelValue(amount.value)).toFixed(currencyDecimalPlaces.value)
+  let newAmount = (await evaluateModelValue(amount.value))
+  newAmount = (currencyDecimalPlaces.value) ? newAmount.toFixed(currencyDecimalPlaces.value) : newAmount.toString()
+
+  amount.value = newAmount
 
   // On iOS if you hide the keyboard via the "Done" button, onBlur gets called but it's not actually blurred. This is a temp fix...
   inputAmount.value?.blur()

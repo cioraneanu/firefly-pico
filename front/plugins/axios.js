@@ -27,7 +27,9 @@ axios.interceptors.request.use(
 const MAX_RETRIES = 2
 
 const retryRequest = async (error) => {
-  const isTimeout = error.code === 'ECONNABORTED' || error.message.includes('timeout') || error.message.includes('Failed to connect to')
+  let errorMessage = get(error, 'response.data.message') ?? get(error, 'message') ?? ''
+
+  const isTimeout = error.code === 'ECONNABORTED' || errorMessage.includes('timeout') || errorMessage.includes('Failed to connect to')
   if (!isTimeout) {
     return
   }
