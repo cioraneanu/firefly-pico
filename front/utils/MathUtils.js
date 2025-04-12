@@ -7,7 +7,7 @@ export const evalMath = (value) => {
     return {
       wasSuccessful: true,
       hasChanged: true,
-      value: '0',
+      value: null,
     }
   }
 

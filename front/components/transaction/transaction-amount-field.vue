@@ -119,7 +119,7 @@ import { useDataStore } from '~/stores/dataStore'
 import { moveInputCursorToEnd, sleep } from '~/utils/VueUtils'
 import { evalMath, removeEndOperators, sanitizeAmount } from '~/utils/MathUtils'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
-import { get } from 'lodash'
+import { cloneDeep, get } from 'lodash'
 import Currency from '~/models/Currency.js'
 
 const profileStore = useProfileStore()
@@ -199,9 +199,10 @@ const onFocus = () => {
 
 const onBlur = async () => {
   isInputFocused.value = false
-  let newAmount = (await evaluateModelValue(amount.value))
-  newAmount = (currencyDecimalPlaces.value) ? newAmount.toFixed(currencyDecimalPlaces.value) : newAmount.toString()
-
+  let newAmount = await evaluateModelValue(amount.value)
+  if (newAmount) {
+    newAmount = currencyDecimalPlaces.value ? newAmount.toFixed(currencyDecimalPlaces.value) : newAmount.toString()
+  }
   amount.value = newAmount
 
   // On iOS if you hide the keyboard via the "Done" button, onBlur gets called but it's not actually blurred. This is a temp fix...
