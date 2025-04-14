@@ -314,7 +314,7 @@ const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemp
   }
 
   if (transactionTemplate) {
-    onTransactionTemplateSelected(transactionTemplate)
+    await onTransactionTemplateSelected(transactionTemplate)
   } else {
     type.value = Transaction.types.expense
   }
