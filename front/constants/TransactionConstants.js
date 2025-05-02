@@ -32,13 +32,13 @@ export const transactionFormField = {
     isVisible: true,
   },
   date: {
-    t: 'Date',
+    t: 'date',
     code: 'date',
     icon: TablerIconConstants.settingsUserPreferencesDate,
     isVisible: true,
   },
   notes: {
-    t: 'Notes',
+    t: 'notes',
     code: 'notes',
     icon: TablerIconConstants.fieldText1,
     isVisible: true,

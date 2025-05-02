@@ -1,30 +1,35 @@
 // import { flags } from '~/constants/SvgConstants.js'
 
 export const languageCode = {
-  en: 'en',
-  ro: 'ro',
-  zhCn: 'zh-CN'
+  english: 'en',
+  romanian: 'ro',
+  chinese: 'zh-CN',
+  italian: 'it'
 }
 
 export const supportedLanguages = [
   {
-    code: languageCode.en,
+    code: languageCode.english,
     file: 'en.json',
     displayName: 'English',
     icon: 'svgo-flags-en',
   },
   {
-    code: languageCode.ro,
+    code: languageCode.romanian,
     file: 'ro.json',
     displayName: 'Română',
     icon: 'svgo-flags-ro',
   },
   {
-    code: languageCode.zhCn,
+    code: languageCode.chinese,
     file: 'zh-CN.json',
     displayName: '简体中文',
     icon: 'svgo-flags-cn',
-
-    // icon: flags.ro,
+  },
+  {
+    code: languageCode.italian,
+    file: 'it.json',
+    displayName: 'Italiano',
+    icon: 'svgo-flags-it',
   },
 ]

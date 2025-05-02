@@ -157,7 +157,7 @@
       "watchers_info": "Macro che vengono applicate quando viene creata una transazione",
       "copy_tag_to_description": "Quando seleziono un tag copia il suo nome della descrizione",
       "copy_tag_to_category": "Quando seleziono un tag copia il suo nome tra le categorie",
-      "copy_category_to_description": "Quando selezionno una categoria copia il suo nome nella descrizione,
+      "copy_category_to_description": "Quando selezionno una categoria copia il suo nome nella descrizione",
       "quick_amounts": {
         "title": "Quick transaction amounts",
         "value": "Importo"
