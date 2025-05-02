@@ -332,9 +332,10 @@ const isTypeExpense = computed(() => isEqual(type.value, Transaction.types.expen
 const isTypeIncome = computed(() => isEqual(type.value, Transaction.types.income))
 const isTypeTransfer = computed(() => isEqual(type.value, Transaction.types.transfer))
 
-const getStyleForField = (code) => {
-  let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === code)
-  let field = profileStore.transactionFormFieldsConfig.find((item) => item.code === code)
+const getStyleForField = (fieldType) => {
+  let fieldCode = fieldType.code
+  let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
+  let field = profileStore.transactionFormFieldsConfig.find((item) => item.code === fieldCode)
   let isVisible = field ? field.isVisible : true
   let displayStyle = isVisible ? '' : 'display: none'
 
