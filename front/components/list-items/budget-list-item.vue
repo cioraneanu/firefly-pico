@@ -2,9 +2,9 @@
   <van-swipe-cell ref="swipeCell" v-bind="clickWithoutSwipe">
     <van-cell>
       <template #title>
-        <div class="list-item-container">
+        <div class="list-item-container" :class="itemClass">
           <div class="first_column flex-center flex-column">
-<!--            <app-icon :icon="icon ?? TablerIconConstants.budget" :size="TablerIconConstants.defaultSize" />-->
+            <!--            <app-icon :icon="icon ?? TablerIconConstants.budget" :size="TablerIconConstants.defaultSize" />-->
             <budget-icon :value="props.value" />
           </div>
 
@@ -15,7 +15,7 @@
               <div class="flex-1">{{ displayName }}</div>
               <div class="text-size-12">{{ budgetLimitSpent }} / {{ budgetLimitAmount }} {{ budgetCurrencySymbol }}</div>
             </div>
-<!--            <bar-chart-item-horizontal :percent="budgetLimitPercent" class="p-0 mb-10" />-->
+            <!--            <bar-chart-item-horizontal :percent="budgetLimitPercent" class="p-0 mb-10" />-->
             <div class="display-flex flex-wrap gap-1 mt-5">
               <div class="tag-gray list-item-subtitle text-size-12">{{ budgetType }}</div>
               <div v-if="budgetAmount" class="tag-gray list-item-subtitle text-size-12">{{ budgetPeriod }}</div>
@@ -52,6 +52,10 @@ const budgetAmount = computed(() => get(props.value, 'attributes.amount', ' - ')
 const budgetLimitSpent = computed(() => Math.abs(get(budgetLimit.value, `attributes.spent`, 0)))
 const budgetLimitAmount = computed(() => get(budgetLimit.value, 'attributes.amount') ?? 0)
 const budgetCurrencySymbol = computed(() => Budget.getCurrencySymbol(props.value))
+
+const itemClass = computed(() => ({
+  'list-item-disabled': !get(props.value, 'attributes.active'),
+}))
 
 const onEdit = async (e) => {
   emit('onEdit', props.value)

@@ -20,6 +20,7 @@ export default class Budget extends BaseModel {
     return {
       attributes: {
         name: '',
+        active: true,
         icon: null,
         auto_budget_type: Budget.types.fixed,
         auto_budget_period: Budget.periods.monthly,

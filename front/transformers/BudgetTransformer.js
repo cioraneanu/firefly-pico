@@ -35,6 +35,7 @@ export default class BudgetTransformer extends ApiTransformer {
     let result = {
       name: get(data, 'name', ''),
       icon: get(data, 'icon.icon'),
+      active: get(data, 'active'),
       auto_budget_type: budgetTypeCode,
     }
 

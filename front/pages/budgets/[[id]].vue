@@ -29,6 +29,8 @@
           <currency-select v-model="currency" name="currency" :rules="[rule.required()]" required />
           <app-field v-model="amount" name="amount" :label="$t('amount')" :icon="TablerIconConstants.cashBanknote" :rules="[rule.required()]" />
         </template>
+
+        <app-boolean v-model="active" :label="$t('active')" />
       </van-cell-group>
 
       <div style="margin: 16px">
@@ -57,6 +59,7 @@ import Budget from '~/models/Budget.js'
 import AccountTypeSelect from '~/components/select/account/account-type-select.vue'
 import BudgetLimit from '~/models/BudgetLimit.js'
 import { rule } from '~/utils/ValidationUtils.js'
+import { TUTORIAL_CONSTANTS } from '~/constants/TutorialConstants.js'
 
 let dataStore = useDataStore()
 let profileStore = useProfileStore()
@@ -103,13 +106,14 @@ let { itemId, item, isEmpty, addButtonText, isLoading, onClickBack, saveItem, on
   onEvent: onEvent,
 })
 
-const { name, icon, type, period, currency, amount } = generateChildren(item, [
+const { name, icon, type, period, currency, amount, active } = generateChildren(item, [
   { computed: 'name', parentKey: 'attributes.name' },
   { computed: 'icon', parentKey: `attributes.icon` },
   { computed: 'type', parentKey: `attributes.auto_budget_type` },
   { computed: 'period', parentKey: `attributes.auto_budget_period` },
   { computed: 'currency', parentKey: `attributes.currency` },
   { computed: 'amount', parentKey: `attributes.amount` },
+  { computed: 'active', parentKey: `attributes.active` },
 ])
 
 watch(name, (newValue) => {
