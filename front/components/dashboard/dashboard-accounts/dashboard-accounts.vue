@@ -5,7 +5,7 @@
     </div>
 
     <van-grid :column-num="2">
-      <van-grid-item v-for="account in visibleDashboardAccounts" :key="account.id" @click="onShowActionSheet(account)">
+      <van-grid-item v-for="account in dataStore.dashboardAccountsVisible" :key="account.id" @click="onShowActionSheet(account)">
         <template #icon>
           <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="24" />
         </template>
@@ -14,22 +14,16 @@
           <div class="display-flex flex-column align-items-center">
             <div class="font-400 text-size-12 text-center text-muted">{{ Account.getDisplayName(account) }}</div>
             <div class="font-700 text-size-12 text-center">{{ getAccountAmount(account) }}</div>
+            <div v-if="!Account.getIsIncludedInNetWorth(account)" class="mt-1 font-400 text-size-11 text-center badge-excluded-net-worth">Not in net worth</div>
           </div>
         </template>
       </van-grid-item>
     </van-grid>
 
-    <div v-if="hasHiddenAccounts" class="flex-center">
-      <div @click="toggleHiddenAccounts" class="p-5 m-5 button-link">
-        {{ showHiddenAccounts ? 'View less...' : 'View more...' }}
-        <component :is="showHiddenAccounts ? IconLibraryMinus : IconLibraryPlus" :size="20" :stroke="1.7" />
-      </div>
-    </div>
-
     <div class="flex-center text-size-13 m-10 flex-wrap">
       <div class="flex-center text-size-13 me-1">
         <icon-cash class="text-muted" :size="24" :stroke="1.5" />
-        <span class="font-400 text-muted">{{ $t('total')}}: </span>
+        <span class="font-400 text-muted">{{ $t('total') }}: </span>
       </div>
 
       <span v-for="(totalValue, totalCurrency) in dataStore.dashboardAccountsTotalByCurrency" class="font-700 ms-1 mx-1 app-select-option-tag">
@@ -38,7 +32,7 @@
     </div>
 
     <div v-if="hasMultipleCurrencies" class="flex-center text-size-13 mb-3 gap-1">
-      <span class="font-700">~{{ accountTotal }} {{ Currency.getCode(dataStore.dashboardCurrency)  }}</span>
+      <span class="font-700">~{{ accountTotal }} {{ Currency.getCode(dataStore.dashboardCurrency) }}</span>
     </div>
   </van-cell-group>
 </template>
@@ -59,13 +53,6 @@ const showHiddenAccounts = ref(false)
 const toggleHiddenAccounts = () => {
   showHiddenAccounts.value = !showHiddenAccounts.value
 }
-
-const visibleDashboardAccounts = computed(() => {
-  const sortedAccounts = dataStore.dashboardAccounts.sort((a, b) => Account.getIsVisibleOnDashboard(b) - Account.getIsVisibleOnDashboard(a))
-  return showHiddenAccounts.value ? sortedAccounts : sortedAccounts.filter((account) => Account.getIsVisibleOnDashboard(account))
-})
-
-const hasHiddenAccounts = computed(() => dataStore.dashboardAccounts.some((account) => !Account.getIsVisibleOnDashboard(account)))
 
 const accountTotal = computed(() => {
   return formatNumberForDashboard(dataStore.dashboardAccountsEstimatedTotal)

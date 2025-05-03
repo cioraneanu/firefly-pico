@@ -80,15 +80,24 @@ export const useDataStore = defineStore('data', {
       const profileStore = useProfileStore()
       return state.accountList.filter((account) => {
         const isTypeAssetOrLiability = [Account.types.asset.fireflyCode, Account.types.liability.fireflyCode].includes(Account.getType(account)?.fireflyCode)
-
         return (
-          isTypeAssetOrLiability && Account.getIsActive(account) && Account.getIsIncludedInNetWorth(account) && (Account.getBalance(account) != 0 || profileStore.dashboard.areEmptyAccountsVisible)
+          isTypeAssetOrLiability && Account.getIsActive(account) && (Account.getBalance(account) != 0 || profileStore.dashboard.areEmptyAccountsVisible)
         )
       })
     },
 
+    dashboardAccountsVisible(state) {
+      return this.dashboardAccounts.filter((item) => Account.getIsVisibleOnDashboard(item))
+    },
+
+    dashboardAccountsInNetWorth(state) {
+      return this.dashboardAccounts.filter((item) => Account.getIsIncludedInNetWorth(item))
+    },
+
+
+
     dashboardAccountsCurrencyList(state) {
-      return uniq(this.dashboardAccounts.map((account) => get(account, 'attributes.currency')))
+      return uniq(this.dashboardAccountsInNetWorth.map((account) => get(account, 'attributes.currency')))
     },
 
     dashboardCurrencyCode(state) {
@@ -96,7 +105,7 @@ export const useDataStore = defineStore('data', {
     },
 
     dashboardAccountsTotalByCurrency(state) {
-      return this.dashboardAccounts.reduce((result, account) => {
+      return this.dashboardAccountsInNetWorth.reduce((result, account) => {
         let accountCurrency = get(account, 'attributes.currency_code')
         const accountBalance = parseFloat(get(account, 'attributes.current_balance') ?? 0)
         let oldValue = get(result, accountCurrency, 0)

@@ -1099,3 +1099,11 @@ img, svg {
     font-size: 12px;
     font-weight: 400;
 }
+
+
+.badge-excluded-net-worth {
+    background: #E3F2FD;
+    padding: 0px 5px;
+    color: #1565C0;
+    border-radius: 3px;
+}
