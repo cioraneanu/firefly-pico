@@ -16,7 +16,9 @@ export function migrateTypeList(userList, targetList, compareKey = 'code') {
   }
   let newList = userList
     .map((userItem) => {
-      return targetList.find((targetItem) => targetItem.code === userItem.code)
+      let defaultItem = targetList.find((targetItem) => targetItem.code === userItem.code)
+      // We added new keys like "t" in the default item and we want to preserve user choice like "userItem.isVisible"
+      return { ...defaultItem, ...userItem }
     })
     .filter((item) => !!item)
 
