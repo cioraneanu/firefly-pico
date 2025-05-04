@@ -261,7 +261,7 @@ export default class Account extends BaseModel {
       case Transaction.types.expense.code:
         return [Account.types.asset, Account.types.cash, Account.types.liability]
       case Transaction.types.transfer.code:
-        return [Account.types.asset]
+        return [Account.types.asset, Account.types.liability]
     }
     return []
   }
