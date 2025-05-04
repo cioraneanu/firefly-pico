@@ -1,10 +1,10 @@
 <template>
-  <transition name="fade">
+  <transition :name="transitionName">
     <div v-if="profileStore.isLoading" class="app-loading-background">
-        <div class="app-loading flex-column flex-center">
-          <icon-rotate :size="30" :stroke="1.4" class="animate-rotate-infinite" />
-          <div class="text-size-16">{{ profileStore.loadingMessage }}</div>
-        </div>
+      <div class="app-loading flex-column flex-center">
+        <icon-rotate :size="30" :stroke="1.4" class="animate-rotate-infinite" />
+        <div class="text-size-16">{{ profileStore.loadingMessage }}</div>
+      </div>
     </div>
   </transition>
 </template>
@@ -14,10 +14,8 @@ import { IconRotate } from '@tabler/icons-vue'
 import anime from 'animejs'
 
 const profileStore = useProfileStore()
+const transitionName = computed(() => profileStore.showAnimations ? 'fade' : '')
 
-// onMounted(async () => {
-//   await nextTick()
-// })
 </script>
 
 <style></style>

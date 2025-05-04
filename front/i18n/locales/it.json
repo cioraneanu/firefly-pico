@@ -112,6 +112,7 @@
     "ui": {
       "theme": "Tema",
       "title": "Impostazioni dell'interfaccia",
+      "show_animations": "Mostra animazioni",
       "reset_forms_after_creation": "Azzera i campi dopo la creazione",
       "transaction_list": "Lista delle transazioni",
       "select_hero_icons": "Seleziona quali icone Hero mostrare",

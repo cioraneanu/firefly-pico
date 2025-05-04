@@ -112,6 +112,7 @@
     "ui": {
       "theme": "Theme",
       "title": "UI settings",
+      "show_animations": "Show animations",
       "reset_forms_after_creation": "Reset forms after creation",
       "transaction_list": "Transaction list",
       "select_hero_icons": "Select what Hero Icons to show",

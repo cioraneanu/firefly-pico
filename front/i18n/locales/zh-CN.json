@@ -112,6 +112,7 @@
     "ui": {
       "theme": "主题",
       "title": "UI 设置",
+      "show_animations": "显示动画",
       "reset_forms_after_creation": "创建后重置表单",
       "transaction_list": "交易列表",
       "select_hero_icons": "选择要显示的 Hero 图标",

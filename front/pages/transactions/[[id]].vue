@@ -345,11 +345,11 @@ const getStyleForField = (fieldType) => {
 
   // Should be same as income, but reverse the position on source with destination
   if (isTypeIncome.value) {
-    let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === code)
-    if (code === transactionFormField.sourceAccount.code) {
+    let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
+    if (fieldCode === transactionFormField.sourceAccount.code) {
       position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === transactionFormField.destinationAccount.code)
     }
-    if (code === transactionFormField.destinationAccount.code) {
+    if (fieldCode === transactionFormField.destinationAccount.code) {
       position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === transactionFormField.sourceAccount.code)
     }
     return `order: ${position}; ${displayStyle}`
@@ -357,10 +357,10 @@ const getStyleForField = (fieldType) => {
 
   // Transfers
   if (isTypeTransfer.value) {
-    if ([transactionFormField.sourceAccount.code, transactionFormField.destinationAccount.code].includes(code)) {
+    if ([transactionFormField.sourceAccount.code, transactionFormField.destinationAccount.code].includes(fieldCode)) {
       return `order: 0`
     }
-    let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === code)
+    let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
     return `order: ${position}; ${displayStyle}`
   }
 

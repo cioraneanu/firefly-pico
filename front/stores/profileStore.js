@@ -21,6 +21,7 @@ export const useProfileStore = defineStore('profile', {
       darkTheme: useLocalStorage('darkTheme', false),
       language: useLocalStorage('language', 'en'),
       startingPage: useLocalStorage('startingPage', Page.types.transactionNew),
+      showAnimations: useLocalStorage('showAnimations', true),
       resetFormOnCreate: useLocalStorage('resetFormOnCreate', false),
 
       assistantTodoTagMatcher: useLocalStorage('assistantTodoTagMatcher', '!!'),

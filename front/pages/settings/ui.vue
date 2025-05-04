@@ -16,6 +16,8 @@
 
         <page-select v-model="startingPage"></page-select>
 
+        <app-boolean v-model="showAnimations" :label="$t('settings.ui.show_animations')" />
+
         <app-boolean v-model="resetFormOnCreate" :label="$t('settings.ui.reset_forms_after_creation')" />
       </van-cell-group>
 
@@ -43,6 +45,7 @@ const themeText = computed(() => (darkTheme.value ? t('settings.ui.dark') : t('s
 const darkTheme = ref(false)
 const startingPage = ref(null)
 const language = ref(null)
+const showAnimations = ref(true)
 const resetFormOnCreate = ref(false)
 
 
@@ -51,6 +54,7 @@ const syncedSettings = [
   { store: profileStore, path: 'darkTheme', ref: darkTheme },
   { store: profileStore, path: 'language', ref: language },
   { store: profileStore, path: 'startingPage', ref: startingPage },
+  { store: profileStore, path: 'showAnimations', ref: showAnimations },
   { store: profileStore, path: 'resetFormOnCreate', ref: resetFormOnCreate },
 ]
 

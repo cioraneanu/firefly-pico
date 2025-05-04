@@ -112,6 +112,7 @@
     "ui": {
       "theme": "Temă",
       "title": "Setări UI",
+      "show_animations": "Arată animații",
       "reset_forms_after_creation": "Resetează formularele după creare",
       "transaction_list": "Lista tranzacțiilor",
       "select_hero_icons": "Selectează ce iconițe Hero să fie afișate",

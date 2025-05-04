@@ -1,6 +1,11 @@
 import anime from 'animejs'
+import { useProfileStore } from '~/stores/profileStore.js'
 
 export function animateSwipeList(list) {
+  if (!useProfileStore().showAnimations) {
+    return
+  }
+
   watch(list, async (newValue, oldValue) => {
     await nextTick()
 
@@ -17,6 +22,10 @@ export function animateSwipeList(list) {
 }
 
 export async function animateTransactionForm() {
+  if (!useProfileStore().showAnimations) {
+    return
+  }
+
   await nextTick()
 
   const targets = `.vant-card, .transaction-type-container, .van-cell-group`
@@ -36,6 +45,10 @@ export async function animateTransactionForm() {
 }
 
 export async function animateSettings() {
+  if (!useProfileStore().showAnimations) {
+    return
+  }
+
   await nextTick()
 
   anime({
@@ -46,6 +59,10 @@ export async function animateSettings() {
 }
 
 export async function animateDashboard() {
+  if (!useProfileStore().showAnimations) {
+    return
+  }
+
   await nextTick()
 
   anime({
@@ -62,6 +79,10 @@ export async function animateDashboard() {
 }
 
 export async function animateBottomToolbarAddButton() {
+  if (!useProfileStore().showAnimations) {
+    return
+  }
+
   anime({
     targets: `#add-new-transaction`,
     scale: [1, 0.2],
@@ -74,6 +95,10 @@ export async function animateBottomToolbarAddButton() {
 }
 
 export async function animateSaveButton() {
+  if (!useProfileStore().showAnimations) {
+    return
+  }
+
   await nextTick()
 
   anime({
@@ -86,6 +111,10 @@ export async function animateSaveButton() {
 }
 
 export async function animateOnNext(element) {
+  if (!useProfileStore().showAnimations) {
+    return
+  }
+
   await nextTick()
 
   anime({
@@ -99,6 +128,10 @@ export async function animateOnNext(element) {
 }
 
 export async function animateOnPrevious(element) {
+  if (!useProfileStore().showAnimations) {
+    return
+  }
+
   await nextTick()
 
   anime({
