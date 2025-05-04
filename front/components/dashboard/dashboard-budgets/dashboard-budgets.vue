@@ -24,11 +24,12 @@ import { get } from 'lodash'
 import Transaction from '~/models/Transaction.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import AppChip from '~/components/ui-kit/app-chip.vue'
+import Budget from '~/models/Budget.js'
 
 const dataStore = useDataStore()
 // const { t } = useI18n()
 
-const budgetList = dataStore.budgetList
+const budgetList = dataStore.budgetList.filter(item => Budget.isActive(item))
 const hasBudgets = computed(() => budgetList.length > 0)
 
 const budgetLimitTotalFormatted = computed(() => `${formatNumberForDashboard(dataStore.budgetLimitTotal)} ${dataStore.dashboardCurrencyCode}`)

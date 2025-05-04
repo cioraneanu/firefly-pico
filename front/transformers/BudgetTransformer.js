@@ -17,7 +17,7 @@ export default class BudgetTransformer extends ApiTransformer {
     item.attributes.icon = Icon.getIcon(get(item, 'attributes.icon'))
     item.attributes.auto_budget_type = Budget.typesList().find((type) => type.fireflyCode === item.attributes.auto_budget_type)
     item.attributes.auto_budget_period = Budget.periodsList().find((type) => type.fireflyCode === item.attributes.auto_budget_period)
-    item.attributes.currency = dataStore.currencyDictionary[get(item, 'attributes.auto_budget_currency_id')]
+    item.attributes.currency = dataStore.currencyDictionary[get(item, 'attributes.currency_id')]
     item.attributes.amount = get(item, 'attributes.auto_budget_amount')
 
     return item

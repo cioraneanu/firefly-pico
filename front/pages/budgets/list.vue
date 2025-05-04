@@ -11,7 +11,6 @@
     <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
       <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
         <app-list-search v-if="isSearchVisible && list.length > 0" v-model="search" />
-
         <budget-list-item v-for="item in filteredList" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
       </van-list>
     </van-pull-refresh>
@@ -42,11 +41,14 @@ const onEvent = (event, payload) => {
 
 const search = ref('')
 const isSearchVisible = ref(true)
+
+const sortedList = computed(() => list.value.sort((a, b) => b.attributes?.active - a.attributes?.active))
+
 const filteredList = computed(() => {
   if (search.value.length === 0) {
-    return list.value
+    return sortedList.value
   }
-  return list.value.filter((item) => {
+  return sortedList.value.filter((item) => {
     return Budget.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
   })
 })

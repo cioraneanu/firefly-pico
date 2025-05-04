@@ -48,6 +48,10 @@ export default class Budget extends BaseModel {
     return _.get(budget, 'attributes.currency.attributes.symbol', get(dataStore.defaultCurrency, 'attributes.symbol'))
   }
 
+  static isActive(budget) {
+    return get(budget, 'attributes.active')
+  }
+
   // --------
 
   static get types() {
