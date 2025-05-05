@@ -29,8 +29,9 @@ export const evalMath = (value) => {
 }
 
 export const sanitizeMathString = (value) => {
-  // Trim unnecessary spaces and reduce multiple spaces to a single space
-  let cleaned = value.trim().replace(/\s+/g, ' ')
+  // Reduce multiple spaces to a single space, and then remove all spaces around math operators
+  let cleaned = value.trim().replace(/\s+/g, ' ').replace(/\s*([+\-*/()])\s*/g, '$1')
+
 
   // Replace all spaces with the '+' operator
   cleaned = cleaned.replace(/\s+/g, '+')
