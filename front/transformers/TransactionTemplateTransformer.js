@@ -17,10 +17,10 @@ export default class TransactionTemplateTransformer extends ApiTransformer {
     // item.amount = Transaction.formatAmountForCurrency(get(item, 'amount', 0))
     item.amount = item.amount ?? '0'
 
-    // item.date = DateUtils.autoToDate(item.date)
     item.account_source = accountsDictionary[item['account_source_id']]
     item.account_destination = accountsDictionary[item['account_destination_id']]
     item.category = categoryDictionary[item['category_id']]
+    item.budget = dataStore.budgetDictionary[item['budget_id']]
     item.tags = (item.tags ?? []).map((transactionTemplateTag) => tagDictionaryById[transactionTemplateTag.tag_id])
     item.extra_names = get(item, 'extra_names', []).map((item) => {
       return {
@@ -52,6 +52,7 @@ export default class TransactionTemplateTransformer extends ApiTransformer {
       account_source_id: get(item, 'account_source.id') ?? null,
       account_destination_id: get(item, 'account_destination.id') ?? null,
       category_id: get(item, 'category.id') ?? null,
+      budget_id: get(item, 'budget.id'),
       tags: (item.tags ?? []).map((item) => item.id),
       type: get(transactionType, 'fireflyCode'),
       // tags
