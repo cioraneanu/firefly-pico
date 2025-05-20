@@ -253,6 +253,7 @@ const onTransactionTemplateSelected = async (transactionTemplate) => {
   category.value = transactionTemplate.category
   notes.value = transactionTemplate.notes
   tags.value = transactionTemplate.tags
+  budget.value = transactionTemplate.budget
 }
 
 watch(category, async (newValue) => {
