@@ -45,6 +45,11 @@
               {{ Category.getDisplayName(category) }}
             </div>
 
+            <div v-if="budget" class="list-item-subtitle">
+              <app-icon :icon="Budget.getIcon(budget) ?? TablerIconConstants.budget" :size="20" />
+              {{ Budget.getDisplayName(budget) }}
+            </div>
+
             <div v-if="notes" class="list-item-subtitle">
               <app-icon :icon="TablerIconConstants.notes" :size="20" />
               {{ notes }}
@@ -82,6 +87,7 @@ import Category from '~/models/Category'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import Tag from '~/models/Tag.js'
+import Budget from '~/models/Budget.js'
 
 const props = defineProps({
   value: Object,
@@ -100,6 +106,7 @@ const extraNames = computed(() =>
 )
 const description = computed(() => _.get(props.value, 'description', ' - '))
 const notes = computed(() => _.get(props.value, 'notes', ' - '))
+const budget = computed(() => _.get(props.value, 'budget'))
 
 const category = computed(() => _.get(props.value, 'category'))
 const tags = computed(() => get(props.value, 'tags', []))
