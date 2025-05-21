@@ -11,6 +11,7 @@ class Profile extends Model
     protected $fillable = [
         'auth_token_hash',
         'settings',
+        'name',
     ];
 
     protected $casts = [
