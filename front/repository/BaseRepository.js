@@ -91,6 +91,7 @@ class BaseRepository {
       if (filterValue === null || filterValue === undefined || filterValue === '') {
         continue
       }
+      filterValue = encodeURIComponent(filterValue)
       // filters.push(`filter[${filter.field}]=${filterValue}`)
       filters.push(`${filter.field}=${filterValue}`)
     }

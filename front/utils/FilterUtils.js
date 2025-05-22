@@ -18,7 +18,7 @@ export const getActiveFilters = (filterDefinition, filterBag) => {
       }
 
       return {
-        filter: encodeURIComponent(item.filter(bagKeyValue)),
+        filter: item.filter(bagKeyValue),
         display: item.display(bagKeyValue),
         toUrl: item.toUrl?.(bagKeyValue) ?? `${item.bagKey}=${bagKeyValue}`,
       }
