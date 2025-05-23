@@ -2,6 +2,8 @@
   <div class="app-form">
     <app-top-toolbar />
 
+    <profile-picker />
+
     <van-cell-group inset style="overflow: auto">
       <app-field-link :label="$t('settings.setup_entry')" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_SETUP)" />
       <app-field-link :label="$t('settings.ui_entry')" :icon="TablerIconConstants.settingsUI" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_UI)" />

@@ -1107,3 +1107,35 @@ img, svg {
     color: #1565C0;
     border-radius: 3px;
 }
+
+
+.profile-picker {
+    display: flex;
+    align-items: center;
+    padding: 10px 18px;
+    white-space: nowrap;
+    background: #f0f0f0;
+}
+
+.profile-picker-card {
+    background: #fff;
+    font-size: 12px;
+    padding: 5px 5px;
+    border-radius: 5px;
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.profile-picker-card-add {
+    border-radius: 5px;
+    border: 1.5px dashed #000;
+    padding: 5px 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

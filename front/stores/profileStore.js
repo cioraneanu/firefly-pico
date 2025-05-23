@@ -15,6 +15,10 @@ import { migrateType } from '~/utils/MigrateUtils.js'
 export const useProfileStore = defineStore('profile', {
   state: () => {
     return {
+      profileList: [],
+      profile: null,
+
+
       isLoading: false,
       loadingMessage: 'Loading...',
 
