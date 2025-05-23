@@ -42,19 +42,7 @@ class BaseControllerFirefly extends BaseController
         if (!$regexResult) {
             return null;
         }
-//        Log::debug("regexing!", ['$fullUrl' => $fullUrl, '$matches' => $matches, 'url' => $this->url]);
         return config('app.firefly_url') . "/api/v1/" . $matches[2];
-//        return ($baseUrl ?? $this->url) . $matches[1];
-
-
-//        $fullUrl = request()->fullUrl();
-//        $pattern = "#/api/([a-zA-Z0-9\-\_\/]+)(.*)#";
-//        $regexResult = preg_match($pattern, $fullUrl, $matches);
-//        if (!$regexResult) {
-//            return null;
-//        }
-//        Log::debug("regexing!", ['$fullUrl' => $fullUrl, '$matches' => $matches, 'url' => $this->url]);
-//        return ($baseUrl ?? $this->url) . $matches[1];
     }
 
     public function getHttpClient()
