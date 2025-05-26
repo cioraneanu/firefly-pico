@@ -4,7 +4,7 @@ import _ from 'lodash'
 
 class ProfileRepository extends BaseRepository {
   constructor() {
-    super('api/profile')
+    super('api/profiles')
   }
 
   async getProfile() {

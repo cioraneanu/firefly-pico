@@ -6,7 +6,7 @@ export default class ProfileTransformer extends ApiTransformer {
       return null
     }
 
-    return item.settings
+    return item
   }
 
   static transformToApi(item) {

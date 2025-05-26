@@ -11,6 +11,7 @@ return new class extends Migration
     {
         Schema::table('profiles', function (Blueprint $table) {
             $table->string("name")->nullable();
+            $table->dropUnique(['auth_token_hash']);
         });
     }
 
@@ -19,6 +20,7 @@ return new class extends Migration
     {
         Schema::table('profiles', function (Blueprint $table) {
             $table->dropColumn("name");
+            $table->string("auth_token_hash")->unique();
         });
     }
 };

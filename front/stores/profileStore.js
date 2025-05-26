@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import * as LanguageConstants from '~/constants/LanguageConstants'
 import DateUtils from '~/utils/DateUtils'
-import { cloneDeep, get, omit } from 'lodash'
+import { cloneDeep, get, head, omit } from 'lodash'
 import { transactionFormFieldList, transactionListFieldList, transactionListHeroIcon, transactionListHeroIconList } from '~/constants/TransactionConstants.js'
 import { NUMBER_FORMAT } from '~/utils/NumberUtils.js'
 import ProfileRepository from '~/repository/ProfileRepository'
@@ -15,13 +15,13 @@ import { migrateType } from '~/utils/MigrateUtils.js'
 export const useProfileStore = defineStore('profile', {
   state: () => {
     return {
-      profileList: [],
-      profile: null,
-
-
       isLoading: false,
       loadingMessage: 'Loading...',
 
+      profileActiveId: useLocalStorage('profileActiveId', null),
+      profileList: useLocalStorage('profileList', []),
+
+      // Actual fields which update when you change profiles
       darkTheme: useLocalStorage('darkTheme', false),
       language: useLocalStorage('language', 'en'),
       startingPage: useLocalStorage('startingPage', Page.types.transactionNew),
@@ -84,16 +84,32 @@ export const useProfileStore = defineStore('profile', {
   getters: {},
 
   actions: {
-    async fetchProfile() {
+    setProfile(profile) {
+      this.profileActiveId = profile.id
+      this.$patch(profile.settings ?? {})
+    },
+
+    getProfileSettings() {
+      let omitList = ['isLoading', 'loadingMessage', 'dashboard.showAccountAmounts', 'profileActiveId', 'profileList']
+      let data = cloneDeep(this.$state)
+      return omit(data, omitList)
+    },
+
+    async getProfiles() {
       const appStore = useAppStore()
       if (!appStore.syncProfileInDB) {
         return
       }
       this.isLoading = true
-      const response = await new ProfileRepository().getProfile()
-      let responseData = response.data ?? {}
-      responseData = ProfileTransformer.transformFromApi(responseData)
-      this.$patch(responseData)
+
+      const response = await new ProfileRepository().getAll()
+      let responseData = response.data ?? []
+
+      this.profileList = responseData
+      let activeProfile = this.profileActiveId ? responseData.find((item) => item.id === this.profileActiveId) : null
+      activeProfile = activeProfile ?? head(responseData)
+      this.setProfile(activeProfile)
+
       this.isLoading = false
 
       this.migrateProfile()
@@ -104,11 +120,9 @@ export const useProfileStore = defineStore('profile', {
       if (!appStore.syncProfileInDB) {
         return
       }
-
-      let omitList = ['isLoading', 'loadingMessage', 'dashboard.showAccountAmounts']
       this.isLoading = true
-      let data = cloneDeep(this.$state)
-      data = omit(data, omitList)
+
+      let data = this.getProfileSettings()
       await new ProfileRepository().writeProfile(ProfileTransformer.transformToApi(data))
       this.isLoading = false
     },
