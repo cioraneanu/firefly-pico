@@ -85,6 +85,9 @@ export const useProfileStore = defineStore('profile', {
 
   actions: {
     setProfile(profile) {
+      if (!profile) {
+        return
+      }
       this.profileActiveId = profile.id
       this.$patch(profile.settings ?? {})
     },

@@ -14,8 +14,6 @@ export default class ProfileTransformer extends ApiTransformer {
       return null
     }
 
-    return {
-      settings: item,
-    }
+    return item
   }
 }

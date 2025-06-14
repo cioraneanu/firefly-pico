@@ -124,7 +124,7 @@ export function useForm(props) {
       } else {
         let responseId = _.get(response, 'data.data.id')
         itemId.value = _.get(response, 'data.data.id')
-        await navigateTo(`${routeForm}/${responseId}`)
+        routeForm ? await navigateTo(`${routeForm}/${responseId}`) : null
       }
     }
 
@@ -137,7 +137,7 @@ export function useForm(props) {
       let response = await repository.delete(itemId.value)
       if (ResponseUtils.isSuccess(response)) {
         onEvent ? onEvent('onPostDelete', response) : null
-        await navigateTo(routeList)
+        routeList ? await navigateTo(routeList) : null
         UIUtils.showToastSuccess(`Deleted successfully.`, 1000)
       }
     }

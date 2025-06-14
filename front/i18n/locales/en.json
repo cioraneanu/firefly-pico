@@ -349,5 +349,9 @@
     },
     "expenses_by_categories": "Expenses by categories",
     "configure_cards": "Configure cards"
+  },
+  "profile_page": {
+    "title_add": "Add profile",
+    "title_edit": "Edit profile"
   }
 }

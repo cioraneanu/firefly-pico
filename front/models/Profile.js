@@ -12,7 +12,10 @@ class Profile extends BaseModel {
   }
 
   getEmpty() {
-    return {}
+    return {
+      name: '',
+      settings: null
+    }
   }
 
   // ------------

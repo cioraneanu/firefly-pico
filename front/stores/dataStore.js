@@ -80,9 +80,7 @@ export const useDataStore = defineStore('data', {
       const profileStore = useProfileStore()
       return state.accountList.filter((account) => {
         const isTypeAssetOrLiability = [Account.types.asset.fireflyCode, Account.types.liability.fireflyCode].includes(Account.getType(account)?.fireflyCode)
-        return (
-          isTypeAssetOrLiability && Account.getIsActive(account) && (Account.getBalance(account) != 0 || profileStore.dashboard.areEmptyAccountsVisible)
-        )
+        return isTypeAssetOrLiability && Account.getIsActive(account) && (Account.getBalance(account) != 0 || profileStore.dashboard.areEmptyAccountsVisible)
       })
     },
 
@@ -93,8 +91,6 @@ export const useDataStore = defineStore('data', {
     dashboardAccountsInNetWorth(state) {
       return this.dashboardAccounts.filter((item) => Account.getIsIncludedInNetWorth(item))
     },
-
-
 
     dashboardAccountsCurrencyList(state) {
       return uniq(this.dashboardAccountsInNetWorth.map((account) => get(account, 'attributes.currency')))
@@ -472,7 +468,8 @@ export const useDataStore = defineStore('data', {
       let async5 = this.fetchCurrencies()
       let async6 = this.fetchBudgets()
       let async7 = this.fetchExchangeRate()
-      await Promise.all([async1, async2, async3, async4, async5, async6, async7])
+      let async8 = useProfileStore().getProfiles()
+      await Promise.all([async1, async2, async3, async4, async5, async6, async7, async8])
       this.lastSync = new Date()
     },
 

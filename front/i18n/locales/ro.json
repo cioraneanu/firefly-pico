@@ -349,5 +349,9 @@
     },
     "expenses_by_categories": "Cheltuieli pe categorii",
     "configure_cards": "Configurare secțiuni"
+  },
+  "profile_page": {
+    "title_add": "Adaugă profil",
+    "title_edit": "Editează profil"
   }
 }
