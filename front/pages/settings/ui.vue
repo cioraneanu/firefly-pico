@@ -2,6 +2,9 @@
   <div class="app-form">
     <app-top-toolbar />
 
+    <profile-picker />
+
+
     <van-form @submit="onSave" class="">
       <van-cell-group inset>
         <div class="van-cell-group-title mb-0">{{ $t('settings.ui.theme') }}:</div>

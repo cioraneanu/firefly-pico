@@ -351,6 +351,7 @@
     "configure_cards": "Configure cards"
   },
   "profile_page": {
+    "title": "Profiles list",
     "title_add": "Add profile",
     "title_edit": "Edit profile"
   }

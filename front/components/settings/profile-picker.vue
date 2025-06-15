@@ -4,8 +4,9 @@
     <van-loading v-if="profileStore.isLoading"/>
     <div v-else class="profile-picker-container">
       <div class="display-flex font-600 text-size-14">
-        <div class="flex-1">Profiles list</div>
-        <van-button size="small" class="add-button" @click="onAdd">New</van-button>
+        <div class="flex-1">{{ $t('profile_page.title') }}</div>
+        {{ profileStore.profileActiveId }}
+        <van-button size="small" class="add-button" @click="onAdd">{{ $t('new') }}</van-button>
       </div>
 
       <div class="profile-picker-card-list">

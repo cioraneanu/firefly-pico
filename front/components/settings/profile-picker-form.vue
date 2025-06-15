@@ -69,6 +69,7 @@ const onHide = () => {
 
 const onShow = (profile) => {
   item.value = cloneDeep(profile) ?? new Profile().getEmpty()
+
   itemId.value = item.value.id
   showDropdown.value = true
 }

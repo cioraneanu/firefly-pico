@@ -14,7 +14,7 @@ class Profile extends BaseModel {
   getEmpty() {
     return {
       name: '',
-      settings: null
+      settings: useProfileStore().getProfileSettings(),
     }
   }
 

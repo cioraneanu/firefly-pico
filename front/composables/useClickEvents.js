@@ -12,7 +12,6 @@ export function useClickEvents(options = {}) {
 
   const handleClick = ({ single, double }) => {
     clickCount.value++
-    console.log('wtf', clickCount.value)
 
     if (clickCount.value === 1) {
       // Single click - wait to see if double click follows
@@ -20,7 +19,6 @@ export function useClickEvents(options = {}) {
         if (clickCount.value === 1 && single) {
           single()
         }
-        console.log('reset')
 
         clickCount.value = 0
       }, delay)
@@ -28,7 +26,6 @@ export function useClickEvents(options = {}) {
       // Double click - clear timer and execute double click
       clearTimeout(clickTimer.value)
       clickCount.value = 0
-      console.log('double!')
       double?.()
     }
   }

@@ -60,7 +60,7 @@ Route::get('search/transactions', [TransactionController::class, 'getAll']);
 
 Route::get("profiles", [ProfileController::class, 'getAll']);
 Route::post("profiles", [ProfileController::class, 'create']);
-Route::patch("profiles/{id}", [ProfileController::class, 'update'])->where('id', '[0-9]+');
+Route::put("profiles/{id}", [ProfileController::class, 'update'])->where('id', '[0-9]+');
 Route::put("profiles/{id}", [ProfileController::class, 'update'])->where('id', '[0-9]+');
 Route::delete("profiles/{id}", [ProfileController::class, 'delete'])->where('id', '[0-9]+');
 

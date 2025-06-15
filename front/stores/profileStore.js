@@ -88,14 +88,19 @@ export const useProfileStore = defineStore('profile', {
       if (!profile) {
         return
       }
+
+      console.log('change profile', {oldValue: cloneDeep(this.language), newValue: cloneDeep(profile)})
       this.profileActiveId = profile.id
       this.$patch(profile.settings ?? {})
     },
 
     getProfileSettings() {
-      let omitList = ['isLoading', 'loadingMessage', 'dashboard.showAccountAmounts', 'profileActiveId', 'profileList']
+      let omitList = ['isLoading', 'loadingMessage', 'dashboard.showAccountAmounts', 'profileActiveId', 'profileList', 'profileActiveId']
       let data = cloneDeep(this.$state)
-      return omit(data, omitList)
+      return {
+        ...omit(data, omitList),
+        id: this.profileActiveId
+      }
     },
 
     async getProfiles() {
@@ -126,7 +131,8 @@ export const useProfileStore = defineStore('profile', {
       this.isLoading = true
 
       let data = this.getProfileSettings()
-      await new ProfileRepository().writeProfile(ProfileTransformer.transformToApi(data))
+      let requestData = ProfileTransformer.transformToApi(data)
+      let respose = await new ProfileRepository().update(data.id, requestData)
       this.isLoading = false
     },
 
