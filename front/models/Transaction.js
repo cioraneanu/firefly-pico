@@ -5,6 +5,7 @@ import { useProfileStore } from '~/stores/profileStore'
 import Account from '~/models/Account'
 import _, { get, includes, isEqual } from 'lodash'
 import Currency from '~/models/Currency.js'
+import { formatNumber } from '~/utils/NumberUtils.js'
 
 class Transaction extends BaseModel {
   getTransformer() {
@@ -119,7 +120,7 @@ class Transaction extends BaseModel {
   static getAmountFormatted(transaction) {
     let currency = this.getCurrency(transaction)
     let digits = Currency.getDecimalPlaces(currency)
-    return this.getAmount(transaction).toFixed(digits)
+    return formatNumber(this.getAmount(transaction), digits)
   }
 
   static getDate(transaction) {
