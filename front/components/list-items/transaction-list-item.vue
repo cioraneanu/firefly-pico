@@ -72,6 +72,7 @@ import Account from '~/models/Account.js'
 import TransactionListItemHeroIcon from '~/components/list-items/transaction-list-item-hero-icon.vue'
 import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
 import { transactionListField } from '~/constants/TransactionConstants.js'
+import { formatNumberForDashboard } from '~/utils/NumberUtils.js'
 
 const props = defineProps({
   value: Object,
@@ -124,7 +125,10 @@ const visibleTags = computed(() => {
 
 // const transactionAmount = computed(() => _.get(props.value, 'attributes.transactions.0.amount', ' - '))
 
-const transactionAmount = computed(() => Transaction.getAmountFormatted(props.value))
+// const transactionAmount = computed(() => Transaction.getAmountFormatted(props.value))
+const transactionAmount = computed(() => {
+  return formatNumberForDashboard(Transaction.getAmountFormatted(props.value))
+})
 const transactionCurrency = computed(() => _.get(firstTransaction.value, 'currency_symbol', ' - '))
 
 const isTransactionExpense = computed(() => isEqual(transactionType.value, Transaction.types.expense))
