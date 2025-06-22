@@ -14,10 +14,9 @@
             </div>
           </div>
 
-          <div @click.stop="onShowTimePicker" class="fake-input flex-1 cursor-pointer">
-            <div :class="labelDateClass">
-              {{ getDisplayTime }}
-            </div>
+          <div @click="onShowTimePicker" class="fake-input flex-1 cursor-pointer time-container">
+            <input ref="timeInput" type="time" class="hidden-input" v-model="modelValueTime" @change="onTimeChange" />
+            <div :class="labelDateClass">{{ getDisplayTime }}</div>
           </div>
         </div>
       </template>
@@ -33,43 +32,6 @@
     </div>
 
     <van-calendar @open="onOpen" v-model:show="showDatePicker" @confirm="onConfirmDate" :show-confirm="false" :min-date="minDate" :max-date="maxDate" color="#000" first-day-of-week="1" />
-
-    <van-popup v-model:show="showTimePicker" round position="bottom" style="padding-top: 4px">
-      <div ref="popupRef" class="h-100 display-flex flex-column app-date-time-grid">
-        <div class="display-flex">
-          <div class="flex-1"></div>
-          <div class="m-3 cursor-pointer" @click="onConfirmTime">Confirm</div>
-        </div>
-
-        <div style="margin-bottom: 8rem">
-          <div class="van-popup-title mb-2">Select an hour</div>
-
-          <van-grid :column-num="6" class="">
-            <template v-for="(hour, index) in hours" :key="index">
-              <van-grid-item @click="onClickHour(hour)" :class="getHourItemClass(hour)">
-                <template #default>
-                  <div class="van-grid-item__text">{{ hour }}</div>
-                  <div class="app-icon-item"></div>
-                </template>
-              </van-grid-item>
-            </template>
-          </van-grid>
-
-          <div class="van-popup-title mb-2 mt-30">Select an minute</div>
-
-          <van-grid :column-num="6">
-            <template v-for="(minute, index) in minutes" :key="index">
-              <van-grid-item @click="onClickMinute(minute)" :class="getMinuteItemClass(minute)">
-                <template #default>
-                  <div class="van-grid-item__text">{{ minute }}</div>
-                  <div class="app-icon-item"></div>
-                </template>
-              </van-grid-item>
-            </template>
-          </van-grid>
-        </div>
-      </div>
-    </van-popup>
   </div>
 </template>
 
@@ -94,17 +56,15 @@ const props = defineProps({
 })
 
 const modelValue = defineModel()
-const modelValueHour = ref(null)
-const modelValueMinute = ref(null)
+const modelValueTime = ref(null)
 
 const showDatePicker = ref(null)
-const showTimePicker = ref(null)
+// const showTimePicker = ref(null)
 
 const minDate = subYears(new Date(), 1)
 const maxDate = addYears(new Date(), 1)
 
-let hours = [...Array(24).keys()].map((item) => (item < 10 ? `0${item}` : item))
-let minutes = [...Array(12).keys()].map((item) => item * 5).map((item) => (item < 10 ? `0${item}` : item))
+const timeInput = ref(null)
 
 const labelDateClass = computed(() => {
   return {
@@ -133,37 +93,18 @@ const onConfirmDate = (value) => {
 // ------
 
 const onShowTimePicker = () => {
-  showTimePicker.value = true
-}
-const timeFilter = (type, options) => {
-  if (type === 'minute') {
-    return options.filter((option) => Number(option.value) % 5 === 0)
-  }
-  return options
+  timeInput.value?.focus()
+  timeInput.value?.showPicker?.()
 }
 
-const getHourItemClass = (hour) => {
-  return {
-    'cursor-pointer p-5': true,
-    active: parseInt(modelValueHour.value ?? -1) === parseInt(hour),
-  }
-}
-
-const getMinuteItemClass = (minute) => {
-  return {
-    'cursor-pointer p-5': true,
-    active: parseInt(modelValueMinute.value ?? -1) === parseInt(minute),
-  }
-}
-
-const onConfirmTime = () => {
-  showTimePicker.value = false
-
+const onTimeChange = () => {
   let newDate = clone(modelValue.value)
-  // let hours = parseInt(get(value, 'selectedValues.0', '0'))
-  // let minutes = parseInt(get(value, 'selectedValues.1', '0'))
-  newDate.setHours(parseInt(modelValueHour.value))
-  newDate.setMinutes(parseInt(modelValueMinute.value))
+  const [hours, minutes] = (modelValueTime.value ?? '').split(':').map(Number)
+  if (!hours || !minutes) {
+    return
+  }
+  newDate.setHours(hours)
+  newDate.setMinutes(minutes)
   modelValue.value = newDate
 }
 
@@ -177,31 +118,13 @@ const getDisplayTime = computed(() => {
 // -------------------------------
 
 watch(modelValue, (newValue) => {
-  if (!newValue) {
-    modelValueHour.value = null
-    modelValueMinute.value = null
-  }
-  modelValueHour.value = newValue.getHours()
-  modelValueMinute.value = Math.ceil(newValue.getMinutes() / 10) * 10
+  modelValueTime.value = newValue ? DateUtils.dateToString(newValue, 'HH:mm') : null
 })
 
-const onClickHour = (value) => {
-  modelValueHour.value = value
-}
-
-const onClickMinute = (value) => {
-  modelValueMinute.value = value
-}
-
-const popupRef = ref(null)
-
-const { distanceY } = usePointerSwipe(popupRef, {
-  disableTextSelect: true,
-  onSwipeEnd(e, direction) {
-    if (distanceY.value < -100) {
-      onConfirmTime()
-    }
-  },
+watch(modelValueTime, (newValue, oldValue) => {
+  if (!newValue && oldValue) {
+    modelValueTime.value = oldValue
+  }
 })
 
 const appCalendar = ref(null)
@@ -231,4 +154,20 @@ const onClickedAddDay = () => {
 }
 </script>
 
-<style></style>
+<style scoped>
+.hidden-input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  pointer-events: none;
+  z-index: -1;
+}
+
+.time-container {
+  position: relative;
+  display: inline-block;
+}
+</style>
