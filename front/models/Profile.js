@@ -2,7 +2,7 @@ import BaseModel from '~/models/BaseModel'
 import ProfileTransformer from '~/transformers/ProfileTransformer'
 import ProfileRepository from '~/repository/ProfileRepository'
 
-class Profile extends BaseModel {
+export default class Profile extends BaseModel {
   getTransformer() {
     return ProfileTransformer
   }
@@ -21,5 +21,3 @@ class Profile extends BaseModel {
     return {}
   }
 }
-
-export default Profile

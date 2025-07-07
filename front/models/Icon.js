@@ -1,6 +1,5 @@
 import BaseModel from '~/models/BaseModel'
 import { avatarListIcons, duoToneListIcons, fluentListIcons } from '~/constants/SvgConstants.js'
-// import { appSelectIcons } from '~/constants/TablerIconConstants.js'
 
 export default class Icon extends BaseModel {
   // ------------

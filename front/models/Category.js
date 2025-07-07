@@ -1,10 +1,10 @@
 import BaseModel from '~/models/BaseModel'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
 import CategoryRepository from '~/repository/CategoryRepository'
-import _ from 'lodash'
+import { get } from 'lodash'
 import { ellipsizeText } from '~/utils/Utils.js'
 
-class Category extends BaseModel {
+export default class Category extends BaseModel {
   getTransformer() {
     return CategoryTransformer
   }
@@ -18,7 +18,7 @@ class Category extends BaseModel {
       attributes: {
         name: '',
         icon: null,
-      }
+      },
     }
   }
 
@@ -37,7 +37,7 @@ class Category extends BaseModel {
   // --------
 
   static getDisplayName(category) {
-    return _.get(category, 'attributes.name')
+    return get(category, 'attributes.name')
   }
 
   static getDisplayNameEllipsized(category, ellipsizeLength = 100) {
@@ -45,8 +45,7 @@ class Category extends BaseModel {
   }
 
   static getIcon(category) {
-    return _.get(category, 'attributes.icon.icon')
+    return get(category, 'attributes.icon.icon')
   }
 }
 
-export default Category

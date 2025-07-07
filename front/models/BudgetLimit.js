@@ -1,10 +1,5 @@
 import BaseModel from '~/models/BaseModel'
-import CategoryTransformer from '~/transformers/CategoryTransformer'
-import CategoryRepository from '~/repository/CategoryRepository'
-import _, { capitalize, get } from 'lodash'
-import BudgetTransformer from '~/transformers/BudgetTransformer.js'
-import BudgetRepository from '~/repository/BudgetRepository.js'
-import { useDataStore } from '~/stores/dataStore.js'
+import { capitalize, get } from 'lodash'
 import { endOfMonth, endOfYear, isSameDay, isSameMonth, isSameYear, startOfMonth, startOfYear } from 'date-fns'
 
 export default class BudgetLimit extends BaseModel {
