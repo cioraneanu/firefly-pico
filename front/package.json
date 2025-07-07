@@ -24,7 +24,7 @@
     "@vant/nuxt": "^1.0.6",
     "@vite-pwa/nuxt": "^0.10.6",
     "eslint-config-prettier": "^9.1.0",
-    "nuxt": "^3.13.0",
+    "nuxt": "^3.17.6",
     "nuxt-svgo": "^4.0.9",
     "prettier": "^3.4.2"
   },
