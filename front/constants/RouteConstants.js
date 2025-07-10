@@ -6,7 +6,6 @@ export default {
   ROUTE_EXTRAS: '/extras',
   ROUTE_DASHBOARD: '/dashboard',
 
-
   ROUTE_SETTINGS: '/settings',
   ROUTE_SETTINGS_SETUP: '/settings/setup',
   ROUTE_SETTINGS_UI: '/settings/ui',
@@ -21,9 +20,6 @@ export default {
   ROUTE_SETTINGS_TRANSACTION_DEFAULT_LIST_FILTERS: '/settings/transactions/default-list-filters',
   ROUTE_SETTINGS_TRANSACTION_QUICK_AMOUNTS: '/settings/transactions/quick-amounts',
   ROUTE_SETTINGS_ABOUT: '/settings/about',
-
-
-
 
   ROUTE_EXCHANGE_RATES: '/exchange-rates',
 
@@ -48,5 +44,10 @@ export default {
   isForm(routeForm, currentForm) {
     let regex = new RegExp(`${routeForm}/[0-9]+`)
     return regex.test(currentForm)
+  },
+
+  isSettings(route) {
+    let regex = new RegExp(`^/settings(.)*`)
+    return regex.test(route)
   },
 }

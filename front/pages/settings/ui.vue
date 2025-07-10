@@ -2,9 +2,6 @@
   <div class="app-form">
     <app-top-toolbar />
 
-    <profile-picker />
-
-
     <van-form @submit="onSave" class="">
       <van-cell-group inset>
         <div class="van-cell-group-title mb-0">{{ $t('settings.ui.theme') }}:</div>
@@ -50,8 +47,6 @@ const startingPage = ref(null)
 const language = ref(null)
 const showAnimations = ref(true)
 const resetFormOnCreate = ref(false)
-
-
 
 const syncedSettings = [
   { store: profileStore, path: 'darkTheme', ref: darkTheme },

@@ -1,6 +1,5 @@
 <template>
   <div :class="layoutClass">
-    <profile-picker />
 
     <slot />
 

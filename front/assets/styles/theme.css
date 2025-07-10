@@ -1120,33 +1120,30 @@ img, svg {
 }
 
 .profile-picker-card-list {
+    flex-wrap: wrap;
     display: flex;
     align-items: center;
-    white-space: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
-    gap: 10px;
+    gap: 5px;
     margin: 5px 0px;
 }
 
 .profile-picker-card {
-    background: #f2f2f2;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+    background: #fcfcfc;
     font-size: 12px;
-    padding: 5px 5px;
-    border-radius: 5px;
-    /*box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;*/
+    padding: 5px 8px;
+    border-radius: 15px;
     cursor: pointer;
     display: flex;
     align-items: center;
+    border: 1px solid #aaaa;
     justify-content: center;
 }
 
 
 .profile-picker-card.active {
-    background: #5a5afd;
+    background: #1E88E5;
     color: #fff;
-
+    border: 0;
 }
 
 
@@ -1158,4 +1155,17 @@ img, svg {
     display: flex;
     align-items: center;
     justify-content: center;
+}
+
+.profile-floating-button {
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-bottom-left-radius: 5px !important;
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+    background: #1E88E5 !important;
+    /*position: fixed;*/
+    /*right: 0px;*/
+    /*padding: 10px;*/
+    /*top: 50%;*/
 }
