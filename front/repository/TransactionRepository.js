@@ -1,8 +1,8 @@
 import BaseRepository from '~/repository/BaseRepository'
 import axios from 'axios'
-import _ from 'lodash'
+import { get } from 'lodash'
 
-class TransactionRepository extends BaseRepository {
+export default class TransactionRepository extends BaseRepository {
   constructor() {
     super(`api/transactions`)
     this.searchTransaction = this.searchTransaction.bind(this)
@@ -14,8 +14,7 @@ class TransactionRepository extends BaseRepository {
     const url = `${appStore.picoBackendURL}/api/search/transactions`
     let searchUrl = this.getUrlForRequest({ filters, page, pageSize, url })
     let response = await axios.get(searchUrl)
-    return _.get(response, 'data', {})
+    return get(response, 'data', {})
   }
 }
 
-export default TransactionRepository

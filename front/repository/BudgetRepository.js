@@ -1,6 +1,6 @@
 import BaseRepository from '~/repository/BaseRepository'
 import axios from 'axios'
-import _ from 'lodash'
+import { get } from 'lodash'
 
 export default class BudgetRepository extends BaseRepository {
   constructor() {
@@ -10,6 +10,6 @@ export default class BudgetRepository extends BaseRepository {
   async getBudgetLimits() {
     const appStore = useAppStore()
     let response = await axios.get(`${appStore.picoBackendURL}/api/budget-limits`)
-    return _.get(response, 'data', {})
+    return get(response, 'data', {})
   }
 }

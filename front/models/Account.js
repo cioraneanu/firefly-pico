@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 import BaseModel from '~/models/BaseModel'
 import AccountTransformer from '~/transformers/AccountTransformer'
 import AccountRepository from '~/repository/AccountRepository'
-import _, { get } from 'lodash'
+import { get } from 'lodash'
 import Transaction from '~/models/Transaction'
 import { NUMBER_FORMAT } from '~/utils/NumberUtils.js'
 import Currency from '~/models/Currency.js'
@@ -199,7 +199,7 @@ export default class Account extends BaseModel {
   // ------------
 
   static getDisplayName(account) {
-    return _.get(account, 'attributes.name')
+    return get(account, 'attributes.name')
   }
 
   static getCurrency(account) {
@@ -233,15 +233,15 @@ export default class Account extends BaseModel {
   }
 
   static getIsActive(account) {
-    return _.get(account, 'attributes.active', false)
+    return get(account, 'attributes.active', false)
   }
 
   static getIsVisibleOnDashboard(account) {
-    return _.get(account, 'attributes.is_dashboard_visible', true)
+    return get(account, 'attributes.is_dashboard_visible', true)
   }
 
   static getIsIncludedInNetWorth(account) {
-    return _.get(account, 'attributes.include_net_worth', false)
+    return get(account, 'attributes.include_net_worth', false)
   }
 
   static getType(account) {

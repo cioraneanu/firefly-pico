@@ -1,7 +1,5 @@
 import BaseModel from '~/models/BaseModel'
-import CategoryTransformer from '~/transformers/CategoryTransformer'
-import CategoryRepository from '~/repository/CategoryRepository'
-import _, { get } from 'lodash'
+import { get } from 'lodash'
 import BudgetTransformer from '~/transformers/BudgetTransformer.js'
 import BudgetRepository from '~/repository/BudgetRepository.js'
 import { useDataStore } from '~/stores/dataStore.js'
@@ -38,14 +36,14 @@ export default class Budget extends BaseModel {
   // --------
 
   static getDisplayName(budget) {
-    return _.get(budget, 'attributes.name')
+    return get(budget, 'attributes.name')
   }
 
   // --------
 
   static getCurrencySymbol(budget) {
     const dataStore = useDataStore()
-    return _.get(budget, 'attributes.currency.attributes.symbol', get(dataStore.defaultCurrency, 'attributes.symbol'))
+    return get(budget, 'attributes.currency.attributes.symbol', get(dataStore.defaultCurrency, 'attributes.symbol'))
   }
 
   static isActive(budget) {

@@ -1,10 +1,9 @@
-import BaseRepository from '~/repository/BaseRepository'
 import BaseModel from '~/models/BaseModel'
-import _, { get } from 'lodash'
+import { get } from 'lodash'
 import CurrencyTransformer from '~/transformers/CurrencyTransformer'
 import CurrencyRepository from '~/repository/CurrencyRepository'
 
-class Currency extends BaseModel {
+export default class Currency extends BaseModel {
   getTransformer() {
     return CurrencyTransformer
   }
@@ -55,5 +54,3 @@ class Currency extends BaseModel {
     return `${this.getName(currency)}, ${this.getSymbol(currency)}`
   }
 }
-
-export default Currency

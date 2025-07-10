@@ -140,7 +140,7 @@ const liabilityAccountList = computed(() => accountList.value.filter((item) => i
 const showAssets = computed(() => props.allowedTypes.some((item) => isEqual(item, Account.types.asset)) && assetAccountList.value.length > 0)
 const showExpense = computed(() => props.allowedTypes.some((item) => isEqual(item, Account.types.expense)) && expenseAccountList.value.length > 0)
 const showIncome = computed(() => props.allowedTypes.some((item) => isEqual(item, Account.types.revenue)) && incomeAccountList.value.length > 0)
-const showLiabilities = computed(() => props.allowedTypes.some((item) => isEqual(item, Account.types.liability)) && incomeAccountList.value.length > 0)
+const showLiabilities = computed(() => props.allowedTypes.some((item) => isEqual(item, Account.types.liability)) && liabilityAccountList.value.length > 0)
 
 // ------ Methods ------
 

@@ -1,4 +1,4 @@
-import _, { get } from 'lodash'
+import { get } from 'lodash'
 
 export default class BaseModel {
   constructor() {}

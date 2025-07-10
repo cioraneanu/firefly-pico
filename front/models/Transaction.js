@@ -3,10 +3,11 @@ import TransactionTransformer from '~/transformers/TransactionTransformer'
 import TransactionRepository from '~/repository/TransactionRepository'
 import { useProfileStore } from '~/stores/profileStore'
 import Account from '~/models/Account'
-import _, { get, includes, isEqual } from 'lodash'
+import { get, includes, isEqual } from 'lodash'
 import Currency from '~/models/Currency.js'
+import { formatNumber } from '~/utils/NumberUtils.js'
 
-class Transaction extends BaseModel {
+export default class Transaction extends BaseModel {
   getTransformer() {
     return TransactionTransformer
   }
@@ -87,7 +88,7 @@ class Transaction extends BaseModel {
   }
 
   static getAmount(transaction) {
-    let transactionSplits = _.get(transaction, 'attributes.transactions', [])
+    let transactionSplits = get(transaction, 'attributes.transactions', [])
     return transactionSplits.reduce((result, item) => {
       let amount = parseFloat(item.amount)
       return result + amount
@@ -119,7 +120,7 @@ class Transaction extends BaseModel {
   static getAmountFormatted(transaction) {
     let currency = this.getCurrency(transaction)
     let digits = Currency.getDecimalPlaces(currency)
-    return this.getAmount(transaction).toFixed(digits)
+    return formatNumber(this.getAmount(transaction), digits)
   }
 
   static getDate(transaction) {
@@ -154,4 +155,3 @@ class Transaction extends BaseModel {
   }
 }
 
-export default Transaction

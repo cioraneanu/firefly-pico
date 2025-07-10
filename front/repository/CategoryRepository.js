@@ -1,9 +1,7 @@
 import BaseRepository from '~/repository/BaseRepository'
 
-class CategoryRepository extends BaseRepository {
+export default class CategoryRepository extends BaseRepository {
   constructor() {
     super(`api/categories`)
   }
 }
-
-export default CategoryRepository

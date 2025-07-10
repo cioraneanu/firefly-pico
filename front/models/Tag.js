@@ -4,7 +4,7 @@ import TagTransformer from '~/transformers/TagTransformer'
 import { get } from 'lodash'
 import { ellipsizeText } from '~/utils/Utils.js'
 
-class Tag extends BaseModel {
+export default class Tag extends BaseModel {
   getTransformer() {
     return TagTransformer
   }
@@ -66,27 +66,4 @@ class Tag extends BaseModel {
     return result
   }
 
-  static getTagWithParents2 = (list, tag) => {
-    const result = []
-
-    // Helper function to find node by tag
-    function findNode(node) {
-      result.push(node)
-      // If parent exists, recursively find its parent
-      if (node.parent_id !== null) {
-        const parent = list.find((item) => item.id === node.parent_id)
-        findNode(parent)
-      }
-    }
-
-    // Find the node with the given tag
-    const node = list.find((item) => item.id === tag || item.parent_id === tag)
-    if (node) {
-      findNode(node)
-    }
-
-    return result
-  }
 }
-
-export default Tag
