@@ -54,15 +54,12 @@ RouteUtils::makeCRUD("transactions", TransactionController::class);
 Route::get('search/transactions', [TransactionController::class, 'getAll']);
 
 
-//Route::get("profile", [ProfileController::class, "get"]);
-//Route::put("profile", [ProfileController::class, "createOrUpdate"]);
-//Route::get("profiles/{id}", [ProfileController::class, 'getOne'])->where('id', '[0-9]+');
+RouteUtils::makeCRUD("profiles", ProfileController::class);
 
-Route::get("profiles", [ProfileController::class, 'getAll']);
-Route::post("profiles", [ProfileController::class, 'create']);
-Route::put("profiles/{id}", [ProfileController::class, 'update'])->where('id', '[0-9]+');
-Route::put("profiles/{id}", [ProfileController::class, 'update'])->where('id', '[0-9]+');
-Route::delete("profiles/{id}", [ProfileController::class, 'delete'])->where('id', '[0-9]+');
+//Route::get("profiles", [ProfileController::class, 'getAll']);
+//Route::post("profiles", [ProfileController::class, 'create']);
+//Route::put("profiles/{id}", [ProfileController::class, 'update'])->where('id', '[0-9]+');
+//Route::delete("profiles/{id}", [ProfileController::class, 'delete'])->where('id', '[0-9]+');
 
 
 Route::get('/test', function (Request $request) {

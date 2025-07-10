@@ -84,7 +84,6 @@ const onSave = async () => {
   UIUtils.showToastLoading(t('settings.setup.verifying'))
   let userResponse = await new UserRepository().getUser()
   UIUtils.stopToastLoading()
-
   if (!ResponseUtils.isSuccess(userResponse)) {
     UIUtils.showToastError(t('settings.setup.invalid_endpoint'))
     return

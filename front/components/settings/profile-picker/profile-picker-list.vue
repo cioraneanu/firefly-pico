@@ -2,8 +2,9 @@
   <div class="profile-picker">
     <van-loading v-if="profileStore.isLoading" />
     <div v-else class="profile-picker-container">
-      <div class="display-flex font-600 text-size-14">
+      <div class="flex-center-vertical font-600 text-size-14 gap-2">
         <div class="flex-1">{{ $t('profile_page.title') }}</div>
+        <icon-rotate-clockwise :size="22" :stroke="2.0" @click="profileStore.getProfiles()"/>
         <van-button size="small" class="add-button" @click="onAdd">{{ $t('new') }}</van-button>
       </div>
 
@@ -20,7 +21,7 @@
 </template>
 
 <script setup>
-import { IconPlus } from '@tabler/icons-vue'
+import { IconRotateClockwise } from '@tabler/icons-vue'
 import ProfilePickerForm from '~/components/settings/profile-picker/profile-picker-form.vue'
 
 const props = defineProps({})

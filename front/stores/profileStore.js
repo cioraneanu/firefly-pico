@@ -136,6 +136,7 @@ export const useProfileStore = defineStore('profile', {
       this.isLoading = false
     },
 
+    // TODO: These could probably be removed later because all users would have transitioned to the new structure
     migrateProfile() {
       // If we add new fields for "transactionFormFieldsConfig" / "dashboardWidgetsConfig"
       // which the user doesn't have in localStorage add them as well

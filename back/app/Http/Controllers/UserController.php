@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\FireflyException;
 use App\Http\Controllers\Base\BaseController;
 use App\Http\Controllers\Base\BaseControllerFirefly;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 
 
@@ -14,6 +15,15 @@ class UserController extends BaseController
 
     public function getUser(Request $request)
     {
+        // If the user doesn't have a profile provide one
+        $profilesCount = Profile::where('auth_token_hash', getAuthTokenHash())->count();
+        if ($profilesCount === 0) {
+            Profile::create([
+                'auth_token_hash' => getAuthTokenHash(),
+                'name' => "Default profile",
+            ]);
+        }
+
         return getUser();
     }
 

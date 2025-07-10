@@ -17,10 +17,19 @@ class ProfileController extends BaseController
         return QueryBuilder::for(Profile::class);
     }
 
+    public function getOne(Request $request)
+    {
+        BaseAuthorization::checkUser();
+
+        $profile = Profile::where('auth_token_hash', getAuthTokenHash())->find($request->id);
+        $result = ['data' => $profile];
+        return $this->respondSuccessWithData($result);
+    }
     public function getAll(Request $request)
     {
-        $authTokenHash = $this->getAuthTokenHash();
-        $profiles = Profile::where('auth_token_hash', $authTokenHash)->get();
+        BaseAuthorization::checkUser();
+
+        $profiles = Profile::where('auth_token_hash', getAuthTokenHash())->get();
         $result = ['data' => $profiles];
         return $this->respondSuccessWithData($result);
     }
@@ -31,7 +40,7 @@ class ProfileController extends BaseController
         BaseAuthorization::checkUser();
 
         $profile = Profile::create([
-            'auth_token_hash' => $this->getAuthTokenHash(),
+            'auth_token_hash' => getAuthTokenHash(),
             'name' => $request->name,
             'settings' => $request->settings,
         ]);
@@ -43,7 +52,7 @@ class ProfileController extends BaseController
         BaseAuthorization::checkUser();
 
         $profile = Profile::where('id', $request->id)->update([
-            'auth_token_hash' => $this->getAuthTokenHash(),
+            'auth_token_hash' => getAuthTokenHash(),
             'name' => $request->name,
             'settings' => $request->settings,
         ]);
@@ -54,17 +63,12 @@ class ProfileController extends BaseController
     {
         BaseAuthorization::checkUser();
 
-        $profile = Profile::where('auth_token_hash', $this->getAuthTokenHash())->where('id', $request->id)->first();
+        $profile = Profile::where('auth_token_hash', getAuthTokenHash())->where('id', $request->id)->first();
         $profile ? $profile->delete() : null;
         return $this->respondSuccessWithData(['data' => $profile]);
     }
 
 
-    private function getAuthTokenHash()
-    {
-        $token = request()->bearerToken();
-        return hash('sha256', $token);
-    }
 
 
 }

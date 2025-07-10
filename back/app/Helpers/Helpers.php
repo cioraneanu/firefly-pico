@@ -5,8 +5,17 @@ use App\Http\Controllers\Base\BaseController;
 use App\Http\Controllers\Base\BaseControllerFirefly;
 use Illuminate\Support\Facades\Cache;
 
-if (!function_exists('getUser')) {
 
+if (!function_exists('getAuthTokenHash')) {
+    function getAuthTokenHash()
+    {
+        $token = request()->bearerToken();
+        return hash('sha256', $token);
+    }
+}
+
+
+if (!function_exists('getUser')) {
     function getUser()
     {
         return Cache::driver('array')->rememberForever('getUser', function () {
