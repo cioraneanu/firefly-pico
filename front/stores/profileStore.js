@@ -85,12 +85,7 @@ export const useProfileStore = defineStore('profile', {
 
   actions: {
     setProfile(profile) {
-      if (!profile) {
-        return
-      }
-
-      console.log('change profile', {oldValue: cloneDeep(this.language), newValue: cloneDeep(profile)})
-      this.profileActiveId = profile.id
+      this.profileActiveId = profile?.id
       this.$patch(profile.settings ?? {})
     },
 
@@ -99,7 +94,7 @@ export const useProfileStore = defineStore('profile', {
       let data = cloneDeep(this.$state)
       return {
         ...omit(data, omitList),
-        id: this.profileActiveId
+        id: this.profileActiveId,
       }
     },
 
@@ -117,6 +112,8 @@ export const useProfileStore = defineStore('profile', {
       let activeProfile = this.profileActiveId ? responseData.find((item) => item.id === this.profileActiveId) : null
       activeProfile = activeProfile ?? head(responseData)
       this.setProfile(activeProfile)
+
+      this.profileActiveId = activeProfile.id
 
       this.isLoading = false
 

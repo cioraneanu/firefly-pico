@@ -3,7 +3,11 @@ import _ from 'lodash'
 import UIUtils from '~/utils/UIUtils'
 import { next } from 'lodash/seq'
 
-// by convention, composable function names start with "use"
+export const useFormEvent = {
+  postSave: 'onPostSave',
+  postDelete: 'onPostDelete',
+}
+
 export function useForm(props) {
   const { form } = props
   const { titleAdd, titleEdit } = props
@@ -115,7 +119,7 @@ export function useForm(props) {
 
     if (ResponseUtils.isSuccess(response)) {
       UIUtils.showToastSuccess('Success')
-      onEvent ? onEvent('onPostSave', response) : null
+      onEvent ? onEvent(useFormEvent.postSave, response) : null
 
       // Should reset form
       if (!newItemId && profileStore.resetFormOnCreate) {
@@ -136,7 +140,7 @@ export function useForm(props) {
     if (result) {
       let response = await repository.delete(itemId.value)
       if (ResponseUtils.isSuccess(response)) {
-        onEvent ? onEvent('onPostDelete', response) : null
+        onEvent ? onEvent(useFormEvent.postDelete, response) : null
         routeList ? await navigateTo(routeList) : null
         UIUtils.showToastSuccess(`Deleted successfully.`, 1000)
       }

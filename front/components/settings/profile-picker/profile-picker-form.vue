@@ -13,7 +13,6 @@
 
         <app-button-form-delete class="mx-3 mt-1" style="width: auto" v-if="itemId" @click="onDelete" />
         <app-button-form-save bottom=" - var(--van-tabbar-height) + 20px" @click="onSave" />
-
       </div>
     </van-popup>
   </div>
@@ -24,17 +23,18 @@ import { IconPlus } from '@tabler/icons-vue'
 import { rule } from '~/utils/ValidationUtils.js'
 import ProfileRepository from '~/repository/ProfileRepository.js'
 import Profile from '~/models/Profile.js'
-import _, { cloneDeep } from 'lodash'
+import _, { cloneDeep, get } from 'lodash'
 import { ref } from 'vue'
 import { useDataStore } from '~/stores/dataStore.js'
 import CategoryTransformer from '~/transformers/CategoryTransformer.js'
-import { useForm } from '~/composables/useForm.js'
+import { useForm, useFormEvent } from '~/composables/useForm.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import Category from '~/models/Category.js'
 import { generateChildren } from '~/utils/VueUtils.js'
 import BudgetTransformer from '~/transformers/BudgetTransformer.js'
 
 const props = defineProps({})
+const emits = defineEmits(['saved'])
 const profileStore = useProfileStore()
 
 const showDropdown = defineModel('showDropdown', false)
@@ -46,6 +46,12 @@ const resetFields = () => {
 }
 
 const onEvent = (event, payload) => {
+
+  // When creating a new Profile auto-select it
+  if (event === useFormEvent.postSave) {
+    let newProfileId = get(payload, 'data.data.id')
+    newProfileId ? profileStore.profileActiveId = newProfileId : null
+  }
   profileStore.getProfiles()
 }
 
@@ -53,12 +59,13 @@ let { itemId, item, isEmpty, addButtonText, isLoading, onClickBack, saveItem, on
   form: form,
   model: new Profile(),
   resetFields,
-  onEvent
+  onEvent,
 })
 
 const { name } = generateChildren(item, [{ computed: 'name', parentKey: 'name' }])
 
 const onSave = async () => {
+  emits('saved', item.value)
   await saveItem()
   onHide()
 }
@@ -69,14 +76,12 @@ const onHide = () => {
 
 const onShow = (profile) => {
   item.value = cloneDeep(profile) ?? new Profile().getEmpty()
-
   itemId.value = item.value.id
   showDropdown.value = true
 }
 
 const { t } = useI18n()
-
-const title = computed(() => itemId.value ? t('profile_page.title_edit') : t('profile_page.title_add'))
+const title = computed(() => (itemId.value ? t('profile_page.title_edit') : t('profile_page.title_add')))
 
 defineExpose({ onShow, onHide })
 </script>

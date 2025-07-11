@@ -1160,9 +1160,9 @@ img, svg {
 .profile-floating-button {
     border-top-right-radius: 0px !important;
     border-bottom-right-radius: 0px !important;
-    border-bottom-left-radius: 5px !important;
-    border-top-left-radius: 5px !important;
-    border-bottom-left-radius: 5px !important;
+    border-bottom-left-radius: 10px !important;
+    border-top-left-radius: 10px !important;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     background: #1E88E5 !important;
     /*position: fixed;*/
     /*right: 0px;*/

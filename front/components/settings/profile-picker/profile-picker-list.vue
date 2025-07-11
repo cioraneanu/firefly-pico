@@ -4,11 +4,11 @@
     <div v-else class="profile-picker-container">
       <div class="flex-center-vertical font-600 text-size-14 gap-2">
         <div class="flex-1">{{ $t('profile_page.title') }}</div>
-        <icon-rotate-clockwise :size="22" :stroke="2.0" @click="profileStore.getProfiles()"/>
+        <icon-rotate-clockwise :size="22" :stroke="2.0" @click="profileStore.getProfiles()" />
         <van-button size="small" class="add-button" @click="onAdd">{{ $t('new') }}</van-button>
       </div>
 
-      <div class="text-muted text-size-12">Quickly switch between different default source account, currency etc. </div>
+      <div class="text-muted text-size-12">Quickly switch between different default source account, currency etc.</div>
       <div class="profile-picker-card-list">
         <div v-for="profile in profileStore.profileList" :class="getProfileCardClass(profile)" @click="onClickEvent(profile)">
           {{ profile.name ?? $t('not_set') }}
@@ -32,7 +32,7 @@ const profileForm = ref(null)
 
 const onAdd = () => {
   // showDropdown.value = true
-  profileForm.value?.onShow()
+  profileForm.value?.onShow(null)
 }
 
 const getProfileCardClass = (profile) => ({

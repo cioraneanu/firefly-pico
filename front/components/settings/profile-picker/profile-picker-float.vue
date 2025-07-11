@@ -1,8 +1,7 @@
 <template>
   <div>
     <van-floating-bubble v-model:offset="offset" axis="y" magnetic="x" @click="isListVisible = true" :gap="0" class="profile-floating-button">
-      <icon-settings size="20" color="#fff" stroke="1.6" />
-      {{ profileStore.profileActiveId }}
+      <icon-nut size="20" color="#fff" stroke="1.6" />
     </van-floating-bubble>
 
     <van-popup v-model:show="isListVisible" position="bottom" :style="{ height: '40%' }">
@@ -12,7 +11,7 @@
 </template>
 
 <script setup>
-import { IconSettings } from '@tabler/icons-vue'
+import { IconSettings, IconSettingsStar, IconNut } from '@tabler/icons-vue'
 
 const profileStore = useProfileStore()
 const isListVisible = ref(false)

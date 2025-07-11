@@ -25,11 +25,12 @@ class ProfileController extends BaseController
         $result = ['data' => $profile];
         return $this->respondSuccessWithData($result);
     }
+
     public function getAll(Request $request)
     {
         BaseAuthorization::checkUser();
 
-        $profiles = Profile::where('auth_token_hash', getAuthTokenHash())->get();
+        $profiles = Profile::where('auth_token_hash', getAuthTokenHash())->orderBy('created_at', 'desc')->get();
         $result = ['data' => $profiles];
         return $this->respondSuccessWithData($result);
     }
@@ -51,11 +52,12 @@ class ProfileController extends BaseController
     {
         BaseAuthorization::checkUser();
 
-        $profile = Profile::where('id', $request->id)->update([
+        Profile::where('id', $request->id)->update([
             'auth_token_hash' => getAuthTokenHash(),
             'name' => $request->name,
             'settings' => $request->settings,
         ]);
+        $profile = Profile::find($request->id);
         return $this->respondSuccessWithData(['data' => $profile]);
     }
 
@@ -67,8 +69,6 @@ class ProfileController extends BaseController
         $profile ? $profile->delete() : null;
         return $this->respondSuccessWithData(['data' => $profile]);
     }
-
-
 
 
 }

@@ -27,6 +27,7 @@
   --van-field-label-width: 10.5em !important;
   --van-collapse-item-content-background: transparent !important;
   --van-collapse-item-content-padding: 5px 5px !important;
+  --van-floating-bubble-size: 40px !important;
 }
 
 .van-theme-dark {
