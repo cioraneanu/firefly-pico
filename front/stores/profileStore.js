@@ -29,6 +29,7 @@ export const useProfileStore = defineStore('profile', {
       resetFormOnCreate: useLocalStorage('resetFormOnCreate', false),
 
       assistantTodoTagMatcher: useLocalStorage('assistantTodoTagMatcher', '!!'),
+      assistantCurrency: useLocalStorage('assistantCurrency', null),
 
       defaultAccountSource: useLocalStorage('defaultAccountSource', null, { serializer: StorageSerializers.object }),
       defaultAccountDestination: useLocalStorage('defaultAccountDestination', null, { serializer: StorageSerializers.object }),

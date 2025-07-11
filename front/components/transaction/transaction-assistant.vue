@@ -2,8 +2,10 @@
   <div class="vant-card flex-column mt-5">
     <div class="vant-card-title flex-center-vertical gap-1">
       {{ $t('transaction.assistant') }}
-      <!--      <app-tutorial v-bind="TUTORIAL_CONSTANTS.assistant" />-->
       <app-tutorial :title="$t('transaction.assistant_tutorial_title')" :body="$t('transaction.assistant_tutorial_body')" />
+
+      <div class="flex-1" />
+      <currency-dropdown class="text-size-12" v-model="profileStore.assistantCurrency" />
     </div>
     <div class="text-size-12 text-muted mb-5">{{ $t('transaction.assistant_format') }}</div>
 

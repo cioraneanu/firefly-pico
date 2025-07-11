@@ -10,6 +10,14 @@
     :getDisplayValue="getDisplayValue"
     v-bind="dynamicAttrs"
   >
+
+    <template #label>
+      <div>
+        <div>{{ props.label ?? $t('currency') }}</div>
+        <div v-if="info" class="text-muted text-size-11 line-height-normal">{{ info }}</div>
+      </div>
+    </template>
+
     <template #left-icon>
       <app-icon :icon="TablerIconConstants.currency" :size="20" />
     </template>
@@ -43,6 +51,9 @@ const props = defineProps({
   label: {
     type: String,
   },
+  info: {
+    type: String,
+  }
 })
 
 const modelValue = defineModel()
