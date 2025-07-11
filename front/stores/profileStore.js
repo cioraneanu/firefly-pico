@@ -90,11 +90,16 @@ export const useProfileStore = defineStore('profile', {
     },
 
     getProfileSettings() {
-      let omitList = ['isLoading', 'loadingMessage', 'dashboard.showAccountAmounts', 'profileActiveId', 'profileList', 'profileActiveId']
+      let omitList = ['isLoading', 'loadingMessage', 'dashboard.showAccountAmounts', 'profileActiveId', 'profileList']
       let data = cloneDeep(this.$state)
+      let profile = this.profileList.find((item) => item.id === this.profileActiveId)
+
       return {
-        ...omit(data, omitList),
         id: this.profileActiveId,
+        name: profile.name,
+        settings: {
+          ...omit(data, omitList),
+        },
       }
     },
 
@@ -129,8 +134,9 @@ export const useProfileStore = defineStore('profile', {
 
       let data = this.getProfileSettings()
       let requestData = ProfileTransformer.transformToApi(data)
-      let respose = await new ProfileRepository().update(data.id, requestData)
+      let response = await new ProfileRepository().update(data.id, requestData)
       this.isLoading = false
+      return response
     },
 
     // TODO: These could probably be removed later because all users would have transitioned to the new structure
