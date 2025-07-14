@@ -5,7 +5,10 @@
       <app-tutorial :title="$t('transaction.assistant_tutorial_title')" :body="$t('transaction.assistant_tutorial_body')" />
 
       <div class="flex-1" />
-      <currency-dropdown class="text-size-12" v-model="profileStore.assistantCurrency" />
+      <div class="assistant-currency">
+        <currency-dropdown class="text-size-12" v-model="profileStore.assistantCurrency" />
+        <icon-square-rounded-x v-if="profileStore.assistantCurrency" :size="20" :stroke="1.5" @click="profileStore.assistantCurrency = null" />
+      </div>
     </div>
     <div class="text-size-12 text-muted mb-5">{{ $t('transaction.assistant_format') }}</div>
 
@@ -98,6 +101,7 @@ import AppTutorial from '~/components/ui-kit/app-tutorial.vue'
 import { TUTORIAL_CONSTANTS } from '~/constants/TutorialConstants.js'
 import Category from '~/models/Category.js'
 import { ellipsizeText } from '~/utils/Utils.js'
+import { IconSquareLetterX, IconSquareRoundedX } from '@tabler/icons-vue'
 
 const props = defineProps({})
 
@@ -271,21 +275,25 @@ const onShow = () => {
   show.value = true
 }
 
-watch([foundTemplate, foundTag, foundCategory, foundAmount, foundDescription, isTodo], ([newTemplate, newTag, newCategory, newAmount, newDescription, newIsTodo]) => {
-  emit('change', {
-    transactionTemplate: newTemplate,
-    amount: newAmount,
-    tag: newTag,
-    category: newCategory,
-    description: newDescription,
-    isTodo: newIsTodo,
-  })
+watch(
+  [foundTemplate, foundTag, foundCategory, foundAmount, foundDescription, isTodo, () => profileStore.assistantCurrency],
+  ([newTemplate, newTag, newCategory, newAmount, newDescription, newIsTodo, newAssistantCurrency]) => {
+    emit('change', {
+      transactionTemplate: newTemplate,
+      amount: newAmount,
+      tag: newTag,
+      category: newCategory,
+      description: newDescription,
+      isTodo: newIsTodo,
+      assistantCurrency: newAssistantCurrency,
+    })
 
-  // If you selected a template and didn't write anything => write the text
-  if (assistantText.value === '' && newTemplate) {
-    assistantText.value = get(newTemplate, 'extra_names.0.name', '')
-  }
-})
+    // If you selected a template and didn't write anything => write the text
+    if (assistantText.value === '' && newTemplate) {
+      assistantText.value = get(newTemplate, 'extra_names.0.name', '')
+    }
+  },
+)
 
 // -----
 </script>

@@ -71,7 +71,7 @@
     "assistant": "助手",
     "assistant_format": "格式 = [模板 / 标签?] [金额?] [描述?]",
     "assistant_tutorial_title": "交易助手",
-    "assistant_tutorial_body": "\n      <p>通过在此输入文本（或使用手机的听写功能）轻松创建交易。</p>\n      <p>预期格式：<br> <b>[搜索]&nbsp; [金额?]&nbsp; [描述?]&nbsp; [待办?]</b></p>\n      <p>1. <b>搜索</b>会在标签、类别和交易模板的名称中查找。支持仅输入部分名称，甚至输入错误的字母。<br><code> elct => electricity</code></p>\n      <p>2. <b>金额</b>支持数学表达式。用空格分隔的数字会自动相加。</p>\n      <p>3. <b>描述</b>是可选的。使用此选项覆盖默认标签名称。</p>\n      <p>4. <b>待办</b>使添加用户定义的“待办标签”变得容易，只需附加一个自定义字符串（默认“!!”）。可以在“设置”中更改。</p>\n      \n      <p><b>示例</b><br>\n      “electricity” = 标签<br>\n      “swimming” = 模板 <br><br>\n      \n      <code>\n      electricity 23<br> \n      elc 12*2+33<br> \n      elc 12+2*3 自定义描述<br> \n      elc 25 !!<br>\n      swim<br> \n    \n      </code>\n      </p>\n    ",
+    "assistant_tutorial_body": "<p>只需在此输入文字（或使用手机的语音输入），即可轻松创建交易。</p> <p>预期格式：<br> <b>[搜索]&nbsp; [金额？]&nbsp; [描述？]&nbsp; [待办？]</b></p> <p>1. <b>搜索</b>将在你的标签名、分类名以及交易模板中进行匹配。支持输入部分名称，甚至可以拼错一些字母。<br><code> elct => electricity</code></p> <p>2. <b>金额</b>支持数学表达式。数字之间用空格分隔时会自动相加。</p> <p>3. <b>描述</b>是可选项。你可以使用它来替换默认的标签名称。</p> <p>4. <b>待办</b>允许你通过添加自定义字符串（默认是“!!”）来快速加入自定义的“待办标签”。这个字符串可以在“设置”中修改。</p> <p><b>示例</b><br> \"electricity\" = 标签<br> \"swimming\" = 模板 <br><br> <code> electricity 23<br> elc 12*2+33<br> elc 12+2*3 自定义描述<br> elc 25 !!<br> swim<br> </code> </p> <p>5. 在右上角有一个<b>货币</b>选择器，你可以即时更换，也可以在“设置” -> “助手”中设为默认。如果使用此功能，<b>金额</b>将被视为该货币，并自动转换为你所选账户的货币。这在出国时会非常有用。</p>",
     "type": {
       "expense": "支出",
       "income": "收入",

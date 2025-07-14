@@ -210,8 +210,15 @@ export default class Account extends BaseModel {
   }
 
   static getCurrencySymbol(account) {
-    let currency = this.getCurrency(account)
-    return Currency.getSymbol(currency)
+    return Currency.getSymbol(this.getCurrency(account))
+  }
+
+  static getCurrencyCode(account) {
+    return Currency.getCode(this.getCurrency(account))
+  }
+
+  static getCurrencyDecimalPlaces(account) {
+    return Currency.getDecimalPlaces(this.getCurrency(account))
   }
 
   static getBalance(account) {

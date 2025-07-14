@@ -1169,3 +1169,13 @@ img, svg {
     /*padding: 10px;*/
     /*top: 50%;*/
 }
+
+
+.assistant-currency {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 5px;
+    border: 1px dashed #000;
+    border-radius: 5px;
+}

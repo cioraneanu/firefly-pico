@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Profile extends Model
 {
-
     use SoftDeletes;
 
 
