@@ -136,6 +136,11 @@ export const useProfileStore = defineStore('profile', {
       let data = this.getProfileSettings()
       let requestData = ProfileTransformer.transformToApi(data)
       let response = await new ProfileRepository().update(data.id, requestData)
+      if (ResponseUtils.isSuccess(response)) {
+        let profileResponse = get(response, 'data.data')
+        this.profileList = this.profileList.map((item) => (item.id === profileResponse.id ? profileResponse : item))
+      }
+
       this.isLoading = false
       return response
     },

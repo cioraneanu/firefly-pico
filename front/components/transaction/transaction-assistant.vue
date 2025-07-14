@@ -26,10 +26,6 @@
         />
 
         <van-button v-if="assistantText" @click="onClear" size="small" style="height: 40px">Clear</van-button>
-
-        <!--        <van-button @click="onShow" style="height: auto; padding: 0px 12px;">-->
-        <!--          <icon-hand-finger :size="15" :stroke-width="1.5"/>-->
-        <!--        </van-button>-->
       </div>
 
       <template v-if="foundTag || foundTemplate || hasAmount">
@@ -37,7 +33,6 @@
         <div class="display-flex flex-center-vertical gap-2 p-5 mt-10 text-size-12 flex-wrap" style="border: 1px dashed black; border-radius: 5px">
           <template v-if="foundTemplate">
             <van-tag round class="assistant-tag" size="medium" type="primary">
-              <!--              <app-icon :icon="TablerIconConstants.transactionTemplate" color="#fff" class="mr-5" :size="15"/>-->
               <span>{{ $t('template') }}</span>
               <span>|</span>
               {{ TransactionTemplate.getDisplayName(foundTemplate) }}
@@ -142,7 +137,7 @@ const fuseConstants = {
   },
 }
 const fuseTags = new Fuse([], { ...fuseOptions, keys: ['attributes.tag'] })
-const fuseTransactionTemplate = new Fuse([], { ...fuseOptions, keys: ['name', 'extra_names'] })
+const fuseTransactionTemplate = new Fuse([], { ...fuseOptions, keys: ['name', 'extra_names.value'] })
 const fuseCategories = new Fuse([], { ...fuseOptions, keys: ['attributes.name'] })
 
 onMounted(() => {})
@@ -276,8 +271,8 @@ const onShow = () => {
 }
 
 watch(
-  [foundTemplate, foundTag, foundCategory, foundAmount, foundDescription, isTodo, () => profileStore.assistantCurrency],
-  ([newTemplate, newTag, newCategory, newAmount, newDescription, newIsTodo, newAssistantCurrency]) => {
+  [foundTemplate, foundTag, foundCategory, foundAmount, foundDescription, isTodo, () => profileStore.assistantCurrency, () => profileStore.profileActiveId],
+  ([newTemplate, newTag, newCategory, newAmount, newDescription, newIsTodo, newAssistantCurrency, _]) => {
     emit('change', {
       transactionTemplate: newTemplate,
       amount: newAmount,
