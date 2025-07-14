@@ -73,7 +73,9 @@
           </template>
 
           <template #right-icon>
-            <currency-dropdown v-model="currencyForeign" />
+            <div class="flex-center">
+              <currency-dropdown v-model="currencyForeign" />
+            </div>
           </template>
 
           <template #input>
