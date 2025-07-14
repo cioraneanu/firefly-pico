@@ -855,8 +855,6 @@ body {
     justify-content: center;
     line-height: 15px;
 
-    /*background: #000;*/
-
     background-image: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
@@ -1106,4 +1104,74 @@ img, svg {
     padding: 0px 5px;
     color: #1565C0;
     border-radius: 3px;
+}
+
+
+.profile-picker {
+    padding: 10px 18px 0px 18px;
+}
+
+.profile-picker-container {
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.profile-picker-card-list {
+    flex-wrap: wrap;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 5px 0px;
+}
+
+.profile-picker-card {
+    font-size: 12px;
+    padding: 5px 8px;
+    border-radius: 15px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border: 1px solid #aaaa;
+    justify-content: center;
+}
+
+
+.profile-picker-card.active {
+    background: #1E88E5;
+    color: #fff;
+    border: 0;
+}
+
+
+.profile-picker-card-add {
+    border-radius: 5px;
+    border: 1.5px dashed #000;
+    padding: 3px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-floating-button {
+    border-top-right-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    border-bottom-left-radius: 10px !important;
+    border-top-left-radius: 10px !important;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    background: #1E88E5 !important;
+    /*position: fixed;*/
+    /*right: 0px;*/
+    /*padding: 10px;*/
+    /*top: 50%;*/
+}
+
+
+.assistant-currency {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 5px;
+    border: 1px dashed #000;
+    border-radius: 5px;
 }

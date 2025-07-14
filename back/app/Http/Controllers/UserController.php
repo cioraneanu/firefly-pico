@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\FireflyException;
 use App\Http\Controllers\Base\BaseController;
 use App\Http\Controllers\Base\BaseControllerFirefly;
+use App\Models\Profile;
 use Illuminate\Http\Request;
 
 

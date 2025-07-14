@@ -48,8 +48,6 @@ const language = ref(null)
 const showAnimations = ref(true)
 const resetFormOnCreate = ref(false)
 
-
-
 const syncedSettings = [
   { store: profileStore, path: 'darkTheme', ref: darkTheme },
   { store: profileStore, path: 'language', ref: language },
@@ -62,8 +60,8 @@ watchSettingsStore(syncedSettings)
 
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
-  await profileStore.writeProfile()
-  UIUtils.showToastSuccess(t('settings.settings_saved'))
+  let response = await profileStore.writeProfile()
+  ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
 }
 
 const toolbar = useToolbar()

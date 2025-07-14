@@ -68,10 +68,8 @@ const onEvent = (event, payload) => {
   }
 }
 
-let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+let { itemId, item, isEmpty, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
-  titleAdd: 'Add category',
-  titleEdit: 'Edit category',
   routeList: RouteConstants.ROUTE_CATEGORY_LIST,
   routeForm: RouteConstants.ROUTE_CATEGORY_ID,
   model: new Category(),

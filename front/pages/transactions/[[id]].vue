@@ -148,6 +148,7 @@ import TransactionSplitBadge from '~/components/transaction/transaction-split-ba
 import { useI18n } from '#imports'
 import { transactionFormField } from '~/constants/TransactionConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
+import Currency from '~/models/Currency.js'
 
 const refAmount = ref(null)
 
@@ -203,7 +204,7 @@ const isForeignAmountVisible = computed(() => {
     Account.getType(accountSource.value)?.fireflyCode === Account.types.asset.fireflyCode &&
     Account.getType(accountDestination.value)?.fireflyCode === Account.types.asset.fireflyCode &&
     Account.getCurrency(accountSource.value)?.id !== Account.getCurrency(accountDestination.value)?.id
-  return !!(newTransactionWithDefaultCurrency || areTypeAssetsWithDifferentCurrencies || currencyForeign.value)
+  return !!(newTransactionWithDefaultCurrency || areTypeAssetsWithDifferentCurrencies || currencyForeign.value || amountForeign.value)
 })
 
 //
@@ -292,41 +293,32 @@ watch(tags, async (newValue) => {
 })
 
 const resetFormFields = () => {
-  accountSource.value = isTypeIncome.value ? profileStore.defaultAccountDestination : profileStore.defaultAccountSource
-  accountDestination.value = isTypeIncome.value ? profileStore.defaultAccountSource : profileStore.defaultAccountDestination
-  tags.value = []
-  category.value = null
-  description.value = ''
+  item.value = new Transaction().getEmpty()
 }
 
-const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemplate: transactionTemplate, amount: newAmount, description: newDescription, isTodo: newIsTodo }) => {
+const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemplate: transactionTemplate, amount: newAmount, description: newDescription, isTodo: newIsTodo, assistantCurrency }) => {
   resetFormFields()
 
-  if (newTag) {
-    tags.value = Tag.getTagWithParents(newTag)
+  newTag && (tags.value = Tag.getTagWithParents(newTag))
+  newIsTodo && dataStore.tagTodo && (tags.value = [...tags.value, dataStore.tagTodo])
+  newCategory && (category.value = newCategory)
+  transactionTemplate ? await onTransactionTemplateSelected(transactionTemplate) : (type.value = Transaction.types.expense)
+
+  if (newAmount && newAmount > 0) {
+    if (!assistantCurrency || !accountSource.value || Account.getCurrencyCode(accountSource.value) === Currency.getCode(assistantCurrency)) {
+      amount.value = newAmount
+    } else {
+      amountForeign.value = newAmount
+      currencyForeign.value = assistantCurrency
+      // Attempt to compute "amount" via exchange rate
+      if (accountSource.value) {
+        let sourceAccountDecimalPlaces = Account.getCurrencyDecimalPlaces(accountSource.value)
+        amount.value = convertCurrency(amountForeign.value, Currency.getCode(currencyForeign.value), Account.getCurrencyCode(accountSource.value)).toFixed(sourceAccountDecimalPlaces)
+      }
+    }
   }
 
-  if (newIsTodo && dataStore.tagTodo) {
-    tags.value = [...tags.value, dataStore.tagTodo]
-  }
-
-  if (newCategory) {
-    category.value = newCategory
-  }
-
-  if (transactionTemplate) {
-    await onTransactionTemplateSelected(transactionTemplate)
-  } else {
-    type.value = Transaction.types.expense
-  }
-
-  if (newAmount) {
-    amount.value = newAmount
-  }
-
-  if (newDescription) {
-    description.value = newDescription
-  }
+  newDescription && (description.value = newDescription)
 }
 
 const isTypeExpense = computed(() => isEqual(type.value, Transaction.types.expense))

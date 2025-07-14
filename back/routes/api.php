@@ -53,13 +53,14 @@ Route::get('budget-limits', [BudgetController::class, 'getBudgetLimits']);
 RouteUtils::makeCRUD("transactions", TransactionController::class);
 Route::get('search/transactions', [TransactionController::class, 'getAll']);
 
-Route::get("profile", [ProfileController::class, "get"]);
-Route::put("profile", [ProfileController::class, "createOrUpdate"]);
 
+RouteUtils::makeCRUD("profiles", ProfileController::class);
 
-//Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//    return $request->user();
-//});
+//Route::get("profiles", [ProfileController::class, 'getAll']);
+//Route::post("profiles", [ProfileController::class, 'create']);
+//Route::put("profiles/{id}", [ProfileController::class, 'update'])->where('id', '[0-9]+');
+//Route::delete("profiles/{id}", [ProfileController::class, 'delete'])->where('id', '[0-9]+');
+
 
 Route::get('/test', function (Request $request) {
     return "Test!";

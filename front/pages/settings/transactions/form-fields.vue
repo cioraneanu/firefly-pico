@@ -57,8 +57,8 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   profileStore.transactionFormFieldsConfig = fieldsList.value
   saveSettingsToStore(syncedSettings)
-  await profileStore.writeProfile()
-  UIUtils.showToastSuccess(t('settings.settings_saved'))
+  let response = await profileStore.writeProfile()
+  ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
   init()
 }
 

@@ -12,7 +12,11 @@ export default class Profile extends BaseModel {
   }
 
   getEmpty() {
-    return {}
+    return {
+      ...useProfileStore().getProfileSettings(),
+      id: null,
+      name: '',
+    }
   }
 
   // ------------

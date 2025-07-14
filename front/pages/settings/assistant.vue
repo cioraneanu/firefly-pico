@@ -6,13 +6,8 @@
       <van-cell-group inset>
         <div class="van-cell-group-title">{{ $t('settings.general') }}:</div>
 
-        <app-field
-          :icon="TablerIconConstants.fieldText2"
-          v-model="assistantTodoTagMatcher"
-          :label="$t('settings.assistant.substring_todo_tag')"
-          :rules="[rule.required()]"
-          required
-        />
+        <app-field :icon="TablerIconConstants.fieldText2" v-model="assistantTodoTagMatcher" :label="$t('settings.assistant.substring_todo_tag')" :rules="[rule.required()]" required />
+        <currency-select v-model="assistantCurrency" :info="$t('settings.assistant.currency')"/>
       </van-cell-group>
 
       <app-button-form-save />
@@ -37,15 +32,19 @@ const profileStore = useProfileStore()
 const dataStore = useDataStore()
 
 const assistantTodoTagMatcher = ref('')
+const assistantCurrency = ref(null)
 
-const syncedSettings = [{ store: profileStore, path: 'assistantTodoTagMatcher', ref: assistantTodoTagMatcher }]
+const syncedSettings = [
+  { store: profileStore, path: 'assistantTodoTagMatcher', ref: assistantTodoTagMatcher },
+  { store: profileStore, path: 'assistantCurrency', ref: assistantCurrency },
+]
 
 watchSettingsStore(syncedSettings)
 
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
-  await profileStore.writeProfile()
-  UIUtils.showToastSuccess(t('settings.settings_saved'))
+  let response = await profileStore.writeProfile()
+  ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
 }
 
 const toolbar = useToolbar()

@@ -16,6 +16,9 @@ export const useAppStore = defineStore('app', {
       syncProfileInDB: useLocalStorage('syncProfileInDB', true),
       daysBetweenFullSync: useLocalStorage('daysBetweenFullSync', 4),
 
+      profileFloatButtonPosition: useLocalStorage('profileFloatButtonPosition', { y: window.innerHeight / 2.2 }),
+
+
       currentAppVersion: runtimeConfig.public.version,
       queryTimeout: runtimeConfig.public.queryTimeout,
       latestAppVersion: null,

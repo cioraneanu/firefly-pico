@@ -29,12 +29,10 @@ export default class Transaction extends BaseModel {
     date.setMinutes(minute)
 
     return {
-      // data: {
       attributes: {
         transactions: [
           {
             amount: '',
-            // 'date': startOfDay(new Date()),
             date: date,
             tags: profileStore.defaultTags,
             description: '',
@@ -47,7 +45,6 @@ export default class Transaction extends BaseModel {
           },
         ],
       },
-      // },
     }
   }
 
@@ -154,4 +151,3 @@ export default class Transaction extends BaseModel {
     return this.types.expense
   }
 }
-

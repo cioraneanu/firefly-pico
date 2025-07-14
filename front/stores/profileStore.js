@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import * as LanguageConstants from '~/constants/LanguageConstants'
 import DateUtils from '~/utils/DateUtils'
-import { cloneDeep, get, omit } from 'lodash'
+import { cloneDeep, get, head, omit } from 'lodash'
 import { transactionFormFieldList, transactionListFieldList, transactionListHeroIcon, transactionListHeroIconList } from '~/constants/TransactionConstants.js'
 import { NUMBER_FORMAT } from '~/utils/NumberUtils.js'
 import ProfileRepository from '~/repository/ProfileRepository'
@@ -18,6 +18,10 @@ export const useProfileStore = defineStore('profile', {
       isLoading: false,
       loadingMessage: 'Loading...',
 
+      profileActiveId: useLocalStorage('profileActiveId', null),
+      profileList: useLocalStorage('profileList', []),
+
+      // Actual fields which update when you change profiles
       darkTheme: useLocalStorage('darkTheme', false),
       language: useLocalStorage('language', 'en'),
       startingPage: useLocalStorage('startingPage', Page.types.transactionNew),
@@ -25,6 +29,7 @@ export const useProfileStore = defineStore('profile', {
       resetFormOnCreate: useLocalStorage('resetFormOnCreate', false),
 
       assistantTodoTagMatcher: useLocalStorage('assistantTodoTagMatcher', '!!'),
+      assistantCurrency: useLocalStorage('assistantCurrency', null, { serializer: StorageSerializers.object }),
 
       defaultAccountSource: useLocalStorage('defaultAccountSource', null, { serializer: StorageSerializers.object }),
       defaultAccountDestination: useLocalStorage('defaultAccountDestination', null, { serializer: StorageSerializers.object }),
@@ -80,16 +85,42 @@ export const useProfileStore = defineStore('profile', {
   getters: {},
 
   actions: {
-    async fetchProfile() {
+    setProfile(profile) {
+      this.profileActiveId = profile?.id
+      this.$patch(profile?.settings ?? {})
+    },
+
+    getProfileSettings() {
+      let omitList = ['isLoading', 'loadingMessage', 'dashboard.showAccountAmounts', 'profileActiveId', 'profileList']
+      let data = cloneDeep(this.$state)
+      let profile = this.profileList.find((item) => item.id === this.profileActiveId)
+
+      return {
+        id: this.profileActiveId,
+        name: profile?.name,
+        settings: {
+          ...omit(data, omitList),
+        },
+      }
+    },
+
+    async getProfiles() {
       const appStore = useAppStore()
       if (!appStore.syncProfileInDB) {
         return
       }
       this.isLoading = true
-      const response = await new ProfileRepository().getProfile()
-      let responseData = response.data ?? {}
-      responseData = ProfileTransformer.transformFromApi(responseData)
-      this.$patch(responseData)
+
+      const response = await new ProfileRepository().getAll()
+      let responseData = response.data ?? []
+
+      this.profileList = responseData
+      let activeProfile = this.profileActiveId ? responseData.find((item) => item.id === this.profileActiveId) : null
+      activeProfile = activeProfile ?? head(responseData)
+      this.setProfile(activeProfile)
+
+      this.profileActiveId = activeProfile?.id
+
       this.isLoading = false
 
       this.migrateProfile()
@@ -100,15 +131,21 @@ export const useProfileStore = defineStore('profile', {
       if (!appStore.syncProfileInDB) {
         return
       }
-
-      let omitList = ['isLoading', 'loadingMessage', 'dashboard.showAccountAmounts']
       this.isLoading = true
-      let data = cloneDeep(this.$state)
-      data = omit(data, omitList)
-      await new ProfileRepository().writeProfile(ProfileTransformer.transformToApi(data))
+
+      let data = this.getProfileSettings()
+      let requestData = ProfileTransformer.transformToApi(data)
+      let response = await new ProfileRepository().update(data.id, requestData)
+      if (ResponseUtils.isSuccess(response)) {
+        let profileResponse = get(response, 'data.data')
+        this.profileList = this.profileList.map((item) => (item.id === profileResponse.id ? profileResponse : item))
+      }
+
       this.isLoading = false
+      return response
     },
 
+    // TODO: These could probably be removed later because all users would have transitioned to the new structure
     migrateProfile() {
       // If we add new fields for "transactionFormFieldsConfig" / "dashboardWidgetsConfig"
       // which the user doesn't have in localStorage add them as well

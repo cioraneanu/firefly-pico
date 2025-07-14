@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Base;
 
 
 use App\Exceptions\GeneralException;
+use App\Models\Personal\Absence;
+use App\Utils\ApprovableUtils;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -48,23 +50,26 @@ class BaseController extends Controller
 
     public function getOne(Request $request)
     {
-        // TODO: Implement getOne() method.
+        $item = $this->getQuery()->findOrFail($request->id);
+        return $this->respond($item);
     }
 
     public function getAll(Request $request)
     {
-        // TODO: Implement getAll() method.
+        $list = $this->getQuery()->get();
+        return $this->respond($list);
     }
 
     public function getTable(Request $request)
     {
-        // TODO: Implement getTable() method.
+        $table = $this->getQuery()->paginate();
+        return $this->respond($table);
     }
 
     public function getCount(Request $request)
     {
-        $response = $this->getQuery()->count();
-        return $this->respond($response);
+        $count = $this->getQuery()->count();
+        return $this->respond($count);
     }
 
 
