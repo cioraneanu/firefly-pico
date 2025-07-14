@@ -311,21 +311,16 @@ const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemp
   transactionTemplate ? await onTransactionTemplateSelected(transactionTemplate) : (type.value = Transaction.types.expense)
 
   if (newAmount) {
-    if (assistantCurrency) {
-      // If no account OR doesn't require foreignCurrency
-      if (!accountSource.value || Account.getCurrencyCode(accountSource.value) === Currency.getCode(assistantCurrency)) {
-        amount.value = newAmount
-      } else {
-        amountForeign.value = newAmount
-        currencyForeign.value = assistantCurrency
-        // Attempt to get compute the exchangeRate value for amount
-        if (accountSource.value) {
-          let sourceAccountDecimalPlaces = Account.getCurrencyDecimalPlaces(accountSource.value)
-          amount.value = convertCurrency(amountForeign.value, Currency.getCode(currencyForeign.value), Account.getCurrencyCode(accountSource.value)).toFixed(sourceAccountDecimalPlaces)
-        }
-      }
-    } else {
+    if (!assistantCurrency || !accountSource.value || Account.getCurrencyCode(accountSource.value) === Currency.getCode(assistantCurrency)) {
       amount.value = newAmount
+    } else {
+      amountForeign.value = newAmount
+      currencyForeign.value = assistantCurrency
+      // Attempt to compute "amount" via exchange rate
+      if (accountSource.value) {
+        let sourceAccountDecimalPlaces = Account.getCurrencyDecimalPlaces(accountSource.value)
+        amount.value = convertCurrency(amountForeign.value, Currency.getCode(currencyForeign.value), Account.getCurrencyCode(accountSource.value)).toFixed(sourceAccountDecimalPlaces)
+      }
     }
   }
 
