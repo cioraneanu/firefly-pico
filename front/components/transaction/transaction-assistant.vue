@@ -282,11 +282,6 @@ watch(
       isTodo: newIsTodo,
       assistantCurrency: newAssistantCurrency,
     })
-
-    // If you selected a template and didn't write anything => write the text
-    if (assistantText.value === '' && newTemplate) {
-      assistantText.value = get(newTemplate, 'extra_names.0.name', '')
-    }
   },
 )
 
