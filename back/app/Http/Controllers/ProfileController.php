@@ -30,6 +30,15 @@ class ProfileController extends BaseController
     {
         BaseAuthorization::checkUser();
 
+        // If we are logged it but don't have a profile yet create a default one
+        $profilesCount = Profile::where('auth_token_hash', getAuthTokenHash())->count();
+        if ($profilesCount === 0) {
+            Profile::create([
+                'auth_token_hash' => getAuthTokenHash(),
+                'name' => "Default profile",
+            ]);
+        }
+
         $profiles = Profile::where('auth_token_hash', getAuthTokenHash())->orderBy('created_at', 'desc')->get();
         $result = ['data' => $profiles];
         return $this->respondSuccessWithData($result);

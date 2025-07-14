@@ -1,15 +1,4 @@
 <template>
-  <!--  <van-popover v-model:show="showPopover">-->
-
-  <!--    <div @click="showPopover = false" class="app-tutorial-popover" style="width: 260px;">-->
-  <!--      <div class="app-toolbar-title">{{ props.title }}</div>-->
-  <!--      <div class="app-toolbar-body" v-html="props.body"></div>-->
-  <!--    </div>-->
-
-  <!--    <template #reference>-->
-  <!--      <div class="app-tutorial-button">?</div>-->
-  <!--    </template>-->
-  <!--  </van-popover>-->
 
   <div class="app-tutorial">
     <div @click.stop.prevent="showPopover = true" class="app-tutorial-button">?</div>

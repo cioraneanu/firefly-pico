@@ -13,8 +13,9 @@ export default class Profile extends BaseModel {
 
   getEmpty() {
     return {
+      ...useProfileStore().getProfileSettings(),
+      id: null,
       name: '',
-      settings: useProfileStore().getProfileSettings(),
     }
   }
 

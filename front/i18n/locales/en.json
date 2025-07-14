@@ -354,6 +354,7 @@
   "profile_page": {
     "title": "Profiles list",
     "title_add": "Add profile",
-    "title_edit": "Edit profile"
+    "title_edit": "Edit profile",
+    "tutorial_body": "<p>A <b>profile</b> is the collection of all the configurations found in the <code>Settings</code> pages.</p><br><p>You can have multiple profiles but only one can be active at a time. You can switch between them with a tap, and edit them via double-tap.</p><br><p>One use case is to have multiple defaults for the <b>transaction-form</b>: one for your daily usage and one for your vacation. The vacation profile can have a different source account, or have a tag called \"Vacation August 2025\" auto-applied. This makes it easy to see your total expense by that tag.</p>"
   }
 }

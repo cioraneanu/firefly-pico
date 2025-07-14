@@ -29,7 +29,7 @@ export const useProfileStore = defineStore('profile', {
       resetFormOnCreate: useLocalStorage('resetFormOnCreate', false),
 
       assistantTodoTagMatcher: useLocalStorage('assistantTodoTagMatcher', '!!'),
-      assistantCurrency: useLocalStorage('assistantCurrency', null),
+      assistantCurrency: useLocalStorage('assistantCurrency', null, { serializer: StorageSerializers.object }),
 
       defaultAccountSource: useLocalStorage('defaultAccountSource', null, { serializer: StorageSerializers.object }),
       defaultAccountDestination: useLocalStorage('defaultAccountDestination', null, { serializer: StorageSerializers.object }),
@@ -87,7 +87,7 @@ export const useProfileStore = defineStore('profile', {
   actions: {
     setProfile(profile) {
       this.profileActiveId = profile?.id
-      this.$patch(profile.settings ?? {})
+      this.$patch(profile?.settings ?? {})
     },
 
     getProfileSettings() {
@@ -97,7 +97,7 @@ export const useProfileStore = defineStore('profile', {
 
       return {
         id: this.profileActiveId,
-        name: profile.name,
+        name: profile?.name,
         settings: {
           ...omit(data, omitList),
         },
@@ -119,7 +119,7 @@ export const useProfileStore = defineStore('profile', {
       activeProfile = activeProfile ?? head(responseData)
       this.setProfile(activeProfile)
 
-      this.profileActiveId = activeProfile.id
+      this.profileActiveId = activeProfile?.id
 
       this.isLoading = false
 

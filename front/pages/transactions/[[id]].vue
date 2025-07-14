@@ -310,7 +310,7 @@ const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemp
   newCategory && (category.value = newCategory)
   transactionTemplate ? await onTransactionTemplateSelected(transactionTemplate) : (type.value = Transaction.types.expense)
 
-  if (newAmount) {
+  if (newAmount && newAmount > 0) {
     if (!assistantCurrency || !accountSource.value || Account.getCurrencyCode(accountSource.value) === Currency.getCode(assistantCurrency)) {
       amount.value = newAmount
     } else {

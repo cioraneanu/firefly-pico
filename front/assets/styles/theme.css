@@ -855,8 +855,6 @@ body {
     justify-content: center;
     line-height: 15px;
 
-    /*background: #000;*/
-
     background-image: linear-gradient(120deg, #f093fb 0%, #f5576c 100%);
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
 }
@@ -1114,7 +1112,6 @@ img, svg {
 }
 
 .profile-picker-container {
-    background: #fff;
     padding: 10px;
     border-radius: 10px;
 }
@@ -1128,7 +1125,6 @@ img, svg {
 }
 
 .profile-picker-card {
-    background: #fcfcfc;
     font-size: 12px;
     padding: 5px 8px;
     border-radius: 15px;

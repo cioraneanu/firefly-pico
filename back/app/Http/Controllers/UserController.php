@@ -15,15 +15,6 @@ class UserController extends BaseController
 
     public function getUser(Request $request)
     {
-        // If the user doesn't have a profile provide one
-        $profilesCount = Profile::where('auth_token_hash', getAuthTokenHash())->count();
-        if ($profilesCount === 0) {
-            Profile::create([
-                'auth_token_hash' => getAuthTokenHash(),
-                'name' => "Default profile",
-            ]);
-        }
-
         return getUser();
     }
 
