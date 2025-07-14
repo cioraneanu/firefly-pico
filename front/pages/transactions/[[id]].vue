@@ -293,13 +293,7 @@ watch(tags, async (newValue) => {
 })
 
 const resetFormFields = () => {
-  accountSource.value = isTypeIncome.value ? profileStore.defaultAccountDestination : profileStore.defaultAccountSource
-  accountDestination.value = isTypeIncome.value ? profileStore.defaultAccountSource : profileStore.defaultAccountDestination
-  tags.value = []
-  category.value = null
-  description.value = ''
-  amountForeign.value = null
-  currencyForeign.value = null
+  item.value = new Transaction().getEmpty()
 }
 
 const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemplate: transactionTemplate, amount: newAmount, description: newDescription, isTodo: newIsTodo, assistantCurrency }) => {
