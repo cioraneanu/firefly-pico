@@ -18,7 +18,7 @@ export const useProfileStore = defineStore('profile', {
       isLoading: false,
       loadingMessage: 'Loading...',
 
-      profileActiveId: useLocalStorage('profileActiveId', null),
+      profileActiveId: useLocalStorage('profileActiveId', null, { serializer: StorageSerializers.number }),
       profileList: useLocalStorage('profileList', []),
 
       // Actual fields which update when you change profiles
@@ -86,7 +86,7 @@ export const useProfileStore = defineStore('profile', {
 
   actions: {
     setProfile(profile) {
-      this.profileActiveId = profile?.id
+      this.profileActiveId = profile ? parseInt(profile?.id) : null
       this.$patch(profile?.settings ?? {})
     },
 
@@ -119,10 +119,7 @@ export const useProfileStore = defineStore('profile', {
       activeProfile = activeProfile ?? head(responseData)
       this.setProfile(activeProfile)
 
-      this.profileActiveId = activeProfile?.id
-
       this.isLoading = false
-
       this.migrateProfile()
     },
 
