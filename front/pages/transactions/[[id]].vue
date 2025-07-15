@@ -24,7 +24,6 @@
           v-model:currencyForeign="currencyForeign"
           :currency="sourceCurrency"
           :isForeignAmountVisible="isForeignAmountVisible"
-          ref="refAmount"
           name="amount"
           :style="getStyleForField(transactionFormField.amount)"
           :disabled="isSplitTransaction"
@@ -141,7 +140,7 @@ import { isStringEmpty } from '~/utils/DataUtils'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import { animateTransactionForm } from '~/utils/AnimationUtils.js'
 import tag from '~/models/Tag'
-import { addDays, endOfMonth, startOfMonth } from 'date-fns'
+import { addDays, endOfMonth, getHours, getMinutes, startOfMonth, startOfToday } from 'date-fns'
 import TransactionRepository from '~/repository/TransactionRepository.js'
 import TransactionTransformer from '~/transformers/TransactionTransformer.js'
 import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
@@ -149,10 +148,6 @@ import { useI18n } from '#imports'
 import { transactionFormField } from '~/constants/TransactionConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
 import Currency from '~/models/Currency.js'
-
-const refAmount = ref(null)
-
-// ------------------------------------
 
 let dataStore = useDataStore()
 let profileStore = useProfileStore()
@@ -216,9 +211,8 @@ const onSubDay = () => {
 }
 
 const onToday = () => {
-  const today = new Date()
-  let newDate = new Date(date.value)
-  newDate.setFullYear(today.getFullYear(), today.getMonth(), today.getDate())
+  let newDate = startOfToday()
+  newDate.setHours(getHours(date.value), getMinutes(date.value), 0)
   date.value = newDate
 }
 
@@ -279,11 +273,7 @@ watch(tags, async (newValue) => {
 
   if (profileStore.copyTagToCategory && !category.value) {
     for (let tagName of sortedTagNames) {
-      let foundCategory = dataStore.categoryList.find((category) => {
-        let categoryName = Category.getDisplayName(category).toLowerCase()
-
-        return tagName === categoryName
-      })
+      let foundCategory = dataStore.categoryList.find((category) => tagName === Category.getDisplayName(category).toLowerCase())
       if (foundCategory) {
         category.value = foundCategory
         break

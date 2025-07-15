@@ -652,7 +652,7 @@ body {
 
 .van-grid-item__text {
     text-align: center;
-    word-break: break-word;
+    word-break: break-word !important;
 }
 
 .app-date-time-grid .van-grid-item__text {

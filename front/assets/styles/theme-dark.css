@@ -380,3 +380,7 @@
   background: #22385b;
   color: #E3F2FD;
 }
+
+.van-theme-dark .assistant-currency {
+  border: 1px dashed #fff;
+}
