@@ -1176,3 +1176,21 @@ img, svg {
     border: 1px dashed #000;
     border-radius: 5px;
 }
+
+.notes-markdown {
+    flex: 1;
+    min-width: 0;
+    max-height: 150px;
+    overflow-y: clip;
+}
+
+.notes-markdown p {
+    margin: 0;
+}
+
+.notes-markdown > * {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+    max-width: 100%;
+}

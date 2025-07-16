@@ -29,7 +29,7 @@
 
             <div v-if="notes && props.isDetailedMode" class="list-item-subtitle" :style="getStyleForField(transactionListField.notes)">
               <app-icon :icon="TablerIconConstants.fieldText1" :size="20" />
-              {{ notes }}
+              <span class="notes-markdown" v-html="notes" />
             </div>
 
             <div v-if="tags && props.isDetailedMode" class="tags-container" :style="getStyleForField(transactionListField.tags)">
@@ -60,7 +60,7 @@
 </template>
 
 <script setup>
-import _, { get, isEqual } from 'lodash'
+import { get, head, isEqual } from 'lodash'
 import Category from '../../models/Category.js'
 import DateUtils from '~/utils/DateUtils'
 import { format } from 'date-fns'
@@ -72,6 +72,7 @@ import Account from '~/models/Account.js'
 import TransactionListItemHeroIcon from '~/components/list-items/transaction-list-item-hero-icon.vue'
 import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
 import { transactionListField } from '~/constants/TransactionConstants.js'
+import { marked } from 'marked'
 
 const props = defineProps({
   value: Object,
@@ -84,18 +85,18 @@ const dataStore = useDataStore()
 
 const emit = defineEmits(['onEdit', 'onDelete'])
 
-const transactions = computed(() => _.get(props.value, 'attributes.transactions', []))
-const firstTransaction = computed(() => _.head(transactions.value))
-const transactionType = computed(() => _.get(firstTransaction.value, 'type', ' - '))
+const transactions = computed(() => get(props.value, 'attributes.transactions', []))
+const firstTransaction = computed(() => head(transactions.value))
+const transactionType = computed(() => get(firstTransaction.value, 'type', ' - '))
 
 const isSplitPayment = computed(() => transactions.value.length > 1)
 
 const displayedAccounts = computed(() => {
-  return [sourceAccount.value, destinationAccount.value].filter(item => !!item)
+  return [sourceAccount.value, destinationAccount.value].filter((item) => !!item)
 })
 
 const description = computed(() => get(props.value, 'attributes.group_title') ?? get(firstTransaction.value, 'description') ?? ' - ')
-// const category = computed(() => _.get(firstTransaction.value, 'category'))
+// const category = computed(() => get(firstTransaction.value, 'category'))
 const categories = computed(() => {
   return transactions.value
     .map((item) => item.category)
@@ -103,7 +104,10 @@ const categories = computed(() => {
     .filter(Boolean)
     .uniqBy('id')
 })
-const notes = computed(() => _.get(firstTransaction.value, 'notes', ' - '))
+const notes = computed(() => {
+  let result = get(firstTransaction.value, 'notes')
+  return result ? marked(result) : null
+})
 
 const tags = computed(() => {
   return transactions.value
@@ -122,16 +126,16 @@ const visibleTags = computed(() => {
   return tags.value.slice(0, 4)
 })
 
-// const transactionAmount = computed(() => _.get(props.value, 'attributes.transactions.0.amount', ' - '))
+// const transactionAmount = computed(() => get(props.value, 'attributes.transactions.0.amount', ' - '))
 
 const transactionAmount = computed(() => Transaction.getAmountFormatted(props.value))
-const transactionCurrency = computed(() => _.get(firstTransaction.value, 'currency_symbol', ' - '))
+const transactionCurrency = computed(() => get(firstTransaction.value, 'currency_symbol', ' - '))
 
 const isTransactionExpense = computed(() => isEqual(transactionType.value, Transaction.types.expense))
 const isTransactionIncome = computed(() => isEqual(transactionType.value, Transaction.types.income))
 const isTransactionTransfer = computed(() => isEqual(transactionType.value, Transaction.types.transfer))
 
-const date = computed(() => DateUtils.autoToDate(_.get(firstTransaction.value, 'date')))
+const date = computed(() => DateUtils.autoToDate(get(firstTransaction.value, 'date')))
 const dateFormatted = computed(() => DateUtils.dateToUI(date.value))
 const dateMonth = computed(() => (date.value ? format(date.value, 'LLL').toUpperCase() : ''))
 const dateWeekdayName = computed(() => (date.value ? format(date.value, 'E').toUpperCase() : ''))

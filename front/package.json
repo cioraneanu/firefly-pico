@@ -40,6 +40,7 @@
     "expr-eval": "^2.0.2",
     "fuse.js": "^7.1.0",
     "lodash": "^4.17.21",
+    "marked": "^16.0.0",
     "pinia": "^3.0.3",
     "vant": "^4.9.20",
     "vuedraggable": "^4.1.0"
