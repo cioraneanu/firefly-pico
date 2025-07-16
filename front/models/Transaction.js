@@ -125,6 +125,9 @@ export default class Transaction extends BaseModel {
   }
 
   static formatAmountForCurrency(amount, currency) {
+    if (!amount || !currency) {
+      return null
+    }
     let decimals = Currency.getDecimalPlaces(currency) ?? 2
     return parseFloat(amount).toFixed(decimals)
   }
