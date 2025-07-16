@@ -2,7 +2,7 @@
   <div :class="layoutClass">
     <slot />
 
-    <profile-picker-float v-if="isProfileFloatButtonVisible" />
+    <profile-picker-float v-if="true" />
     <app-bottom-toolbar />
     <app-bottom-loading />
   </div>
@@ -23,8 +23,8 @@ const layoutClass = computed(() => {
   }
 })
 
-const isProfileFloatButtonVisible = computed(() => {
-  let route = useRoute()
-  return RouteConstants.isSettings(route.path) || route.path === RouteConstants.ROUTE_TRANSACTION_ID
-})
+// const isProfileFloatButtonVisible = computed(() => {
+//   let route = useRoute()
+//   return RouteConstants.isSettings(route.path) || route.path === RouteConstants.ROUTE_TRANSACTION_ID
+// })
 </script>

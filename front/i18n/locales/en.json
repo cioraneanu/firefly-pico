@@ -304,7 +304,8 @@
     "title_add": "Add tag",
     "title_edit": "Edit tag",
     "parent_tag": "Parent tag",
-    "mark_as_todo": "Mark as to-do"
+    "mark_as_todo": "Mark as to-do",
+    "end_date": "End date"
   },
   "category_page": {
     "title_add": "Add category",

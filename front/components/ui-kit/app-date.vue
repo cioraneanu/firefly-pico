@@ -2,6 +2,11 @@
   <div class="">
     <!--    <van-cell :title="label" :value="date" @click="show = true"/>-->
     <van-field v-model="getSelectedName" is-link readonly class="app-field" :label="label" placeholder="No date" @click="show = true" v-bind="dynamicAttrs">
+
+      <template v-if="attrs.icon" #left-icon>
+        <app-icon :icon="attrs.icon" :size="20" />
+      </template>
+
       <template #input>
         <div>
           <div :class="labelClass">

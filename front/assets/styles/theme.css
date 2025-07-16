@@ -428,6 +428,7 @@ body {
 }
 
 .second_column {
+    line-height: normal;
     overflow: hidden;
     margin-right: 10px;
 }

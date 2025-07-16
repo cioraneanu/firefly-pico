@@ -16,6 +16,8 @@
               <div v-if="displayName" class="title app-tag app-select-option-text">{{ displayName }}</div>
               <div v-if="isTodo" class="tag-todo">Todo</div>
             </div>
+            <div v-if="date" class="text-muted text-size-11">{{ $t('tag_page.end_date') }}: {{ date }}</div>
+            <div v-if="description" class="text-muted text-size-11">{{ description }}</div>
             <div class="app-icon-item"></div>
           </div>
 
@@ -31,7 +33,7 @@
 </template>
 
 <script setup>
-import _, { get } from 'lodash'
+import { get } from 'lodash'
 import { useDataStore } from '~/stores/dataStore'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import TablerIconConstants from '~/constants/TablerIconConstants'
@@ -51,8 +53,10 @@ const dataStore = useDataStore()
 const icon = computed(() => Tag.getIcon(props.value))
 
 const level = computed(() => get(props.value, 'level', 0))
-const displayName = computed(() => _.get(props.value, 'attributes.tag', ' - '))
-const isTodo = computed(() => _.get(props.value, 'attributes.is_todo'))
+const displayName = computed(() => get(props.value, 'attributes.tag', ' - '))
+const description = computed(() => get(props.value, 'attributes.description'))
+const date = computed(() => DateUtils.dateToString(get(props.value, 'attributes.date')))
+const isTodo = computed(() => get(props.value, 'attributes.is_todo'))
 
 const onEdit = async (e) => {
   emit('onEdit', props.value)
