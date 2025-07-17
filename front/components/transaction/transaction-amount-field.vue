@@ -101,14 +101,6 @@
             </van-button>
           </td>
         </tr>
-
-        <tr v-show="isInputFocused">
-          <td v-for="operator in operatorsList">
-            <van-button class="w-100 transaction-amount-button transaction-operation-button mt-5" @mousedown.prevent.stop="onOperation(operator)" type="default" size="normal">
-              {{ operator }}
-            </van-button>
-          </td>
-        </tr>
       </tbody>
     </table>
 
@@ -142,6 +134,8 @@ const amountBindings = computed(() => {
 const amount = defineModel('amount')
 const amountForeign = defineModel('amountForeign')
 const currencyForeign = defineModel('currencyForeign')
+const isInputFocused = defineModel('isFocused')
+
 
 const props = defineProps({
   showQuickButtons: {
@@ -166,6 +160,8 @@ const props = defineProps({
   },
 })
 
+const emit = defineEmits(['focus'])
+
 const currencySymbol = computed(() => Currency.getSymbol(props.currency))
 const currencyForeignSymbol = computed(() => Currency.getSymbol(currencyForeign.value))
 
@@ -182,12 +178,10 @@ const transactionInputClass = computed(() => {
   }
 })
 const showEvaluateSuccessAnimation = ref(false)
-const isInputFocused = ref(false)
 const inputAmount = ref(null)
 const inputAmountForeign = ref(null)
 
 const quickButtons = profileStore.quickValueButtons
-const operatorsList = ref(['+', '-', '*', '/'])
 
 const onQuickButton = async (quickButton) => {
   let value = !amount.value || amount.value === '' ? '0' : amount.value

@@ -33,9 +33,7 @@ const { isKeyboardVisible, keyboardHeight, visualViewportHeight, visualViewportO
 
 const style = computed(() => {
   const bottomWithoutKeyboard = `calc(env(safe-area-inset-bottom, 0px) + var(--van-tabbar-height) ${props.bottom})`
-  const bottomWithKeyboardValue = Math.max(keyboardHeight.value + 10 - visualViewportOffsetTop.value, 0)
-  const bottomWithKeyboard = `${bottomWithKeyboardValue}px`
-
+  const bottomWithKeyboard = `${Math.max(keyboardHeight.value + 10 - visualViewportOffsetTop.value, 0)}px`
   return {
     bottom: isKeyboardVisible.value ? bottomWithKeyboard : bottomWithoutKeyboard,
   }

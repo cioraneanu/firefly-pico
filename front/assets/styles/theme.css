@@ -78,14 +78,25 @@ body {
 
 .app-button-save {
     position: fixed !important;
-    /*bottom: 70px;*/
     left: 20px;
     right: 20px;
-    /*box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;*/
     z-index: 2;
-
     max-width: var(--max-device-width);
     margin: 0 auto;
+}
+
+.transaction-amount-operations {
+    position: fixed !important;
+    right: 20px;
+    background: #eee;
+    border-radius: 15px;
+    padding: 5px 20px;
+}
+
+.transaction-amount-operations .button {
+    background: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
 }
 
 .shadow-1 {
@@ -575,9 +586,6 @@ body {
     border: 1px solid #aaa !important;
 }
 
-.transaction-operation-button {
-    /*border: 1px solid #9C27B0 !important;*/
-}
 
 /*---------------------------------*/
 
