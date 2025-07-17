@@ -1,5 +1,5 @@
 import { onMounted, ref } from 'vue'
-import _ from 'lodash'
+import { get, cloneDeep } from 'lodash'
 import UIUtils from '~/utils/UIUtils'
 import { next } from 'lodash/seq'
 
@@ -89,7 +89,7 @@ export function useForm(props) {
     }
 
     item.value = newValue
-    fetchedItem.value = _.cloneDeep(newValue)
+    fetchedItem.value = cloneDeep(newValue)
 
     await nextTick()
     isLoading.value = false
@@ -126,8 +126,8 @@ export function useForm(props) {
         item.value = model.getEmpty()
         resetFields ? resetFields() : null
       } else {
-        let responseId = _.get(response, 'data.data.id')
-        itemId.value = _.get(response, 'data.data.id')
+        let responseId = get(response, 'data.data.id')
+        itemId.value = get(response, 'data.data.id')
         routeForm ? await navigateTo(`${routeForm}/${responseId}`) : null
       }
     }

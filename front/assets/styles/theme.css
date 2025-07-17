@@ -1181,7 +1181,7 @@ img, svg {
     flex: 1;
     min-width: 0;
     max-height: 150px;
-    overflow-y: clip;
+    overflow-y: auto;
 }
 
 .notes-markdown p {
