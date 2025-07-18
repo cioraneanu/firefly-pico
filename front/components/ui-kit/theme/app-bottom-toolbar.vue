@@ -43,7 +43,6 @@ import { useDataStore } from '~/stores/dataStore'
 import { useProfileStore } from '~/stores/profileStore'
 import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants'
-import anime from 'animejs'
 import { animateBottomToolbarAddButton } from '~/utils/AnimationUtils.js'
 
 const dataStore = useDataStore()

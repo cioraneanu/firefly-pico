@@ -19,7 +19,6 @@
 </template>
 
 <script setup>
-import anime from 'animejs'
 import { animateSaveButton } from '~/utils/AnimationUtils.js'
 
 const props = defineProps({
