@@ -172,13 +172,11 @@ const onQuickButton = async (quickButton) => {
 }
 
 const onFocus = () => {
-  console.log('onFocus')
   isFocused.value = true
 }
 
 const onBlur = async () => {
   await nextTick()
-  console.log('onBlur')
   isFocused.value = false
   let newAmount = await evaluateModelValue(amount.value)
   if (newAmount) {
