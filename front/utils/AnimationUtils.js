@@ -1,4 +1,4 @@
-import { animate, stagger } from 'animejs'
+import { animate, stagger, createTimeline, utils, createSpring } from 'animejs'
 import { useProfileStore } from '~/stores/profileStore.js'
 
 const clearAnimationStyle = (animation) => {
@@ -147,9 +147,43 @@ export async function animateOnPrevious(element) {
   })
 }
 
+export async function animateShakeAmountInput() {
+  if (!useProfileStore().showAnimations) {
+    return
+  }
+
+  await nextTick()
+
+  animate('.transaction-amount-field-input', {
+    translateY: [0, -13],
+    opacity: [1, 0],
+    loop: 1,
+    alternate: true,
+    duration: 150,
+  })
+}
+
 export async function animateTransactionAmountOperatorButtons() {
   if (!useProfileStore().showAnimations) {
     return
   }
   await nextTick()
+  utils.set('.transaction-amount-operations', { opacity: 0 })
+  utils.set('.transaction-amount-operations .button', { opacity: 0 })
+
+  const timeline = createTimeline()
+  timeline
+    .add({ duration: 250 })
+    .add('.transaction-amount-operations', {
+      opacity: [0, 1],
+      translateX: [-50, 0],
+      scaleX: [0, 1.0],
+      duration: 300,
+    })
+    .add('.transaction-amount-operations .button', {
+      opacity: [0, 1],
+      translateY: [-5, 0],
+      duration: 50,
+      delay: stagger(25, { start: 0 }),
+    })
 }

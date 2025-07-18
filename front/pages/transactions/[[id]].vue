@@ -18,12 +18,10 @@
           <transaction-split-badge />
         </div>
 
-        Focused = {{ isAmountFocused }}
         <transaction-amount-field
           v-model:amount="amount"
           v-model:amountForeign="amountForeign"
           v-model:currencyForeign="currencyForeign"
-          v-model:isFocused="isAmountFocused"
           :currency="sourceCurrency"
           :isForeignAmountVisible="isForeignAmountVisible"
           name="amount"
@@ -116,8 +114,6 @@
       </div>
 
       <app-button-form-save v-if="!isSplitTransaction" />
-
-      <transaction-amount-field-operations v-if="isAmountFocused" />
     </van-form>
 
     <app-card-info style="order: 99">
@@ -428,11 +424,6 @@ const cloneTransactions = async () => {
   item.value = cloneItem
 }
 
-const isAmountFocused = ref(false)
-
-watch(isAmountFocused, (newValue) => {
-  newValue ? animateTransactionAmountOperatorButtons() : null
-})
 </script>
 
 <style></style>

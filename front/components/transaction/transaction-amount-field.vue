@@ -1,16 +1,8 @@
 <template>
   <div class="van-cell-fake pb-10">
     <!--    Amount field    -->
-    <div>
-      <van-field
-        v-model="amount"
-        :label="$t('amount')"
-        :placeholder="$t('amount')"
-        @click="() => inputAmount.focus()"
-        class="flex-center-vertical app-field transaction-amount-field"
-        v-bind="amountBindings"
-        label-align="top"
-      >
+    <div @click="onClick">
+      <van-field v-model="amount" :label="$t('amount')" :placeholder="$t('amount')" class="flex-center-vertical app-field transaction-amount-field" v-bind="amountBindings" label-align="top">
         <template #left-icon>
           <app-icon :icon="TablerIconConstants.cashBanknote" :size="20" />
         </template>
@@ -30,7 +22,7 @@
             style="width: 100%; border: none; background: transparent; height: 24px"
             type="text"
             inputmode="decimal"
-            :class="transactionInputClass"
+            class="transaction-amount-field-input"
           />
         </template>
       </van-field>
@@ -79,20 +71,13 @@
           </template>
 
           <template #input>
-            <input
-              v-model="amountForeign"
-              ref="inputAmountForeign"
-              style="width: 100%; border: none; background: transparent; height: 24px"
-              type="text"
-              inputmode="decimal"
-              class="transactionAmountField"
-            />
+            <input v-model="amountForeign" ref="inputAmountForeign" style="width: 100%; border: none; background: transparent; height: 24px" type="text" inputmode="decimal" />
           </template>
         </van-field>
       </div>
     </template>
 
-    <table v-if="showQuickButtons && !disabled" class="transaction-amount-table-buttons">
+    <table v-if="showQuickButtons && !disabled" class="ml-15">
       <tbody>
         <tr>
           <td v-for="quickButton in quickButtons">
@@ -105,6 +90,8 @@
     </table>
 
     <!--    <div class="delimiter"/>-->
+
+    <transaction-amount-field-operations v-if="isFocused" @result="onOperation"/>
   </div>
 </template>
 
@@ -115,6 +102,7 @@ import { evalMath, removeEndOperators, sanitizeAmount } from '~/utils/MathUtils'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { cloneDeep, get } from 'lodash'
 import Currency from '~/models/Currency.js'
+import { animateShakeAmountInput, animateTransactionAmountOperatorButtons } from '~/utils/AnimationUtils.js'
 
 const profileStore = useProfileStore()
 const dataStore = useDataStore()
@@ -134,8 +122,7 @@ const amountBindings = computed(() => {
 const amount = defineModel('amount')
 const amountForeign = defineModel('amountForeign')
 const currencyForeign = defineModel('currencyForeign')
-const isInputFocused = defineModel('isFocused')
-
+const isFocused = ref(false)
 
 const props = defineProps({
   showQuickButtons: {
@@ -171,13 +158,6 @@ const currencyForeignCode = computed(() => Currency.getCode(currencyForeign.valu
 const currencyDecimalPlaces = computed(() => Currency.getDecimalPlaces(props.currency))
 const currencyForeignDecimalPlaces = computed(() => Currency.getDecimalPlaces(currencyForeign.value))
 
-const transactionInputClass = computed(() => {
-  return {
-    transactionAmountField: true,
-    animate: showEvaluateSuccessAnimation.value,
-  }
-})
-const showEvaluateSuccessAnimation = ref(false)
 const inputAmount = ref(null)
 const inputAmountForeign = ref(null)
 
@@ -190,11 +170,14 @@ const onQuickButton = async (quickButton) => {
 }
 
 const onFocus = () => {
-  isInputFocused.value = true
+  console.log('onFocus')
+  isFocused.value = true
 }
 
 const onBlur = async () => {
-  isInputFocused.value = false
+  await nextTick()
+  console.log('onBlur')
+  isFocused.value = false
   let newAmount = await evaluateModelValue(amount.value)
   if (newAmount) {
     newAmount = currencyDecimalPlaces.value ? newAmount.toFixed(currencyDecimalPlaces.value) : newAmount.toString()
@@ -214,9 +197,7 @@ const evaluateModelValue = async (amount) => {
   }
 
   if (hasChanged) {
-    showEvaluateSuccessAnimation.value = true
-    await sleep(300)
-    showEvaluateSuccessAnimation.value = false
+    await animateShakeAmountInput()
   }
 
   return value
@@ -226,9 +207,9 @@ watch(amount, (newValue) => {
   amount.value = sanitizeAmount(newValue)
 })
 
-const onOperation = async (operation) => {
-  amount.value = sanitizeAmount(amount.value + operation)
-  moveInputCursorToEnd(input, amount)
+const onOperation = async (button) => {
+  amount.value = sanitizeAmount(amount.value + button.value)
+  // moveInputCursorToEnd(input, amount)
 }
 
 const getConversionError = () => {
@@ -260,33 +241,13 @@ const convertForeignToAmount = () => {
   amount.value = convertCurrency(amountForeign.value, currencyForeignCode.value, currencyCode.value).toFixed(currencyDecimalPlaces.value)
 }
 
-onMounted(() => {
-  // UIUtils.focusInput(input)
+const onClick = () => {
+  // if (!isFocused.value) {
+  //   inputAmount.value.focus()
+  // }
+}
+
+watch(isFocused, (newValue) => {
+  newValue ? animateTransactionAmountOperatorButtons() : null
 })
 </script>
-
-<style scoped>
-.transaction-amount-table-buttons {
-  margin-left: 15px;
-}
-
-.animate {
-  animation: jelly 0.4s;
-}
-
-@keyframes jelly {
-  0%,
-  100% {
-    transform: scale(1, 1);
-  }
-  25% {
-    transform: scale(0.9, 1.1);
-  }
-  50% {
-    transform: scale(1.1, 0.9);
-  }
-  75% {
-    transform: scale(0.95, 1.05);
-  }
-}
-</style>
