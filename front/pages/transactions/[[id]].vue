@@ -138,7 +138,7 @@ import Category from '~/models/Category'
 import Tag from '~/models/Tag'
 import { isStringEmpty } from '~/utils/DataUtils'
 import TablerIconConstants from '~/constants/TablerIconConstants'
-import { animateTransactionForm } from '~/utils/AnimationUtils.js'
+import { animateTransactionAmountOperatorButtons, animateTransactionForm } from '~/utils/AnimationUtils.js'
 import tag from '~/models/Tag'
 import { addDays, endOfMonth, getHours, getMinutes, startOfMonth, startOfToday } from 'date-fns'
 import TransactionRepository from '~/repository/TransactionRepository.js'
@@ -423,6 +423,7 @@ const cloneTransactions = async () => {
   delete cloneItem.id
   item.value = cloneItem
 }
+
 </script>
 
 <style></style>

@@ -34,7 +34,7 @@
     "@vant/touch-emulator": "^1.4.0",
     "@vueuse/core": "^13.5.0",
     "@vueuse/gesture": "^2.0.0",
-    "animejs": "^3.2.2",
+    "animejs": "^4.0.2",
     "axios": "^1.10.0",
     "date-fns": "^4.1.0",
     "expr-eval": "^2.0.2",

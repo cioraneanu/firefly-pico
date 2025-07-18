@@ -10,7 +10,6 @@
 
 <script setup>
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
-import anime from 'animejs'
 
 const emit = defineEmits(['onEdit'])
 const onEdit = () => {

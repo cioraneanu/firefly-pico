@@ -11,7 +11,6 @@
 
 <script setup>
 import { IconRotate } from '@tabler/icons-vue'
-import anime from 'animejs'
 
 const profileStore = useProfileStore()
 const transitionName = computed(() => profileStore.showAnimations ? 'fade' : '')
