@@ -7,8 +7,6 @@
 </template>
 
 <script setup>
-import { animateTransactionAmountOperatorButtons } from '~/utils/AnimationUtils.js'
-
 const emit = defineEmits(['result'])
 import { IconPlus, IconMinus, IconAsteriskSimple, IconDivide } from '@tabler/icons-vue'
 
@@ -32,11 +30,9 @@ const { isKeyboardVisible, keyboardHeight, visualViewportHeight, visualViewportO
 const style = computed(() => {
   const offset = 70
   const bottomWithoutKeyboard = `calc(env(safe-area-inset-bottom, 0px) + var(--van-tabbar-height) + ${offset}px)`
-  const bottomWithKeyboard = `${Math.max(keyboardHeight.value - 10  + offset - visualViewportOffsetTop.value, 0)}px`
+  const bottomWithKeyboard = `${Math.max(keyboardHeight.value - 10 + offset - visualViewportOffsetTop.value, 0)}px`
   return {
     bottom: isKeyboardVisible.value ? bottomWithKeyboard : bottomWithoutKeyboard,
   }
 })
-
-
 </script>

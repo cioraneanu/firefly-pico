@@ -155,11 +155,10 @@ export async function animateShakeAmountInput() {
   await nextTick()
 
   animate('.transaction-amount-field-input', {
-    translateY: [0, -13],
-    opacity: [1, 0],
-    loop: 1,
-    alternate: true,
-    duration: 150,
+    translateY: [0, -13, 0],
+    opacity: [1, 0, 1],
+    duration: 450,
+    ease: 'outCubic'
   })
 }
 
