@@ -10,7 +10,7 @@
         <div class="display-flex gap-2 w-100">
           <div @click.stop="showDatePicker = true" class="fake-input flex-1 cursor-pointer">
             <div :class="labelDateClass">
-              <div class="day-of-week">{{dayOfWeek}}</div>
+              <div class="day-of-week">{{ dayOfWeek }}</div>
               {{ getDisplayDate }}
             </div>
           </div>

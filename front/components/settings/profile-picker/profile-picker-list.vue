@@ -10,7 +10,7 @@
         <van-button size="small" class="add-button" @click="onAdd">{{ $t('new') }}</van-button>
       </div>
 
-      <div class="text-muted text-size-12">Quickly switch between different default source account, currency etc.</div>
+      <div class="text-muted text-size-12">{{ $t('profile_page.info') }}</div>
       <div class="profile-picker-card-list">
         <div v-for="profile in profileStore.profileList" :class="getProfileCardClass(profile)" @click="onClickEvent(profile)">
           {{ profile.name ?? $t('not_set') }}

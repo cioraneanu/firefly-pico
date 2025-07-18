@@ -9,8 +9,8 @@
             </div>
 
             <div class="flex-center-vertical gap-2">
-              <transaction-type-dot :transactionType="transactionType" class="ml-5" />
-              <div v-if="description" class="list-item-title">{{ description }}</div>
+<!--              <transaction-type-dot :transactionType="transactionType" class="ml-5" />-->
+              <div v-if="description" class="list-item-title" >{{ description }}</div>
             </div>
 
             <div class="flex-column" :style="getStyleForField(transactionListField.accounts)">
@@ -41,13 +41,16 @@
           </div>
 
           <div class="third_column">
-            <div class="font-weight-700 text-size-16">{{ transactionAmount }} {{ transactionCurrency }}</div>
+            <div class="font-weight-700 text-size-14" :style="amountStyle">{{ transactionAmount }} {{ transactionCurrency }}</div>
 
             <transaction-list-item-hero-icon v-if="props.isDetailedMode" :value="props.value" />
 
-            <div class="flex-center-vertical text-muted text-size-12">
-              {{ dateFormatted }}
+            <div class="display-flex flex-column align-items-end text-size-12 gap-1 line-height-normal mt-1">
+              <div>{{ dateFormatted }}</div>
+              <div class="text-muted">{{ timeAgo }}</div>
             </div>
+
+            <div class="flex-center-vertical text-muted text-size-12 gap-1"></div>
           </div>
         </div>
       </template>
@@ -60,7 +63,7 @@
 </template>
 
 <script setup>
-import { get, head, isEqual } from 'lodash'
+import { capitalize, get, head, isEqual } from 'lodash'
 import Category from '../../models/Category.js'
 import DateUtils from '~/utils/DateUtils'
 import { format } from 'date-fns'
@@ -73,6 +76,7 @@ import TransactionListItemHeroIcon from '~/components/list-items/transaction-lis
 import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
 import { transactionListField } from '~/constants/TransactionConstants.js'
 import { marked } from 'marked'
+import { formatTimeAgo } from '@vueuse/core'
 
 const props = defineProps({
   value: Object,
@@ -96,7 +100,6 @@ const displayedAccounts = computed(() => {
 })
 
 const description = computed(() => get(props.value, 'attributes.group_title') ?? get(firstTransaction.value, 'description') ?? ' - ')
-// const category = computed(() => get(firstTransaction.value, 'category'))
 const categories = computed(() => {
   return transactions.value
     .map((item) => item.category)
@@ -126,22 +129,18 @@ const visibleTags = computed(() => {
   return tags.value.slice(0, 4)
 })
 
-// const transactionAmount = computed(() => get(props.value, 'attributes.transactions.0.amount', ' - '))
-
-const transactionAmount = computed(() => Transaction.getAmountFormatted(props.value))
+const amountSign = computed(() => (isTypeExpense.value ? '-' : isTypeIncome.value ? '+' : ''))
+const transactionAmount = computed(() => `${amountSign.value}${Transaction.getAmountFormatted(props.value)}`)
 const transactionCurrency = computed(() => get(firstTransaction.value, 'currency_symbol', ' - '))
 
-const isTransactionExpense = computed(() => isEqual(transactionType.value, Transaction.types.expense))
-const isTransactionIncome = computed(() => isEqual(transactionType.value, Transaction.types.income))
-const isTransactionTransfer = computed(() => isEqual(transactionType.value, Transaction.types.transfer))
+const isTypeExpense = computed(() => isEqual(transactionType.value, Transaction.types.expense))
+const isTypeIncome = computed(() => isEqual(transactionType.value, Transaction.types.income))
+const isTypeTransfer = computed(() => isEqual(transactionType.value, Transaction.types.transfer))
 
 const date = computed(() => DateUtils.autoToDate(get(firstTransaction.value, 'date')))
 const dateFormatted = computed(() => DateUtils.dateToUI(date.value))
-const dateMonth = computed(() => (date.value ? format(date.value, 'LLL').toUpperCase() : ''))
-const dateWeekdayName = computed(() => (date.value ? format(date.value, 'E').toUpperCase() : ''))
-const dateDayOfMonth = computed(() => {
-  return date.value ? format(date.value, 'dd') : ''
-})
+const dayOfWeek = computed(() => DateUtils.dateToString(date.value, 'EEEEEE'))
+const timeAgo = computed(() => capitalize(formatTimeAgo(date.value)))
 
 const destinationAccount = computed(() => {
   let destinationId = get(firstTransaction.value, 'destination_id')
@@ -170,6 +169,18 @@ const onEdit = async (e) => {
 const onDelete = async () => {
   emit('onDelete', props.value)
 }
+
+const amountStyle = computed(() => {
+  if (isTypeExpense.value) {
+    return `color: var(--expense2)`
+  }
+  if (isTypeIncome.value) {
+    return `color: var(--income1)`
+  }
+  if (isTypeTransfer.value) {
+    return `color: var(--transfer1)`
+  }
+})
 
 const swipeCell = ref(null)
 const clickWithoutSwipe = useClickWithoutSwipe({ swipeCell: swipeCell, onClick: onEdit })
