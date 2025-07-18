@@ -83,16 +83,7 @@
           </div>
         </div>
 
-        <app-field
-          v-model="notes"
-          :icon="TablerIconConstants.fieldText1"
-          :label="$t('notes')"
-          :placeholder="$t('notes')"
-          type="textarea"
-          rows="1"
-          autosize
-          :style="getStyleForField(transactionFormField.notes)"
-        />
+        <transaction-note-field v-model="notes" :style="getStyleForField(transactionFormField.notes)" />
 
         <budget-select v-model="budget" :style="getStyleForField(transactionFormField.budget)" />
       </van-cell-group>
@@ -148,6 +139,7 @@ import { useI18n } from '#imports'
 import { transactionFormField } from '~/constants/TransactionConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
 import Currency from '~/models/Currency.js'
+import TransactionNoteField from '~/components/transaction/transaction-note-field.vue'
 
 let dataStore = useDataStore()
 let profileStore = useProfileStore()
@@ -423,7 +415,6 @@ const cloneTransactions = async () => {
   delete cloneItem.id
   item.value = cloneItem
 }
-
 </script>
 
 <style></style>
