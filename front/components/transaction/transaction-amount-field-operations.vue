@@ -1,7 +1,7 @@
 <template>
   <div class="transaction-amount-operations flex-center-vertical gap-1" :style="style">
     <div v-for="operator in operatorsList" class="button flex-center" @mousedown.prevent.stop="onOperation(operator)">
-      <component :is="operator.icon" :size="16" :stroke="2.2" />
+      <component :is="operator.icon" :size="16" :stroke="2.0" />
     </div>
   </div>
 </template>
@@ -10,7 +10,7 @@
 import { animateTransactionAmountOperatorButtons } from '~/utils/AnimationUtils.js'
 
 const emit = defineEmits(['result'])
-import { IconPlus, IconMinus, IconAsterisk, IconDivide } from '@tabler/icons-vue'
+import { IconPlus, IconMinus, IconAsteriskSimple, IconDivide } from '@tabler/icons-vue'
 
 const onOperation = (value) => {
   emit('result', value)
@@ -19,7 +19,7 @@ const onOperation = (value) => {
 const operator = {
   plus: { value: '+', icon: IconPlus },
   minus: { value: '-', icon: IconMinus },
-  multiply: { value: '*', icon: IconAsterisk },
+  multiply: { value: '*', icon: IconAsteriskSimple },
   divide: { value: '/', icon: IconDivide },
 }
 

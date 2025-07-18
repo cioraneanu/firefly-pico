@@ -14,41 +14,31 @@
         </template>
 
         <template #input>
-          <input
-            v-model="amount"
-            @focus="onFocus"
-            @blur="onBlur"
-            ref="inputAmount"
-            style="width: 100%; border: none; background: transparent; height: 24px"
-            type="text"
-            inputmode="decimal"
-            class="transaction-amount-field-input"
-          />
+          <div class="flex-center-vertical w-100">
+            <input
+              v-model="amount"
+              @focus="onFocus"
+              @blur="onBlur"
+              ref="inputAmount"
+              style="width: 100%; border: none; background: transparent; height: 24px"
+              type="text"
+              inputmode="decimal"
+              class="transaction-amount-field-input"
+            />
+            <van-button v-if="isConvertButtonVisible" @click="convertAmountToForeign" size="small" class="">
+              <template #icon>
+                <div class="display-flex">
+                  <app-icon :icon="TablerIconConstants.transaction" :size="16" />
+                  <app-icon :icon="TablerIconConstants.downArrow" :size="16" />
+                </div>
+              </template>
+            </van-button>
+          </div>
         </template>
       </van-field>
     </div>
 
     <template v-if="props.isForeignAmountVisible">
-      <div class="flex-center">
-        <van-button @click="convertAmountToForeign" size="small" class="mr-10">
-          <template #icon>
-            <div class="display-flex">
-              <app-icon :icon="TablerIconConstants.transaction" :size="16" />
-              <app-icon :icon="TablerIconConstants.downArrow" :size="16" />
-            </div>
-          </template>
-        </van-button>
-
-        <van-button @click="convertForeignToAmount" size="small" class="mr-10">
-          <template #icon>
-            <div class="display-flex">
-              <app-icon :icon="TablerIconConstants.transaction" :size="16" />
-              <app-icon :icon="TablerIconConstants.upArrow" :size="16" />
-            </div>
-          </template>
-        </van-button>
-      </div>
-
       <!--    Foreign amount field    -->
       <div class="flex-center-vertical">
         <van-field
@@ -71,7 +61,18 @@
           </template>
 
           <template #input>
-            <input v-model="amountForeign" ref="inputAmountForeign" style="width: 100%; border: none; background: transparent; height: 24px" type="text" inputmode="decimal" />
+            <div class="flex-center-vertical gap-1">
+              <input v-model="amountForeign" ref="inputAmountForeign" style="width: 100%; border: none; background: transparent; height: 24px" type="text" inputmode="decimal" />
+
+              <van-button v-if="isConvertButtonVisible" @click="convertForeignToAmount" size="small" class="">
+                <template #icon>
+                  <div class="display-flex">
+                    <app-icon :icon="TablerIconConstants.transaction" :size="16" />
+                    <app-icon :icon="TablerIconConstants.upArrow" :size="16" />
+                  </div>
+                </template>
+              </van-button>
+            </div>
           </template>
         </van-field>
       </div>
@@ -91,7 +92,7 @@
 
     <!--    <div class="delimiter"/>-->
 
-    <transaction-amount-field-operations v-if="isFocused" @result="onOperation"/>
+    <transaction-amount-field-operations v-if="isFocused" @result="onOperation" />
   </div>
 </template>
 
@@ -157,6 +158,7 @@ const currencyForeignCode = computed(() => Currency.getCode(currencyForeign.valu
 
 const currencyDecimalPlaces = computed(() => Currency.getDecimalPlaces(props.currency))
 const currencyForeignDecimalPlaces = computed(() => Currency.getDecimalPlaces(currencyForeign.value))
+const isConvertButtonVisible = computed(() => props.isForeignAmountVisible && currencyForeign.value)
 
 const inputAmount = ref(null)
 const inputAmountForeign = ref(null)
