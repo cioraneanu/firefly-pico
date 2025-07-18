@@ -92,7 +92,8 @@ export async function animateBottomToolbarAddButton() {
   animate('#add-new-transaction', {
     scale: [1, 0.2],
     opacity: [1, 0.4],
-    direction: 'alternate',
+    alternate: true,
+    loop: 1,
     duration: 150,
     delay: 0,
     ease: 'outSine',
@@ -115,33 +116,34 @@ export async function animateSaveButton() {
   })
 }
 
-export async function animateOnNext(element) {
+export async function animateOnNext() {
   if (!useProfileStore().showAnimations) {
     return
   }
 
   await nextTick()
-
-  animate(element, {
-    duration: 100,
+  animate('.dashboard-control-date', {
     translateX: [0, 10],
-    direction: 'alternate',
+    duration: 100,
+    alternate: true,
+    loop: 1,
     delay: 0,
     ease: 'outSine',
   })
 }
 
-export async function animateOnPrevious(element) {
+export async function animateOnPrevious() {
   if (!useProfileStore().showAnimations) {
     return
   }
 
   await nextTick()
 
-  animate(element, {
+  animate('.dashboard-control-date', {
     translateX: [0, -10],
     duration: 100,
-    direction: 'alternate',
+    alternate: true,
+    loop: 1,
     delay: 0,
     ease: 'outSine',
   })
@@ -158,7 +160,7 @@ export async function animateShakeAmountInput() {
     translateY: [0, -13, 0],
     opacity: [1, 0, 1],
     duration: 450,
-    ease: 'outCubic'
+    ease: 'outCubic',
   })
 }
 

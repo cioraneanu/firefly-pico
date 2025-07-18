@@ -1,5 +1,5 @@
 <template>
-  <van-cell-group inset class="dashboard-control-date" :style="style" >
+  <van-cell-group inset class="dashboard-control-date" :style="style">
     <div class="flex-center-vertical gap-2">
       <app-icon :icon="TablerIconConstants.leftArrow" @click.stop="onPreviousMonth" :size="24" class="m-10" />
 
@@ -28,7 +28,6 @@ import DashboardControlButtons from '~/components/dashboard/dashboard-controls/d
 const dataStore = useDataStore()
 const profileStore = useProfileStore()
 
-const dashboardControlDate = ref(null)
 
 const rangeTitle = computed(() => {
   let date1 = DateUtils.dateToUI(dataStore.dashboardDateStart)
@@ -37,11 +36,11 @@ const rangeTitle = computed(() => {
 })
 const onNextMonth = () => {
   dataStore.dashboard.month = addMonths(dataStore.dashboard.month, 1)
-  animateOnNext(dashboardControlDate.value)
+  animateOnNext()
 }
 const onPreviousMonth = () => {
   dataStore.dashboard.month = addMonths(dataStore.dashboard.month, -1)
-  animateOnPrevious(dashboardControlDate.value)
+  animateOnPrevious()
 }
 
 const { y } = useWindowScroll()

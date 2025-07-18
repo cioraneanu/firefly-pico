@@ -346,12 +346,11 @@ body {
 .day-of-week {
     font-size: 10px;
     font-weight: 500;
-    background: #999;
+    background: #222;
     border-radius: 5px;
     color: white;
     padding: 0px 4px;
     height: 18px;
-    margin-top: -5px;
     display: flex;
     align-items: center;
     justify-content: center;

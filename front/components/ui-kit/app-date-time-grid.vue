@@ -10,6 +10,7 @@
         <div class="display-flex gap-2 w-100">
           <div @click.stop="showDatePicker = true" class="fake-input flex-1 cursor-pointer">
             <div :class="labelDateClass">
+              <div class="day-of-week">{{dayOfWeek}}</div>
               {{ getDisplayDate }}
             </div>
           </div>
@@ -68,6 +69,7 @@ const timeInput = ref(null)
 
 const labelDateClass = computed(() => {
   return {
+    'flex-center-vertical gap-1': true,
     'text-muted': !props.modelValue,
   }
 })
@@ -78,6 +80,8 @@ const getDisplayDate = computed(() => {
   }
   return DateUtils.dateToUI(modelValue.value)
 })
+
+const dayOfWeek = computed(() => DateUtils.dateToString(modelValue.value, 'EEEEEE'))
 
 const onConfirmDate = (value) => {
   showDatePicker.value = false
