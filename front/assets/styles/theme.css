@@ -1171,10 +1171,6 @@ img, svg {
     border-top-left-radius: 10px !important;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     background: #1E88E5 !important;
-    /*position: fixed;*/
-    /*right: 0px;*/
-    /*padding: 10px;*/
-    /*top: 50%;*/
 }
 
 
@@ -1203,4 +1199,14 @@ img, svg {
     overflow-wrap: break-word;
     white-space: normal;
     max-width: 100%;
+}
+
+.transaction-amount-field-input {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+}
+
+.van-swipe-cell {
+    will-change: transform, opacity;
+    transform: translateZ(0);
 }

@@ -384,3 +384,12 @@
 .van-theme-dark .assistant-currency {
   border: 1px dashed #fff;
 }
+
+.van-theme-dark .transaction-amount-operations {
+  background: #222;
+}
+
+.van-theme-dark .transaction-amount-operations .button {
+  background: #000;
+  border: 1px solid #999;
+}
