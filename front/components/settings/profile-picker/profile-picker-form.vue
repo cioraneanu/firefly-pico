@@ -60,6 +60,7 @@ let { itemId, item, isEmpty, addButtonText, isLoading, onClickBack, saveItem, on
   model: new Profile(),
   resetFields,
   onEvent,
+  isRouteAware: false
 })
 
 const { name } = generateChildren(item, [{ computed: 'name', parentKey: 'name' }])

@@ -10,8 +10,7 @@ export const useFormEvent = {
 
 export function useForm(props) {
   const { form } = props
-  const { titleAdd, titleEdit } = props
-  const { routeList, routeForm } = props
+  const { routeList, routeForm, isRouteAware = true } = props
   const { model, resetFields, onEvent } = props
   const fetchItemExternal = props.fetchItem
 
@@ -22,20 +21,18 @@ export function useForm(props) {
   let profileStore = useProfileStore()
   const route = useRoute()
 
-  const title = computed(() => (route.params.id ? titleEdit : titleAdd))
-
   let itemId = ref(null)
   let formName = ref(`form-${crypto.randomUUID ? crypto.randomUUID() : Utils.getGUID()}`)
 
-  // let itemId = computed(() => route.params.id)
-
-  watch(
-    () => route.params.id,
-    async (newValue, oldValue) => {
-      itemId.value = newValue
-    },
-    { immediate: true },
-  )
+  if (isRouteAware) {
+    watch(
+      () => route.params.id,
+      async (newValue, oldValue) => {
+        itemId.value = newValue
+      },
+      { immediate: true },
+    )
+  }
 
   let isLoading = ref(false)
   let item = ref({})
@@ -192,7 +189,6 @@ export function useForm(props) {
     item,
     fetchedItem,
     isEmpty,
-    title,
     addButtonText,
     isLoading,
     onClickBack,
