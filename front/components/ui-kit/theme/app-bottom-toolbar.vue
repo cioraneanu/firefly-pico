@@ -3,7 +3,6 @@
     <van-tabbar-item :name="tabConstants.dashboard" @click="onChange(tabConstants.dashboard)">
       {{ $t('toolbar.home') }}
       <template #icon="{ active }">
-        <!--        <IconDeviceDesktopAnalytics />-->
         <app-icon :icon="TablerIconConstants.dashboard" :size="20" :stroke="getStrokeWidth(active)" />
       </template>
     </van-tabbar-item>
@@ -39,6 +38,7 @@
 </template>
 
 <script setup>
+import { isEqual } from 'lodash'
 import { useDataStore } from '~/stores/dataStore'
 import { useProfileStore } from '~/stores/profileStore'
 import RouteConstants from '~/constants/RouteConstants'
@@ -54,7 +54,6 @@ const tabConstants = {
   add: 'add',
   transactionList: 'transactionList',
   dashboard: 'dashboard',
-  transactionTemplateList: 'transactionTemplateList',
   extras: 'extras',
   settings: 'settings',
 }
@@ -64,20 +63,23 @@ const { isKeyboardVisible } = useKeyboard()
 
 watch(
   () => route.path,
-  (newValue) => {
+  (newValue, oldValue) => {
+    if (isEqual(newValue, oldValue)) {
+      return
+    }
+
     if (newValue === RouteConstants.ROUTE_TRANSACTION_LIST || RouteConstants.isForm(RouteConstants.ROUTE_TRANSACTION_ID, newValue)) {
       activeTab.value = tabConstants.transactionList
     }
 
-    if (newValue === RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST || RouteConstants.isForm(RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID, newValue)) {
-      activeTab.value = tabConstants.transactionTemplateList
-    }
-
     if (
-      [RouteConstants.ROUTE_EXTRAS, RouteConstants.ROUTE_TAG_LIST, RouteConstants.ROUTE_ACCOUNT_LIST, RouteConstants.ROUTE_CATEGORY_LIST].includes(newValue) ||
+      [RouteConstants.ROUTE_EXTRAS, RouteConstants.ROUTE_TAG_LIST, RouteConstants.ROUTE_ACCOUNT_LIST, RouteConstants.ROUTE_CATEGORY_LIST, RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST].includes(
+        newValue,
+      ) ||
       RouteConstants.isForm(RouteConstants.ROUTE_TAG_ID, newValue) ||
       RouteConstants.isForm(RouteConstants.ROUTE_ACCOUNT_ID, newValue) ||
-      RouteConstants.isForm(RouteConstants.ROUTE_CATEGORY_ID, newValue)
+      RouteConstants.isForm(RouteConstants.ROUTE_CATEGORY_ID, newValue) ||
+      RouteConstants.isForm(RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID, newValue)
     ) {
       activeTab.value = tabConstants.extras
     }
@@ -112,10 +114,6 @@ const onChange = async (code) => {
 
     case tabConstants.transactionList:
       await navigateTo(RouteConstants.ROUTE_TRANSACTION_LIST)
-      break
-
-    case tabConstants.transactionTemplateList:
-      await navigateTo(RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST)
       break
 
     case tabConstants.extras:

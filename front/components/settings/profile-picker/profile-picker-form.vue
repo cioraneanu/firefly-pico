@@ -55,12 +55,12 @@ const onEvent = (event, payload) => {
   profileStore.getProfiles()
 }
 
-let { itemId, item, isEmpty, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+let { itemId, item, saveItem, onDelete } = useForm({
   form: form,
   model: new Profile(),
   resetFields,
   onEvent,
-  isRouteAware: false
+  shouldFetchOnMount: false
 })
 
 const { name } = generateChildren(item, [{ computed: 'name', parentKey: 'name' }])
