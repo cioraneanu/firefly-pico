@@ -2,7 +2,7 @@
   <div class="app-form">
     <app-top-toolbar>
       <template #right>
-        <app-button-list-add v-if="addButtonText" @click="onNew" />
+        <app-button-list-add v-if="itemId" @click="onNew" />
       </template>
     </app-top-toolbar>
 
@@ -92,7 +92,7 @@ const onEvent = (event, payload) => {
   }
 }
 
-let { itemId, item, isEmpty, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+let { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
   routeList: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST,
   routeForm: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID,

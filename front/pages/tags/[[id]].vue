@@ -2,7 +2,7 @@
   <div class="app-form">
     <app-top-toolbar>
       <template #right>
-        <app-button-list-add v-if="addButtonText" @click="onNew" />
+        <app-button-list-add v-if="itemId" @click="onNew" />
       </template>
     </app-top-toolbar>
 
@@ -64,7 +64,7 @@ const route = useRoute()
 const form = ref(null)
 
 const fetchItem = async () => {
-  let tag = cloneDeep(dataStore.tagDictionaryById[itemId.value])
+  let tag = cloneDeep(dataStore.tagDictionaryById[useRoute().params.id])
 
   let parentTagId = get(tag, 'attributes.parent_id')
   if (parentTagId) {
@@ -91,7 +91,7 @@ const resetFields = () => {
   tag.value = ''
 }
 
-let { itemId, item, isEmpty, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+let { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
   routeList: RouteConstants.ROUTE_TAG_LIST,
   routeForm: RouteConstants.ROUTE_TAG_ID,

@@ -2,7 +2,7 @@
   <div class="app-form">
     <app-top-toolbar>
       <template #right>
-        <app-button-list-add v-if="addButtonText" @click="onNew" />
+        <app-button-list-add v-if="itemId" @click="onNew" />
       </template>
     </app-top-toolbar>
 
@@ -59,7 +59,7 @@ const resetFields = () => {
 
 const fetchItem = () => {
   const dataStore = useDataStore()
-  item.value = dataStore.currencyDictionary[itemId.value]
+  item.value = dataStore.currencyDictionary[useRoute().params.id]
 }
 
 const onEvent = (event, payload) => {
@@ -73,7 +73,7 @@ const onEvent = (event, payload) => {
   }
 }
 
-let { itemId, item, isEmpty, title, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError } = useForm({
+let { itemId, item, saveItem, onDelete, onNew, onValidationError } = useForm({
   form: form,
   routeList: RouteConstants.ROUTE_CURRENCY_LIST,
   routeForm: RouteConstants.ROUTE_CURRENCY_ID,

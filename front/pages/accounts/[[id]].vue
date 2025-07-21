@@ -2,7 +2,7 @@
   <div class="app-form">
     <app-top-toolbar>
       <template #right>
-        <app-button-list-add v-if="addButtonText" @click="onNew" />
+        <app-button-list-add v-if="itemId" @click="onNew" />
       </template>
     </app-top-toolbar>
 
@@ -83,7 +83,7 @@ const isAdjustBalanceVisible = ref(false)
 
 const fetchItem = () => {
   const dataStore = useDataStore()
-  item.value = dataStore.accountDictionary[itemId.value]
+  item.value = dataStore.accountDictionary[useRoute().params.id]
 }
 
 const onEvent = (event, payload) => {
@@ -98,7 +98,7 @@ const onEvent = (event, payload) => {
   }
 }
 
-let { itemId, item, isEmpty, addButtonText, isLoading, onClickBack, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+let { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
   routeList: RouteConstants.ROUTE_ACCOUNT_LIST,
   routeForm: RouteConstants.ROUTE_ACCOUNT_ID,
