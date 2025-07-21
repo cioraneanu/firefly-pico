@@ -2,7 +2,6 @@ import BaseModel from '~/models/BaseModel'
 import { get } from 'lodash'
 import BudgetTransformer from '~/transformers/BudgetTransformer.js'
 import BudgetRepository from '~/repository/BudgetRepository.js'
-import { useDataStore } from '~/stores/dataStore.js'
 
 export default class Budget extends BaseModel {
   getTransformer() {

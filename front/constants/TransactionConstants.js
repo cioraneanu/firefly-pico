@@ -82,11 +82,11 @@ export const transactionListField = {
     icon: TablerIconConstants.tag,
     isVisible: true,
   },
-  // budget: {
-  //   code: 'budget',
-  //   name: 'Budget',
-  //   isVisible: true,
-  // },
+  budget: {
+    code: 'budget',
+    name: 'Budget',
+    isVisible: true,
+  },
 }
 
 export const transactionListHeroIcon = {

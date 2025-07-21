@@ -1,4 +1,4 @@
-class UIUtils {
+export default class UIUtils {
   static showToast(text, duration = 3000) {}
 
   static showToastSuccess(message, duration = 1000) {
@@ -65,4 +65,3 @@ class UIUtils {
   }
 }
 
-export default UIUtils

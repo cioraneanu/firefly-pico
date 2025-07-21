@@ -6,7 +6,10 @@ import { supportedLanguages } from './i18n'
 const appName = 'Firefly Pico'
 const appDescription = 'Firefly III companion app.'
 export default defineNuxtConfig({
-
+  devServer: {
+    // host: '192.168.1.10',
+    // host: '0'
+  },
   i18n: {
     vueI18n: './i18n/i18n.config.js',
     langDir: 'locales',
@@ -32,12 +35,6 @@ export default defineNuxtConfig({
       // mihai: 'test'
     },
   },
-
-  devServer: {
-    // host: '192.168.1.10',
-    // host: '0'
-  },
-
   vite: {
     vue: {
       script: {

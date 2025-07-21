@@ -9,8 +9,8 @@
             </div>
 
             <div class="flex-center-vertical gap-2">
-<!--              <transaction-type-dot :transactionType="transactionType" class="ml-5" />-->
-              <div v-if="description" class="list-item-title" >{{ description }}</div>
+              <!--              <transaction-type-dot :transactionType="transactionType" class="ml-5" />-->
+              <div v-if="description" class="list-item-title">{{ description }}</div>
             </div>
 
             <div class="flex-column" :style="getStyleForField(transactionListField.accounts)">
@@ -38,6 +38,11 @@
                 <div class="list-item-subtitle ml-5">{{ Tag.getDisplayNameEllipsized(tag, 10) }}</div>
               </div>
             </div>
+
+            <div v-if="budget && props.isDetailedMode" class="list-item-subtitle" :style="getStyleForField(transactionListField.budget)">
+              <app-icon :icon="TablerIconConstants.budget" :size="20" />
+              {{ Budget.getDisplayName(budget) }}
+            </div>
           </div>
 
           <div class="third_column">
@@ -64,13 +69,14 @@
 
 <script setup>
 import { capitalize, get, head, isEqual } from 'lodash'
-import Category from '../../models/Category.js'
+import Category from '@/models/Category.js'
 import DateUtils from '~/utils/DateUtils'
 import { format } from 'date-fns'
 import Transaction from '~/models/Transaction'
+import Budget from '~/models/Budget.js'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import TablerIconConstants from '~/constants/TablerIconConstants'
-import Tag from '../../models/Tag.js'
+import Tag from '@/models/Tag.js'
 import Account from '~/models/Account.js'
 import TransactionListItemHeroIcon from '~/components/list-items/transaction-list-item-hero-icon.vue'
 import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
@@ -119,6 +125,8 @@ const tags = computed(() => {
     .filter(Boolean)
     .uniqBy('id')
 })
+
+const budget = computed(() => get(firstTransaction.value, 'budget'))
 
 const isTodo = computed(() => tags.value.some((tag) => get(tag, 'attributes.is_todo')))
 const cellClass = computed(() => ({
