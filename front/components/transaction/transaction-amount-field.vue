@@ -190,15 +190,14 @@ const onBlur = async () => {
 
 const evaluateModelValue = async (amount) => {
   let newAmount = removeEndOperators(amount)
-  const { wasSuccessful, hasChanged, value } = evalMath(newAmount)
+  const { wasSuccessful, value } = evalMath(newAmount)
   if (!wasSuccessful) {
     UIUtils.showToastError('Cannot evaluate expression')
     return
   }
 
-  if (hasChanged) {
-    await animateShakeAmountInput()
-  }
+  const hasChanged = parseFloat(newAmount ?? 0) !== parseFloat(value ?? 0)
+  hasChanged ? await animateShakeAmountInput() : null
 
   return value
 }
