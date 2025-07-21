@@ -55,13 +55,13 @@
           </template>
 
           <template #right-icon>
-            <div class="flex-center">
-              <currency-dropdown v-model="currencyForeign" @click="() => {}"/>
+            <div class="flex-center" @click.prevent.stop>
+              <currency-dropdown v-model="currencyForeign" />
             </div>
           </template>
 
           <template #input>
-            <div class="flex-center-vertical gap-1">
+            <div class="flex-center-vertical gap-1 w-100">
               <input v-model="amountForeign" ref="inputAmountForeign" style="width: 100%; border: none; background: transparent; height: 24px" type="text" inputmode="decimal" />
 
               <van-button v-if="isConvertButtonVisible" @click="convertForeignToAmount" size="small" class="">
