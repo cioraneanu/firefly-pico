@@ -37,7 +37,7 @@ export const icons = {
   notes: 'IconWallet',
   repeaterHandler: 'IconMenu2',
 
-  lastSync: 'IconRefresh',
+  lastSync: 'IconCloudDown',
   refresh: 'IconRefresh',
 
   leftArrow: 'IconArrowLeft',

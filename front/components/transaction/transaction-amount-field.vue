@@ -1,7 +1,6 @@
 <template>
   <div class="van-cell-fake pb-10">
-    <!--    Amount field    -->
-    <div @click="onClick">
+    <div>
       <van-field v-model="amount" :label="$t('amount')" :placeholder="$t('amount')" class="flex-center-vertical app-field transaction-amount-field" v-bind="amountBindings" label-align="top">
         <template #left-icon>
           <app-icon :icon="TablerIconConstants.cashBanknote" :size="20" />
@@ -90,23 +89,18 @@
       </tbody>
     </table>
 
-    <!--    <div class="delimiter"/>-->
-
-    <transaction-amount-field-operations v-if="isFocused" @result="onOperation" />
+    <transaction-amount-field-operations v-if="isFocused && device.isMobileOrTablet" @result="onOperation" />
   </div>
 </template>
 
 <script setup>
-import { useDataStore } from '~/stores/dataStore'
-import { moveInputCursorToEnd, sleep } from '~/utils/VueUtils'
 import { evalMath, removeEndOperators, sanitizeAmount } from '~/utils/MathUtils'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
-import { cloneDeep, get } from 'lodash'
 import Currency from '~/models/Currency.js'
 import { animateShakeAmountInput, animateTransactionAmountOperatorButtons } from '~/utils/AnimationUtils.js'
 
+const device = useDevice()
 const profileStore = useProfileStore()
-const dataStore = useDataStore()
 const attrs = useAttrs()
 const amountBindings = computed(() => {
   return {
@@ -238,12 +232,6 @@ const convertForeignToAmount = () => {
     return
   }
   amount.value = convertCurrency(amountForeign.value, currencyForeignCode.value, currencyCode.value).toFixed(currencyDecimalPlaces.value)
-}
-
-const onClick = () => {
-  // if (!isFocused.value) {
-  //   inputAmount.value.focus()
-  // }
 }
 
 watch(isFocused, (newValue) => {

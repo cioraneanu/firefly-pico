@@ -12,6 +12,13 @@
       <app-field-link :label="$t('settings.about_entry')" :icon="TablerIconConstants.settingsAbout" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_ABOUT)" />
     </van-cell-group>
 
+
+    <van-cell-group inset style="overflow: auto">
+      <app-field-link label="Sync everything" :icon="TablerIconConstants.lastSync" @click="onSyncEverything" :isLink="false" />
+    </van-cell-group>
+
+
+
     <div class="text-muted subtitle flex-center mt-20 flex-column">
       <div>
         <a :href="REPO_URL">{{$t('settings.version')}}: {{ appStore.currentAppVersion }}</a>
@@ -31,12 +38,21 @@ import { useToolbar } from '~/composables/useToolbar'
 import { REPO_URL } from '~/constants/Constants'
 
 import TablerIconConstants from '~/constants/TablerIconConstants'
+import UIUtils from '~/utils/UIUtils.js'
 
 const appStore = useAppStore()
+const dataStore = useDataStore()
 const toolbar = useToolbar()
 
 const { t } = useI18n()
 toolbar.init({ title: t('settings.settings_title') })
+
+
+const onSyncEverything = async () => {
+  UIUtils.showToastLoading(t('settings.setup.fetching'))
+  await dataStore.syncEverything()
+  UIUtils.stopToastLoading()
+}
 
 onMounted(() => {
   animateSettings()

@@ -54,7 +54,8 @@ class TransactionTemplateController extends BaseController
     {
         TransactionTemplateAuthorization::authorizeRead();
 
-        $paginatedData = $this->getQuery()->paginate();
+        $pageSize = request()->has('limit') ? request()->limit : 10;
+        $paginatedData = $this->getQuery()->paginate($pageSize);
         $result = [
             'data' => $paginatedData->items(),
             'meta' => [

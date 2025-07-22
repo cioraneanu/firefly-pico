@@ -69,9 +69,11 @@ export const useDataStore = defineStore('data', {
       isLoadingCategories: false,
       isLoadingBudgets: false,
       isLoadingTransactionTemplates: false,
+      isLoadingCurrencies: false,
+      isLoadingExchangeRates: false,
+
       isLoadingDashboardTransactions: false,
       isLoadingDashboardTransactionsLastWeek: false,
-      isLoadingExchangeRates: false,
     }
   },
 
@@ -298,7 +300,15 @@ export const useDataStore = defineStore('data', {
     },
 
     isLoadingExtras(state) {
-      return state.isLoadingCategories || state.isLoadingTags || state.isLoadingTransactionTemplates || state.isLoadingAccounts
+      return (
+        state.isLoadingCategories ||
+        state.isLoadingTags ||
+        state.isLoadingTransactionTemplates ||
+        state.isLoadingAccounts ||
+        state.isLoadingExchangeRates ||
+        state.isLoadingCurrencies ||
+        state.isLoadingBudgets
+      )
     },
 
     transactionTemplateDictionary: (state) => {
@@ -470,6 +480,7 @@ export const useDataStore = defineStore('data', {
       let async7 = this.fetchExchangeRate()
       let async8 = useProfileStore().getProfiles()
       await Promise.all([async1, async2, async3, async4, async5, async6, async7, async8])
+
       this.lastSync = new Date()
     },
 
@@ -521,12 +532,16 @@ export const useDataStore = defineStore('data', {
     },
 
     async fetchTransactionTemplates() {
+      this.isLoadingTransactionTemplates = true
       const list = await new TransactionTemplateRepository().getAllWithMerge()
       this.transactionTemplateList = TransactionTemplateTransformer.transformFromApiList(list)
+      this.isLoadingTransactionTemplates = false
     },
 
     async fetchCurrencies() {
+      this.isLoadingCurrencies = true
       this.currenciesList = await new CurrencyRepository().getAllWithMerge()
+      this.isLoadingCurrencies = false
     },
 
     async init() {
