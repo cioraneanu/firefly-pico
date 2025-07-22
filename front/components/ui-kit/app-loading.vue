@@ -1,9 +1,9 @@
 <template>
   <transition :name="transitionName">
-    <div v-if="profileStore.isLoading" class="app-loading-background">
+    <div v-if="loading.isLoading" class="app-loading-background">
       <div class="app-loading flex-column flex-center">
         <icon-rotate :size="30" :stroke="1.4" class="animate-rotate-infinite" />
-        <div class="text-size-16">{{ profileStore.loadingMessage }}</div>
+        <div class="text-size-16">{{ loading.loadingMessage }}</div>
       </div>
     </div>
   </transition>
@@ -11,6 +11,9 @@
 
 <script setup>
 import { IconRotate } from '@tabler/icons-vue'
+import { useLoading } from '~/composables/useLoading.js'
+
+const loading = useLoading()
 
 const profileStore = useProfileStore()
 const transitionName = computed(() => profileStore.showAnimations ? 'fade' : '')
