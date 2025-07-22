@@ -24,8 +24,6 @@
           autosize
           :clearable="true"
         />
-
-        <van-button v-if="assistantText" @click="onClear" size="small" style="height: 40px">Clear</van-button>
       </div>
 
       <template v-if="foundTag || foundTemplate || hasAmount">
@@ -35,7 +33,7 @@
             <van-tag round class="assistant-tag" size="medium" type="primary">
               <span>{{ $t('template') }}</span>
               <span>|</span>
-              {{ TransactionTemplate.getDisplayName(foundTemplate) }}
+              {{ foundTemplateDisplayName }}
             </van-tag>
           </template>
 
@@ -113,6 +111,7 @@ const assistantTextField = ref(null)
 const foundCategory = ref(null)
 const foundTag = ref(null)
 const foundTemplate = ref(null)
+const foundTemplateDisplayName = ref(null) // String showing either template name or the matched extra name
 const foundAmount = ref(null)
 const foundDescription = ref(null)
 const isTodo = ref(false)
@@ -121,7 +120,7 @@ const hasAmount = computed(() => {
   return foundAmount.value && foundAmount.value > 0
 })
 
-const fuseOptions = { includeScore: true, minMatchCharLength: 3, threshold: 0.6, distance: 100 }
+const fuseOptions = { includeScore: true, minMatchCharLength: 3, threshold: 0.6, distance: 100, includeMatches: true }
 const fuseConstants = {
   template: {
     weight: 1.0,
@@ -209,6 +208,7 @@ const processAssistantText = () => {
       score: get(head(fuseTemplateResults), 'score') * fuseConstants.template.weight,
       type: fuseConstants.template.type,
       item: get(head(fuseTemplateResults), 'item'),
+      match: get(head(fuseTemplateResults), 'matches.0.value')
     },
     {
       score: get(head(fuseTagResults), 'score') * fuseConstants.tag.weight,
@@ -229,6 +229,8 @@ const processAssistantText = () => {
 
   if (bestGuess) {
     foundTemplate.value = bestGuess.type === fuseConstants.template.type ? bestGuess.item : null
+    foundTemplateDisplayName.value = foundTemplate.value ? bestGuess.match : null
+
     foundTag.value = bestGuess.type === fuseConstants.tag.type ? bestGuess.item : null
     foundCategory.value = bestGuess.type === fuseConstants.category.type ? bestGuess.item : null
   }
