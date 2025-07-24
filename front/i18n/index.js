@@ -4,7 +4,8 @@ export const languageCode = {
   english: 'en',
   romanian: 'ro',
   chinese: 'zh-CN',
-  italian: 'it'
+  italian: 'it',
+  brazilian_portuguese: 'pt-BR',
 }
 
 export const supportedLanguages = [
@@ -31,5 +32,11 @@ export const supportedLanguages = [
     file: 'it.json',
     displayName: 'Italiano',
     icon: 'svgo-flags-it',
+  },
+  {
+    code: languageCode.brazilian_portuguese,
+    file: 'pt-BR.json',
+    displayName: 'Português (Brasil)',
+    icon: 'svgo-flags-br',
   },
 ]
