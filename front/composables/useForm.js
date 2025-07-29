@@ -4,6 +4,7 @@ import UIUtils from '~/utils/UIUtils'
 import { next } from 'lodash/seq'
 
 export const useFormEvent = {
+  postFetch: 'postFetch',
   postSave: 'onPostSave',
   postDelete: 'onPostDelete',
 }
@@ -52,6 +53,8 @@ export function useForm(props) {
 
     await nextTick()
     isLoading.value = false
+
+    onEvent?.(useFormEvent.postFetch)
   }
 
   async function saveItem() {
