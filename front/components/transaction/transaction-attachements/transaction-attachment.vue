@@ -1,18 +1,27 @@
 <template>
-  <div class="flex-center bg-success" style="width: 50px; height: 50px">
-    {{ letter }}
+  <div class="flex-center flex-column p-2 transaction-attachment" @click="onClick">
+    <icon-photo :size="30" :stroke="1.4" />
+    <div class="text-size-12">{{ displayName }}</div>
   </div>
 </template>
 
-
 <script setup>
+import { IconPhoto } from '@tabler/icons-vue'
+
 import { get, head } from 'lodash'
+import { trimString } from '~/utils/StringUtils.js'
 
 const props = defineProps({
-  value: {}
+  value: {},
 })
 
+const displayName = computed(() => trimString(title.value ?? filename.value).toLowerCase())
+const title = computed(() => get(props.value, 'attributes.title'))
+const filename = computed(() => get(props.value, 'attributes.filename'))
+const downloadUrl = computed(() => get(props.value, 'attributes.download_url'))
 
-const letter = computed(() => head(get(props.value, 'attributes.filename')))
 
+const onClick = () => {
+  useImage().show(downloadUrl.value)
+}
 </script>

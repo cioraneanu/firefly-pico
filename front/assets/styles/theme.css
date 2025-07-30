@@ -1210,3 +1210,9 @@ img, svg {
     will-change: transform, opacity;
     transform: translateZ(0);
 }
+
+.transaction-attachment {
+    border-radius: 5px;
+    border: 1px dashed #000;
+    cursor: pointer;
+}
