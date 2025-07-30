@@ -86,6 +86,8 @@
         <transaction-note-field v-model="notes" :style="getStyleForField(transactionFormField.notes)" />
 
         <budget-select v-model="budget" :style="getStyleForField(transactionFormField.budget)" />
+
+        <transaction-attachments-list :transaction="item" :list="attachments" />
       </van-cell-group>
 
       <div style="margin: 16px; position: relative">
@@ -140,6 +142,9 @@ import { transactionFormField } from '~/constants/TransactionConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
 import Currency from '~/models/Currency.js'
 import TransactionNoteField from '~/components/transaction/transaction-note-field.vue'
+import TransactionAttachmentsList from '~/components/transaction/transaction-attachements/transaction-attachments-list.vue'
+import AttachmentRepository from '~/repository/AttachmentRepository.js'
+import AttachmentTransformer from '~/transformers/AttachmentTransformer.js'
 
 let dataStore = useDataStore()
 let profileStore = useProfileStore()
@@ -147,11 +152,19 @@ const route = useRoute()
 
 const form = ref(null)
 const assistantText = ref('')
-const attachements = ref([])
+const attachments = ref([])
 
-const onFormEvent = (event) => {
+const onFormEvent = async (event) => {
   if (event === useFormEvent.postFetch) {
+    await fetchAttachments()
+  }
+}
 
+const fetchAttachments = async () => {
+  let response = await new AttachmentRepository().getForTransaction(itemId.value)
+  console.log({ response })
+  if (ResponseUtils.isSuccess(response)) {
+    attachments.value = AttachmentTransformer.transformFromApiList(response.data?.data ?? [])
   }
 }
 
