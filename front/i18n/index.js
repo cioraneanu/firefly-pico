@@ -6,6 +6,7 @@ export const languageCode = {
   chinese: 'zh-CN',
   italian: 'it',
   brazilian_portuguese: 'pt-BR',
+  german_german: 'de-DE',
 }
 
 export const supportedLanguages = [
@@ -38,5 +39,11 @@ export const supportedLanguages = [
     file: 'pt-BR.json',
     displayName: 'Português (Brasil)',
     icon: 'svgo-flags-br',
+  },
+  {
+    code: languageCode.german_german,
+    file: 'de-DE.json',
+    displayName: 'Deutsch (Deutschland)',
+    icon: 'svgo-flags-de',
   },
 ]
