@@ -36,5 +36,10 @@ export default class AttachmentRepository extends BaseRepository {
     const responseStep2 = await axios.post(urlStep2, arrayBuffer, {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     })
+
+    if (!ResponseUtils.isSuccess(responseStep2)) {
+      // If upload failed, try to keep things clean and delete the attachment entry
+      await this.delete(attachmentId)
+    }
   }
 }

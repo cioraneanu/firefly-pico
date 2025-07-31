@@ -1,6 +1,6 @@
 <template>
-  <div v-if="transactionId" class="px-3 pb-3">
-    <div class="font-400 text-size-14">
+  <div v-if="transactionId" class="px-3 pb-3 pt-1">
+    <div class="flex-center-vertical font-400 text-size-14">
       <app-icon :icon="TablerIconConstants.attachment" :size="20" />
       {{ $t('attachments') }}
     </div>
@@ -8,7 +8,7 @@
     <div class="flex-center-vertical flex-wrap gap-1 mt-2">
       <van-loading v-if="isLoading" />
 
-      <transaction-attachment v-for="item in list" :value="item" />
+      <transaction-attachment v-for="item in list" :value="item" @result="fetchAttachments" />
 
       <div v-if="!isLoading" class="add-attachment flex-center">
         <icon-plus :size="30" :stroke="0.8" />
@@ -55,4 +55,6 @@ const onUpload = async (e) => {
   await new AttachmentRepository().uploadForTransaction(id, file)
   await fetchAttachments()
 }
+
+
 </script>
