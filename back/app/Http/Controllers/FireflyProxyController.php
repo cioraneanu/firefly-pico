@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Base\BaseControllerFirefly;
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 
 class FireflyProxyController extends BaseControllerFirefly
@@ -18,17 +19,14 @@ class FireflyProxyController extends BaseControllerFirefly
     // ---------------------------
 
 
-    public function proxyRequest(Request $request) {
-
+    public function proxyRequest(Request $request)
+    {
         $url = $this->getFullUrl();
-        $body = $request->all();
+        $body = $request->getContent();
         $method = $request->method();
-//        dd($url, $body, $method);
-        $response = $this->getHttpClient()->get($url, $body);
-
-        return $response->body();
+        $response = $this->getHttpClient()->send($method, $url, ['body' => $body]);
+        return response($response->body(), $response->getStatusCode());
     }
-
 
 
 }

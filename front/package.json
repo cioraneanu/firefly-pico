@@ -36,6 +36,7 @@
     "@vueuse/gesture": "^2.0.0",
     "animejs": "^4.0.2",
     "axios": "^1.10.0",
+    "basiclightbox": "^5.0.4",
     "date-fns": "^4.1.0",
     "expr-eval": "^2.0.2",
     "fuse.js": "^7.1.0",

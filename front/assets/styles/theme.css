@@ -1216,3 +1216,17 @@ img, svg {
     border: 1px dashed #000;
     cursor: pointer;
 }
+
+.add-attachment {
+    position: relative;
+}
+
+.add-attachment input {
+    cursor: pointer;
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+}

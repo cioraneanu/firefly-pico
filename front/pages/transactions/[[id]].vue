@@ -87,7 +87,7 @@
 
         <budget-select v-model="budget" :style="getStyleForField(transactionFormField.budget)" />
 
-        <transaction-attachments-list :transaction="item" :list="attachments" />
+        <transaction-attachments-list :transaction="item" />
       </van-cell-group>
 
       <div style="margin: 16px; position: relative">
@@ -152,19 +152,10 @@ const route = useRoute()
 
 const form = ref(null)
 const assistantText = ref('')
-const attachments = ref([])
 
 const onFormEvent = async (event) => {
   if (event === useFormEvent.postFetch) {
-    await fetchAttachments()
-  }
-}
-
-const fetchAttachments = async () => {
-  let response = await new AttachmentRepository().getForTransaction(itemId.value)
-  console.log({ response })
-  if (ResponseUtils.isSuccess(response)) {
-    attachments.value = AttachmentTransformer.transformFromApiList(response.data?.data ?? [])
+    // await fetchAttachments()
   }
 }
 

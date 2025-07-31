@@ -64,7 +64,10 @@ Route::get('/test', function (Request $request) {
 });
 
 // Just proxy the requests in which we do not change anything straight to Firefly III
-Route::get('{any?}', [FireflyProxyController::class, 'proxyRequest'])->where('any', '.*');
+$proxyMethods = ['get', 'post', 'put', 'patch', 'delete'];
+foreach ($proxyMethods as $proxyMethod) {
+    Route::$proxyMethod('{any?}', [FireflyProxyController::class, 'proxyRequest'])->where('any', '.*');
+}
 
 
 

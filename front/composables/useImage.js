@@ -1,34 +1,22 @@
-import { onMounted, ref } from 'vue'
-import UIUtils from '~/utils/UIUtils'
-import _, { get } from 'lodash'
 import axios from 'axios'
-
+import * as basicLightbox from 'basiclightbox'
+import 'basiclightbox/dist/basicLightbox.min.css'
+import { get } from 'lodash'
+import { blobToJson } from '~/utils/DataUtils.js'
 
 export function useImage(prop) {
   const show = async (url) => {
-    try {
-      const response = await axios.get(url, { responseType: 'blob' })
-
-      const blobUrl = URL.createObjectURL(response.data)
-
-      const overlay = document.createElement('div')
-      overlay.id = 'image-overlay'
-
-      const img = document.createElement('img')
-      img.src = blobUrl
-
-      overlay.appendChild(img)
-
-      // Optional: Click to remove the overlay
-      overlay.addEventListener('click', () => {
-        overlay.remove()
-        URL.revokeObjectURL(blobUrl)
-      })
-
-      document.body.appendChild(overlay)
-    } catch (err) {
-      console.error('Error fetching image:', err)
+    const response = await axios.get(url, { responseType: 'blob' })
+    if (!ResponseUtils.isSuccess(response)) {
+      const responseBody = await blobToJson(response.data)
+      const errorMessage = get(responseBody, 'message') ?? "Error occurred"
+      UIUtils.showToastError(errorMessage)
+      return
     }
+
+    const blobUrl = URL.createObjectURL(response.data)
+    const instance = basicLightbox.create(`<img src="${blobUrl}" style="max-width: 100vw; max-height: 100vh;" />`)
+    instance.show()
   }
 
   return { show }

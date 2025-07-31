@@ -8,9 +8,7 @@ export default class AttachmentTransformer extends ApiTransformer {
       return null
     }
 
-    // item.attributes.download_url =
-    // let newUrl = "http://127.0.0.1:8000/api/attachments/1/download"
-
+    item.attributes.download_url = convertFireflyToPicoUrl(item.attributes.download_url)
 
     return item
   }
