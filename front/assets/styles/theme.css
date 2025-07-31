@@ -1213,12 +1213,16 @@ img, svg {
 
 .transaction-attachment {
     border-radius: 5px;
-    border: 1px dashed #000;
+    background: #f5f5f5;
     cursor: pointer;
 }
 
 .add-attachment {
     position: relative;
+    border: 1px dashed;
+    border-radius: 3px;
+    padding: 4px;
+    background: #fafafa;
 }
 
 .add-attachment input {

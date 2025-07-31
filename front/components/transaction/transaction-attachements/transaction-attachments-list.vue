@@ -1,14 +1,17 @@
 <template>
-  <div class="p-2">
-    <div class="font-600">Attachments</div>
+  <div v-if="transactionId" class="px-3 pb-3">
+    <div class="font-400 text-size-14">
+      <app-icon :icon="TablerIconConstants.attachment" :size="20" />
+      {{ $t('attachments') }}
+    </div>
 
-    <div class="display-flex gap-1">
+    <div class="flex-center-vertical flex-wrap gap-1 mt-2">
       <van-loading v-if="isLoading" />
 
       <transaction-attachment v-for="item in list" :value="item" />
 
-      <div v-if="!isLoading" class="add-attachment p-2">
-        <icon-square-plus :size="50" :stroke="0.8" />
+      <div v-if="!isLoading" class="add-attachment flex-center">
+        <icon-plus :size="30" :stroke="0.8" />
         <input type="file" @change="onUpload" />
       </div>
     </div>
@@ -16,12 +19,13 @@
 </template>
 
 <script setup>
-import { IconSquarePlus } from '@tabler/icons-vue'
+import { IconSquarePlus, IconPlus } from '@tabler/icons-vue'
 import TransactionAttachment from '~/components/transaction/transaction-attachements/transaction-attachment.vue'
 import AttachmentRepository from '~/repository/AttachmentRepository.js'
 import { get, head } from 'lodash'
 import { ref } from 'vue'
 import AttachmentTransformer from '~/transformers/AttachmentTransformer.js'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 const isLoading = ref(false)
 const list = ref([])
@@ -35,7 +39,6 @@ const transactionId = computed(() => props.transaction?.id)
 const fetchAttachments = async () => {
   isLoading.value = true
   let response = await new AttachmentRepository().getForTransaction(transactionId.value)
-  console.log({ response })
   if (ResponseUtils.isSuccess(response)) {
     list.value = AttachmentTransformer.transformFromApiList(response.data?.data ?? [])
   }

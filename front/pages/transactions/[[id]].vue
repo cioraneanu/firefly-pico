@@ -87,7 +87,7 @@
 
         <budget-select v-model="budget" :style="getStyleForField(transactionFormField.budget)" />
 
-        <transaction-attachments-list :transaction="item" />
+        <transaction-attachments-list :transaction="item" :style="getStyleForField(transactionFormField.attachments)" />
       </van-cell-group>
 
       <div style="margin: 16px; position: relative">

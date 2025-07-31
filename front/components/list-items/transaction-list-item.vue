@@ -8,9 +8,9 @@
               <transaction-split-badge />
             </div>
 
-            <div class="flex-center-vertical gap-2">
+            <div class="flex-center-vertical gap-1">
               <div v-if="description" class="list-item-title">{{ description }}</div>
-              <icon-photo v-if="hasAttachments" :size="20" :stroke="1.8" />
+              <app-icon v-if="hasAttachments" :icon="TablerIconConstants.attachment" :size="20" color="#1E88E5" />
             </div>
 
             <div class="flex-column" :style="getStyleForField(transactionListField.accounts)">

@@ -55,6 +55,12 @@ export const transactionFormField = {
     icon: TablerIconConstants.budget,
     isVisible: true,
   },
+  attachments: {
+    t: 'attachments',
+    code: 'attachments',
+    icon: TablerIconConstants.attachment,
+    isVisible: true,
+  },
 }
 
 export const transactionListField = {

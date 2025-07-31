@@ -22,13 +22,11 @@ export default class AttachmentRepository extends BaseRepository {
       attachable_id: id,
     }
     let responseStep1 = await axios.post(urlStep1, bodyStep1)
-    console.log({ responseStep1 })
     if (!ResponseUtils.isSuccess(responseStep1)) {
       return
     }
 
     let attachmentId = get(responseStep1, 'data.data.id')
-    console.log({ attachmentId })
 
     const urlStep2 = `${useAppStore().picoBackendURL}/api/attachments/${attachmentId}/upload`
 
@@ -38,6 +36,5 @@ export default class AttachmentRepository extends BaseRepository {
     const responseStep2 = await axios.post(urlStep2, arrayBuffer, {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     })
-    console.log({ responseStep2 })
   }
 }
