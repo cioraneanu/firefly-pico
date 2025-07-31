@@ -153,18 +153,11 @@ const route = useRoute()
 const form = ref(null)
 const assistantText = ref('')
 
-const onFormEvent = async (event) => {
-  if (event === useFormEvent.postFetch) {
-    // await fetchAttachments()
-  }
-}
-
 let { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
   routeList: RouteConstants.ROUTE_TRANSACTION_LIST,
   routeForm: RouteConstants.ROUTE_TRANSACTION_ID,
   model: new Transaction(),
-  onEvent: onFormEvent,
   resetFields: () => {
     assistantText.value = ''
   },
@@ -427,6 +420,4 @@ const cloneTransactions = async () => {
   delete cloneItem.id
   item.value = cloneItem
 }
-
-onMounted(() => {})
 </script>
