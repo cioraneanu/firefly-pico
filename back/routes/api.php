@@ -4,6 +4,7 @@ use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\FireflyProxyController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TransactionController;
@@ -56,15 +57,18 @@ Route::get('search/transactions', [TransactionController::class, 'getAll']);
 
 RouteUtils::makeCRUD("profiles", ProfileController::class);
 
-//Route::get("profiles", [ProfileController::class, 'getAll']);
-//Route::post("profiles", [ProfileController::class, 'create']);
-//Route::put("profiles/{id}", [ProfileController::class, 'update'])->where('id', '[0-9]+');
-//Route::delete("profiles/{id}", [ProfileController::class, 'delete'])->where('id', '[0-9]+');
 
 
 Route::get('/test', function (Request $request) {
     return "Test!";
 });
+
+// Just proxy the requests in which we do not change anything straight to Firefly III
+$proxyMethods = ['get', 'post', 'put', 'patch', 'delete'];
+foreach ($proxyMethods as $proxyMethod) {
+    Route::$proxyMethod('{any?}', [FireflyProxyController::class, 'proxyRequest'])->where('any', '.*');
+}
+
 
 
 

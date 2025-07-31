@@ -2,8 +2,10 @@ import { onMounted, ref } from 'vue'
 import { get, cloneDeep } from 'lodash'
 import UIUtils from '~/utils/UIUtils'
 import { next } from 'lodash/seq'
+import { getGUID } from '~/utils/Utils.js'
 
 export const useFormEvent = {
+  postFetch: 'postFetch',
   postSave: 'onPostSave',
   postDelete: 'onPostDelete',
 }
@@ -17,7 +19,7 @@ export function useForm(props) {
 
   let profileStore = useProfileStore()
 
-  let formName = ref(`form-${crypto.randomUUID ? crypto.randomUUID() : Utils.getGUID()}`)
+  let formName = ref(`form-${getGUID()}`)
 
   let isLoading = ref(false)
   let item = ref({})
@@ -52,6 +54,8 @@ export function useForm(props) {
 
     await nextTick()
     isLoading.value = false
+
+    onEvent?.(useFormEvent.postFetch)
   }
 
   async function saveItem() {

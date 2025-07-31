@@ -393,3 +393,10 @@
   background: #000;
   border: 1px solid #999;
 }
+
+.van-theme-dark .transaction-attachment {
+  background: #2f2f2f;
+}
+.van-theme-dark .add-attachment {
+  background: #2f2f2f;
+}

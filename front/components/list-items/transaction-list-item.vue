@@ -8,9 +8,9 @@
               <transaction-split-badge />
             </div>
 
-            <div class="flex-center-vertical gap-2">
-              <!--              <transaction-type-dot :transactionType="transactionType" class="ml-5" />-->
+            <div class="flex-center-vertical gap-1">
               <div v-if="description" class="list-item-title">{{ description }}</div>
+              <app-icon v-if="hasAttachments" :icon="TablerIconConstants.attachment" :size="20" color="#1E88E5" />
             </div>
 
             <div class="flex-column" :style="getStyleForField(transactionListField.accounts)">
@@ -83,6 +83,7 @@ import TransactionSplitBadge from '~/components/transaction/transaction-split-ba
 import { transactionListField } from '~/constants/TransactionConstants.js'
 import { marked } from 'marked'
 import { formatTimeAgo } from '@vueuse/core'
+import { IconPhoto } from '@tabler/icons-vue'
 
 const props = defineProps({
   value: Object,
@@ -106,6 +107,8 @@ const displayedAccounts = computed(() => {
 })
 
 const description = computed(() => get(props.value, 'attributes.group_title') ?? get(firstTransaction.value, 'description') ?? ' - ')
+const hasAttachments = computed(() => transactions.value.some((item) => item.has_attachments))
+
 const categories = computed(() => {
   return transactions.value
     .map((item) => item.category)

@@ -98,3 +98,20 @@ export const setLevel = (data, parentId = null, level = 0) => {
 export const compareVersionStrings = (a, b) => {
   return a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' })
 }
+
+export const convertFireflyToPicoUrl = (url) => {
+  const parsed = new URL(url)
+  const newPath = parsed.pathname.replace('/api/v1', '/api')
+  let picoBackendURL = useAppStore().picoBackendURL
+
+  return `${picoBackendURL}${newPath}`
+}
+
+export const blobToJson = async (blob) => {
+  const text = await blob.text() // Convert Blob to string
+  try {
+    return JSON.parse(text)
+  } catch (error) {
+    return null
+  }
+}
