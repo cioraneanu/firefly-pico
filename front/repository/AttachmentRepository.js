@@ -2,6 +2,7 @@ import BaseRepository from '~/repository/BaseRepository'
 import axios from 'axios'
 import { get } from 'lodash'
 import { getGUID } from '~/utils/Utils.js'
+import { translate } from '~/plugins/plugin-i18n.js'
 
 export default class AttachmentRepository extends BaseRepository {
   constructor() {
@@ -40,6 +41,9 @@ export default class AttachmentRepository extends BaseRepository {
     if (!ResponseUtils.isSuccess(responseStep2)) {
       // If upload failed, try to keep things clean and delete the attachment entry
       await this.delete(attachmentId)
+      return
     }
+
+    UIUtils.showToastSuccess(translate('success'))
   }
 }
