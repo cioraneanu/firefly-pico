@@ -1215,6 +1215,7 @@ img, svg {
     border-radius: 5px;
     background: #f5f5f5;
     cursor: pointer;
+    min-width: 100px;
 }
 
 .add-attachment {

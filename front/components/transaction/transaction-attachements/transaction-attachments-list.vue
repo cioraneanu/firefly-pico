@@ -8,7 +8,7 @@
     <div class="flex-center-vertical flex-wrap gap-1 mt-2">
       <van-loading v-if="isLoading" />
 
-      <transaction-attachment v-for="item in list" :value="item" @result="fetchAttachments" />
+      <transaction-attachment v-for="item in list" :key="item.id" :value="item" @result="fetchAttachments" />
 
       <div v-if="!isLoading" class="add-attachment flex-center">
         <icon-plus :size="30" :stroke="0.8" />
