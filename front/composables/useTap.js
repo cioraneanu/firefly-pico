@@ -1,6 +1,3 @@
-// useGesture.js - Vue 3 Composable
-import { ref } from 'vue'
-
 export const useTapEvent = {
   single: 'single',
   double: 'double',
@@ -103,13 +100,14 @@ export function useTap(callback, options = {}) {
 
   // Return the event handlers to bind to the element
   return {
-    onPointerdown: handlePointerDown,
-    onPointerup: handlePointerUp,
-    onPointerleave: handlePointerLeave,
-    // Also handle mouse events for better compatibility
-    onMousedown: handlePointerDown,
-    onMouseup: handlePointerUp,
-    onMouseleave: handlePointerLeave,
+    // onPointerdown: handlePointerDown,
+    // onPointerup: handlePointerUp,
+    // onPointerleave: handlePointerLeave,
+
+    // onMousedown: handlePointerDown,
+    // onMouseup: handlePointerUp,
+    // onMouseleave: handlePointerLeave,
+
     // Touch events for mobile
     onTouchstart: handlePointerDown,
     onTouchend: handlePointerUp,

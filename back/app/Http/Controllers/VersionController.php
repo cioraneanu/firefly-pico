@@ -15,15 +15,14 @@ class VersionController extends BaseController
 
     public function getLatestVersion(Request $request)
     {
-        $url = 'https://hub.docker.com/v2/repositories/cioraneanu/firefly-pico/tags?page_size=1000';
+        $url = 'https://api.github.com/repos/cioraneanu/firefly-pico/tags?per_page=100';
         $response = Http::get($url);
         if (!$response->successful()) {
             return null;
         }
-        $body = $response->json();
-        $versions = fcollect($body['results'])
+        $versions = fcollect($response->json())
         ->map(fn($item) => $item['name'])
-        ->filter(fn($item) => $item !== 'latest')
+        ->filter(fn($item) => !str_ends_with($item, '-dev'))
         ->toArray();
 
         usort($versions, 'version_compare');
