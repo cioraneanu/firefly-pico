@@ -16,7 +16,7 @@
           </div>
 
           <div @click="onShowTimePicker" class="fake-input flex-1 cursor-pointer time-container">
-            <input ref="timeInput" type="time" class="hidden-input" v-model="modelValueTime" @change="onTimeChange" />
+            <input ref="timeInput" type="time" class="hidden-input" v-model="modelValueTime" />
             <div :class="labelDateClass">{{ getDisplayTime }}</div>
           </div>
         </div>
@@ -33,6 +33,7 @@
     </div>
 
     <van-calendar @open="onOpen" v-model:show="showDatePicker" @confirm="onConfirmDate" :show-confirm="false" :min-date="minDate" :max-date="maxDate" color="#000" first-day-of-week="1" />
+    <app-date-time-grid-time-popup v-model:show="showTimePicker" v-model="modelValueTime" />
   </div>
 </template>
 
@@ -45,6 +46,7 @@ import { clone, head } from 'lodash'
 import { usePointerSwipe } from '@vueuse/core'
 import { useSwipeToDismiss } from '~/composables/useSwipeToDismiss.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import AppDateTimeGridTimePopup from '~/components/ui-kit/app-date-time-grid-time-popup.vue'
 
 const dataStore = useDataStore()
 const attrs = useAttrs()
@@ -60,7 +62,7 @@ const modelValue = defineModel()
 const modelValueTime = ref(null)
 
 const showDatePicker = ref(null)
-// const showTimePicker = ref(null)
+const showTimePicker = ref(null)
 
 const minDate = subYears(new Date(), 1)
 const maxDate = addYears(new Date(), 1)
@@ -97,20 +99,25 @@ const onConfirmDate = (value) => {
 // ------
 
 const onShowTimePicker = () => {
-  timeInput.value?.focus()
-  timeInput.value?.showPicker?.()
+  let hasBrowserTimePicker = timeInput.value?.showPicker
+  if (hasBrowserTimePicker) {
+    timeInput.value?.focus()
+    timeInput.value?.showPicker?.()
+  } else {
+    showTimePicker.value = true
+  }
 }
 
-const onTimeChange = () => {
+watch(modelValueTime, (newValue, oldValue) => {
   let newDate = clone(modelValue.value)
-  const [hours, minutes] = (modelValueTime.value ?? '').split(':').map(Number)
+  const [hours, minutes] = (newValue ?? '').split(':').map(Number)
   if (!hours || !minutes) {
     return
   }
   newDate.setHours(hours)
   newDate.setMinutes(minutes)
   modelValue.value = newDate
-}
+})
 
 const getDisplayTime = computed(() => {
   if (!modelValue.value) {
