@@ -20,7 +20,7 @@ const props = defineProps({
   value: {},
 })
 
-const emits = defineEmits(['result'])
+const emits = defineEmits(['result', 'isLoading'])
 
 const displayName = computed(() => trimString(title.value ?? filename.value).toLowerCase())
 const title = computed(() => get(props.value, 'attributes.title'))
@@ -30,10 +30,14 @@ const isImage = computed(() => (get(props.value, 'attributes.mime') ?? '').start
 
 const { t } = useI18n()
 
-const tapBinding = useTap((event) => {
+const tapBinding = useTap(async (event) => {
   switch (event) {
     case useTapEvent.single:
-      isImage.value ? showImageFromUrl(downloadUrl.value) : downloadFileFromUrl(downloadUrl.value, filename.value)
+      emits('isLoading', true)
+      try {
+        isImage.value ? await showImageFromUrl(downloadUrl.value) : await downloadFileFromUrl(downloadUrl.value, filename.value)
+      } catch {}
+      emits('isLoading', false)
       break
     case useTapEvent.long:
       useActionSheet().show([
