@@ -99,7 +99,7 @@ const onConfirmDate = (value) => {
 // ------
 
 const onShowTimePicker = () => {
-  let hasBrowserTimePicker = timeInput.value?.showPicker
+  const hasBrowserTimePicker = useDevice().isMobileOrTablet || useDevice().isChrome
   if (hasBrowserTimePicker) {
     timeInput.value?.focus()
     timeInput.value?.showPicker?.()

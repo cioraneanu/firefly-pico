@@ -17,8 +17,6 @@ const localModelValue = ref(null)
 watch(
   modelValue,
   (newValue, oldValue) => {
-    console.log('modelValue', { newValue, oldValue })
-
     if (isEqual(newValue, oldValue) || !newValue) {
       return
     }
@@ -28,7 +26,6 @@ watch(
 )
 
 watch(localModelValue, (newValue, oldValue) => {
-  console.log('localModelValue', { newValue, oldValue })
   if (isEqual(newValue, oldValue)) {
     return
   }
