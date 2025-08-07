@@ -12,13 +12,15 @@
 
 <script setup>
 import { IconNut } from '@tabler/icons-vue'
+import { useWindowSize } from '@vueuse/core'
 
 const appStore = useAppStore()
 const isListVisible = ref(false)
 
-// Ignore the X coordinate as the window can be resized
+const { width } = useWindowSize()
+// Only persist the Y position and set the X based on the current window width
 const position = computed({
-  get: () => appStore.profileFloatButtonPosition,
+  get: () => ({ x: width.value - 40, y: appStore.profileFloatButtonPosition.y }),
   set: (value) => {
     appStore.profileFloatButtonPosition = { y: value.y }
   },

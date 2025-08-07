@@ -39,6 +39,7 @@ const tapBinding = useTap(async (event) => {
       } catch {}
       emits('isLoading', false)
       break
+    case useTapEvent.double:
     case useTapEvent.long:
       useActionSheet().show([
         {
