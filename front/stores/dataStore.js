@@ -34,6 +34,7 @@ export const useDataStore = defineStore('data', {
 
       dashboard: {
         // month: startOfMonth(new Date()),
+        filters: {},
         month: null,
         transactionsList: [],
         transactionsListLastWeek: [],
@@ -395,14 +396,6 @@ export const useDataStore = defineStore('data', {
     async fetchDashboardTransactionsForInterval() {
       this.isLoadingDashboardTransactions = true
 
-      // let filters = [
-      //   { field: 'start', value: DateUtils.dateToString(this.dashboardDateStart) },
-      //   { field: 'end', value: DateUtils.dateToString(this.dashboardDateEnd) },
-      //   { field: 'type', value: 'income,expense,transfer' },
-      // ]
-      // const list = await new TransactionRepository().getAllWithMerge({ filters })
-
-      // TODO: Test this on user with larger Databases. Need to make sure the /search endpoint + filters is faster than all transaction with frontend filtering
       let filtersParts = [`date_after:${DateUtils.dateToString(this.dashboardDateStart)}`, `date_before:${DateUtils.dateToString(this.dashboardDateEnd)}`, ...getExcludedTransactionFilters()]
       let filters = [{ field: 'query', value: filtersParts.join(' ') }]
       let searchMethod = new TransactionRepository().searchTransaction
@@ -417,13 +410,6 @@ export const useDataStore = defineStore('data', {
 
       let startDate = DateUtils.dateToString(subDays(startOfDay(new Date()), 7))
       let endDate = DateUtils.dateToString(startOfDay(new Date()))
-
-      // let filters = [
-      //   { field: 'start', value: startDate },
-      //   { field: 'end', value: endDate },
-      //   { field: 'type', value: 'expense' },
-      // ]
-      // const list = await new TransactionRepository().getAllWithMerge({ filters })
 
       let filtersParts = [`date_after:${startDate}`, `date_after:${startDate}`, `type:withdrawal`, ...getExcludedTransactionFilters()]
       let filters = [{ field: 'query', value: filtersParts.join(' ') }]

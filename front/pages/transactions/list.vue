@@ -2,12 +2,10 @@
   <div :class="formClass">
     <app-top-toolbar>
       <template #right>
-        <div>
-          <van-button @click="onShowFilters" size="small" class="mr-10 no-border">
-            <template #icon>
-              <app-icon :icon="TablerIconConstants.search" size="20" :stroke="1.9" />
-            </template>
-          </van-button>
+        <div class="flex-center-vertical gap-1">
+          <div @click.prevent.stop="onShowFilters" class="mr-10">
+            <app-icon :icon="TablerIconConstants.search" size="20" :stroke="1.6" />
+          </div>
 
           <app-button-list-add @click="onAdd" />
         </div>
