@@ -1174,7 +1174,7 @@ img, svg {
 }
 
 
-.assistant-currency {
+.currency-dropdown {
     display: flex;
     align-items: center;
     gap: 5px;
@@ -1182,6 +1182,11 @@ img, svg {
     border: 1px dashed #000;
     border-radius: 5px;
 }
+
+.currency-dropdown.borderless {
+    border: none;
+}
+
 
 .notes-markdown {
     flex: 1;

@@ -28,7 +28,6 @@
       </div>
     </van-pull-refresh>
 
-    <transaction-filters ref="transactionFiltersRef" v-model="dataStore.dashboard.filters" />
 
   </div>
 </template>

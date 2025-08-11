@@ -55,7 +55,7 @@
 
           <template #right-icon>
             <div class="flex-center" @click.prevent.stop>
-              <currency-dropdown v-model="currencyForeign" />
+              <currency-dropdown v-model="currencyForeign" class="borderless" />
             </div>
           </template>
 
