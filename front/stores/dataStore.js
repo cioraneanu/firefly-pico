@@ -33,8 +33,7 @@ export const useDataStore = defineStore('data', {
       isLoading: false,
 
       dashboard: {
-        // month: startOfMonth(new Date()),
-        filters: {},
+        backendFilters: [],
         month: null,
         transactionsList: [],
         transactionsListLastWeek: [],
@@ -397,6 +396,7 @@ export const useDataStore = defineStore('data', {
       this.isLoadingDashboardTransactions = true
 
       let filtersParts = [`date_after:${DateUtils.dateToString(this.dashboardDateStart)}`, `date_before:${DateUtils.dateToString(this.dashboardDateEnd)}`, ...getExcludedTransactionFilters()]
+      filtersParts = [...filtersParts, ...this.dashboard.backendFilters]
       let filters = [{ field: 'query', value: filtersParts.join(' ') }]
       let searchMethod = new TransactionRepository().searchTransaction
       let list = await new TransactionRepository().getAllWithMerge({ filters, getAll: searchMethod })
@@ -412,6 +412,7 @@ export const useDataStore = defineStore('data', {
       let endDate = DateUtils.dateToString(startOfDay(new Date()))
 
       let filtersParts = [`date_after:${startDate}`, `date_after:${startDate}`, `type:withdrawal`, ...getExcludedTransactionFilters()]
+      filtersParts = [...filtersParts, ...this.dashboard.backendFilters]
       let filters = [{ field: 'query', value: filtersParts.join(' ') }]
       let searchMethod = new TransactionRepository().searchTransaction
       let list = await new TransactionRepository().getAllWithMerge({ filters, getAll: searchMethod })
@@ -539,6 +540,15 @@ export const useDataStore = defineStore('data', {
     },
 
     // -----
+
+    async fetchDashboard() {
+      this.fetchAccounts()
+      this.fetchDashboardTransactionsForInterval()
+      this.fetchDashboardTransactionsForWeek()
+      this.fetchTransactionsWithTodos()
+      this.fetchExchangeRate()
+      this.fetchBudgets()
+    }
 
     // -----
   },
