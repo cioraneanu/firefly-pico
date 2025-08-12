@@ -1,6 +1,6 @@
 <template>
   <van-popup v-model:show="showDropdown" round position="bottom" :style="style">
-    <div class="h-100 display-flex flex-column qqq">
+    <div class="h-100 display-flex flex-column qqq" @touchstart.stop @touchmove.stop>
       <div class="flex-center-vertical m-10 mb-0">
         <div class="flex-1 text-center font-weight-600 text-size-18">{{ $t('filters.transaction_filters') }}</div>
       </div>

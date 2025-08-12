@@ -58,5 +58,4 @@ watch(filtersBackendList, (newValue) => {
   dataStore.dashboard.backendFilters = newValue
 })
 
-// bindOneWay(filtersBackendList, dataStore.dashboard.backendFilters)
 </script>
