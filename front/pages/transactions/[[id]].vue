@@ -261,16 +261,17 @@ watch(tags, async (newValue) => {
   }
 
   // Give child tags more priority for more granularity
-  const sortedTagNames = sortByPath(newValue, 'level', false).map((tag) => Tag.getDisplayNameEllipsized(tag).toLowerCase())
+  const sortedTagNames = sortByPath(newValue, 'level', false).map((tag) => Tag.getDisplayNameEllipsized(tag))
 
   if (profileStore.copyTagToDescription && isStringEmpty(description.value)) {
     // The first one is the one with the highest level
-    description.value = head(sortedTagNames) ?? ''
+    let descriptionValue = head(sortedTagNames) ?? ''
+    description.value = profileStore.lowerCaseTransactionDescription ? descriptionValue.toLowerCase() : descriptionValue
   }
 
   if (profileStore.copyTagToCategory && !category.value) {
     for (let tagName of sortedTagNames) {
-      let foundCategory = dataStore.categoryList.find((category) => tagName === Category.getDisplayName(category).toLowerCase())
+      let foundCategory = dataStore.categoryList.find((category) => tagName.toLowerCase() === Category.getDisplayName(category).toLowerCase())
       if (foundCategory) {
         category.value = foundCategory
         break

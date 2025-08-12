@@ -31,15 +31,6 @@
 
         <day-select v-model="weekStartsOn" />
 
-        <app-select
-          :label="$t('settings.formatting.first_day_of_month')"
-          :popupTitle="$t('settings.formatting.select_first_day_of_month')"
-          v-model="firstDayOfMonth"
-          v-model:showDropdown="isDropdownFirstDayVisible"
-          :list="firstDayOfMonthList"
-          :columns="4"
-          :has-search="false"
-        />
       </van-cell-group>
 
       <van-cell-group inset>
@@ -83,9 +74,7 @@ const dateFormatList = [DateUtils.FORMAT_ROMANIAN_DATE, DateUtils.FORMAT_ENGLISH
 const isDropdownDateFormatVisible = ref(false)
 const isDropdownWeekStartsOnVisible = ref(false)
 
-const firstDayOfMonth = ref(null)
-const firstDayOfMonthList = [...Array(27).keys()].map((item) => item + 1)
-const isDropdownFirstDayVisible = ref(false)
+
 
 const numberFormat = ref(null)
 const stripAccents = ref(false)
@@ -97,7 +86,6 @@ const lowerCaseTagName = ref(false)
 const syncedSettings = [
   { store: profileStore, path: 'dateFormat', ref: dateFormat },
   { store: profileStore, path: 'weekStartsOn', ref: weekStartsOn },
-  { store: profileStore, path: 'dashboard.firstDayOfMonth', ref: firstDayOfMonth },
   { store: profileStore, path: 'numberFormat', ref: numberFormat },
   { store: profileStore, path: 'stripAccents', ref: stripAccents },
   { store: profileStore, path: 'lowerCaseTransactionDescription', ref: lowerCaseTransactionDescription },

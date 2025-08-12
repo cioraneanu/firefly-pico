@@ -11,6 +11,16 @@
         <div class="van-cell-group-title mb-0">{{ $t('settings.dashboard.config') }}:</div>
         <app-boolean :label="$t('settings.dashboard.show_empty_accounts')" v-model="areEmptyAccountsVisible" />
         <app-boolean :label="$t('settings.dashboard.show_decimal_places')" v-model="showDecimal" />
+
+        <app-select
+            :label="$t('settings.formatting.first_day_of_month')"
+            :popupTitle="$t('settings.formatting.select_first_day_of_month')"
+            v-model="firstDayOfMonth"
+            v-model:showDropdown="isDropdownFirstDayVisible"
+            :list="firstDayOfMonthList"
+            :columns="4"
+            :has-search="false"
+        />
       </van-cell-group>
 
       <van-cell-group inset>
@@ -45,12 +55,18 @@ const excludedAccountsList = ref([])
 const excludedCategoriesList = ref([])
 const excludedTagsList = ref([])
 
+const firstDayOfMonth = ref(null)
+const firstDayOfMonthList = [...Array(27).keys()].map((item) => item + 1)
+const isDropdownFirstDayVisible = ref(false)
+
 const syncedSettings = [
   { store: profileStore, path: 'dashboard.areEmptyAccountsVisible', ref: areEmptyAccountsVisible },
   { store: profileStore, path: 'dashboard.showDecimal', ref: showDecimal },
   { store: profileStore, path: 'dashboard.excludedAccountsList', ref: excludedAccountsList },
   { store: profileStore, path: 'dashboard.excludedCategoriesList', ref: excludedCategoriesList },
   { store: profileStore, path: 'dashboard.excludedTagsList', ref: excludedTagsList },
+  { store: profileStore, path: 'dashboard.firstDayOfMonth', ref: firstDayOfMonth },
+
 ]
 
 watchSettingsStore(syncedSettings)
