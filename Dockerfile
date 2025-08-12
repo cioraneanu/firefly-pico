@@ -1,7 +1,7 @@
 FROM composer:2.2 AS composer_base
 
 #-----------------------------------------------------------------
-FROM alpine:3.20 AS base
+FROM alpine:3.22 AS base
 
 #Install packages
 RUN apk add --no-cache \
