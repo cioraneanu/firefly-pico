@@ -2,12 +2,10 @@
   <div :class="formClass">
     <app-top-toolbar>
       <template #right>
-        <div>
-          <van-button @click="onShowFilters" size="small" class="mr-10 no-border">
-            <template #icon>
-              <app-icon :icon="TablerIconConstants.search" size="20" :stroke="1.9" />
-            </template>
-          </van-button>
+        <div class="flex-center-vertical gap-1">
+          <div @click.prevent.stop="onShowFilters" class="mr-10">
+            <app-icon :icon="TablerIconConstants.search" size="20" :stroke="1.6" />
+          </div>
 
           <app-button-list-add @click="onAdd" />
         </div>
@@ -17,13 +15,15 @@
     <div class="applied-filters-container" v-if="filtersDisplayList.length > 0">
       <div class="flex-center-vertical">
         <div class="title flex-1">{{ $t('filters.applied_filters') }}</div>
-        <van-button @click="onClearFilters" size="small" class="">{{ $t('filters.clear') }}</van-button>
+        <!--        <div @click="onClearFilters"><icon-square-rounded-x  :size="24" :stroke="1.5" /></div>-->
       </div>
 
       <div class="display-flex flex-wrap gap-1">
         <div v-for="appliedFilter in filtersDisplayList" class="tag-filter">
-          <app-icon :icon="TablerIconConstants.filter" size="14" :stroke="1.9" />
           <span class="ml-5">{{ appliedFilter }}</span>
+        </div>
+        <div @click="onClearFilters">
+          <icon-square-rounded-x :size="26" :stroke="1.5" />
         </div>
       </div>
     </div>
@@ -48,7 +48,6 @@ import { useList } from '~/composables/useList'
 import Transaction from '~/models/Transaction'
 import { useToolbar } from '~/composables/useToolbar'
 import EmptyList from '~/components/general/empty-list.vue'
-// import { IconAdjustmentsAlt, IconFilter } from '@tabler/icons-vue'
 import { ref } from 'vue'
 import TransactionRepository from '~/repository/TransactionRepository'
 import Tag from '~/models/Tag.js'
@@ -60,6 +59,8 @@ import Budget from '~/models/Budget.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { filterBagHasValues, getActiveFilters, getFiltersFromURL, saveToUrl } from '~/utils/FilterUtils.js'
+import { useListFilters } from '~/composables/useListFilters.js'
+import { IconSquareRoundedX } from '@tabler/icons-vue'
 
 const dataStore = useDataStore()
 const route = useRoute()
@@ -95,19 +96,8 @@ const formClass = computed(() => ({
   empty: isEmpty.value,
 }))
 
-let filters = ref({})
-
-let activeFilters = computed(() => {
-  let filterDefinitions = Object.values(TransactionFilterUtils.filters)
-  return getActiveFilters(filterDefinitions, filters.value)
-})
-
-let filtersDisplayList = computed(() => {
-  return activeFilters.value.map((item) => item.display)
-})
-
-let filtersBackendList = computed(() => {
-  return activeFilters.value.map((item) => item.filter)
+let { filters, filtersBackendList, filtersDisplayList, activeFilters } = useListFilters({
+  filterDefinitions: Object.values(TransactionFilterUtils.filters),
 })
 
 watch(filtersBackendList, (newValue, oldValue) => {

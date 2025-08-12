@@ -5,10 +5,7 @@
       <app-tutorial :title="$t('transaction.assistant_tutorial_title')" :body="$t('transaction.assistant_tutorial_body')" />
 
       <div class="flex-1" />
-      <div class="assistant-currency">
-        <currency-dropdown class="text-size-12" v-model="profileStore.assistantCurrency" />
-        <icon-square-rounded-x v-if="profileStore.assistantCurrency" :size="20" :stroke="1.5" @click="profileStore.assistantCurrency = null" />
-      </div>
+      <currency-dropdown class="text-size-12" v-model="profileStore.assistantCurrency" :is-clearable="true" />
     </div>
     <div class="text-size-12 text-muted mb-5">{{ $t('transaction.assistant_format') }}</div>
 
@@ -208,7 +205,7 @@ const processAssistantText = () => {
       score: get(head(fuseTemplateResults), 'score') * fuseConstants.template.weight,
       type: fuseConstants.template.type,
       item: get(head(fuseTemplateResults), 'item'),
-      match: get(head(fuseTemplateResults), 'matches.0.value')
+      match: get(head(fuseTemplateResults), 'matches.0.value'),
     },
     {
       score: get(head(fuseTagResults), 'score') * fuseConstants.tag.weight,

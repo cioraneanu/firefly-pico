@@ -1,14 +1,22 @@
 <template>
   <div class="text-size-14 flex-center-vertical gap-1">
-    <span class="text-muted text-size-12">{{ $t('dashboard.controls') }}:</span>
-    <div class="app-button-small" @click="onToggleTotalCurrency">
-      <app-icon :icon="TablerIconConstants.transaction" :size="14" />
-      {{ dataStore.dashboardCurrencyCode }}
-    </div>
+    <currency-dropdown v-model="dataStore.dashboardCurrency" />
 
     <div class="app-button-small" @click="onToggleShowDashboardAccountValues">
       <app-icon :icon="profileStore.dashboard.showAccountAmounts ? TablerIconConstants.eyeHidden : TablerIconConstants.eyeVisible" :size="20" />
     </div>
+
+    <div class="app-button-small">
+      <div @click="onShowFilters">
+        <app-icon :icon="TablerIconConstants.search" :size="18" />
+        <span v-if="activeFiltersCount > 0"> {{ activeFiltersCount }}</span>
+      </div>
+      <div v-if="activeFiltersCount > 0" @click="onResetFilters">
+        <icon-square-rounded-x :size="22" :stroke="1.5" />
+      </div>
+    </div>
+
+    <transaction-filters ref="transactionFiltersRef" v-model="filters" :show-date="false" style="height: 85%" />
   </div>
 </template>
 
@@ -16,26 +24,38 @@
 import { addMonths } from 'date-fns'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Currency from '~/models/Currency.js'
+import { useListFilters } from '~/composables/useListFilters.js'
+import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
+import { IconSquareRoundedX } from '@tabler/icons-vue'
 
 const dataStore = useDataStore()
 const profileStore = useProfileStore()
 
-
+const transactionFiltersRef = useTemplateRef('transactionFiltersRef')
 
 const hasMultipleCurrencies = computed(() => dataStore.dashboardAccountsCurrencyList.length > 1)
-
-const onToggleTotalCurrency = () => {
-  if (dataStore.dashboardAccountsCurrencyList.length === 0) {
-    return
-  }
-  let index = dataStore.dashboardAccountsCurrencyList.findIndex((currency) => currency.id === dataStore.dashboardCurrency?.id)
-  let newIndex = (index + 1) % dataStore.dashboardAccountsCurrencyList.length
-  dataStore.dashboardCurrency = dataStore.dashboardAccountsCurrencyList[newIndex]
-}
 
 const onToggleShowDashboardAccountValues = async () => {
   profileStore.dashboard.showAccountAmounts = !profileStore.dashboard.showAccountAmounts
 }
 
+const onShowFilters = () => {
+  transactionFiltersRef.value.show()
+}
+
+let { filters, filtersBackendList, activeFiltersCount, activeFilters } = useListFilters({
+  filterDefinitions: Object.values(TransactionFilterUtils.filters),
+})
+const onResetFilters = () => {
+  filters.value = {}
+}
+
+watch(filters, (newValue) => {
+  dataStore.fetchDashboard()
+})
+
+watch(filtersBackendList, (newValue) => {
+  dataStore.dashboard.backendFilters = newValue
+})
 
 </script>

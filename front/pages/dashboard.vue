@@ -27,6 +27,8 @@
         </app-card-info>
       </div>
     </van-pull-refresh>
+
+
   </div>
 </template>
 
@@ -48,12 +50,7 @@ const profileStore = useProfileStore()
 const { isLoadingAccounts } = storeToRefs(dataStore)
 
 const onRefresh = () => {
-  dataStore.fetchAccounts()
-  dataStore.fetchDashboardTransactionsForInterval()
-  dataStore.fetchDashboardTransactionsForWeek()
-  dataStore.fetchTransactionsWithTodos()
-  dataStore.fetchExchangeRate()
-  dataStore.fetchBudgets()
+  dataStore.fetchDashboard()
 }
 
 const onRefreshDebounce = debounce(onRefresh, 200)

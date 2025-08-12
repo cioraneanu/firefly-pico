@@ -33,7 +33,7 @@ export const useDataStore = defineStore('data', {
       isLoading: false,
 
       dashboard: {
-        // month: startOfMonth(new Date()),
+        backendFilters: [],
         month: null,
         transactionsList: [],
         transactionsListLastWeek: [],
@@ -395,15 +395,8 @@ export const useDataStore = defineStore('data', {
     async fetchDashboardTransactionsForInterval() {
       this.isLoadingDashboardTransactions = true
 
-      // let filters = [
-      //   { field: 'start', value: DateUtils.dateToString(this.dashboardDateStart) },
-      //   { field: 'end', value: DateUtils.dateToString(this.dashboardDateEnd) },
-      //   { field: 'type', value: 'income,expense,transfer' },
-      // ]
-      // const list = await new TransactionRepository().getAllWithMerge({ filters })
-
-      // TODO: Test this on user with larger Databases. Need to make sure the /search endpoint + filters is faster than all transaction with frontend filtering
       let filtersParts = [`date_after:${DateUtils.dateToString(this.dashboardDateStart)}`, `date_before:${DateUtils.dateToString(this.dashboardDateEnd)}`, ...getExcludedTransactionFilters()]
+      filtersParts = [...filtersParts, ...this.dashboard.backendFilters]
       let filters = [{ field: 'query', value: filtersParts.join(' ') }]
       let searchMethod = new TransactionRepository().searchTransaction
       let list = await new TransactionRepository().getAllWithMerge({ filters, getAll: searchMethod })
@@ -418,14 +411,8 @@ export const useDataStore = defineStore('data', {
       let startDate = DateUtils.dateToString(subDays(startOfDay(new Date()), 7))
       let endDate = DateUtils.dateToString(startOfDay(new Date()))
 
-      // let filters = [
-      //   { field: 'start', value: startDate },
-      //   { field: 'end', value: endDate },
-      //   { field: 'type', value: 'expense' },
-      // ]
-      // const list = await new TransactionRepository().getAllWithMerge({ filters })
-
       let filtersParts = [`date_after:${startDate}`, `date_after:${startDate}`, `type:withdrawal`, ...getExcludedTransactionFilters()]
+      filtersParts = [...filtersParts, ...this.dashboard.backendFilters]
       let filters = [{ field: 'query', value: filtersParts.join(' ') }]
       let searchMethod = new TransactionRepository().searchTransaction
       let list = await new TransactionRepository().getAllWithMerge({ filters, getAll: searchMethod })
@@ -552,6 +539,15 @@ export const useDataStore = defineStore('data', {
     },
 
     // -----
+
+    async fetchDashboard() {
+      this.fetchAccounts()
+      this.fetchDashboardTransactionsForInterval()
+      this.fetchDashboardTransactionsForWeek()
+      this.fetchTransactionsWithTodos()
+      this.fetchExchangeRate()
+      this.fetchBudgets()
+    }
 
     // -----
   },
