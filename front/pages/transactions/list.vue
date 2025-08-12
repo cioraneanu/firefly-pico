@@ -21,15 +21,11 @@
       <div class="display-flex flex-wrap gap-1">
         <div v-for="appliedFilter in filtersDisplayList" class="tag-filter">
           <span class="ml-5">{{ appliedFilter }}</span>
-          <app-icon :icon="TablerIconConstants.filter" size="14" :stroke="1.9" />
-          <div @click="onClearFilters">
-            <icon-square-rounded-x :size="26" :stroke="1.5" />
-          </div>
         </div>
-
+        <div @click="onClearFilters">
+          <icon-square-rounded-x :size="26" :stroke="1.5" />
+        </div>
       </div>
-
-
     </div>
 
     <empty-list v-if="isEmpty && !isLoading" />
