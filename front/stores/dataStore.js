@@ -164,6 +164,21 @@ export const useDataStore = defineStore('data', {
         return result
       }, {})
     },
+
+    dashboardTransfersByTag(state) {
+      return this.transactionsListTransfers.reduce((result, transaction) => {
+        let tags = Transaction.getTags(transaction)
+        let rootTag = tags.find((tag) => !get(tag, 'attributes.parent_id')) ?? head(tags)
+        let targetTags = state.dashboard.tagsWidgetModeOnlyRootTag ? [rootTag] : tags
+        for (let targetTag of targetTags) {
+          let tagId = get(targetTag, 'id', 0)
+          let oldTotal = get(result, tagId, 0)
+          result[tagId] = oldTotal + convertTransactionAmountToCurrency(transaction, Currency.getCode(state.dashboardCurrency))
+        }
+        return result
+      }, {})
+    },
+
     dashboardDateStart(state) {
       const profileStore = useProfileStore()
       if (!state.dashboard.month) {
