@@ -16,9 +16,9 @@
 
         <dashboard-budgets :style="getStyleForCard(dashboardCard.budgets)" />
 
-        <dashboard-tag-totals :style="getStyleForCard(dashboardCard.expensesByTag)" />
+        <dashboard-tag-expense-totals :style="getStyleForCard(dashboardCard.expensesByTag)" />
 
-        <dashboard-category-totals :style="getStyleForCard(dashboardCard.expensesByCategory)" />
+        <dashboard-category-expense-totals :style="getStyleForCard(dashboardCard.expensesByCategory)" />
 
         <dashboard-todo-transactions :style="getStyleForCard(dashboardCard.todoTransactions)" />
 
