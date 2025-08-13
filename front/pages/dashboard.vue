@@ -20,6 +20,8 @@
 
         <dashboard-category-expense-totals :style="getStyleForCard(dashboardCard.expensesByCategory)" />
 
+        <dashboard-category-transfer-totals :style="getStyleForCard(dashboardCard.transfersByCategory)" />
+
         <dashboard-todo-transactions :style="getStyleForCard(dashboardCard.todoTransactions)" />
 
         <app-card-info style="order: 99">
