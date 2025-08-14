@@ -210,6 +210,8 @@
         "transactions_summary": "Transactions summary",
         "expenses_by_tag": "Expenses by tags",
         "expenses_by_category": "Expenses by categories",
+        "transfers_by_tag": "Transfers by tags",
+        "transfers_by_category": "Transfers by categories",
         "todo_transactions": "Todo transactions"
       }
     },

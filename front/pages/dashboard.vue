@@ -16,13 +16,13 @@
 
         <dashboard-budgets :style="getStyleForCard(dashboardCard.budgets)" />
 
-        <dashboard-tag-expense-totals :style="getStyleForCard(dashboardCard.expensesByTag)" />
+        <dashboard-tag-totals-expense :style="getStyleForCard(dashboardCard.expensesByTag)" />
 
-        <dashboard-category-expense-totals :style="getStyleForCard(dashboardCard.expensesByCategory)" />
+        <dashboard-category-totals-expense :style="getStyleForCard(dashboardCard.expensesByCategory)" />
 
-        <dashboard-tag-transfer-totals :style="getStyleForCard(dashboardCard.transfersByTag)" />
+        <dashboard-tag-totals-transfer :style="getStyleForCard(dashboardCard.transfersByTag)" />
 
-        <dashboard-category-transfer-totals :style="getStyleForCard(dashboardCard.transfersByCategory)" />
+        <dashboard-category-totals-transfer :style="getStyleForCard(dashboardCard.transfersByCategory)" />
 
         <dashboard-todo-transactions :style="getStyleForCard(dashboardCard.todoTransactions)" />
 
@@ -40,14 +40,12 @@
 import { useToolbar } from '~/composables/useToolbar'
 import { debounce } from 'lodash/function'
 import UIUtils from '~/utils/UIUtils.js'
-import DashboardTagTotals from '~/components/dashboard/dashboard-tag-expense-totals/dashboard-tag-expense-totals.vue'
 import { animateDashboard } from '~/utils/AnimationUtils.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import { dashboardCard } from '~/constants/DashboardConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { useSwipe } from '@vueuse/core'
 import { addMonths } from 'date-fns'
-import DashboardControlButtons from '~/components/dashboard/dashboard-controls/dashboard-control-buttons.vue'
 
 const dataStore = useDataStore()
 const profileStore = useProfileStore()

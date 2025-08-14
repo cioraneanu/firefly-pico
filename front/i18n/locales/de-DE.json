@@ -208,6 +208,8 @@
         "transactions_summary": "Transaktions-Zusammenfassung",
         "expenses_by_tag": "Ausgaben nach Tags",
         "expenses_by_category": "Ausgaben nach Kategorie",
+        "transfers_by_tag": "Übertragungen nach Tags",
+        "transfers_by_category": "Transfers nach Kategorien",
         "todo_transactions": "Todo Transaktionen"
       }
     },
