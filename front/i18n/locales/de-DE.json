@@ -350,7 +350,13 @@
       "all_tags": "Alle Tags",
       "one_root_tag": "Ein Root Tag"
     },
+    "transfers_by_tags": {
+      "title": "Überträge nach Tags",
+      "all_tags": "Alle Tags",
+      "one_root_tag": "Ein Root Tag"
+    },
     "expenses_by_categories": "Ausgaben nach Kategorien",
+    "transfers_by_categories": "Überträge nach Kategorien",
     "configure_cards": "Karten konfigurieren"
   },
   "profile_page": {

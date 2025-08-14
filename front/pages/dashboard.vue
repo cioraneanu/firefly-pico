@@ -16,9 +16,13 @@
 
         <dashboard-budgets :style="getStyleForCard(dashboardCard.budgets)" />
 
-        <dashboard-tag-totals :style="getStyleForCard(dashboardCard.expensesByTag)" />
+        <dashboard-tag-expense-totals :style="getStyleForCard(dashboardCard.expensesByTag)" />
 
-        <dashboard-category-totals :style="getStyleForCard(dashboardCard.expensesByCategory)" />
+        <dashboard-category-expense-totals :style="getStyleForCard(dashboardCard.expensesByCategory)" />
+
+        <dashboard-tag-transfer-totals :style="getStyleForCard(dashboardCard.transfersByTag)" />
+
+        <dashboard-category-transfer-totals :style="getStyleForCard(dashboardCard.transfersByCategory)" />
 
         <dashboard-todo-transactions :style="getStyleForCard(dashboardCard.todoTransactions)" />
 
@@ -36,7 +40,7 @@
 import { useToolbar } from '~/composables/useToolbar'
 import { debounce } from 'lodash/function'
 import UIUtils from '~/utils/UIUtils.js'
-import DashboardTagTotals from '~/components/dashboard/dashboard-tag-totals/dashboard-tag-totals.vue'
+import DashboardTagTotals from '~/components/dashboard/dashboard-tag-expense-totals/dashboard-tag-expense-totals.vue'
 import { animateDashboard } from '~/utils/AnimationUtils.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import { dashboardCard } from '~/constants/DashboardConstants.js'

@@ -152,6 +152,33 @@ export const useDataStore = defineStore('data', {
       }, {})
     },
 
+    dashboardTransfersByCategory(state) {
+      return this.transactionsListTransfers.reduce((result, transaction) => {
+        const splits = Transaction.getSplits(transaction)
+        for (let split of splits) {
+          const categoryId = split.category_id
+          const oldTotal = get(result, categoryId, 0)
+          result[categoryId] = oldTotal + convertCurrency(split.amount, split.currency_code, Currency.getCode(state.dashboardCurrency))
+        }
+
+        return result
+      }, {})
+    },
+
+    dashboardTransfersByTag(state) {
+      return this.transactionsListTransfers.reduce((result, transaction) => {
+        let tags = Transaction.getTags(transaction)
+        let rootTag = tags.find((tag) => !get(tag, 'attributes.parent_id')) ?? head(tags)
+        let targetTags = state.dashboard.tagsWidgetModeOnlyRootTag ? [rootTag] : tags
+        for (let targetTag of targetTags) {
+          let tagId = get(targetTag, 'id', 0)
+          let oldTotal = get(result, tagId, 0)
+          result[tagId] = oldTotal + convertTransactionAmountToCurrency(transaction, Currency.getCode(state.dashboardCurrency))
+        }
+        return result
+      }, {})
+    },
+
     dashboardDateStart(state) {
       const profileStore = useProfileStore()
       if (!state.dashboard.month) {
