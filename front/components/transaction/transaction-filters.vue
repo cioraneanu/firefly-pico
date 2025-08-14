@@ -9,7 +9,9 @@
         <van-form @submit="onApplyFilters">
           <app-field class="flex-1" v-model="description" :label="$t('description')" :placeholder="$t('description')" />
 
-          <transaction-type-select v-model="transactionType" />
+          <template v-if="showType">
+            <transaction-type-select v-model="transactionType" />
+          </template>
 
           <div class="display-flex van-cell-fake pl-3 align-items-baseline">
             <div class="display-flex flex-column gap-3 align-items-center">
@@ -79,6 +81,9 @@ import { addMonths, endOfMonth, startOfMonth } from 'date-fns'
 const modelValue = defineModel({})
 const props = defineProps({
   showDate: {
+    default: true,
+  },
+  showType: {
     default: true,
   },
 })

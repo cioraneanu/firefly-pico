@@ -16,7 +16,7 @@
       </div>
     </div>
 
-    <transaction-filters ref="transactionFiltersRef" v-model="filters" :show-date="false" style="height: 85%" />
+    <transaction-filters ref="transactionFiltersRef" v-model="filters" :show-date="false" :show-type="false" style="height: 85%" />
   </div>
 </template>
 
