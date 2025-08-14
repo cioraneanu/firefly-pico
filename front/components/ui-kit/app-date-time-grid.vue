@@ -42,7 +42,7 @@ import { useDataStore } from '~/stores/dataStore'
 import DateUtils from '~/utils/DateUtils'
 import { addDays, addYears, startOfDay, subYears } from 'date-fns'
 import { useFormAttributes } from '~/composables/useFormAttributes'
-import { clone, head } from 'lodash'
+import { clone, head, isNull } from 'lodash'
 import { usePointerSwipe } from '@vueuse/core'
 import { useSwipeToDismiss } from '~/composables/useSwipeToDismiss.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
@@ -99,7 +99,7 @@ const onConfirmDate = (value) => {
 // ------
 
 const onShowTimePicker = () => {
-  const hasBrowserTimePicker = useDevice().isMobileOrTablet || useDevice().isChrome
+  const hasBrowserTimePicker = useDevice().isMobileOrTablet
   if (hasBrowserTimePicker) {
     timeInput.value?.focus()
     timeInput.value?.showPicker?.()
@@ -111,7 +111,7 @@ const onShowTimePicker = () => {
 watch(modelValueTime, (newValue, oldValue) => {
   let newDate = clone(modelValue.value)
   const [hours, minutes] = (newValue ?? '').split(':').map(Number)
-  if (!hours || !minutes) {
+  if (isNull(hours) || isNull(minutes)) {
     return
   }
   newDate.setHours(hours)
