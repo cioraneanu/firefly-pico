@@ -260,7 +260,8 @@ export const useDataStore = defineStore('data', {
       if (this.totalIncomeThisMonth === 0) {
         return 0
       }
-      return ((this.transactionsListSavingsAmount * 1.0) / this.totalIncomeThisMonth) * 100
+      let percent = ((this.transactionsListSavingsAmount * 1.0) / this.totalIncomeThisMonth) * 100
+      return Math.max(percent, 0)
     },
 
     transactionsListExpense(state) {

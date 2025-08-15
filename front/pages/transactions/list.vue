@@ -15,14 +15,13 @@
     <div class="applied-filters-container" v-if="filtersDisplayList.length > 0">
       <div class="flex-center-vertical">
         <div class="title flex-1">{{ $t('filters.applied_filters') }}</div>
-        <!--        <div @click="onClearFilters"><icon-square-rounded-x  :size="24" :stroke="1.5" /></div>-->
       </div>
 
       <div class="display-flex flex-wrap gap-1">
         <div v-for="appliedFilter in filtersDisplayList" class="tag-filter">
           <span class="ml-5">{{ appliedFilter }}</span>
         </div>
-        <div @click="onClearFilters">
+        <div @click="onClearFilters" style="z-index: 2">
           <icon-square-rounded-x :size="26" :stroke="1.5" />
         </div>
       </div>
