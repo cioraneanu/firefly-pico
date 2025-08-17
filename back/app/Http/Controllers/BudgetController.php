@@ -22,9 +22,7 @@ class BudgetController extends BaseControllerFirefly
 
     public function getBudgetLimits(Request $request)
     {
-        $now = Carbon::now()->startOfMonth()->format("Y-m-d");
         $url = $this->getFullUrl();
-        $url = "$url?start=$now&end=$now";
         $response = $this->getHttpClient()->get($url);
 
         if ($response->status() !== self::HTTP_CODE_OK) {
