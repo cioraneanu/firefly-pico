@@ -26,6 +26,8 @@ import BudgetRepository from '~/repository/BudgetRepository.js'
 import BudgetTransformer from '~/transformers/BudgetTransformer.js'
 import BudgetLimitTransformer from '~/transformers/BudgetLimitTransformer.js'
 import Currency from '~/models/Currency.js'
+import DateUtils from '~/utils/DateUtils.js'
+import { startOfTomorrow } from 'date-fns/startOfTomorrow'
 
 export const useDataStore = defineStore('data', {
   state: () => {
@@ -501,7 +503,8 @@ export const useDataStore = defineStore('data', {
 
     async fetchAccounts() {
       this.isLoadingAccounts = true
-      let list = await new AccountRepository().getAllWithMerge()
+      let filters = [{ field: 'date', value: DateUtils.dateToString(startOfTomorrow()) }]
+      let list = await new AccountRepository().getAllWithMerge({ filters })
       const allowedTypes = [Account.types.asset, Account.types.expense, Account.types.revenue, Account.types.liability].map((item) => item.fireflyCode)
       list = list.filter((item) => allowedTypes.includes(get(item, 'attributes.type')) && Account.getIsActive(item))
       this.accountList = AccountTransformer.transformFromApiList(list)
@@ -575,7 +578,7 @@ export const useDataStore = defineStore('data', {
       this.fetchTransactionsWithTodos()
       this.fetchExchangeRate()
       this.fetchBudgets()
-    }
+    },
 
     // -----
   },
