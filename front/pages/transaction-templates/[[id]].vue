@@ -141,6 +141,7 @@ onMounted(async () => {
   account_destination.value = sourceTransaction.accountDestination
   category.value = sourceTransaction.category
   tags.value = sourceTransaction.tags
+  budget.value = sourceTransaction.budget
 })
 
 const toolbar = useToolbar()
