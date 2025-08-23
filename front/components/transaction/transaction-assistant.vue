@@ -82,16 +82,12 @@
 <script setup>
 import { onMounted, watch } from 'vue'
 import { useDataStore } from '~/stores/dataStore'
-import TransactionTemplate from '~/models/TransactionTemplate'
 import { debounce } from 'lodash/function'
-import { get, head } from 'lodash'
 import Tag from '~/models/Tag'
-import Fuse from 'fuse.js'
 import AppTutorial from '~/components/ui-kit/app-tutorial.vue'
-import { TUTORIAL_CONSTANTS } from '~/constants/TutorialConstants.js'
 import Category from '~/models/Category.js'
 import { ellipsizeText } from '~/utils/Utils.js'
-import { IconSquareLetterX, IconSquareRoundedX } from '@tabler/icons-vue'
+import { useFuzzySearchResource } from '~/composables/useFuzzySearch.js'
 
 const props = defineProps({})
 
@@ -101,7 +97,6 @@ const profileStore = useProfileStore()
 const emit = defineEmits(['change'])
 const show = ref(false)
 
-// const assistantText = ref('')
 const assistantText = defineModel()
 const assistantTextField = ref(null)
 
@@ -117,50 +112,11 @@ const hasAmount = computed(() => {
   return foundAmount.value && foundAmount.value > 0
 })
 
-const fuseOptions = { includeScore: true, minMatchCharLength: 3, threshold: 0.6, distance: 100, includeMatches: true }
-const fuseConstants = {
-  template: {
-    weight: 1.0,
-    type: 'template',
-  },
-  tag: {
-    weight: 1.5,
-    type: 'tag',
-  },
-  category: {
-    weight: 1.5,
-    type: 'category',
-  },
-}
-const fuseTags = new Fuse([], { ...fuseOptions, keys: ['attributes.tag'] })
-const fuseTransactionTemplate = new Fuse([], { ...fuseOptions, keys: ['name', 'extra_names.value'] })
-const fuseCategories = new Fuse([], { ...fuseOptions, keys: ['attributes.name'] })
+const fuzzySearch = useFuzzySearch()
 
 onMounted(() => {})
 
-watch(
-  dataStore.tagList,
-  (newValue) => {
-    fuseTags.setCollection(newValue)
-  },
-  { immediate: true },
-)
 
-watch(
-  dataStore.transactionTemplateList,
-  (newValue) => {
-    fuseTransactionTemplate.setCollection(newValue)
-  },
-  { immediate: true },
-)
-
-watch(
-  dataStore.categoryList,
-  (newValue) => {
-    fuseCategories.setCollection(newValue)
-  },
-  { immediate: true },
-)
 
 const autoFocusField = () => {
   // const textArea = assistantTextField.value.querySelector('textarea')
@@ -188,7 +144,6 @@ const processAssistantText = () => {
   const match = text.match(regex)
 
   let searchWords = match[1] || ''
-  searchWords = LanguageUtils.removeAccents(searchWords).trim()
 
   let numerical = match[2]
   let { wasSuccessful, value } = evalMath(numerical)
@@ -196,51 +151,16 @@ const processAssistantText = () => {
 
   foundDescription.value = match[3] || ''
 
-  const fuseTemplateResults = fuseTransactionTemplate.search(searchWords)
-  const fuseTagResults = fuseTags.search(searchWords)
-  const fuseCategoryResults = fuseCategories.search(searchWords)
+  let bestGuess = fuzzySearch.search(searchWords)
 
-  let assistantGuesses = [
-    {
-      score: get(head(fuseTemplateResults), 'score') * fuseConstants.template.weight,
-      type: fuseConstants.template.type,
-      item: get(head(fuseTemplateResults), 'item'),
-      match: get(head(fuseTemplateResults), 'matches.0.value'),
-    },
-    {
-      score: get(head(fuseTagResults), 'score') * fuseConstants.tag.weight,
-      type: fuseConstants.tag.type,
-      item: get(head(fuseTagResults), 'item'),
-    },
-    {
-      score: get(head(fuseCategoryResults), 'score') * fuseConstants.category.weight,
-      type: fuseConstants.category.type,
-      item: get(head(fuseCategoryResults), 'item'),
-    },
-  ]
-    .filter((result) => !!result.item)
-    .sort((a, b) => {
-      return a.score - b.score
-    })
-  let bestGuess = head(assistantGuesses)
 
   if (bestGuess) {
-    foundTemplate.value = bestGuess.type === fuseConstants.template.type ? bestGuess.item : null
+    foundTemplate.value = bestGuess.type === useFuzzySearchResource.template.type ? bestGuess.item : null
     foundTemplateDisplayName.value = foundTemplate.value ? bestGuess.match : null
 
-    foundTag.value = bestGuess.type === fuseConstants.tag.type ? bestGuess.item : null
-    foundCategory.value = bestGuess.type === fuseConstants.category.type ? bestGuess.item : null
+    foundTag.value = bestGuess.type === useFuzzySearchResource.tag.type ? bestGuess.item : null
+    foundCategory.value = bestGuess.type === useFuzzySearchResource.category.type ? bestGuess.item : null
   }
-
-  //   , head(fuseTagResults), head(fuseCategoryResults)]
-
-  // foundTemplate.value = get(fuseTemplateResults, '0.item')
-  // if (foundTemplate.value) {
-  //   foundTag.value = null
-  //   return
-  // }
-  //
-  // foundTag.value = get(fuseTagResults, '0.item')
 }
 
 watch(assistantText, (newValue) => {
@@ -249,12 +169,6 @@ watch(assistantText, (newValue) => {
 
 const processReceivedTextDebounce = debounce(processAssistantText, 200)
 
-const onSubmit = () => {
-  // emit('change', {
-  //   transactionTemplate: foundTemplate.value,
-  //   amount: foundAmount.value,
-  // })
-}
 
 const onClear = () => {
   assistantText.value = ''
