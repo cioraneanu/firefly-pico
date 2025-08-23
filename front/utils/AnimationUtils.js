@@ -129,6 +129,9 @@ export async function animateOnNext() {
     loop: 1,
     delay: 0,
     ease: 'outSine',
+    onComplete: (animation) => {
+      clearAnimationStyle(animation) // Leaving "transform: translateY(0px);" after the animation is finished on .van-cell-group causes the app-select popup to not go fullscreen...
+    },
   })
 }
 
@@ -146,6 +149,9 @@ export async function animateOnPrevious() {
     loop: 1,
     delay: 0,
     ease: 'outSine',
+    onComplete: (animation) => {
+      clearAnimationStyle(animation) // Leaving "transform: translateY(0px);" after the animation is finished on .van-cell-group causes the app-select popup to not go fullscreen...
+    },
   })
 }
 
