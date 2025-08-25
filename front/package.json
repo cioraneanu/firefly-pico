@@ -42,6 +42,7 @@
     "fuse.js": "^7.1.0",
     "lodash": "^4.17.21",
     "marked": "^16.1.2",
+    "minisearch": "^7.1.2",
     "pinia": "^3.0.3",
     "vant": "^4.9.21",
     "vuedraggable": "^4.1.0"
