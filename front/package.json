@@ -1,5 +1,5 @@
 {
-  "version": "1.9.0",
+  "version": "1.9.1",
   "private": true,
   "scripts": {
     "start": "npm run dev -- -o",
@@ -22,7 +22,7 @@
     "@nuxtjs/device": "^3.2.4",
     "@nuxtjs/i18n": "^10.0.3",
     "@vant/nuxt": "^1.0.7",
-    "@vite-pwa/nuxt": "^0.10.6",
+    "@vite-pwa/nuxt": "^1.0.4",
     "eslint-config-prettier": "^10.1.8",
     "nuxt": "^4.0.3",
     "nuxt-svgo": "^4.2.6",
