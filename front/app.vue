@@ -16,10 +16,22 @@ import '~/assets/styles/variables.css'
 import AppLoading from '~/components/ui-kit/app-loading.vue'
 import profile from '~/models/Profile.js'
 import { setDefaultOptions } from 'date-fns'
+import { useMagicKeys } from '@vueuse/core'
+import { snapdom } from '@zumer/snapdom'
 
 let dataStore = useDataStore()
 let profileStore = useProfileStore()
 let appStore = useAppStore()
+
+const keys = useMagicKeys()
+const shiftCtrlA = keys['A+B']
+watch(shiftCtrlA, async (value) => {
+  if (value) {
+    const el = document.querySelector('body');
+    const result = await snapdom(el);
+    await result.download({ format: 'svg', filename: 'my-capture' });
+  }
+})
 
 const theme = computed(() => (profileStore.darkTheme ? 'dark' : 'white'))
 const pwaColor = computed(() => (profileStore.darkTheme ? '#1c1c1e' : '#ffffff'))
