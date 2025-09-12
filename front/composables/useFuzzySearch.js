@@ -1,19 +1,18 @@
-import Fuse from 'fuse.js'
 import { watch } from 'vue'
 import { get, head } from 'lodash'
-
+import MiniSearch from 'minisearch'
 
 export const useFuzzySearchResource = {
   template: {
-    weight: 1.0,
+    weight: 1.3,
     type: 'template',
   },
   tag: {
-    weight: 1.5,
+    weight: 1.0,
     type: 'tag',
   },
   category: {
-    weight: 1.5,
+    weight: 1.0,
     type: 'category',
   },
 }
@@ -21,16 +20,37 @@ export const useFuzzySearchResource = {
 export function useFuzzySearch(props) {
   const dataStore = useDataStore()
 
-  const fuseOptions = { ignoreLocation: true, includeScore: true, minMatchCharLength: 3, threshold: 0.6, distance: 100, includeMatches: true }
+  const fuzzyOptions = {
+    prefix: true, // allow prefix search ("sana" matches "sanatate")
+    fuzzy: 0.2, // allow fuzzy matching (edit distance 1–2)
+    combineWith: 'AND', // require all words to match
+  }
 
-  const fuseTags = new Fuse([], { ...fuseOptions, keys: ['attributes.tag'] })
-  const fuseTransactionTemplate = new Fuse([], { ...fuseOptions, keys: ['name', 'extra_names.value'] })
-  const fuseCategories = new Fuse([], { ...fuseOptions, keys: ['attributes.name'] })
+  let queryTag = new MiniSearch({
+    fields: ['attributes.tag'],
+    extractField: (document, fieldName) => get(document, fieldName), // Nested paths
+  })
+
+  let queryCategory = new MiniSearch({
+    fields: ['attributes.name'],
+    extractField: (document, fieldName) => get(document, fieldName), // Nested paths
+  })
+
+  let queryTemplate = new MiniSearch({
+    fields: ['name', 'extra_names'],
+    extractField: (document, fieldName) => {
+      if (fieldName === 'extra_names') {
+        return document.extra_names.map((x) => x.value)
+      }
+      return document[fieldName]
+    },
+  })
 
   watch(
     dataStore.tagList,
     (newValue) => {
-      fuseTags.setCollection(newValue)
+      queryTag.removeAll()
+      queryTag.addAll(newValue)
     },
     { immediate: true },
   )
@@ -38,7 +58,8 @@ export function useFuzzySearch(props) {
   watch(
     dataStore.transactionTemplateList,
     (newValue) => {
-      fuseTransactionTemplate.setCollection(newValue)
+      queryTemplate.removeAll()
+      queryTemplate.addAll(newValue)
     },
     { immediate: true },
   )
@@ -46,7 +67,8 @@ export function useFuzzySearch(props) {
   watch(
     dataStore.categoryList,
     (newValue) => {
-      fuseCategories.setCollection(newValue)
+      queryCategory.removeAll()
+      queryCategory.addAll(newValue)
     },
     { immediate: true },
   )
@@ -54,33 +76,40 @@ export function useFuzzySearch(props) {
   // ---
 
   const search = (text) => {
-    const sanitizedText = LanguageUtils.removeAccents(text).trim().split(' ').join(' | ')
+    const sanitizedText = LanguageUtils.removeAccents(text).trim()
 
-    const fuseTemplateResults = fuseTransactionTemplate.search(sanitizedText)
-    const fuseTagResults = fuseTags.search(sanitizedText)
-    const fuseCategoryResults = fuseCategories.search(sanitizedText)
+    let resultsTag = queryTag.search(sanitizedText, fuzzyOptions)
+    let resultsCategory = queryCategory.search(sanitizedText, fuzzyOptions)
+    let resultsTemplate = queryTemplate.search(sanitizedText, fuzzyOptions)
+    console.log({ resultsTag, resultsCategory, resultsTemplate })
+
+    let [foundTag, foundCategory, foundTemplate] = [resultsTag, resultsCategory, resultsTemplate].map(head)
+    console.log({ foundTag, foundCategory, foundTemplate })
 
     let assistantGuesses = [
       {
-        score: get(head(fuseTemplateResults), 'score') * useFuzzySearchResource.template.weight,
+        score: (foundTemplate?.score ?? 0) * useFuzzySearchResource.template.weight,
         type: useFuzzySearchResource.template.type,
-        item: get(head(fuseTemplateResults), 'item'),
-        match: get(head(fuseTemplateResults), 'matches.0.value'),
+        item: dataStore.transactionTemplateDictionary[foundTemplate?.id],
+        match: (foundTemplate?.terms ?? []).join(" "),
       },
       {
-        score: get(head(fuseTagResults), 'score') * useFuzzySearchResource.tag.weight,
+        score: (foundTag?.score ?? 0) * useFuzzySearchResource.tag.weight,
         type: useFuzzySearchResource.tag.type,
-        item: get(head(fuseTagResults), 'item'),
+        item: dataStore.tagDictionaryById[foundTag?.id],
       },
       {
-        score: get(head(fuseCategoryResults), 'score') * useFuzzySearchResource.category.weight,
+        score: (foundCategory?.score ?? 0) * useFuzzySearchResource.category.weight,
         type: useFuzzySearchResource.category.type,
-        item: get(head(fuseCategoryResults), 'item'),
+        item: dataStore.categoryDictionary[foundCategory?.id],
       },
     ]
-      .filter((result) => !!result.item)
+    console.log({assistantGuesses})
+
+
+    assistantGuesses = assistantGuesses.filter((result) => !!result.item)
       .sort((a, b) => {
-        return a.score - b.score
+        return b.score - a.score
       })
     return head(assistantGuesses)
   }
