@@ -110,7 +110,7 @@ export function useFuzzySearch(props) {
 
     assistantGuesses = assistantGuesses.filter((result) => !!result.item)
       .sort((a, b) => {
-        return a.score - b.score
+        return b.score - a.score
       })
     return head(assistantGuesses)
   }
