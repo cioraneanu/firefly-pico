@@ -1,4 +1,3 @@
-import Fuse from 'fuse.js'
 import { watch } from 'vue'
 import { get, head } from 'lodash'
 import MiniSearch from 'minisearch'

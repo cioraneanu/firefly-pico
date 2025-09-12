@@ -39,7 +39,6 @@
     "basiclightbox": "^5.0.4",
     "date-fns": "^4.1.0",
     "expr-eval": "^2.0.2",
-    "fuse.js": "^7.1.0",
     "lodash": "^4.17.21",
     "marked": "^16.1.2",
     "minisearch": "^7.1.2",
