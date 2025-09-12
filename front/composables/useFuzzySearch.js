@@ -4,7 +4,7 @@ import MiniSearch from 'minisearch'
 
 export const useFuzzySearchResource = {
   template: {
-    weight: 1.3,
+    weight: 2.0,
     type: 'template',
   },
   tag: {
@@ -81,10 +81,10 @@ export function useFuzzySearch(props) {
     let resultsTag = queryTag.search(sanitizedText, fuzzyOptions)
     let resultsCategory = queryCategory.search(sanitizedText, fuzzyOptions)
     let resultsTemplate = queryTemplate.search(sanitizedText, fuzzyOptions)
-    console.log({ resultsTag, resultsCategory, resultsTemplate })
+    // console.log({ resultsTag, resultsCategory, resultsTemplate })
 
     let [foundTag, foundCategory, foundTemplate] = [resultsTag, resultsCategory, resultsTemplate].map(head)
-    console.log({ foundTag, foundCategory, foundTemplate })
+    // console.log({ foundTag, foundCategory, foundTemplate })
 
     let assistantGuesses = [
       {
@@ -104,7 +104,7 @@ export function useFuzzySearch(props) {
         item: dataStore.categoryDictionary[foundCategory?.id],
       },
     ]
-    console.log({assistantGuesses})
+    // console.log({assistantGuesses})
 
 
     assistantGuesses = assistantGuesses.filter((result) => !!result.item)

@@ -153,4 +153,23 @@ export default class Transaction extends BaseModel {
 
     return this.types.expense
   }
+
+  static attemptAccountFixOnTypeChange(newType, sourceAccount, destinationAccount) {
+    let firstAsset = [sourceAccount, destinationAccount].find((account) => Account.getType(account)?.fireflyCode === Account.types.asset.fireflyCode)
+
+    switch (newType.code) {
+      case Transaction.types.income.code:
+        let source = [sourceAccount, destinationAccount].find((account) => [Account.types.liability.fireflyCode, Account.types.revenue.fireflyCode, Account.types.cash.fireflyCode].includes(Account.getType(account)?.fireflyCode))
+        return { source: source, destination: firstAsset }
+
+      case Transaction.types.expense.code:
+        let destination = [sourceAccount, destinationAccount].find((account) => {
+          return [Account.types.liability.fireflyCode, Account.types.expense.fireflyCode, Account.types.cash.fireflyCode].includes(Account.getType(account)?.fireflyCode)
+        })
+        return { source: firstAsset, destination: destination }
+      case Transaction.types.transfer.code:
+        let otherAsset = [sourceAccount, destinationAccount].find((account) => firstAsset?.id !== account?.id && Account.getType(account)?.code === Account.types.asset.code)
+        return { source: firstAsset, destination: otherAsset }
+    }
+  }
 }
