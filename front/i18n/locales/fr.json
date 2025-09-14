@@ -1,0 +1,373 @@
+{
+  "new": "Nouveauté",
+  "save": "Sauvegarder",
+  "delete": "Supprimer",
+  "add": "Ajouter",
+  "search": "Rechercher",
+  "success": "Réussite",
+  "search_placeholder": "Rechercher...",
+  "clone": "Dupliquer",
+  "not_set": "Non défini",
+  "loading": "Chargement...",
+  "items": "éléments",
+  "name": "Nom",
+  "code": "Code",
+  "symbol": "Symbole",
+  "description": "Description",
+  "notes": "Notes",
+  "ok": "Ok",
+  "copy": "Copier",
+  "paste": "Coller",
+  "copied": "Copié",
+  "pasted": "Collé",
+  "status": "Statut",
+  "transaction_type": "Type d'opération",
+  "without": "Sans",
+  "template": "Modèle",
+  "templates": "Modèles",
+  "category": "Catégorie",
+  "categories": "Catégories",
+  "category_select": "Catégorie associée",
+  "tag": "Étiquette",
+  "tags": "Étiquettes",
+  "todo": "To do",
+  "tags_select": "Tag associé",
+  "budget": "Budget",
+  "budgets": "Budgets",
+  "budget_select": "Budget associé",
+  "attachment": "Pièce jointe",
+  "attachments": "Pièces jointes",
+  "account": "Compte",
+  "accounts": "Comptes",
+  "total": "Total",
+  "select_is_empty": "Aucune sélection...",
+  "active": "Actif",
+  "calendar": "Calendrier",
+  "date": "Date",
+  "date_after": "Date après",
+  "date_before": "Date avant",
+  "sub_month": "-1 mois",
+  "this_month": "Mois actuel",
+  "add_month": "+1 mois",
+  "sub_day": "-1 jour",
+  "today": "Aujourd'hui",
+  "add_day": "+1 jour",
+  "day_of_week": "Jour de la semaine",
+  "amount": "Montant",
+  "amount_min": "Montant min",
+  "amount_max": "Montant max",
+  "toolbar": {
+    "home": "Accueil",
+    "transactions": "Opérations",
+    "extras": "Extras",
+    "settings": "Paramètres"
+  },
+  "filters": {
+    "clear": "Effacer",
+    "applied_filters": "Filtres appliqués",
+    "apply_filters": "Appliquer les filtres",
+    "transaction_filters": "Filtres des opérations"
+  },
+  "transaction": {
+    "title_list": "Liste des opérations",
+    "split_transaction": "Fractionner l'opération",
+    "assistant": "Assistant",
+    "assistant_format": "\"Format = [modèle / tag?] [montant?] [description?]\",",
+    "assistant_tutorial_title": "Assistant de transaction",
+    "assistant_tutorial_body": "<p>Créer facilement des transactions en tapant du texte ici (ou en utilisant la dictée vocale de votre téléphone).</p>\\n<p>Attendu de format :<br> <b>[recherche]&nbsp; [montant?]&nbsp; [description?]&nbsp; [todo?]</b></p>\\n<p>1. La <b>recherche</b> s'effectue dans les tags, catégories et modèles d'opération. Elle supporte les noms partiels et quelques fautes de frappe.<br><code> elct => electricité</code></p>\\n<p>2. Le <b>montant</b> prend en charge les expressions mathématiques. Les nombres séparés par un espace sont automatiquement additionés.</p>\\n<p>3. La <b>description</b> est facultative. Utilisez-la pour remplacer le nom de l'étiquette par défaut.</p>\\n<p>4. La fonctionnalité <b>todo</b> permet d'ajouter facilement à votre opération le todo tag avec la chaîne de caractère personnalisé (par défaut \\\"!!\\\"). Modifiable dans les paramètres</p>\\n\\n<p><b>Exemples</b><br>\\n\\\"electricité\\\" = tag<br>\\n\\\"natation\\\" = template <br><br>\\n\\n<code>\\nelectricité 23<br> \\nelc 12*2+33<br> \\nelc 12+2*3 description personnalisé<br> \\nelc 25 !!<br>\\nnata<br> \\n\\n</code>\\n</p>\\n\\n<p>5. En haut à droite, vous pouvez choisir la <b>devise</b>. Vous pouvez la modifier à tout moment ou définir la valeur par défaut dans les \\\"Pramètres\\\"->\\\"Assistant\\\". Lorsque vous l'utilisez, le <b>montant</b> le montant sera traité dans cette devise et le montant total sera convertie dans la devise de votre compte. Cela peut s'avérer très utile lorsque vous voyagez à l'étranger",
+    "type": {
+      "expense": "Dépense",
+      "income": "Revenu / Recette",
+      "transfer": "Transfert"
+    },
+    "source_account": "Compte source",
+    "destination_account": "Compte de destination",
+    "make_template": "Créer un modèle",
+    "configure_fields": "Configurer les champs",
+    "title_clone_transaction": "Dupliquer l'opération",
+    "title_edit_transaction": "Éditer l'opération",
+    "title_add_transaction": "Ajouter une opération"
+  },
+  "settings": {
+    "settings_title": "Réglages",
+    "general": "Général",
+    "required_field": "Ce champ est obligatoire",
+    "settings_saved": "Paramètres enregistrés",
+    "setup_entry": "Configuration",
+    "setup": {
+      "title": "Configuration",
+      "pico_backend_url": "URL du backend Pico",
+      "sync_settings_via_token": "Synchroniser les paramètres entre les appareils via un jeton",
+      "days_between_sync": "Intervalle (jours) pour la synchro. complètes des \"Extras\"",
+      "loaded_data_stats": "Statistiques des données chargées",
+      "account": "Compte",
+      "categories": "Catégories",
+      "tags": "Tags",
+      "templates": "Modèles",
+      "budgets": "Budgets",
+      "last_sync": "Dernière synchronisation",
+      "verifying": "Vérification...",
+      "invalid_endpoint": "L'endpoint saisi est incorrect.",
+      "invalid_token": "Le token saisi est incorrect ou expiré.",
+      "fetching": "Récupération en cours..."
+    },
+    "ui_entry": "Interface utilisateur",
+    "ui": {
+      "theme": "Thème",
+      "title": "Interface utilisateur",
+      "show_animations": "Show animations",
+      "reset_forms_after_creation": "Réinitialiser les formulaires après la création",
+      "transaction_list": "Liste des opérations",
+      "select_hero_icons": "Sélectionnez les icônes à afficher",
+      "hero_icons": "Icônes",
+      "right_side_card": "(Carte latérale droite dans la liste)",
+      "dark": "Sombre",
+      "light": "Clair",
+      "pages": {
+        "new_transacation": "Nouvelle opération",
+        "transacation_list": "Liste des opérations",
+        "dashboard": "Tableau de bord"
+      }
+    },
+    "assistant_entry": "Assistant",
+    "assistant": {
+      "title": "Paramètres de l'Assistant",
+      "substring_todo_tag": "Balise pour tag todo",
+      "currency": "Le montant indiqué dans le texte de l'assistant sera interprété comme la devise choisie ci-dessous"
+    },
+    "formatting_entry": "Mise en forme",
+    "formatting": {
+      "title": "Paramètres de mise en forme",
+      "numbers_format": "Mise en forme des nombres",
+      "select_numbers_format": "Sélection de la mise en forme des nombres",
+      "date_format": "Format de la date",
+      "select_date_format": "Sélectionnez un format de date",
+      "first_day_of_month": "Premier jour du mois",
+      "select_first_day_of_month": "Sélectionnez le premier jour du mois",
+      "casing": "Styles de capitalisation (casing)",
+      "force_transaction_description_lowercase": "Forcer la description de l'opération en minuscule",
+      "force_account_name_lowercase": "Forcer le nom du compte en minuscule",
+      "force_category_name_lowercase": "Forcer le nom de la catégorie en minuscules",
+      "force_tag_name_lowercase": "Forcer le nom du tag en minuscule",
+      "strip_accents": "Enlever les accents"
+    },
+    "transactions_entry": "Opérations",
+    "transactions": {
+      "title": "Paramètres des opérations",
+      "default_form_values_entry": "Valeurs par défaut du formulaire",
+      "default_list_filters_entry": "Filtre de liste par défaut",
+      "amount_increment_buttons": "Boutons d'incrémentation de montant",
+      "configure_form_fields": "Configurer les champs de formulaire",
+      "configure_list_fields": "Configurer les champs de la liste",
+      "watchers": "Observateurs",
+      "watchers_info": "S'applique uniquement lors de la création d'une opération",
+      "copy_tag_to_description": "Lorsque je sélectionne un tag, copiez-le dans la description",
+      "copy_tag_to_category": "Lorsque je sélectionne un tag, copiez-le dans la catégorie",
+      "copy_category_to_description": "Lorsque je sélectionne une catégorie, copiez-la dans la description",
+      "quick_amounts": {
+        "title": "Montants des opérations rapides",
+        "value": "Montant rapide"
+      },
+      "list_fields": {
+        "title": "Définir les champs de la liste",
+        "fields": "Champs",
+        "select_hero_icons": "Sélectionnez les icônes à afficher",
+        "hero_icons": "Icônes",
+        "right_side_card": "(Carte latérale droite dans la liste)"
+      },
+      "form_fields": {
+        "title": "Définir les champs de formulaire",
+        "always_show_foreign_currency": "Toujours afficher le champ des devises étrangères"
+      },
+      "default_list_filters": {
+        "title": "Filtres par défaut de la liste des transactions",
+        "info": "Il est recommandé d'utiliser ces filtres uniquement si vous avez une grande quantité de transactions qui se traduisent par chargement lent de la liste. Ex. Afficher uniquement les transactions après le début de l'année en cours."
+      },
+      "default_form_values": {
+        "title": "Nouvelle transaction par défaut",
+        "default_source_account": "Compte source par défaut",
+        "default_destination_account": "Compte de destination par défaut",
+        "default_category": "Catégorie par défaut",
+        "default_tags": "Tags par défaut (uniquement présélectionnés)",
+        "auto_tags": "Tags automatiques (ajoutés après création)",
+        "foreign_currency": "Devise étrangère pour les dépenses"
+      }
+    },
+    "about_entry": "À propos",
+    "version": "Version",
+    "new_version_available": "Nouvelle version disponible",
+    "dashboard_entry": "Tableau de bord",
+    "dashboard": {
+      "title": "Paramètres du tableau de bord",
+      "cards_order": "Ordre des widgets du tableau de bord",
+      "config": "Configuration",
+      "show_empty_accounts": "Afficher les comptes avec 0 montant",
+      "show_decimal_places": "Afficher les décimales",
+      "transaction_exclusion": "Exclusion d'opération",
+      "cards": {
+        "accounts_summary": "Récapitulatif des comptes",
+        "expenses_this_week": "Dépenses de cette semaine",
+        "transactions_summary": "Récapitulatif des opérations",
+        "expenses_by_tag": "Dépenses par tags",
+        "expenses_by_category": "Dépenses par catégories",
+        "transfers_by_tag": "Transferts par tags",
+        "transfers_by_category": "Transferts par catégories",
+        "todo_transactions": "Opérations à traiter"
+      }
+    },
+    "token": {
+      "label": "Jeton d'accès personnel",
+      "placeholder": "Jeton personnel"
+    }
+  },
+  "about": {
+    "title": "À propos",
+    "info": "Info",
+    "items_list_deleted": "- Glisser l'élément vers la gauche pour le supprimer",
+    "list_updated": "- Actualiser la liste en glissant vers le bas",
+    "popups_dismissed": "- Les popups peuvent être effacés en les glissant ver le bas",
+    "dashboard_clickable": "- Sur le tableau de bord, la plupart des icônes et des barres de graphiques sont cliquables.",
+    "credits": "Crédits",
+    "developed_by": "- Développé par Mihai Cioraneanu - <a href=\"{url}\">GitHub</a>",
+    "using_laravel_nuxt": "- Utilisation de <a href=\"https://laravel.com/\" target=\"_blank\">Laravel</a> et <a href=\"https://nuxt.com/\" target=\"_blank\">Nuxt</a>",
+    "consuming_firefly": "- Utilisation de l'API REST <a href=\"https://www.firefly-iii.org\" target=\"_blank\">Firefly III</a>",
+    "ui_theme_vant": "- Avec un thème de l'interface utilisateur basé sur <a href=\"https://vant-ui.github.io\" target=\"_blank\">Vant</a>",
+    "exchange_rate_api": "- Taux de change par <a href=\"https://www.exchangerate-api.com\">Exchange Rate API</a>",
+    "iconpacks_tabler": "- Pack d'icônes : <a href=\"https://tabler.io/icons\" target=\"_blank\">Tabler Icons</a>",
+    "iconpacks_fluent": "- Pack d'icônes : <a href=\"https://github.com/microsoft/fluentui\" target=\"_blank\">Fluent UI System Icons</a>",
+    "iconpacks_circle_avatar": "- Pack d'icônes : <a href=\"https://www.svgrepo.com/author/Laura%20Reen\" target=\"_blank\">Circle Avatar Vectors by Laura Reen</a>",
+    "iconpacks_svg_repo": "- Pack d'icônes : <a href=\"https://www.svgrepo.com/\" target=\"_blank\">SVG Repo</a>",
+    "iconpacks_freepik": "- Pack d'icônes : <a href=\"https://www.freepik.com/\" target=\"_blank\">Freepik</a>",
+    "illustrations_undraw": "- Illustrations : <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>"
+  },
+  "page_select": {
+    "label": "Page d'accueil",
+    "title": "Sélectionnez votre page d'accueil"
+  },
+  "language_select": {
+    "title": "Sélectionnez votre langue",
+    "label": "Langue"
+  },
+  "day_select": {
+    "label": "Premier jour de la semaine",
+    "title": "Choix du premier jour de la semaine"
+  },
+  "account_select": {
+    "title": "Sélectionnez un compte",
+    "asset_accounts": "Comptes d’actif",
+    "expense_accounts": "Comptes de dépenses",
+    "income_accounts": "Comptes de revenus/ recettes",
+    "liability_accounts": "Comptes passifs",
+    "no_accounts": "Aucun compte"
+  },
+  "currency_select": {
+    "title": "Sélectionnez une devise"
+  },
+  "validation": {
+    "required": "Champ requis"
+  },
+  "primary": "Principal",
+  "classification": "Catégorisation",
+  "extra": "Extra",
+  "exchange_rates": "Taux de change",
+  "currency": "Devise ",
+  "currencies": "Devises",
+  "show_transactions": "Voir les opérations",
+  "icon": "Icône",
+  "icon_select": "Sélectionner une icône",
+  "icon_empty": "Pas d'icône",
+  "list": "Liste",
+  "percentage": "Pourcentage",
+  "repeater_no_values": "Aucune valeur définie. Utilisez le bouton 'ajouter'.",
+  "account_page": {
+    "title_add": "Ajouter un compte",
+    "title_edit": "Modifier le compte",
+    "adjust_balance": "Ajuster le solde",
+    "account_type": "Type",
+    "account_type_asset": "Actif",
+    "account_type_revenue": "Revenus / Recettes",
+    "account_type_expense": "Dépense",
+    "account_type_liability": "Passif",
+    "account_type_cash": "Espèces",
+    "account_role": "Rôle",
+    "account_role_default": "Par défaut",
+    "account_role_shared": "Partagé",
+    "account_role_savings": "Épargne",
+    "account_role_credit_card": "Carte bancaire",
+    "liability_type": "Type de passif",
+    "liability_direction": "Sens du passif",
+    "include_net_worth": "Est inclus dans la valeur nette",
+    "visible_on_dashboard": "Est visible sur le tableau de bord",
+    "balance": "Solde"
+  },
+  "transaction_template_page": {
+    "title_add": "Ajouter un modèle",
+    "title_edit": "Modifier le modèle",
+    "extra_names": "Noms supplémentaires (trouvable avec l'assistant) :"
+  },
+  "tag_page": {
+    "title_add": "Ajouter un tag",
+    "title_edit": "Modifier le tag",
+    "parent_tag": "Tag parent",
+    "mark_as_todo": "Marquer comme to-do",
+    "end_date": "Date de fin"
+  },
+  "category_page": {
+    "title_add": "Ajouter une catégorie",
+    "title_edit": "Modifier la catégorie"
+  },
+  "currency_page": {
+    "title_add": "Ajouter une devise",
+    "title_edit": "Modifier la devise",
+    "decimal_places": "Emplacement de la décimale"
+  },
+  "budget_page": {
+    "title_add": "Nouveau budget",
+    "title_edit": "Modifier le budget",
+    "spent": "Utilisé",
+    "percent": "Pourcentage",
+    "interval": "Échéance",
+    "type": "Type de budget",
+    "period": "Période du budget"
+  },
+  "exchange_rate_page": {
+    "relative_to_usd": "Par rapport à USD"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "controls": "Commandes",
+    "account_total": "Solde total",
+    "expenses_week": "Dépenses de la semaine",
+    "transactions_summary": {
+      "title": "Résumé des opérations",
+      "surplus": "Balance",
+      "days_remaining": "Jours restants",
+      "savings_summary": "Résumé des économies"
+    },
+    "budget": {
+      "spent": "Dépense",
+      "budgeted": "Prévue",
+      "remaining": "Restant"
+    },
+    "expenses_by_tags": {
+      "title": "Dépenses par tags",
+      "all_tags": "Tous les tags",
+      "one_root_tag": "Tag racine"
+    },
+    "transfers_by_tags": {
+      "title": "Transferts par tags",
+      "all_tags": "Tous les tags",
+      "one_root_tag": "Tag racine"
+    },
+    "expenses_by_categories": "Dépenses par catégories",
+    "transfers_by_categories": "Transferts par catégories",
+    "configure_cards": "Configurer les widgets"
+  },
+  "profile_page": {
+    "title": "Profils",
+    "title_add": "Ajouter profil",
+    "info": "Basculez rapidement entre tous vos paramètres",
+    "title_edit": "Modifier profil",
+    "tutorial_body": "<p>Un <b>profil</b><code> est la collection de toutes les configurations trouvées dans les <code>Paramètres </code>.</p><br><p><i>\nVous pouvez avoir plusieurs profils, mais vous ne pouvez en activer qu'un à la fois.\nVous pouvez basculer entre les profils avec un <i>appui court<i> et les modifier avec un <i>double-appuie<i> ou <i>un appui long<i></p><br><p>\nVous pouvez séparer vos dépenses quotidiennes et vos dépenses effectuées durant vos vacances dans le </b>formulaire de l'opération <b></b>.\nLe profil de vacances peut avoir un compte source différent ou un tag spécifique attitré automatiquement (ex : \"Vacances août 2025\"). Cela facilite ainsi le suivi de vos dépenses.</p>"
+  }
+}
