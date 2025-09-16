@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-export default class UIUtils {
+export default class Utils {
 
   static updateListWithNewItems(list, newItems) {
     newItems = _.isArray(newItems) ? newItems : [newItems]

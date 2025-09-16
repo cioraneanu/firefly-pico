@@ -24,7 +24,7 @@
     "@vant/nuxt": "^1.0.7",
     "@vite-pwa/nuxt": "^1.0.4",
     "eslint-config-prettier": "^10.1.8",
-    "nuxt": "^4.0.3",
+    "nuxt": "^4.1.2",
     "nuxt-svgo": "^4.2.6",
     "prettier": "^3.6.2"
   },
@@ -35,7 +35,7 @@
     "@vueuse/core": "^13.6.0",
     "@vueuse/gesture": "^2.0.0",
     "animejs": "^4.1.2",
-    "axios": "^1.11.0",
+    "axios": "^1.12.2",
     "basiclightbox": "^5.0.4",
     "date-fns": "^4.1.0",
     "expr-eval": "^2.0.2",
