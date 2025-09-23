@@ -239,6 +239,7 @@ const onTransactionTemplateSelected = async (transactionTemplate) => {
   if (transactionTemplate.account_destination_id) {
     accountDestination.value = dataStore.accountDictionary[transactionTemplate.account_destination_id]
   }
+
   description.value = transactionTemplate.description
   category.value = transactionTemplate.category
   notes.value = transactionTemplate.notes
@@ -305,6 +306,7 @@ const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemp
   }
 
   newDescription && (description.value = newDescription)
+  attemptAccountsFix()
 }
 
 const isTypeExpense = computed(() => isEqual(type.value, Transaction.types.expense))
@@ -365,15 +367,18 @@ const accountDestinationBinding = computed(() => {
 
 watch(type, (newValue, oldValue) => {
   // Only when creating a transaction
-    if (itemId.value) {
+  if (itemId.value) {
     return
   }
+  attemptAccountsFix()
+})
 
-  // Check if source / destination accounts still make sense and attempt to fix them :)
-  let { source, destination } = Transaction.attemptAccountFixOnTypeChange(newValue, accountSource.value, accountDestination.value)
+// Check if source / destination accounts still make sense and attempt to fix them :)
+const attemptAccountsFix = () => {
+  let { source, destination } = Transaction.attemptAccountFixOnTypeChange(type.value, accountSource.value, accountDestination.value)
   accountSource.value = source
   accountDestination.value = destination
-})
+}
 
 watch(description, (newValue) => {
   newValue = newValue ?? ''
