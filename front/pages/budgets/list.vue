@@ -70,18 +70,15 @@ const onRefresh = async () => {
   isLoading.value = true
   isRefreshing.value = true
 
-  const dataStore = useDataStore()
   await dataStore.fetchBudgets()
+  list.value = dataStore.budgetList
 
   isLoading.value = false
   isRefreshing.value = false
-
-  onLoadMore()
 }
 
 const onLoadMore = () => {
-  const dataStore = useDataStore()
-  list.value = dataStore.budgetList
+  onRefresh()
 }
 
 // -----
@@ -91,11 +88,6 @@ const toolbar = useToolbar()
 toolbar.init({
   title: t('budgets'),
   backRoute: RouteConstants.ROUTE_EXTRAS,
-})
-
-
-onMounted(() => {
-  onRefresh()
 })
 
 animateSwipeList(list)
