@@ -69,19 +69,11 @@ const filteredList = computed(() => {
   })
 })
 
-const budgetList = computed(() => {
-  if (search.value.length === 0) {
-    return dataStore.budgetList
-  }
-  return dataStore.budgetList.filter((item) => {
-    return Budget.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
-  })
-})
 
 // ------ Methods ------
 
 onMounted(async () => {
-  list.value = dataStore.budgetList
+  list.value = dataStore.budgetList.filter(item => Budget.isActive(item))
 })
 
 const onSelectCell = (value) => {
