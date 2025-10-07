@@ -1,39 +1,14 @@
 <template>
-  <van-tabbar v-if="!isKeyboardVisible" v-model="activeTab" :safe-area-inset-bottom="true" :fixed="true">
-    <van-tabbar-item :name="tabConstants.dashboard" @click="onChange(tabConstants.dashboard)">
-      {{ $t('toolbar.home') }}
-      <template #icon="{ active }">
-        <app-icon :icon="TablerIconConstants.dashboard" :size="20" :stroke="getStrokeWidth(active)" />
-      </template>
-    </van-tabbar-item>
+  <van-tabbar v-if="!isKeyboardVisible" :safe-area-inset-bottom="true" :fixed="true">
+    <div class="display-flex w-100">
 
-    <van-tabbar-item :name="tabConstants.transactionList" @click="onChange(tabConstants.transactionList)">
-      {{ $t('toolbar.transactions') }}
-      <template #icon="{ active }">
-        <app-icon :icon="TablerIconConstants.transaction" :size="20" :stroke="getStrokeWidth(active)" />
-      </template>
-    </van-tabbar-item>
+      <div v-for="button of buttonsList" :class="getButtonClass(button)" @click="onClick(button)">
+        <app-icon :icon="getButtonIcon(button)" :size="28" />
+        <div class="text-size-11">{{ button.title }}</div>
+      </div>
 
-    <van-tabbar-item :name="tabConstants.add" @click="onNewTransaction">
-      <template #icon="{ active }">
-        <svg-add-icon width="40" height="40" id="add-new-transaction" />
-      </template>
-    </van-tabbar-item>
+    </div>
 
-    <van-tabbar-item :name="tabConstants.extras" @click="onChange(tabConstants.extras)">
-      {{ $t('toolbar.extras') }}
-
-      <template #icon="{ active }">
-        <app-icon :icon="TablerIconConstants.extras" :size="20" :stroke="getStrokeWidth(active)" />
-      </template>
-    </van-tabbar-item>
-
-    <van-tabbar-item :name="tabConstants.settings" :dot="appStore.isNewVersionAvailable" @click="onChange(tabConstants.settings)">
-      {{ $t('toolbar.settings') }}
-      <template #icon="{ active }">
-        <app-icon :icon="TablerIconConstants.settings" :size="20" :stroke="getStrokeWidth(active)" />
-      </template>
-    </van-tabbar-item>
   </van-tabbar>
 </template>
 
@@ -45,19 +20,31 @@ import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import { animateBottomToolbarAddButton } from '~/utils/AnimationUtils.js'
 
-const dataStore = useDataStore()
-const profileStore = useProfileStore()
-const appStore = useAppStore()
 const route = useRoute()
 
-const tabConstants = {
-  add: 'add',
-  transactionList: 'transactionList',
-  dashboard: 'dashboard',
-  extras: 'extras',
-  settings: 'settings',
+const { t } = useI18n()
+const activeButton = ref(null)
+
+const button = {
+  dashboard: { title: t('toolbar.home'), iconOn: 'svgo-toolbar-dashboard-on', iconOff: 'svgo-toolbar-dashboard-off', code: 'dashboard', route: RouteConstants.ROUTE_DASHBOARD },
+  transactions: { title: t('toolbar.transactions'), iconOn: 'svgo-toolbar-transactions-on', iconOff: 'svgo-toolbar-transactions-off', code: 'transactions', route: RouteConstants.ROUTE_TRANSACTION_LIST },
+  add: { title: t('toolbar.home'), iconOn: 'svgo-toolbar-add', iconOff: 'svgo-toolbar-add', code: 'add', route: RouteConstants.ROUTE_TRANSACTION_ID },
+  extras: { title: t('toolbar.extras'), iconOn: 'svgo-toolbar-extras-on', iconOff: 'svgo-toolbar-extras-off', code: 'extras', route: RouteConstants.ROUTE_EXTRAS },
+  settings: { title: t('toolbar.settings'), iconOn: 'svgo-toolbar-settings-on', iconOff: 'svgo-toolbar-settings-off', code: 'settings', route: RouteConstants.ROUTE_SETTINGS },
 }
-const activeTab = ref(null)
+
+const buttonsList = Object.values(button)
+
+
+const isButtonSelected = (button) => button.code === activeButton.value?.code
+const getButtonIcon = (button) => isButtonSelected(button) ? button.iconOn : button.iconOff
+
+
+const getButtonClass = (button) => ({
+  'flex-1 flex-center flex-column cursor-pointer': true,
+  [button.class]: button.class,
+  selected: isButtonSelected(button)
+})
 
 const { isKeyboardVisible } = useKeyboard()
 
@@ -69,7 +56,7 @@ watch(
     }
 
     if (newValue === RouteConstants.ROUTE_TRANSACTION_LIST || RouteConstants.isForm(RouteConstants.ROUTE_TRANSACTION_ID, newValue)) {
-      activeTab.value = tabConstants.transactionList
+      activeButton.value = button.transactions
     }
 
     if (
@@ -81,48 +68,21 @@ watch(
       RouteConstants.isForm(RouteConstants.ROUTE_CATEGORY_ID, newValue) ||
       RouteConstants.isForm(RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID, newValue)
     ) {
-      activeTab.value = tabConstants.extras
+      activeButton.value = button.extras
     }
 
     if ([RouteConstants.ROUTE_SETTINGS].includes(newValue)) {
-      activeTab.value = tabConstants.settings
+      activeButton.value = button.settings
+    }
+
+    if ([RouteConstants.ROUTE_DASHBOARD].includes(newValue)) {
+      activeButton.value = button.dashboard
     }
   },
   { deep: true, immediate: true },
 )
 
-onMounted(async () => {})
-
-const getStrokeWidth = (active) => {
-  return active ? 2.2 : 1.7
-}
-
-const onNewTransaction = () => {
-  animateBottomToolbarAddButton()
-  onChange(tabConstants.add)
-}
-
-const onChange = async (code) => {
-  switch (code) {
-    case tabConstants.dashboard:
-      await navigateTo(RouteConstants.ROUTE_DASHBOARD)
-      break
-
-    case tabConstants.add:
-      await navigateTo(RouteConstants.ROUTE_TRANSACTION_ID)
-      break
-
-    case tabConstants.transactionList:
-      await navigateTo(RouteConstants.ROUTE_TRANSACTION_LIST)
-      break
-
-    case tabConstants.extras:
-      await navigateTo(RouteConstants.ROUTE_EXTRAS)
-      break
-
-    case tabConstants.settings:
-      await navigateTo(RouteConstants.ROUTE_SETTINGS)
-      break
-  }
+const onClick = async (button) => {
+  await navigateTo(button.route)
 }
 </script>
