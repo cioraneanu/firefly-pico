@@ -1,14 +1,19 @@
 <template>
   <van-tabbar v-if="!isKeyboardVisible" :safe-area-inset-bottom="true" :fixed="true">
     <div class="display-flex w-100">
+      <div v-for="button of buttonTypesList" :class="getButtonClass(button)" @click="onClick(button)">
+        <template v-if="button.code === buttonType.add.code">
+          <div class="" style="z-index: 99; transform: translateY(-16px);">
+            <component :is="getButtonIcon(button)" style="width: 55px; height: 55px;  " />
+          </div>
+        </template>
 
-      <div v-for="button of buttonsList" :class="getButtonClass(button)" @click="onClick(button)">
-        <app-icon :icon="getButtonIcon(button)" :size="28" />
-        <div class="text-size-11">{{ button.title }}</div>
+        <template v-else>
+          <component :is="getButtonIcon(button)" style="width: 28px; height: 28px" />
+          <div class="text-size-11">{{ button.title }}</div>
+        </template>
       </div>
-
     </div>
-
   </van-tabbar>
 </template>
 
@@ -19,31 +24,44 @@ import { useProfileStore } from '~/stores/profileStore'
 import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import { animateBottomToolbarAddButton } from '~/utils/AnimationUtils.js'
+import DashboardOn from '@/assets/icons/toolbar/dashboard-on.svg'
+import DashboardOff from '@/assets/icons/toolbar/dashboard-off.svg'
+import TransactionOn from '@/assets/icons/toolbar/transactions-on.svg'
+import TransactionOff from '@/assets/icons/toolbar/transactions-off.svg'
+import ExtrasOn from '@/assets/icons/toolbar/extras-on.svg'
+import ExtrasOff from '@/assets/icons/toolbar/extras-off.svg'
+import SettingsOn from '@/assets/icons/toolbar/settings-on.svg'
+import SettingsOff from '@/assets/icons/toolbar/settings-off.svg'
+import IconAdd from '@/assets/icons/toolbar/add.svg'
 
 const route = useRoute()
 
 const { t } = useI18n()
 const activeButton = ref(null)
 
-const button = {
-  dashboard: { title: t('toolbar.home'), iconOn: 'svgo-toolbar-dashboard-on', iconOff: 'svgo-toolbar-dashboard-off', code: 'dashboard', route: RouteConstants.ROUTE_DASHBOARD },
-  transactions: { title: t('toolbar.transactions'), iconOn: 'svgo-toolbar-transactions-on', iconOff: 'svgo-toolbar-transactions-off', code: 'transactions', route: RouteConstants.ROUTE_TRANSACTION_LIST },
-  add: { title: t('toolbar.home'), iconOn: 'svgo-toolbar-add', iconOff: 'svgo-toolbar-add', code: 'add', route: RouteConstants.ROUTE_TRANSACTION_ID },
-  extras: { title: t('toolbar.extras'), iconOn: 'svgo-toolbar-extras-on', iconOff: 'svgo-toolbar-extras-off', code: 'extras', route: RouteConstants.ROUTE_EXTRAS },
-  settings: { title: t('toolbar.settings'), iconOn: 'svgo-toolbar-settings-on', iconOff: 'svgo-toolbar-settings-off', code: 'settings', route: RouteConstants.ROUTE_SETTINGS },
+const buttonType = {
+  dashboard: { title: t('toolbar.home'), iconOn: DashboardOn, iconOff: DashboardOff, code: 'dashboard', route: RouteConstants.ROUTE_DASHBOARD },
+  transactions: {
+    title: t('toolbar.transactions'),
+    iconOn: TransactionOn,
+    iconOff: TransactionOff,
+    code: 'transactions',
+    route: RouteConstants.ROUTE_TRANSACTION_LIST,
+  },
+  add: { title: t('toolbar.home'), iconOn: IconAdd, iconOff: IconAdd, code: 'add', route: RouteConstants.ROUTE_TRANSACTION_ID },
+  extras: { title: t('toolbar.extras'), iconOn: ExtrasOn, iconOff: ExtrasOff, code: 'extras', route: RouteConstants.ROUTE_EXTRAS },
+  settings: { title: t('toolbar.settings'), iconOn: SettingsOn, iconOff: SettingsOff, code: 'settings', route: RouteConstants.ROUTE_SETTINGS },
 }
 
-const buttonsList = Object.values(button)
-
+const buttonTypesList = Object.values(buttonType)
 
 const isButtonSelected = (button) => button.code === activeButton.value?.code
-const getButtonIcon = (button) => isButtonSelected(button) ? button.iconOn : button.iconOff
-
+const getButtonIcon = (button) => (isButtonSelected(button) ? button.iconOn : button.iconOff)
 
 const getButtonClass = (button) => ({
   'flex-1 flex-center flex-column cursor-pointer': true,
   [button.class]: button.class,
-  selected: isButtonSelected(button)
+  selected: isButtonSelected(button),
 })
 
 const { isKeyboardVisible } = useKeyboard()
@@ -56,7 +74,7 @@ watch(
     }
 
     if (newValue === RouteConstants.ROUTE_TRANSACTION_LIST || RouteConstants.isForm(RouteConstants.ROUTE_TRANSACTION_ID, newValue)) {
-      activeButton.value = button.transactions
+      activeButton.value = buttonType.transactions
     }
 
     if (
@@ -68,15 +86,15 @@ watch(
       RouteConstants.isForm(RouteConstants.ROUTE_CATEGORY_ID, newValue) ||
       RouteConstants.isForm(RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID, newValue)
     ) {
-      activeButton.value = button.extras
+      activeButton.value = buttonType.extras
     }
 
     if ([RouteConstants.ROUTE_SETTINGS].includes(newValue)) {
-      activeButton.value = button.settings
+      activeButton.value = buttonType.settings
     }
 
     if ([RouteConstants.ROUTE_DASHBOARD].includes(newValue)) {
-      activeButton.value = button.dashboard
+      activeButton.value = buttonType.dashboard
     }
   },
   { deep: true, immediate: true },
