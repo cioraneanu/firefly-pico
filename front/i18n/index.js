@@ -8,6 +8,7 @@ export const languageCode = {
   brazilian_portuguese: 'pt-BR',
   german_german: 'de-DE',
   swiss_german: 'de-CH',
+  french: 'fr-FR'
 }
 
 export const supportedLanguages = [
@@ -52,5 +53,11 @@ export const supportedLanguages = [
     file: 'de-DE.json',
     displayName: 'Deutsch (Schweiz)',
     icon: 'svgo-flags-ch',
+  },
+  {
+    code: languageCode.french,
+    file: 'fr.json',
+    displayName: 'Francais',
+    icon: 'svgo-flags-fr',
   },
 ]
