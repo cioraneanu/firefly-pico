@@ -109,11 +109,10 @@ const onShowTimePicker = () => {
 }
 
 watch(modelValueTime, (newValue, oldValue) => {
+  let parseValue = newValue === null || newValue === '' ? ':' : newValue
+  const [hours, minutes] = parseValue.split(':').map(Number)
+
   let newDate = clone(modelValue.value)
-  const [hours, minutes] = (newValue ?? '').split(':').map(Number)
-  if (isNull(hours) || isNull(minutes)) {
-    return
-  }
   newDate.setHours(hours)
   newDate.setMinutes(minutes)
   modelValue.value = newDate
@@ -130,12 +129,6 @@ const getDisplayTime = computed(() => {
 
 watch(modelValue, (newValue) => {
   modelValueTime.value = newValue ? DateUtils.dateToString(newValue, 'HH:mm') : null
-})
-
-watch(modelValueTime, (newValue, oldValue) => {
-  if (!newValue && oldValue) {
-    modelValueTime.value = oldValue
-  }
 })
 
 const appCalendar = ref(null)
