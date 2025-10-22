@@ -1240,3 +1240,22 @@ img, svg {
     top: 0;
     left: 0;
 }
+
+.app-bottom-toolbar {
+    height: 55px !important;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 3px 11px;
+}
+
+.app-bottom-toolbar-add {
+    z-index: 99;
+    transform: translateY(-16px);
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+    border-radius: 50%;
+    padding: 1px;
+    background: var(--white);
+}
+
+.app-bottom-toolbar-add > * {
+    width: 50px;
+    height: 50px;
+}

@@ -1,15 +1,15 @@
 <template>
-  <van-tabbar v-if="!isKeyboardVisible" :safe-area-inset-bottom="true" :fixed="true">
+  <van-tabbar v-if="!isKeyboardVisible" :safe-area-inset-bottom="true" :fixed="true" class="app-bottom-toolbar">
     <div class="display-flex w-100">
       <div v-for="button of buttonTypesList" :class="getButtonClass(button)" @click="onClick(button)">
         <template v-if="button.code === buttonType.add.code">
-          <div class="" style="z-index: 99; transform: translateY(-16px);">
-            <component :is="getButtonIcon(button)" style="width: 55px; height: 55px;  " />
+          <div class="app-bottom-toolbar-add">
+            <component :is="getButtonIcon(button)" />
           </div>
         </template>
 
         <template v-else>
-          <component :is="getButtonIcon(button)" style="width: 28px; height: 28px" />
+          <component :is="getButtonIcon(button)" style="width: 30px; height: 30px" />
           <div class="text-size-11">{{ button.title }}</div>
         </template>
       </div>
@@ -48,7 +48,7 @@ const buttonType = {
     code: 'transactions',
     route: RouteConstants.ROUTE_TRANSACTION_LIST,
   },
-  add: { title: t('toolbar.home'), iconOn: IconAdd, iconOff: IconAdd, code: 'add', route: RouteConstants.ROUTE_TRANSACTION_ID },
+  add: { title: t('add'), iconOn: IconAdd, iconOff: IconAdd, code: 'add', route: RouteConstants.ROUTE_TRANSACTION_ID },
   extras: { title: t('toolbar.extras'), iconOn: ExtrasOn, iconOff: ExtrasOff, code: 'extras', route: RouteConstants.ROUTE_EXTRAS },
   settings: { title: t('toolbar.settings'), iconOn: SettingsOn, iconOff: SettingsOff, code: 'settings', route: RouteConstants.ROUTE_SETTINGS },
 }
