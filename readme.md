@@ -1,7 +1,7 @@
 
 <div align="center">
 
-  <img src="docs/images/logo2.png" height="100">
+  <img src="readme/images/logo2.png" height="100">
 </div>
 
 
@@ -10,13 +10,13 @@
 </p>
 
 <p align="center">
-<a href="docs/installation.md">Installation</a>
+<a href="readme/installation.md">Installation</a>
 ·
 <a href="https://github.com/cioraneanu/firefly-pico/issues">Suggestion or bug?</a>
 ·
-<a href="docs/architecture.md">Architecture</a>
+<a href="readme/architecture.md">Architecture</a>
 ·
-<a href="docs/contribute.md">Contribution</a>
+<a href="readme/contribute.md">Contribution</a>
 </p>
 
 <p align="center">
@@ -33,7 +33,7 @@
 <h1></h1>
 
 <div align="center">
-<img src="docs/images/presentation.png">
+<img src="readme/images/presentation.png">
 </div>
 
 
@@ -51,12 +51,12 @@ That meant making the expense tracking process as short as possible all while st
 Several (bad) ideas later I've come to this version. A transaction assistant :tophat:
 
 <div>
-  <img src="docs/images/demo.gif" width="300">
+  <img src="readme/images/demo.gif" width="300">
 </div>
 
 | Action                                                                          | Result                                                                                                                                                                                                                                                                                                                                                                                        |
 |---------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| - Partially write the name of a "tag" + "amount".<br>- Hit "Save". You're done!<br>(Ex. "elctr 28") | - Source account is preselected in Settings.<br>- Date is automatically set to "now"<br>- Fuzzy search found a tag with name close to what you typed ("electricity"). It also selected all of its parent tags.<br>- Category is selected by matching it to one of the tags above.<br>- The description field is copied from the child tag. <br><br> [Assistant tutorial](./docs/assistant.md) |
+| - Partially write the name of a "tag" + "amount".<br>- Hit "Save". You're done!<br>(Ex. "elctr 28") | - Source account is preselected in Settings.<br>- Date is automatically set to "now"<br>- Fuzzy search found a tag with name close to what you typed ("electricity"). It also selected all of its parent tags.<br>- Category is selected by matching it to one of the tags above.<br>- The description field is copied from the child tag. <br><br> [Assistant tutorial](readme/assistant.md) |
 
 
 
