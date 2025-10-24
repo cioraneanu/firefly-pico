@@ -143,12 +143,7 @@ export default {
 
   getPredefinedFilters() {
     let profileStore = useProfileStore()
-
-    return {
-      account: profileStore.transactionListDefaultFilterAccount,
-      dateStart: profileStore.transactionListDefaultFilterDateStart,
-      dateEnd: profileStore.transactionListDefaultFilterDateEnd,
-    }
+    return profileStore.transactionListFilters
   },
 
   getValuesFromDictionary(value, dictionary) {

@@ -116,9 +116,7 @@ watch(filters, (newValue, oldValue) => {
 })
 
 const saveFiltersToProfile = () => {
-  profileStore.transactionListDefaultFilterAccount = filters.value.account ?? null
-  profileStore.transactionListDefaultFilterDateStart = filters.value.dateStart ?? null
-  profileStore.transactionListDefaultFilterDateEnd = filters.value.dateEnd ?? null
+  profileStore.transactionListFilters = filters.value
 }
 
 const onClearFilters = () => {

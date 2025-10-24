@@ -39,9 +39,8 @@ export const useProfileStore = defineStore('profile', {
       defaultTags: useLocalStorage('defaultTags', [], { serializer: StorageSerializers.object }),
       autoAddedTags: useLocalStorage('autoAddedTags', [], { serializer: StorageSerializers.object }),
 
-      transactionListDefaultFilterAccount: useLocalStorage('transactionListDefaultFilterAccount', null, { serializer: StorageSerializers.object }),
-      transactionListDefaultFilterDateStart: useLocalStorage('transactionListDefaultFilterDateStart', null),
-      transactionListDefaultFilterDateEnd: useLocalStorage('transactionListDefaultFilterDateEnd', null),
+      // Transaction list filters - stored as single object for simplicity
+      transactionListFilters: useLocalStorage('transactionListFilters', {}, { serializer: StorageSerializers.object }),
 
       isForeignCurrencyAlwaysVisible: useLocalStorage('isForeignCurrencyAlwaysVisible', false),
 
