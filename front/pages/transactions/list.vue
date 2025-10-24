@@ -62,6 +62,7 @@ import { useListFilters } from '~/composables/useListFilters.js'
 import { IconSquareRoundedX } from '@tabler/icons-vue'
 
 const dataStore = useDataStore()
+const profileStore = useProfileStore()
 const route = useRoute()
 
 const transactionFiltersRef = ref(null)
@@ -111,7 +112,14 @@ watch(filters, (newValue, oldValue) => {
     return
   }
   saveToUrl(activeFilters.value)
+  saveFiltersToProfile()
 })
+
+const saveFiltersToProfile = () => {
+  profileStore.transactionListDefaultFilterAccount = filters.value.account ?? null
+  profileStore.transactionListDefaultFilterDateStart = filters.value.dateStart ?? null
+  profileStore.transactionListDefaultFilterDateEnd = filters.value.dateEnd ?? null
+}
 
 const onClearFilters = () => {
   filters.value = {}
