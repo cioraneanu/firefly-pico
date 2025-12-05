@@ -63,66 +63,66 @@
     "settings": "Paramètres"
   },
   "filters": {
-    "clear": "Clear",
-    "applied_filters": "Applied filters",
-    "apply_filters": "Apply filters",
-    "transaction_filters": "Transaction filters"
+    "clear": "Effacer",
+    "applied_filters": "Filtres appliqués",
+    "apply_filters": "Appliquer les filtres",
+    "transaction_filters": "Filtres sur les transactions"
   },
   "transaction": {
-    "title_list": "Transactions list",
-    "split_transaction": "Split transaction",
+    "title_list": "Transactions",
+    "split_transaction": "Transaction fractionnée",
     "assistant": "Assistant",
-    "assistant_format": "Format = [template / tag?] [amount?] [description?]",
-    "assistant_tutorial_title": "Transaction assistant",
-    "assistant_tutorial_body": "<p>Easily create transactions by typing text here (or using your phone's dictation).</p>\n<p>Expected format:<br> <b>[search]&nbsp; [amount?]&nbsp; [description?]&nbsp; [todo?]</b></p>\n<p>1. The <b>search</b> looks in the name of your tags, categories and transaction-templates. It supports entering just part of the name and even getting some of the letters wrong.<br><code> elct => electricity</code></p>\n<p>2. The <b>amount</b> supports mathematical expressions. Numbers separated by a space get automatically added up.</p>\n<p>3. The <b>description</b> is optional. Use this to overwrite the default tag name.</p>\n<p>4. The <b>todo</b> makes it easy to add the user defined \"todo-tag\" by appending a custom string(default \"!!\"). This can be changed in \"Settings\"</p>\n\n<p><b>Examples</b><br>\n\"electricity\" = tag<br>\n\"swimming\" = template <br><br>\n\n<code>\nelectricity 23<br> \nelc 12*2+33<br> \nelc 12+2*3 custom description<br> \nelc 25 !!<br>\nswim<br> \n\n</code>\n</p>\n\n<p>5. In the top-right there is a <b>currency</b> picker which you can change on the fly or set a default from \"Settings\" -> \"Assistant\". When used this will treat the <b>amount</b> as that currency and will convert the final value into your selected account currency. This can be really useful when going abroad.</p>",
+    "assistant_format": "Format = [modele / etiquette?] [montant?] [description?]",
+    "assistant_tutorial_title": "Assistant",
+    "assistant_tutorial_body": "<p>Créer facilement des transactions (Ou utiliser la reconnaissance vocale de votre téléphone).</p>\n<p>Format:<br> <b>[Recherche]&nbsp; [montant?]&nbsp; [description?]&nbsp; [A pointer?]</b></p>\n<p>1. La <b>recherche</b> regardes les étiquettes, les catégories et les modèles. Il permet de saisir seulement une partie du nom et même de se tromper sur certaines lettres.<br><code> elct => électricité</code></p>\n<p>2. Le champ <b>montant</b> prend en charge les expressions mathématiques. Les nombres séparés par un espace sont automatiquement additionnés.\n<p>3. La <b>description</b> est facultative. Utilisez-la pour remplacer le nom de balise par défaut.\n<p>4. Le <b>todo</b> facilite l'ajout de la balise 'todo-tag' définie par l'utilisateur en ajoutant une chaîne personnalisée (par défaut '!!'). Cela peut être modifié dans les Paramètres.</p>\n\n<p><b>Exemples</b><br>\n\"electricite\" = etiquette<br>\n\"swimming\" = modèle <br><br>\n\n<code>\nelectricite 23<br> \nelc 12*2+33<br> \nelc 12+2*3 description<br> \nelc 25 !!<br>\nswim<br> \n\n</code>\n</p>\n\n<p>5. En haut à droite, vous trouverez un sélecteur de devise que vous pouvez modifier instantanément ou définir par défaut dans « Paramètres » → « Assistant ». Ce sélecteur traitera le montant dans la devise choisie et convertira la valeur finale dans la devise de votre compte. Cette fonctionnalité peut s'avérer très pratique lors de vos voyages à l'étranger.</p>",
     "type": {
-      "expense": "Expense",
-      "income": "Income",
-      "transfer": "Transfer"
+      "expense": "Dépenses",
+      "income": "Revenue",
+      "transfer": "Transfert"
     },
-    "source_account": "Source account",
-    "destination_account": "Destination account",
-    "make_template": "Make template",
-    "configure_fields": "Configure fields",
-    "title_clone_transaction": "Clone transaction",
-    "title_edit_transaction": "Edit transaction",
-    "title_add_transaction": "Add transaction"
+    "source_account": "Compte source",
+    "destination_account": "Compte Destination",
+    "make_template": "Modèle",
+    "configure_fields": "Configuration des champs",
+    "title_clone_transaction": "Dupliquer la transaction",
+    "title_edit_transaction": "Editer la transaction",
+    "title_add_transaction": "Ajouter une transaction"
   },
   "settings": {
-    "settings_title": "Settings",
-    "general": "General",
-    "required_field": "This field is required",
-    "settings_saved": "Settings saved",
-    "setup_entry": "Setup",
+    "settings_title": "Paramètres",
+    "general": "Général",
+    "required_field": "Ce champ est obligatoire",
+    "settings_saved": "Paramètres enregistrés",
+    "setup_entry": "Initialisation",
     "setup": {
-      "title": "Setup",
-      "pico_backend_url": "Pico backend URL",
-      "sync_settings_via_token": "Sync settings across devices via token",
-      "days_between_sync": "Days between full sync of \"Extras\"",
-      "loaded_data_stats": "Loaded data stats",
-      "account": "Account",
+      "title": "Initialisation",
+      "pico_backend_url": "Pico URL",
+      "sync_settings_via_token": "Token Firefly iii",
+      "days_between_sync": "Nombre de jour avant synchronisation complète \"Extras\"",
+      "loaded_data_stats": "Statistique des données",
+      "account": "Compte",
       "categories": "Categories",
-      "tags": "Tags",
-      "templates": "Templates",
+      "tags": "Etiquettes",
+      "templates": "Modèles",
       "budgets": "Budgets",
-      "last_sync": "Last sync",
-      "verifying": "Verifying...",
-      "invalid_endpoint": "The provided endpoint is not correct.",
-      "invalid_token": "The provided token is not correct or expired.",
-      "fetching": "Fetching..."
+      "last_sync": "Dernière synchronisation",
+      "verifying": "Vérification...",
+      "invalid_endpoint": "L'url de l'Api n'est pas correcte.",
+      "invalid_token": "Le token n'est pas valide.",
+      "fetching": "Récupération ..."
     },
-    "ui_entry": "User interface",
+    "ui_entry": "Interfacte Utilisateur",
     "ui": {
       "theme": "Theme",
-      "title": "UI settings",
-      "show_animations": "Show animations",
-      "reset_forms_after_creation": "Reset forms after creation",
-      "transaction_list": "Transaction list",
-      "select_hero_icons": "Select what Hero Icons to show",
-      "hero_icons": "Hero Icons",
-      "right_side_card": "(Right side card in the list)",
-      "dark": "Dark",
-      "light": "Light",
+      "title": "Paramètres de l'interface utilisateur",
+      "show_animations": "Voir les animations",
+      "reset_forms_after_creation": "Réinitialiser les formulaires après la création",
+      "transaction_list": "Transactions",
+      "select_hero_icons": "Sélectionnez les icônes à afficher",
+      "hero_icons": "Icône",
+      "right_side_card": "(Carte de droite dans la liste)",
+      "dark": "Foncée",
+      "light": "Claire",
       "pages": {
         "new_transacation": "New transaction",
         "transacation_list": "Transactions list",
@@ -153,221 +153,221 @@
     },
     "transactions_entry": "Transactions",
     "transactions": {
-      "title": "Transaction settings",
-      "default_form_values_entry": "Default form values",
-      "default_list_filters_entry": "Default list filters",
-      "amount_increment_buttons": "Amount increment buttons",
-      "configure_form_fields": "Configure form fields",
-      "configure_list_fields": "Configure list fields",
-      "watchers": "Watchers",
-      "watchers_info": "Applies only while creating a transaction",
-      "copy_tag_to_description": "When I select a Tag copy it into Description",
-      "copy_tag_to_category": "When I select a Tag copy it into Category",
-      "copy_category_to_description": "When I select a Category copy it into Description",
+      "title": "Paramètres des transactions",
+      "default_form_values_entry": "Valeurs par défaut",
+      "default_list_filters_entry": "Filtres par défaut",
+      "amount_increment_buttons": "Incrémentation du montant",
+      "configure_form_fields": "Champs des formulaires",
+      "configure_list_fields": "Liste des champs",
+      "watchers": "Observateurs",
+      "watchers_info": "Appliquer uniquement pendant la création",
+      "copy_tag_to_description": "Copier l'etiquette dans la description",
+      "copy_tag_to_category": "Copier l'etiquette dans la catégorie",
+      "copy_category_to_description": "Copier la catégorie dans la description",
       "quick_amounts": {
-        "title": "Quick transaction amounts",
-        "value": "Value"
+        "title": "Montant des transactions",
+        "value": "Valeur"
       },
       "list_fields": {
-        "title": "Set list fields",
-        "fields": "Fields",
-        "select_hero_icons": "Select what Hero Icons to show",
-        "hero_icons": "Hero Icons",
-        "right_side_card": "(Right side card in the list)"
+        "title": "Définir les champs de la liste",
+        "fields": "Champs",
+        "select_hero_icons": "Sélectionner les icônes héros à afficher",
+        "hero_icons": "Icônes héros",
+        "right_side_card": "(Carte du côté droit dans la liste)"
       },
       "form_fields": {
-        "title": "Set form fields",
-        "always_show_foreign_currency": "Always show foreign currency field"
+        "title": "Définir les champs du formulaire",
+        "always_show_foreign_currency": "Toujours afficher le champ de la devise étrangère"
       },
       "default_list_filters": {
-        "title": "Transaction list default filters",
-        "info": "It is recommended to use these filters only if you have a large amount of transactions which results in a slow list load. Ex. Show only transactions after the start of the current year."
+        "title": "Filtres par défaut de la liste des transactions",
+        "info": "Il est recommandé d'utiliser ces filtres uniquement si vous avez un grand nombre de transactions ce qui entraîne un chargement lent de la liste. Ex. N'afficher que les transactions après le début de l'année en cours."
       },
       "default_form_values": {
-        "title": "New transaction defaults",
-        "default_source_account": "Default source account",
-        "default_destination_account": "Default destination account",
-        "default_category": "Default category",
-        "default_tags": "Default tags (only preselected)",
-        "auto_tags": "Auto tags (appended after creation)",
-        "foreign_currency": "Foreign currency for expenses"
+        "title": "Nouvelles valeurs par défaut des transactions",
+        "default_source_account": "Compte source par défaut",
+        "default_destination_account": "Compte de destination par défaut",
+        "default_category": "Catégorie par défaut",
+        "default_tags": "Étiquettes par défaut (sélectionnées uniquement)",
+        "auto_tags": "Étiquettes automatiques (ajoutées après la création)",
+        "foreign_currency": "Devise étrangère pour les dépenses"
       }
     },
-    "about_entry": "About",
+    "about_entry": "À propos",
     "version": "Version",
-    "new_version_available": "New version available",
-    "dashboard_entry": "Dashboard",
+    "new_version_available": "Nouvelle version disponible",
+    "dashboard_entry": "Tableau de bord",
     "dashboard": {
-      "title": "Dashboard settings",
-      "cards_order": "Dashboard cards order",
-      "config": "Config",
-      "show_empty_accounts": "Show accounts with 0 amount",
-      "show_decimal_places": "Show decimal places",
-      "transaction_exclusion": "Transaction exclusion",
+      "title": "Paramètres du tableau de bord",
+      "cards_order": "Ordre des cartes du tableau de bord",
+      "config": "Configuration",
+      "show_empty_accounts": "Afficher les comptes avec un montant de 0",
+      "show_decimal_places": "Afficher les décimales",
+      "transaction_exclusion": "Exclusion des transactions",
       "cards": {
-        "accounts_summary": "Accounts summary",
-        "expenses_this_week": "Expenses this week",
-        "transactions_summary": "Transactions summary",
-        "expenses_by_tag": "Expenses by tags",
-        "expenses_by_category": "Expenses by categories",
-        "transfers_by_tag": "Transfers by tags",
-        "transfers_by_category": "Transfers by categories",
-        "todo_transactions": "Todo transactions"
+        "accounts_summary": "Résumé des comptes",
+        "expenses_this_week": "Dépenses de cette semaine",
+        "transactions_summary": "Résumé des transactions",
+        "expenses_by_tag": "Dépenses par étiquettes",
+        "expenses_by_category": "Dépenses par catégories",
+        "transfers_by_tag": "Transferts par étiquettes",
+        "transfers_by_category": "Transferts par catégories",
+        "todo_transactions": "Transactions à faire"
       }
     },
     "token": {
-      "label": "Personal access token",
-      "placeholder": "Personal token"
+      "label": "Jeton d'accès personnel",
+      "placeholder": "Jeton personnel"
     }
   },
   "about": {
-    "title": "About",
-    "info": "Info",
-    "items_list_deleted": "- Items in a list can be deleted with a horizontal swipe",
-    "list_updated": "- A list can be updated via pull to refresh",
-    "popups_dismissed": "- Popups that appear from the bottom can be dismissed with a swipe down gesture",
-    "dashboard_clickable": "- On the dashboard most of the icons and chart bars are clickable.",
-    "credits": "Credits",
-    "developed_by": "- Developed by Mihai Cioraneanu - <a href=\"{url}\">GitHub</a>",
-    "using_laravel_nuxt": "- Using <a href=\"https://laravel.com/\" target=\"_blank\">Laravel</a> and <a href=\"https://nuxt.com/\" target=\"_blank\">Nuxt</a>",
-    "consuming_firefly": "- Consuming the <a href=\"https://www.firefly-iii.org\" target=\"_blank\">Firefly III</a> REST API",
-    "ui_theme_vant": "- With a UI theme based on <a href=\"https://vant-ui.github.io\" target=\"_blank\">Vant</a>",
-    "exchange_rate_api": "- Exchange rate by <a href=\"https://www.exchangerate-api.com\">Exchange Rate API</a>",
-    "iconpacks_tabler": "- IconPacks: <a href=\"https://tabler.io/icons\" target=\"_blank\">Tabler Icons</a>",
-    "iconpacks_fluent": "- IconPacks: <a href=\"https://github.com/microsoft/fluentui\" target=\"_blank\">Fluent UI System Icons</a>",
-    "iconpacks_circle_avatar": "- IconPacks: <a href=\"https://www.svgrepo.com/author/Laura%20Reen\" target=\"_blank\">Circle Avatar Vectors by Laura Reen</a>",
-    "iconpacks_svg_repo": "- IconPacks: <a href=\"https://www.svgrepo.com/\" target=\"_blank\">SVG Repo</a>",
-    "iconpacks_freepik": "- IconPacks: <a href=\"https://www.freepik.com/\" target=\"_blank\">Freepik</a>",
-    "illustrations_undraw": "- Illustrations: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>"
+    "title": "À propos",
+    "info": "Infos",
+    "items_list_deleted": "- Les éléments d'une liste peuvent être supprimés par un glissement horizontal",
+    "list_updated": "- Une liste peut être mise à jour par un geste de glisser-déposer",
+    "popups_dismissed": "- Les fenêtres popup qui apparaissent depuis le bas peuvent être fermées par un geste de glissement vers le bas",
+    "dashboard_clickable": "- Sur le tableau de bord, la plupart des icônes et des barres de graphique sont cliquables.",
+    "credits": "Crédits",
+    "developed_by": "- Développé par Mihai Cioraneanu - <a href=\"{url}\">GitHub</a>",
+    "using_laravel_nuxt": "- Utilisation de <a href=\"https://laravel.com/\" target=\"_blank\">Laravel</a> et <a href=\"https://nuxt.com/\" target=\"_blank\">Nuxt</a>",
+    "consuming_firefly": "- Utilisation de l'API REST <a href=\"https://www.firefly-iii.org\" target=\"_blank\">Firefly III</a>",
+    "ui_theme_vant": "- Avec un thème UI basé sur <a href=\"https://vant-ui.github.io\" target=\"_blank\">Vant</a>",
+    "exchange_rate_api": "- Taux de change par <a href=\"https://www.exchangerate-api.com\">Exchange Rate API</a>",
+    "iconpacks_tabler": "- IconPacks : <a href=\"https://tabler.io/icons\" target=\"_blank\">Tabler Icons</a>",
+    "iconpacks_fluent": "- IconPacks : <a href=\"https://github.com/microsoft/fluentui\" target=\"_blank\">Fluent UI System Icons</a>",
+    "iconpacks_circle_avatar": "- IconPacks : <a href=\"https://www.svgrepo.com/author/Laura%20Reen\" target=\"_blank\">Circle Avatar Vectors par Laura Reen</a>",
+    "iconpacks_svg_repo": "- IconPacks : <a href=\"https://www.svgrepo.com/\" target=\"_blank\">SVG Repo</a>",
+    "iconpacks_freepik": "- IconPacks : <a href=\"https://www.freepik.com/\" target=\"_blank\">Freepik</a>",
+    "illustrations_undraw": "- Illustrations : <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>"
   },
   "page_select": {
-    "label": "Starting page",
-    "title": "Select your starting page"
+    "label": "Page de départ",
+    "title": "Sélectionnez votre page de départ"
   },
   "language_select": {
-    "title": "Select your language",
-    "label": "Language"
+    "title": "Sélectionnez votre langue",
+    "label": "Langue"
   },
   "day_select": {
-    "label": "First day of the week",
-    "title": "Select the first day of the week"
+    "label": "Premier jour de la semaine",
+    "title": "Sélectionnez le premier jour de la semaine"
   },
   "account_select": {
-    "title": "Select an account",
-    "asset_accounts": "Asset accounts",
-    "expense_accounts": "Expense accounts",
-    "income_accounts": "Income accounts",
-    "liability_accounts": "Liability accounts",
-    "no_accounts": "No accounts"
+    "title": "Sélectionnez un compte",
+    "asset_accounts": "Comptes d'actifs",
+    "expense_accounts": "Comptes de dépenses",
+    "income_accounts": "Comptes de revenus",
+    "liability_accounts": "Comptes de passifs",
+    "no_accounts": "Aucun compte"
   },
   "currency_select": {
-    "title": "Select a currency"
+    "title": "Sélectionnez une devise"
   },
   "validation": {
-    "required": "Field is required"
+    "required": "Ce champ est obligatoire"
   },
-  "primary": "Primary",
+  "primary": "Principal",
   "classification": "Classification",
-  "extra": "Extra",
-  "exchange_rates": "Exchange rates",
-  "currency": "Currency",
-  "currencies": "Currencies",
-  "show_transactions": "Show transactions",
-  "icon": "Icon",
-  "icon_select": "Select an icon",
-  "icon_empty": "No icon",
-  "list": "List",
-  "percentage": "Percentage",
-  "repeater_no_values": "No values set. Use the 'add' button.",
+  "extra": "Supplémentaire",
+  "exchange_rates": "Taux de change",
+  "currency": "Devise",
+  "currencies": "Devises",
+  "show_transactions": "Afficher les transactions",
+  "icon": "Icône",
+  "icon_select": "Sélectionnez une icône",
+  "icon_empty": "Aucune icône",
+  "list": "Liste",
+  "percentage": "Pourcentage",
+  "repeater_no_values": "Aucune valeur définie. Utilisez le bouton 'ajouter'.",
   "account_page": {
-    "title_add": "Add account",
-    "title_edit": "Edit account",
-    "adjust_balance": "Adjust balance",
+    "title_add": "Ajouter un compte",
+    "title_edit": "Modifier un compte",
+    "adjust_balance": "Ajuster le solde",
     "account_type": "Type",
-    "account_type_asset": "Asset",
-    "account_type_revenue": "Revenue",
-    "account_type_expense": "Expense",
-    "account_type_liability": "Liability",
-    "account_type_cash": "Cash",
-    "account_role": "Role",
-    "account_role_default": "Default",
-    "account_role_shared": "Shared",
-    "account_role_savings": "Savings",
-    "account_role_credit_card": "Credit card",
-    "liability_type": "Liability type",
-    "liability_direction": "Liability in/out",
-    "include_net_worth": "Is included in net worth",
-    "visible_on_dashboard": "Is visible on Dashboard",
-    "balance": "Balance"
+    "account_type_asset": "Actif",
+    "account_type_revenue": "Revenu",
+    "account_type_expense": "Dépense",
+    "account_type_liability": "Passif",
+    "account_type_cash": "Caisse",
+    "account_role": "Rôle",
+    "account_role_default": "Défaut",
+    "account_role_shared": "Partagé",
+    "account_role_savings": "Épargne",
+    "account_role_credit_card": "Carte de crédit",
+    "liability_type": "Type de passif",
+    "liability_direction": "Passif entrant/sortant",
+    "include_net_worth": "Est inclus dans la valeur nette",
+    "visible_on_dashboard": "Est visible sur le tableau de bord",
+    "balance": "Solde"
   },
   "transaction_template_page": {
-    "title_add": "Add template",
-    "title_edit": "Edit template",
-    "extra_names": "Extra names (assistant findable):"
+    "title_add": "Ajouter un modèle",
+    "title_edit": "Modifier un modèle",
+    "extra_names": "Noms supplémentaires (trouvables par l'assistant) :"
   },
   "tag_page": {
-    "title_add": "Add tag",
-    "title_edit": "Edit tag",
-    "parent_tag": "Parent tag",
-    "mark_as_todo": "Mark as to-do",
-    "end_date": "End date"
+    "title_add": "Ajouter une étiquette",
+    "title_edit": "Modifier une étiquette",
+    "parent_tag": "Étiquette parente",
+    "mark_as_todo": "Marquer comme à faire",
+    "end_date": "Date de fin"
   },
   "category_page": {
-    "title_add": "Add category",
-    "title_edit": "Edit category"
+    "title_add": "Ajouter une catégorie",
+    "title_edit": "Modifier une catégorie"
   },
   "currency_page": {
-    "title_add": "Add currency",
-    "title_edit": "Edit currency",
-    "decimal_places": "Decimal places"
+    "title_add": "Ajouter une devise",
+    "title_edit": "Modifier une devise",
+    "decimal_places": "Nombre de décimales"
   },
   "budget_page": {
-    "title_add": "Add budget",
-    "title_edit": "Edit budget",
-    "spent": "Spent",
-    "percent": "Percent",
-    "interval": "Interval",
-    "type": "Budget type",
-    "period": "Budget period"
+    "title_add": "Ajouter un budget",
+    "title_edit": "Modifier un budget",
+    "spent": "Dépensé",
+    "percent": "Pourcentage",
+    "interval": "Intervalle",
+    "type": "Type de budget",
+    "period": "Période budgétaire"
   },
   "exchange_rate_page": {
-    "relative_to_usd": "Relative to USD"
+    "relative_to_usd": "Par rapport au USD"
   },
   "dashboard": {
-    "title": "Dashboard",
-    "controls": "Controls",
-    "account_total": "Total balance",
-    "expenses_week": "Expenses this week",
+    "title": "Tableau de bord",
+    "controls": "Contrôles",
+    "account_total": "Solde total",
+    "expenses_week": "Dépenses de cette semaine",
     "transactions_summary": {
-      "title": "Transactions summary",
-      "surplus": "Surplus",
-      "days_remaining": "Days remaining",
-      "savings_summary": "Savings summary"
+      "title": "Résumé des transactions",
+      "surplus": "Excédent",
+      "days_remaining": "Jours restants",
+      "savings_summary": "Résumé de l'épargne"
     },
     "budget": {
-      "spent": "Spent",
-      "budgeted": "Budgeted",
-      "remaining": "Remaining"
+      "spent": "Dépensé",
+      "budgeted": "Budgété",
+      "remaining": "Restant"
     },
     "expenses_by_tags": {
-      "title": "Expenses by tags",
-      "all_tags": "All tags",
-      "one_root_tag": "One root tag"
+      "title": "Dépenses par étiquettes",
+      "all_tags": "Toutes les étiquettes",
+      "one_root_tag": "Une étiquette racine"
     },
     "transfers_by_tags": {
-      "title": "Transfers by tags",
-      "all_tags": "All tags",
-      "one_root_tag": "One root tag"
+      "title": "Transferts par étiquettes",
+      "all_tags": "Toutes les étiquettes",
+      "one_root_tag": "Une étiquette racine"
     },
-    "expenses_by_categories": "Expenses by categories",
-    "transfers_by_categories": "Transfers by categories",
-    "configure_cards": "Configure cards"
+    "expenses_by_categories": "Dépenses par catégories",
+    "transfers_by_categories": "Transferts par catégories",
+    "configure_cards": "Configurer les cartes"
   },
   "profile_page": {
-    "title": "Profiles list",
-    "title_add": "Add profile",
-    "info": "Quickly switch between all your settings",
-    "title_edit": "Edit profile",
-    "tutorial_body": "<p>A <b>profile</b> is the collection of all the configurations found in the <code>Settings</code> pages.</p><br><p>You can have multiple profiles but only one can be active at a time. You can switch between them with a <i>tap</i>, and edit them via <i>double-tap</i> or <i>long-tap</i></p><br><p>One use case is to have multiple defaults for the <b>transaction-form</b>: one for your daily usage and one for your vacation. The vacation profile can have a different source account, or have a tag called \"Vacation August 2025\" auto-applied. This makes it easy to see your total expense by that tag.</p>"
+    "title": "Liste des profils",
+    "title_add": "Ajouter un profil",
+    "info": "Passez rapidement entre tous vos paramètres",
+    "title_edit": "Modifier un profil",
+    "tutorial_body": "<p>Un <b>profil</b> est la collection de toutes les configurations trouvées dans les pages <code>Paramètres</code>.</p><br><p>Vous pouvez avoir plusieurs profils mais un seul peut être actif à la fois. Vous pouvez passer d'un profil à l'autre en <i>appuyant</i> et les modifier en <i>double-appuyant</i> ou <i>appuyant longuement</i></p><br><p>Un cas d'utilisation est d'avoir plusieurs paramètres par défaut pour le <b>formulaire de transaction</b> : un pour votre utilisation quotidienne et un pour vos vacances. Le profil de vacances peut avoir un compte source différent ou avoir une étiquette appelée \"Vacances août 2025\" appliquée automatiquement. Cela facilite la visualisation de vos dépenses totales par cette étiquette.</p>"
   }
 }
