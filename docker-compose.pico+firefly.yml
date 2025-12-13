@@ -22,7 +22,7 @@ services:
       firefly:
 
   firefly-pico-postgresql:
-    image: postgres:latest
+    image: postgres:18
     container_name: firefly_pico_db
     restart: always
     environment:
@@ -30,7 +30,7 @@ services:
       - POSTGRES_USER=firefly-pico
       - POSTGRES_PASSWORD=very-secure-pwd-pico
     volumes:
-      - /<your_path>/firefly-pico-db:/var/lib/postgresql/data
+      - /<your_path>/firefly-pico-db:/var/lib/postgresql
     networks:
       firefly:
 
@@ -60,7 +60,7 @@ services:
       firefly:
 
   firefly-app-postgresql:
-    image: postgres:latest
+    image: postgres:18
     container_name: firefly_iii_db
     restart: always
     environment:
@@ -68,7 +68,7 @@ services:
       - POSTGRES_USER=firefly
       - POSTGRES_PASSWORD=very-secure-pwd-firefly
     volumes:
-      - /<your_path>/firefly-db:/var/lib/postgresql/data
+      - /<your_path>/firefly-db:/var/lib/postgresql
     networks:
       firefly:
 
