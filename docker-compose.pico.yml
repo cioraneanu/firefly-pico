@@ -21,14 +21,14 @@ services:
       - firefly
 
   firefly-pico-postgresql:
-    image: postgres:latest
+    image: postgres:18
     container_name: firefly_pico_db
     environment:
       - POSTGRES_DB=firefly-pico
       - POSTGRES_USER=firefly-pico
       - POSTGRES_PASSWORD=very-secure-pwd
     volumes:
-      - /<your_path>:/var/lib/postgresql/data
+      - /<your_path>:/var/lib/postgresql
     networks:
       - firefly
 
