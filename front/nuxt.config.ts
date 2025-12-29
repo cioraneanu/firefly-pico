@@ -115,9 +115,6 @@ export default defineNuxtConfig({
     },
     workbox: {
       navigateFallback: '/',
-      cacheNames: {
-        prefix: 'firefly-pico-v2'
-      }
     },
     devOptions: {
       enabled: false,

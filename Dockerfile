@@ -5,6 +5,8 @@ FROM alpine:3.22 AS base
 
 #Install packages
 RUN apk add --no-cache \
+#    git \
+#    unzip \
     tar \
     nginx \
     nodejs \
@@ -48,6 +50,8 @@ COPY back/ .
 RUN mv .env.example .env
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV COMPOSER_PROCESS_TIMEOUT=600
+
 RUN composer install --no-dev --optimize-autoloader
 RUN php artisan key:generate
 RUN tar --owner=www-data --group=www-data --exclude=.git -czf /tmp/app-back.tar.gz .

@@ -30,6 +30,8 @@ import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
 import Tag from '~/models/Tag.js'
 
+console.log('templates/list -> inited')
+
 const dataStore = useDataStore()
 const onEvent = (event, payload) => {
   if (event === 'onPostDelete') {
@@ -80,7 +82,9 @@ const onRefresh = async () => {
   await onLoadMore()
 }
 
-onMounted(() => {})
+onMounted(() => {
+  console.log('templates/list -> mounted')
+})
 
 // ----
 
