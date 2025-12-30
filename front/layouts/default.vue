@@ -1,9 +1,21 @@
 <template>
   <div :class="layoutClass">
-    <slot />
+    <template v-if="device.isMobile">
+      <slot />
+      <app-bottom-toolbar />
+    </template>
+
+    <template v-else>
+      <div class="display-flex gap-3">
+        <app-left-sidebar />
+        <div class="desktop-content">
+          <slot />
+        </div>
+      </div>
+    </template>
+
 
     <profile-picker-float v-if="true" />
-    <app-bottom-toolbar />
     <app-bottom-loading />
   </div>
 </template>

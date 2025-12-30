@@ -1,5 +1,5 @@
 <template>
-  <van-nav-bar :safe-area-inset-top="true" :fixed="true" :placeholder="true" v-bind="attributes" :left-text="leftText" @click-left="onBack">
+  <van-nav-bar :safe-area-inset-top="true" :fixed="device.isMobile" :placeholder="true" v-bind="attributes" :left-text="leftText" @click-left="onBack">
     <template #right>
       <slot name="right" />
     </template>
@@ -24,6 +24,8 @@ import { useToolbar } from '~/composables/useToolbar'
 
 const profileStore = useProfileStore()
 const { title, subtitle, onBack, leftText, backRoute, titleIcon } = useToolbar()
+const device = useDevice()
+
 
 const hasSubtitle = computed(() => !isStringEmpty(subtitle.value))
 

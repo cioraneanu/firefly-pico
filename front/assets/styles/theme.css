@@ -908,11 +908,10 @@ body {
     }
 }
 
-.layout.desktop {
-    /*max-width: 800px;*/
-    max-width: var(--max-device-width);
-    margin: 0 auto;
-}
+/*.layout.desktop {*/
+/*    max-width: var(--max-device-width);*/
+/*    margin: 0 auto;*/
+/*}*/
 
 .layout {
     min-height: 100vh;
@@ -1239,4 +1238,18 @@ img, svg {
     height: 100%;
     top: 0;
     left: 0;
+}
+
+.app-left-sidebar {
+    background: var(--white);
+    position: fixed;
+    height: 100vh;
+    /*padding: 20px;*/
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    width: 15.00rem;
+}
+
+.desktop-content {
+    flex: 1;
+    padding-inline-start: 16.25rem;
 }
