@@ -7,7 +7,7 @@
     v-model:showDropdown="showDropdown"
     v-model:search="search"
     :list="filteredList"
-    :columns="3"
+    :columns="appStore.gridColumns"
     :getDisplayValue="getDisplayValue"
     v-bind="dynamicAttrs"
   >
@@ -45,6 +45,7 @@ import Tag from '~/models/Tag.js'
 import Budget from '~/models/Budget.js'
 
 const dataStore = useDataStore()
+const appStore = useAppStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 

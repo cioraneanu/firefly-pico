@@ -27,7 +27,7 @@
       </template>
     </van-field>
 
-    <van-popup v-model:show="showDropdown" round position="bottom" style="height: 90%; padding-top: 4px">
+    <van-popup v-model:show="showDropdown" v-bind="popupProps">
       <div ref="popupRef" class="h-100 display-flex flex-column qqq">
         <div v-if="props.popupTitle" class="van-popup-title">{{ props.popupTitle }}</div>
 
@@ -136,6 +136,21 @@ const fieldClass = computed(() => {
   return {
     'app-field': true,
     empty: !modelValue.value,
+  }
+})
+
+const popupProps = computed(() => {
+  if (useAppStore().isDesktopLayout) {
+    return {
+      position: 'center',
+      style: { width: '80vw', maxHeight: '70vh', borderRadius: '12px', padding: '16px' },
+    }
+  }
+
+  return {
+    round: true,
+    position: 'bottom',
+    style: { height: '90%', paddingTop: '4px' },
   }
 })
 

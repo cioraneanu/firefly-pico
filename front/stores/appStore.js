@@ -32,6 +32,13 @@ export const useAppStore = defineStore('app', {
       return (state.windowWidth ?? 0) > 800 && useDevice().isDesktop
     },
 
+    gridColumns(state) {
+      if (this.isDesktopLayout) {
+        return Math.floor(state.windowWidth / 200)
+      }
+      return 3
+    },
+
     hasAuthToken(state) {
       return state.authToken && state.authToken.length > 0
     },
