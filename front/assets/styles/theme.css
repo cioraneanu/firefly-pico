@@ -76,7 +76,7 @@ body {
     cursor: pointer;
 }
 
-.app-button-save {
+.layout-mobile .app-button-save {
     position: fixed !important;
     left: 20px;
     right: 20px;
@@ -84,6 +84,19 @@ body {
     max-width: var(--max-device-width);
     margin: 0 auto;
 }
+
+.layout-desktop .app-button-save {
+    position: fixed !important;
+    right: 50px;
+    bottom: 50px !important;
+    /*right: 20px;*/
+    z-index: 2;
+    width: 200px;
+    /*max-width: var(--max-device-width);*/
+    /*margin: 0 auto;*/
+}
+
+
 
 .transaction-amount-operations {
     position: fixed !important;

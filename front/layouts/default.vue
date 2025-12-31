@@ -30,8 +30,10 @@ const appStore = useAppStore()
 const layoutClass = computed(() => {
   return {
     layout: true,
-    desktop: device.isDesktop,
-    mobile: device.isMobile,
+    'layout-desktop': appStore.isDesktopLayout,
+    'layout-mobile': !appStore.isDesktopLayout,
+    // desktop: device.isDesktop,
+    // mobile: device.isMobile,
   }
 })
 
