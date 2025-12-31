@@ -113,11 +113,13 @@ export const useProfileStore = defineStore('profile', {
 
       const response = await new ProfileRepository().getAll()
       let responseData = response.data ?? []
-
       this.profileList = responseData
-      let activeProfile = this.profileActiveId ? responseData.find((item) => item.id === this.profileActiveId) : null
-      activeProfile = activeProfile ?? head(responseData)
-      this.setProfile(activeProfile)
+
+      if (responseData.length > 0) {
+        let activeProfile = this.profileActiveId ? responseData.find((item) => item.id === this.profileActiveId) : null
+        activeProfile = activeProfile ?? head(responseData)
+        this.setProfile(activeProfile)
+      }
 
       this.isLoading = false
       this.migrateProfile()
