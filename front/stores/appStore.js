@@ -22,10 +22,16 @@ export const useAppStore = defineStore('app', {
       currentAppVersion: runtimeConfig.public.version,
       queryTimeout: runtimeConfig.public.queryTimeout,
       latestAppVersion: null,
+
+      windowWidth: null
     }
   },
 
   getters: {
+    isDesktopLayout(state) {
+      return (state.windowWidth ?? 0) > 800 && useDevice().isDesktop
+    },
+
     hasAuthToken(state) {
       return state.authToken && state.authToken.length > 0
     },

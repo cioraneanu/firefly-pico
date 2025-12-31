@@ -1,11 +1,6 @@
 <template>
   <div :class="layoutClass">
-    <template v-if="device.isMobile">
-      <slot />
-      <app-bottom-toolbar />
-    </template>
-
-    <template v-else>
+    <template v-if="appStore.isDesktopLayout">
       <div class="display-flex gap-3">
         <app-left-sidebar />
         <div class="desktop-content">
@@ -14,6 +9,10 @@
       </div>
     </template>
 
+    <template v-else>
+      <slot />
+      <app-bottom-toolbar />
+    </template>
 
     <profile-picker-float v-if="true" />
     <app-bottom-loading />
@@ -26,6 +25,7 @@ import { ref } from 'vue';
 import RouteConstants from '~/constants/RouteConstants.js'
 
 const device = useDevice()
+const appStore = useAppStore()
 
 const layoutClass = computed(() => {
   return {

@@ -1253,3 +1253,16 @@ img, svg {
     flex: 1;
     padding-inline-start: 16.25rem;
 }
+
+.app-top-toolbar-desktop {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    margin: 15px;
+    background: var(--white);
+    border-radius: 10px;
+    position: sticky;
+    top: 10px;
+    z-index: 2;
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
