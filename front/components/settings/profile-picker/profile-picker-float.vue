@@ -3,7 +3,7 @@
     <van-floating-bubble v-model:offset="position" axis="y" magnetic="x" @click="isListVisible = true" :gap="0" class="profile-floating-button">
       <div class="flex-center-vertical" style="gap: 4px; padding: 0 8px;">
         <icon-nut size="20" color="#fff" stroke="1.6" />
-        <span v-if="profileStore.shortProfileName" class="text-white text-xs font-bold">{{ profileStore.shortProfileName }}</span>
+<!--        <span v-if="profileStore.shortProfileName" class="text-white text-xs font-bold">{{ profileStore.shortProfileName }}</span>-->
       </div>
     </van-floating-bubble>
 
