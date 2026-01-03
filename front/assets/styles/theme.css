@@ -395,12 +395,6 @@ body {
     rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
 }
 
-.van-tabbar-item--active {
-    color: black !important;
-    font-weight: 600;
-    font-size: 13px !important;
-}
-
 /*.van-grid-item*/
 .active .app-icon-item {
     background: #e91e63;

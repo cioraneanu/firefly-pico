@@ -4,6 +4,7 @@ import ResponseUtils from '~/utils/ResponseUtils'
 import { compareVersionStrings } from '~/utils/DataUtils'
 import InfoRepository from '~/repository/InfoRepository.js'
 import { get } from 'lodash'
+import RouteConstants from '~/constants/RouteConstants.js'
 
 export const useAppStore = defineStore('app', {
   state: () => {
@@ -28,6 +29,20 @@ export const useAppStore = defineStore('app', {
   },
 
   getters: {
+    activePage(state) {
+      const route = useRoute()
+      const routeMapping = {
+        [RouteConstants.ROUTE_DASHBOARD]: [RouteConstants.ROUTE_DASHBOARD],
+        [RouteConstants.ROUTE_TRANSACTION_LIST]: [RouteConstants.ROUTE_TRANSACTION_LIST, RouteConstants.ROUTE_TRANSACTION_ID],
+        [RouteConstants.ROUTE_EXTRAS]: [
+            RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST, RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID,
+            RouteConstants.ROUTE_ACCOUNT_LIST, RouteConstants.ROUTE_ACCOUNT_ID,
+            RouteConstants.ROUTE_TAG_LIST, RouteConstants.ROUTE_TAG_ID,
+      ]
+
+      }
+    },
+
     isDesktopLayout(state) {
       return (state.windowWidth ?? 0) > 800 && useDevice().isDesktop
     },
