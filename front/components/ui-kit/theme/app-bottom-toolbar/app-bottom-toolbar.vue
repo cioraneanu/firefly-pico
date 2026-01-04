@@ -1,8 +1,8 @@
 <template>
   <van-tabbar v-if="!isKeyboardVisible" :safe-area-inset-bottom="true" :fixed="true">
 
-    <app-bottom-toolbar-item :label="$t('toolbar.home')" :icon="TablerIconConstants.dashboard" :route="RouteConstants.ROUTE_DASHBOARD"/>
-    <app-bottom-toolbar-item :label="$t('toolbar.transactions')" :icon="TablerIconConstants.transaction" :route="RouteConstants.ROUTE_TRANSACTION_LIST"/>
+    <app-bottom-toolbar-item :label="$t('toolbar.home')" :icon="iconDashboard" :route="RouteConstants.ROUTE_DASHBOARD"/>
+    <app-bottom-toolbar-item :label="$t('toolbar.transactions')" :icon="iconTransactionList" :route="RouteConstants.ROUTE_TRANSACTION_LIST"/>
 
 
     <app-bottom-toolbar-item :route="RouteConstants.ROUTE_TRANSACTION_ID">
@@ -25,6 +25,7 @@ import RouteConstants from '~/constants/RouteConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { animateBottomToolbarAddButton } from '~/utils/AnimationUtils.js'
 
+
 const dataStore = useDataStore()
 const profileStore = useProfileStore()
 const appStore = useAppStore()
@@ -39,6 +40,14 @@ const tabConstants = {
 }
 
 const { isKeyboardVisible } = useKeyboard()
+
+const iconDashboard = computed(() => {
+  return useRoute().path === RouteConstants.ROUTE_DASHBOARD ? 'svgo-custom-dashboard2' : 'svgo-custom-dashboard1'
+})
+
+const iconTransactionList = computed(() => {
+  return useRoute().path === RouteConstants.ROUTE_TRANSACTION_LIST ? 'svgo-custom-transactions2' : 'svgo-custom-transactions1'
+})
 
 // watch(
 //   () => route.path,

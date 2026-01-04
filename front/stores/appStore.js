@@ -19,12 +19,11 @@ export const useAppStore = defineStore('app', {
 
       profileFloatButtonPosition: useLocalStorage('profileFloatButtonPosition', { y: window.innerHeight / 2.2 }),
 
-
       currentAppVersion: runtimeConfig.public.version,
       queryTimeout: runtimeConfig.public.queryTimeout,
       latestAppVersion: null,
 
-      windowWidth: null
+      windowWidth: null,
     }
   },
 
@@ -35,12 +34,15 @@ export const useAppStore = defineStore('app', {
         [RouteConstants.ROUTE_DASHBOARD]: [RouteConstants.ROUTE_DASHBOARD],
         [RouteConstants.ROUTE_TRANSACTION_LIST]: [RouteConstants.ROUTE_TRANSACTION_LIST, RouteConstants.ROUTE_TRANSACTION_ID],
         [RouteConstants.ROUTE_EXTRAS]: [
-            RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST, RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID,
-            RouteConstants.ROUTE_ACCOUNT_LIST, RouteConstants.ROUTE_ACCOUNT_ID,
-            RouteConstants.ROUTE_TAG_LIST, RouteConstants.ROUTE_TAG_ID,
-      ]
-
+          RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST,
+          RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID,
+          RouteConstants.ROUTE_ACCOUNT_LIST,
+          RouteConstants.ROUTE_ACCOUNT_ID,
+          RouteConstants.ROUTE_TAG_LIST,
+          RouteConstants.ROUTE_TAG_ID,
+        ],
       }
+      // return route.path.conta
     },
 
     isDesktopLayout(state) {
