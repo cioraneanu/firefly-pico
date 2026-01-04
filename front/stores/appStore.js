@@ -34,6 +34,7 @@ export const useAppStore = defineStore('app', {
         [RouteConstants.ROUTE_DASHBOARD]: [RouteConstants.ROUTE_DASHBOARD],
         [RouteConstants.ROUTE_TRANSACTION_LIST]: [RouteConstants.ROUTE_TRANSACTION_LIST, RouteConstants.ROUTE_TRANSACTION_ID],
         [RouteConstants.ROUTE_EXTRAS]: [
+          RouteConstants.ROUTE_EXTRAS,
           RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST,
           RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID,
           RouteConstants.ROUTE_ACCOUNT_LIST,
