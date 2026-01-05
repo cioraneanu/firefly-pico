@@ -3,7 +3,7 @@
     <div class="sidebar-header">
       <div class="add-btn-wrapper">
         <nuxt-link :to="RouteConstants.ROUTE_TRANSACTION_ID" class="p-0">
-          <button class="add-transaction-btn">
+          <button class="add-transaction-btn-desktop">
             <app-icon :icon="TablerIconConstants.dashboardTotalIncomes" :size="20" />
             <span>New Transaction</span>
           </button>
@@ -75,28 +75,6 @@ const route = useRoute()
 
 .add-btn-wrapper {
   margin-bottom: 0.5rem;
-}
-
-.add-transaction-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  width: 100%;
-  padding: 0.5rem 1rem;
-  background-color: #0f172a; /* slate-900 */
-  color: white;
-  border: 1px solid #0f172a;
-  border-radius: 0.375rem; /* rounded-md */
-  font-size: 0.875rem; /* text-sm */
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-}
-
-.add-transaction-btn:hover {
-  background-color: #1e293b; /* slate-800 */
 }
 
 .sidebar-nav {

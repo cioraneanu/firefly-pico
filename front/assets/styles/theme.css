@@ -1280,8 +1280,49 @@ img, svg {
 }
 
 .app-bottom-toolbar-item.selected {
-    font-weight: 600;
+    font-weight: 700;
     color: #ee2524;
 }
+
+.van-hairline--top-bottom:after, .van-hairline-unset--top-bottom:after {
+    border-width: 0 !important;
+}
+
+
+.add-transaction-btn-mobile,.add-transaction-btn-desktop {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.875rem; /* text-sm */
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.add-transaction-btn-mobile {
+    padding: 0.35rem;
+    margin-top: 0px;
+    border-radius: 0.975rem; /* rounded-md */
+    background-color: #ee2524; /* slate-900 */
+}
+
+.add-transaction-btn-desktop {
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border-radius: 0.5rem; /* rounded-md */
+    background-color: #0f172a; /* slate-900 */
+    border: 1px solid #0f172a;
+}
+
+.add-transaction-btn-desktop:hover {
+    background-color: #1e293b; /* slate-800 */
+}
+
+
+
+
 
 

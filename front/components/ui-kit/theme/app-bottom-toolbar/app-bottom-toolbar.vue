@@ -1,19 +1,18 @@
 <template>
   <van-tabbar v-if="!isKeyboardVisible" :safe-area-inset-bottom="true" :fixed="true">
-
-    <app-bottom-toolbar-item :route="RouteConstants.ROUTE_DASHBOARD"/>
-    <app-bottom-toolbar-item :route="RouteConstants.ROUTE_TRANSACTION_LIST"/>
-
+    <app-bottom-toolbar-item :route="RouteConstants.ROUTE_DASHBOARD" />
+    <app-bottom-toolbar-item :route="RouteConstants.ROUTE_TRANSACTION_LIST" />
 
     <app-bottom-toolbar-item :route="RouteConstants.ROUTE_TRANSACTION_ID">
       <template #icon>
-        <svg-add-icon width="40" height="40" id="add-new-transaction" />
+        <button class="add-transaction-btn-mobile">
+          <app-icon :icon="TablerIconConstants.dashboardTotalIncomes" :size="30" />
+        </button>
       </template>
     </app-bottom-toolbar-item>
 
-
-    <app-bottom-toolbar-item :route="RouteConstants.ROUTE_EXTRAS"/>
-    <app-bottom-toolbar-item :route="RouteConstants.ROUTE_SETTINGS"/>
+    <app-bottom-toolbar-item :route="RouteConstants.ROUTE_EXTRAS" />
+    <app-bottom-toolbar-item :route="RouteConstants.ROUTE_SETTINGS" />
   </van-tabbar>
 </template>
 
@@ -26,7 +25,6 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { animateBottomToolbarAddButton } from '~/utils/AnimationUtils.js'
 import IconDashboard1 from '~/assets/icons/custom/dashboard1.svg'
 import IconDashboard2 from '~/assets/icons/custom/dashboard2.svg'
-
 
 const dataStore = useDataStore()
 const profileStore = useProfileStore()
@@ -86,8 +84,6 @@ const iconTransactionList = computed(() => {
 
 onMounted(async () => {})
 
-
-
 const onNewTransaction = () => {
   animateBottomToolbarAddButton()
   onChange(tabConstants.add)
@@ -117,3 +113,5 @@ const onChange = async (code) => {
   }
 }
 </script>
+
+
