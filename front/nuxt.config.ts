@@ -7,7 +7,7 @@ const appName = 'Firefly Pico'
 const appDescription = 'Firefly III companion app.'
 export default defineNuxtConfig({
   devServer: {
-    host: '192.168.1.213',
+    // host: '192.168.1.213',
     // host: '0'
   },
   i18n: {

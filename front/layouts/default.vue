@@ -14,7 +14,7 @@
       <app-bottom-toolbar />
     </template>
 
-    <profile-picker-float v-if="true" />
+    <profile-picker-float v-if="!appStore.isDesktopLayout" />
     <app-bottom-loading />
   </div>
 </template>

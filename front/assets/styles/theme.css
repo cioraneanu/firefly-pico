@@ -97,7 +97,6 @@ body {
 }
 
 
-
 .transaction-amount-operations {
     position: fixed !important;
     right: 20px;
@@ -1289,7 +1288,7 @@ img, svg {
 }
 
 
-.add-transaction-btn-mobile,.add-transaction-btn-desktop {
+.add-transaction-btn-mobile, .add-transaction-btn-desktop {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1302,10 +1301,12 @@ img, svg {
 }
 
 .add-transaction-btn-mobile {
-    padding: 0.35rem;
-    margin-top: 0px;
+    padding: 0.55rem;
+    margin-top: -13px;
     border-radius: 0.975rem; /* rounded-md */
     background-color: #ee2524; /* slate-900 */
+    border: 2px solid white;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 0px 5px -1px, rgba(0, 0, 0, 0.3) 0px -1px 3px -1px;
 }
 
 .add-transaction-btn-desktop {
