@@ -27,33 +27,31 @@
       </template>
     </van-field>
 
-    <van-popup v-model:show="showDropdown" v-bind="popupProps">
-      <div ref="popupRef" class="h-100 display-flex flex-column qqq">
-        <div v-if="props.popupTitle" class="van-popup-title">{{ props.popupTitle }}</div>
+    <app-popup v-model:show="showDropdown">
+      <div v-if="props.popupTitle" class="van-popup-title">{{ props.popupTitle }}</div>
 
-        <div v-if="hasSearch" style="margin-right: 12px" class="p-1 flex-center-vertical gap-1">
-          <van-search v-model="search" :placeholder="$t('search_placeholder')" class="flex-1" />
+      <div v-if="hasSearch" style="margin-right: 12px" class="p-1 flex-center-vertical gap-1">
+        <van-search v-model="search" :placeholder="$t('search_placeholder')" class="flex-1" />
 
-          <slot name="top-right"></slot>
-        </div>
-
-        <div ref="popupContentRef" class="flex-1 flex-column overflow-auto mt-20">
-          <slot name="popup" :onSelectCell="onSelectCell">
-            <van-grid :column-num="columns">
-              <template v-for="(item, index) in list" :key="index">
-                <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
-                  <template #default>
-                    <slot name="item" :item="item" :isActive="isItemSelected(item)">
-                      <app-select-option :text="getDisplayName(item)" />
-                    </slot>
-                  </template>
-                </van-grid-item>
-              </template>
-            </van-grid>
-          </slot>
-        </div>
+        <slot name="top-right"></slot>
       </div>
-    </van-popup>
+
+      <div ref="popupContentRef" class="flex-1 flex-column overflow-auto mt-20">
+        <slot name="popup" :onSelectCell="onSelectCell">
+          <van-grid :column-num="columns">
+            <template v-for="(item, index) in list" :key="index">
+              <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
+                <template #default>
+                  <slot name="item" :item="item" :isActive="isItemSelected(item)">
+                    <app-select-option :text="getDisplayName(item)" />
+                  </slot>
+                </template>
+              </van-grid-item>
+            </template>
+          </van-grid>
+        </slot>
+      </div>
+    </app-popup>
   </div>
 </template>
 
@@ -139,21 +137,6 @@ const fieldClass = computed(() => {
   }
 })
 
-const popupProps = computed(() => {
-  if (useAppStore().isDesktopLayout) {
-    return {
-      position: 'center',
-      style: { width: '80vw', maxHeight: '70vh', borderRadius: '12px', padding: '16px' },
-    }
-  }
-
-  return {
-    round: true,
-    position: 'bottom',
-    style: { height: '90%', paddingTop: '4px' },
-  }
-})
-
 const modelValueDisplayName = computed(() => {
   if (!modelValue.value) {
     return null
@@ -205,8 +188,8 @@ const onSelectCell = (item) => {
     }
     modelValue.value = newValue
   } else {
-    let sameOptionClicked =  isEqual(modelValue.value, item)
-    modelValue.value = sameOptionClicked ? ( isClearable.value ? null:  item ) : item
+    let sameOptionClicked = isEqual(modelValue.value, item)
+    modelValue.value = sameOptionClicked ? (isClearable.value ? null : item) : item
     showDropdown.value = false
   }
 }

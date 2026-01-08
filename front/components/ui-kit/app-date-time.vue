@@ -39,19 +39,11 @@
 
     <van-calendar v-model:show="showDatePicker" @confirm="onConfirmDate" :show-confirm="false" :min-date="minDate" :max-date="maxDate" color="#ee0a24" />
 
-    <van-popup v-model:show="showTimePicker" round position="bottom" style="padding-top: 4px">
-      <div ref="popupRef" class="h-100 display-flex flex-column">
-        <!--        <div class="display-flex">-->
-        <!--          <van-button>Cancel</van-button>-->
-        <!--          <div class="flex-1">Choose time</div>-->
-        <!--          <van-button>Confirm</van-button>-->
-        <!--        </div>-->
-
+    <app-popup v-model:show="showTimePicker" round position="bottom" style="padding-top: 4px">
         <div>
           <van-time-picker :model-value="tempTime" :filter="timeFilter" title="Choose time" @confirm="onConfirmTime" :visible-option-num="14" />
         </div>
-      </div>
-    </van-popup>
+    </app-popup>
   </div>
 </template>
 

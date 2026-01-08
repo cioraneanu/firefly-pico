@@ -1,5 +1,5 @@
 <template>
-  <van-popup v-model:show="showDropdown" round position="bottom" :style="style">
+  <app-popup v-model:show="showDropdown" :style="style">
     <div class="h-100 display-flex flex-column qqq" @touchstart.stop @touchmove.stop>
       <div class="flex-center-vertical m-10 mb-0">
         <div class="flex-1 text-center font-weight-600 text-size-18">{{ $t('filters.transaction_filters') }}</div>
@@ -68,7 +68,7 @@
         </van-form>
       </div>
     </div>
-  </van-popup>
+  </app-popup>
 </template>
 
 <script setup>
@@ -106,7 +106,13 @@ const { description, dateStart, dateEnd, amountStart, amountEnd, category, witho
 ])
 const showDropdown = ref(false)
 
+const appStore = useAppStore()
+
 const style = computed(() => {
+  if (appStore.isDesktopLayout) {
+    return null
+  }
+
   return {
     height: '90%',
     // 'height': 'calc(100vh - 3rem)',

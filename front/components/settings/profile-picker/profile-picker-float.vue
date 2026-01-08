@@ -4,9 +4,9 @@
       <icon-nut size="20" color="#fff" stroke="1.6" />
     </van-floating-bubble>
 
-    <van-popup v-model:show="isListVisible" position="bottom" :style="{ height: '40%' }">
+    <app-popup v-model:show="isListVisible" :style="appStore.isDesktopLayout ? null : { height: '40%' }">
       <profile-picker-list></profile-picker-list>
-    </van-popup>
+    </app-popup>
   </div>
 </template>
 

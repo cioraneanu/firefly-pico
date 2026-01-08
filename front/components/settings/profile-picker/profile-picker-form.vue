@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-popup v-model:show="showDropdown" round position="bottom" style="padding-top: 4px; padding-bottom: 80px">
+    <app-popup v-model:show="showDropdown" round position="bottom" style="padding-top: 4px; padding-bottom: 80px">
       <div ref="popupRef" class="h-100 display-flex flex-column qqq">
         <div class="van-popup-title flex-center-vertical px-4">
           <div class="flex-1">{{ title }}</div>
@@ -14,7 +14,7 @@
         <app-button-form-delete class="mx-3 mt-1" style="width: auto" v-if="itemId" @click="onDelete" />
         <app-button-form-save bottom=" - var(--van-tabbar-height) + 20px" @click="onSave" />
       </div>
-    </van-popup>
+    </app-popup>
   </div>
 </template>
 

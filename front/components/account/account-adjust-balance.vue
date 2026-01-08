@@ -1,6 +1,6 @@
 <template>
   <div class="van-cell-fake">
-    <van-popup v-model:show="showDropdown" round position="bottom" style="height: 250px; padding-top: 4px">
+    <app-popup v-model:show="showDropdown" :style="style">
       <div ref="popupRef" class="h-100 display-flex flex-column">
         <div class="van-popup-title">Adjust balance</div>
 
@@ -12,7 +12,7 @@
           <van-button @click="onSave" round type="primary" native-type="submit" class="mx-3 mb-20 shadow-depth2">Save </van-button>
         </div>
       </div>
-    </van-popup>
+    </app-popup>
   </div>
 </template>
 
@@ -39,6 +39,17 @@ const props = defineProps({
   value: {},
 })
 
+const appStore = useAppStore()
+const style = computed(() => {
+  if (appStore.isDesktopLayout) {
+    return null
+  }
+  return {
+    height: '250px',
+    paddingTop: '4px',
+  }
+})
+
 const emits = defineEmits('result')
 
 watch(showDropdown, (newValue) => {
@@ -46,7 +57,6 @@ watch(showDropdown, (newValue) => {
 })
 
 const onSave = async () => {
-
   UIUtils.showToastLoading('Adjusting...')
   let accountId = get(props.value, 'id')
   let accountBody = cloneDeep(props.value)
