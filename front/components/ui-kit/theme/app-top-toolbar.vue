@@ -7,6 +7,7 @@
           <div class="">
             <div class="app-toolbar-title">{{ title }}</div>
             <div v-if="hasSubtitle" class="app-toolbar-subtitle">{{ subtitle }}</div>
+            <slot name="subtitle" />
           </div>
         </slot>
       </div>

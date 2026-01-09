@@ -1,11 +1,15 @@
 <template>
   <div class="app-form">
-    <app-top-toolbar />
+    <app-top-toolbar>
+      <template #subtitle>
+        <dashboard-control-desktop v-if="appStore.isDesktopLayout" />
+      </template>
+    </app-top-toolbar>
 
     <van-pull-refresh v-model="isLoadingAccounts" @refresh="onRefresh">
-      <div ref="dashboard" class="flex-column display-flex">
-        <dashboard-control />
+      <dashboard-control v-if="!appStore.isDesktopLayout" />
 
+      <div ref="dashboard" class="dynamic-masonry">
         <dashboard-calendar :style="getStyleForCard(dashboardCard.calendar)" />
 
         <dashboard-accounts :style="getStyleForCard(dashboardCard.accounts)" />
@@ -25,14 +29,13 @@
         <dashboard-category-totals-transfer :style="getStyleForCard(dashboardCard.transfersByCategory)" />
 
         <dashboard-todo-transactions :style="getStyleForCard(dashboardCard.todoTransactions)" />
-
-        <app-card-info style="order: 99">
-          <app-field-link :label="$t('dashboard.configure_cards')" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER)" />
-        </app-card-info>
       </div>
+
+      <app-card-info style="order: 99">
+        <app-field-link :label="$t('dashboard.configure_cards')" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER)" />
+      </app-card-info>
+
     </van-pull-refresh>
-
-
   </div>
 </template>
 
@@ -48,6 +51,7 @@ import { useSwipe } from '@vueuse/core'
 import { addMonths } from 'date-fns'
 
 const dataStore = useDataStore()
+const appStore = useAppStore()
 const profileStore = useProfileStore()
 const { isLoadingAccounts } = storeToRefs(dataStore)
 
@@ -101,6 +105,13 @@ const { lengthX } = useSwipe(dashboard, {
     }
   },
 })
+
+// const dashboardContainerClass = computed(() => {
+//   return {
+//     'flex-column display-flex': !appStore.isDesktopLayout,
+//     'masonry-2-columns': appStore.isDesktopLayout,
+//   }
+// })
 
 const toolbar = useToolbar()
 const { t } = useI18n()

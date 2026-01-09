@@ -1322,6 +1322,21 @@ img, svg {
     background-color: #1e293b; /* slate-800 */
 }
 
+.masonry-2-columns {
+    column-count: 2;
+    column-gap: 16px;
+}
+
+
+.dynamic-masonry {
+    column-width: 500px;
+    column-gap: 16px;
+}
+
+.dynamic-masonry .van-cell-group--inset {
+    margin-top: 0;
+}
+
 
 
 
