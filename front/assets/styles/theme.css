@@ -1329,12 +1329,13 @@ img, svg {
 
 
 .dynamic-masonry {
-    column-width: 500px;
-    column-gap: 16px;
+    padding-top: 10px;
+    column-width: 700px;
+    column-gap: 5px;
 }
 
-.dynamic-masonry .van-cell-group--inset {
-    margin-top: 0;
+.dynamic-masonry > :first-child {
+    margin-top: 0 !important;
 }
 
 
