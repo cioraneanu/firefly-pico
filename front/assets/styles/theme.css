@@ -693,6 +693,10 @@ body {
     padding: 0px !important;
 }
 
+.van-grid-item {
+    min-width: 0;
+}
+
 /*===========================*/
 
 .bar-container-vertical .bar-container {

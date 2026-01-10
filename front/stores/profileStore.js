@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import * as LanguageConstants from '~/constants/LanguageConstants'
 import DateUtils from '~/utils/DateUtils'
-import { cloneDeep, get, head, omit } from 'lodash'
+import { cloneDeep, get, head, keyBy, omit } from 'lodash'
 import { transactionFormFieldList, transactionListFieldList, transactionListHeroIcon, transactionListHeroIconList } from '~/constants/TransactionConstants.js'
 import { NUMBER_FORMAT } from '~/utils/NumberUtils.js'
 import ProfileRepository from '~/repository/ProfileRepository'
@@ -82,7 +82,40 @@ export const useProfileStore = defineStore('profile', {
     }
   },
 
-  getters: {},
+  getters: {
+    profileDictionary(state) {
+      return keyBy(state.profileList, 'id')
+    },
+
+    activeProfile(state) {
+      return this.profileDictionary[state.profileActiveId]
+    },
+
+    shortProfileName(state) {
+      // If single profile or no list, show nothing
+      if (!this.activeProfile || state.profileList.length <= 1) {
+        return null
+      }
+
+      const profileName = this.activeProfile.name.toLowerCase()
+      const otherProfileNames = state.profileList.filter((p) => p.id != state.profileActiveId).map((p) => (p.name || '').toLowerCase())
+
+      // Find shortest unique prefix
+      for (let i = 1; i <= profileName.length; i++) {
+        const prefix = profileName.substring(0, i)
+        const prefixLower = prefix.toLowerCase()
+
+        // Check uniqueness case-insensitive
+        const isConflict = otherProfileNames.some((name) => name.startsWith(prefixLower))
+
+        if (!isConflict) {
+          return prefix
+        }
+      }
+
+      return profileName
+    },
+  },
 
   actions: {
     setProfile(profile) {
@@ -113,11 +146,13 @@ export const useProfileStore = defineStore('profile', {
 
       const response = await new ProfileRepository().getAll()
       let responseData = response.data ?? []
-
       this.profileList = responseData
-      let activeProfile = this.profileActiveId ? responseData.find((item) => item.id === this.profileActiveId) : null
-      activeProfile = activeProfile ?? head(responseData)
-      this.setProfile(activeProfile)
+
+      if (responseData.length > 0) {
+        let activeProfile = this.profileActiveId ? responseData.find((item) => item.id === this.profileActiveId) : null
+        activeProfile = activeProfile ?? head(responseData)
+        this.setProfile(activeProfile)
+      }
 
       this.isLoading = false
       this.migrateProfile()

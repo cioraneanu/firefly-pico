@@ -8,13 +8,12 @@
     :columns="appStore.gridColumns"
     v-bind="dynamicAttrs"
     :has-search="false"
-    :clearable="false"
-  >
+    :clearable="false">
     <template #item="{ item, isActive }">
       <div class="display-flex flex-column text-size-12">
-        <div class="flex-center-vertical gap-2 mx-1">
+        <div class="flex-center gap-2 mx-1 flex-wrap">
           <app-icon :icon="item.icon" :size="24" />
-          {{ item.displayName }}
+          <div class="text-center">{{ item.displayName }}</div>
         </div>
         <div v-if="isActive" class="app-icon-item mt-5"></div>
       </div>
