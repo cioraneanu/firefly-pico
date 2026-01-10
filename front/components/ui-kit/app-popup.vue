@@ -1,5 +1,5 @@
 <template>
-  <van-popup v-bind="popupProps" teleport="body">
+  <van-popup v-bind="popupProps" :teleport="teleport" :z-index="zIndex">
     <template v-for="slot in Object.keys($slots)" v-slot:[slot]="scoped">
       <slot :name="slot" v-bind="scoped ?? {}" />
     </template>
@@ -7,6 +7,15 @@
 </template>
 
 <script setup>
+const props = defineProps({
+  teleport: {
+    default: 'body',
+  },
+  zIndex: {
+    type: [String, Number],
+  },
+})
+
 const appStore = useAppStore()
 
 const popupProps = computed(() => {

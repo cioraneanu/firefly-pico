@@ -27,7 +27,7 @@
       </template>
     </van-field>
 
-    <app-popup v-model:show="showDropdown">
+    <app-popup v-model:show="showDropdown" :teleport="props.teleport" :z-index="props.zIndex">
       <div v-if="props.popupTitle" class="van-popup-title">{{ props.popupTitle }}</div>
 
       <div v-if="hasSearch" style="margin-right: 12px" class="p-1 flex-center-vertical gap-1">
@@ -123,6 +123,8 @@ const props = defineProps({
   isMultiSelect: {
     default: false,
   },
+  teleport: {},
+  zIndex: {},
 })
 
 const attrs = useAttrs()
