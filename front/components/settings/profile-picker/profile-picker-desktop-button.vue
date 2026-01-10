@@ -1,8 +1,8 @@
 <template>
-  <div>
+  <div v-if="appStore.isDesktopLayout">
     <div class="profile-picker-dashboard-button" @click="isListVisible = true">Profile</div>
 
-    <app-popup v-model:show="isListVisible" :style="appStore.isDesktopLayout ? null : { height: '40%' }">
+    <app-popup v-model:show="isListVisible"  :style="appStore.isDesktopLayout ? null : { height: '40%' }">
       <profile-picker-list></profile-picker-list>
     </app-popup>
   </div>
