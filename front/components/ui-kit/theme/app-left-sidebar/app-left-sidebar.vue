@@ -32,6 +32,7 @@
       </div>
 
       <div class="nav-section mt-auto">
+        <profile-picker-desktop-button />
         <div class="section-label">Settings</div>
         <app-left-sidebar-page label="Settings" :icon="TablerIconConstants.settings" :route="RouteConstants.ROUTE_SETTINGS" />
       </div>

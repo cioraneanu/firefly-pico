@@ -1,6 +1,6 @@
 <template>
   <div>
-    <app-popup v-model:show="showDropdown" round position="bottom" style="padding-top: 4px; padding-bottom: 80px">
+    <app-popup v-model:show="showDropdown" style="padding-top: 4px; padding-bottom: 80px">
       <div ref="popupRef" class="h-100 display-flex flex-column qqq">
         <div class="van-popup-title flex-center-vertical px-4">
           <div class="flex-1">{{ title }}</div>

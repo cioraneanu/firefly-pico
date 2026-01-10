@@ -1322,6 +1322,20 @@ img, svg {
     background-color: #1e293b; /* slate-800 */
 }
 
+.profile-picker-dashboard-button {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #fff;
+    background: #7b90ff;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
 .masonry-2-columns {
     column-count: 2;
     column-gap: 16px;
