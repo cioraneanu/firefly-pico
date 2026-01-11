@@ -1,6 +1,9 @@
 <template>
   <div v-if="appStore.isDesktopLayout">
-    <div class="profile-picker-dashboard-button" @click="isListVisible = true">Profile</div>
+    <div class="profile-picker-dashboard-button flex-center" @click="isListVisible = true">
+      <icon-nut size="20" color="#000" stroke="1.6" />
+      Profile: {{ profileStore.activeProfile?.name }}
+    </div>
 
     <app-popup v-model:show="isListVisible"  :style="appStore.isDesktopLayout ? null : { height: '40%' }">
       <profile-picker-list></profile-picker-list>
@@ -13,6 +16,7 @@ import { IconNut } from '@tabler/icons-vue'
 import { useWindowSize } from '@vueuse/core'
 
 const appStore = useAppStore()
+const profileStore = useProfileStore()
 const isListVisible = ref(false)
 
 const { width } = useWindowSize()

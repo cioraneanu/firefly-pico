@@ -92,28 +92,11 @@ export const useProfileStore = defineStore('profile', {
     },
 
     shortProfileName(state) {
-      // If single profile or no list, show nothing
       if (!this.activeProfile || state.profileList.length <= 1) {
         return null
       }
-
       const profileName = this.activeProfile.name.toLowerCase()
-      const otherProfileNames = state.profileList.filter((p) => p.id != state.profileActiveId).map((p) => (p.name || '').toLowerCase())
-
-      // Find shortest unique prefix
-      for (let i = 1; i <= profileName.length; i++) {
-        const prefix = profileName.substring(0, i)
-        const prefixLower = prefix.toLowerCase()
-
-        // Check uniqueness case-insensitive
-        const isConflict = otherProfileNames.some((name) => name.startsWith(prefixLower))
-
-        if (!isConflict) {
-          return prefix
-        }
-      }
-
-      return profileName
+      return profileName.substring(0, 3)
     },
   },
 
