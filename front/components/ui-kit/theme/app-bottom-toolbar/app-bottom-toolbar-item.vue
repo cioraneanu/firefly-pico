@@ -64,8 +64,6 @@ const isSelected = computed(() => appStore.activePage === props.route)
 
 const icon = computed(() => {
   let isActiveKey = isSelected.value ? 'iconOn' : 'iconOff'
-  console.log('debug', { isActiveKey, 'props.route': props.route, 'icons[props.route]': icons[props.route] })
-
   return icons[props.route][isActiveKey]
 })
 

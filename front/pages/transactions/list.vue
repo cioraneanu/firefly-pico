@@ -4,7 +4,7 @@
       <template #right>
         <div class="flex-center-vertical gap-1">
           <div @click.prevent.stop="onShowFilters" class="mr-10">
-            <app-icon :icon="TablerIconConstants.search" size="20" :stroke="1.6" />
+            <app-icon :icon="TablerIconConstants.search" size="20" :stroke="1.9" />
           </div>
 
           <app-button-list-add @click="onAdd" />
@@ -56,6 +56,7 @@ import { cloneDeep, get, isEqual } from 'lodash'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import Budget from '~/models/Budget.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
+import { IconSearch} from '@tabler/icons-vue'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { filterBagHasValues, getActiveFilters, getFiltersFromURL, saveToUrl } from '~/utils/FilterUtils.js'
 import { useListFilters } from '~/composables/useListFilters.js'
