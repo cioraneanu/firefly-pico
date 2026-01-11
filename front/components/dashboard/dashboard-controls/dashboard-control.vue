@@ -18,46 +18,16 @@
 </template>
 
 <script setup>
-import { addMonths } from 'date-fns'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { useWindowScroll } from '@vueuse/core'
-import { animateOnNext, animateOnPrevious } from '~/utils/AnimationUtils.js'
-import DashboardControls from '~/components/dashboard/dashboard-controls/dashboard-control-buttons.vue'
 import DashboardControlButtons from '~/components/dashboard/dashboard-controls/dashboard-control-buttons.vue'
+import { useDashboardControls } from '~/composables/useDashboardControls.js'
 
 const dataStore = useDataStore()
-const profileStore = useProfileStore()
-
-
-const rangeTitle = computed(() => {
-  let date1 = DateUtils.dateToUI(dataStore.dashboardDateStart)
-  let date2 = DateUtils.dateToUI(dataStore.dashboardDateEnd)
-  return `${date1} - ${date2}`
-})
-const onNextMonth = () => {
-  dataStore.dashboard.month = addMonths(dataStore.dashboard.month, 1)
-  animateOnNext()
-}
-const onPreviousMonth = () => {
-  dataStore.dashboard.month = addMonths(dataStore.dashboard.month, -1)
-  animateOnPrevious()
-}
+const { showDropdown, rangeTitle, onNextMonth, onPreviousMonth, onChooseMonth } = useDashboardControls()
 
 const { y } = useWindowScroll()
 const style = computed(() => {
   return y.value > 20 ? `box-shadow: rgba(60, 64, 67, 0.1) 0px 1px 2px 0px, rgba(60, 64, 67, 0.05) 0px 1px 3px 1px;` : ``
 })
-
-const showDropdown = ref(false)
-
-const onChooseMonth = () => {
-  showDropdown.value = true
-}
-
-watch(
-  () => dataStore.dashboard.month,
-  (newValue) => {
-    dataStore.fetchDashboardTransactionsForInterval()
-  },
-)
 </script>
