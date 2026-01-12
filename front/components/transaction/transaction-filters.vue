@@ -1,12 +1,11 @@
 <template>
   <app-popup v-model:show="showDropdown" :style="style">
-    <div class="h-100 display-flex flex-column qqq" @touchstart.stop @touchmove.stop>
-      <div class="flex-center-vertical m-10 mb-0">
-        <div class="flex-1 text-center font-weight-600 text-size-18">{{ $t('filters.transaction_filters') }}</div>
-      </div>
+      <van-form @submit="onApplyFilters" class="flex-1 display-flex flex-column qqq" style="overflow: hidden">
+        <div class="flex-center-vertical m-10 mb-0">
+          <div class="flex-1 text-center font-weight-600 text-size-18">{{ $t('filters.transaction_filters') }}</div>
+        </div>
 
-      <div ref="popupContentRef" class="flex-1 flex-column overflow-auto color" style="padding-bottom: 100px">
-        <van-form @submit="onApplyFilters">
+        <div ref="popupContentRef" class="flex-1 flex-column overflow-auto color" style="padding-bottom: 100px">
           <app-field class="flex-1" v-model="description" :label="$t('description')" :placeholder="$t('description')" />
 
           <template v-if="showType">
@@ -59,15 +58,15 @@
             <app-field class="flex-1" v-model="amountStart" :label="$t('amount_min')" :placeholder="$t('amount_min')" />
             <app-field class="flex-1" v-model="amountEnd" :label="$t('amount_max')" :placeholder="$t('amount_max')" />
           </div>
+        </div>
 
-          <app-button-form-save :label="$t('filters.apply_filters')">
-            <template #left>
-              <van-button v-if="isFiltered" @click="onClearFilters" round>{{ $t('filters.clear') }}</van-button>
-            </template>
-          </app-button-form-save>
-        </van-form>
-      </div>
-    </div>
+        <app-button-form-save :label="$t('filters.apply_filters')">
+          <template #left>
+            <van-button v-if="isFiltered" @click="onClearFilters" round>{{ $t('filters.clear') }}</van-button>
+          </template>
+        </app-button-form-save>
+      </van-form>
+
   </app-popup>
 </template>
 
@@ -110,7 +109,11 @@ const appStore = useAppStore()
 
 const style = computed(() => {
   if (appStore.isDesktopLayout) {
-    return null
+    return {
+      overflow: 'hidden',
+      display: 'flex',
+      flexDirection: 'column',
+    }
   }
 
   return {
