@@ -60,7 +60,7 @@
             <app-field class="flex-1" v-model="amountEnd" :label="$t('amount_max')" :placeholder="$t('amount_max')" />
           </div>
 
-          <app-button-form-save :label="$t('filters.apply_filters')" bottom=" - var(--van-tabbar-height) + 20px">
+          <app-button-form-save :label="$t('filters.apply_filters')">
             <template #left>
               <van-button v-if="isFiltered" @click="onClearFilters" round>{{ $t('filters.clear') }}</van-button>
             </template>

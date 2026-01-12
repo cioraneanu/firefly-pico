@@ -1,7 +1,12 @@
 <template>
   <div class="flex-center-vertical gap-2">
-    <app-icon :icon="TablerIconConstants.leftArrow" @click.stop="onPreviousMonth" :size="24" class="cursor-pointer" />
-    <app-icon :icon="TablerIconConstants.rightArrow" @click.stop="onNextMonth" :size="24" class="cursor-pointer" />
+    <div class="simple-button">
+      <app-icon :icon="TablerIconConstants.leftArrow" @click.stop="onPreviousMonth" :size="22" class="cursor-pointer" />
+    </div>
+
+    <div class="simple-button">
+      <app-icon :icon="TablerIconConstants.rightArrow" @click.stop="onNextMonth" :size="22" class="cursor-pointer" />
+    </div>
 
     <div @click="onChooseMonth" class="text-size-14 font-weight-600 cursor-pointer mx-2">{{ rangeTitle }}</div>
 

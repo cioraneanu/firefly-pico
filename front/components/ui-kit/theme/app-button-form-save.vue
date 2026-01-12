@@ -1,5 +1,5 @@
 <template>
-  <div class="app-button-save flex-center-vertical gap-2" :style="style">
+  <div :class="classComputed" :style="style">
     <slot name="left"></slot>
     <van-button round type="primary" native-type="submit" class="flex-1 shadow-depth2">
       {{ label ?? $t('save') }}
@@ -10,6 +10,7 @@
 
 <script setup>
 import { animateSaveButton } from '~/utils/AnimationUtils.js'
+const appStore = useAppStore()
 
 const props = defineProps({
   label: {},
@@ -27,6 +28,12 @@ const style = computed(() => {
     bottom: isKeyboardVisible.value ? bottomWithKeyboard : bottomWithoutKeyboard,
   }
 })
+
+const classComputed = computed(() => ({
+  'app-button-save  flex-center-vertical gap-2': true,
+  mobile: !appStore.isDesktopLayout,
+  desktop: appStore.isDesktopLayout,
+}))
 
 onMounted(async () => {
   await animateSaveButton()
