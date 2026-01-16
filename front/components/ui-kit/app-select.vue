@@ -28,16 +28,17 @@
     </van-field>
 
     <app-popup v-model:show="showDropdown" :teleport="props.teleport" :z-index="props.zIndex">
-      <div class="display-flex flex-column h-100">
-        <div v-if="props.popupTitle" class="van-popup-title">{{ props.popupTitle }}</div>
+      <div class="display-flex flex-column h-100" style="min-height: 0;">
 
-        <div v-if="hasSearch" style="margin-right: 12px" class="p-1 flex-center-vertical gap-1">
+      <div v-if="props.popupTitle" class="van-popup-title">{{ props.popupTitle }}</div>
+
+        <div v-if="hasSearch" style="margin-right: 12px;" class="p-1 flex-center-vertical gap-1">
           <van-search v-model="search" :placeholder="$t('search_placeholder')" class="flex-1" />
 
           <slot name="top-right"></slot>
         </div>
 
-        <div ref="popupContentRef" class="flex-1 flex-column overflow-auto mt-20">
+        <div ref="popupContentRef" class="flex-column overflow-auto">
           <slot name="popup" :onSelectCell="onSelectCell">
             <van-grid :column-num="columns">
               <template v-for="(item, index) in list" :key="index">

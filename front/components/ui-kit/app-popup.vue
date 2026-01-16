@@ -22,7 +22,7 @@ const popupProps = computed(() => {
   if (appStore.isDesktopLayout) {
     return {
       position: 'center',
-      style: { width: '80vw', maxHeight: '70vh', borderRadius: '12px', padding: '16px' },
+      style: { width: '80vw', maxHeight: '70vh', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', overflow: 'hidden' },
     }
   }
 
