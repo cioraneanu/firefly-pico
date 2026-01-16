@@ -30,7 +30,7 @@
     <empty-list v-if="isEmpty && !isLoading" />
 
     <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
-      <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
+      <van-list class="grid-columns-2 p-1" :finished="isFinished" @load="onLoadMore">
         <transaction-list-item v-for="item in list" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
       </van-list>
     </van-pull-refresh>

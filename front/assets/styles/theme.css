@@ -76,7 +76,7 @@ body {
     cursor: pointer;
 }
 
-.app-button-save.mobile  {
+.app-button-save.mobile {
     position: fixed !important;
     left: 20px;
     right: 20px;
@@ -218,6 +218,7 @@ body {
 .van-field--label-top .van-icon-arrow.van-cell__right-icon {
     margin-top: 7px;
 }
+
 
 .van-cell-fake {
     position: relative;
@@ -1361,6 +1362,15 @@ img, svg {
     background: #eee;
     border-radius: 5px;
     padding: 3px 5px;
+}
+
+.layout-desktop .van-swipe-cell__right {
+    right: -1px;
+}
+
+.grid-columns-2 {
+    display: grid;
+    grid-template-columns: auto auto;
 }
 
 
