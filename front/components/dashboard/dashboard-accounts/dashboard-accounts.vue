@@ -5,7 +5,7 @@
     </div>
 
     <van-grid :column-num="2">
-      <van-grid-item v-for="account in dataStore.dashboardAccountsVisible" :key="account.id" @click="onShowActionSheet(account)">
+      <van-grid-item v-for="account in dataStore.dashboardAccountsVisible" :key="account.id" @click="onShowActionSheet(account)" class="cursor-pointer">
         <template #icon>
           <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="24" />
         </template>

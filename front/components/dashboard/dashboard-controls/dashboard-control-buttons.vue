@@ -2,16 +2,16 @@
   <div class="text-size-14 flex-center-vertical gap-1">
     <currency-dropdown v-model="dataStore.dashboardCurrency" />
 
-    <div class="app-button-small" @click="onToggleShowDashboardAccountValues">
+    <div class="app-button-small cursor-pointer" @click="onToggleShowDashboardAccountValues">
       <app-icon :icon="profileStore.dashboard.showAccountAmounts ? TablerIconConstants.eyeHidden : TablerIconConstants.eyeVisible" :size="20" />
     </div>
 
     <div class="app-button-small">
-      <div @click="onShowFilters">
+      <div @click="onShowFilters" class="cursor-pointer">
         <app-icon :icon="TablerIconConstants.search" :size="18" />
         <span v-if="activeFiltersCount > 0"> {{ activeFiltersCount }}</span>
       </div>
-      <div v-if="activeFiltersCount > 0" @click="onResetFilters">
+      <div v-if="activeFiltersCount > 0" @click="onResetFilters" class="cursor-pointer">
         <icon-square-rounded-x :size="22" :stroke="1.5" />
       </div>
     </div>

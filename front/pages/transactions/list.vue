@@ -3,7 +3,7 @@
     <app-top-toolbar>
       <template #right>
         <div class="flex-center-vertical gap-1">
-          <div @click.prevent.stop="onShowFilters" class="mr-10">
+          <div @click.prevent.stop="onShowFilters" class="mr-10 cursor-pointer">
             <app-icon :icon="TablerIconConstants.search" size="20" :stroke="1.9" />
           </div>
 
@@ -21,7 +21,7 @@
         <div v-for="appliedFilter in filtersDisplayList" class="tag-filter">
           <span class="ml-5">{{ appliedFilter }}</span>
         </div>
-        <div @click="onClearFilters" style="z-index: 2">
+        <div @click="onClearFilters" class="cursor-pointer" style="z-index: 2">
           <icon-square-rounded-x :size="26" :stroke="1.5" />
         </div>
       </div>

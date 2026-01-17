@@ -1,5 +1,5 @@
 <template>
-  <div class="van-cell-fake">
+  <div class="van-cell-fake cursor-pointer">
     <van-field :model-value="modelValueDisplayName" :class="fieldClass" :label="label" :placeholder="props.placeholder" v-bind="dynamicAttrs" @click.stop="onShowDropdown" is-link readonly>
       <template v-for="slot in Object.keys($slots)" v-slot:[slot]="scoped">
         <slot :name="slot" v-bind="scoped ?? {}" />
@@ -7,7 +7,7 @@
 
       <template #right-icon>
         <div>
-          <van-icon v-if="modelValue && isClearable" @click.prevent.stop="onClear" name="clear" />
+          <van-icon v-if="modelValue && isClearable" @click.prevent.stop="onClear" name="clear" class="cursor-pointer" />
         </div>
       </template>
 
@@ -20,7 +20,7 @@
               <slot name="inputItemContent" :item="item">
                 <span class="font-weight-400 text-size-12">{{ getDisplayName(item) }}</span>
               </slot>
-              <van-icon v-if="isClearable" :size="16" style="color: #888" @click.prevent.stop="onSelectCell(item)" name="clear" />
+              <van-icon v-if="isClearable" :size="16" style="color: #888" @click.prevent.stop="onSelectCell(item)" name="clear" class="cursor-pointer" />
             </div>
           </div>
         </slot>

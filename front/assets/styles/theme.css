@@ -1347,6 +1347,9 @@ img, svg {
     column-gap: 16px;
 }
 
+.van-cell-fake .van-field__control:read-only {
+    cursor: pointer;
+}
 
 .dynamic-masonry {
     padding-top: 10px;
@@ -1373,7 +1376,9 @@ img, svg {
     grid-template-columns: auto auto;
 }
 
-
+.van-cell-fake label {
+    cursor: pointer;
+}
 
 
 

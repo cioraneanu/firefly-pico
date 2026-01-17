@@ -9,7 +9,7 @@
         <div class="flex-column van-cell p-10">
           <app-repeater v-model="fieldsList" :is-list-dynamic="false" :empty-item="{ value: '' }">
             <template #content="{ element, index }">
-              <div class="app-field m-5" @click="onClickIsVisible(element)">
+              <div class="app-field m-5 cursor-pointer" @click="onClickIsVisible(element)">
                 <div class="van-field__body flex-center-vertical gap-1 pointer-events-none prevent-select">
                   <app-icon v-if="element.icon" :icon="element.icon" :size="20" />
                   <div class="flex-1 text-size-14">{{ element.t ? $t(element.t) : element.name }}</div>
