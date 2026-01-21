@@ -161,8 +161,8 @@ const quickButtons = profileStore.quickValueButtons
 
 const onQuickButton = async (quickButton) => {
   let value = !amount.value || amount.value === '' ? '0' : amount.value
-  value = parseInt(value)
-  amount.value = `${value + parseInt(quickButton)}`
+  let newAmount = parseFloat(value) + parseFloat(quickButton)
+  amount.value = newAmount.toFixed(currencyDecimalPlaces.value ?? 0)
 }
 
 const onFocus = () => {
