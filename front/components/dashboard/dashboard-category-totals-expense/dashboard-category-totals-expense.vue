@@ -3,7 +3,7 @@
     <div class="van-cell-group-title">{{ $t('dashboard.expenses_by_categories') }}:</div>
     <div class="display-flex flex-column ml-15 mr-15">
       <table>
-        <tr v-for="bar in barsList" @click="onShowActionSheet(bar)">
+        <tr v-for="bar in barsList" @click="onShowActionSheet(bar)" class="cursor-pointer">
           <td style="width: 1%">
             <div class="flex-center-vertical gap-1 my-1">
               <app-icon :icon="Category.getIcon(bar.category) ?? TablerIconConstants.category" :size="20" />

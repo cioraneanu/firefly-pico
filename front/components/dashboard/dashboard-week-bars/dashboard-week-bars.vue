@@ -4,7 +4,7 @@
     <div class="display-flex">
       <div class="flex-1" />
 
-      <bar-chart-item-vertical v-for="bar in barsList" v-bind="bar" @click="onClick(bar)" />
+      <bar-chart-item-vertical v-for="bar in barsList" v-bind="bar" @click="onClick(bar)" class="cursor-pointer" />
 
       <div class="flex-1" />
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <van-grid-item>
+  <van-grid-item class="cursor-pointer">
     <template #icon>
       <app-icon :icon="icon" :size="24" />
     </template>
