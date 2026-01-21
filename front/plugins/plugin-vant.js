@@ -10,6 +10,7 @@ import italian from 'vant/es/locale/lang/it-IT'
 import ptBR from 'vant/es/locale/lang/pt-BR'
 import deDE from 'vant/es/locale/lang/de-DE'
 import frFR from 'vant/es/locale/lang/fr-FR'
+import ruRU from 'vant/es/locale/lang/ru-RU'
 
 import { languageCode } from '~/i18n/index.js'
 
@@ -26,6 +27,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         [languageCode.german_german]: deDE,
         [languageCode.swiss_german]: deDE,
         [languageCode.french]: frFR,
+        [languageCode.russian]: ruRU,
       }
       let locale = localeDictionary[newValue] || enUS
       Locale.use(newValue, locale)
