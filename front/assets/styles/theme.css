@@ -1353,7 +1353,7 @@ img, svg {
 
 .dynamic-masonry {
     padding-top: 10px;
-    column-width: 700px;
+    column-width: 500px;
     column-gap: 5px;
 }
 

@@ -1,7 +1,7 @@
 <template>
   <van-cell-group inset>
     <div class="van-cell-group-title">{{ $t('dashboard.expenses_week') }}:</div>
-    <div class="display-flex">
+    <div class="display-flex gap-2">
       <div class="flex-1" />
 
       <bar-chart-item-vertical v-for="bar in barsList" v-bind="bar" @click="onClick(bar)" class="cursor-pointer" />

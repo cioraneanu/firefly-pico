@@ -8,7 +8,7 @@
       <app-icon :icon="TablerIconConstants.rightArrow" @click.stop="onNextMonth" :size="22" class="cursor-pointer" />
     </div>
 
-    <div @click="onChooseMonth" class="text-size-14 font-weight-600 cursor-pointer mx-2">{{ rangeTitle }}</div>
+    <div @click="onChooseMonth" class="text-size-13 font-weight-500 cursor-pointer mx-2">{{ rangeTitle }}</div>
 
     <dashboard-control-buttons />
   </div>
