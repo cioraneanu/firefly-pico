@@ -5,10 +5,6 @@
 
     <app-bottom-toolbar-item :route="RouteConstants.ROUTE_TRANSACTION_ID">
       <template #icon>
-        <!--        <button class="add-transaction-btn-mobile">-->
-        <!--          <icon-square-rounded-plus-filled :size="20"/>-->
-        <!--        </button>-->
-
         <div class="flex-center flex-column">
           <icon-square-rounded-plus-filled :size="36" color="#1976D2" />
 <!--          <div class="app-bottom-toolbar-item flex-center">New</div>-->
