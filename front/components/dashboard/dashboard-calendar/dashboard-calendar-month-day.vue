@@ -33,7 +33,7 @@ const dayOfMonth = computed(() => (props.isVisible ? getDate(props.day) : null))
 
 const tdClass = computed(() => {
   return {
-    day: true,
+    'day cursor-pointer': true,
     'day-weekend': isWeekend(props.day),
     'day-today': isToday(props.day),
   }

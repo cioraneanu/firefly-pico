@@ -1,18 +1,8 @@
 <template>
-  <div class="app-button-save flex-center-vertical gap-2" :style="style">
+  <div :class="classComputed" :style="style">
     <slot name="left"></slot>
-    <van-button round type="primary" native-type="submit" class="flex-1 shadow-depth2">
+    <van-button round type="primary" native-type="submit" class="flex-1 shadow-depth2 cursor-pointer">
       {{ label ?? $t('save') }}
-
-      <!--    1000 debug attempts to get the save button to stick above the mobile Keyboard -->
-      <template v-if="false">
-        <div class="text-size-10">Keyboard = {{ isKeyboardVisible }}, Height = {{ keyboardHeight }}</div>
-        <div class="text-size-10">
-          H = {{ visualViewportHeight }}, page = {{ visualViewportPageTop }}, offset =
-          {{ visualViewportOffsetTop }}
-        </div>
-        <div class="text-size-10">Window = {{ debug }}</div>
-      </template>
     </van-button>
     <slot name="right" />
   </div>
@@ -20,6 +10,7 @@
 
 <script setup>
 import { animateSaveButton } from '~/utils/AnimationUtils.js'
+const appStore = useAppStore()
 
 const props = defineProps({
   label: {},
@@ -37,6 +28,12 @@ const style = computed(() => {
     bottom: isKeyboardVisible.value ? bottomWithKeyboard : bottomWithoutKeyboard,
   }
 })
+
+const classComputed = computed(() => ({
+  'app-button-save  flex-center-vertical gap-2': true,
+  mobile: !appStore.isDesktopLayout,
+  desktop: appStore.isDesktopLayout,
+}))
 
 onMounted(async () => {
   await animateSaveButton()

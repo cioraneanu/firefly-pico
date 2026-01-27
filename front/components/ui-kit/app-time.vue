@@ -17,19 +17,11 @@
       </template>
     </van-field>
 
-    <van-popup v-model:show="showDropdown" round position="bottom" style="padding-top: 4px">
-      <div ref="popupRef" class="h-100 display-flex flex-column">
-        <!--        <div class="display-flex">-->
-        <!--          <van-button>Cancel</van-button>-->
-        <!--          <div class="flex-1">Choose time</div>-->
-        <!--          <van-button>Confirm</van-button>-->
-        <!--        </div>-->
-
+    <app-popup v-model:show="showDropdown" style="padding-top: 4px">
         <div>
           <van-time-picker v-model="localModelValue" :filter="filter" title="Choose time" @confirm="onConfirm" />
         </div>
-      </div>
-    </van-popup>
+    </app-popup>
   </div>
 </template>
 

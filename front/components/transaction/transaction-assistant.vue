@@ -75,7 +75,6 @@
       </template>
     </div>
 
-    <transaction-template-popup v-model:show="show" v-model="foundTemplate" />
   </div>
 </template>
 
@@ -95,7 +94,6 @@ const dataStore = useDataStore()
 const profileStore = useProfileStore()
 
 const emit = defineEmits(['change'])
-const show = ref(false)
 
 const assistantText = defineModel()
 const assistantTextField = ref(null)
@@ -177,10 +175,6 @@ const onClear = () => {
   foundCategory.value = null
   foundTag.value = null
   foundDescription.value = null
-}
-
-const onShow = () => {
-  show.value = true
 }
 
 watch(

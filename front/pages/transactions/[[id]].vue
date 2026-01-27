@@ -13,7 +13,7 @@
     <transaction-type-tabs v-model="type" class="mx-3 mt-1 mb-1" />
 
     <van-form :disabled="isSplitTransaction" :name="formName" class="transaction-form-group" ref="form" @submit="saveItem" @failed="onValidationError">
-      <van-cell-group inset class="mt-0 flex-column display-flex">
+      <van-cell-group inset class="dynamic-masonry">
         <div v-if="isSplitTransaction" class="display-flex ml-3 mt-3">
           <transaction-split-badge />
         </div>
@@ -40,7 +40,7 @@
           <template #label>
             <div class="flex-center-vertical gap-1">
               <div class="flex-1">{{ $t('transaction.source_account') }}</div>
-              <van-button v-if="showSourceAccountSuggestion" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_FORM_VALUES)" size="mini" class="suggestion-button"
+              <van-button v-if="showSourceAccountSuggestion" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_FORM_VALUES)" size="mini" class="suggestion-button cursor-pointer"
                 >Set your default
               </van-button>
             </div>
@@ -77,9 +77,9 @@
           <app-date-time-grid v-model="date" name="date" :rules="[rule.required()]" required />
 
           <div v-if="!isSplitTransaction" class="px-3 flex-center-vertical gap-1">
-            <van-button size="small" @click="onSubDay">{{ $t('sub_day') }}</van-button>
-            <van-button size="small" @click="onToday">{{ $t('today') }}</van-button>
-            <van-button size="small" @click="onAddDay">{{ $t('add_day') }}</van-button>
+            <van-button size="small" class="cursor-pointer" @click="onSubDay">{{ $t('sub_day') }}</van-button>
+            <van-button size="small" class="cursor-pointer" @click="onToday">{{ $t('today') }}</van-button>
+            <van-button size="small" class="cursor-pointer" @click="onAddDay">{{ $t('add_day') }}</van-button>
           </div>
         </div>
 
@@ -94,12 +94,12 @@
         <app-button-form-delete class="mt-10" v-if="itemId && !isSplitTransaction" @click="onDelete" />
 
         <div class="display-flex gap-1">
-          <van-button v-if="itemId && !isSplitTransaction" @click="onCreateClone" block type="default" class="mt-2 flex-1">
+          <van-button v-if="itemId && !isSplitTransaction" @click="onCreateClone" block type="default" class="mt-2 flex-1 cursor-pointer">
             <app-icon :icon="TablerIconConstants.clone" />
             {{ $t('clone') }}
           </van-button>
 
-          <van-button v-if="itemId && !isSplitTransaction" @click="onCreateTransactionTemplate" block type="default" class="mt-2 flex-1">
+          <van-button v-if="itemId && !isSplitTransaction" @click="onCreateTransactionTemplate" block type="default" class="mt-2 flex-1 cursor-pointer">
             <app-icon :icon="TablerIconConstants.transactionTemplate" />
             {{ $t('transaction.make_template') }}
           </van-button>

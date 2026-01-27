@@ -1,5 +1,5 @@
 <template>
-  <div class="van-cell-fake">
+  <div class="van-cell-fake cursor-pointer">
     <van-field :model-value="modelValueDisplayName" :class="fieldClass" :label="label" :placeholder="props.placeholder" v-bind="dynamicAttrs" @click.stop="onShowDropdown" is-link readonly>
       <template v-for="slot in Object.keys($slots)" v-slot:[slot]="scoped">
         <slot :name="slot" v-bind="scoped ?? {}" />
@@ -7,7 +7,7 @@
 
       <template #right-icon>
         <div>
-          <van-icon v-if="modelValue && isClearable" @click.prevent.stop="onClear" name="clear" />
+          <van-icon v-if="modelValue && isClearable" @click.prevent.stop="onClear" name="clear" class="cursor-pointer" />
         </div>
       </template>
 
@@ -20,24 +20,25 @@
               <slot name="inputItemContent" :item="item">
                 <span class="font-weight-400 text-size-12">{{ getDisplayName(item) }}</span>
               </slot>
-              <van-icon v-if="isClearable" :size="16" style="color: #888" @click.prevent.stop="onSelectCell(item)" name="clear" />
+              <van-icon v-if="isClearable" :size="16" style="color: #888" @click.prevent.stop="onSelectCell(item)" name="clear" class="cursor-pointer" />
             </div>
           </div>
         </slot>
       </template>
     </van-field>
 
-    <van-popup v-model:show="showDropdown" round position="bottom" style="height: 90%; padding-top: 4px">
-      <div ref="popupRef" class="h-100 display-flex flex-column qqq">
-        <div v-if="props.popupTitle" class="van-popup-title">{{ props.popupTitle }}</div>
+    <app-popup v-model:show="showDropdown" :teleport="props.teleport" :z-index="props.zIndex">
+      <div class="display-flex flex-column h-100" style="min-height: 0;">
 
-        <div v-if="hasSearch" style="margin-right: 12px" class="p-1 flex-center-vertical gap-1">
+      <div v-if="props.popupTitle" class="van-popup-title">{{ props.popupTitle }}</div>
+
+        <div v-if="hasSearch" style="margin-right: 12px;" class="p-1 flex-center-vertical gap-1">
           <van-search v-model="search" :placeholder="$t('search_placeholder')" class="flex-1" />
 
           <slot name="top-right"></slot>
         </div>
 
-        <div ref="popupContentRef" class="flex-1 flex-column overflow-auto mt-20">
+        <div ref="popupContentRef" class="flex-column overflow-auto">
           <slot name="popup" :onSelectCell="onSelectCell">
             <van-grid :column-num="columns">
               <template v-for="(item, index) in list" :key="index">
@@ -53,7 +54,10 @@
           </slot>
         </div>
       </div>
-    </van-popup>
+
+
+
+    </app-popup>
   </div>
 </template>
 
@@ -125,6 +129,8 @@ const props = defineProps({
   isMultiSelect: {
     default: false,
   },
+  teleport: {},
+  zIndex: {},
 })
 
 const attrs = useAttrs()
@@ -190,8 +196,8 @@ const onSelectCell = (item) => {
     }
     modelValue.value = newValue
   } else {
-    let sameOptionClicked =  isEqual(modelValue.value, item)
-    modelValue.value = sameOptionClicked ? ( isClearable.value ? null:  item ) : item
+    let sameOptionClicked = isEqual(modelValue.value, item)
+    modelValue.value = sameOptionClicked ? (isClearable.value ? null : item) : item
     showDropdown.value = false
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <van-field value="" :label="label" readonly class="app-field-link" v-bind="binding">
+  <van-field value="" :label="label" readonly class="app-field-link van-cell-fake" v-bind="binding">
     <template #left-icon="state">
       <slot>
         <app-icon v-if="props.icon" :icon="props.icon" :size="props.size" />

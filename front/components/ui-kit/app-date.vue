@@ -17,7 +17,7 @@
 
       <template #right-icon>
         <div>
-          <van-icon v-if="modelValue" @click.prevent.stop="date = null" name="clear" />
+          <van-icon v-if="modelValue" @click.prevent.stop="date = null" name="clear" class="cursor-pointer" />
         </div>
       </template>
     </van-field>

@@ -7,7 +7,8 @@
     v-model:showDropdown="showDropdown"
     v-model:search="search"
     :list="filteredList"
-    :columns="3"
+    :columns="appStore.gridColumns"
+
     :getDisplayValue="getDisplayValue"
     v-bind="dynamicAttrs"
   >
@@ -44,6 +45,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants'
 import Tag from '~/models/Tag.js'
 
 const dataStore = useDataStore()
+const appStore = useAppStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 
@@ -102,5 +104,3 @@ const onRefresh = async () => {
   isLoading.value = false
 }
 </script>
-
-<style></style>

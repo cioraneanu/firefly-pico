@@ -64,7 +64,8 @@ import {
   IconListDetails,
   IconCloudDown,
   IconPhoto,
-  IconFilter2
+  IconFilter2,
+  IconSearch
 } from '@tabler/icons-vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -132,6 +133,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconCloudDown', IconCloudDown)
   nuxtApp.vueApp.component('IconPhoto', IconPhoto)
   nuxtApp.vueApp.component('IconFilter2', IconFilter2)
+  nuxtApp.vueApp.component('IconSearch', IconSearch)
 
   // for (let iconName in tablerIcons) {
   //   nuxtApp.vueApp.component(iconName, tablerIcons[iconName])

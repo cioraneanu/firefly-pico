@@ -5,7 +5,7 @@
     v-model="modelValue"
     v-model:showDropdown="showDropdown"
     :list="list"
-    :columns="3"
+    :columns="appStore.gridColumns"
     v-bind="dynamicAttrs"
     :has-search="false"
     :clearable="false">
@@ -36,6 +36,7 @@ import { format, startOfWeek, addDays } from 'date-fns'
 import { supportedLanguages } from '~/i18n/index.js'
 import Category from '~/models/Category.js'
 
+const appStore = useAppStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 

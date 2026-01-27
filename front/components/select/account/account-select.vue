@@ -7,7 +7,7 @@
     v-model:showDropdown="showDropdown"
     v-model:search="search"
     :list="accountList"
-    :columns="3"
+    :columns="appStore.gridColumns"
     :isMultiSelect="props.isMultiSelect"
     :getDisplayValue="getDisplayValue"
     v-bind="dynamicAttrs"
@@ -99,7 +99,7 @@ import { IconRefresh } from '@tabler/icons-vue'
 import { isEqual } from 'lodash/lang'
 
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
-
+const appStore = useAppStore()
 const dataStore = useDataStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)

@@ -1,9 +1,9 @@
 <template>
-  <van-popup v-model:show="modelValueShow" round position="bottom" style="padding-top: 4px">
+  <app-popup v-model:show="modelValueShow" style="padding-top: 4px">
     <div ref="popupRef" class="h-100 display-flex flex-column app-date-time-grid">
         <van-time-picker v-if="localModelValue" v-model="localModelValue" @confirm="onClose" @cancel="onClose" />
     </div>
-  </van-popup>
+  </app-popup>
 </template>
 
 <script setup>

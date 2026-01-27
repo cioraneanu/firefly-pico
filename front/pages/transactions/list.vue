@@ -3,8 +3,8 @@
     <app-top-toolbar>
       <template #right>
         <div class="flex-center-vertical gap-1">
-          <div @click.prevent.stop="onShowFilters" class="mr-10">
-            <app-icon :icon="TablerIconConstants.search" size="20" :stroke="1.6" />
+          <div @click.prevent.stop="onShowFilters" class="mr-10 cursor-pointer">
+            <app-icon :icon="TablerIconConstants.search" size="20" :stroke="1.9" />
           </div>
 
           <app-button-list-add @click="onAdd" />
@@ -21,7 +21,7 @@
         <div v-for="appliedFilter in filtersDisplayList" class="tag-filter">
           <span class="ml-5">{{ appliedFilter }}</span>
         </div>
-        <div @click="onClearFilters" style="z-index: 2">
+        <div @click="onClearFilters" class="cursor-pointer" style="z-index: 2">
           <icon-square-rounded-x :size="26" :stroke="1.5" />
         </div>
       </div>
@@ -30,7 +30,7 @@
     <empty-list v-if="isEmpty && !isLoading" />
 
     <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
-      <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
+      <van-list :class="listClass" :finished="isFinished" @load="onLoadMore">
         <transaction-list-item v-for="item in list" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
       </van-list>
     </van-pull-refresh>
@@ -56,14 +56,21 @@ import { cloneDeep, get, isEqual } from 'lodash'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import Budget from '~/models/Budget.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
+import { IconSearch} from '@tabler/icons-vue'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { filterBagHasValues, getActiveFilters, getFiltersFromURL, saveToUrl } from '~/utils/FilterUtils.js'
 import { useListFilters } from '~/composables/useListFilters.js'
 import { IconSquareRoundedX } from '@tabler/icons-vue'
 
 const dataStore = useDataStore()
+const appStore = useAppStore()
 const route = useRoute()
 
+
+const listClass = computed(() => ({
+  'p-1': true,
+  'grid-columns-2': appStore.isDesktopLayout,
+}))
 const transactionFiltersRef = ref(null)
 
 let transactionRepository = new TransactionRepository()

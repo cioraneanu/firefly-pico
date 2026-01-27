@@ -73,7 +73,7 @@ export const icons = {
   lock: 'IconLock',
 
   filter: 'IconFilter',
-  search: 'IconFilter2',
+  search: 'IconSearch',
   form: 'IconForms',
   order: 'IconMenuOrder',
   list: 'IconListDetails',

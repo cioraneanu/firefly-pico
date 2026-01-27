@@ -7,7 +7,7 @@ import Icon from '~/models/Icon.js'
 
 const props = defineProps({
   icon: {
-    type: String,
+    // type: String,
   },
   size: {
     default: 25,
@@ -22,10 +22,12 @@ const props = defineProps({
 const style = computed(() => `width: ${props.size}px; height: ${props.size}px`)
 
 const isColorInvertable = computed(() => {
-  if (Icon.isTypeTabler(props.icon) || Icon.isTypeAvatar(props.icon) ||  Icon.isTypeFlag(props.icon)) {
+  if (typeof props.icon === 'object') {
+    return true
+  }
+  if (Icon.isTypeTabler(props.icon) || Icon.isTypeAvatar(props.icon) || Icon.isTypeFlag(props.icon)) {
     return false
   }
   return true
 })
 </script>
-

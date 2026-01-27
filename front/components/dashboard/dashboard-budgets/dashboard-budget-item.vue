@@ -1,5 +1,5 @@
 <template>
-  <van-grid-item @click="onGoToBudget">
+  <van-grid-item @click="onGoToBudget" class="cursor-pointer">
     <template #icon>
       <budget-icon :value="props.value" />
     </template>

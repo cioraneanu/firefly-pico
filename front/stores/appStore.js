@@ -4,6 +4,7 @@ import ResponseUtils from '~/utils/ResponseUtils'
 import { compareVersionStrings } from '~/utils/DataUtils'
 import InfoRepository from '~/repository/InfoRepository.js'
 import { get } from 'lodash'
+import RouteConstants from '~/constants/RouteConstants.js'
 
 export const useAppStore = defineStore('app', {
   state: () => {
@@ -18,14 +19,53 @@ export const useAppStore = defineStore('app', {
 
       profileFloatButtonPosition: useLocalStorage('profileFloatButtonPosition', { y: window.innerHeight / 2.2 }),
 
-
       currentAppVersion: runtimeConfig.public.version,
       queryTimeout: runtimeConfig.public.queryTimeout,
       latestAppVersion: null,
+
+      windowWidth: null,
     }
   },
 
   getters: {
+    activePage(state) {
+      const route = useRoute()
+      const routeMapping = {
+        [RouteConstants.ROUTE_DASHBOARD]: [RouteConstants.ROUTE_DASHBOARD],
+        [RouteConstants.ROUTE_TRANSACTION_LIST]: [RouteConstants.ROUTE_TRANSACTION_LIST],
+        [RouteConstants.ROUTE_EXTRAS]: [
+          RouteConstants.ROUTE_EXTRAS,
+          RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST,
+          RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID,
+          RouteConstants.ROUTE_ACCOUNT_LIST,
+          RouteConstants.ROUTE_ACCOUNT_ID,
+          RouteConstants.ROUTE_TAG_LIST,
+          RouteConstants.ROUTE_TAG_ID,
+        ],
+        [RouteConstants.ROUTE_SETTINGS]: [
+          RouteConstants.ROUTE_SETTINGS,
+          RouteConstants.ROUTE_SETTINGS_SETUP,
+          RouteConstants.ROUTE_SETTINGS_ABOUT,
+          RouteConstants.ROUTE_SETTINGS_UI,
+        ],
+      }
+
+      return Object.entries(routeMapping).find(
+        ([, routes]) => routes.includes(route.path)
+      )?.[0]
+    },
+
+    isDesktopLayout(state) {
+      return (state.windowWidth ?? 0) > 800 && useDevice().isDesktop
+    },
+
+    gridColumns(state) {
+      if (this.isDesktopLayout) {
+        return Math.floor(state.windowWidth / 200)
+      }
+      return 3
+    },
+
     hasAuthToken(state) {
       return state.authToken && state.authToken.length > 0
     },
