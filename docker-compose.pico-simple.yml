@@ -1,0 +1,11 @@
+version: '3.3'
+services:
+  firefly-pico:
+    image: cioraneanu/firefly-pico:latest
+    ports:
+      - "6976:80"
+    environment:
+      - FIREFLY_URL=https://firefly.domain.com
+    volumes:
+      - ./firefly-pico-data:/var/www/html/database/data
+    restart: unless-stopped
