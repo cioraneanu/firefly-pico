@@ -1,8 +1,8 @@
 <template>
   <div v-if="appStore.isDesktopLayout">
     <div class="profile-picker-dashboard-button flex-center" @click="isListVisible = true">
-      <icon-nut size="20" color="#000" stroke="1.6" />
-      Profile: {{ profileStore.activeProfile?.name }}
+      <icon-nut size="20" stroke="1.6"  />
+      <div class="text-size-13">Profile: {{ profileStore.activeProfile?.name }}</div>
     </div>
 
     <app-popup v-model:show="isListVisible"  :style="appStore.isDesktopLayout ? null : { height: '40%' }">

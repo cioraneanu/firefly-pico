@@ -32,8 +32,14 @@
       </div>
 
       <div class="nav-section mt-auto">
-        <profile-picker-desktop-button />
-        <div class="section-label">Settings</div>
+        <div class="flex-center-vertical gap-1">
+          <profile-picker-desktop-button class="flex-1" />
+          <div class="profile-picker-dashboard-button">
+            <app-icon @click="onChangeTheme" :size="20" :stroke-width="2.0" :icon="profileStore.darkTheme ? TablerIconConstants.darkTheme : TablerIconConstants.whiteTheme" />
+          </div>
+        </div>
+
+        <div class="section-label mt-3">Settings</div>
         <app-left-sidebar-page label="Settings" :icon="TablerIconConstants.settings" :route="RouteConstants.ROUTE_SETTINGS" />
       </div>
     </nav>
@@ -51,8 +57,11 @@ const dataStore = useDataStore()
 const profileStore = useProfileStore()
 // const appStore = useAppStore() // Removed unused store if not needed, or keep if implicit global
 const route = useRoute()
+
+const onChangeTheme = () => {
+  profileStore.darkTheme = !profileStore.darkTheme
+  profileStore.writeProfile()
+}
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
