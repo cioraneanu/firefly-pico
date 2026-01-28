@@ -394,6 +394,10 @@
 
     }
 
+    .simple-button {
+        background: #181818;
+    }
+
 
     .profile-picker-dashboard-button {
         background: #292929;
