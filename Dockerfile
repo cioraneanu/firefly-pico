@@ -52,6 +52,8 @@ ENV COMPOSER_PROCESS_TIMEOUT=600
 
 RUN composer install --no-dev --optimize-autoloader
 RUN php artisan key:generate
+ARG APP_VERSION
+RUN echo $APP_VERSION > /var/www/html/VERSION
 RUN tar --owner=www-data --group=www-data --exclude=.git -czf /tmp/app-back.tar.gz .
 
 #Configure frontend
