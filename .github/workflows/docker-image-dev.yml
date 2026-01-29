@@ -35,3 +35,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/firefly-pico:dev
+          build-args: |
+            APP_VERSION=${{ github.ref_name }}
