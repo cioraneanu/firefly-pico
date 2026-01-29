@@ -39,6 +39,10 @@ onMounted(async () => {
   appStore.fetchLatestAppVersion()
   await profileStore.getProfiles()
   await dataStore.syncEverythingIfOld()
+
+  const runtimeConfig = useRuntimeConfig()
+  console.log('debug version', { v1: runtimeConfig.public.version, v2: runtimeConfig.public.version2 })
+
 })
 
 const { isLoading } = storeToRefs(dataStore)
