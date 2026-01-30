@@ -61,7 +61,7 @@ WORKDIR /var/www/html/front
 COPY front/ .
 
 RUN npm install \
-    && NUXT_PUBLIC_VERSION=$APP_VERSION npm run build
+    && NUXT_PUBLIC_VERSION="$APP_VERSION" npm run build
 RUN npm prune --production
 RUN npm cache clean --force
 RUN tar --owner=www-data --group=www-data \
