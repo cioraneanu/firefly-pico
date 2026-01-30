@@ -30,9 +30,8 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     public: {
-      version: pkg.version,
+      version: process.env.NUXT_PUBLIC_VERSION ?? pkg.version,
       queryTimeout: 4000,
-      // mihai: 'test'
     },
   },
   vite: {
@@ -76,8 +75,6 @@ export default defineNuxtConfig({
   },
 
   modules: ['@vite-pwa/nuxt', '@nuxtjs/device', '@pinia/nuxt', '@vant/nuxt', 'nuxt-svgo', '@nuxt/eslint', '@nuxtjs/i18n'],
-
-
 
   svgo: {
     defaultImport: 'component',

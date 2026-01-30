@@ -1,4 +1,4 @@
-name: Build dev docker image
+name: Build docker dev
 
 on:
   push:
@@ -35,3 +35,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/firefly-pico:dev
+          build-args: |
+            APP_VERSION=${{ github.ref_name }}

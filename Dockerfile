@@ -52,6 +52,8 @@ ENV COMPOSER_PROCESS_TIMEOUT=600
 
 RUN composer install --no-dev --optimize-autoloader
 RUN php artisan key:generate
+ARG APP_VERSION
+RUN echo $APP_VERSION > /var/www/html/VERSION
 RUN tar --owner=www-data --group=www-data --exclude=.git -czf /tmp/app-back.tar.gz .
 
 #Configure frontend
@@ -59,7 +61,7 @@ WORKDIR /var/www/html/front
 COPY front/ .
 
 RUN npm install \
-    && npm run build
+    && NUXT_PUBLIC_VERSION="$APP_VERSION" npm run build
 RUN npm prune --production
 RUN npm cache clean --force
 RUN tar --owner=www-data --group=www-data \
