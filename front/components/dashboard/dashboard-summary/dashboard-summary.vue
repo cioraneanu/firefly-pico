@@ -27,7 +27,7 @@
         subtitleClass="text-primary"
       />
 
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardTotalSurplus" title="Surplus" :subtitle="totalSurplusFormatted" subtitleClass="" />
+      <dashboard-summary-card :icon="TablerIconConstants.dashboardTotalSurplus" :title="$t('dashboard.transactions_summary.surplus')" :subtitle="totalSurplusFormatted" subtitleClass="" />
       <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" :title="$t('toolbar.transactions')" :subtitle="dataStore.totalTransactionsCount" subtitleClass="" />
       <dashboard-summary-card :icon="TablerIconConstants.account" :title="$t('dashboard.transactions_summary.days_remaining')" :subtitle="remainingDays" />
     </van-grid>
