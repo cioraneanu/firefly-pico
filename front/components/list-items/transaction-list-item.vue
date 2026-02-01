@@ -3,13 +3,13 @@
     <van-cell :class="cellClass">
       <template #title>
         <div class="display-flex transaction-card prevent-select align-items-lg-stretch">
-          <div class="second_column flex-1">
+          <div class="second_column flex-1-w">
             <div v-if="isSplitPayment && props.isDetailedMode" class="mt-1 display-flex">
               <transaction-split-badge />
             </div>
 
             <div class="flex-center-vertical gap-1">
-              <div v-if="description" class="list-item-title">{{ description }}</div>
+              <div v-if="description" class="list-item-title max-2-lines">{{ description }}</div>
               <app-icon v-if="hasAttachments" :icon="TablerIconConstants.attachment" :size="20" color="#1E88E5" />
             </div>
 
@@ -29,7 +29,7 @@
 
             <div v-if="notes && props.isDetailedMode" class="list-item-subtitle" :style="getStyleForField(transactionListField.notes)">
               <app-icon :icon="TablerIconConstants.fieldText1" :size="20" />
-              <span class="notes-markdown" v-html="notes" />
+              <span class="notes-markdown max-2-lines word-break-word" v-html="notes" />
             </div>
 
             <div v-if="tags && props.isDetailedMode" class="tags-container" :style="getStyleForField(transactionListField.tags)">
