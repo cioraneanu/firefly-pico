@@ -891,6 +891,17 @@ label.display-block {
   flex: 1;
 }
 
+.flex-1-w {
+    flex: 1;
+    min-width: 0;
+}
+
+.word-break-word {
+    word-break: break-word;
+}
+
+
+
 .flex-bottom {
   display: flex;
   justify-content: center;
