@@ -9,7 +9,7 @@
             </div>
 
             <div class="flex-center-vertical gap-1">
-              <div v-if="description" class="list-item-title max-2-lines">{{ description }}</div>
+              <div v-if="description" class="list-item-title max-2-lines word-break-word">{{ description }}</div>
               <app-icon v-if="hasAttachments" :icon="TablerIconConstants.attachment" :size="20" color="#1E88E5" />
             </div>
 
