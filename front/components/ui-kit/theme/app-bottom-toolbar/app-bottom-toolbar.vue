@@ -7,13 +7,13 @@
       <template #icon>
         <div class="flex-center flex-column">
           <icon-square-rounded-plus-filled :size="36" color="#1976D2" />
-<!--          <div class="app-bottom-toolbar-item flex-center">New</div>-->
+          <!--          <div class="app-bottom-toolbar-item flex-center">New</div>-->
         </div>
       </template>
     </app-bottom-toolbar-item>
 
     <app-bottom-toolbar-item :route="RouteConstants.ROUTE_EXTRAS" />
-    <app-bottom-toolbar-item :route="RouteConstants.ROUTE_SETTINGS" />
+    <app-bottom-toolbar-item :route="RouteConstants.ROUTE_SETTINGS" :dot="appStore.isNewVersionAvailable" />
   </van-tabbar>
 </template>
 
