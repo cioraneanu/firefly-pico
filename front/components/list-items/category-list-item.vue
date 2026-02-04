@@ -9,7 +9,7 @@
 
           <div class="separator"></div>
 
-          <div class="second_column flex-1">
+          <div class="second_column flex-1 flex-center-vertical">
             <div v-if="displayName" class="title">{{ displayName }}</div>
           </div>
         </div>

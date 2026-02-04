@@ -11,7 +11,7 @@
 
           <div class="separator"></div>
 
-          <div class="second_column display-flex flex-column">
+          <div class="second_column display-flex flex-column justify-content-center">
             <div class="flex-center-vertical gap-2 overflow-visible">
               <div v-if="displayName" class="title app-tag app-select-option-text">{{ displayName }}</div>
               <div v-if="isTodo" class="tag-todo">Todo</div>

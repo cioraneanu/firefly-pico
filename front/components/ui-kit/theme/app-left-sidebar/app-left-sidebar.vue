@@ -40,7 +40,7 @@
         </div>
 
         <div class="section-label mt-3">Settings</div>
-        <app-left-sidebar-page label="Settings" :icon="TablerIconConstants.settings" :route="RouteConstants.ROUTE_SETTINGS" />
+        <app-left-sidebar-page label="Settings" :icon="TablerIconConstants.settings" :route="RouteConstants.ROUTE_SETTINGS" :dot="appStore.isNewVersionAvailable" />
       </div>
     </nav>
   </div>
@@ -55,7 +55,7 @@ import { animateBottomToolbarAddButton } from '~/utils/AnimationUtils.js'
 
 const dataStore = useDataStore()
 const profileStore = useProfileStore()
-// const appStore = useAppStore() // Removed unused store if not needed, or keep if implicit global
+const appStore = useAppStore()
 const route = useRoute()
 
 const onChangeTheme = () => {
