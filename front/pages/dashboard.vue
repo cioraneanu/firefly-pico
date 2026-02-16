@@ -10,31 +10,12 @@
       <dashboard-control v-if="!appStore.isDesktopLayout" />
 
       <div ref="dashboard" class="dynamic-masonry">
-        <dashboard-calendar :style="getStyleForCard(dashboardCard.calendar)" />
-
-        <dashboard-accounts :style="getStyleForCard(dashboardCard.accounts)" />
-
-        <dashboard-week-bars :style="getStyleForCard(dashboardCard.expensesLastWeek)" />
-
-        <dashboard-summary :style="getStyleForCard(dashboardCard.transactionsSummary)" />
-
-        <dashboard-budgets :style="getStyleForCard(dashboardCard.budgets)" />
-
-        <dashboard-tag-totals-expense :style="getStyleForCard(dashboardCard.expensesByTag)" />
-
-        <dashboard-category-totals-expense :style="getStyleForCard(dashboardCard.expensesByCategory)" />
-
-        <dashboard-tag-totals-transfer :style="getStyleForCard(dashboardCard.transfersByTag)" />
-
-        <dashboard-category-totals-transfer :style="getStyleForCard(dashboardCard.transfersByCategory)" />
-
-        <dashboard-todo-transactions :style="getStyleForCard(dashboardCard.todoTransactions)" />
+        <component :is="card.component" v-for="card in visibleCards" :key="card.code" />
       </div>
 
       <app-card-info style="order: 99">
         <app-field-link :label="$t('dashboard.configure_cards')" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER)" />
       </app-card-info>
-
     </van-pull-refresh>
   </div>
 </template>
@@ -45,15 +26,56 @@ import { debounce } from 'lodash/function'
 import UIUtils from '~/utils/UIUtils.js'
 import { animateDashboard } from '~/utils/AnimationUtils.js'
 import RouteConstants from '~/constants/RouteConstants.js'
-import { dashboardCard } from '~/constants/DashboardConstants.js'
+import { dashboardCard, dashboardCardList } from '~/constants/DashboardConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { useSwipe } from '@vueuse/core'
 import { addMonths } from 'date-fns'
+import DashboardCalendar from '~/components/dashboard/dashboard-calendar/dashboard-calendar.vue'
+import DashboardAccounts from '~/components/dashboard/dashboard-accounts/dashboard-accounts.vue'
+import DashboardWeekBars from '~/components/dashboard/dashboard-week-bars/dashboard-week-bars.vue'
+import DashboardSummary from '~/components/dashboard/dashboard-summary/dashboard-summary.vue'
+import DashboardBudgets from '~/components/dashboard/dashboard-budgets/dashboard-budgets.vue'
+import DashboardTagTotalsExpense from '~/components/dashboard/dashboard-tag-totals-expense/dashboard-tag-totals-expense.vue'
+import DashboardCategoryTotalsExpense from '~/components/dashboard/dashboard-category-totals-expense/dashboard-category-totals-expense.vue'
+import DashboardTagTotalsTransfer from '~/components/dashboard/dashboard-tag-totals-transfer/dashboard-tag-totals-transfer.vue'
+import DashboardCategoryTotalsTransfer from '~/components/dashboard/dashboard-category-totals-transfer/dashboard-category-totals-transfer.vue'
+import DashboardTodoTransactions from '~/components/dashboard/dashboard-todo-transactions/dashboard-todo-transactions.vue'
 
 const dataStore = useDataStore()
 const appStore = useAppStore()
 const profileStore = useProfileStore()
 const { isLoadingAccounts } = storeToRefs(dataStore)
+
+const cardComponents = {
+  [dashboardCard.calendar.code]: DashboardCalendar,
+  [dashboardCard.accounts.code]: DashboardAccounts,
+  [dashboardCard.expensesLastWeek.code]: DashboardWeekBars,
+  [dashboardCard.transactionsSummary.code]: DashboardSummary,
+  [dashboardCard.budgets.code]: DashboardBudgets,
+  [dashboardCard.expensesByTag.code]: DashboardTagTotalsExpense,
+  [dashboardCard.expensesByCategory.code]: DashboardCategoryTotalsExpense,
+  [dashboardCard.transfersByTag.code]: DashboardTagTotalsTransfer,
+  [dashboardCard.transfersByCategory.code]: DashboardCategoryTotalsTransfer,
+  [dashboardCard.todoTransactions.code]: DashboardTodoTransactions,
+}
+
+const visibleCards = computed(() => {
+  return dashboardCardList
+    .map((card) => {
+      let position = profileStore.dashboardWidgetsConfig.findIndex((item) => item.code === card.code)
+      let field = profileStore.dashboardWidgetsConfig.find((item) => item.code === card.code)
+      let isVisible = field ? field.isVisible : true
+
+      return {
+        ...card,
+        position: position === -1 ? 999 : position,
+        isVisible,
+        component: cardComponents[card.code],
+      }
+    })
+    .filter((card) => card.isVisible)
+    .sort((a, b) => a.position - b.position)
+})
 
 const onRefresh = () => {
   dataStore.fetchDashboard()
@@ -73,16 +95,6 @@ onMounted(() => {
 const isLoadingDashboard = computed(() => {
   return dataStore.isLoadingAccounts || dataStore.isLoadingDashboardTransactions || dataStore.isLoadingDashboardTransactionsLastWeek
 })
-
-const getStyleForCard = (dashboardCard) => {
-  let cardCode = dashboardCard.code
-  let position = profileStore.dashboardWidgetsConfig.findIndex((item) => item.code === cardCode)
-  let field = profileStore.dashboardWidgetsConfig.find((item) => item.code === cardCode)
-  let isVisible = field ? field.isVisible : true
-  let displayStyle = isVisible ? '' : 'display: none'
-
-  return `order: ${position}; ${displayStyle}`
-}
 
 const dashboard = ref(null)
 let swipeStartAt = null
@@ -106,12 +118,6 @@ const { lengthX } = useSwipe(dashboard, {
   },
 })
 
-// const dashboardContainerClass = computed(() => {
-//   return {
-//     'flex-column display-flex': !appStore.isDesktopLayout,
-//     'masonry-2-columns': appStore.isDesktopLayout,
-//   }
-// })
 
 const toolbar = useToolbar()
 const { t } = useI18n()

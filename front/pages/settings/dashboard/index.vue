@@ -81,6 +81,7 @@ const toolbar = useToolbar()
 toolbar.init({
   title: t('settings.dashboard.title'),
   backRoute: RouteConstants.ROUTE_SETTINGS,
+  backRouteDesktop: RouteConstants.ROUTE_SETTINGS,
 })
 
 const onGoToDashboardCardsOrder = async () => await navigateTo(RouteConstants.ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER)
