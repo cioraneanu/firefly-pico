@@ -4,10 +4,13 @@
     <div class="app-top-toolbar-desktop">
       <div class="flex-1">
         <slot name="title">
-          <div class="">
-            <div class="app-toolbar-title">{{ title }}</div>
-            <div v-if="hasSubtitle" class="app-toolbar-subtitle">{{ subtitle }}</div>
-            <slot name="subtitle" />
+          <div class="flex-center-vertical gap-2">
+            <icon-arrow-left v-if="backRouteDesktop" :size="20" @click="onBack" />
+            <div>
+              <div class="app-toolbar-title">{{ title }}</div>
+              <div v-if="hasSubtitle" class="app-toolbar-subtitle">{{ subtitle }}</div>
+              <slot name="subtitle" />
+            </div>
           </div>
         </slot>
       </div>
@@ -39,10 +42,11 @@
 <script setup>
 import { useProfileStore } from '~/stores/profileStore'
 import { useToolbar } from '~/composables/useToolbar'
+import { IconArrowLeft } from '@tabler/icons-vue'
 
 const appStore = useAppStore()
 const profileStore = useProfileStore()
-const { title, subtitle, onBack, leftText, backRoute, titleIcon } = useToolbar()
+const { title, subtitle, onBack, leftText, backRoute, backRouteDesktop, titleIcon } = useToolbar()
 const device = useDevice()
 
 const hasSubtitle = computed(() => !isStringEmpty(subtitle.value))

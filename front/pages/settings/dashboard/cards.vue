@@ -69,6 +69,7 @@ const toolbar = useToolbar()
 toolbar.init({
   title: t('settings.dashboard.cards_order'),
   backRoute: RouteConstants.ROUTE_DASHBOARD,
+  backRouteDesktop: RouteConstants.ROUTE_DASHBOARD,
 })
 
 onMounted(() => {

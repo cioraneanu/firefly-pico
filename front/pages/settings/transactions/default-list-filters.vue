@@ -55,6 +55,7 @@ const toolbar = useToolbar()
 toolbar.init({
   title: t('settings.transactions.default_list_filters.title'),
   backRoute: RouteConstants.ROUTE_SETTINGS_TRANSACTION,
+  backRouteDesktop: RouteConstants.ROUTE_SETTINGS_TRANSACTION,
 })
 
 onMounted(() => {

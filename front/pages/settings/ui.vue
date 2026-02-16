@@ -68,6 +68,7 @@ const toolbar = useToolbar()
 toolbar.init({
   title: computed(() => t('settings.ui.title')),
   backRoute: RouteConstants.ROUTE_SETTINGS,
+  backRouteDesktop: RouteConstants.ROUTE_SETTINGS,
 })
 
 onMounted(() => {
