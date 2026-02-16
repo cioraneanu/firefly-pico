@@ -60,7 +60,7 @@
           </div>
         </div>
 
-        <app-button-form-save :label="$t('filters.apply_filters')">
+        <app-button-form-save :label="$t('filters.apply_filters')" bottom=" - var(--van-tabbar-height) + 20px">
           <template #left>
             <van-button v-if="isFiltered" @click="onClearFilters" round>{{ $t('filters.clear') }}</van-button>
           </template>
@@ -122,6 +122,8 @@ const style = computed(() => {
     // 'height': '100%',
     'padding-top': '4px',
     'border-radius': '0px',
+    display: 'flex',
+    flexDirection: 'column',
   }
 })
 
