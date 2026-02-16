@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<style>.cls-1{fill:#616c7f;}.cls-2{fill:#4c5665;}.cls-3{fill:#97f8f5;}</style>
+</defs>
+<title/>
+<g id="Glasses">
+<path class="cls-1" d="M29.5,34h-2a3,3,0,0,0-6,0h-2a5,5,0,0,1,10,0Z"/>
+<path class="cls-2" d="M2,34a1,1,0,0,0,1-1V11A3.85,3.85,0,0,1,7,7c3.955,0,4,3.837,4,4v2a1,1,0,0,0,2,0V11A5.785,5.785,0,0,0,7,5a5.785,5.785,0,0,0-6,6V33A1,1,0,0,0,2,34Z"/>
+<path class="cls-1" d="M2,32H5a0,0,0,0,1,0,0v4a0,0,0,0,1,0,0H2a2,2,0,0,1-2-2v0a2,2,0,0,1,2-2Z"/>
+<path class="cls-2" d="M46,34a1,1,0,0,1-1-1V11a3.85,3.85,0,0,0-4-4c-3.955,0-4,3.837-4,4v2a1,1,0,0,1-2,0V11a5.785,5.785,0,0,1,6-6,5.785,5.785,0,0,1,6,6V33A1,1,0,0,1,46,34Z"/>
+<circle class="cls-1" cx="13" cy="34" r="9"/>
+<circle class="cls-3" cx="13" cy="34" r="7"/>
+<path class="cls-1" d="M45,32h3a0,0,0,0,1,0,0v4a0,0,0,0,1,0,0H45a2,2,0,0,1-2-2v0A2,2,0,0,1,45,32Z" transform="translate(91 68) rotate(-180)"/>
+<circle class="cls-1" cx="36" cy="34" r="9"/>
+<circle class="cls-3" cx="36" cy="34" r="7"/>
+</g>
+</svg>

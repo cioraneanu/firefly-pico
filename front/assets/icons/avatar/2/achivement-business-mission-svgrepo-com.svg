@@ -1,0 +1,20 @@
+<?xml version="1.0" ?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<style>.cls-1{fill:#fabb53;}.cls-2{fill:#f7972e;}.cls-3{fill:#fab353;}.cls-4{fill:#face53;}.cls-5{fill:#4c5665;}.cls-6{fill:#616c7f;}.cls-7{fill:#3f4856;}</style>
+</defs>
+<title/>
+<g data-name="Winner" id="Winner-2">
+<path class="cls-1" d="M14.871,26.048C4.827,26.048.765,15.87.018,10.264A2,2,0,0,1,2,8H12a2,2,0,0,1,0,4H4.469c1.014,3.722,3.906,10.633,11.365,10.007a2,2,0,0,1,.332,3.986Q15.5,26.049,14.871,26.048Z"/>
+<rect class="cls-2" height="4" rx="2" ry="2" width="34" x="7" y="2"/>
+<rect class="cls-3" height="4" rx="2" ry="2" width="34" x="7" y="2"/>
+<path class="cls-4" d="M33.129,26.048q-.633,0-1.295-.055a2,2,0,1,1,.332-3.986c7.5.622,10.37-6.284,11.373-10.007H36a2,2,0,0,1,0-4H46a2,2,0,0,1,1.982,2.264C47.235,15.87,43.172,26.047,33.129,26.048Z"/>
+<path class="cls-1" d="M33.129,26.048q-.633,0-1.295-.055a2,2,0,1,1,.332-3.986c7.5.622,10.37-6.284,11.373-10.007H36a2,2,0,0,1,0-4H46a2,2,0,0,1,1.982,2.264C47.235,15.87,43.172,26.047,33.129,26.048Z"/>
+<polygon class="cls-1" points="28 35 20 35 21 30 27 30 28 35"/>
+<path class="cls-5" d="M34,45H14V36a1.027,1.027,0,0,1,1.053-1H32.947A1.027,1.027,0,0,1,34,36Z"/>
+<rect class="cls-6" height="5" width="12" x="18" y="38"/>
+<path class="cls-4" d="M10,6H38a0,0,0,0,1,0,0V17A14,14,0,0,1,24,31h0A14,14,0,0,1,10,17V6a0,0,0,0,1,0,0Z"/>
+<rect class="cls-7" height="3" rx="1" ry="1" width="28" x="10" y="45"/>
+</g>
+</svg>

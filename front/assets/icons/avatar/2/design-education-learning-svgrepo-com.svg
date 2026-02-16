@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<style>.cls-1{fill:#d0d7df;}.cls-2{fill:#fed049;}.cls-3{fill:#49aaee;}.cls-4{fill:#fde0ba;}.cls-5{fill:#4c6681;}.cls-6{fill:#f6b445;}.cls-7{fill:#3398d6;}</style>
+</defs>
+<title/>
+<g id="Tool">
+<path class="cls-1" d="M37,5H29V2a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2Z"/>
+<rect class="cls-2" height="32" width="8" x="29" y="8"/>
+<rect class="cls-3" height="3" width="8" x="29" y="5"/>
+<polygon class="cls-4" points="33 48 33 48 29 40 37 40 33 48"/>
+<path class="cls-5" d="M34.724,44.551a2.973,2.973,0,0,0-3.448,0L33,48Z"/>
+<rect class="cls-6" height="32" width="2" x="35" y="8"/>
+<rect class="cls-7" height="3" width="2" x="35" y="5"/>
+<path class="cls-2" d="M14,0a2.006,2.006,0,0,0-2,2V46a2.006,2.006,0,0,0,2,2H25V0Z"/>
+<rect class="cls-6" height="2" width="8" x="17" y="23"/>
+<rect class="cls-6" height="2" width="5" x="20" y="15"/>
+<rect class="cls-6" height="2" width="8" x="17" y="7"/>
+<rect class="cls-6" height="2" width="5" x="20" y="31"/>
+<rect class="cls-6" height="2" width="8" x="17" y="39"/>
+</g>
+</svg>
