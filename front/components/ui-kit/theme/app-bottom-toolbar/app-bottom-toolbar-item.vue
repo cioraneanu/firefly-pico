@@ -1,7 +1,8 @@
 <template>
-  <div @click="onChange" class="flex-1 flex-center flex-column cursor-pointer " style="gap: 2px">
-    <div>
+  <div @click="onChange" class="flex-1 flex-center flex-column cursor-pointer" style="gap: 2px">
+    <div class="position-relative">
       <slot name="icon">
+        <div v-if="dot" class="van-badge van-badge--dot van-badge--fixed" style="top: -2px; right: -4px"></div>
         <app-icon :icon="icon" :size="20" />
       </slot>
     </div>
@@ -23,6 +24,7 @@ import IconSettings2 from '~/assets/icons/custom/settings2.svg'
 
 const props = defineProps({
   route: {},
+  dot: {},
 })
 
 const onChange = async () => {
@@ -31,7 +33,7 @@ const onChange = async () => {
 
 const labelClass = computed(() => ({
   'app-bottom-toolbar-item': true,
-  'selected': isSelected.value,
+  selected: isSelected.value,
 }))
 
 const { t } = useI18n()

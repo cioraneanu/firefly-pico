@@ -3,6 +3,7 @@
     <div class="flex-center-vertical">
       <app-icon :icon="icon" :size="20" />
       {{ label }}
+      <div v-if="dot" class="van-badge van-badge--dot"></div>
     </div>
   </nuxt-link>
 </template>
@@ -18,5 +19,6 @@ const props = defineProps({
   label: {},
   icon: {},
   route: {},
+  dot: {}
 })
 </script>
