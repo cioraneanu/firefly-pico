@@ -1,0 +1,22 @@
+<?xml version="1.0" ?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<style>.cls-1{fill:#fed049;}.cls-2{fill:#4c5665;}.cls-3{fill:#a4b0c0;}.cls-4{fill:#768ba0;}</style>
+</defs>
+<title/>
+<g id="Light">
+<circle class="cls-1" cx="14" cy="17" r="4"/>
+<rect class="cls-2" height="2" rx="1" ry="1" width="34" x="4" y="46"/>
+<rect class="cls-2" height="3" rx="1" ry="1" width="34" x="4" y="45"/>
+<polygon class="cls-2" points="31.733 44.354 29.267 42.646 42.032 24.208 25.972 9.093 28.028 6.907 45.968 23.792 31.733 44.354"/>
+<rect class="cls-2" height="9.389" rx="4" ry="4" transform="translate(2.187 18.505) rotate(-45)" width="14" x="16.43" y="1.918"/>
+<rect class="cls-3" height="9.389" rx="4" ry="4" transform="translate(2.187 18.505) rotate(-45)" width="14" x="16.43" y="1.918"/>
+<path class="cls-4" d="M28.87,7.81l-4.24,4.24a3.99,3.99,0,0,1-5.66,0l-.88-.88a4,4,0,0,0,3.54-1.12l4.24-4.24a4.008,4.008,0,0,0,0-5.66L25.79.07a3.975,3.975,0,0,1,2.1,1.1l.98.98A4.008,4.008,0,0,1,28.87,7.81Z"/>
+<path class="cls-3" d="M36,45a7,7,0,0,0-14,0"/>
+<path class="cls-3" d="M6.01,8.01a11.314,11.314,0,0,1,16,16"/>
+<path class="cls-4" d="M22.01,24.01l-3-3A14.247,14.247,0,0,0,23.36,9.64,11.312,11.312,0,0,1,22.01,24.01Z"/>
+<circle class="cls-4" cx="44" cy="24" r="4"/>
+<circle class="cls-3" cx="44" cy="24" r="2"/>
+</g>
+</svg>

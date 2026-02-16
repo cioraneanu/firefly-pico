@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<style>.cls-1{fill:#bec3c7;}.cls-2{fill:#face53;}.cls-3{fill:#f7972e;}.cls-4{fill:#fab353;}.cls-5{fill:#4c5665;}</style>
+</defs>
+<title/>
+<g id="Bell">
+<rect class="cls-1" height="3" width="3" x="23" y="17"/>
+<circle class="cls-2" cx="24" cy="45" r="3"/>
+<path class="cls-2" d="M24.161,19h-.322c-5.186,0-8.545,4.2-8.545,9.389A47.965,47.965,0,0,1,13.6,42H34.4a47.965,47.965,0,0,1-1.69-13.611C32.706,23.2,29.347,19,24.161,19Z"/>
+<rect class="cls-3" height="3" rx="1.269" ry="1.269" width="22" x="13" y="41"/>
+<rect class="cls-4" height="3" rx="1.269" ry="1.269" width="22" x="13" y="41"/>
+<path class="cls-5" d="M24.5,0h0A2.5,2.5,0,0,1,27,2.5V16a1,1,0,0,1-1,1H23a1,1,0,0,1-1-1V2.5A2.5,2.5,0,0,1,24.5,0Z"/>
+</g>
+</svg>

@@ -1,0 +1,16 @@
+<?xml version="1.0" ?>
+<!-- Uploaded to: SVG Repo, www.svgrepo.com, Generator: SVG Repo Mixer Tools -->
+<svg width="800px" height="800px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<defs>
+<style>.cls-1{fill:#d0d7df;}.cls-2{fill:#a4b0c0;}.cls-3{fill:#4c5665;}.cls-4{fill:#49aaee;}.cls-5{fill:#3398d6;}</style>
+</defs>
+<title/>
+<g id="Search">
+<rect class="cls-1" height="4" transform="translate(47 60) rotate(180)" width="1" x="23" y="28"/>
+<rect class="cls-2" height="4" transform="translate(50 60) rotate(180)" width="2" x="24" y="28"/>
+<path class="cls-3" d="M24.5,32h0A2.5,2.5,0,0,1,27,34.5V47a1,1,0,0,1-1,1H23a1,1,0,0,1-1-1V34.5A2.5,2.5,0,0,1,24.5,32Z" transform="translate(49 80) rotate(180)"/>
+<circle class="cls-1" cx="25" cy="15" r="15"/>
+<circle class="cls-4" cx="25" cy="15" r="13"/>
+<path class="cls-5" d="M15.5,16.5a1,1,0,0,1-1-1A10.512,10.512,0,0,1,25,5a1,1,0,0,1,0,2,8.51,8.51,0,0,0-8.5,8.5A1,1,0,0,1,15.5,16.5Z"/>
+</g>
+</svg>
