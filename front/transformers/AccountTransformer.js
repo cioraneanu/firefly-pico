@@ -46,6 +46,7 @@ export default class AccountTransformer extends ApiTransformer {
 
     return {
       name: get(data, 'name', ''),
+      group: data?.group?.toLowerCase(),
       icon: get(data, 'icon.icon'),
       type: get(data, 'type.fireflyCode'),
       account_role: get(data, 'account_role.fireflyCode'),
@@ -56,7 +57,6 @@ export default class AccountTransformer extends ApiTransformer {
 
       liability_type: get(data, 'liability_type.fireflyCode'),
       liability_direction: get(data, 'liability_direction.fireflyCode'),
-
 
       include_net_worth: get(data, 'include_net_worth', false),
       is_dashboard_visible: get(data, 'is_dashboard_visible', true),

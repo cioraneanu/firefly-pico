@@ -18,6 +18,7 @@
             <div class="subtitle display-flex flex-wrap gap-2">
               <span class="tag-gray list-item-subtitle" v-if="accountType">{{ $t('account_page.account_type') }}: {{ accountType }}</span>
               <span class="tag-gray list-item-subtitle" v-if="accountRole">{{ $t('account_page.account_role') }}: {{ accountRole }}</span>
+              <span class="tag-gray list-item-subtitle" v-if="accountGroup">{{ $t('account_page.account_group') }}: {{ accountGroup }}</span>
             </div>
 
             <div class="display-flex">
@@ -51,6 +52,7 @@ const { t } = useI18n()
 
 const displayName = computed(() => get(props.value, 'attributes.name', ' - '))
 
+const accountGroup = computed(() => get(props.value, 'attributes.group'))
 const accountType = computed(() => t(get(props.value, 'attributes.type.t')))
 const accountRole = computed(() => {
   let translate = get(props.value, 'attributes.account_role.t')

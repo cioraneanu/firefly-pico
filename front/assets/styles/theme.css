@@ -1476,4 +1476,8 @@ body {
     opacity: 1 !important;
 }
 
+.app-field-dropdown .van-popover__wrapper {
+    width: 100%;
+}
+
 
