@@ -1,13 +1,15 @@
 <template>
-  <van-popover v-model:show="showPopover" placement="bottom-start">
-    <van-cell-group>
-      <van-cell v-for="item in dropdownList" :key="item" :title="item" @click="onSelect(item)" />
-    </van-cell-group>
+  <div class="van-cell-fake cursor-pointer app-field-dropdown">
+    <van-popover v-model:show="showPopover" placement="bottom-start" class="">
+      <van-cell-group>
+        <van-cell v-for="item in dropdownList" :key="item" :title="item" @click="onSelect(item)" class="cursor-pointer"/>
+      </van-cell-group>
 
-    <template #reference>
-      <app-field v-model="modelValue" v-bind="$attrs" @focus="isFocused = true" @blur="isFocused = false" @click.stop.prevent />
-    </template>
-  </van-popover>
+      <template #reference>
+        <app-field v-model="modelValue" v-bind="$attrs" @focus="isFocused = true" @blur="isFocused = false" @click.stop.prevent />
+      </template>
+    </van-popover>
+  </div>
 </template>
 
 <script setup>
@@ -23,10 +25,8 @@ const props = defineProps({
   list: {},
 })
 
-
 const getListWithDebounce = debounce(async () => {
   dropdownList.value = typeof props.list === 'function' ? await props.list(modelValue.value) : props.list
-  console.log('after debounce', dropdownList.value)
 }, 500)
 
 watch(modelValue, (newValue) => {

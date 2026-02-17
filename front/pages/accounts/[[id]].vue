@@ -26,8 +26,7 @@
         <account-liability-type-select v-if="isLiability" v-model="liabilityType" name="accountLiabilityType" :rules="[rule.required()]" required />
         <account-liability-direction-select v-if="isLiability" v-model="liabilityDirection" name="accountLiabilityDirection" :rules="[rule.required()]" required />
 
-        <app-field v-model="group" name="Description" :label="$t('account_page.account_group')" :icon="TablerIconConstants.fieldText2"> </app-field>
-
+<!--        <app-field v-model="group" name="Description" :label="$t('account_page.account_group')" :icon="TablerIconConstants.fieldText2"> </app-field>-->
         <app-field-dropdown v-model="group" :list="getGroupList" name="Description" :label="$t('account_page.account_group')" :icon="TablerIconConstants.fieldText2"> </app-field-dropdown>
 
         <app-boolean v-model="includeNetWorth" :label="$t('account_page.include_net_worth')" />
