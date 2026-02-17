@@ -63,6 +63,7 @@ import { avatarListIcons } from '~/constants/SvgConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
 import AppFieldDropdown from '~/components/ui-kit/app-field-dropdown.vue'
+import AccountRepository from '~/repository/AccountRepository.js'
 
 let dataStore = useDataStore()
 let profileStore = useProfileStore()
@@ -141,9 +142,8 @@ const onAdjustBalance = () => {
   isAdjustBalanceVisible.value = true
 }
 
-const getGroupList = (text) => {
-  console.log('getGroupList', {text})
-  return ['vasile', 'ion', 'iulian']
+const getGroupList = async (text) => {
+  return await new AccountRepository().getGroups(text)
 }
 
 const onNavigateToTransactionsList = async () => {

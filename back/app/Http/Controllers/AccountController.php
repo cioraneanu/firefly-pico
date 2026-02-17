@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Base\BaseControllerFirefly;
 use App\Models\Account;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 
 class AccountController extends BaseControllerFirefly
@@ -15,8 +17,12 @@ class AccountController extends BaseControllerFirefly
     }
 
 
-    public function getAccountGroups() {
-        return Account::distinct()->pluck('group')->filter()->values();
+    public function getAccountGroups(Request $request)
+    {
+        $text = $request->text;
+        return Account::distinct()->pluck('group')->filter(function ($value) use ($text) {
+            return $text ? Str::contains($value, $text, true) : !!$value;
+        })->values();
     }
 
 }

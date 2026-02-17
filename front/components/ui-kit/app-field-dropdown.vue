@@ -5,7 +5,7 @@
     </van-cell-group>
 
     <template #reference>
-      <app-field v-model="modelValue" v-bind="$attrs" @focus="isFocused = true" @blur="isFocused = false" />
+      <app-field v-model="modelValue" v-bind="$attrs" @focus="isFocused = true" @blur="isFocused = false" @click.stop.prevent />
     </template>
   </van-popover>
 </template>
@@ -23,12 +23,10 @@ const props = defineProps({
   list: {},
 })
 
-const onFocus = () => {
-  isFocused.value = true
-}
 
-const getListWithDebounce = debounce(() => {
-  dropdownList.value = typeof props.list === 'function' ? props.list(modelValue.value) : props.list
+const getListWithDebounce = debounce(async () => {
+  dropdownList.value = typeof props.list === 'function' ? await props.list(modelValue.value) : props.list
+  console.log('after debounce', dropdownList.value)
 }, 500)
 
 watch(modelValue, (newValue) => {
