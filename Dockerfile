@@ -42,26 +42,31 @@ FROM base AS build-container
 # Installing composer
 COPY --from=composer_base /usr/bin/composer /usr/local/bin/composer
 
-#Configure backend
-WORKDIR /var/www/html
-COPY back/ .
-RUN mv .env.example .env
-
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_PROCESS_TIMEOUT=600
 
-RUN composer install --no-dev --optimize-autoloader
+#Configure backend - copy dependency files first for better caching
+WORKDIR /var/www/html
+COPY back/composer.json back/composer.lock* ./
+RUN composer install --no-dev --optimize-autoloader --no-scripts --no-autoloader
+
+# Copy backend source code
+COPY back/ .
+RUN composer dump-autoload --optimize --no-dev
+RUN mv .env.example .env
 RUN php artisan key:generate
 ARG APP_VERSION
 RUN echo $APP_VERSION > /var/www/html/VERSION
 RUN tar --owner=www-data --group=www-data --exclude=.git -czf /tmp/app-back.tar.gz .
 
-#Configure frontend
+#Configure frontend - copy dependency files first for better caching
 WORKDIR /var/www/html/front
-COPY front/ .
+COPY front/package.json front/package-lock.json* ./
+RUN npm ci --prefer-offline --no-audit
 
-RUN npm install \
-    && NUXT_PUBLIC_VERSION="$APP_VERSION" npm run build
+# Copy frontend source code and build
+COPY front/ .
+RUN NUXT_PUBLIC_VERSION="$APP_VERSION" npm run build
 RUN npm prune --production
 RUN npm cache clean --force
 RUN tar --owner=www-data --group=www-data \
