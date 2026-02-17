@@ -14,4 +14,9 @@ class AccountController extends BaseControllerFirefly
         parent::__construct("/api/v1/accounts", Account::class);
     }
 
+
+    public function getAccountGroups() {
+        return Account::distinct()->pluck('group')->filter()->values();
+    }
+
 }

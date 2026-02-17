@@ -23,7 +23,7 @@
     <div class="flex-center text-size-13 m-10 flex-wrap">
       <div class="flex-center text-size-13 me-1">
         <icon-cash class="text-muted" :size="24" :stroke="1.5" />
-        <span class="font-400 text-muted">{{ $t('total') }}: </span>
+        <span class="font-400 text-muted">{{ $t('dashboard.accounts.by_currency') }}: </span>
       </div>
 
       <span v-for="(totalValue, totalCurrency) in dataStore.dashboardAccountsTotalByCurrency" class="font-700 ms-1 mx-1 app-select-option-tag">
@@ -31,9 +31,23 @@
       </span>
     </div>
 
+
+    <div v-if="hasAccountGroups" class="flex-center text-size-13 mb-3 gap-1">
+      <div class="flex-center text-size-13 me-1">
+        <span class="font-400 text-muted">{{ $t('dashboard.accounts.by_group') }}: </span>
+      </div>
+
+      <span v-for="(totalValue, groupName) in dataStore.dashboardAccountsTotalByGroup" class="font-700 ms-1 mx-1 app-select-option-tag">
+       {{ groupName }} | {{ formatNumberForDashboard(totalValue) }}  {{ Currency.getCode(dataStore.dashboardCurrency) }}
+      </span>
+    </div>
+
     <div v-if="hasMultipleCurrencies" class="flex-center text-size-13 mb-3 gap-1">
+      <span class="font-400 text-muted">{{ $t('dashboard.accounts.total') }}: </span>
       <span class="font-700">~{{ accountTotal }} {{ Currency.getCode(dataStore.dashboardCurrency) }}</span>
     </div>
+
+
   </van-cell-group>
 </template>
 
@@ -54,6 +68,8 @@ const toggleHiddenAccounts = () => {
   showHiddenAccounts.value = !showHiddenAccounts.value
 }
 
+
+
 const accountTotal = computed(() => {
   return formatNumberForDashboard(dataStore.dashboardAccountsEstimatedTotal)
 })
@@ -63,6 +79,7 @@ const getAccountAmount = (account) => {
 }
 
 const hasMultipleCurrencies = computed(() => dataStore.dashboardAccountsCurrencyList.length > 1)
+const hasAccountGroups = computed(() => dataStore.dashboardAccountsGroupsList.length > 0)
 
 const actionSheet = useActionSheet()
 const onShowActionSheet = (account) => {
