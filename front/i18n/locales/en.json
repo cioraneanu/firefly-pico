@@ -298,7 +298,8 @@
     "liability_direction": "Liability in/out",
     "include_net_worth": "Is included in net worth",
     "visible_on_dashboard": "Is visible on Dashboard",
-    "balance": "Balance"
+    "balance": "Balance",
+    "account_group": "Group"
   },
   "transaction_template_page": {
     "title_add": "Add template",
@@ -343,6 +344,11 @@
       "surplus": "Surplus",
       "days_remaining": "Days remaining",
       "savings_summary": "Savings summary"
+    },
+    "accounts": {
+      "by_currency": "By currency",
+      "by_group": "By group",
+      "total": "Total"
     },
     "budget": {
       "spent": "Spent",

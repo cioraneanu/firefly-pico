@@ -13,17 +13,7 @@
 
     <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
       <van-cell-group inset>
-        <app-field
-          v-model="name"
-          name="Description"
-          :label="$t('description')"
-          type="textarea"
-          rows="1"
-          autosize
-          :icon="TablerIconConstants.fieldText2"
-          :rules="[rule.required()]"
-          required
-        >
+        <app-field v-model="name" name="Description" :label="$t('description')" type="textarea" rows="1" autosize :icon="TablerIconConstants.fieldText2" :rules="[rule.required()]" required>
         </app-field>
 
         <icon-select v-model="icon" :list="avatarListIcons" />
@@ -35,6 +25,9 @@
 
         <account-liability-type-select v-if="isLiability" v-model="liabilityType" name="accountLiabilityType" :rules="[rule.required()]" required />
         <account-liability-direction-select v-if="isLiability" v-model="liabilityDirection" name="accountLiabilityDirection" :rules="[rule.required()]" required />
+
+<!--        <app-field v-model="group" name="Description" :label="$t('account_page.account_group')" :icon="TablerIconConstants.fieldText2"> </app-field>-->
+        <app-field-dropdown v-model="group" :list="getGroupList" name="Description" :label="$t('account_page.account_group')" :icon="TablerIconConstants.fieldText2"> </app-field-dropdown>
 
         <app-boolean v-model="includeNetWorth" :label="$t('account_page.include_net_worth')" />
 
@@ -68,6 +61,8 @@ import { useToolbar } from '~/composables/useToolbar'
 import { avatarListIcons } from '~/constants/SvgConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
+import AppFieldDropdown from '~/components/ui-kit/app-field-dropdown.vue'
+import AccountRepository from '~/repository/AccountRepository.js'
 
 let dataStore = useDataStore()
 let profileStore = useProfileStore()
@@ -113,8 +108,9 @@ let { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = u
 const pathKey = 'attributes'
 
 // const name = ref("")
-const { name, type, role, currency, icon, includeNetWorth, isDashboardVisible, liabilityType, liabilityDirection } = generateChildren(item, [
+const { name, type, role, currency, icon, includeNetWorth, isDashboardVisible, liabilityType, liabilityDirection, group } = generateChildren(item, [
   { computed: 'name', parentKey: `${pathKey}.name` },
+  { computed: 'group', parentKey: `${pathKey}.group` },
   { computed: 'icon', parentKey: `${pathKey}.icon` },
   { computed: 'type', parentKey: `${pathKey}.type` },
   { computed: 'role', parentKey: `${pathKey}.account_role` },
@@ -145,6 +141,10 @@ const onAdjustBalance = () => {
   isAdjustBalanceVisible.value = true
 }
 
+const getGroupList = async (text) => {
+  return await new AccountRepository().getGroups(text)
+}
+
 const onNavigateToTransactionsList = async () => {
   let filters = TransactionFilterUtils.filters.account.toUrl([item.value])
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
@@ -152,7 +152,7 @@ const onNavigateToTransactionsList = async () => {
 
 const toolbar = useToolbar()
 toolbar.init({
-  title:  itemId.value ? t('account_page.title_edit') : t('account_page.title_add'),
+  title: itemId.value ? t('account_page.title_edit') : t('account_page.title_add'),
   leftText: t('list'),
   backRoute: RouteConstants.ROUTE_ACCOUNT_LIST,
 })

@@ -100,6 +100,10 @@ export const useDataStore = defineStore('data', {
       return uniq(this.dashboardAccountsInNetWorth.map((account) => get(account, 'attributes.currency')))
     },
 
+    dashboardAccountsGroupsList(state) {
+      return uniq(this.dashboardAccountsInNetWorth.map((account) => get(account, 'attributes.group'))).filter(item => !!item)
+    },
+
     dashboardCurrencyCode(state) {
       return Currency.getCode(state.dashboardCurrency)
     },
@@ -125,6 +129,21 @@ export const useDataStore = defineStore('data', {
           return result + convertCurrency(currencyAmount, currencyCode, Currency.getCode(state.dashboardCurrency))
         }, 0)
         .toFixed(2)
+    },
+
+    dashboardAccountsTotalByGroup(state) {
+      return this.dashboardAccountsInNetWorth.reduce((result, account) => {
+        let group = get(account, 'attributes.group')
+        if (!group) {
+          return result
+        }
+        let accountBalance = parseFloat(get(account, 'attributes.current_balance') ?? 0)
+        accountBalance = convertCurrency(accountBalance, Account.getCurrencyCode(account), Currency.getCode(state.dashboardCurrency))
+
+        let oldValue = get(result, group, 0)
+        set(result, group, oldValue + accountBalance)
+        return result
+      }, {})
     },
 
     dashboardExpensesByCategory(state) {

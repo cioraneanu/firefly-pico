@@ -34,6 +34,8 @@ RouteUtils::makeCRUD("transaction-templates", TransactionTemplateController::cla
 
 // Firefly proxied resources
 RouteUtils::makeCRUD("accounts", AccountController::class);
+Route::get("accounts/groups", [AccountController::class, 'getAccountGroups']);
+
 RouteUtils::makeCRUD("categories", CategoryController::class);
 RouteUtils::makeCRUD("budgets", BudgetController::class);
 RouteUtils::makeCRUD("tags", TagController::class);
@@ -56,7 +58,6 @@ Route::get('search/transactions', [TransactionController::class, 'getAll']);
 
 
 RouteUtils::makeCRUD("profiles", ProfileController::class);
-
 
 
 Route::get('/test', function (Request $request) {
