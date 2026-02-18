@@ -132,7 +132,8 @@
     "assistant_entry": "Asistent",
     "assistant": {
       "title": "Setări asistent",
-      "substring_todo_tag": "Subșir care adaugă eticheta de făcut"
+      "substring_todo_tag": "Subșir care adaugă eticheta de făcut",
+      "currency": "Partea de sumă din textul asistentului va fi interpretată ca o valută străină de acest tip"
     },
     "formatting_entry": "Formatare",
     "formatting": {
@@ -295,7 +296,8 @@
     "liability_direction": "Direcție datorie",
     "include_net_worth": "Include în averea netă",
     "visible_on_dashboard": "Este vizibil pe Dashboard",
-    "balance": "Total"
+    "balance": "Total",
+    "account_group": "Grup"
   },
   "transaction_template_page": {
     "title_add": "Adaugă șablon",
@@ -306,7 +308,8 @@
     "title_add": "Adaugă etichetă",
     "title_edit": "Editează etichetă",
     "parent_tag": "Etichetă părinte",
-    "mark_as_todo": "Marchează ca 'de făcut'"
+    "mark_as_todo": "Marchează ca 'de făcut'",
+    "end_date": "Data de sfârşit"
   },
   "category_page": {
     "title_add": "Adaugă categorie",
@@ -350,12 +353,20 @@
       "all_tags": "Toate etichetele",
       "one_root_tag": "O etichetă părinte"
     },
+    "transfers_by_tags": {
+      "title": "Transferuri pe etichete",
+      "all_tags": "Toate etichetele",
+      "one_root_tag": "O etichetă părinte"
+    },
     "expenses_by_categories": "Cheltuieli pe categorii",
+    "transfers_by_categories": "Transferuri pe categorii",
     "configure_cards": "Configurare secțiuni"
   },
   "profile_page": {
     "title": "Listă profiluri",
     "title_add": "Adaugă profil",
-    "title_edit": "Editează profil"
+    "info": "Comută rapid íntre toate setările tale",
+    "title_edit": "Editează profil",
+    "tutorial_body": "<p>Un <b>profil</b> este colecția tuturor configurărilor găsite în paginile <code>Setări</code>.</p><br><p>Poți avea mai multe profiluri, dar doar unul poate fi activ la un moment dat. Poți comuta între ele cu un <i>tap</i> şi le poți edita prin <i>dublu-tap</i> sau <i>tap lung</i></p><br><p>Un caz de utilizare este să ai mai multe valori implicite pentru <b>formularul de tranzacție</b>: unul pentru utilizarea zilnică şi unul pentru vacanță. Profilul de vacanță poate avea un cont sursă diferit sau poate aplica automat o etichetă numită \"Vacanță August 2025\". Acest lucru face uşor să vezi cheltuielile totale după acea etichetă.</p>"
   }
 }

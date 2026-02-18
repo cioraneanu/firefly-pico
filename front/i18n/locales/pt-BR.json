@@ -210,6 +210,8 @@
         "transactions_summary": "Resumo das transações",
         "expenses_by_tag": "Despesas por tags",
         "expenses_by_category": "Despesas por categorias",
+        "transfers_by_tag": "Transferências por tags",
+        "transfers_by_category": "Transferências por categorias",
         "todo_transactions": "Transações a fazer"
       }
     },
@@ -296,7 +298,8 @@
     "liability_direction": "Passivo entrada/saída",
     "include_net_worth": "Está incluído no patrimônio líquido",
     "visible_on_dashboard": "Está visível no Painel",
-    "balance": "Saldo"
+    "balance": "Saldo",
+    "account_group": "Grupo"
   },
   "transaction_template_page": {
     "title_add": "Adicionar modelo",
@@ -352,7 +355,13 @@
       "all_tags": "Todas as tags",
       "one_root_tag": "Uma tag raiz"
     },
+    "transfers_by_tags": {
+      "title": "Transferências por tags",
+      "all_tags": "Todas as tags",
+      "one_root_tag": "Uma tag raiz"
+    },
     "expenses_by_categories": "Despesas por categorias",
+    "transfers_by_categories": "Transferências por categorias",
     "configure_cards": "Configurar cartões"
   },
   "profile_page": {

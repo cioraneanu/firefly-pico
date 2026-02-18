@@ -131,25 +131,25 @@
     },
     "assistant_entry": "Assistant",
     "assistant": {
-      "title": "Assistant settings",
-      "substring_todo_tag": "Substring which adds the todo tag",
-      "currency": "The amount part in the assistant text will be interpreted as a foreign currency of this kind"
+      "title": "Paramètres de l'assistant",
+      "substring_todo_tag": "Sous-chaîne qui ajoute l'étiquette à faire",
+      "currency": "La partie montant dans le texte de l'assistant sera interprétée comme une devise étrangère de ce type"
     },
-    "formatting_entry": "Formatting",
+    "formatting_entry": "Formatage",
     "formatting": {
-      "title": "Formatting settings",
-      "numbers_format": "Numbers formatting",
-      "select_numbers_format": "Select preferred numbers formatting",
-      "date_format": "Date format",
-      "select_date_format": "Select a date format",
-      "first_day_of_month": "First day of month",
-      "select_first_day_of_month": "Select the first day of month",
-      "casing": "Casing",
-      "force_transaction_description_lowercase": "Force transaction description lowercase",
-      "force_account_name_lowercase": "Force account name lowercase",
-      "force_category_name_lowercase": "Force category name lowercase",
-      "force_tag_name_lowercase": "Force tag name lowercase",
-      "strip_accents": "Strip accents"
+      "title": "Paramètres de formatage",
+      "numbers_format": "Formatage des nombres",
+      "select_numbers_format": "Sélectionner le formatage des nombres préféré",
+      "date_format": "Format de date",
+      "select_date_format": "Sélectionner un format de date",
+      "first_day_of_month": "Premier jour du mois",
+      "select_first_day_of_month": "Sélectionner le premier jour du mois",
+      "casing": "Casse",
+      "force_transaction_description_lowercase": "Forcer la description de transaction en minuscules",
+      "force_account_name_lowercase": "Forcer le nom du compte en minuscules",
+      "force_category_name_lowercase": "Forcer le nom de la catégorie en minuscules",
+      "force_tag_name_lowercase": "Forcer le nom de l'étiquette en minuscules",
+      "strip_accents": "Supprimer les accents"
     },
     "transactions_entry": "Transactions",
     "transactions": {
@@ -298,7 +298,8 @@
     "liability_direction": "Passif entrant/sortant",
     "include_net_worth": "Est inclus dans la valeur nette",
     "visible_on_dashboard": "Est visible sur le tableau de bord",
-    "balance": "Solde"
+    "balance": "Solde",
+    "account_group": "Groupe"
   },
   "transaction_template_page": {
     "title_add": "Ajouter un modèle",
