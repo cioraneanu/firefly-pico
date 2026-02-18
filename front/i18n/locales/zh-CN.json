@@ -132,7 +132,8 @@
     "assistant_entry": "助手",
     "assistant": {
       "title": "助手设置",
-      "substring_todo_tag": "添加待办标签的子字符串"
+      "substring_todo_tag": "添加待办标签的子字符串",
+      "currency": "助手文本中的金额部分将被解释为此类型的外币"
     },
     "formatting_entry": "格式化",
     "formatting": {
@@ -213,6 +214,8 @@
         "transactions_summary": "交易摘要",
         "expenses_by_tag": "按标签分类的支出",
         "expenses_by_category": "按类别分类的支出",
+        "transfers_by_tag": "按标签分类的转账",
+        "transfers_by_category": "按类别分类的转账",
         "todo_transactions": "待处理交易"
       }
     }
@@ -295,7 +298,8 @@
     "liability_direction": "负债进/出",
     "include_net_worth": "是否计入净资产",
     "visible_on_dashboard": "是否在仪表板上显示",
-    "balance": "平衡"
+    "balance": "平衡",
+    "account_group": "组"
   },
   "transaction_template_page": {
     "title_add": "添加模板",
@@ -306,7 +310,8 @@
     "title_add": "添加标签",
     "title_edit": "编辑标签",
     "parent_tag": "父标签",
-    "mark_as_todo": "标记为待办"
+    "mark_as_todo": "标记为待办",
+    "end_date": "结束日期"
   },
   "category_page": {
     "title_add": "添加类别",
@@ -350,7 +355,20 @@
       "all_tags": "所有标签",
       "one_root_tag": "一个根标签"
     },
+    "transfers_by_tags": {
+      "title": "按标签分类的转账",
+      "all_tags": "所有标签",
+      "one_root_tag": "一个根标签"
+    },
     "expenses_by_categories": "费用分类",
+    "transfers_by_categories": "转账分类",
     "configure_cards": "配置卡"
+  },
+  "profile_page": {
+    "title": "配置文件列表",
+    "title_add": "添加配置文件",
+    "info": "快速切换所有设置",
+    "title_edit": "编辑配置文件",
+    "tutorial_body": "<p>一个<b>配置文件</b>是在<code>设置</code>页面中找到的所有配置的集合。</p><br><p>您可以拥有多个配置文件，但一次只能激活一个。您可以通过<i>点击</i>在它们之间切换，并通过<i>双击</i>或<i>长按</i>来编辑它们</p><br><p>一个使用场景是为<b>交易表单</b>设置多个默认值：一个用于日常使用，一个用于度假。度假配置文件可以有不同的源账户，或者自动应用名为\"度假 2025 年 8 月\"的标签。这使得按该标签查看总支出变得很容易。</p>"
   }
 }

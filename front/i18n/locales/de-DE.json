@@ -296,7 +296,8 @@
     "liability_direction": "Verbindlichkeit ein/aus",
     "include_net_worth": "Im Nettovermögen enthalten",
     "visible_on_dashboard": "Im Dashboard ersichtlich",
-    "balance": "Kontostand"
+    "balance": "Kontostand",
+    "account_group": "Gruppe"
   },
   "transaction_template_page": {
     "title_add": "Template hinzufügen",

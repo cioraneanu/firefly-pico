@@ -298,7 +298,8 @@
     "liability_direction": "Долг мне/мой",
     "include_net_worth": "Включать в чистый капитал",
     "visible_on_dashboard": "Виден на дашборде",
-    "balance": "Баланс"
+    "balance": "Баланс",
+    "account_group": "Группа"
   },
   "transaction_template_page": {
     "title_add": "Добавить шаблон",

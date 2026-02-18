@@ -298,7 +298,8 @@
     "liability_direction": "Direzione passività (in/uscita)",
     "include_net_worth": "Incluso nel patrimonio netto",
     "visible_on_dashboard": "Visibile nella Dashboard",
-    "balance": "Saldo"
+    "balance": "Saldo",
+    "account_group": "Gruppo"
   },
   "transaction_template_page": {
     "title_add": "Aggiungi modello",
