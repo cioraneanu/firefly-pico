@@ -10,13 +10,9 @@
 </p>
 
 <p align="center">
-<a href="docs/installation.md">Installation</a>
+<a href="https://cioraneanu.github.io/firefly-pico-docs">Documentation</a>
 ·
-<a href="https://github.com/cioraneanu/firefly-pico/issues">Suggestion or bug?</a>
-·
-<a href="docs/architecture.md">Architecture</a>
-·
-<a href="docs/contribute.md">Contribution</a>
+<a href="https://cioraneanu.github.io/firefly-pico-docs/installation/docker">Installation</a>
 </p>
 
 <p align="center">
@@ -51,12 +47,8 @@ That meant making the expense tracking process as short as possible all while st
 Several (bad) ideas later I've come to this version. A transaction assistant :tophat:
 
 <div>
-  <img src="docs/images/demo.gif" width="300">
+  <img src="docs/images/demo.gif" width="250">
 </div>
-
-| Action                                                                          | Result                                                                                                                                                                                                                                                                                                                                                                                        |
-|---------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| - Partially write the name of a "tag" + "amount".<br>- Hit "Save". You're done!<br>(Ex. "elctr 28") | - Source account is preselected in Settings.<br>- Date is automatically set to "now"<br>- Fuzzy search found a tag with name close to what you typed ("electricity"). It also selected all of its parent tags.<br>- Category is selected by matching it to one of the tags above.<br>- The description field is copied from the child tag. <br><br> [Assistant tutorial](./docs/assistant.md) |
 
 
 
@@ -71,34 +63,6 @@ Several (bad) ideas later I've come to this version. A transaction assistant :to
 - ✅ Beautiful dashboard making it easy to keep an eye on everything that matters :chart_with_upwards_trend:
 - ✅ Lots of tweaks and settings :wrench:
 - ✅ Free and open-source
-
-
-## 🔧 My setup
-**Firefly** is very flexible and that can leave people unsure about how they should organise things.
-This is by no means the only / best way to do, but it's what works for me:
-```
-- Create asset accounts for everything (ex. one for every family member, one for each savings account). It's easier to not use any revenue/expense accounts; that way they will be threated as "cash" and you'll have one less field to fill inside transactions
-- Create your big, general "Categories" (ex. Bills, Food, Fun, Transportation etc.)
-- Create your root tags with names identical to the "Categories" above (ex. Bills, Food, Fun, Transportation etc.) (This is useful because selecting a "Tg" will automatically select the "Category".)
-- Create your child tags for granularity (ex. Electricity, Heating, Internet with the parent tag Bills). It's a good idea to remember these names and use them with the assistant for super fast expense tracking
-- Create a tag, name it "todo", and set the "Mark as to-do" field to Yes. Add this tag to any transaction that will be edited later. Ex. You paid dinner for multiple people and some will give you the money back later. Or you buy multiple shoes and return some of them. All these transactions will show up on your dashboard.
-- Go to Settings -> New transaction defaults -> Set your default source account. 
-  - (Optionally) If there are multiple users sharing an account you can create separate "tags" with their names. Then everyone can select their own for the "Auto tags" field.
-- Identify any transactions that you perform often but cannot be turned into "Reapeating transactions" because of irregularities. Create "templates" for them. The assistant can easily handle them as well.
-- For budgets you can setup "Rules" inside Firefly III. When a transaction is created, if it has a list of tags, asign it to your desiered budget. 
-
-- Finally make the process of starting the app faster:
-  - [iOS] Create a home screen shortcut: open the app in Safari -> Share icon -> Add to Homescreen. The app will also show up in you iOS global search
-  - [iOS] [Optional] Add double tap shortcut: 
-    - Open Shortcuts app -> + -> Add action -> search for "Open URLs" -> Enter the pico deployment URL -> Tap toolbar and rename it to "Open Pico"
-    - Open Settings -> Accesibility -> Touch -> Back tap -> Double tap -> Select the shortcut created above.
-```
-
-
-
-## 📑 Notes
-- Split transactions will show up as read-only, and you cannot create them inside **Pico**. Separate transactions make more sense to me.
-- Although I'm aiming to make **Pico** support as many functionalities as possible, some resources (like "Rules") will remain to be handled inside Firefly III.
 
 
 ## :coffee: Support
