@@ -36,22 +36,26 @@
 
 
 ## 💡About 
-For several years I've enjoyed tracking my expenses in proprietary mobile apps 
-but after getting into self-hosting I've wondered if there is an alternative that 
-gives me the same functionality without losing control over my data.
-I've came across Firefly III and I instantly fell in love with all of its features. 
-Seeing that it offers a REST API I've decided to play with it and make a web app that feels mobile native.
-I also wanted to convince my significant other to use it and so I had to go for the extremely challenging “Wife Approval Certification”.
-That meant making the expense tracking process as short as possible all while still using tags and categories because who doesn't love some nice reports :innocent:
+**Firefly-Pico** is a mobile-optimized, highly responsive web application designed as a **[Firefly III](https://github.com/firefly-iii/firefly-iii)** companion app. 
 
-Several (bad) ideas later I've come to this version. A transaction assistant :tophat:
+It is built with a focus on speed and ease of use,
+allowing you to quickly log expenses, organize tags, and keep track of your finances
+on the go, all while maintaining completely private control over your own data.
 
-<div>
-  <img src="docs/images/demo.gif" width="250">
+Apart from the sleek interface, it augments **Firefly III** with custom entity icons,
+support for sub-tags, and "templates" for auto-filling the transaction form.  
+
+Last but not least, it also comes with a smart "assistant" which makes recording expenses a breeze 🎉:
+
+<div style="text-align:center">
+  <img src="docs/images/assistant.gif" width="250">
 </div>
 
 
+<div style="text-align:center">
 
+Check out the **[full documentation](https://cioraneanu.github.io/firefly-pico-docs)**.
+</div>
 
 ## 🚀 Features
 - ✅ Beautiful clean minimalistic UI :fire: subtle animations and dark-theme support :first_quarter_moon_with_face: 
@@ -67,15 +71,3 @@ Several (bad) ideas later I've come to this version. A transaction assistant :to
 
 ## :coffee: Support
 If you enjoy Firefly-Pico please give this repository a star ⭐️.
-
-## :crown: Attribution
-Just like Firefly III this is licensed under the [GNU Affero General Public License v3](./LICENSE).
-
-- Developed by Mihai Cioraneanu
-- Using [Laravel](https://laravel.com/) and [Nuxt](https://nuxt.com/)
-- Consuming the [Firefly III](https://www.firefly-iii.org) REST API
-- With a custom UI theme based on [Vant](https://vant-ui.github.io)
-- Exchange rates powered by [Exchange Rate API](https://www.exchangerate-api.com)
-- IconPacks: [Tablr Icons](https://tabler.io/icons) · [Fluent UI System Icons](https://github.com/microsoft/fluentui) · [Circle Avatar Vectors by Laura Reen](https://www.svgrepo.com/author/Laura%20Reen) 
-· [SVG Repo](https://www.svgrepo.com/) · [Freepik](https://www.freepik.com/)
-- Illustrations: [unDraw](https://undraw.co)
