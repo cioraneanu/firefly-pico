@@ -39,7 +39,7 @@
   "attachments": "Załączniki",
   "account": "Konto",
   "accounts": "Konta",
-  "total": "Razem",
+  "total": "Saldo",
   "select_is_empty": "Brak wyboru...",
   "active": "Aktywne",
   "calendar": "Kalentadz",
@@ -110,45 +110,45 @@
       "invalid_token": "Podany token jest nieprawidłowy lub stracił ważność.",
       "fetching": "Pobieranie..."
     },
-    "ui_entry": "User interface",
+    "ui_entry": "Interfejs użytkownika",
     "ui": {
-      "theme": "Theme",
-      "title": "UI settings",
-      "show_animations": "Show animations",
-      "reset_forms_after_creation": "Reset forms after creation",
-      "transaction_list": "Transaction list",
-      "select_hero_icons": "Select what Hero Icons to show",
-      "hero_icons": "Hero Icons",
-      "right_side_card": "(Right side card in the list)",
-      "dark": "Dark",
-      "light": "Light",
+      "theme": "Motyw",
+      "title": "Ustawienia UI",
+      "show_animations": "Pokaż animacje",
+      "reset_forms_after_creation": "Resetuj formularze po utworzeniu",
+      "transaction_list": "Lista transakcji",
+      "select_hero_icons": "Wybierz ikony Bohaterów",
+      "hero_icons": "Ikony Bohaterów",
+      "right_side_card": "(Karta po prawej stronie na liście)",
+      "dark": "Ciemny",
+      "light": "Jasny",
       "pages": {
-        "new_transacation": "New transaction",
-        "transacation_list": "Transactions list",
-        "dashboard": "Dashboard"
+        "new_transacation": "Nowa transakcja",
+        "transacation_list": "Lista transakcji",
+        "dashboard": "Pulpit"
       }
     },
-    "assistant_entry": "Assistant",
+    "assistant_entry": "Assystent",
     "assistant": {
-      "title": "Assistant settings",
-      "substring_todo_tag": "Substring which adds the todo tag",
-      "currency": "The amount part in the assistant text will be interpreted as a foreign currency of this kind"
+      "title": "Ustawienia Assystenta",
+      "substring_todo_tag": "Tekst, który dodaje tag todo",
+      "currency": "Wartość podana w tekście asystenta zostanie zinterpretowana jako waluta obca tego rodzaju"
     },
-    "formatting_entry": "Formatting",
+    "formatting_entry": "Formatowanie",
     "formatting": {
-      "title": "Formatting settings",
-      "numbers_format": "Numbers formatting",
-      "select_numbers_format": "Select preferred numbers formatting",
-      "date_format": "Date format",
-      "select_date_format": "Select a date format",
-      "first_day_of_month": "First day of month",
-      "select_first_day_of_month": "Select the first day of month",
-      "casing": "Casing",
-      "force_transaction_description_lowercase": "Force transaction description lowercase",
-      "force_account_name_lowercase": "Force account name lowercase",
-      "force_category_name_lowercase": "Force category name lowercase",
-      "force_tag_name_lowercase": "Force tag name lowercase",
-      "strip_accents": "Strip accents"
+      "title": "Ustawienia formatowania",
+      "numbers_format": "Formatowanie liczb",
+      "select_numbers_format": "Wybierz preferowany sposób formatowania liczb",
+      "date_format": "Format daty",
+      "select_date_format": "Wybierz format daty",
+      "first_day_of_month": "Pierwszy dzień miesiąca",
+      "select_first_day_of_month": "Wybierz pierwszy dzień miesiąca",
+      "casing": "Pisownia",
+      "force_transaction_description_lowercase": "Wymuś pisanie opisu transakcji małymi literami",
+      "force_account_name_lowercase": "Wymuś pisownię nazwy konta małymi literami",
+      "force_category_name_lowercase": "Wymuś nazwy kategorii do pisowni małymi literami",
+      "force_tag_name_lowercase": "Wymuś pisownię nazwy tagu małymi literami",
+      "strip_accents": "Akcenty w postaci pasków"
     },
     "transactions_entry": "Transactions",
     "transactions": {
@@ -260,19 +260,19 @@
     "no_accounts": "No accounts"
   },
   "currency_select": {
-    "title": "Select a currency"
+    "title": "Wybierz walutę"
   },
   "validation": {
-    "required": "Field is required"
+    "required": "Pole jest obowiązkowe"
   },
-  "primary": "Primary",
-  "classification": "Classification",
-  "extra": "Extra",
-  "exchange_rates": "Exchange rates",
-  "currency": "Currency",
-  "currencies": "Currencies",
-  "show_transactions": "Show transactions",
-  "icon": "Icon",
+  "primary": "Podstawowe",
+  "classification": "Klasyfikacja",
+  "extra": "Dodatkowe",
+  "exchange_rates": "Kurs wymiany walut",
+  "currency": "Waluta",
+  "currencies": "Waluty",
+  "show_transactions": "Pokaż transakcje",
+  "icon": "Ikona",
   "icon_select": "Select an icon",
   "icon_empty": "No icon",
   "list": "List",
@@ -297,82 +297,82 @@
     "liability_direction": "Liability in/out",
     "include_net_worth": "Is included in net worth",
     "visible_on_dashboard": "Is visible on Dashboard",
-    "balance": "Balance",
-    "account_group": "Group"
+    "balance": "Saldo",
+    "account_group": "Grupa"
   },
   "transaction_template_page": {
-    "title_add": "Add template",
-    "title_edit": "Edit template",
-    "extra_names": "Extra names (assistant findable):"
+    "title_add": "Dodaj szablon",
+    "title_edit": "Edytuj szablon",
+    "extra_names": "Dodatkowe nazwy (możliwość wyszukiwania Asystenta):"
   },
   "tag_page": {
-    "title_add": "Add tag",
-    "title_edit": "Edit tag",
-    "parent_tag": "Parent tag",
-    "mark_as_todo": "Mark as to-do",
-    "end_date": "End date"
+    "title_add": "Dodaj tag",
+    "title_edit": "Edytuj tag",
+    "parent_tag": "Tag nadrzędny",
+    "mark_as_todo": "Oznacz jako to-do",
+    "end_date": "Data zakończenia"
   },
   "category_page": {
-    "title_add": "Add category",
-    "title_edit": "Edit category"
+    "title_add": "Dodaj kategorię",
+    "title_edit": "Edytuj kategorię"
   },
   "currency_page": {
-    "title_add": "Add currency",
-    "title_edit": "Edit currency",
-    "decimal_places": "Decimal places"
+    "title_add": "Dodaj walutę",
+    "title_edit": "Edytuj walutę",
+    "decimal_places": "Miejsca po przecinku"
   },
   "budget_page": {
-    "title_add": "Add budget",
-    "title_edit": "Edit budget",
-    "spent": "Spent",
-    "percent": "Percent",
-    "interval": "Interval",
-    "type": "Budget type",
-    "period": "Budget period"
+    "title_add": "Dodaj budżet",
+    "title_edit": "Edytuj buzdet",
+    "spent": "Wydane",
+    "percent": "Procent",
+    "interval": "Przedział",
+    "type": "Typ budżety",
+    "period": "Okres budżetowy"
   },
   "exchange_rate_page": {
-    "relative_to_usd": "Relative to USD"
+    "relative_to_usd": "W stosunku do USD"
   },
   "dashboard": {
-    "title": "Dashboard",
-    "controls": "Controls",
-    "account_total": "Total balance",
-    "expenses_week": "Expenses this week",
+    "title": "Pulpit",
+    "controls": "Elementy sterujące",
+    "account_total": "Saldo ogółem",
+    "expenses_week": "Wydatki w tym tygodniu",
     "transactions_summary": {
-      "title": "Transactions summary",
-      "surplus": "Surplus",
-      "days_remaining": "Days remaining",
-      "savings_summary": "Savings summary"
+      "title": "Podsumowanie transakcji",
+      "surplus": "Nadwyżka",
+      "days_remaining": "Pozostałe dni",
+      "savings_summary": "Podsumowanie oszczędności"
     },
     "accounts": {
-      "by_currency": "By currency",
-      "by_group": "By group",
-      "total": "Total"
+      "by_currency": "Wg waluty",
+      "by_group": "Wg grupy",
+      "total": "Saldo"
     },
     "budget": {
-      "spent": "Spent",
-      "budgeted": "Budgeted",
-      "remaining": "Remaining"
+      "spent": "Wydane",
+      "budgeted": "Zaplanowane",
+      "remaining": "Pozostałe"
     },
     "expenses_by_tags": {
-      "title": "Expenses by tags",
-      "all_tags": "All tags",
-      "one_root_tag": "One root tag"
+      "title": "Wydatki wg tagów",
+      "all_tags": "Wszystkie tagi",
+      "one_root_tag": "Jeden tag główny"
     },
     "transfers_by_tags": {
-      "title": "Transfers by tags",
-      "all_tags": "All tags",
-      "one_root_tag": "One root tag"
+      "title": "Transfery wg tagów",
+      "all_tags": "Wszystkie tagi",
+      "one_root_tag": "Jeden tag główny"
     },
-    "expenses_by_categories": "Expenses by categories",
-    "transfers_by_categories": "Transfers by categories",
-    "configure_cards": "Configure cards"
+    "expenses_by_categories": "Wydatki wg kategorii",
+    "transfers_by_categories": "Transfery wg kategorii",
+    "configure_cards": "Skonfiguruj karty"
   },
   "profile_page": {
     "title": "Lista profili",
     "title_add": "Dodaj profil",
     "info": "Szybkie przełączanie między wszystkimi ustawieniami",
     "title_edit": "Edytuj profil",
-    "tutorial_body": "<p>A <b>profile</b> is the collection of all the configurations found in the <code>Settings</code> pages.</p><br><p>You can have multiple profiles but only one can be active at a time. You can switch between them with a <i>tap</i>, and edit them via <i>double-tap</i> or <i>long-tap</i></p><br><p>One use case is to have multiple defaults for the <b>transaction-form</b>: one for your daily usage and one for your vacation. The vacation profile can have a different source account, or have a tag called \"Vacation August 2025\" auto-applied. This makes it easy to see your total expense by that tag.</p>"
+    "tutorial_body": "<p><b>Profil</b> to zbiór wszystkich ustawień dostępnych na stronach <code>Ustawienia</code>. </p><br><p>Możesz mieć wiele profili, ale w danym momencie aktywny może być tylko jeden. Możesz przełączać się między nimi za pomocą <i>dotknięcia</i>, a edytować je poprzez <i>podwójne dotknięcie</i> lub <i>długie dotknięcie</i></p><br><p>Jednym z przykładów zastosowania jest posiadanie wielu ustawień domyślnych dla <b>formularza transakcji</b>: jednego do codziennego użytku i jednego na wakacje. Profil wakacyjny może mieć inne konto źródłowe lub automatycznie przypisaną etykietę o nazwie „Wakacje sierpień 2025”. Ułatwia to przeglądanie całkowitych wydatków według tej etykiety.</p>"
   }
 }
