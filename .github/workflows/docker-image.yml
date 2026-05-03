@@ -18,7 +18,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
       - name: Extract metadata (tags)
         id: meta
         uses: docker/metadata-action@v5
@@ -37,4 +36,6 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/firefly-pico:latest , ${{ secrets.DOCKERHUB_USERNAME }}/firefly-pico:${{ github.ref_name  }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            APP_VERSION=${{ github.ref_name }}
 
