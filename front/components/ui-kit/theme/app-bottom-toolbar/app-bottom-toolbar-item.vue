@@ -43,22 +43,22 @@ const icons = {
   [RouteConstants.ROUTE_DASHBOARD]: {
     iconOn: IconDashboard2,
     iconOff: IconDashboard1,
-    label: t('toolbar.home'),
+    label: () => t('toolbar.home'),
   },
   [RouteConstants.ROUTE_TRANSACTION_LIST]: {
     iconOn: IconTransactions2,
     iconOff: IconTransactions1,
-    label: t('toolbar.transactions'),
+    label: () => t('toolbar.transactions'),
   },
   [RouteConstants.ROUTE_EXTRAS]: {
     iconOn: IconExtra2,
     iconOff: IconExtra1,
-    label: t('toolbar.extras'),
+    label: () => t('toolbar.extras'),
   },
   [RouteConstants.ROUTE_SETTINGS]: {
     iconOn: IconSettings2,
     iconOff: IconSettings1,
-    label: t('toolbar.settings'),
+    label: () => t('toolbar.settings'),
   },
 }
 
@@ -70,6 +70,6 @@ const icon = computed(() => {
 })
 
 const label = computed(() => {
-  return icons[props.route]?.label
+  return icons[props.route]?.label()
 })
 </script>

@@ -13,22 +13,22 @@
 
     <nav class="sidebar-nav">
       <div class="nav-section">
-        <div class="section-label">Main</div>
+        <div class="section-label">{{ $t('main') }}</div>
         <app-left-sidebar-page label="Dashboard" :icon="TablerIconConstants.dashboard" :route="RouteConstants.ROUTE_DASHBOARD" />
         <app-left-sidebar-page label="Transactions" :icon="TablerIconConstants.transaction" :route="RouteConstants.ROUTE_TRANSACTION_LIST" />
       </div>
 
       <div class="nav-section">
-        <div class="section-label">Extras</div>
-        <app-left-sidebar-page label="Accounts" :icon="TablerIconConstants.account" :route="RouteConstants.ROUTE_ACCOUNT_LIST" />
-        <app-left-sidebar-page label="Templates" :icon="TablerIconConstants.transactionTemplate" :route="RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST" />
-        <app-left-sidebar-page label="Budgets" :icon="TablerIconConstants.budget" :route="RouteConstants.ROUTE_BUDGET_LIST" />
+        <div class="section-label">{{ $t('extra') }}</div>
+        <app-left-sidebar-page :label="$t('accounts')" :icon="TablerIconConstants.account" :route="RouteConstants.ROUTE_ACCOUNT_LIST" />
+        <app-left-sidebar-page :label="$t('templates')" :icon="TablerIconConstants.transactionTemplate" :route="RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST" />
+        <app-left-sidebar-page :label="$t('budgets')" :icon="TablerIconConstants.budget" :route="RouteConstants.ROUTE_BUDGET_LIST" />
       </div>
 
       <div class="nav-section">
-        <div class="section-label">Classifications</div>
-        <app-left-sidebar-page label="Tags" :icon="TablerIconConstants.tag" :route="RouteConstants.ROUTE_TAG_LIST" />
-        <app-left-sidebar-page label="Categories" :icon="TablerIconConstants.category" :route="RouteConstants.ROUTE_CATEGORY_LIST" />
+        <div class="section-label">{{ $t('classifications') }}</div>
+        <app-left-sidebar-page :label="$t('tags')" :icon="TablerIconConstants.tag" :route="RouteConstants.ROUTE_TAG_LIST" />
+        <app-left-sidebar-page :label="$t('categories')" :icon="TablerIconConstants.category" :route="RouteConstants.ROUTE_CATEGORY_LIST" />
       </div>
 
       <div class="nav-section mt-auto">
@@ -39,8 +39,8 @@
           </div>
         </div>
 
-        <div class="section-label mt-3">Settings</div>
-        <app-left-sidebar-page label="Settings" :icon="TablerIconConstants.settings" :route="RouteConstants.ROUTE_SETTINGS" :dot="appStore.isNewVersionAvailable" />
+        <div class="section-label mt-3">{{ $t('toolbar.settings') }}</div>
+        <app-left-sidebar-page :label="$t('toolbar.settings')" :icon="TablerIconConstants.settings" :route="RouteConstants.ROUTE_SETTINGS" :dot="appStore.isNewVersionAvailable" />
       </div>
     </nav>
   </div>
