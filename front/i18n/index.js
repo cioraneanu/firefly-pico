@@ -9,6 +9,7 @@ export const languageCode = {
   german_german: 'de-DE',
   swiss_german: 'de-CH',
   french: 'fr-FR',
+  polish: 'pl',
   russian: 'ru-RU'
 }
 
@@ -60,6 +61,12 @@ export const supportedLanguages = [
     file: 'fr.json',
     displayName: 'Francais',
     icon: 'svgo-flags-fr',
+  },
+  {
+    code: languageCode.polish,
+    file: 'pl.json',
+    displayName: 'Polski',
+    icon: 'svgo-flags-pl',
   },
   {
     code: languageCode.russian,
