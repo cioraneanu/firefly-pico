@@ -35,14 +35,15 @@
   "budget": "预算",
   "budgets": "预算",
   "budget_select": "选择预算",
-  "account": "账户",
-  "accounts": "帐户",
   "attachment": "依恋",
   "attachments": "附件",
+  "account": "账户",
+  "accounts": "帐户",
+  "classifications": "分类",
   "total": "全部的",
   "select_is_empty": "无选择...",
-  "calendar": "Calendar",
   "active": "积极的",
+  "calendar": "Calendar",
   "date": "日期",
   "date_after": "日期之后",
   "date_before": "日期之前",
@@ -269,6 +270,7 @@
   "primary": "主要",
   "classification": "分类",
   "extra": "额外",
+  "main": "主要",
   "exchange_rates": "汇率",
   "currency": "货币",
   "currencies": "货币种类",
@@ -370,5 +372,7 @@
     "info": "快速切换所有设置",
     "title_edit": "编辑配置文件",
     "tutorial_body": "<p>一个<b>配置文件</b>是在<code>设置</code>页面中找到的所有配置的集合。</p><br><p>您可以拥有多个配置文件，但一次只能激活一个。您可以通过<i>点击</i>在它们之间切换，并通过<i>双击</i>或<i>长按</i>来编辑它们</p><br><p>一个使用场景是为<b>交易表单</b>设置多个默认值：一个用于日常使用，一个用于度假。度假配置文件可以有不同的源账户，或者自动应用名为\"度假 2025 年 8 月\"的标签。这使得按该标签查看总支出变得很容易。</p>"
-  }
+  },
+  "profile": "个人资料",
+  "new_transaction": "新交易"
 }

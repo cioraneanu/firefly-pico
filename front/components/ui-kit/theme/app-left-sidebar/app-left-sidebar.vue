@@ -5,7 +5,7 @@
         <nuxt-link :to="RouteConstants.ROUTE_TRANSACTION_ID" class="p-0">
           <button class="add-transaction-btn-desktop">
             <app-icon :icon="TablerIconConstants.dashboardTotalIncomes" :size="20" />
-            <span>{{ $t('new_transaction') }}</span>
+            <span class="">{{ $t('new_transaction') }}</span>
           </button>
         </nuxt-link>
       </div>

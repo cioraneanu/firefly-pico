@@ -39,6 +39,7 @@
   "attachments": "Allegati",
   "account": "Conto",
   "accounts": "Conti",
+  "classifications": "Classificazioni",
   "total": "Totale",
   "select_is_empty": "Nessuna selezione...",
   "active": "Attivo",
@@ -269,6 +270,7 @@
   "primary": "Principale",
   "classification": "Classificazione",
   "extra": "Extra",
+  "main": "Principale",
   "exchange_rates": "Tassi di cambio",
   "currency": "Valuta",
   "currencies": "Valute",
@@ -370,5 +372,7 @@
     "info": "Passa rapidamente tra tutte le tue impostazioni",
     "title_edit": "Modifica profilo",
     "tutorial_body": "<p>Un <b>profilo</b> è l'insieme di tutte le configurazioni presenti nelle pagine <code>Impostazioni</code>.</p><br><p>Puoi avere più profili ma solo uno può essere attivo alla volta. Puoi passare tra di essi con un <i>tap</i> e modificarli con un <i>doppio tap</i> o <i>tap prolungato</i></p><br><p>Un caso d'uso è avere predefiniti diversi per il <b>modulo transazioni</b>: uno per l'uso quotidiano e uno per le vacanze. Il profilo vacanze può avere un conto sorgente diverso o applicare automaticamente un tag chiamato \"Vacanze agosto 2025\". Questo rende facile vedere la spesa totale per quel tag.</p>"
-  }
+  },
+  "profile": "Profilo",
+  "new_transaction": "Nuova transazione"
 }

@@ -39,6 +39,7 @@
   "attachments": "Fichiers",
   "account": "Compte",
   "accounts": "Comptes",
+  "classifications": "Classifications",
   "total": "Total",
   "select_is_empty": "Aucune selection...",
   "active": "Actif",
@@ -269,6 +270,7 @@
   "primary": "Principal",
   "classification": "Classification",
   "extra": "Supplémentaire",
+  "main": "Principal",
   "exchange_rates": "Taux de change",
   "currency": "Devise",
   "currencies": "Devises",
@@ -370,5 +372,7 @@
     "info": "Passez rapidement entre tous vos paramètres",
     "title_edit": "Modifier un profil",
     "tutorial_body": "<p>Un <b>profil</b> est la collection de toutes les configurations trouvées dans les pages <code>Paramètres</code>.</p><br><p>Vous pouvez avoir plusieurs profils mais un seul peut être actif à la fois. Vous pouvez passer d'un profil à l'autre en <i>appuyant</i> et les modifier en <i>double-appuyant</i> ou <i>appuyant longuement</i></p><br><p>Un cas d'utilisation est d'avoir plusieurs paramètres par défaut pour le <b>formulaire de transaction</b> : un pour votre utilisation quotidienne et un pour vos vacances. Le profil de vacances peut avoir un compte source différent ou avoir une étiquette appelée \"Vacances août 2025\" appliquée automatiquement. Cela facilite la visualisation de vos dépenses totales par cette étiquette.</p>"
-  }
+  },
+  "profile": "Profil",
+  "new_transaction": "Nouvelle transaction"
 }

@@ -35,8 +35,11 @@
   "budget": "Budget",
   "budgets": "Budgets",
   "budget_select": "Budget auswählen",
+  "attachment": "Anhang",
+  "attachments": "Anhänge",
   "account": "Konto",
   "accounts": "Konti",
+  "classifications": "Klassifizierungen",
   "total": "Summe",
   "select_is_empty": "Keine Auswahl...",
   "active": "Aktiv",
@@ -267,6 +270,7 @@
   "primary": "Primary",
   "classification": "Klassifizierung",
   "extra": "Extra",
+  "main": "Haupt",
   "exchange_rates": "Exchange Rate",
   "currency": "Währung",
   "currencies": "Währungen",
@@ -368,5 +372,7 @@
     "info": "Schnell zwischen all deinen Einstellungen wechseln",
     "title_edit": "Profil bearbeiten",
     "tutorial_body": "<p>Ein <b>Profil</b> ist die Sammlung aller Konfigurationen die in in den <code>Einstellungen</code> gefunden werden können.</p><br><p>Du kannst mehrere Profile haben aber nur eines kann aktiv sein. Du kannst durch einen Tab zwischen den Profilen wechseln und sie durch einen Double-Tab bearbeiten.</p><br><p>Ein Use-Case ist mehrere Standards für <b>Transaktions-Formulare</b> zu haben: Eines für deine täglichen Ausgaben und eines für Ferien. Das Ferien Profil kann ein anderes Quell-Konto haben oder einen Tag namens \"Ferien August 2025\" automatisch anwenden. Damit wird es einfach die totalen Ausgaben für diesen Tag zu sehen.</p>"
-  }
+  },
+  "profile": "Profil",
+  "new_transaction": "Neue Transaktion"
 }

@@ -39,6 +39,7 @@
   "attachments": "Załączniki",
   "account": "Rachunek",
   "accounts": "Rachunki",
+  "classifications": "Klasyfikacje",
   "total": "Saldo",
   "select_is_empty": "Brak wyboru...",
   "active": "Aktywne",
@@ -269,6 +270,7 @@
   "primary": "Podstawowe",
   "classification": "Klasyfikacja",
   "extra": "Dodatkowe",
+  "main": "Główny",
   "exchange_rates": "Kurs wymiany walut",
   "currency": "Waluta",
   "currencies": "Waluty",
@@ -375,5 +377,7 @@
     "info": "Szybkie przełączanie między wszystkimi ustawieniami",
     "title_edit": "Edytuj profil",
     "tutorial_body": "<p><b>Profil</b> to zbiór wszystkich ustawień dostępnych na stronach <code>Ustawienia</code>. </p><br><p>Możesz mieć wiele profili, ale w danym momencie aktywny może być tylko jeden. Możesz przełączać się między nimi za pomocą <i>dotknięcia</i>, a edytować je poprzez <i>podwójne dotknięcie</i> lub <i>długie dotknięcie</i></p><br><p>Jednym z przykładów zastosowania jest posiadanie wielu ustawień domyślnych dla <b>formularza transakcji</b>: jednego do codziennego użytku i jednego na wakacje. Profil wakacyjny może mieć inne konto źródłowe lub automatycznie przypisaną etykietę o nazwie „Wakacje sierpień 2025”. Ułatwia to przeglądanie całkowitych wydatków według tej etykiety.</p>"
-  }
+  },
+  "profile": "Profil",
+  "new_transaction": "Nowa transakcja"
 }
