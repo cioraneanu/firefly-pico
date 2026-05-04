@@ -2,7 +2,7 @@
   <div v-if="appStore.isDesktopLayout" class="profile-picker-wrapper">
     <div class="profile-picker-dashboard-button flex-center" @click="isListVisible = true">
       <icon-nut size="20" stroke="1.6"  />
-      <div class="profile-picker-dashboard-button-text">Profile: {{ profileStore.activeProfile?.name }}</div>
+      <div class="profile-picker-dashboard-button-text">{{ $t('profile') }}: {{ profileStore.activeProfile?.name }}</div>
     </div>
 
     <app-popup v-model:show="isListVisible"  :style="appStore.isDesktopLayout ? null : { height: '40%' }">
