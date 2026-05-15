@@ -13,7 +13,7 @@
     <transaction-type-tabs v-model="type" class="mx-3 mt-1 mb-1" />
 
     <van-form :disabled="isSplitTransaction" :name="formName" class="transaction-form-group" ref="form" @submit="saveItem" @failed="onValidationError">
-      <van-cell-group inset class="dynamic-masonry">
+      <van-cell-group inset class="dynamic-masonry display-flex-column">
         <div v-if="isSplitTransaction" class="display-flex ml-3 mt-3">
           <transaction-split-badge />
         </div>
