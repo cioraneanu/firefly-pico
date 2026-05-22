@@ -366,8 +366,10 @@ const accountDestinationBinding = computed(() => {
 })
 
 watch(type, (newValue, oldValue) => {
-  // Only when creating a transaction
-  if (itemId.value) {
+  // Only react to real user-driven tab switches on the new-transaction form.
+  // On initial form population, oldValue is undefined and the saved defaults
+  // are still being settled — running the repair there silently dropped them.
+  if (itemId.value || !oldValue || isEqual(newValue, oldValue)) {
     return
   }
   attemptAccountsFix()
