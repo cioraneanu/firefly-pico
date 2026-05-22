@@ -3,7 +3,7 @@ import TransactionTransformer from '~/transformers/TransactionTransformer'
 import TransactionRepository from '~/repository/TransactionRepository'
 import { useProfileStore } from '~/stores/profileStore'
 import Account from '~/models/Account'
-import { get, includes, isEqual } from 'lodash'
+import { get } from 'lodash'
 import Currency from '~/models/Currency.js'
 import { formatNumber } from '~/utils/NumberUtils.js'
 
@@ -48,7 +48,7 @@ export default class Transaction extends BaseModel {
     }
   }
 
-  getFake(id) {
+  getFake() {
     return {}
   }
 
@@ -100,18 +100,44 @@ export default class Transaction extends BaseModel {
     return get(transaction, 'attributes.transactions.0.currency_code', [])
   }
 
-  static getTags(transaction) {
-    return get(transaction, 'attributes.transactions', [])
-      .map((item) => item.tags)
-      .flat()
-  }
-
-  static getCategoryId(transaction) {
-    return get(transaction, 'attributes.transactions.0.category_id', 0)
-  }
-
   static getSplits(transaction) {
     return get(transaction, 'attributes.transactions', [])
+  }
+
+  static getFirstSplit(transaction) {
+    return this.getSplits(transaction)[0]
+  }
+
+  static isSplitPayment(transaction) {
+    return this.getSplits(transaction).length > 1
+  }
+
+  static getDescription(transaction) {
+    return get(transaction, 'attributes.group_title') ?? get(this.getFirstSplit(transaction), 'description') ?? ' - '
+  }
+
+  static hasAttachments(transaction) {
+    return this.getSplits(transaction).some((item) => item.has_attachments)
+  }
+
+  static getCategories(transaction) {
+    let categories = this.getSplits(transaction)
+      .map((item) => item.category)
+      .flat()
+      .filter(Boolean)
+    return categories.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
+  }
+
+  static getNotes(transaction) {
+    return get(this.getFirstSplit(transaction), 'notes')
+  }
+
+  static getTags(transaction) {
+    let tags = this.getSplits(transaction)
+      .map((item) => item.tags)
+      .flat()
+      .filter(Boolean)
+    return tags.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
   }
 
   static getAmountFormatted(transaction) {
@@ -158,18 +184,20 @@ export default class Transaction extends BaseModel {
     let firstAsset = [sourceAccount, destinationAccount].find((account) => Account.getType(account)?.fireflyCode === Account.types.asset.fireflyCode)
 
     switch (newType.code) {
-      case Transaction.types.income.code:
+      case Transaction.types.income.code: {
         let source = [sourceAccount, destinationAccount].find((account) => [Account.types.liability.fireflyCode, Account.types.revenue.fireflyCode, Account.types.cash.fireflyCode].includes(Account.getType(account)?.fireflyCode))
         return { source: source, destination: firstAsset }
-
-      case Transaction.types.expense.code:
+      }
+      case Transaction.types.expense.code: {
         let destination = [sourceAccount, destinationAccount].find((account) => {
           return [Account.types.liability.fireflyCode, Account.types.expense.fireflyCode, Account.types.cash.fireflyCode].includes(Account.getType(account)?.fireflyCode)
         })
         return { source: firstAsset, destination: destination }
-      case Transaction.types.transfer.code:
+      }
+      case Transaction.types.transfer.code: {
         let otherAsset = [sourceAccount, destinationAccount].find((account) => firstAsset?.id !== account?.id && Account.getType(account)?.code === Account.types.asset.code)
         return { source: firstAsset, destination: otherAsset }
+      }
     }
   }
 }
