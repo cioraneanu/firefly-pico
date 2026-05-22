@@ -4,7 +4,7 @@
     <div class="display-flex gap-2">
       <div class="flex-1" />
 
-      <bar-chart-item-vertical v-for="bar in barsList" v-bind="bar" @click="onClick(bar)" class="cursor-pointer" />
+      <bar-chart-item-vertical v-for="bar in barsList" v-bind="bar" class="cursor-pointer" @click="onClick(bar)" />
 
       <div class="flex-1" />
     </div>
@@ -12,7 +12,7 @@
 </template>
 <script setup>
 import { eachDayOfInterval, format, startOfDay, subDays } from 'date-fns'
-import { capitalize, get } from 'lodash'
+import { capitalize, get } from 'lodash-es'
 import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
@@ -42,8 +42,8 @@ const barsList = computed(() => {
 })
 
 const onClick = async (bar) => {
-  let excludedUrl = getExcludedTransactionUrl()
-  let filters = [
+  const excludedUrl = getExcludedTransactionUrl()
+  const filters = [
     TransactionFilterUtils.filters.dateAfter.toUrl(bar.date),
     TransactionFilterUtils.filters.dateBefore.toUrl(bar.date),
     TransactionFilterUtils.filters.transactionType.toUrl(Transaction.types.expense),

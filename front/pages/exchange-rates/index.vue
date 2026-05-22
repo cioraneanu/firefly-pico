@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { useDataStore } from '~/stores/dataStore'
 import { useToolbar } from '~/composables/useToolbar'

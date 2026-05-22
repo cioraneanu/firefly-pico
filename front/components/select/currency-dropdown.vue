@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import _, { get } from 'lodash'
+import _, { get } from 'lodash-es'
 import { useDataStore } from '~/stores/dataStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import { IconCaretDown, IconSquareRoundedX } from '@tabler/icons-vue'
@@ -32,7 +32,7 @@ const props = defineProps({
     default: false,
   }
 })
-let list = ref([])
+const list = ref([])
 
 const currencyCode = computed(() => Currency.getCode(modelValue.value))
 

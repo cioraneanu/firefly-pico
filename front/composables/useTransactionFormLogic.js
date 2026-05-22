@@ -1,5 +1,5 @@
 import { watch } from 'vue'
-import { head } from 'lodash'
+import { head } from 'lodash-es'
 import Category from '~/models/Category'
 import Tag from '~/models/Tag'
 import Transaction from '~/models/Transaction'

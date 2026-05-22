@@ -14,7 +14,7 @@
 
 
     <van-cell-group inset style="overflow: auto">
-      <app-field-link label="Sync everything" :icon="TablerIconConstants.lastSync" @click="onSyncEverything" :isLink="false" />
+      <app-field-link label="Sync everything" :icon="TablerIconConstants.lastSync" :is-link="false" @click="onSyncEverything" />
     </van-cell-group>
 
 
@@ -28,7 +28,7 @@
         <a :href="REPO_URL">{{$t('settings.new_version_available')}}: {{ appStore.latestAppVersion }} 🎉</a>
       </div>
     </div>
-    <div></div>
+    <div/>
   </div>
 </template>
 

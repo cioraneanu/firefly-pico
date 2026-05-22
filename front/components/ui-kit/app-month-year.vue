@@ -12,10 +12,10 @@
 </template>
 
 <script setup>
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import { useDataStore } from '~/stores/dataStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
-import { isEqual } from 'lodash/lang'
+import { isEqual } from 'lodash-es/lang'
 import { useSwipeToDismiss } from '~/composables/useSwipeToDismiss'
 
 const dataStore = useDataStore()
@@ -25,7 +25,7 @@ const modelValue = defineModel({
     return DateUtils.stringToDate(`${value[0]}-${value[1]}-01`)
   },
   get: (value) => {
-    let result = value ?? new Date()
+    const result = value ?? new Date()
     return [result.getFullYear(), result.getMonth() + 1]
   },
 })

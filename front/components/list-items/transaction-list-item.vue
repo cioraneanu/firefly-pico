@@ -55,7 +55,7 @@
               <div class="text-muted">{{ timeAgo }}</div>
             </div>
 
-            <div class="flex-center-vertical text-muted text-size-12 gap-1"/>
+            <div class="flex-center-vertical text-muted text-size-12 gap-1" />
           </div>
         </div>
       </template>
@@ -68,7 +68,7 @@
 </template>
 
 <script setup>
-import { capitalize, get } from 'lodash'
+import { capitalize, get, isEqual } from 'lodash-es'
 import Category from '@/models/Category.js'
 import DateUtils from '~/utils/DateUtils'
 import Transaction from '~/models/Transaction'

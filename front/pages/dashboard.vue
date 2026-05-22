@@ -22,7 +22,7 @@
 
 <script setup>
 import { useToolbar } from '~/composables/useToolbar'
-import { debounce } from 'lodash/function'
+import { debounce } from 'lodash-es/function'
 import UIUtils from '~/utils/UIUtils.js'
 import { animateDashboard } from '~/utils/AnimationUtils.js'
 import RouteConstants from '~/constants/RouteConstants.js'
@@ -62,9 +62,9 @@ const cardComponents = {
 const visibleCards = computed(() => {
   return dashboardCardList
     .map((card) => {
-      let position = profileStore.dashboardWidgetsConfig.findIndex((item) => item.code === card.code)
-      let field = profileStore.dashboardWidgetsConfig.find((item) => item.code === card.code)
-      let isVisible = field ? field.isVisible : true
+      const position = profileStore.dashboardWidgetsConfig.findIndex((item) => item.code === card.code)
+      const field = profileStore.dashboardWidgetsConfig.find((item) => item.code === card.code)
+      const isVisible = field ? field.isVisible : true
 
       return {
         ...card,
@@ -105,8 +105,8 @@ const { lengthX } = useSwipe(dashboard, {
     swipeStartAt = e.timeStamp
   },
   onSwipeEnd(e, direction) {
-    let duration = e.timeStamp - swipeStartAt
-    let velocity = Math.abs(lengthX.value) / duration
+    const duration = e.timeStamp - swipeStartAt
+    const velocity = Math.abs(lengthX.value) / duration
 
     if (lengthX.value > 100 && velocity >= 0.5) {
       dataStore.dashboard.month = addMonths(dataStore.dashboard.month, 1)

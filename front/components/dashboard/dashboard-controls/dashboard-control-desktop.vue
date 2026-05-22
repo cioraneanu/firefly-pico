@@ -1,19 +1,19 @@
 <template>
   <div class="flex-center-vertical gap-2">
     <div class="simple-button">
-      <app-icon :icon="TablerIconConstants.leftArrow" @click.stop="onPreviousMonth" :size="22" class="cursor-pointer" />
+      <app-icon :icon="TablerIconConstants.leftArrow" :size="22" class="cursor-pointer" @click.stop="onPreviousMonth" />
     </div>
 
     <div class="simple-button">
-      <app-icon :icon="TablerIconConstants.rightArrow" @click.stop="onNextMonth" :size="22" class="cursor-pointer" />
+      <app-icon :icon="TablerIconConstants.rightArrow" :size="22" class="cursor-pointer" @click.stop="onNextMonth" />
     </div>
 
-    <div @click="onChooseMonth" class="text-size-13 font-weight-500 cursor-pointer mx-2">{{ rangeTitle }}</div>
+    <div class="text-size-13 font-weight-500 cursor-pointer mx-2" @click="onChooseMonth">{{ rangeTitle }}</div>
 
     <dashboard-control-buttons />
   </div>
 
-  <app-month-year v-model="dataStore.dashboard.month" v-model:showDropdown="showDropdown" />
+  <app-month-year v-model="dataStore.dashboard.month" v-model:show-dropdown="showDropdown" />
 </template>
 
 <script setup>

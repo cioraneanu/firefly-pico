@@ -1,5 +1,5 @@
 <template>
-  <van-grid-item @click="onGoToBudget" class="cursor-pointer">
+  <van-grid-item class="cursor-pointer" @click="onGoToBudget">
     <template #icon>
       <budget-icon :value="props.value" />
     </template>
@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import Budget from '~/models/Budget.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import BudgetLimit from '~/models/BudgetLimit.js'
@@ -37,7 +37,7 @@ const budgetLimitInterval = computed(() => BudgetLimit.getLimitInterval(budgetLi
 const budgetCurrencySymbol = computed(() => Budget.getCurrencySymbol(props.value))
 
 const onGoToBudget = async () => {
-  let budgetId = get(props.value, 'id')
+  const budgetId = get(props.value, 'id')
   if (!budgetId) {
     return
   }

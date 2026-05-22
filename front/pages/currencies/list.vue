@@ -8,7 +8,7 @@
 
     <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
       <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
-        <currency-list-item v-for="item in sortedList" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
+        <currency-list-item v-for="item in sortedList" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
       </van-list>
     </van-pull-refresh>
   </div>
@@ -25,7 +25,7 @@ import { useToolbar } from '~/composables/useToolbar'
 import CurrencyListItem from '~/components/list-items/currency-list-item.vue'
 import Currency from '~/models/Currency'
 
-let dataStore = useDataStore()
+const dataStore = useDataStore()
 
 const onEvent = (event, payload) => {
   if (event === 'onPostDelete') {

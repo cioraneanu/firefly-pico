@@ -3,7 +3,7 @@ import { useLocalStorage } from '@vueuse/core'
 import ResponseUtils from '~/utils/ResponseUtils'
 import { compareVersionStrings } from '~/utils/DataUtils'
 import InfoRepository from '~/repository/InfoRepository.js'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import RouteConstants from '~/constants/RouteConstants.js'
 
 export const useAppStore = defineStore('app', {

@@ -10,10 +10,10 @@
       <app-field-link :label="$t('show_transactions')" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
     </app-card-info>
 
-    <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
+    <van-form ref="form" :name="formName" class="" @submit="saveItem" @failed="onValidationError">
       <van-cell-group inset>
         <app-field v-model="tag" name="name" :label="$t('name')" rows="1" autosize :icon="TablerIconConstants.fieldText2" :rules="[rule.required()]" required />
-        <tag-select :label="$t('tag_page.parent_tag')" v-model="parentTag" :isMultiSelect="false" />
+        <tag-select v-model="parentTag" :label="$t('tag_page.parent_tag')" :is-multi-select="false" />
         <app-field v-model="description" name="description" :label="$t('description')" autosize :icon="TablerIconConstants.fieldText1" />
         <app-date v-model="date" :label="$t('tag_page.end_date')" :icon="TablerIconConstants.settingsUserPreferencesDate" />
         <icon-select v-model="icon" />
@@ -31,7 +31,7 @@
       <div style="margin: 16px">
         <app-button-form-save />
 
-        <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
+        <app-button-form-delete v-if="itemId" class="mt-10" @click="onDelete" />
       </div>
     </van-form>
 
@@ -44,7 +44,7 @@ import { ref } from 'vue';
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
-import _, { cloneDeep, get, set } from 'lodash'
+import _, { cloneDeep, get, set } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
@@ -57,16 +57,16 @@ import { TUTORIAL_CONSTANTS } from '~/constants/TutorialConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
 
-let dataStore = useDataStore()
-let profileStore = useProfileStore()
+const dataStore = useDataStore()
+const profileStore = useProfileStore()
 const route = useRoute()
 
 const form = ref(null)
 
 const fetchItem = async () => {
-  let tag = cloneDeep(dataStore.tagDictionaryById[useRoute().params.id])
+  const tag = cloneDeep(dataStore.tagDictionaryById[useRoute().params.id])
 
-  let parentTagId = get(tag, 'attributes.parent_id')
+  const parentTagId = get(tag, 'attributes.parent_id')
   if (parentTagId) {
     tag.attributes.parentTag = dataStore.tagDictionaryById[parentTagId]
   }
@@ -78,7 +78,7 @@ const onEvent = (event, payload) => {
     let newItem = _.get(payload, 'data.data')
     newItem = TagTransformer.transformFromApi(newItem)
 
-    let isTodo = get(newItem, 'attributes.is_todo')
+    const isTodo = get(newItem, 'attributes.is_todo')
     const oldTagsList = dataStore.tagList.map((item) => (isTodo && set(item, 'attributes.is_todo', false)) || item).filter((item) => item.id !== itemId.value)
     dataStore.tagList = [newItem, ...oldTagsList]
   }
@@ -91,7 +91,7 @@ const resetFields = () => {
   tag.value = ''
 }
 
-let { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
   routeList: RouteConstants.ROUTE_TAG_LIST,
   routeForm: RouteConstants.ROUTE_TAG_ID,
@@ -119,7 +119,7 @@ toolbar.init({
 })
 
 const onNavigateToTransactionsList = async () => {
-  let filters = TransactionFilterUtils.filters.tag.toUrl(item.value)
+  const filters = TransactionFilterUtils.filters.tag.toUrl(item.value)
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
 }
 

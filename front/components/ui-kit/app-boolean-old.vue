@@ -1,6 +1,6 @@
 <template>
   <div class="van-cell-fake">
-    <van-field class="app-field" :label="label" v-bind="dynamicAttrs" @click="onToggle" readonly>
+    <van-field class="app-field" :label="label" v-bind="dynamicAttrs" readonly @click="onToggle">
       <template v-if="$slots.label" #label>
         <slot name="label" />
       </template>

@@ -1,4 +1,4 @@
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import Transaction from '~/models/Transaction'
 
 export function convertCurrency(amount, fromCurrency, toCurrency) {

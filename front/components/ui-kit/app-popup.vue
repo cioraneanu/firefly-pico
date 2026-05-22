@@ -1,6 +1,6 @@
 <template>
   <van-popup v-bind="popupProps" :teleport="teleport" :z-index="zIndex">
-    <template v-for="slot in Object.keys($slots)" v-slot:[slot]="scoped">
+    <template v-for="slot in Object.keys($slots)" #[slot]="scoped">
       <slot :name="slot" v-bind="scoped ?? {}" />
     </template>
   </van-popup>

@@ -2,12 +2,12 @@
   <div class="app-form">
     <app-top-toolbar />
 
-    <van-form @submit="onSave" class="">
+    <van-form class="" @submit="onSave">
       <van-cell-group inset>
         <div class="van-cell-fake flex-column van-cell">
           <app-repeater v-model="quickAmountValues" :empty-item="{ value: '' }">
             <template #content="{ element, index }">
-              <app-field :placeholder="$t('settings.transactions.quick_amounts.value')" v-model="element.value" inputmode="decimal" />
+              <app-field v-model="element.value" :placeholder="$t('settings.transactions.quick_amounts.value')" inputmode="decimal" />
             </template>
           </app-repeater>
         </div>
@@ -39,8 +39,8 @@ onMounted(() => {
 
 const onSave = async () => {
   profileStore.quickValueButtons = quickAmountValues.value.map((item) => {
-    let value = sanitizeAmount(item.value)
-    let startsWithOperator = ['-', '+'].includes(value[0])
+    const value = sanitizeAmount(item.value)
+    const startsWithOperator = ['-', '+'].includes(value[0])
     return startsWithOperator ? value : `+${value}`
   })
 

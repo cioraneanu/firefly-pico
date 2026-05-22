@@ -1,4 +1,4 @@
-import _, { get } from 'lodash'
+import _, { get } from 'lodash-es'
 import Account from '~/models/Account'
 import ApiTransformer from '~/transformers/ApiTransformer'
 import { useDataStore } from '~/stores/dataStore'

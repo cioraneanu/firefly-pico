@@ -20,7 +20,7 @@
 
 <script setup>
 import DashboardBudgetItem from '~/components/dashboard/dashboard-budgets/dashboard-budget-item.vue'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import Transaction from '~/models/Transaction.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import AppChip from '~/components/ui-kit/app-chip.vue'

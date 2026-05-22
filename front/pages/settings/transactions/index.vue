@@ -2,7 +2,7 @@
   <div class="app-form">
     <app-top-toolbar />
 
-    <van-form @submit="onSave" class="">
+    <van-form class="" @submit="onSave">
       <van-cell-group inset>
         <app-field-link
           :icon="TablerIconConstants.form"
@@ -64,7 +64,7 @@ watchSettingsStore(syncedSettings)
 
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
-  let response = await profileStore.writeProfile()
+  const response = await profileStore.writeProfile()
   ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
 }
 

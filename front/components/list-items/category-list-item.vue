@@ -7,7 +7,7 @@
             <app-icon :icon="icon ?? TablerIconConstants.category" :size="TablerIconConstants.defaultSize" />
           </div>
 
-          <div class="separator"></div>
+          <div class="separator"/>
 
           <div class="second_column flex-1 flex-center-vertical">
             <div v-if="displayName" class="title">{{ displayName }}</div>
@@ -23,7 +23,7 @@
 </template>
 
 <script setup>
-import _ from 'lodash'
+import _ from 'lodash-es'
 import { useDataStore } from '~/stores/dataStore'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import TablerIconConstants from '~/constants/TablerIconConstants'

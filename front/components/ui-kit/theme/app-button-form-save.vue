@@ -1,6 +1,6 @@
 <template>
   <div :class="classComputed" :style="style">
-    <slot name="left"></slot>
+    <slot name="left"/>
     <van-button round type="primary" native-type="submit" class="flex-1 shadow-depth2 cursor-pointer">
       {{ label ?? $t('save') }}
     </van-button>

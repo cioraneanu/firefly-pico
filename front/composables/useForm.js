@@ -1,7 +1,7 @@
 import { onMounted, ref } from 'vue'
-import { get, cloneDeep } from 'lodash'
+import { get, cloneDeep } from 'lodash-es'
 import UIUtils from '~/utils/UIUtils'
-import { next } from 'lodash/seq'
+import { next } from 'lodash-es/seq'
 import { getGUID } from '~/utils/Utils.js'
 
 export const useFormEvent = {

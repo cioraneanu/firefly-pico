@@ -8,11 +8,11 @@
     <div class="flex-center-vertical flex-wrap gap-1 mt-2">
       <van-loading v-if="isLoading" />
 
-      <transaction-attachment v-for="item in list" :key="item.id" :value="item" @result="fetchAttachments" @isLoading="onLoadingChange" />
+      <transaction-attachment v-for="item in list" :key="item.id" :value="item" @result="fetchAttachments" @is-loading="onLoadingChange" />
 
       <div v-if="!isLoading" class="add-attachment flex-center">
         <icon-plus :size="30" :stroke="0.8" />
-        <input type="file" @change="onUpload" />
+        <input type="file" @change="onUpload" >
       </div>
     </div>
   </div>
@@ -22,7 +22,7 @@
 import { IconSquarePlus, IconPlus } from '@tabler/icons-vue'
 import TransactionAttachment from '~/components/transaction/transaction-attachements/transaction-attachment.vue'
 import AttachmentRepository from '~/repository/AttachmentRepository.js'
-import { get, head } from 'lodash'
+import { get, head } from 'lodash-es'
 import { ref } from 'vue'
 import AttachmentTransformer from '~/transformers/AttachmentTransformer.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
@@ -38,7 +38,7 @@ const transactionId = computed(() => props.transaction?.id)
 
 const fetchAttachments = async () => {
   isLoading.value = true
-  let response = await new AttachmentRepository().getForTransaction(transactionId.value)
+  const response = await new AttachmentRepository().getForTransaction(transactionId.value)
   if (ResponseUtils.isSuccess(response)) {
     list.value = AttachmentTransformer.transformFromApiList(response.data?.data ?? [])
   }

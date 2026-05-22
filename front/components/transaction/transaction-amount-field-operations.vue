@@ -7,8 +7,8 @@
 </template>
 
 <script setup>
-const emit = defineEmits(['result'])
 import { IconPlus, IconMinus, IconAsteriskSimple, IconDivide } from '@tabler/icons-vue'
+const emit = defineEmits(['result'])
 
 const onOperation = (value) => {
   emit('result', value)

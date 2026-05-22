@@ -5,7 +5,7 @@
     </div>
 
     <van-grid :column-num="2">
-      <van-grid-item v-for="account in dataStore.dashboardAccountsVisible" :key="account.id" @click="onShowActionSheet(account)" class="cursor-pointer">
+      <van-grid-item v-for="account in dataStore.dashboardAccountsVisible" :key="account.id" class="cursor-pointer" @click="onShowActionSheet(account)">
         <template #icon>
           <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="24" />
         </template>
@@ -91,7 +91,7 @@ const onShowActionSheet = (account) => {
 
 const onGoToTransactions = async (account) => {
   if (account) {
-    let filters = TransactionFilterUtils.filters.account.toUrl([account])
+    const filters = TransactionFilterUtils.filters.account.toUrl([account])
     await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
   }
 }

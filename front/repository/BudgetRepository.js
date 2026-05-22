@@ -1,6 +1,6 @@
 import BaseRepository from '~/repository/BaseRepository'
 import axios from 'axios'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import { endOfMonth, startOfMonth } from 'date-fns'
 
 export default class BudgetRepository extends BaseRepository {

@@ -1,6 +1,6 @@
 import { onMounted, ref } from 'vue'
 import UIUtils from '~/utils/UIUtils'
-import _, { get } from 'lodash'
+import _, { get } from 'lodash-es'
 
 // by convention, composable function names start with "use"
 export function useList(prop) {

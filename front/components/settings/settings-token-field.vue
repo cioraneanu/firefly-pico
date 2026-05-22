@@ -6,9 +6,9 @@
       </template>
     </van-field>
 
-    <van-dialog :confirm-button-text="$t('ok')" width="100%" style="margin: 20px; max-height: 500px" v-model:show="showDialog">
+    <van-dialog v-model:show="showDialog" :confirm-button-text="$t('ok')" width="100%" style="margin: 20px; max-height: 500px">
       <div class="p-20">
-        <app-field type="textarea" left-icon="eye-o" v-model="modelValue" :label="$t('settings.token.label')" :rules="[rule.required()]" />
+        <app-field v-model="modelValue" type="textarea" left-icon="eye-o" :label="$t('settings.token.label')" :rules="[rule.required()]" />
 
         <div class="flex-center gap-1 mt-3">
           <van-button size="small" @click="onCopy">
@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-import _ from 'lodash'
+import _ from 'lodash-es'
 import { useDataStore } from '~/stores/dataStore'
 import DateUtils from '~/utils/DateUtils'
 import { addDays, startOfDay } from 'date-fns'

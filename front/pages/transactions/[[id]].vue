@@ -118,7 +118,7 @@
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
-import _, { get, head, isEqual } from 'lodash'
+import _, { get, head, isEqual } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'

@@ -8,15 +8,15 @@
 
       <template #input>
         <div class="display-flex gap-2 w-100">
-          <div @click.stop="showDatePicker = true" class="fake-input flex-1 cursor-pointer">
+          <div class="fake-input flex-1 cursor-pointer" @click.stop="showDatePicker = true">
             <div :class="labelDateClass">
               <div class="day-of-week">{{ dayOfWeek }}</div>
               {{ getDisplayDate }}
             </div>
           </div>
 
-          <div @click="onShowTimePicker" class="fake-input flex-1 cursor-pointer time-container">
-            <input ref="timeInput" type="time" class="hidden-input" v-model="modelValueTime" />
+          <div class="fake-input flex-1 cursor-pointer time-container" @click="onShowTimePicker">
+            <input ref="timeInput" v-model="modelValueTime" type="time" class="hidden-input" >
             <div :class="labelDateClass">{{ getDisplayTime }}</div>
           </div>
         </div>
@@ -26,13 +26,13 @@
     <div v-if="false" class="display-flex" style="gap: 3px">
       <div class="display-flex flex-1 ml-15" style="justify-content: flex-start; align-items: center; gap: 3px">
         <span class="text-size-14 mr-20 text-muted">Quick actions:</span>
-        <van-button @click.prevent.stop="onClickedMinusDay" type="default" size="normal">-1</van-button>
-        <van-button @click.prevent.stop="onClickedToday" type="default" size="normal">Today</van-button>
-        <van-button @click.prevent.stop="onClickedAddDay" type="default" size="normal">+1</van-button>
+        <van-button type="default" size="normal" @click.prevent.stop="onClickedMinusDay">-1</van-button>
+        <van-button type="default" size="normal" @click.prevent.stop="onClickedToday">Today</van-button>
+        <van-button type="default" size="normal" @click.prevent.stop="onClickedAddDay">+1</van-button>
       </div>
     </div>
 
-    <van-calendar @open="onOpen" v-model:show="showDatePicker" @confirm="onConfirmDate" :show-confirm="false" :min-date="minDate" :max-date="maxDate" color="#000" first-day-of-week="1" />
+    <van-calendar v-model:show="showDatePicker" :show-confirm="false" :min-date="minDate" :max-date="maxDate" color="#000" first-day-of-week="1" @open="onOpen" @confirm="onConfirmDate" />
     <app-date-time-grid-time-popup v-model:show="showTimePicker" v-model="modelValueTime" />
   </div>
 </template>
@@ -42,7 +42,7 @@ import { useDataStore } from '~/stores/dataStore'
 import DateUtils from '~/utils/DateUtils'
 import { addDays, addYears, startOfDay, subYears } from 'date-fns'
 import { useFormAttributes } from '~/composables/useFormAttributes'
-import { clone, head, isNull } from 'lodash'
+import { clone, head, isNull } from 'lodash-es'
 import { usePointerSwipe } from '@vueuse/core'
 import { useSwipeToDismiss } from '~/composables/useSwipeToDismiss.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
@@ -88,7 +88,7 @@ const dayOfWeek = computed(() => DateUtils.dateToString(modelValue.value, 'EEEEE
 const onConfirmDate = (value) => {
   showDatePicker.value = false
 
-  let newDate = clone(modelValue.value)
+  const newDate = clone(modelValue.value)
   newDate.setFullYear(value.getFullYear())
   newDate.setMonth(value.getMonth())
   newDate.setDate(value.getDate())
@@ -109,10 +109,10 @@ const onShowTimePicker = () => {
 }
 
 watch(modelValueTime, (newValue, oldValue) => {
-  let parseValue = newValue === null || newValue === '' ? ':' : newValue
+  const parseValue = newValue === null || newValue === '' ? ':' : newValue
   const [hours, minutes] = parseValue.split(':').map(Number)
 
-  let newDate = clone(modelValue.value)
+  const newDate = clone(modelValue.value)
   newDate.setHours(hours)
   newDate.setMinutes(minutes)
   modelValue.value = newDate

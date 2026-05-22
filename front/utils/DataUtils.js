@@ -1,6 +1,6 @@
 // export function sortByPath = (list, path) => list.sort((a,b) => (a.attributes.tag > b.attributes.tag) ? 1 : ((b.attributes.tag > a.attributes.tag) ? -1 : 0))
 
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 
 export const sortByPath = (list, path, isAsc = true) =>
   list.sort((a, b) => {

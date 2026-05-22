@@ -1,4 +1,4 @@
-import _, { uniq, get } from 'lodash'
+import _, { uniq, get } from 'lodash-es'
 import ApiTransformer from './ApiTransformer'
 import DateUtils from '~/utils/DateUtils'
 import { useProfileStore } from '~/stores/profileStore'

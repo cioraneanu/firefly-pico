@@ -11,7 +11,7 @@
     <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
       <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
         <app-list-search v-if="isSearchVisible && list.length > 0" v-model="search" />
-        <budget-list-item v-for="item in filteredList" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
+        <budget-list-item v-for="item in filteredList" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
       </van-list>
     </van-pull-refresh>
   </div>
@@ -28,7 +28,7 @@ import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import Budget from '~/models/Budget.js'
 
-let dataStore = useDataStore()
+const dataStore = useDataStore()
 
 // let list = computed(() => dataStore.accountList)
 // let formRoute = RouteConstants.ROUTE_ACCOUNT_ID

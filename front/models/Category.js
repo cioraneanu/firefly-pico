@@ -1,7 +1,7 @@
 import BaseModel from '~/models/BaseModel'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
 import CategoryRepository from '~/repository/CategoryRepository'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import { ellipsizeText } from '~/utils/Utils.js'
 
 export default class Category extends BaseModel {

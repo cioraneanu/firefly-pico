@@ -35,7 +35,7 @@
         <div class="flex-center-vertical gap-1">
           <profile-picker-desktop-button class="flex-1" />
           <div class="profile-picker-dashboard-button">
-            <app-icon @click="onChangeTheme" :size="20" :stroke-width="2.0" :icon="profileStore.darkTheme ? TablerIconConstants.darkTheme : TablerIconConstants.whiteTheme" />
+            <app-icon :size="20" :stroke-width="2.0" :icon="profileStore.darkTheme ? TablerIconConstants.darkTheme : TablerIconConstants.whiteTheme" @click="onChangeTheme" />
           </div>
         </div>
 

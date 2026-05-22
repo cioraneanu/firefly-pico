@@ -3,7 +3,7 @@ import TransactionTransformer from '~/transformers/TransactionTransformer'
 import TransactionRepository from '~/repository/TransactionRepository'
 import { useProfileStore } from '~/stores/profileStore'
 import Account from '~/models/Account'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import Currency from '~/models/Currency.js'
 import { formatNumber } from '~/utils/NumberUtils.js'
 

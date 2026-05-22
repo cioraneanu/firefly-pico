@@ -2,21 +2,21 @@
   <div class="app-form">
     <app-top-toolbar />
 
-    <van-form @submit="onSave" class="">
+    <van-form class="" @submit="onSave">
       <van-cell-group inset>
         <app-field-link :icon="TablerIconConstants.order" :label="$t('settings.dashboard.cards_order')" @click="onGoToDashboardCardsOrder" />
       </van-cell-group>
 
       <van-cell-group inset>
         <div class="van-cell-group-title mb-0">{{ $t('settings.dashboard.config') }}:</div>
-        <app-boolean :label="$t('settings.dashboard.show_empty_accounts')" v-model="areEmptyAccountsVisible" />
-        <app-boolean :label="$t('settings.dashboard.show_decimal_places')" v-model="showDecimal" />
+        <app-boolean v-model="areEmptyAccountsVisible" :label="$t('settings.dashboard.show_empty_accounts')" />
+        <app-boolean v-model="showDecimal" :label="$t('settings.dashboard.show_decimal_places')" />
 
         <app-select
-            :label="$t('settings.formatting.first_day_of_month')"
-            :popupTitle="$t('settings.formatting.select_first_day_of_month')"
             v-model="firstDayOfMonth"
-            v-model:showDropdown="isDropdownFirstDayVisible"
+            v-model:show-dropdown="isDropdownFirstDayVisible"
+            :label="$t('settings.formatting.first_day_of_month')"
+            :popup-title="$t('settings.formatting.select_first_day_of_month')"
             :list="firstDayOfMonthList"
             :columns="4"
             :has-search="false"
@@ -25,9 +25,9 @@
 
       <van-cell-group inset>
         <div class="van-cell-group-title mb-0">{{ $t('settings.dashboard.transaction_exclusion') }}:</div>
-        <account-select v-model="excludedAccountsList" :isMultiSelect="true" />
-        <category-select v-model="excludedCategoriesList" :isMultiSelect="true" />
-        <tag-select v-model="excludedTagsList" :isMultiSelect="true" :autoSelectParents="false" />
+        <account-select v-model="excludedAccountsList" :is-multi-select="true" />
+        <category-select v-model="excludedCategoriesList" :is-multi-select="true" />
+        <tag-select v-model="excludedTagsList" :is-multi-select="true" :auto-select-parents="false" />
       </van-cell-group>
 
       <app-button-form-save />
@@ -73,7 +73,7 @@ watchSettingsStore(syncedSettings)
 
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
-  let response = await profileStore.writeProfile()
+  const response = await profileStore.writeProfile()
   ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
 }
 

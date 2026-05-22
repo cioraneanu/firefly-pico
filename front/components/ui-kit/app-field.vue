@@ -1,6 +1,6 @@
 <template>
-  <van-field ref="vanFieldRef" v-model="modelValue" v-bind="dynamicAttrs" class="app-field app-field-text" @focus="onFocus" clearable>
-    <template v-for="slot in Object.keys($slots)" v-slot:[slot]="scoped">
+  <van-field ref="vanFieldRef" v-model="modelValue" v-bind="dynamicAttrs" class="app-field app-field-text" clearable @focus="onFocus">
+    <template v-for="slot in Object.keys($slots)" #[slot]="scoped">
       <slot :name="slot" v-bind="scoped ?? {}" />
     </template>
 

@@ -1,9 +1,9 @@
 <template>
   <app-select
-    :label="$t('transaction_type')"
-    :popupTitle="$t('transaction_type')"
     v-model="modelValue"
-    v-model:showDropdown="showDropdown"
+    v-model:show-dropdown="showDropdown"
+    :label="$t('transaction_type')"
+    :popup-title="$t('transaction_type')"
     :list="list"
     :columns="1"
     v-bind="dynamicAttrs"

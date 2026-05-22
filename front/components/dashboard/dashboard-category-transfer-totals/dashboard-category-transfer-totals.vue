@@ -3,7 +3,7 @@
     <div class="van-cell-group-title">{{ $t('dashboard.transfers_by_categories') }}:</div>
     <div class="display-flex flex-column ml-15 mr-15">
       <table>
-        <tr v-for="bar in barsList" @click="onShowActionSheet(bar)" class="cursor-pointer">
+        <tr v-for="bar in barsList" class="cursor-pointer" @click="onShowActionSheet(bar)">
           <td style="width: 1%">
             <div class="flex-center-vertical gap-1 my-1">
               <app-icon :icon="Category.getIcon(bar.category) ?? TablerIconConstants.category" :size="20" />
@@ -12,7 +12,7 @@
           </td>
 
           <td>
-            <bar-chart-item-horizontal :percent="bar.percent" :getBackground="getBarColor" />
+            <bar-chart-item-horizontal :percent="bar.percent" :get-background="getBarColor" />
           </td>
 
           <td style="width: 1%">
@@ -26,7 +26,7 @@
   </van-cell-group>
 </template>
 <script setup>
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
@@ -38,12 +38,12 @@ const dataStore = useDataStore()
 const { t } = useI18n()
 
 const barsList = computed(() => {
-  let dictionary = dataStore.dashboardTransfersByCategory
+  const dictionary = dataStore.dashboardTransfersByCategory
 
-  let maxAmount = Math.max(...Object.values(dictionary))
+  const maxAmount = Math.max(...Object.values(dictionary))
 
-  let bars = Object.keys(dictionary).map((categoryId) => {
-    let category = dataStore.categoryDictionary[categoryId]
+  const bars = Object.keys(dictionary).map((categoryId) => {
+    const category = dataStore.categoryDictionary[categoryId]
     const amount = dictionary[categoryId]
     const percent = (amount / maxAmount) * 100
     return {
@@ -77,7 +77,7 @@ const onGoToCategory = async (category) => {
 const onGoToTransactions = async (category) => {
   const startDate = DateUtils.dateToString(dataStore.dashboardDateStart)
   const endDate = DateUtils.dateToString(dataStore.dashboardDateEnd)
-  let excludedUrl = getExcludedTransactionUrl()
+  const excludedUrl = getExcludedTransactionUrl()
 
   if (!category) {
     await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_category=true&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.transfer.code}${excludedUrl}`)

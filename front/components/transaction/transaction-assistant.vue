@@ -5,7 +5,7 @@
       <app-tutorial :title="$t('transaction.assistant_tutorial_title')" :body="$t('transaction.assistant_tutorial_body')" />
 
       <div class="flex-1" />
-      <currency-dropdown class="text-size-12" v-model="profileStore.assistantCurrency" :is-clearable="true" />
+      <currency-dropdown v-model="profileStore.assistantCurrency" class="text-size-12" :is-clearable="true" />
     </div>
     <div class="text-size-12 text-muted mb-5">{{ $t('transaction.assistant_format') }}</div>
 
@@ -13,8 +13,8 @@
       <div class="flex-center-vertical gap-2">
         <app-field
           ref="assistantTextField"
-          class="van-cell-no-padding compact flex-1"
           v-model="assistantText"
+          class="van-cell-no-padding compact flex-1"
           label=""
           :placeholder="`${$t('transaction.assistant')} ...`"
           rows="1"
@@ -81,7 +81,7 @@
 <script setup>
 import { onMounted, watch } from 'vue'
 import { useDataStore } from '~/stores/dataStore'
-import { debounce } from 'lodash/function'
+import { debounce } from 'lodash-es/function'
 import Tag from '~/models/Tag'
 import AppTutorial from '~/components/ui-kit/app-tutorial.vue'
 import Category from '~/models/Category.js'
@@ -141,15 +141,15 @@ const processAssistantText = () => {
   const regex = /^(\D+)?(?:\s*(\d[\.\d\s\+\-\*\/]*))?(?:\s+(.*))?$/
   const match = text.match(regex)
 
-  let searchWords = match[1] || ''
+  const searchWords = match[1] || ''
 
-  let numerical = match[2]
-  let { wasSuccessful, value } = evalMath(numerical)
+  const numerical = match[2]
+  const { wasSuccessful, value } = evalMath(numerical)
   foundAmount.value = numerical && wasSuccessful ? value.toString() : null
 
   foundDescription.value = match[3] || ''
 
-  let bestGuess = fuzzySearch.search(searchWords)
+  const bestGuess = fuzzySearch.search(searchWords)
 
 
   if (bestGuess) {

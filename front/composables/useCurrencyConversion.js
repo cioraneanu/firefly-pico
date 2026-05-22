@@ -1,4 +1,4 @@
-import { evalMath, removeEndOperators, convertCurrency } from '~/utils/MathUtils'
+import { evalMath, removeEndOperators } from '~/utils/MathUtils'
 import { animateShakeAmountInput } from '~/utils/AnimationUtils.js'
 
 export const useCurrencyConversion = ({

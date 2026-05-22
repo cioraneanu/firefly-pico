@@ -2,15 +2,15 @@
   <div class="app-form">
     <app-top-toolbar />
 
-    <van-form @submit="onSave" class="">
+    <van-form class="" @submit="onSave">
       <van-cell-group inset>
         <div class="text-muted text-size-12 font-400 p-3">
           {{ $t('settings.transactions.default_list_filters.info') }}
         </div>
         <account-select v-model="account" :label="$t('account')" />
         <div class="flex-center-vertical">
-          <app-date class="flex-1" v-model="dateStart" :label="$t('date_after')" />
-          <app-date class="flex-1" v-model="dateEnd" :label="$t('date_before')" />
+          <app-date v-model="dateStart" class="flex-1" :label="$t('date_after')" />
+          <app-date v-model="dateEnd" class="flex-1" :label="$t('date_before')" />
         </div>
       </van-cell-group>
 
@@ -47,7 +47,7 @@ watchSettingsStore(syncedSettings)
 
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
-  let response = await profileStore.writeProfile()
+  const response = await profileStore.writeProfile()
   ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
 }
 
