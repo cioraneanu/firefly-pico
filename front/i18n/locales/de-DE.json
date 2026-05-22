@@ -81,8 +81,8 @@
       "income": "Einkommen",
       "transfer": "Transfer"
     },
-    "source_account": "Source account",
-    "destination_account": "Destination account",
+    "source_account": "Quell-Konto",
+    "destination_account": "Ziel-Konto",
     "make_template": "Template erstellen",
     "configure_fields": "Felder konfigurieren",
     "title_clone_transaction": "Transaktion duplizieren",
