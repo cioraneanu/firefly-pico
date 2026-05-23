@@ -26,7 +26,7 @@ export const useTransactionStore = defineStore('transaction', {
       return TransactionTransformer.transformFromApiList(list?.data ?? [])
     },
 
-    async fetchDashboardTransactionsForInterval(startDate, endDate, backendFilters) {
+    async fetchDashboardTransactionsForInterval(startDate, endDate, backendFilters = []) {
       this.isLoadingDashboardTransactions = true
 
       let filtersParts = [`date_after:${DateUtils.dateToString(startDate)}`, `date_before:${DateUtils.dateToString(endDate)}`, ...getExcludedTransactionFilters()]
@@ -39,7 +39,7 @@ export const useTransactionStore = defineStore('transaction', {
       return TransactionTransformer.transformFromApiList(list)
     },
 
-    async fetchDashboardTransactionsForWeek(backendFilters) {
+    async fetchDashboardTransactionsForWeek(backendFilters = []) {
       this.isLoadingDashboardTransactionsLastWeek = true
 
       let startDate = DateUtils.dateToString(subDays(startOfDay(new Date()), 7))

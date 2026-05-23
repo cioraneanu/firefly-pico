@@ -39,8 +39,8 @@ export const useDataStore = defineStore('data', () => {
     // Expose actions
     fetchAccounts: accountStore.fetchAccounts,
     fetchTransactionsWithTodos: transactionStore.fetchTransactionsWithTodos,
-    fetchDashboardTransactionsForInterval: transactionStore.fetchDashboardTransactionsForInterval,
-    fetchDashboardTransactionsForWeek: transactionStore.fetchDashboardTransactionsForWeek,
+    fetchDashboardTransactionsForInterval: dashboardStore.fetchDashboardTransactionsForInterval,
+    fetchDashboardTransactionsForWeek: dashboardStore.fetchDashboardTransactionsForWeek,
     fetchBudgets: budgetStore.fetchBudgets,
     fetchCategories: categoryStore.fetchCategories,
     fetchTags: tagStore.fetchTags,
