@@ -1,46 +1,65 @@
 import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
 import { keyBy } from 'lodash-es'
 import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import CurrencyRepository from '~/repository/CurrencyRepository'
 import Currency from '~/models/Currency.js'
 
-export const useCurrencyStore = defineStore('currency', {
-  state: () => ({
-    exchangeRates: useLocalStorage('exchangeRates', {}),
-    dashboardCurrency: useLocalStorage('dashboardCurrency', null, { serializer: StorageSerializers.object }),
-    currenciesList: useLocalStorage('currenciesList', []),
-    isLoadingCurrencies: false,
-    isLoadingExchangeRates: false,
-  }),
+export const useCurrencyStore = defineStore('currency', () => {
+  const exchangeRates = useLocalStorage('exchangeRates', {})
+  const dashboardCurrency = useLocalStorage('dashboardCurrency', null, { serializer: StorageSerializers.object })
+  const currenciesList = useLocalStorage('currenciesList', [])
+  const isLoadingCurrencies = ref(false)
+  const isLoadingExchangeRates = ref(false)
 
-  getters: {
-    dashboardCurrencyCode: (state) => Currency.getCode(state.dashboardCurrency),
-    currencyDictionary: (state) => keyBy(state.currenciesList, 'id'),
-    defaultCurrency: (state) => state.currenciesList.find((item) => item?.attributes?.default),
-    exchangeRatesList: (state) => {
-      let infoList = state.exchangeRates?.currencies ?? []
-      let infoDictionary = keyBy(infoList, 'code')
+  const dashboardCurrencyCode = computed(() => {
+    return Currency.getCode(dashboardCurrency.value)
+  })
 
-      let rates = state.exchangeRates?.rates
-      return Object.keys(rates ?? {}).map((currencyCode) => ({
-        code: currencyCode,
-        value: rates[currencyCode],
-        name: infoDictionary?.[currencyCode]?.name ?? ' - ',
-        country: infoDictionary?.[currencyCode]?.country ?? ' - ',
-      }))
-    },
-  },
+  const currencyDictionary = computed(() => {
+    return keyBy(currenciesList.value, 'id')
+  })
 
-  actions: {
-    async fetchExchangeRate() {
-      this.isLoadingExchangeRates = true
-      this.exchangeRates = await new CurrencyRepository().getCurrencyExchange()
-      this.isLoadingExchangeRates = false
-    },
-    async fetchCurrencies() {
-      this.isLoadingCurrencies = true
-      this.currenciesList = await new CurrencyRepository().getAllWithMerge()
-      this.isLoadingCurrencies = false
-    },
-  },
+  const defaultCurrency = computed(() => {
+    return currenciesList.value.find((item) => item?.attributes?.default)
+  })
+
+  const exchangeRatesList = computed(() => {
+    let infoList = exchangeRates.value?.currencies ?? []
+    let infoDictionary = keyBy(infoList, 'code')
+
+    let rates = exchangeRates.value?.rates
+    return Object.keys(rates ?? {}).map((currencyCode) => ({
+      code: currencyCode,
+      value: rates[currencyCode],
+      name: infoDictionary?.[currencyCode]?.name ?? ' - ',
+      country: infoDictionary?.[currencyCode]?.country ?? ' - ',
+    }))
+  })
+
+  async function fetchExchangeRate() {
+    isLoadingExchangeRates.value = true
+    exchangeRates.value = await new CurrencyRepository().getCurrencyExchange()
+    isLoadingExchangeRates.value = false
+  }
+
+  async function fetchCurrencies() {
+    isLoadingCurrencies.value = true
+    currenciesList.value = await new CurrencyRepository().getAllWithMerge()
+    isLoadingCurrencies.value = false
+  }
+
+  return {
+    exchangeRates,
+    dashboardCurrency,
+    currenciesList,
+    isLoadingCurrencies,
+    isLoadingExchangeRates,
+    dashboardCurrencyCode,
+    currencyDictionary,
+    defaultCurrency,
+    exchangeRatesList,
+    fetchExchangeRate,
+    fetchCurrencies,
+  }
 })

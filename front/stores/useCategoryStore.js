@@ -1,25 +1,29 @@
 import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
 import { keyBy } from 'lodash-es'
 import { useLocalStorage } from '@vueuse/core'
 import CategoryRepository from '~/repository/CategoryRepository'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
 
-export const useCategoryStore = defineStore('category', {
-  state: () => ({
-    categoryList: useLocalStorage('categoryList', []),
-    isLoadingCategories: false,
-  }),
+export const useCategoryStore = defineStore('category', () => {
+  const categoryList = useLocalStorage('categoryList', [])
+  const isLoadingCategories = ref(false)
 
-  getters: {
-    categoryDictionary: (state) => keyBy(state.categoryList, 'id'),
-  },
+  const categoryDictionary = computed(() => {
+    return keyBy(categoryList.value, 'id')
+  })
 
-  actions: {
-    async fetchCategories() {
-      this.isLoadingCategories = true
-      const list = await new CategoryRepository().getAllWithMerge()
-      this.categoryList = CategoryTransformer.transformFromApiList(list)
-      this.isLoadingCategories = false
-    },
-  },
+  async function fetchCategories() {
+    isLoadingCategories.value = true
+    const list = await new CategoryRepository().getAllWithMerge()
+    categoryList.value = CategoryTransformer.transformFromApiList(list)
+    isLoadingCategories.value = false
+  }
+
+  return {
+    categoryList,
+    isLoadingCategories,
+    categoryDictionary,
+    fetchCategories,
+  }
 })

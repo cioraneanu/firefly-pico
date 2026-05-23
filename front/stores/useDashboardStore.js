@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 import { startOfMonth, subMonths, getDate, differenceInDays, setDate, addMonths, subDays } from 'date-fns'
 import { useProfileStore } from '~/stores/profileStore'
@@ -11,140 +12,158 @@ import { useCurrencyStore } from '~/stores/useCurrencyStore'
 import { useBudgetStore } from '~/stores/useBudgetStore'
 import { useTransactionStore } from '~/stores/useTransactionStore'
 
-export const useDashboardStore = defineStore('dashboard', {
-  state: () => ({
-    isLoading: false,
-    backendFilters: [],
-    month: null,
-    transactionsList: [],
-    transactionsListLastWeek: [],
-    transactionsWithTodo: [],
-    tagsWidgetModeOnlyRootTag: useLocalStorage('tagsWidgetModeOnlyRootTag', true),
-    lastSync: useLocalStorage('lastSync', null, {
-      serializer: {
-        read: (v) => (v ? new Date(v) : null),
-        write: (v) => (v ? v.toISOString() : null),
-      },
-    }),
-    isSyncRequiredByMissingExtras: false,
-  }),
-
-  getters: {
-    dashboardDateStart(state) {
-      const profileStore = useProfileStore()
-      if (!state.month) return null
-      return setDate(state.month, profileStore.dashboard.firstDayOfMonth)
+export const useDashboardStore = defineStore('dashboard', () => {
+  const isLoading = ref(false)
+  const backendFilters = ref([])
+  const month = ref(null)
+  const transactionsList = ref([])
+  const transactionsListLastWeek = ref([])
+  const transactionsWithTodo = ref([])
+  const tagsWidgetModeOnlyRootTag = useLocalStorage('tagsWidgetModeOnlyRootTag', true)
+  const lastSync = useLocalStorage('lastSync', null, {
+    serializer: {
+      read: (v) => (v ? new Date(v) : null),
+      write: (v) => (v ? v.toISOString() : null),
     },
+  })
+  const isSyncRequiredByMissingExtras = ref(false)
 
-    dashboardDateEnd() {
-      if (!this.month) return null
-      return subDays(addMonths(this.dashboardDateStart, 1), 1)
-    },
+  // Getters
+  const dashboardDateStart = computed(() => {
+    const profileStore = useProfileStore()
+    if (!month.value) return null
+    return setDate(month.value, profileStore.dashboard.firstDayOfMonth)
+  })
 
-    isLoadingExtras() {
-      const categoryStore = useCategoryStore()
-      const tagStore = useTagStore()
-      const templateStore = useTemplateStore()
-      const accountStore = useAccountStore()
-      const currencyStore = useCurrencyStore()
-      const budgetStore = useBudgetStore()
+  const dashboardDateEnd = computed(() => {
+    if (!month.value) return null
+    return subDays(addMonths(dashboardDateStart.value, 1), 1)
+  })
 
-      return (
-        categoryStore.isLoadingCategories ||
-        tagStore.isLoadingTags ||
-        templateStore.isLoadingTransactionTemplates ||
-        accountStore.isLoadingAccounts ||
-        currencyStore.isLoadingExchangeRates ||
-        currencyStore.isLoadingCurrencies ||
-        budgetStore.isLoadingBudgets
-      )
-    },
-  },
+  const isLoadingExtras = computed(() => {
+    const categoryStore = useCategoryStore()
+    const tagStore = useTagStore()
+    const templateStore = useTemplateStore()
+    const accountStore = useAccountStore()
+    const currencyStore = useCurrencyStore()
+    const budgetStore = useBudgetStore()
 
-  actions: {
-    async init() {
-      const profileStore = useProfileStore()
-      let now = new Date()
-      let dashboardMonth = startOfMonth(new Date())
-      let monthToSub = getDate(now) < profileStore.dashboard.firstDayOfMonth ? 1 : 0
-      this.month = subMonths(dashboardMonth, monthToSub)
-    },
+    return (
+      categoryStore.isLoadingCategories ||
+      tagStore.isLoadingTags ||
+      templateStore.isLoadingTransactionTemplates ||
+      accountStore.isLoadingAccounts ||
+      currencyStore.isLoadingExchangeRates ||
+      currencyStore.isLoadingCurrencies ||
+      budgetStore.isLoadingBudgets
+    )
+  })
 
-    async fetchDashboardTransactionsForInterval() {
-      const transactionStore = useTransactionStore()
-      this.transactionsList = await transactionStore.fetchDashboardTransactionsForInterval(
-        this.dashboardDateStart,
-        this.dashboardDateEnd,
-        this.backendFilters
-      )
-    },
+  // Actions
+  async function init() {
+    const profileStore = useProfileStore()
+    let now = new Date()
+    let dashboardMonth = startOfMonth(new Date())
+    let monthToSub = getDate(now) < profileStore.dashboard.firstDayOfMonth ? 1 : 0
+    month.value = subMonths(dashboardMonth, monthToSub)
+  }
 
-    async fetchDashboardTransactionsForWeek() {
-      const transactionStore = useTransactionStore()
-      this.transactionsListLastWeek = await transactionStore.fetchDashboardTransactionsForWeek(this.backendFilters)
-    },
+  async function fetchDashboardTransactionsForInterval() {
+    const transactionStore = useTransactionStore()
+    transactionsList.value = await transactionStore.fetchDashboardTransactionsForInterval(
+      dashboardDateStart.value,
+      dashboardDateEnd.value,
+      backendFilters.value
+    )
+  }
 
-    async fetchTransactionsWithTodos() {
-      const transactionStore = useTransactionStore()
-      const tagStore = useTagStore()
-      this.transactionsWithTodo = await transactionStore.fetchTransactionsWithTodos(tagStore.tagTodo)
-    },
+  async function fetchDashboardTransactionsForWeek() {
+    const transactionStore = useTransactionStore()
+    transactionsListLastWeek.value = await transactionStore.fetchDashboardTransactionsForWeek(backendFilters.value)
+  }
 
-    async fetchDashboard() {
-      const accountStore = useAccountStore()
-      const currencyStore = useCurrencyStore()
-      const budgetStore = useBudgetStore()
+  async function fetchTransactionsWithTodos() {
+    const transactionStore = useTransactionStore()
+    const tagStore = useTagStore()
+    transactionsWithTodo.value = await transactionStore.fetchTransactionsWithTodos(tagStore.tagTodo)
+  }
 
-      let dashboardCurrency = await accountStore.fetchAccounts(currencyStore.dashboardCurrency)
-      if (dashboardCurrency) {
-        currencyStore.dashboardCurrency = dashboardCurrency
-      }
-      
-      this.fetchDashboardTransactionsForInterval()
-      this.fetchDashboardTransactionsForWeek()
-      this.fetchTransactionsWithTodos()
-      currencyStore.fetchExchangeRate()
-      budgetStore.fetchBudgets()
-    },
+  async function fetchDashboard() {
+    const accountStore = useAccountStore()
+    const currencyStore = useCurrencyStore()
+    const budgetStore = useBudgetStore()
 
-    async syncEverythingIfOld() {
-      let lastSyncTime = this.lastSync ?? subDays(new Date(), 365)
-      let now = new Date()
-      const appStore = useAppStore()
+    let dashboardCurrency = await accountStore.fetchAccounts(currencyStore.dashboardCurrency)
+    if (dashboardCurrency) {
+      currencyStore.dashboardCurrency = dashboardCurrency
+    }
+    
+    await fetchDashboardTransactionsForInterval()
+    await fetchDashboardTransactionsForWeek()
+    await fetchTransactionsWithTodos()
+    currencyStore.fetchExchangeRate()
+    budgetStore.fetchBudgets()
+  }
 
-      if (differenceInDays(now, lastSyncTime) < appStore.daysBetweenFullSync) {
-        return
-      }
+  async function syncEverythingIfOld() {
+    let lastSyncTime = lastSync.value ?? subDays(new Date(), 365)
+    let now = new Date()
+    const appStore = useAppStore()
 
-      this.isLoading = true
-      await this.syncEverything()
-      this.isLoading = false
-    },
+    if (differenceInDays(now, lastSyncTime) < appStore.daysBetweenFullSync) {
+      return
+    }
 
-    async syncEverything() {
-      const appStore = useAppStore()
-      if (!appStore.hasAuthToken) return
+    isLoading.value = true
+    await syncEverything()
+    isLoading.value = false
+  }
 
-      const categoryStore = useCategoryStore()
-      const accountStore = useAccountStore()
-      const tagStore = useTagStore()
-      const templateStore = useTemplateStore()
-      const currencyStore = useCurrencyStore()
-      const budgetStore = useBudgetStore()
-      const profileStore = useProfileStore()
+  async function syncEverything() {
+    const appStore = useAppStore()
+    if (!appStore.hasAuthToken) return
 
-      await Promise.all([
-        categoryStore.fetchCategories(),
-        accountStore.fetchAccounts(currencyStore.dashboardCurrency),
-        tagStore.fetchTags(),
-        templateStore.fetchTransactionTemplates(),
-        currencyStore.fetchCurrencies(),
-        budgetStore.fetchBudgets(),
-        currencyStore.fetchExchangeRate(),
-        profileStore.getProfiles(),
-      ])
+    const categoryStore = useCategoryStore()
+    const accountStore = useAccountStore()
+    const tagStore = useTagStore()
+    const templateStore = useTemplateStore()
+    const currencyStore = useCurrencyStore()
+    const budgetStore = useBudgetStore()
+    const profileStore = useProfileStore()
 
-      this.lastSync = new Date()
-    },
-  },
+    await Promise.all([
+      categoryStore.fetchCategories(),
+      accountStore.fetchAccounts(currencyStore.dashboardCurrency),
+      tagStore.fetchTags(),
+      templateStore.fetchTransactionTemplates(),
+      currencyStore.fetchCurrencies(),
+      budgetStore.fetchBudgets(),
+      currencyStore.fetchExchangeRate(),
+      profileStore.getProfiles(),
+    ])
+
+    lastSync.value = new Date()
+  }
+
+  return {
+    isLoading,
+    backendFilters,
+    month,
+    transactionsList,
+    transactionsListLastWeek,
+    transactionsWithTodo,
+    tagsWidgetModeOnlyRootTag,
+    lastSync,
+    isSyncRequiredByMissingExtras,
+    dashboardDateStart,
+    dashboardDateEnd,
+    isLoadingExtras,
+    init,
+    fetchDashboardTransactionsForInterval,
+    fetchDashboardTransactionsForWeek,
+    fetchTransactionsWithTodos,
+    fetchDashboard,
+    syncEverythingIfOld,
+    syncEverything,
+  }
 })

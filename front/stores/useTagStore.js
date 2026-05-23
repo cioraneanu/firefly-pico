@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
 import { keyBy, cloneDeep } from 'lodash-es'
 import { useLocalStorage } from '@vueuse/core'
 import TagRepository from '~/repository/TagRepository'
@@ -6,32 +7,45 @@ import TagTransformer from '~/transformers/TagTransformer'
 import { listToTree, setLevel, sortByPath, treeToList } from '~/utils/DataUtils'
 import LanguageUtils from '~/utils/LanguageUtils.js'
 
-export const useTagStore = defineStore('tag', {
-  state: () => ({
-    tagList: useLocalStorage('tagList', []),
-    isLoadingTags: false,
-  }),
+export const useTagStore = defineStore('tag', () => {
+  const tagList = useLocalStorage('tagList', [])
+  const isLoadingTags = ref(false)
 
-  getters: {
-    tagTodo: (state) => state.tagList.find((tag) => tag?.attributes?.is_todo),
-    tagDictionaryByName: (state) => keyBy(state.tagList, (item) => LanguageUtils.removeAccentsAndLowerCase(item?.attributes?.tag)),
-    tagDictionaryById: (state) => keyBy(state.tagList, 'id'),
-    tagListHierarchy: (state) => {
-      let sortedList = sortByPath(state.tagList, 'attributes.tag')
-      const tree = listToTree(sortedList)
-      return treeToList(tree)
-    },
-  },
+  const tagTodo = computed(() => {
+    return tagList.value.find((tag) => tag?.attributes?.is_todo)
+  })
 
-  actions: {
-    async fetchTags() {
-      this.isLoadingTags = true
-      const list = await new TagRepository().getAllWithMerge()
-      this.tagList = TagTransformer.transformFromApiList(list)
+  const tagDictionaryByName = computed(() => {
+    return keyBy(tagList.value, (item) => LanguageUtils.removeAccentsAndLowerCase(item?.attributes?.tag))
+  })
 
-      let newTags = cloneDeep(this.tagList)
-      setLevel(newTags)
-      this.isLoadingTags = false
-    },
-  },
+  const tagDictionaryById = computed(() => {
+    return keyBy(tagList.value, 'id')
+  })
+
+  const tagListHierarchy = computed(() => {
+    let sortedList = sortByPath(tagList.value, 'attributes.tag')
+    const tree = listToTree(sortedList)
+    return treeToList(tree)
+  })
+
+  async function fetchTags() {
+    isLoadingTags.value = true
+    const list = await new TagRepository().getAllWithMerge()
+    tagList.value = TagTransformer.transformFromApiList(list)
+
+    let newTags = cloneDeep(tagList.value)
+    setLevel(newTags)
+    isLoadingTags.value = false
+  }
+
+  return {
+    tagList,
+    isLoadingTags,
+    tagTodo,
+    tagDictionaryByName,
+    tagDictionaryById,
+    tagListHierarchy,
+    fetchTags,
+  }
 })
