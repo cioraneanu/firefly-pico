@@ -37,3 +37,5 @@ jobs:
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/firefly-pico:dev
           build-args: |
             APP_VERSION=${{ github.ref_name }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

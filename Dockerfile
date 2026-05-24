@@ -42,26 +42,30 @@ FROM base AS build-container
 # Installing composer
 COPY --from=composer_base /usr/bin/composer /usr/local/bin/composer
 
-#Configure backend
+#Configure backend - Step 1: Install dependencies
 WORKDIR /var/www/html
-COPY back/ .
-RUN mv .env.example .env
-
+COPY back/composer.json back/composer.lock ./
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_PROCESS_TIMEOUT=600
+RUN composer install --no-dev --no-scripts --no-autoloader
 
-RUN composer install --no-dev --optimize-autoloader
+#Configure backend - Step 2: Copy source and finalize
+COPY back/ .
+RUN mv .env.example .env
+RUN composer dump-autoload --no-dev --optimize
 RUN php artisan key:generate
 ARG APP_VERSION
 RUN echo $APP_VERSION > /var/www/html/VERSION
 RUN tar --owner=www-data --group=www-data --exclude=.git -czf /tmp/app-back.tar.gz .
 
-#Configure frontend
+#Configure frontend - Step 1: Install dependencies
 WORKDIR /var/www/html/front
-COPY front/ .
+COPY front/package.json front/package-lock.json front/.npmrc* ./
+RUN npm ci --ignore-scripts
 
-RUN npm install \
-    && NUXT_PUBLIC_VERSION="$APP_VERSION" npm run build
+#Configure frontend - Step 2: Copy source and build
+COPY front/ .
+RUN NUXT_PUBLIC_VERSION="$APP_VERSION" npm run build
 RUN npm prune --production
 RUN npm cache clean --force
 RUN tar --owner=www-data --group=www-data \
