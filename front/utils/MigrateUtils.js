@@ -1,4 +1,4 @@
-import { get, isEqual } from 'lodash'
+import { get, isEqual } from 'lodash-es'
 import Transaction from '~/models/Transaction'
 
 // TODO: Maybe make these functions return {shouldMigrate: true, value: x} so we can avoid unnecesary localStorage updates

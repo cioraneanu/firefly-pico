@@ -1,5 +1,5 @@
 import BaseModel from '~/models/BaseModel'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import BudgetTransformer from '~/transformers/BudgetTransformer.js'
 import BudgetRepository from '~/repository/BudgetRepository.js'
 

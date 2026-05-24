@@ -15,7 +15,7 @@
 import { format, getDate, isAfter, isBefore, isMonday, isSameDay, isSameMonth, isToday, isWeekend, startOfWeek, isFirstDayOfMonth } from 'date-fns'
 import { computed } from 'vue'
 import Transaction from '~/models/Transaction.js'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import { formatNumberForDashboard } from '~/utils/NumberUtils.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
 import RouteConstants from '~/constants/RouteConstants.js'
@@ -40,17 +40,17 @@ const tdClass = computed(() => {
 })
 
 const amountIncome = computed(() => {
-  let value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.income.code}`)
+  const value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.income.code}`)
   return value ? formatNumberForDashboard(value) : null
 })
 
 const amountExpense = computed(() => {
-  let value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.expense.code}`)
+  const value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.expense.code}`)
   return value ? formatNumberForDashboard(value) : null
 })
 
 const amountTransfer = computed(() => {
-  let value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.transfer.code}`)
+  const value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.transfer.code}`)
   return value ? formatNumberForDashboard(value) : null
 })
 
@@ -68,8 +68,8 @@ const dayStyle = computed(() => {
 })
 
 const onClick = async () => {
-  let excludedUrl = getExcludedTransactionUrl()
-  let filters = [
+  const excludedUrl = getExcludedTransactionUrl()
+  const filters = [
     TransactionFilterUtils.filters.dateAfter.toUrl(props.day),
     TransactionFilterUtils.filters.dateBefore.toUrl(props.day),
   ].join('&')

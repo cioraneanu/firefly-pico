@@ -1,5 +1,5 @@
 <template>
-  <app-select label="Date display" v-model="modelValue" v-model:showDropdown="showDropdown" :list="list" :columns="1" v-bind="dynamicAttrs" :has-search="false" />
+  <app-select v-model="modelValue" v-model:show-dropdown="showDropdown" label="Date display" :list="list" :columns="1" v-bind="dynamicAttrs" :has-search="false" />
 </template>
 
 <script setup>

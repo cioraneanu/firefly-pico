@@ -14,7 +14,7 @@
 
         <van-collapse v-model="visibleAccountTypes">
           <van-collapse-item v-for="{ accounts, typeName } in accountsGroupList" :title="typeName" :name="typeName">
-            <account-list-item v-for="item in accounts" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
+            <account-list-item v-for="item in accounts" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
           </van-collapse-item>
         </van-collapse>
       </van-list>
@@ -29,13 +29,13 @@ import { useList } from '~/composables/useList'
 import Account from '~/models/Account'
 import { useToolbar } from '~/composables/useToolbar'
 import { ref } from 'vue'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 
-let dataStore = useDataStore()
+const dataStore = useDataStore()
 
 const onEvent = (event, payload) => {
   if (event === 'onPostDelete') {

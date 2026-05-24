@@ -15,7 +15,7 @@
 
               <div>
                 <div class="flex-center-vertical gap-1">
-                  <transaction-type-dot :transactionType="transactionType" />
+                  <transaction-type-dot :transaction-type="transactionType" />
                   <div v-if="name" class="list-item-title" style="line-height: 18px !important">{{ name }}</div>
                 </div>
 
@@ -74,13 +74,13 @@
     </van-cell>
 
     <template #right>
-      <van-button @click="onDelete" class="delete-button" square type="danger" text="Delete" />
+      <van-button class="delete-button" square type="danger" text="Delete" @click="onDelete" />
     </template>
   </van-swipe-cell>
 </template>
 
 <script setup>
-import _, { get } from 'lodash'
+import _, { get } from 'lodash-es'
 
 import Account from '~/models/Account'
 import Category from '~/models/Category'

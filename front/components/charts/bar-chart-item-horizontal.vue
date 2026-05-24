@@ -17,7 +17,7 @@ const props = defineProps({
 })
 
 const barStyle = computed(() => {
-  let background = props.getBackground ? props.getBackground() : null
+  const background = props.getBackground ? props.getBackground() : null
   return {
     width: `${props.percent}%`,
     ...(background ? { background: background } : {}),

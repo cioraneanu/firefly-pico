@@ -1,14 +1,14 @@
 <template>
   <app-select
-    :label="label ?? $t('tags')"
     v-model="modelValue"
-    class=""
-    :popupTitle="$t('tags_select')"
-    v-model:showDropdown="showDropdown"
+    v-model:show-dropdown="showDropdown"
     v-model:search="search"
+    :label="label ?? $t('tags')"
+    class=""
+    :popup-title="$t('tags_select')"
     :list="filteredList"
-    :isMultiSelect="props.isMultiSelect"
-    :getDisplayValue="getDisplayValue"
+    :is-multi-select="props.isMultiSelect"
+    :get-display-value="getDisplayValue"
     v-bind="dynamicAttrs"
   >
 
@@ -17,11 +17,11 @@
     </template>
 
     <template #top-right>
-      <van-button size="small" @click="onRefresh" class="">
+      <van-button size="small" class="" @click="onRefresh">
         <app-icon :icon="TablerIconConstants.refresh" :stroke="1.7" size="14" />
       </van-button>
 
-      <van-button size="small" @click="onToggleDisplayMode" class="">
+      <van-button size="small" class="" @click="onToggleDisplayMode">
         <app-icon :icon="showGridIcon" :size="14" />
       </van-button>
     </template>
@@ -36,7 +36,7 @@
     <template #popup>
       <van-grid v-if="showTagSelectAsGrid" :column-num="3">
         <template v-for="(item, index) in filteredList" :key="index">
-          <van-grid-item @click="onSelectCell(item)" style="cursor: pointer" :class="getOptionClass(item)">
+          <van-grid-item style="cursor: pointer" :class="getOptionClass(item)" @click="onSelectCell(item)">
             <app-select-option :text="Tag.getDisplayNameEllipsized(item)" :icon="Tag.getIcon(item) ?? TablerIconConstants.tag" />
           </van-grid-item>
         </template>
@@ -55,9 +55,9 @@ import { useDataStore } from '~/stores/dataStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import Tag from '~/models/Tag'
 
-import { isEqual } from 'lodash/lang'
+import { isEqual } from 'lodash-es/lang'
 import TablerIconConstants from '~/constants/TablerIconConstants'
-import { uniqBy } from 'lodash/array.js'
+import { uniqBy } from 'lodash-es/array.js'
 
 const dataStore = useDataStore()
 const profileStore = useProfileStore()
@@ -82,7 +82,7 @@ const modelValue = defineModel()
 const showDropdown = ref(false)
 const search = ref('')
 
-let list = ref([])
+const list = ref([])
 const isLoading = ref(false)
 UIUtils.showLoadingWhen(isLoading)
 
@@ -112,10 +112,10 @@ onMounted(async () => {
 
 const onSelectCell = (item) => {
   if (props.isMultiSelect) {
-    let targetTags = props.autoSelectParents ? Tag.getTagWithParents(item) : [item]
+    const targetTags = props.autoSelectParents ? Tag.getTagWithParents(item) : [item]
 
     let newValue = modelValue.value ?? []
-    let isSelected = newValue.some((value) => {
+    const isSelected = newValue.some((value) => {
       const result = item.id === value.id
       return result
     })

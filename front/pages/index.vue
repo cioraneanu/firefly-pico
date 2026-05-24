@@ -10,7 +10,7 @@ import Page from '~/models/Page.js'
 
 const profileStore = useProfileStore()
 
-let startingPage = computed(() => {
+const startingPage = computed(() => {
   switch (profileStore.startingPage?.code) {
     case Page.types.transactionNew.code:
       return markRaw(TransactionCreate)

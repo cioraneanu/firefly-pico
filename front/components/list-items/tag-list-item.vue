@@ -9,7 +9,7 @@
             <app-icon :icon="icon ?? TablerIconConstants.tag" :size="TablerIconConstants.defaultSize" />
           </div>
 
-          <div class="separator"></div>
+          <div class="separator"/>
 
           <div class="second_column display-flex flex-column justify-content-center">
             <div class="flex-center-vertical gap-2 overflow-visible">
@@ -18,10 +18,10 @@
             </div>
             <div v-if="date" class="text-muted text-size-11">{{ $t('tag_page.end_date') }}: {{ date }}</div>
             <div v-if="description" class="text-muted text-size-11">{{ description }}</div>
-            <div class="app-icon-item"></div>
+            <div class="app-icon-item"/>
           </div>
 
-          <div class="flex-1"></div>
+          <div class="flex-1"/>
         </div>
       </template>
     </van-cell>
@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import { useDataStore } from '~/stores/dataStore'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import TablerIconConstants from '~/constants/TablerIconConstants'

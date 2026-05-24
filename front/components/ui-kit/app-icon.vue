@@ -1,5 +1,5 @@
 <template>
-  <component :is="props.icon" :fontControlled="false" :style="style" :stroke-width="props.stroke" class="svg-icon" :color-invertable="isColorInvertable" />
+  <component :is="props.icon" :font-controlled="false" :style="style" :stroke-width="props.stroke" class="svg-icon" :color-invertable="isColorInvertable" />
 </template>
 
 <script setup>

@@ -1,5 +1,5 @@
 import { watch } from 'vue'
-import { get, head } from 'lodash'
+import { get, head } from 'lodash-es'
 import MiniSearch from 'minisearch'
 
 export const useFuzzySearchResource = {

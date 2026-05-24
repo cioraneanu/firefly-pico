@@ -1,4 +1,4 @@
-import { cloneDeep, get } from 'lodash'
+import { cloneDeep, get } from 'lodash-es'
 import ApiTransformer from './ApiTransformer'
 import { useDataStore } from '~/stores/dataStore'
 import Transaction from '~/models/Transaction'

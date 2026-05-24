@@ -11,7 +11,7 @@
           <app-field v-model="item.name" :label="$t('name')" :rules="[rule.required()]" required />
         </van-cell-group>
 
-        <app-button-form-delete class="mx-3 mt-1" style="width: auto" v-if="itemId" @click="onDelete" />
+        <app-button-form-delete v-if="itemId" class="mx-3 mt-1" style="width: auto" @click="onDelete" />
         <app-button-form-save bottom=" - var(--van-tabbar-height) + 20px" @click="onSave" />
       </div>
     </app-popup>
@@ -23,7 +23,7 @@ import { IconPlus } from '@tabler/icons-vue'
 import { rule } from '~/utils/ValidationUtils.js'
 import ProfileRepository from '~/repository/ProfileRepository.js'
 import Profile from '~/models/Profile.js'
-import _, { cloneDeep, get } from 'lodash'
+import _, { cloneDeep, get } from 'lodash-es'
 import { ref } from 'vue'
 import { useDataStore } from '~/stores/dataStore.js'
 import CategoryTransformer from '~/transformers/CategoryTransformer.js'
@@ -49,13 +49,13 @@ const onEvent = (event, payload) => {
 
   // When creating a new Profile auto-select it
   if (event === useFormEvent.postSave) {
-    let newProfileId = get(payload, 'data.data.id')
+    const newProfileId = get(payload, 'data.data.id')
     newProfileId ? profileStore.profileActiveId = newProfileId : null
   }
   profileStore.getProfiles()
 }
 
-let { itemId, item, saveItem, onDelete } = useForm({
+const { itemId, item, saveItem, onDelete } = useForm({
   form: form,
   model: new Profile(),
   resetFields,

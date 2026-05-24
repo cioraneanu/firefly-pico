@@ -11,10 +11,9 @@
       <app-field-link :label="$t('show_transactions')" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
     </app-card-info>
 
-    <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
+    <van-form ref="form" :name="formName" class="" @submit="saveItem" @failed="onValidationError">
       <van-cell-group inset>
-        <app-field v-model="name" name="Description" :label="$t('description')" type="textarea" rows="1" autosize :icon="TablerIconConstants.fieldText2" :rules="[rule.required()]" required>
-        </app-field>
+        <app-field v-model="name" name="Description" :label="$t('description')" type="textarea" rows="1" autosize :icon="TablerIconConstants.fieldText2" :rules="[rule.required()]" required/>
 
         <icon-select v-model="icon" :list="avatarListIcons" />
 
@@ -27,7 +26,7 @@
         <account-liability-direction-select v-if="isLiability" v-model="liabilityDirection" name="accountLiabilityDirection" :rules="[rule.required()]" required />
 
 <!--        <app-field v-model="group" name="Description" :label="$t('account_page.account_group')" :icon="TablerIconConstants.fieldText2"> </app-field>-->
-        <app-field-dropdown v-model="group" :list="getGroupList" name="Description" :label="$t('account_page.account_group')" :icon="TablerIconConstants.fieldText2"> </app-field-dropdown>
+        <app-field-dropdown v-model="group" :list="getGroupList" name="Description" :label="$t('account_page.account_group')" :icon="TablerIconConstants.fieldText2"/>
 
         <app-boolean v-model="includeNetWorth" :label="$t('account_page.include_net_worth')" />
 
@@ -36,11 +35,11 @@
 
       <div style="margin: 16px" class="">
         <app-button-form-save />
-        <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
+        <app-button-form-delete v-if="itemId" class="mt-10" @click="onDelete" />
       </div>
     </van-form>
 
-    <account-adjust-balance :value="item" @result="onEvent" v-model:showDropdown="isAdjustBalanceVisible" />
+    <account-adjust-balance v-model:show-dropdown="isAdjustBalanceVisible" :value="item" @result="onEvent" />
   </div>
 </template>
 
@@ -49,7 +48,7 @@ import { ref } from 'vue';
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
@@ -64,8 +63,8 @@ import { rule } from '~/utils/ValidationUtils.js'
 import AppFieldDropdown from '~/components/ui-kit/app-field-dropdown.vue'
 import AccountRepository from '~/repository/AccountRepository.js'
 
-let dataStore = useDataStore()
-let profileStore = useProfileStore()
+const dataStore = useDataStore()
+const profileStore = useProfileStore()
 const route = useRoute()
 const { t } = useI18n()
 
@@ -93,7 +92,7 @@ const onEvent = (event, payload) => {
   }
 }
 
-let { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
   routeList: RouteConstants.ROUTE_ACCOUNT_LIST,
   routeForm: RouteConstants.ROUTE_ACCOUNT_ID,
@@ -146,7 +145,7 @@ const getGroupList = async (text) => {
 }
 
 const onNavigateToTransactionsList = async () => {
-  let filters = TransactionFilterUtils.filters.account.toUrl([item.value])
+  const filters = TransactionFilterUtils.filters.account.toUrl([item.value])
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
 }
 

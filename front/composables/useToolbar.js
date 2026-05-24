@@ -47,8 +47,6 @@ export function useToolbar() {
       subtitle.value = _subtitle
     }
 
-    console.log('init', {_backRoute, _backRouteDesktop})
-
     titleIcon.value = _titleIcon
     leftText.value = _leftText
     backRoute.value = _backRoute

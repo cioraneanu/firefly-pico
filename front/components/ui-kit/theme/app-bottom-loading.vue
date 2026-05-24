@@ -7,7 +7,7 @@
 
     <div v-if="dataStore.isSyncRequiredByMissingExtras" class="flex-center-vertical gap-2">
       <span class="text-size-12 font-weight-400">Found extras that require resync.</span>
-      <van-button @click="onResync" size="small"> Sync </van-button>
+      <van-button size="small" @click="onResync"> Sync </van-button>
     </div>
   </div>
 </template>

@@ -7,9 +7,9 @@
         <div class="text-muted text-size-12 px-3 mt-10 text-center">This will change the account opening balance</div>
 
         <div ref="popupContentRef" class="display-flex flex-column flex-1 overflow-auto mt-20">
-          <app-field label="New amount" :icon="TablerIconConstants.fieldText2" v-model="newAmount" />
+          <app-field v-model="newAmount" label="New amount" :icon="TablerIconConstants.fieldText2" />
           <div class="flex-1" />
-          <van-button @click="onSave" round type="primary" native-type="submit" class="mx-3 mb-20 shadow-depth2">Save </van-button>
+          <van-button round type="primary" native-type="submit" class="mx-3 mb-20 shadow-depth2" @click="onSave">Save </van-button>
         </div>
       </div>
     </app-popup>
@@ -17,10 +17,10 @@
 </template>
 
 <script setup>
-import { cloneDeep, get } from 'lodash'
+import { cloneDeep, get } from 'lodash-es'
 import { useDataStore } from '~/stores/dataStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
-import { isEqual } from 'lodash/lang'
+import { isEqual } from 'lodash-es/lang'
 import { useSwipeToDismiss } from '~/composables/useSwipeToDismiss'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import AccountRepository from '~/repository/AccountRepository.js'
@@ -58,12 +58,12 @@ watch(showDropdown, (newValue) => {
 
 const onSave = async () => {
   UIUtils.showToastLoading('Adjusting...')
-  let accountId = get(props.value, 'id')
+  const accountId = get(props.value, 'id')
   let accountBody = cloneDeep(props.value)
-  let amountOffset = parseFloat(newAmount.value) - parseFloat(get(props.value, 'attributes.current_balance'))
+  const amountOffset = parseFloat(newAmount.value) - parseFloat(get(props.value, 'attributes.current_balance'))
   accountBody.attributes.opening_balance = parseFloat(accountBody.attributes.opening_balance) + amountOffset
   accountBody = AccountTransformer.transformToApi(accountBody)
-  let response = await new AccountRepository().update(accountId, accountBody)
+  const response = await new AccountRepository().update(accountId, accountBody)
   emits('result', 'onPostSave', response)
 
   UIUtils.stopToastLoading()

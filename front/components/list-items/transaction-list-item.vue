@@ -55,23 +55,22 @@
               <div class="text-muted">{{ timeAgo }}</div>
             </div>
 
-            <div class="flex-center-vertical text-muted text-size-12 gap-1"></div>
+            <div class="flex-center-vertical text-muted text-size-12 gap-1" />
           </div>
         </div>
       </template>
     </van-cell>
 
     <template #right>
-      <van-button @click="onDelete" class="delete-button" square type="danger" text="Delete" />
+      <van-button class="delete-button" square type="danger" text="Delete" @click="onDelete" />
     </template>
   </van-swipe-cell>
 </template>
 
 <script setup>
-import { capitalize, get, head, isEqual } from 'lodash'
+import { capitalize, get, isEqual } from 'lodash-es'
 import Category from '@/models/Category.js'
 import DateUtils from '~/utils/DateUtils'
-import { format } from 'date-fns'
 import Transaction from '~/models/Transaction'
 import Budget from '~/models/Budget.js'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
@@ -83,7 +82,6 @@ import TransactionSplitBadge from '~/components/transaction/transaction-split-ba
 import { transactionListField } from '~/constants/TransactionConstants.js'
 import { marked } from 'marked'
 import { formatTimeAgo } from '@vueuse/core'
-import { IconPhoto } from '@tabler/icons-vue'
 
 const props = defineProps({
   value: Object,
@@ -96,38 +94,25 @@ const dataStore = useDataStore()
 
 const emit = defineEmits(['onEdit', 'onDelete'])
 
-const transactions = computed(() => get(props.value, 'attributes.transactions', []))
-const firstTransaction = computed(() => head(transactions.value))
+const firstTransaction = computed(() => Transaction.getFirstSplit(props.value))
 const transactionType = computed(() => get(firstTransaction.value, 'type', ' - '))
 
-const isSplitPayment = computed(() => transactions.value.length > 1)
+const isSplitPayment = computed(() => Transaction.isSplitPayment(props.value))
 
 const displayedAccounts = computed(() => {
   return [sourceAccount.value, destinationAccount.value].filter((item) => !!item)
 })
 
-const description = computed(() => get(props.value, 'attributes.group_title') ?? get(firstTransaction.value, 'description') ?? ' - ')
-const hasAttachments = computed(() => transactions.value.some((item) => item.has_attachments))
+const description = computed(() => Transaction.getDescription(props.value))
+const hasAttachments = computed(() => Transaction.hasAttachments(props.value))
 
-const categories = computed(() => {
-  return transactions.value
-    .map((item) => item.category)
-    .flat()
-    .filter(Boolean)
-    .uniqBy('id')
-})
+const categories = computed(() => Transaction.getCategories(props.value))
 const notes = computed(() => {
-  let result = get(firstTransaction.value, 'notes')
+  const result = Transaction.getNotes(props.value)
   return result ? marked(result) : null
 })
 
-const tags = computed(() => {
-  return transactions.value
-    .map((item) => item.tags)
-    .flat()
-    .filter(Boolean)
-    .uniqBy('id')
-})
+const tags = computed(() => Transaction.getTags(props.value))
 
 const budget = computed(() => get(firstTransaction.value, 'budget'))
 
@@ -150,30 +135,29 @@ const isTypeTransfer = computed(() => isEqual(transactionType.value, Transaction
 
 const date = computed(() => DateUtils.autoToDate(get(firstTransaction.value, 'date')))
 const dateFormatted = computed(() => DateUtils.dateToUI(date.value))
-const dayOfWeek = computed(() => DateUtils.dateToString(date.value, 'EEEEEE'))
 const timeAgo = computed(() => capitalize(formatTimeAgo(date.value)))
 
 const destinationAccount = computed(() => {
-  let destinationId = get(firstTransaction.value, 'destination_id')
+  const destinationId = get(firstTransaction.value, 'destination_id')
   return get(dataStore.accountDictionary, destinationId)
 })
 
 const sourceAccount = computed(() => {
-  let sourceId = get(firstTransaction.value, 'source_id')
+  const sourceId = get(firstTransaction.value, 'source_id')
   return get(dataStore.accountDictionary, sourceId)
 })
 
 const profileStore = useProfileStore()
 const getStyleForField = ({ code }) => {
-  let position = profileStore.transactionListFieldsConfig.findIndex((item) => item.code === code)
-  let field = profileStore.transactionListFieldsConfig.find((item) => item.code === code)
-  let isVisible = field ? field.isVisible : true
-  let displayStyle = isVisible ? '' : 'display: none'
+  const position = profileStore.transactionListFieldsConfig.findIndex((item) => item.code === code)
+  const field = profileStore.transactionListFieldsConfig.find((item) => item.code === code)
+  const isVisible = field ? field.isVisible : true
+  const displayStyle = isVisible ? '' : 'display: none'
 
   return `order: ${position}; ${displayStyle}`
 }
 
-const onEdit = async (e) => {
+const onEdit = async () => {
   emit('onEdit', props.value)
 }
 
@@ -191,6 +175,7 @@ const amountStyle = computed(() => {
   if (isTypeTransfer.value) {
     return `color: var(--transfer1)`
   }
+  return ''
 })
 
 const swipeCell = ref(null)

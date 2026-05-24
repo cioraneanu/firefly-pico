@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import _, { get, isEmpty, isEqual } from 'lodash'
+import _, { get, isEmpty, isEqual } from 'lodash-es'
 import DateUtils from '~/utils/DateUtils'
 import { format } from 'date-fns'
 import Account from '~/models/Account.js'
@@ -75,7 +75,7 @@ const accountIcons = computed(() => {
 })
 
 const tagIcon = computed(() => {
-  let sortedTags = sortByPath(tags.value, 'attributes.parent_id', false)
+  const sortedTags = sortByPath(tags.value, 'attributes.parent_id', false)
   return get(sortedTags, '0.attributes.icon.icon') ?? TablerIconConstants.tag
 })
 const categoryIcon = computed(() => {

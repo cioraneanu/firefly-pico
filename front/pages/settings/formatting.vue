@@ -2,15 +2,15 @@
   <div class="app-form">
     <app-top-toolbar />
 
-    <van-form @submit="onSave" class="">
+    <van-form class="" @submit="onSave">
       <van-cell-group inset>
         <div class="van-cell-group-title">{{ $t('settings.general') }}:</div>
 
         <app-select
-          :label="$t('settings.formatting.numbers_format') + ':'"
-          :popupTitle="$t('settings.formatting.select_numbers_format')"
           v-model="numberFormat"
-          v-model:showDropdown="isDropdownNumberFormatVisible"
+          v-model:show-dropdown="isDropdownNumberFormatVisible"
+          :label="$t('settings.formatting.numbers_format') + ':'"
+          :popup-title="$t('settings.formatting.select_numbers_format')"
           :list="numberFormatList"
           :columns="1"
           :has-search="false"
@@ -20,10 +20,10 @@
         />
 
         <app-select
-          :label="$t('settings.formatting.date_format')"
-          :popupTitle="$t('settings.formatting.select_date_format')"
           v-model="dateFormat"
-          v-model:showDropdown="isDropdownDateFormatVisible"
+          v-model:show-dropdown="isDropdownDateFormatVisible"
+          :label="$t('settings.formatting.date_format')"
+          :popup-title="$t('settings.formatting.select_date_format')"
           :list="dateFormatList"
           :columns="1"
           :has-search="false"
@@ -36,11 +36,11 @@
       <van-cell-group inset>
         <div class="van-cell-group-title">{{ $t('settings.formatting.casing') }}:</div>
 
-        <app-boolean :label="$t('settings.formatting.force_transaction_description_lowercase')" v-model="lowerCaseTransactionDescription" />
-        <app-boolean :label="$t('settings.formatting.force_account_name_lowercase')" v-model="lowerCaseAccountName" />
-        <app-boolean :label="$t('settings.formatting.force_category_name_lowercase')" v-model="lowerCaseCategoryName" />
-        <app-boolean :label="$t('settings.formatting.force_tag_name_lowercase')" v-model="lowerCaseTagName" />
-        <app-boolean :label="$t('settings.formatting.strip_accents')" v-model="stripAccents" />
+        <app-boolean v-model="lowerCaseTransactionDescription" :label="$t('settings.formatting.force_transaction_description_lowercase')" />
+        <app-boolean v-model="lowerCaseAccountName" :label="$t('settings.formatting.force_account_name_lowercase')" />
+        <app-boolean v-model="lowerCaseCategoryName" :label="$t('settings.formatting.force_category_name_lowercase')" />
+        <app-boolean v-model="lowerCaseTagName" :label="$t('settings.formatting.force_tag_name_lowercase')" />
+        <app-boolean v-model="stripAccents" :label="$t('settings.formatting.strip_accents')" />
       </van-cell-group>
 
       <app-button-form-save />
@@ -98,7 +98,7 @@ watchSettingsStore(syncedSettings)
 
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
-  let response = await profileStore.writeProfile()
+  const response = await profileStore.writeProfile()
   ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
 }
 

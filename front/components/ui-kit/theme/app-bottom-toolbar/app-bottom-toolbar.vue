@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { isEqual } from 'lodash'
+import { isEqual } from 'lodash-es'
 import { useDataStore } from '~/stores/dataStore.js'
 import { useProfileStore } from '~/stores/profileStore.js'
 import RouteConstants from '~/constants/RouteConstants.js'

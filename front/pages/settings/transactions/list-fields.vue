@@ -2,7 +2,7 @@
   <div class="app-form">
     <app-top-toolbar />
 
-    <van-form @submit="onSave" class="">
+    <van-form class="" @submit="onSave">
       <van-cell-group inset class="">
         <div class="van-cell-group-title mb-0">{{ $t('settings.transactions.list_fields.fields') }}:</div>
 
@@ -23,9 +23,9 @@
 
       <van-cell-group inset>
         <app-select
-          :popupTitle="$t('settings.transactions.list_fields.select_hero_icons')"
           v-model="heroIcons"
-          v-model:showDropdown="isHeroIconsDropdownVisible"
+          v-model:show-dropdown="isHeroIconsDropdownVisible"
+          :popup-title="$t('settings.transactions.list_fields.select_hero_icons')"
           :list="heroIconsList"
           :is-multi-select="true"
           :columns="1"
@@ -76,7 +76,7 @@ const onClickIsVisible = (element) => {
 }
 
 const init = () => {
-  let isListOk = profileStore.transactionListFieldsConfig.length === transactionListFieldList.length
+  const isListOk = profileStore.transactionListFieldsConfig.length === transactionListFieldList.length
   fieldsList.value = isListOk ? profileStore.transactionListFieldsConfig : transactionListFieldList
 }
 
@@ -95,7 +95,7 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   profileStore.transactionListFieldsConfig = fieldsList.value
   saveSettingsToStore(syncedSettings)
-  let response = await profileStore.writeProfile()
+  const response = await profileStore.writeProfile()
   ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
   init()
 }

@@ -1,6 +1,6 @@
 import axios from 'axios'
 import BaseRepository from '~/repository/BaseRepository'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 
 export default class ProfileRepository extends BaseRepository {
   constructor() {

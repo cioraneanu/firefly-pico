@@ -1,7 +1,7 @@
 import BaseModel from '~/models/BaseModel'
 import TagRepository from '~/repository/TagRepository'
 import TagTransformer from '~/transformers/TagTransformer'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import { ellipsizeText } from '~/utils/Utils.js'
 
 export default class Tag extends BaseModel {

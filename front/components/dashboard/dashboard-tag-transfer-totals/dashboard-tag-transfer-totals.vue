@@ -8,7 +8,7 @@
     </div>
     <div class="display-flex flex-column ml-15 mr-15">
       <table>
-        <tr v-for="bar in barsList" @click="onShowActionSheet(bar)" class="cursor-pointer">
+        <tr v-for="bar in barsList" class="cursor-pointer" @click="onShowActionSheet(bar)">
           <td style="width: 1%">
             <div class="flex-center-vertical gap-1 my-1">
               <app-icon :icon="Tag.getIcon(bar.tag) ?? TablerIconConstants.tag" :size="20" />
@@ -17,7 +17,7 @@
           </td>
 
           <td>
-            <bar-chart-item-horizontal :percent="bar.percent" :getBackground="getBarColor"/>
+            <bar-chart-item-horizontal :percent="bar.percent" :get-background="getBarColor"/>
           </td>
 
           <td style="width: 1%">
@@ -31,7 +31,7 @@
   </van-cell-group>
 </template>
 <script setup>
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
 import Tag from '~/models/Tag.js'
@@ -89,7 +89,7 @@ const onGoToTag = async (tag) => {
 const onGoToTransactions = async (tag) => {
   const startDate = DateUtils.dateToString(dataStore.dashboardDateStart)
   const endDate = DateUtils.dateToString(dataStore.dashboardDateEnd)
-  let excludedUrl = getExcludedTransactionUrl()
+  const excludedUrl = getExcludedTransactionUrl()
 
   if (!tag) {
     await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_tag=true&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.transfer.code}${excludedUrl}`)

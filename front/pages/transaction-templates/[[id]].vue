@@ -17,12 +17,12 @@
           <span>{{ $t('transaction_template_page.extra_names') }}</span>
           <app-repeater v-model="extra_names" :empty-item="{ value: '' }">
             <template #content="{ element, index }">
-              <app-field placeholder="Name" v-model="element.value" class="compact" :name="`extra-name-${index}`" required :rules="[rule.required()]" />
+              <app-field v-model="element.value" placeholder="Name" class="compact" :name="`extra-name-${index}`" required :rules="[rule.required()]" />
             </template>
           </app-repeater>
         </div>
 
-        <transaction-amount-field v-model:amount="amount" ref="refAmount" />
+        <transaction-amount-field ref="refAmount" v-model:amount="amount" />
 
         <account-select v-model="account_source" :label="$t('transaction.source_account')" :allowed-types="accountSourceAllowedTypes" />
 
@@ -43,7 +43,7 @@
       <div style="margin: 16px">
         <app-button-form-save />
 
-        <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
+        <app-button-form-delete v-if="itemId" class="mt-10" @click="onDelete" />
       </div>
     </van-form>
   </div>
@@ -54,7 +54,7 @@ import { ref } from 'vue';
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
-import _, { get } from 'lodash'
+import _, { get } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
@@ -74,8 +74,8 @@ const refAmount = ref(null)
 
 // ------------------------------------
 
-let dataStore = useDataStore()
-let profileStore = useProfileStore()
+const dataStore = useDataStore()
+const profileStore = useProfileStore()
 const route = useRoute()
 const { t } = useI18n()
 
@@ -92,7 +92,7 @@ const onEvent = (event, payload) => {
   }
 }
 
-let { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
   routeList: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST,
   routeForm: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID,

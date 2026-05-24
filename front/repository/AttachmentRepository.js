@@ -1,6 +1,6 @@
 import BaseRepository from '~/repository/BaseRepository'
 import axios from 'axios'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import { getGUID } from '~/utils/Utils.js'
 import { translate } from '~/plugins/plugin-i18n.js'
 

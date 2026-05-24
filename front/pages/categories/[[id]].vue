@@ -10,7 +10,7 @@
       <app-field-link :label="$t('show_transactions')" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
     </app-card-info>
 
-    <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
+    <van-form ref="form" :name="formName" class="" @submit="saveItem" @failed="onValidationError">
       <van-cell-group inset>
         <app-field v-model="name" name="name" :label="$t('name')" rows="1" autosize :icon="TablerIconConstants.fieldText2" :rules="[rule.required()]" />
 
@@ -20,7 +20,7 @@
       <div style="margin: 16px">
         <app-button-form-save />
 
-        <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
+        <app-button-form-delete v-if="itemId" class="mt-10" @click="onDelete" />
       </div>
     </van-form>
   </div>
@@ -31,7 +31,7 @@ import { ref } from 'vue';
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
-import _ from 'lodash'
+import _ from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
@@ -42,8 +42,8 @@ import CategoryTransformer from '~/transformers/CategoryTransformer'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
 
-let dataStore = useDataStore()
-let profileStore = useProfileStore()
+const dataStore = useDataStore()
+const profileStore = useProfileStore()
 const route = useRoute()
 
 const form = ref(null)
@@ -68,7 +68,7 @@ const onEvent = (event, payload) => {
   }
 }
 
-let { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
   routeList: RouteConstants.ROUTE_CATEGORY_LIST,
   routeForm: RouteConstants.ROUTE_CATEGORY_ID,
@@ -94,7 +94,7 @@ watch(name, (newValue) => {
 })
 
 const onNavigateToTransactionsList = async () => {
-  let filters = TransactionFilterUtils.filters.category.toUrl(item.value)
+  const filters = TransactionFilterUtils.filters.category.toUrl(item.value)
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
 }
 

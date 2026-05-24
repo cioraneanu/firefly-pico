@@ -1,14 +1,14 @@
 <template>
   <app-select
-    :label="$t('account_page.liability_direction')"
-    :popupTitle="$t('account_page.liability_direction')"
     v-model="modelValue"
-    v-model:showDropdown="showDropdown"
+    v-model:show-dropdown="showDropdown"
+    :label="$t('account_page.liability_direction')"
+    :popup-title="$t('account_page.liability_direction')"
     :list="list"
     :columns="1"
     v-bind="dynamicAttrs"
     :has-search="false"
-    :getDisplayValue="getDisplayValue"
+    :get-display-value="getDisplayValue"
   >
     <template #left-icon>
       <app-icon :icon="TablerIconConstants.fieldSelect2" :size="20" />

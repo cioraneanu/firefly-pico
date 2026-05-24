@@ -10,14 +10,14 @@
       </div>
     </div>
     <div>
-      <transaction-list-item v-for="transaction in dataStore.dashboard.transactionsWithTodo" :key="transaction.id" :value="transaction" :is-detailed-mode="false" @onEdit="onEditTransaction" />
+      <transaction-list-item v-for="transaction in dataStore.dashboard.transactionsWithTodo" :key="transaction.id" :value="transaction" :is-detailed-mode="false" @on-edit="onEditTransaction" />
     </div>
   </van-cell-group>
 </template>
 <script setup>
 import RouteConstants from '~/constants/RouteConstants.js'
 import { TUTORIAL_CONSTANTS } from '~/constants/TutorialConstants.js'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 
 const dataStore = useDataStore()
 

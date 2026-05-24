@@ -1,13 +1,13 @@
 <template>
   <app-select
-    :label="label ?? $t('icon')"
-    :popupTitle="$t('icon_select')"
     v-model="modelValue"
-    v-model:showDropdown="showDropdown"
+    v-model:show-dropdown="showDropdown"
     v-model:search="search"
+    :label="label ?? $t('icon')"
+    :popup-title="$t('icon_select')"
     :list="filteredList"
     :columns="6"
-    :getDisplayValue="getDisplayValue"
+    :get-display-value="getDisplayValue"
     v-bind="dynamicAttrs"
   >
     <template #left-icon>
@@ -22,7 +22,7 @@
     <template #item="{ item }">
       <div class="flex-center flex-column mt-5 text-size-12">
         <app-icon :icon="item.icon" style="width: 30px"/>
-        <div class="app-icon-item"></div>
+        <div class="app-icon-item"/>
       </div>
     </template>
   </app-select>

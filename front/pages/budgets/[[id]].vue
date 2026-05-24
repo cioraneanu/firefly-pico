@@ -6,7 +6,7 @@
       </template>
     </app-top-toolbar>
 
-    <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
+    <van-form ref="form" :name="formName" class="" @submit="saveItem" @failed="onValidationError">
       <app-card-info v-if="itemId">
         <div class="van-cell-group-title">{{ $t('status') }}:</div>
         <div class="px-3 pb-15 flex-column text-size-12">
@@ -36,7 +36,7 @@
       <div style="margin: 16px">
         <app-button-form-save />
 
-        <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
+        <app-button-form-delete v-if="itemId" class="mt-10" @click="onDelete" />
       </div>
     </van-form>
   </div>
@@ -47,7 +47,7 @@ import { ref } from 'vue';
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
-import _, { get } from 'lodash'
+import _, { get } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
@@ -61,8 +61,8 @@ import BudgetLimit from '~/models/BudgetLimit.js'
 import { rule } from '~/utils/ValidationUtils.js'
 import { TUTORIAL_CONSTANTS } from '~/constants/TutorialConstants.js'
 
-let dataStore = useDataStore()
-let profileStore = useProfileStore()
+const dataStore = useDataStore()
+const profileStore = useProfileStore()
 const route = useRoute()
 
 const form = ref(null)
@@ -96,7 +96,7 @@ const onEvent = (event, payload) => {
   }
 }
 
-let { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
   routeList: RouteConstants.ROUTE_BUDGET_LIST,
   routeForm: RouteConstants.ROUTE_BUDGET_ID,
@@ -124,7 +124,7 @@ watch(name, (newValue) => {
 })
 
 const onNavigateToTransactionsList = async () => {
-  let filters = TransactionFilterUtils.filters.budget.toUrl(item.value)
+  const filters = TransactionFilterUtils.filters.budget.toUrl(item.value)
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
 }
 

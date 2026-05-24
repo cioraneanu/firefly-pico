@@ -8,11 +8,11 @@
 
     <div class="mb-10" />
 
-    <transaction-assistant v-if="!itemId && !isCloning" @change="onAssistant" @keyup.enter="saveItem" v-model="assistantText" />
+    <transaction-assistant v-if="!itemId && !isCloning" v-model="assistantText" @change="onAssistant" @keyup.enter="saveItem" />
 
     <transaction-type-tabs v-model="type" class="mx-3 mt-1 mb-1" />
 
-    <van-form :disabled="isSplitTransaction" :name="formName" class="transaction-form-group" ref="form" @submit="saveItem" @failed="onValidationError">
+    <van-form ref="form" :disabled="isSplitTransaction" :name="formName" class="transaction-form-group" @submit="saveItem" @failed="onValidationError">
       <van-cell-group inset class="dynamic-masonry display-flex-column">
         <div v-if="isSplitTransaction" class="display-flex ml-3 mt-3">
           <transaction-split-badge />
@@ -20,14 +20,14 @@
 
         <transaction-amount-field
           v-model:amount="amount"
-          v-model:amountForeign="amountForeign"
-          v-model:currencyForeign="currencyForeign"
+          v-model:amount-foreign="amountForeign"
+          v-model:currency-foreign="currencyForeign"
           :currency="sourceCurrency"
-          :isForeignAmountVisible="isForeignAmountVisible"
+          :is-foreign-amount-visible="isForeignAmountVisible"
           name="amount"
           :style="getStyleForField(transactionFormField.amount)"
           :disabled="isSplitTransaction"
-          :isAmountRequired="true"
+          :is-amount-required="true"
         />
 
         <account-select
@@ -40,7 +40,7 @@
           <template #label>
             <div class="flex-center-vertical gap-1">
               <div class="flex-1">{{ $t('transaction.source_account') }}</div>
-              <van-button v-if="showSourceAccountSuggestion" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_FORM_VALUES)" size="mini" class="suggestion-button cursor-pointer"
+              <van-button v-if="showSourceAccountSuggestion" size="mini" class="suggestion-button cursor-pointer" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_FORM_VALUES)"
                 >Set your default
               </van-button>
             </div>
@@ -91,15 +91,15 @@
       </van-cell-group>
 
       <div style="margin: 16px; position: relative">
-        <app-button-form-delete class="mt-10" v-if="itemId && !isSplitTransaction" @click="onDelete" />
+        <app-button-form-delete v-if="itemId && !isSplitTransaction" class="mt-10" @click="onDelete" />
 
         <div class="display-flex gap-1">
-          <van-button v-if="itemId && !isSplitTransaction" @click="onCreateClone" block type="default" class="mt-2 flex-1 cursor-pointer">
+          <van-button v-if="itemId && !isSplitTransaction" block type="default" class="mt-2 flex-1 cursor-pointer" @click="onCreateClone">
             <app-icon :icon="TablerIconConstants.clone" />
             {{ $t('clone') }}
           </van-button>
 
-          <van-button v-if="itemId && !isSplitTransaction" @click="onCreateTransactionTemplate" block type="default" class="mt-2 flex-1 cursor-pointer">
+          <van-button v-if="itemId && !isSplitTransaction" block type="default" class="mt-2 flex-1 cursor-pointer" @click="onCreateTransactionTemplate">
             <app-icon :icon="TablerIconConstants.transactionTemplate" />
             {{ $t('transaction.make_template') }}
           </van-button>
@@ -118,7 +118,7 @@
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
 import { useDataStore } from '~/stores/dataStore'
-import _, { get, head, isEqual } from 'lodash'
+import _, { get, head, isEqual } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
@@ -145,15 +145,16 @@ import TransactionNoteField from '~/components/transaction/transaction-note-fiel
 import TransactionAttachmentsList from '~/components/transaction/transaction-attachements/transaction-attachments-list.vue'
 import AttachmentRepository from '~/repository/AttachmentRepository.js'
 import AttachmentTransformer from '~/transformers/AttachmentTransformer.js'
+import { useTransactionFormLogic } from '~/composables/useTransactionFormLogic.js'
 
-let dataStore = useDataStore()
-let profileStore = useProfileStore()
+const dataStore = useDataStore()
+const profileStore = useProfileStore()
 const route = useRoute()
 
 const form = ref(null)
 const assistantText = ref('')
 
-let { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
   routeList: RouteConstants.ROUTE_TRANSACTION_LIST,
   routeForm: RouteConstants.ROUTE_TRANSACTION_ID,
@@ -189,8 +190,8 @@ const accountDestinationAllowedTypes = computed(() => Account.getAccountTypesFor
 const sourceCurrency = computed(() => Account.getCurrency(accountSource.value))
 
 const isForeignAmountVisible = computed(() => {
-  let newTransactionWithDefaultCurrency = !itemId.value && (profileStore.defaultForeignCurrency || profileStore.isForeignCurrencyAlwaysVisible)
-  let areTypeAssetsWithDifferentCurrencies =
+  const newTransactionWithDefaultCurrency = !itemId.value && (profileStore.defaultForeignCurrency || profileStore.isForeignCurrencyAlwaysVisible)
+  const areTypeAssetsWithDifferentCurrencies =
     accountSource.value &&
     accountDestination.value &&
     Account.getType(accountSource.value)?.fireflyCode === Account.types.asset.fireflyCode &&
@@ -203,12 +204,30 @@ const isForeignAmountVisible = computed(() => {
 
 // ----- Custom logic -----
 
+const { onAssistant, attemptAccountsFix } = useTransactionFormLogic({
+  item,
+  itemId,
+  category,
+  tags,
+  description,
+  type,
+  accountSource,
+  accountDestination,
+  amount,
+  amountForeign,
+  currencyForeign,
+  notes,
+  budget,
+  dataStore,
+  profileStore
+})
+
 const onSubDay = () => {
   date.value = addDays(date.value, -1)
 }
 
 const onToday = () => {
-  let newDate = startOfToday()
+  const newDate = startOfToday()
   newDate.setHours(getHours(date.value), getMinutes(date.value), 0)
   date.value = newDate
 }
@@ -224,101 +243,18 @@ const onCreateClone = async () => {
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_ID}?transaction_id=${itemId.value}`)
 }
 
-const onTransactionTemplateSelected = async (transactionTemplate) => {
-  if (!transactionTemplate) {
-    item.value = new Transaction().getEmpty()
-    return
-  }
-  type.value = transactionTemplate.type
 
-  amount.value = transactionTemplate.amount
-  if (transactionTemplate.account_source_id) {
-    accountSource.value = dataStore.accountDictionary[transactionTemplate.account_source_id]
-  }
-
-  if (transactionTemplate.account_destination_id) {
-    accountDestination.value = dataStore.accountDictionary[transactionTemplate.account_destination_id]
-  }
-
-  description.value = transactionTemplate.description
-  category.value = transactionTemplate.category
-  notes.value = transactionTemplate.notes
-  tags.value = transactionTemplate.tags
-  budget.value = transactionTemplate.budget
-}
-
-watch(category, async (newValue) => {
-  if (!profileStore.copyCategoryToDescription || !isStringEmpty(description.value) || itemId.value || !newValue) {
-    return
-  }
-  description.value = Category.getDisplayName(newValue)
-})
-
-watch(tags, async (newValue) => {
-  if (itemId.value || !newValue) {
-    return
-  }
-
-  // Give child tags more priority for more granularity
-  const sortedTagNames = sortByPath(newValue, 'level', false).map((tag) => Tag.getDisplayNameEllipsized(tag))
-
-  if (profileStore.copyTagToDescription && isStringEmpty(description.value)) {
-    // The first one is the one with the highest level
-    let descriptionValue = head(sortedTagNames) ?? ''
-    description.value = profileStore.lowerCaseTransactionDescription ? descriptionValue.toLowerCase() : descriptionValue
-  }
-
-  if (profileStore.copyTagToCategory && !category.value) {
-    for (let tagName of sortedTagNames) {
-      let foundCategory = dataStore.categoryList.find((category) => tagName.toLowerCase() === Category.getDisplayName(category).toLowerCase())
-      if (foundCategory) {
-        category.value = foundCategory
-        break
-      }
-    }
-  }
-})
-
-const resetFormFields = () => {
-  item.value = new Transaction().getEmpty()
-}
-
-const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemplate: transactionTemplate, amount: newAmount, description: newDescription, isTodo: newIsTodo, assistantCurrency }) => {
-  resetFormFields()
-
-  newTag && (tags.value = Tag.getTagWithParents(newTag))
-  newIsTodo && dataStore.tagTodo && (tags.value = [...tags.value, dataStore.tagTodo])
-  newCategory && (category.value = newCategory)
-  transactionTemplate ? await onTransactionTemplateSelected(transactionTemplate) : (type.value = Transaction.types.expense)
-
-  if (newAmount && newAmount > 0) {
-    if (!assistantCurrency || !accountSource.value || Account.getCurrencyCode(accountSource.value) === Currency.getCode(assistantCurrency)) {
-      amount.value = newAmount
-    } else {
-      amountForeign.value = newAmount
-      currencyForeign.value = assistantCurrency
-      // Attempt to compute "amount" via exchange rate
-      if (accountSource.value) {
-        let sourceAccountDecimalPlaces = Account.getCurrencyDecimalPlaces(accountSource.value)
-        amount.value = convertCurrency(amountForeign.value, Currency.getCode(currencyForeign.value), Account.getCurrencyCode(accountSource.value)).toFixed(sourceAccountDecimalPlaces)
-      }
-    }
-  }
-
-  newDescription && (description.value = newDescription)
-  attemptAccountsFix()
-}
 
 const isTypeExpense = computed(() => isEqual(type.value, Transaction.types.expense))
 const isTypeIncome = computed(() => isEqual(type.value, Transaction.types.income))
 const isTypeTransfer = computed(() => isEqual(type.value, Transaction.types.transfer))
 
 const getStyleForField = (fieldType) => {
-  let fieldCode = fieldType.code
-  let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
-  let field = profileStore.transactionFormFieldsConfig.find((item) => item.code === fieldCode)
-  let isVisible = field ? field.isVisible : true
-  let displayStyle = isVisible ? '' : 'display: none'
+  const fieldCode = fieldType.code
+  const position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
+  const field = profileStore.transactionFormFieldsConfig.find((item) => item.code === fieldCode)
+  const isVisible = field ? field.isVisible : true
+  const displayStyle = isVisible ? '' : 'display: none'
 
   if (isTypeExpense.value) {
     return `order: ${position}; ${displayStyle}`
@@ -341,7 +277,7 @@ const getStyleForField = (fieldType) => {
     if ([transactionFormField.sourceAccount.code, transactionFormField.destinationAccount.code].includes(fieldCode)) {
       return `order: 0`
     }
-    let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
+    const position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
     return `order: ${position}; ${displayStyle}`
   }
 
@@ -375,23 +311,6 @@ watch(type, (newValue, oldValue) => {
   attemptAccountsFix()
 })
 
-// Check if source / destination accounts still make sense and attempt to fix them :)
-const attemptAccountsFix = () => {
-  let { source, destination } = Transaction.attemptAccountFixOnTypeChange(type.value, accountSource.value, accountDestination.value)
-  accountSource.value = source
-  accountDestination.value = destination
-}
-
-watch(description, (newValue) => {
-  newValue = newValue ?? ''
-  if (profileStore.lowerCaseTransactionDescription) {
-    newValue = newValue.toLowerCase()
-  }
-  if (profileStore.stripAccents) {
-    newValue = LanguageUtils.removeAccents(newValue)
-  }
-  description.value = newValue
-})
 
 const showSourceAccountSuggestion = computed(() => !profileStore.defaultAccountSource && !accountSource.value)
 

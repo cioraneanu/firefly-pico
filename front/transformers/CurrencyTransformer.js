@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _ from 'lodash-es'
 import DateUtils from '~/utils/DateUtils'
 import Account from '~/models/Account'
 import Utils from '~/utils/Utils'

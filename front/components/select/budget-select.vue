@@ -1,14 +1,14 @@
 <template>
   <app-select
+    v-model="modelValue"
+    v-model:show-dropdown="showDropdown"
+    v-model:search="search"
     :label="label ?? $t('budget')"
     class=""
-    :popupTitle="$t('budget_select')"
-    v-model="modelValue"
-    v-model:showDropdown="showDropdown"
-    v-model:search="search"
+    :popup-title="$t('budget_select')"
     :list="filteredList"
     :columns="appStore.gridColumns"
-    :getDisplayValue="getDisplayValue"
+    :get-display-value="getDisplayValue"
     v-bind="dynamicAttrs"
   >
 
@@ -17,7 +17,7 @@
     </template>
 
     <template #top-right>
-      <van-button size="small" @click="onRefresh" class="">
+      <van-button size="small" class="" @click="onRefresh">
         <app-icon :icon="TablerIconConstants.refresh" :stroke="1.7" size="14" />
       </van-button>
     </template>
@@ -59,7 +59,7 @@ const modelValue = defineModel()
 const showDropdown = ref(false)
 const search = ref('')
 
-let list = ref([])
+const list = ref([])
 
 const filteredList = computed(() => {
   if (search.value.length === 0) {

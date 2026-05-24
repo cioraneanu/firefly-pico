@@ -2,7 +2,7 @@
   <div class="app-form">
     <app-top-toolbar />
 
-    <van-form @submit="onSave" class="">
+    <van-form class="" @submit="onSave">
       <van-cell-group inset class="">
         <div class="flex-column van-cell p-10">
           <app-repeater v-model="fieldsList" :is-list-dynamic="false" :empty-item="{ value: '' }">
@@ -57,7 +57,7 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   profileStore.transactionFormFieldsConfig = fieldsList.value
   saveSettingsToStore(syncedSettings)
-  let response = await profileStore.writeProfile()
+  const response = await profileStore.writeProfile()
   ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
   init()
 }
@@ -71,7 +71,7 @@ const onClickIsVisible = (element) => {
 }
 
 const init = () => {
-  let isListOk = profileStore.transactionFormFieldsConfig.length === transactionFormFieldList.length
+  const isListOk = profileStore.transactionFormFieldsConfig.length === transactionFormFieldList.length
   fieldsList.value = isListOk ? profileStore.transactionFormFieldsConfig : transactionFormFieldList
 }
 

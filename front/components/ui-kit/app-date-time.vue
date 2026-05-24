@@ -4,13 +4,13 @@
     <van-field v-model="getDisplayDate" is-link readonly :clickable="false" class="" left-icon="calendar-o" :label="label" placeholder="No date" v-bind="dynamicAttrs">
       <template #input>
         <div class="display-flex gap-2 w-100">
-          <div @click.stop="showDatePicker = true" class="fake-input flex-1 cursor-pointer">
+          <div class="fake-input flex-1 cursor-pointer" @click.stop="showDatePicker = true">
             <div :class="labelDateClass">
               {{ getDisplayDate }}
             </div>
           </div>
 
-          <div @click.stop="onShowTimePicker" class="fake-input flex-1 cursor-pointer">
+          <div class="fake-input flex-1 cursor-pointer" @click.stop="onShowTimePicker">
             <div :class="labelDateClass">
               {{ getDisplayTime }}
             </div>
@@ -31,17 +31,17 @@
     <div v-if="false" class="display-flex" style="gap: 3px">
       <div class="display-flex flex-1 ml-15" style="justify-content: flex-start; align-items: center; gap: 3px">
         <span class="text-size-14 mr-20 text-muted">Quick actions:</span>
-        <van-button @click.prevent.stop="onClickedMinusDay" type="default" size="normal">-1</van-button>
-        <van-button @click.prevent.stop="onClickedToday" type="default" size="normal">Today</van-button>
-        <van-button @click.prevent.stop="onClickedAddDay" type="default" size="normal">+1</van-button>
+        <van-button type="default" size="normal" @click.prevent.stop="onClickedMinusDay">-1</van-button>
+        <van-button type="default" size="normal" @click.prevent.stop="onClickedToday">Today</van-button>
+        <van-button type="default" size="normal" @click.prevent.stop="onClickedAddDay">+1</van-button>
       </div>
     </div>
 
-    <van-calendar v-model:show="showDatePicker" @confirm="onConfirmDate" :show-confirm="false" :min-date="minDate" :max-date="maxDate" color="#ee0a24" />
+    <van-calendar v-model:show="showDatePicker" :show-confirm="false" :min-date="minDate" :max-date="maxDate" color="#ee0a24" @confirm="onConfirmDate" />
 
     <app-popup v-model:show="showTimePicker" style="padding-top: 4px">
         <div>
-          <van-time-picker :model-value="tempTime" :filter="timeFilter" title="Choose time" @confirm="onConfirmTime" :visible-option-num="14" />
+          <van-time-picker :model-value="tempTime" :filter="timeFilter" title="Choose time" :visible-option-num="14" @confirm="onConfirmTime" />
         </div>
     </app-popup>
   </div>
@@ -52,7 +52,7 @@ import { useDataStore } from '~/stores/dataStore'
 import DateUtils from '~/utils/DateUtils'
 import { addDays, addYears, startOfDay, subYears } from 'date-fns'
 import { useFormAttributes } from '~/composables/useFormAttributes'
-import { clone, get } from 'lodash'
+import { clone, get } from 'lodash-es'
 
 const dataStore = useDataStore()
 const attrs = useAttrs()
@@ -67,9 +67,9 @@ const props = defineProps({
 
 const modelValue = defineModel()
 const tempTime = computed(() => {
-  let date = modelValue.value ?? new Date()
-  let hour = date.getHours()
-  let minute = Math.ceil(date.getMinutes() / 10) * 10
+  const date = modelValue.value ?? new Date()
+  const hour = date.getHours()
+  const minute = Math.ceil(date.getMinutes() / 10) * 10
   return [hour, minute]
 })
 
@@ -95,7 +95,7 @@ const getDisplayDate = computed(() => {
 const onConfirmDate = (value) => {
   showDatePicker.value = false
 
-  let newDate = clone(modelValue.value)
+  const newDate = clone(modelValue.value)
   newDate.setFullYear(value.getFullYear())
   newDate.setMonth(value.getMonth())
   newDate.setDate(value.getDate())
@@ -118,9 +118,9 @@ const timeFilter = (type, options) => {
 const onConfirmTime = (value) => {
   showTimePicker.value = false
 
-  let newDate = clone(modelValue.value)
-  let hours = parseInt(get(value, 'selectedValues.0', '0'))
-  let minutes = parseInt(get(value, 'selectedValues.1', '0'))
+  const newDate = clone(modelValue.value)
+  const hours = parseInt(get(value, 'selectedValues.0', '0'))
+  const minutes = parseInt(get(value, 'selectedValues.1', '0'))
   newDate.setHours(hours)
   newDate.setMinutes(minutes)
   modelValue.value = newDate

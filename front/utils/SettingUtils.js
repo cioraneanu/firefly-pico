@@ -1,4 +1,4 @@
-import { set, get } from 'lodash'
+import { set, get } from 'lodash-es'
 import { watch } from 'vue'
 
 export function saveSettingsToStore(settingsList) {

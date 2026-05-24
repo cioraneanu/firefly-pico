@@ -7,7 +7,7 @@
 </template>
 
 <script setup>
-import { isEqual } from 'lodash'
+import { isEqual } from 'lodash-es'
 
 const modelValueShow = defineModel('show')
 const modelValue = defineModel()

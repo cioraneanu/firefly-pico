@@ -8,7 +8,7 @@
 <script setup>
 import { IconPhoto } from '@tabler/icons-vue'
 
-import { get, head } from 'lodash'
+import { get, head } from 'lodash-es'
 import { trimString } from '~/utils/StringUtils.js'
 import { downloadFileFromUrl, showImageFromUrl } from '~/utils/AttachmentUtils.js'
 import { onLongPress } from '@vueuse/core'

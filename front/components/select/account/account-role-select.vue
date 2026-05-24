@@ -1,14 +1,14 @@
 <template>
   <app-select
-    :label="$t('account_page.account_role')"
-    popupTitle="Select an account role"
     v-model="modelValue"
-    v-model:showDropdown="showDropdown"
+    v-model:show-dropdown="showDropdown"
+    :label="$t('account_page.account_role')"
+    popup-title="Select an account role"
     :list="list"
     :columns="1"
     v-bind="dynamicAttrs"
     :has-search="false"
-    :getDisplayValue="getDisplayValue"
+    :get-display-value="getDisplayValue"
   >
     <template #left-icon>
       <app-icon :icon="TablerIconConstants.fieldSelect2" :size="20" />

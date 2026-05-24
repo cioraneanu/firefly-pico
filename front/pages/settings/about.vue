@@ -16,19 +16,19 @@
     <van-cell-group inset>
       <div class="van-cell-group-title mb-0">{{ $t('about.credits') }}</div>
       <div class="text-muted text-size-12 p-20 pt-10">
-        <div v-html="$t('about.developed_by', { url: REPO_URL })"></div>
-        <br />
-        <div v-html="$t('about.using_laravel_nuxt')"></div>
-        <div v-html="$t('about.consuming_firefly')"></div>
-        <div v-html="$t('about.ui_theme_vant')"></div>
-        <div v-html="$t('about.exchange_rate_api')"></div>
-        <br />
-        <div v-html="$t('about.iconpacks_tabler')"></div>
-        <div v-html="$t('about.iconpacks_fluent')"></div>
-        <div v-html="$t('about.iconpacks_circle_avatar')"></div>
-        <div v-html="$t('about.iconpacks_svg_repo')"></div>
-        <div v-html="$t('about.iconpacks_freepik')"></div>
-        <div v-html="$t('about.illustrations_undraw')"></div>
+        <div v-html="$t('about.developed_by', { url: REPO_URL })"/>
+        <br >
+        <div v-html="$t('about.using_laravel_nuxt')"/>
+        <div v-html="$t('about.consuming_firefly')"/>
+        <div v-html="$t('about.ui_theme_vant')"/>
+        <div v-html="$t('about.exchange_rate_api')"/>
+        <br >
+        <div v-html="$t('about.iconpacks_tabler')"/>
+        <div v-html="$t('about.iconpacks_fluent')"/>
+        <div v-html="$t('about.iconpacks_circle_avatar')"/>
+        <div v-html="$t('about.iconpacks_svg_repo')"/>
+        <div v-html="$t('about.iconpacks_freepik')"/>
+        <div v-html="$t('about.illustrations_undraw')"/>
       </div>
     </van-cell-group>
   </div>

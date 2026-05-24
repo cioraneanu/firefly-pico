@@ -3,7 +3,7 @@ import TransactionTransformer from '~/transformers/TransactionTransformer'
 import TransactionRepository from '~/repository/TransactionRepository'
 import { useProfileStore } from '~/stores/profileStore'
 import Account from '~/models/Account'
-import { get, includes, isEqual } from 'lodash'
+import { get } from 'lodash-es'
 import Currency from '~/models/Currency.js'
 import { formatNumber } from '~/utils/NumberUtils.js'
 
@@ -48,7 +48,7 @@ export default class Transaction extends BaseModel {
     }
   }
 
-  getFake(id) {
+  getFake() {
     return {}
   }
 
@@ -100,18 +100,44 @@ export default class Transaction extends BaseModel {
     return get(transaction, 'attributes.transactions.0.currency_code', [])
   }
 
-  static getTags(transaction) {
-    return get(transaction, 'attributes.transactions', [])
-      .map((item) => item.tags)
-      .flat()
-  }
-
-  static getCategoryId(transaction) {
-    return get(transaction, 'attributes.transactions.0.category_id', 0)
-  }
-
   static getSplits(transaction) {
     return get(transaction, 'attributes.transactions', [])
+  }
+
+  static getFirstSplit(transaction) {
+    return this.getSplits(transaction)[0]
+  }
+
+  static isSplitPayment(transaction) {
+    return this.getSplits(transaction).length > 1
+  }
+
+  static getDescription(transaction) {
+    return get(transaction, 'attributes.group_title') ?? get(this.getFirstSplit(transaction), 'description') ?? ' - '
+  }
+
+  static hasAttachments(transaction) {
+    return this.getSplits(transaction).some((item) => item.has_attachments)
+  }
+
+  static getCategories(transaction) {
+    let categories = this.getSplits(transaction)
+      .map((item) => item.category)
+      .flat()
+      .filter(Boolean)
+    return categories.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
+  }
+
+  static getNotes(transaction) {
+    return get(this.getFirstSplit(transaction), 'notes')
+  }
+
+  static getTags(transaction) {
+    let tags = this.getSplits(transaction)
+      .map((item) => item.tags)
+      .flat()
+      .filter(Boolean)
+    return tags.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
   }
 
   static getAmountFormatted(transaction) {

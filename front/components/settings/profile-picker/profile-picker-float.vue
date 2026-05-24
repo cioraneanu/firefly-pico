@@ -1,6 +1,6 @@
 <template>
   <div>
-    <van-floating-bubble v-model:offset="position" axis="y" magnetic="x" @click="isListVisible = true" :gap="0" class="profile-floating-button">
+    <van-floating-bubble v-model:offset="position" axis="y" magnetic="x" :gap="0" class="profile-floating-button" @click="isListVisible = true">
       <div class="flex-center flex-column" style="padding: 0 8px;">
         <icon-nut size="20" color="#fff" stroke="1.6" />
         <span v-if="profileStore.shortProfileName" class="text-size-10">{{ profileStore.shortProfileName }}</span>
@@ -8,7 +8,7 @@
     </van-floating-bubble>
 
     <app-popup v-model:show="isListVisible" :style="appStore.isDesktopLayout ? null : { height: '40%' }">
-      <profile-picker-list></profile-picker-list>
+      <profile-picker-list/>
     </app-popup>
   </div>
 </template>

@@ -17,9 +17,9 @@ import AppLoading from '~/components/ui-kit/app-loading.vue'
 import profile from '~/models/Profile.js'
 import { setDefaultOptions } from 'date-fns'
 
-let dataStore = useDataStore()
-let profileStore = useProfileStore()
-let appStore = useAppStore()
+const dataStore = useDataStore()
+const profileStore = useProfileStore()
+const appStore = useAppStore()
 
 const theme = computed(() => (profileStore.darkTheme ? 'dark' : 'white'))
 const pwaColor = computed(() => (profileStore.darkTheme ? '#1c1c1e' : '#ffffff'))

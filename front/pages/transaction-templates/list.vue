@@ -12,7 +12,7 @@
       <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
         <app-list-search v-if="isSearchVisible && list.length > 0" v-model="search" />
 
-        <transaction-template-list-item v-for="item in filteredList" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
+        <transaction-template-list-item v-for="item in filteredList" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
       </van-list>
     </van-pull-refresh>
   </div>

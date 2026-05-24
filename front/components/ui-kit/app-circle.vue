@@ -16,7 +16,7 @@
       />
     </svg>
     <div class="icon-container">
-      <slot></slot>
+      <slot/>
     </div>
   </div>
 </template>

@@ -2,11 +2,11 @@
   <div class="app-form">
     <app-top-toolbar />
 
-    <van-form @submit="onSave" class="">
+    <van-form class="" @submit="onSave">
       <van-cell-group inset>
         <div class="van-cell-group-title">{{ $t('settings.general') }}:</div>
 
-        <app-field :icon="TablerIconConstants.fieldText2" v-model="assistantTodoTagMatcher" :label="$t('settings.assistant.substring_todo_tag')" :rules="[rule.required()]" required />
+        <app-field v-model="assistantTodoTagMatcher" :icon="TablerIconConstants.fieldText2" :label="$t('settings.assistant.substring_todo_tag')" :rules="[rule.required()]" required />
         <currency-select v-model="assistantCurrency" :info="$t('settings.assistant.currency')"/>
       </van-cell-group>
 
@@ -43,7 +43,7 @@ watchSettingsStore(syncedSettings)
 
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
-  let response = await profileStore.writeProfile()
+  const response = await profileStore.writeProfile()
   ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
 }
 

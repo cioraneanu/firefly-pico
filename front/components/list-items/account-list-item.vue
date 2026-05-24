@@ -8,7 +8,7 @@
             <!--            <span class="badge2"> {{ currencySymbol }}</span>-->
           </div>
 
-          <div class="separator"></div>
+          <div class="separator"/>
 
           <div class="second_column flex-1">
             <div v-if="displayName" class="flex-center-vertical gap-1">
@@ -16,9 +16,9 @@
             </div>
 
             <div class="subtitle display-flex flex-wrap gap-2">
-              <span class="tag-gray list-item-subtitle" v-if="accountType">{{ $t('account_page.account_type') }}: {{ accountType }}</span>
-              <span class="tag-gray list-item-subtitle" v-if="accountRole">{{ $t('account_page.account_role') }}: {{ accountRole }}</span>
-              <span class="tag-gray list-item-subtitle" v-if="accountGroup">{{ $t('account_page.account_group') }}: {{ accountGroup }}</span>
+              <span v-if="accountType" class="tag-gray list-item-subtitle">{{ $t('account_page.account_type') }}: {{ accountType }}</span>
+              <span v-if="accountRole" class="tag-gray list-item-subtitle">{{ $t('account_page.account_role') }}: {{ accountRole }}</span>
+              <span v-if="accountGroup" class="tag-gray list-item-subtitle">{{ $t('account_page.account_group') }}: {{ accountGroup }}</span>
             </div>
 
             <div class="display-flex">
@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import { useDataStore } from '~/stores/dataStore'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import TablerIconConstants from '~/constants/TablerIconConstants'
@@ -55,7 +55,7 @@ const displayName = computed(() => get(props.value, 'attributes.name', ' - '))
 const accountGroup = computed(() => get(props.value, 'attributes.group'))
 const accountType = computed(() => t(get(props.value, 'attributes.type.t')))
 const accountRole = computed(() => {
-  let translate = get(props.value, 'attributes.account_role.t')
+  const translate = get(props.value, 'attributes.account_role.t')
   return translate ? t(translate) : null
 })
 const currencySymbol = computed(() => get(props.value, 'attributes.currency_code'))
