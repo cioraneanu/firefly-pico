@@ -30,7 +30,7 @@ export const useDashboardControls = () => {
         () => dataStore.dashboard.month,
         () => {
             dataStore.fetchDashboardTransactionsForInterval()
-            dataStore.fetchBudgets()
+            dataStore.fetchBudgetLimits()
         }
     )
 

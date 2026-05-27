@@ -23,6 +23,8 @@ export const useBudgetStore = defineStore('budget', () => {
     return keyBy(budgetLimitList.value, 'attributes.budget_id')
   })
 
+
+
   async function fetchBudgets() {
     isLoadingBudgets.value = true
 
@@ -48,6 +50,26 @@ export const useBudgetStore = defineStore('budget', () => {
     isLoadingBudgets.value = false
   }
 
+  async function fetchBudgetLimits() {
+    isLoadingBudgets.value = true
+
+    const dashboardStore = useDashboardStore()
+
+    // Fallback to current month if dashboard store is not initialized
+    let start = dashboardStore.dashboardDateStart ?? startOfMonth(new Date())
+    let end = dashboardStore.dashboardDateEnd ?? endOfMonth(new Date())
+
+    const filters = [
+      { field: 'start', value: DateUtils.dateToString(start) },
+      { field: 'end', value: DateUtils.dateToString(end) },
+    ]
+
+    const fetchedBudgetLimitList = await new BudgetLimitRepository().getAllWithMerge({ filters })
+    budgetLimitList.value = BudgetLimitTransformer.transformFromApiList(fetchedBudgetLimitList)
+
+    isLoadingBudgets.value = false
+  }
+
   return {
     budgetList,
     budgetLimitList,
@@ -55,5 +77,6 @@ export const useBudgetStore = defineStore('budget', () => {
     budgetDictionary,
     budgetLimitDictionary,
     fetchBudgets,
+    fetchBudgetLimits,
   }
 })

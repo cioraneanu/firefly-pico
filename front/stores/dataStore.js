@@ -42,6 +42,7 @@ export const useDataStore = defineStore('data', () => {
     fetchDashboardTransactionsForInterval: dashboardStore.fetchDashboardTransactionsForInterval,
     fetchDashboardTransactionsForWeek: dashboardStore.fetchDashboardTransactionsForWeek,
     fetchBudgets: budgetStore.fetchBudgets,
+    fetchBudgetLimits: budgetStore.fetchBudgetLimits,
     fetchCategories: categoryStore.fetchCategories,
     fetchTags: tagStore.fetchTags,
     fetchExchangeRate: currencyStore.fetchExchangeRate,
