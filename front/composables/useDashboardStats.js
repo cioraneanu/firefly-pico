@@ -20,7 +20,7 @@ export const useDashboardStats = () => {
   const budgetStore = useBudgetStore()
 
   const dashboardAccounts = computed(() => {
-    return accountStore.accountList.filter((account) => {
+    return dashboardStore.dashboardAccountList.filter((account) => {
       const isTypeAssetOrLiability = [Account.types.asset.fireflyCode, Account.types.liability.fireflyCode].includes(Account.getType(account)?.fireflyCode)
       return isTypeAssetOrLiability && Account.getIsActive(account) && (Account.getBalance(account) != 0 || profileStore.dashboard.areEmptyAccountsVisible)
     })

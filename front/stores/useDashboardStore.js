@@ -11,11 +11,18 @@ import { useTemplateStore } from '~/stores/useTemplateStore'
 import { useCurrencyStore } from '~/stores/useCurrencyStore'
 import { useBudgetStore } from '~/stores/useBudgetStore'
 import { useTransactionStore } from '~/stores/useTransactionStore'
+import { keyBy, head } from 'lodash-es'
+import AccountRepository from '~/repository/AccountRepository'
+import AccountTransformer from '~/transformers/AccountTransformer'
+import Account from '~/models/Account'
+import DateUtils from '~/utils/DateUtils.js'
 
 export const useDashboardStore = defineStore('dashboard', () => {
   const isLoading = ref(false)
   const backendFilters = ref([])
   const month = ref(null)
+  const dashboardAccountList = useLocalStorage('dashboardAccountList', [])
+  const isLoadingDashboardAccounts = ref(false)
   const transactionsList = ref([])
   const transactionsListLastWeek = ref([])
   const transactionsWithTodo = ref([])
@@ -29,6 +36,10 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const isSyncRequiredByMissingExtras = ref(false)
 
   // Getters
+  const dashboardAccountDictionary = computed(() => {
+    return keyBy(dashboardAccountList.value, 'id')
+  })
+
   const dashboardDateStart = computed(() => {
     const profileStore = useProfileStore()
     if (!month.value) return null
@@ -93,7 +104,8 @@ export const useDashboardStore = defineStore('dashboard', () => {
     const currencyStore = useCurrencyStore()
     const budgetStore = useBudgetStore()
 
-    let dashboardCurrency = await accountStore.fetchAccounts(currencyStore.dashboardCurrency)
+    // TODO: This is weird...
+    let dashboardCurrency = await fetchDashboardAccounts()
     if (dashboardCurrency) {
       currencyStore.dashboardCurrency = dashboardCurrency
     }
@@ -103,6 +115,23 @@ export const useDashboardStore = defineStore('dashboard', () => {
     await fetchTransactionsWithTodos()
     currencyStore.fetchExchangeRate()
     budgetStore.fetchBudgets()
+  }
+
+  async function fetchDashboardAccounts() {
+    const currencyStore = useCurrencyStore()
+    isLoadingDashboardAccounts.value = true
+    let filters = [{ field: 'date', value: DateUtils.dateToString(dashboardDateEnd.value) }]
+    let list = await new AccountRepository().getAllWithMerge({ filters })
+    const allowedTypes = [Account.types.asset, Account.types.expense, Account.types.revenue, Account.types.liability].map((item) => item.fireflyCode)
+    list = list.filter((item) => allowedTypes.includes(item?.attributes?.type) && Account.getIsActive(item))
+    dashboardAccountList.value = AccountTransformer.transformFromApiList(list)
+    isLoadingDashboardAccounts.value = false
+
+    if (!currencyStore.dashboardCurrency?.id) {
+      let currencies = list.map((item) => item?.attributes?.currency).filter((item) => !!item)
+      return head(currencies)
+    }
+    return null
   }
 
   async function syncEverythingIfOld() {
@@ -149,12 +178,15 @@ export const useDashboardStore = defineStore('dashboard', () => {
     isLoading,
     backendFilters,
     month,
+    dashboardAccountList,
+    isLoadingDashboardAccounts,
     transactionsList,
     transactionsListLastWeek,
     transactionsWithTodo,
     tagsWidgetModeOnlyRootTag,
     lastSync,
     isSyncRequiredByMissingExtras,
+    dashboardAccountDictionary,
     dashboardDateStart,
     dashboardDateEnd,
     isLoadingExtras,
@@ -162,6 +194,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
     fetchDashboardTransactionsForInterval,
     fetchDashboardTransactionsForWeek,
     fetchTransactionsWithTodos,
+    fetchDashboardAccounts,
     fetchDashboard,
     syncEverythingIfOld,
     syncEverything,
