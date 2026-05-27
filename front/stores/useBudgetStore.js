@@ -3,8 +3,12 @@ import { ref, computed } from 'vue'
 import { keyBy } from 'lodash-es'
 import { useLocalStorage } from '@vueuse/core'
 import BudgetRepository from '~/repository/BudgetRepository.js'
+import BudgetLimitRepository from '~/repository/BudgetLimitRepository.js'
 import BudgetTransformer from '~/transformers/BudgetTransformer.js'
 import BudgetLimitTransformer from '~/transformers/BudgetLimitTransformer.js'
+import DateUtils from '~/utils/DateUtils.js'
+import { useDashboardStore } from '~/stores/useDashboardStore'
+import { startOfMonth, endOfMonth } from 'date-fns'
 
 export const useBudgetStore = defineStore('budget', () => {
   const budgetList = useLocalStorage('budgetList', [])
@@ -22,9 +26,19 @@ export const useBudgetStore = defineStore('budget', () => {
   async function fetchBudgets() {
     isLoadingBudgets.value = true
 
+    const dashboardStore = useDashboardStore()
+    
+    // Fallback to current month if dashboard store is not initialized
+    let start = dashboardStore.dashboardDateStart ?? startOfMonth(new Date())
+    let end = dashboardStore.dashboardDateEnd ?? endOfMonth(new Date())
+
+    const filters = [
+      { field: 'start', value: DateUtils.dateToString(start) },
+      { field: 'end', value: DateUtils.dateToString(end) },
+    ]
+
     const asyncBudget = new BudgetRepository().getAllWithMerge()
-    let fetchBudgetLimits = new BudgetRepository().getBudgetLimits
-    const asyncBudgetLimit = new BudgetRepository().getAllWithMerge({ getAll: fetchBudgetLimits })
+    const asyncBudgetLimit = new BudgetLimitRepository().getAllWithMerge({ filters })
 
     const [fetchedBudgetList, fetchedBudgetLimitList] = await Promise.all([asyncBudget, asyncBudgetLimit])
 
