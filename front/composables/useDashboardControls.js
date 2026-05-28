@@ -28,8 +28,11 @@ export const useDashboardControls = () => {
 
     watch(
         () => dataStore.dashboard.month,
-        () => {
+        (newVal, oldVal) => {
+            if (!oldVal) return
+            dataStore.fetchDashboardAccounts()
             dataStore.fetchDashboardTransactionsForInterval()
+            dataStore.fetchBudgetLimits()
         }
     )
 
