@@ -63,7 +63,6 @@ const onRefresh = async () => {
   isRefreshing.value = false
 }
 
-UIUtils.showLoadingWhen(isRefreshing)
 
 const toolbar = useToolbar()
 const { t } = useI18n()

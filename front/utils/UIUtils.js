@@ -24,14 +24,14 @@ export default class UIUtils {
   }
 
   static showToastLoading(message = "Loading...") {
-    const profileStore = useProfileStore()
-    profileStore.isLoading = true
-    profileStore.loadingMessage = message
+    const loadingStore = useLoadingStore()
+    loadingStore.isManualLoading = true
+    loadingStore.loadingMessage = message
   }
 
   static stopToastLoading() {
-    const profileStore = useProfileStore()
-    profileStore.isLoading = false
+    const loadingStore = useLoadingStore()
+    loadingStore.isManualLoading = false
   }
 
   static showConfirmation(title, text, buttonConfirm = 'Da', buttonCancel = 'Nu') {}
@@ -47,14 +47,6 @@ export default class UIUtils {
     })
   }
 
-  static showLoadingWhen(isLoading) {
-    const profileStore = useProfileStore()
-    const { t } = useI18n()
-    watch(isLoading, (newValue) => {
-      profileStore.loadingMessage = t('loading')
-      profileStore.isLoading = newValue
-    })
-  }
 
   static focusInput(inputRef) {
     const { isIos } = useDevice()

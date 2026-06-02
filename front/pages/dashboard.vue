@@ -123,5 +123,4 @@ const toolbar = useToolbar()
 const { t } = useI18n()
 toolbar.init({ title: t('dashboard.title') })
 
-UIUtils.showLoadingWhen(isLoadingDashboard)
 </script>

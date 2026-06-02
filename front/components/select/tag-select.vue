@@ -84,7 +84,6 @@ const search = ref('')
 
 const list = ref([])
 const isLoading = ref(false)
-UIUtils.showLoadingWhen(isLoading)
 
 const filteredList = computed(() => {
   if (search.value.length === 0) {
