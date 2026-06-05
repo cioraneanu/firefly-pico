@@ -1,0 +1,3 @@
+# Ensure all files in the docker directory use LF line endings
+# These files are copied into Linux containers and must not have CRLF
+docker/** text eol=lf
