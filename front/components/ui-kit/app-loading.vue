@@ -6,12 +6,12 @@
         <div class="text-size-16">{{ loadingStore.loadingMessage }}</div>
         
         <van-button 
-          v-if="loadingStore.activeRequests.length > 0" 
+          v-if="loadingStore.activeRequests.length > 0 && showCancelButton" 
           @click="loadingStore.cancelActiveRequests()" 
           class="mt-4" 
           size="small" 
           type="danger">
-          Cancel Requests
+          {{ $t('stop') }}
         </van-button>
       </div>
     </div>
@@ -26,6 +26,24 @@ const profileStore = useProfileStore()
 const loadingStore = useLoadingStore()
 const transitionName = computed(() => profileStore.showAnimations ? 'fade' : '')
 
+const showCancelButton = ref(false)
+let timeout = null
+
+watch(() => loadingStore.isLoading, (isLoading) => {
+  if (isLoading) {
+    showCancelButton.value = false
+    timeout = setTimeout(() => {
+      showCancelButton.value = true
+    }, 2000)
+  } else {
+    showCancelButton.value = false
+    if (timeout) clearTimeout(timeout)
+  }
+}, { immediate: true })
+
+onUnmounted(() => {
+  if (timeout) clearTimeout(timeout)
+})
 </script>
 
 <style></style>
