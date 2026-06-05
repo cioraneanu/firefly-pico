@@ -33,7 +33,6 @@ php /var/www/html/artisan config:clear
 php /var/www/html/artisan config:cache
 php /var/www/html/artisan cache:clear
 
-chown -R www-data:www-data /var/www/html/database/data
-chmod -R 775 /var/www/html/database/data
+mkdir -p /var/www/html/database/data
 
 supervisord -c /etc/supervisord.conf

@@ -128,23 +128,31 @@ RUN adduser \
 
 RUN mkdir -p -m 772 /tmp/nginx/ && chown -R www-data:www-data /tmp/nginx
 RUN chmod -R 772 /var/www/html/storage && chown -R www-data:www-data /var/www/html/storage
+RUN mkdir -p /var/www/html/database/data && chown -R www-data:www-data /var/www/html/database/data && chmod -R 775 /var/www/html/database/data
+RUN chown -R www-data:www-data /var/www/html/bootstrap/cache
 
 # Configure supervisor
 COPY docker/conf/supervisor/supervisord.conf /etc/supervisord.conf
 COPY docker/conf/supervisor/ /etc/supervisor.d/
+RUN mkdir -p /tmp/supervisor /tmp/crontabs && chown -R www-data:www-data /tmp/supervisor /tmp/crontabs
 
 # Configure PHP
-RUN mkdir -p /run/php/ && touch /run/php/php8.2-fpm.pid
+RUN mkdir -p /run/php/ && touch /run/php/php8.2-fpm.pid && chown -R www-data:www-data /run/php
+RUN mkdir -p /var/log/php82 && chown -R www-data:www-data /var/log/php82
 COPY docker/conf/php-fpm/ /etc/php82/
 
 # Configure nginx
 COPY docker/conf/nginx/ /etc/nginx/
+RUN chown -R www-data:www-data /var/log/nginx /var/lib/nginx /run/nginx 2>/dev/null; \
+    mkdir -p /run/nginx && chown www-data:www-data /run/nginx
 
 # Configure entrypoint
 COPY --chmod=755 docker/docker-entrypoint.d/ /docker-entrypoint.d/
 
 #set default db connection
 ENV DB_CONNECTION=sqlite
+
+USER www-data
 
 ENTRYPOINT ["/docker-entrypoint.d/start.sh"]
 CMD ["run"]
