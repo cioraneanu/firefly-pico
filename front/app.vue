@@ -41,8 +41,6 @@ onMounted(async () => {
   await dataStore.syncEverythingIfOld()
 })
 
-const { isLoading } = storeToRefs(dataStore)
-UIUtils.showLoadingWhen(isLoading)
 </script>
 
 <style>

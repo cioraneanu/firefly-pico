@@ -4,8 +4,13 @@ import { get } from 'lodash-es'
 axios.interceptors.request.use(
   (config) => {
     const appStore = useAppStore()
+    const loadingStore = useLoadingStore()
 
     const controller = new AbortController()
+    const requestId = Math.random().toString(36).substring(7)
+    config.requestId = requestId
+    config.signal = controller.signal
+    loadingStore.addActiveRequest({ id: requestId, controller })
 
     let authToken = appStore.authToken
     if (!appStore.hasAuthToken) {
@@ -58,6 +63,8 @@ const retryRequest = async (error) => {
 
 axios.interceptors.response.use(
   function (response) {
+    const loadingStore = useLoadingStore()
+    loadingStore.removeActiveRequest(response.config?.requestId)
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
     return response
@@ -70,6 +77,9 @@ axios.interceptors.response.use(
     }
 
     await retryRequest(error)
+
+    const loadingStore = useLoadingStore()
+    loadingStore.removeActiveRequest(error.config?.requestId)
 
     return Promise.resolve(error.response)
   },

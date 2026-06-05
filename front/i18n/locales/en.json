@@ -1,4 +1,6 @@
 {
+  "stop": "Stop",
+  "requests_remaining": "requests remaining",
   "new": "New",
   "save": "Save",
   "delete": "Delete",

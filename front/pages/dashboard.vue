@@ -6,7 +6,7 @@
       </template>
     </app-top-toolbar>
 
-    <van-pull-refresh v-model="isLoadingAccounts" @refresh="onRefresh">
+    <van-pull-refresh v-model="isLoadingDashboard" @refresh="onRefresh">
       <dashboard-control v-if="!appStore.isDesktopLayout" />
 
       <div ref="dashboard" class="dynamic-masonry">
@@ -44,7 +44,6 @@ import DashboardTodoTransactions from '~/components/dashboard/dashboard-todo-tra
 const dataStore = useDataStore()
 const appStore = useAppStore()
 const profileStore = useProfileStore()
-const { isLoadingAccounts } = storeToRefs(dataStore)
 
 const cardComponents = {
   [dashboardCard.calendar.code]: DashboardCalendar,
@@ -93,7 +92,7 @@ onMounted(() => {
 })
 
 const isLoadingDashboard = computed(() => {
-  return dataStore.isLoadingAccounts || dataStore.isLoadingDashboardTransactions || dataStore.isLoadingDashboardTransactionsLastWeek
+  return dataStore.isLoadingAccounts || dataStore.isLoadingDashboardTransactions || dataStore.isLoadingDashboardTransactionsLastWeek || dataStore.isLoadingBudgets
 })
 
 const dashboard = ref(null)
@@ -123,5 +122,4 @@ const toolbar = useToolbar()
 const { t } = useI18n()
 toolbar.init({ title: t('dashboard.title') })
 
-UIUtils.showLoadingWhen(isLoadingDashboard)
 </script>

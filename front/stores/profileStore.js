@@ -14,9 +14,6 @@ import Page from '~/models/Page.js'
 import { migrateType, migrateTypeList } from '~/utils/MigrateUtils.js'
 
 export const useProfileStore = defineStore('profile', () => {
-  const isLoading = ref(false)
-  const loadingMessage = ref('Loading...')
-
   const profileActiveId = useLocalStorage('profileActiveId', null, { serializer: StorageSerializers.number })
   const profileList = useLocalStorage('profileList', [])
 
@@ -103,7 +100,7 @@ export const useProfileStore = defineStore('profile', () => {
   }
 
   function getProfileSettings() {
-    let omitList = ['isLoading', 'loadingMessage', 'dashboard.showAccountAmounts', 'profileActiveId', 'profileList']
+    let omitList = ['dashboard.showAccountAmounts', 'profileActiveId', 'profileList']
     let data = cloneDeep(useProfileStore().$state)
     let profile = profileList.value.find((item) => item.id === profileActiveId.value)
 
@@ -121,7 +118,6 @@ export const useProfileStore = defineStore('profile', () => {
     if (!appStore.syncProfileInDB) {
       return
     }
-    isLoading.value = true
 
     const response = await new ProfileRepository().getAll()
     let responseData = response.data ?? []
@@ -133,7 +129,6 @@ export const useProfileStore = defineStore('profile', () => {
       setProfile(activeProfileObj)
     }
 
-    isLoading.value = false
     migrateProfile()
   }
 
@@ -142,7 +137,6 @@ export const useProfileStore = defineStore('profile', () => {
     if (!appStore.syncProfileInDB) {
       return
     }
-    isLoading.value = true
 
     let data = getProfileSettings()
     let requestData = ProfileTransformer.transformToApi(data)
@@ -152,7 +146,6 @@ export const useProfileStore = defineStore('profile', () => {
       profileList.value = profileList.value.map((item) => (item.id === profileResponse.id ? profileResponse : item))
     }
 
-    isLoading.value = false
     return response
   }
 
@@ -169,8 +162,6 @@ export const useProfileStore = defineStore('profile', () => {
   }
 
   return {
-    isLoading,
-    loadingMessage,
     profileActiveId,
     profileList,
     darkTheme,

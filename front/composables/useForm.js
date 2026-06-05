@@ -139,7 +139,6 @@ export function useForm(props) {
 
   // ----- Loading indicators -----
 
-  UIUtils.showLoadingWhen(isLoading)
 
   // -----------------------------
 

@@ -57,6 +57,5 @@ const onUpload = async (e) => {
 }
 
 const onLoadingChange = (value) => {
-  value ? UIUtils.showToastLoading() : UIUtils.stopToastLoading()
 }
 </script>

@@ -1,5 +1,4 @@
 export default class UIUtils {
-  static showToast(text, duration = 3000) {}
 
   static showToastSuccess(message, duration = 1000) {
     const instance = showNotify({
@@ -23,18 +22,6 @@ export default class UIUtils {
     })
   }
 
-  static showToastLoading(message = "Loading...") {
-    const profileStore = useProfileStore()
-    profileStore.isLoading = true
-    profileStore.loadingMessage = message
-  }
-
-  static stopToastLoading() {
-    const profileStore = useProfileStore()
-    profileStore.isLoading = false
-  }
-
-  static showConfirmation(title, text, buttonConfirm = 'Da', buttonCancel = 'Nu') {}
 
   static async showDeleteConfirmation(title, message) {
     return new Promise((resolve, reject) => {
@@ -47,21 +34,5 @@ export default class UIUtils {
     })
   }
 
-  static showLoadingWhen(isLoading) {
-    const profileStore = useProfileStore()
-    const { t } = useI18n()
-    watch(isLoading, (newValue) => {
-      profileStore.loadingMessage = t('loading')
-      profileStore.isLoading = newValue
-    })
-  }
-
-  static focusInput(inputRef) {
-    const { isIos } = useDevice()
-    if (isIos) {
-    } else {
-      inputRef.value.click()
-    }
-  }
 }
 

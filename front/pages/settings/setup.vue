@@ -81,9 +81,7 @@ const onSave = async () => {
   appStore.syncProfileInDB = syncProfileInDB.value
   appStore.daysBetweenFullSync = daysBetweenFullSync.value
 
-  UIUtils.showToastLoading(t('settings.setup.verifying'))
   const userResponse = await new UserRepository().getUser()
-  UIUtils.stopToastLoading()
   if (!ResponseUtils.isSuccess(userResponse)) {
     UIUtils.showToastError(t('settings.setup.invalid_endpoint'))
     return
@@ -95,9 +93,7 @@ const onSave = async () => {
     return
   }
 
-  UIUtils.showToastLoading(t('settings.setup.fetching'))
   await dataStore.syncEverything()
-  UIUtils.stopToastLoading()
   UIUtils.showToastSuccess(t('settings.settings_saved'))
 }
 

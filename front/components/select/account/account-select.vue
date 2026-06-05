@@ -174,7 +174,6 @@ const getOptionClass = (option) => {
 }
 
 const isLoading = ref(false)
-UIUtils.showLoadingWhen(isLoading)
 const onRefresh = async () => {
   isLoading.value = true
   await dataStore.fetchAccounts()
