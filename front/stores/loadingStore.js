@@ -2,11 +2,10 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 
 export const useLoadingStore = defineStore('loading', () => {
-  const isManualLoading = ref(false)
   const loadingMessage = ref('Loading...')
   const activeRequests = ref([])
 
-  const isLoading = computed(() => isManualLoading.value || activeRequests.value.length > 0)
+  const isLoading = computed(() => activeRequests.value.length > 0)
 
   function addActiveRequest(request) {
     activeRequests.value.push(request)
@@ -26,7 +25,6 @@ export const useLoadingStore = defineStore('loading', () => {
   }
 
   return {
-    isManualLoading,
     loadingMessage,
     activeRequests,
     isLoading,

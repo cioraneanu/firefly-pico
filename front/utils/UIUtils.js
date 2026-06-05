@@ -1,5 +1,4 @@
 export default class UIUtils {
-  static showToast(text, duration = 3000) {}
 
   static showToastSuccess(message, duration = 1000) {
     const instance = showNotify({
@@ -23,18 +22,6 @@ export default class UIUtils {
     })
   }
 
-  static showToastLoading(message = "Loading...") {
-    const loadingStore = useLoadingStore()
-    loadingStore.isManualLoading = true
-    loadingStore.loadingMessage = message
-  }
-
-  static stopToastLoading() {
-    const loadingStore = useLoadingStore()
-    loadingStore.isManualLoading = false
-  }
-
-  static showConfirmation(title, text, buttonConfirm = 'Da', buttonCancel = 'Nu') {}
 
   static async showDeleteConfirmation(title, message) {
     return new Promise((resolve, reject) => {
@@ -47,13 +34,5 @@ export default class UIUtils {
     })
   }
 
-
-  static focusInput(inputRef) {
-    const { isIos } = useDevice()
-    if (isIos) {
-    } else {
-      inputRef.value.click()
-    }
-  }
 }
 
