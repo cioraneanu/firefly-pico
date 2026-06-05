@@ -51,24 +51,6 @@ export const useDashboardStore = defineStore('dashboard', () => {
     return subDays(addMonths(dashboardDateStart.value, 1), 1)
   })
 
-  const isLoadingExtras = computed(() => {
-    const categoryStore = useCategoryStore()
-    const tagStore = useTagStore()
-    const templateStore = useTemplateStore()
-    const accountStore = useAccountStore()
-    const currencyStore = useCurrencyStore()
-    const budgetStore = useBudgetStore()
-
-    return (
-      categoryStore.isLoadingCategories ||
-      tagStore.isLoadingTags ||
-      templateStore.isLoadingTransactionTemplates ||
-      accountStore.isLoadingAccounts ||
-      currencyStore.isLoadingExchangeRates ||
-      currencyStore.isLoadingCurrencies ||
-      budgetStore.isLoadingBudgets
-    )
-  })
 
   // Actions
   async function init() {
@@ -189,7 +171,6 @@ export const useDashboardStore = defineStore('dashboard', () => {
     dashboardAccountDictionary,
     dashboardDateStart,
     dashboardDateEnd,
-    isLoadingExtras,
     init,
     fetchDashboardTransactionsForInterval,
     fetchDashboardTransactionsForWeek,
