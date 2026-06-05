@@ -8,6 +8,9 @@
         <div v-if="loadingStore.activeRequests.length > 0" class="text-size-12 text-muted mt-2">
           {{ loadingStore.activeRequests.length }} {{ $t('requests_remaining') }}
         </div>
+        <div v-else>
+          WTF
+        </div>
         
         <van-button 
           v-if="loadingStore.activeRequests.length > 0 && showCancelButton" 
