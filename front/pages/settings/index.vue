@@ -49,9 +49,7 @@ toolbar.init({ title: t('settings.settings_title') })
 
 
 const onSyncEverything = async () => {
-  UIUtils.showToastLoading(t('settings.setup.fetching'))
   await dataStore.syncEverything()
-  UIUtils.stopToastLoading()
 }
 
 onMounted(() => {

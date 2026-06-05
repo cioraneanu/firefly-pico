@@ -57,7 +57,6 @@ watch(showDropdown, (newValue) => {
 })
 
 const onSave = async () => {
-  UIUtils.showToastLoading('Adjusting...')
   const accountId = get(props.value, 'id')
   let accountBody = cloneDeep(props.value)
   const amountOffset = parseFloat(newAmount.value) - parseFloat(get(props.value, 'attributes.current_balance'))
@@ -65,8 +64,6 @@ const onSave = async () => {
   accountBody = AccountTransformer.transformToApi(accountBody)
   const response = await new AccountRepository().update(accountId, accountBody)
   emits('result', 'onPostSave', response)
-
-  UIUtils.stopToastLoading()
   showDropdown.value = false
 }
 

@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
+import { debounce } from 'lodash-es'
 
 export const useLoadingStore = defineStore('loading', () => {
   const loadingMessage = ref('Loading...')
@@ -7,16 +8,20 @@ export const useLoadingStore = defineStore('loading', () => {
 
   const isLoading = computed(() => activeRequests.value.length > 0)
 
+  const isLoadingDelayed = ref(false)
+  const setIsLoadingDelayed = debounce(() => (isLoadingDelayed.value = false), 400)
+  watch(isLoading, (v) => (v ? (setIsLoadingDelayed.cancel(), (isLoadingDelayed.value = true)) : setIsLoadingDelayed()))
+
   function addActiveRequest(request) {
     activeRequests.value.push(request)
   }
 
   function removeActiveRequest(id) {
-    activeRequests.value = activeRequests.value.filter(req => req.id !== id)
+    activeRequests.value = activeRequests.value.filter((req) => req.id !== id)
   }
 
   function cancelActiveRequests() {
-    activeRequests.value.forEach(req => {
+    activeRequests.value.forEach((req) => {
       if (req.controller) {
         req.controller.abort()
       }
@@ -28,6 +33,7 @@ export const useLoadingStore = defineStore('loading', () => {
     loadingMessage,
     activeRequests,
     isLoading,
+    isLoadingDelayed,
     addActiveRequest,
     removeActiveRequest,
     cancelActiveRequests,
