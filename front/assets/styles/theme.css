@@ -1440,6 +1440,8 @@ img, svg {
     flex-direction: column;
     gap: 1.5rem;
     flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .nav-section {
