@@ -39,11 +39,10 @@ import { useDashboardStore } from '~/stores/dashboardStore'
 
 const categoryStore = useCategoryStore()
 const dashboardStore = useDashboardStore()
-const dashboardStats = dashboardStore
 const { t } = useI18n()
 
 const barsList = computed(() => {
-  const dictionary = dashboardStats.dashboardTransfersByCategory
+  const dictionary = dashboardStore.dashboardTransfersByCategory
 
   const maxAmount = Math.max(...Object.values(dictionary))
 

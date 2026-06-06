@@ -44,7 +44,6 @@ import DashboardTodoTransactions from '~/components/dashboard/dashboard-todo-tra
 import { useDashboardStore } from '~/stores/dashboardStore'
 
 const dashboardStore = useDashboardStore()
-const dashboardStats = dashboardStore
 const appStore = useAppStore()
 const profileStore = useProfileStore()
 

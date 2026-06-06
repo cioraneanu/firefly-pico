@@ -28,13 +28,13 @@
       />
 
       <dashboard-summary-card :icon="TablerIconConstants.dashboardTotalSurplus" :title="$t('dashboard.transactions_summary.surplus')" :subtitle="totalSurplusFormatted" subtitle-class="" />
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" :title="$t('toolbar.transactions')" :subtitle="dashboardStats.totalTransactionsCount" subtitle-class="" />
+      <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" :title="$t('toolbar.transactions')" :subtitle="dashboardStore.totalTransactionsCount" subtitle-class="" />
       <dashboard-summary-card :icon="TablerIconConstants.account" :title="$t('dashboard.transactions_summary.days_remaining')" :subtitle="remainingDays" />
     </van-grid>
 
     <div class="van-cell-group-title">{{ $t('dashboard.transactions_summary.savings_summary') }}:</div>
     <van-grid :column-num="3" @click="onNavigateToTransactionSavings">
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" :title="$t('toolbar.transactions')" :subtitle="dashboardStats.transactionsListSavingsCount" subtitle-class="" />
+      <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" :title="$t('toolbar.transactions')" :subtitle="dashboardStore.transactionsListSavingsCount" subtitle-class="" />
       <dashboard-summary-card :icon="TablerIconConstants.dashboardCoin" :title="$t('amount')" :subtitle="transactionsListSavingsAmount" :subtitle-class="savingsAmountClass" />
       <dashboard-summary-card :icon="TablerIconConstants.dashboardSavingsPercent" :title="$t('percentage')" :subtitle="savingsPercentFormatted" subtitle-class="text-primary" />
     </van-grid>
@@ -50,7 +50,6 @@ import { useDashboardStore } from '~/stores/dashboardStore'
 
 const profileStore = useProfileStore()
 const dashboardStore = useDashboardStore()
-const dashboardStats = dashboardStore
 
 const startDate = computed(() => {
   const dateCurrentMonth = startOfDay(new Date()).setDate(profileStore.dashboard.firstDayOfMonth)
@@ -71,10 +70,10 @@ const remainingDays = computed(() => {
   return differenceInDays(endDate.value, startOfDay(new Date())) + 1
 })
 
-const totalExpenseFormatted = computed(() => formatNumberForDashboard(dashboardStats.totalExpenseThisMonth))
-const totalIncomeFormatted = computed(() => formatNumberForDashboard(dashboardStats.totalIncomeThisMonth))
-const totalTransferFormatted = computed(() => formatNumberForDashboard(dashboardStats.totalTransfersThisMonth))
-const totalSurplusFormatted = computed(() => formatNumberForDashboard(dashboardStats.totalSurplusThisMonth))
+const totalExpenseFormatted = computed(() => formatNumberForDashboard(dashboardStore.totalExpenseThisMonth))
+const totalIncomeFormatted = computed(() => formatNumberForDashboard(dashboardStore.totalIncomeThisMonth))
+const totalTransferFormatted = computed(() => formatNumberForDashboard(dashboardStore.totalTransfersThisMonth))
+const totalSurplusFormatted = computed(() => formatNumberForDashboard(dashboardStore.totalSurplusThisMonth))
 
 const onGoToTransactionsByType = async (transactionType) => {
   const excludedUrl = getExcludedTransactionUrl()
@@ -101,17 +100,17 @@ watch(
   },
 )
 
-const transactionsListSavingsAmount = computed(() => formatNumberForDashboard(dashboardStats.transactionsListSavingsAmount))
-const savingsAmountClass = computed(() => (dashboardStats.transactionsListSavingsAmount > 0 ? 'text-success' : 'text-danger'))
+const transactionsListSavingsAmount = computed(() => formatNumberForDashboard(dashboardStore.transactionsListSavingsAmount))
+const savingsAmountClass = computed(() => (dashboardStore.transactionsListSavingsAmount > 0 ? 'text-success' : 'text-danger'))
 
 const savingsPercentFormatted = computed(() => {
-  return `${Math.trunc(dashboardStats.transactionsListSavingsPercentage)} %`
+  return `${Math.trunc(dashboardStore.transactionsListSavingsPercentage)} %`
 })
 const onNavigateToTransactionSavings = async () => {
-  if (dashboardStats.transactionsListSavings.length === 0) {
+  if (dashboardStore.transactionsListSavings.length === 0) {
     return
   }
-  const transactionIds = dashboardStats.transactionsListSavings.map((item) => item.id).join(',')
+  const transactionIds = dashboardStore.transactionsListSavings.map((item) => item.id).join(',')
   const filters = TransactionFilterUtils.filters.id.toUrl(transactionIds)
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
 }

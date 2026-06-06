@@ -5,7 +5,7 @@
     </div>
 
     <van-grid :column-num="2">
-      <van-grid-item v-for="account in dashboardStats.dashboardAccountsVisible" :key="account?.id" class="cursor-pointer" @click="onShowActionSheet(account)">
+      <van-grid-item v-for="account in dashboardStore.dashboardAccountsVisible" :key="account?.id" class="cursor-pointer" @click="onShowActionSheet(account)">
         <template #icon>
           <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="24" />
         </template>
@@ -26,7 +26,7 @@
         <span class="font-400 text-muted">{{ $t('dashboard.accounts.by_currency') }}: </span>
       </div>
 
-      <span v-for="(totalValue, totalCurrency) in dashboardStats.dashboardAccountsTotalByCurrency" class="font-700 ms-1 mx-1 app-select-option-tag">
+      <span v-for="(totalValue, totalCurrency) in dashboardStore.dashboardAccountsTotalByCurrency" class="font-700 ms-1 mx-1 app-select-option-tag">
         {{ formatNumberForDashboard(totalValue) }} {{ totalCurrency }}
       </span>
     </div>
@@ -36,7 +36,7 @@
         <span class="font-400 text-muted">{{ $t('dashboard.accounts.by_group') }}: </span>
       </div>
 
-      <span v-for="(totalValue, groupName) in dashboardStats.dashboardAccountsTotalByGroup" class="font-700 ms-1 mx-1 app-select-option-tag">
+      <span v-for="(totalValue, groupName) in dashboardStore.dashboardAccountsTotalByGroup" class="font-700 ms-1 mx-1 app-select-option-tag">
         {{ groupName }} | {{ formatNumberForDashboard(totalValue) }} {{ Currency.getCode(currencyStore.dashboardCurrency) }}
       </span>
     </div>
@@ -61,7 +61,7 @@ import { useDashboardStore } from '~/stores/dashboardStore.js'
 
 const profileStore = useProfileStore()
 const currencyStore = useCurrencyStore()
-const dashboardStats = useDashboardStore()
+const dashboardStore = useDashboardStore()
 
 const showHiddenAccounts = ref(false)
 const toggleHiddenAccounts = () => {
@@ -69,15 +69,15 @@ const toggleHiddenAccounts = () => {
 }
 
 const accountTotal = computed(() => {
-  return formatNumberForDashboard(dashboardStats.dashboardAccountsEstimatedTotal)
+  return formatNumberForDashboard(dashboardStore.dashboardAccountsEstimatedTotal)
 })
 
 const getAccountAmount = (account) => {
   return `${formatNumberForDashboard(Account.getBalance(account))} ${Account.getCurrencySymbol(account)}`
 }
 
-const hasMultipleCurrencies = computed(() => dashboardStats.dashboardAccountsCurrencyList.length > 1)
-const hasAccountGroups = computed(() => dashboardStats.dashboardAccountsGroupsList.length > 0)
+const hasMultipleCurrencies = computed(() => dashboardStore.dashboardAccountsCurrencyList.length > 1)
+const hasAccountGroups = computed(() => dashboardStore.dashboardAccountsGroupsList.length > 0)
 
 const actionSheet = useActionSheet()
 const onShowActionSheet = (account) => {

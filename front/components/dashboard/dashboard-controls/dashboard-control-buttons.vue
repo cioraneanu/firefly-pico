@@ -33,12 +33,11 @@ import { useDashboardStore } from '~/stores/dashboardStore'
 
 const currencyStore = useCurrencyStore()
 const dashboardStore = useDashboardStore()
-const dashboardStats = dashboardStore
 const profileStore = useProfileStore()
 
 const transactionFiltersRef = useTemplateRef('transactionFiltersRef')
 
-const hasMultipleCurrencies = computed(() => dashboardStats.dashboardAccountsCurrencyList.length > 1)
+const hasMultipleCurrencies = computed(() => dashboardStore.dashboardAccountsCurrencyList.length > 1)
 
 const onToggleShowDashboardAccountValues = async () => {
   profileStore.dashboard.showAccountAmounts = !profileStore.dashboard.showAccountAmounts

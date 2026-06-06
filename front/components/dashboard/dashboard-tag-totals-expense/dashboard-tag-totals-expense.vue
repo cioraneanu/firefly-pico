@@ -41,7 +41,6 @@ import { useActionSheet } from '~/composables/useActionSheet.js'
 
 const dashboardStore = useDashboardStore()
 const tagStore = useTagStore()
-const dashboardStats = dashboardStore
 const { t } = useI18n()
 
 const onToggleTagMode = () => {
@@ -51,7 +50,7 @@ const onToggleTagMode = () => {
 const tagModeDisplayName = computed(() => (dashboardStore.tagsWidgetModeOnlyRootTag ? t('dashboard.expenses_by_tags.one_root_tag') : t('dashboard.expenses_by_tags.all_tags')))
 
 const barsList = computed(() => {
-  const tagTotalDictionary = dashboardStats.dashboardExpensesByTag
+  const tagTotalDictionary = dashboardStore.dashboardExpensesByTag
 
   const maxAmount = Math.max(...Object.values(tagTotalDictionary))
 

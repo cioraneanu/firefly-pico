@@ -28,13 +28,13 @@ import Budget from '~/models/Budget.js'
 
 const budgetStore = useBudgetStore()
 const currencyStore = useCurrencyStore()
-const dashboardStats = useDashboardStore()
+const dashboardStore = useDashboardStore()
 // const { t } = useI18n()
 
 const budgetList = budgetStore.budgetList.filter(item => Budget.isActive(item))
 const hasBudgets = computed(() => budgetList.length > 0)
 
-const budgetLimitTotalFormatted = computed(() => `${formatNumberForDashboard(dashboardStats.budgetLimitTotal)} ${currencyStore.dashboardCurrencyCode}`)
-const budgetLimitSpentFormatted = computed(() => `${formatNumberForDashboard(dashboardStats.budgetLimitSpent)} ${currencyStore.dashboardCurrencyCode}`)
-const budgetLimitRemainingFormatted = computed(() => `${formatNumberForDashboard(dashboardStats.budgetLimitRemaining) } ${currencyStore.dashboardCurrencyCode}`)
+const budgetLimitTotalFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitTotal)} ${currencyStore.dashboardCurrencyCode}`)
+const budgetLimitSpentFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitSpent)} ${currencyStore.dashboardCurrencyCode}`)
+const budgetLimitRemainingFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitRemaining) } ${currencyStore.dashboardCurrencyCode}`)
 </script>
