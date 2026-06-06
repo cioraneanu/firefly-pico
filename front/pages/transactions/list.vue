@@ -61,7 +61,6 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { filterBagHasValues, getActiveFilters, getFiltersFromURL, saveToUrl } from '~/utils/FilterUtils.js'
 import { useListFilters } from '~/composables/useListFilters.js'
 
-const dataStore = useDataStore()
 const appStore = useAppStore()
 const route = useRoute()
 

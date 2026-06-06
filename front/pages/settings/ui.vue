@@ -29,7 +29,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useProfileStore } from '~/stores/profileStore'
-import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
@@ -39,8 +38,6 @@ import LanguageSelect from '~/components/select/general/language-select.vue'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
-const dataStore = useDataStore()
-
 const themeText = computed(() => (darkTheme.value ? t('settings.ui.dark') : t('settings.ui.light')))
 const darkTheme = ref(false)
 const startingPage = ref(null)

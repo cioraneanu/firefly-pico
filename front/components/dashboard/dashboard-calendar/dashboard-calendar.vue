@@ -5,8 +5,8 @@
 </template>
 
 <script setup>
-const dataStore = useDataStore()
+const dashboardStore = useDashboardStore()
 
-const startDate = computed(() => new Date(dataStore.dashboardDateStart))
-const endDate = computed(() => new Date(dataStore.dashboardDateEnd))
+const startDate = computed(() => new Date(dashboardStore.dashboardDateStart))
+const endDate = computed(() => new Date(dashboardStore.dashboardDateEnd))
 </script>

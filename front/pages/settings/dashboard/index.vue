@@ -38,7 +38,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useProfileStore } from '~/stores/profileStore.js'
-import { useDataStore } from '~/stores/dataStore.js'
 import UIUtils from '~/utils/UIUtils.js'
 import { useToolbar } from '~/composables/useToolbar.js'
 import RouteConstants from '~/constants/RouteConstants.js'

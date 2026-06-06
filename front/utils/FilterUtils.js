@@ -27,7 +27,7 @@ export const getActiveFilters = (filterDefinition, filterBag) => {
 }
 
 export const getFiltersFromURL = (filterDefinition) => {
-  let dataStore = useDataStore()
+
   const route = useRoute()
 
   return filterDefinition.reduce((result, item) => {

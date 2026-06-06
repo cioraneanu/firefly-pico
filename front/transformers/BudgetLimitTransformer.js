@@ -5,7 +5,7 @@ import Utils from '~/utils/Utils'
 import ApiTransformer from '~/transformers/ApiTransformer'
 import Icon from '~/models/Icon.js'
 import Budget from '~/models/Budget.js'
-import { useDataStore } from '~/stores/dataStore.js'
+
 import { roundNumber } from '~/utils/MathUtils.js'
 
 export default class BudgetLimitTransformer extends ApiTransformer {

@@ -117,7 +117,7 @@
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
+
 import _, { get, head, isEqual } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
@@ -147,7 +147,7 @@ import AttachmentRepository from '~/repository/AttachmentRepository.js'
 import AttachmentTransformer from '~/transformers/AttachmentTransformer.js'
 import { useTransactionFormLogic } from '~/composables/useTransactionFormLogic.js'
 
-const dataStore = useDataStore()
+
 const profileStore = useProfileStore()
 const route = useRoute()
 
@@ -218,7 +218,6 @@ const { onAssistant, attemptAccountsFix } = useTransactionFormLogic({
   currencyForeign,
   notes,
   budget,
-  dataStore,
   profileStore
 })
 

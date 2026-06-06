@@ -21,8 +21,6 @@ import RouteConstants from '~/constants/RouteConstants.js'
 import BudgetLimit from '~/models/BudgetLimit.js'
 import { formatNumberForDashboard } from '~/utils/NumberUtils.js'
 
-const dataStore = useDataStore()
-
 const props = defineProps({
   value: {},
 })

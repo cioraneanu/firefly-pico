@@ -80,7 +80,6 @@
 
 <script setup>
 import { onMounted, watch } from 'vue'
-import { useDataStore } from '~/stores/dataStore'
 import { debounce } from 'lodash-es/function'
 import Tag from '~/models/Tag'
 import AppTutorial from '~/components/ui-kit/app-tutorial.vue'
@@ -90,7 +89,6 @@ import { useFuzzySearchResource } from '~/composables/useFuzzySearch.js'
 
 const props = defineProps({})
 
-const dataStore = useDataStore()
 const profileStore = useProfileStore()
 
 const emit = defineEmits(['change'])

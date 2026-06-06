@@ -48,13 +48,11 @@
 </template>
 
 <script setup>
-import { useDataStore } from '~/stores/dataStore'
 import DateUtils from '~/utils/DateUtils'
 import { addDays, addYears, startOfDay, subYears } from 'date-fns'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import { clone, get } from 'lodash-es'
 
-const dataStore = useDataStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 

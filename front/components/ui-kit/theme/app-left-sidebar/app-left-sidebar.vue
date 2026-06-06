@@ -50,13 +50,12 @@
 </template>
 
 <script setup>
-import { useDataStore } from '~/stores/dataStore.js'
+
 import { useProfileStore } from '~/stores/profileStore.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { animateBottomToolbarAddButton } from '~/utils/AnimationUtils.js'
 
-const dataStore = useDataStore()
 const profileStore = useProfileStore()
 const appStore = useAppStore()
 const route = useRoute()

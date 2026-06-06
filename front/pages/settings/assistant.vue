@@ -18,7 +18,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useProfileStore } from '~/stores/profileStore'
-import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
@@ -29,7 +28,6 @@ import { rule } from '~/utils/ValidationUtils.js'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
-const dataStore = useDataStore()
 
 const assistantTodoTagMatcher = ref('')
 const assistantCurrency = ref(null)

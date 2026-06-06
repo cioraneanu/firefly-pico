@@ -20,15 +20,16 @@ export const useDashboardStats = () => {
   const budgetStore = useBudgetStore()
 
   const dashboardAccounts = computed(() => {
-    return dashboardStore.dashboardAccountList.filter((account) => {
+    return (dashboardStore.dashboardAccountList || []).filter((account) => {
+      if (!account) return false
       const isTypeAssetOrLiability = [Account.types.asset.fireflyCode, Account.types.liability.fireflyCode].includes(Account.getType(account)?.fireflyCode)
       return isTypeAssetOrLiability && Account.getIsActive(account) && (Account.getBalance(account) != 0 || profileStore.dashboard.areEmptyAccountsVisible)
     })
   })
 
-  const dashboardAccountsVisible = computed(() => dashboardAccounts.value.filter((item) => Account.getIsVisibleOnDashboard(item)))
+  const dashboardAccountsVisible = computed(() => dashboardAccounts.value.filter((item) => item && Account.getIsVisibleOnDashboard(item)))
   
-  const dashboardAccountsInNetWorth = computed(() => dashboardAccounts.value.filter((item) => Account.getIsIncludedInNetWorth(item)))
+  const dashboardAccountsInNetWorth = computed(() => dashboardAccounts.value.filter((item) => item && Account.getIsIncludedInNetWorth(item)))
 
   const dashboardAccountsCurrencyList = computed(() => uniq(dashboardAccountsInNetWorth.value.map((account) => account?.attributes?.currency)))
 

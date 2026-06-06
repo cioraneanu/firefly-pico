@@ -2,7 +2,12 @@ import _, { uniq, get } from 'lodash-es'
 import ApiTransformer from './ApiTransformer'
 import DateUtils from '~/utils/DateUtils'
 import { useProfileStore } from '~/stores/profileStore'
-import { useDataStore } from '~/stores/dataStore'
+import { useDashboardStore } from '~/stores/useDashboardStore'
+import { useAccountStore } from '~/stores/useAccountStore'
+import { useCategoryStore } from '~/stores/useCategoryStore'
+import { useTagStore } from '~/stores/useTagStore'
+import { useBudgetStore } from '~/stores/useBudgetStore'
+import { useCurrencyStore } from '~/stores/useCurrencyStore'
 import Transaction from '~/models/Transaction'
 import Tag from '~/models/Tag'
 import Account from '~/models/Account.js'
@@ -13,10 +18,16 @@ export default class TransactionTransformer extends ApiTransformer {
       return null
     }
 
-    const dataStore = useDataStore()
-    const accountsDictionary = dataStore.accountDictionary
-    const categoryDictionary = dataStore.categoryDictionary
-    const tagDictionaryByName = dataStore.tagDictionaryByName
+    const dashboardStore = useDashboardStore()
+    const accountStore = useAccountStore()
+    const categoryStore = useCategoryStore()
+    const tagStore = useTagStore()
+    const budgetStore = useBudgetStore()
+    const currencyStore = useCurrencyStore()
+
+    const accountsDictionary = accountStore.accountDictionary
+    const categoryDictionary = categoryStore.categoryDictionary
+    const tagDictionaryByName = tagStore.tagDictionaryByName
 
     item.attributes.transactions = item.attributes.transactions.map((transaction) => {
       /*
@@ -30,10 +41,10 @@ export default class TransactionTransformer extends ApiTransformer {
       let hasMissingTag = false
 
       let currencyForeignId = get(transaction, 'foreign_currency_id')
-      transaction.currencyForeign = currencyForeignId ? dataStore.currencyDictionary[currencyForeignId] : null
+      transaction.currencyForeign = currencyForeignId ? currencyStore.currencyDictionary[currencyForeignId] : null
 
       let currencyId = get(transaction, 'currency_id')
-      transaction.currency = currencyId ? dataStore.currencyDictionary[currencyId] : null
+      transaction.currency = currencyId ? currencyStore.currencyDictionary[currencyId] : null
 
       transaction.amount = Transaction.formatAmountForCurrency(transaction?.amount, transaction.currency)
       transaction.amountForeign = Transaction.formatAmountForCurrency(transaction?.foreign_amount, transaction.currencyForeign)
@@ -41,7 +52,7 @@ export default class TransactionTransformer extends ApiTransformer {
       transaction.accountSource = accountsDictionary[transaction['source_id']]
       transaction.accountDestination = accountsDictionary[transaction['destination_id']]
       transaction.category = categoryDictionary[transaction['category_id']]
-      transaction.budget = dataStore.budgetDictionary[transaction['budget_id']]
+      transaction.budget = budgetStore.budgetDictionary[transaction['budget_id']]
       // transaction.tags = TagTransformer.transformFromApiList(transaction.tags.map(tagName => tagDictionaryByName[LanguageUtils.removeAccentsAndForceLowerCase(tagName)]))
       transaction.tags = transaction.tags.map((tagName) => {
         hasMissingTag = hasMissingTag || !tagDictionaryByName[LanguageUtils.removeAccentsAndLowerCase(tagName)]
@@ -53,7 +64,7 @@ export default class TransactionTransformer extends ApiTransformer {
       transaction.type = Transaction.typesList.find((item) => item.fireflyCode === transaction.type)
 
       if (hasMissingCategory || hasMissingTag) {
-        dataStore.isSyncRequiredByMissingExtras = true
+        dashboardStore.isSyncRequiredByMissingExtras = true
       }
 
       return transaction
