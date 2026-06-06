@@ -41,7 +41,7 @@ import { useActionSheet } from '~/composables/useActionSheet.js'
 
 const dashboardStore = useDashboardStore()
 const tagStore = useTagStore()
-const dashboardStats = useDashboardStats()
+const dashboardStats = dashboardStore
 const { t } = useI18n()
 
 const onToggleTagMode = () => {

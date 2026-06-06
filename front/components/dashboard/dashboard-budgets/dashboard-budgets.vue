@@ -28,7 +28,7 @@ import Budget from '~/models/Budget.js'
 
 const budgetStore = useBudgetStore()
 const currencyStore = useCurrencyStore()
-const dashboardStats = useDashboardStats()
+const dashboardStats = useDashboardStore()
 // const { t } = useI18n()
 
 const budgetList = budgetStore.budgetList.filter(item => Budget.isActive(item))

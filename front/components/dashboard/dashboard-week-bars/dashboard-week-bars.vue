@@ -17,7 +17,7 @@ import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
 
-const dashboardStats = useDashboardStats()
+const dashboardStats = useDashboardStore()
 
 const barsList = computed(() => {
   const amountsList = Object.values(dashboardStats.dashboardExpenseByDay)

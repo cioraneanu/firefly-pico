@@ -47,11 +47,10 @@ import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
 
 import { useDashboardStore } from '~/stores/dashboardStore'
-import { useDashboardStats } from '~/composables/useDashboardStats'
 
 const profileStore = useProfileStore()
 const dashboardStore = useDashboardStore()
-const dashboardStats = useDashboardStats()
+const dashboardStats = dashboardStore
 
 const startDate = computed(() => {
   const dateCurrentMonth = startOfDay(new Date()).setDate(profileStore.dashboard.firstDayOfMonth)

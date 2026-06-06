@@ -30,11 +30,10 @@ import { IconSquareRoundedX } from '@tabler/icons-vue'
 
 import { useCurrencyStore } from '~/stores/currencyStore'
 import { useDashboardStore } from '~/stores/dashboardStore'
-import { useDashboardStats } from '~/composables/useDashboardStats'
 
 const currencyStore = useCurrencyStore()
 const dashboardStore = useDashboardStore()
-const dashboardStats = useDashboardStats()
+const dashboardStats = dashboardStore
 const profileStore = useProfileStore()
 
 const transactionFiltersRef = useTemplateRef('transactionFiltersRef')

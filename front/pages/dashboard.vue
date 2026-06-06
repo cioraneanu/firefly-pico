@@ -42,16 +42,15 @@ import DashboardCategoryTotalsTransfer from '~/components/dashboard/dashboard-ca
 import DashboardTodoTransactions from '~/components/dashboard/dashboard-todo-transactions/dashboard-todo-transactions.vue'
 
 import { useDashboardStore } from '~/stores/dashboardStore'
-import { useDashboardStats } from '~/composables/useDashboardStats'
 
 const dashboardStore = useDashboardStore()
-const dashboardStats = useDashboardStats()
+const dashboardStats = dashboardStore
 const appStore = useAppStore()
 const profileStore = useProfileStore()
 
 const cardComponents = {
   [dashboardCard.calendar.code]: DashboardCalendar,
-  // [dashboardCard.accounts.code]: DashboardAccounts,
+  [dashboardCard.accounts.code]: DashboardAccounts,
   [dashboardCard.expensesLastWeek.code]: DashboardWeekBars,
   [dashboardCard.transactionsSummary.code]: DashboardSummary,
   [dashboardCard.budgets.code]: DashboardBudgets,
@@ -93,7 +92,7 @@ const onRefreshDebounce = debounce(onRefresh, 200)
 onMounted(() => {
   animateDashboard()
 
-  if (dashboardStats.transactionsListLastWeek.length > 0) {
+  if (dashboardStore.transactionsListLastWeek.length > 0) {
     return
   }
   onRefreshDebounce()

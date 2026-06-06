@@ -26,7 +26,7 @@ const props = defineProps({
     default: true,
   },
 })
-const dashboardStats = useDashboardStats()
+const dashboardStats = useDashboardStore()
 
 const formattedDate = computed(() => (props.isVisible ? format(props.day, 'yyyy-MM-dd') : null))
 const dayOfMonth = computed(() => (props.isVisible ? getDate(props.day) : null))

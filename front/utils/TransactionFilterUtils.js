@@ -97,9 +97,9 @@ export default {
     },
     account: {
       bagKey: 'account',
-      filter: (item) => `account_id:"${item.map((account) => account.id)}"`,
+      filter: (item) => `account_id:"${item.map((account) => account?.id)}"`,
       display: (item) => `Account: ${item.map(Account.getDisplayName).join(', ')}`,
-      toUrl: (item) => `account_id=${item.map((account) => account.id)}`,
+      toUrl: (item) => `account_id=${item.map((account) => account?.id)}`,
       fromUrl: () => {
         let accountIds = useRoute().query?.account_id
         return accountIds ? accountIds.split(',').map((accountId) => useAccountStore().accountDictionary[accountId]) : null
@@ -107,9 +107,9 @@ export default {
     },
     exceptAccount: {
       bagKey: 'excludedAccount',
-      filter: (item) => `-account_id:"${item.map((account) => account.id).join(',')}"`,
+      filter: (item) => `-account_id:"${item.map((account) => account?.id).join(',')}"`,
       display: (item) => `- Account: ${item.map((account) => Account.getDisplayName(account)).join(',')}`,
-      toUrl: (item) => `exclude_account_id=${item.map((account) => account.id)}`,
+      toUrl: (item) => `exclude_account_id=${item.map((account) => account?.id)}`,
       fromUrl: () => {
         let accountIds = useRoute().query?.exclude_account_id
         return accountIds ? accountIds.split(',').map((accountId) => useAccountStore().accountDictionary[accountId]) : null

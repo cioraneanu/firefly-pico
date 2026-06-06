@@ -5,7 +5,7 @@
     </div>
 
     <van-grid :column-num="2">
-      <van-grid-item v-for="account in dashboardStats.dashboardAccountsVisible" :key="account.id" class="cursor-pointer" @click="onShowActionSheet(account)">
+      <van-grid-item v-for="account in dashboardStats.dashboardAccountsVisible" :key="account?.id" class="cursor-pointer" @click="onShowActionSheet(account)">
         <template #icon>
           <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="24" />
         </template>
@@ -61,7 +61,7 @@ import { useDashboardStore } from '~/stores/dashboardStore.js'
 
 const profileStore = useProfileStore()
 const currencyStore = useCurrencyStore()
-const dashboardStats = useDashboardStats()
+const dashboardStats = useDashboardStore()
 
 const showHiddenAccounts = ref(false)
 const toggleHiddenAccounts = () => {
@@ -95,10 +95,7 @@ const onGoToTransactions = async (account) => {
 }
 
 const onGoToAccount = async (account) => {
-  console.log('wtf', { account })
-  // console.log('wtf', {account, xxx: useDashboardStore().dashboardAccountList})
-
-  if (account) {
+  if (account?.id) {
     await navigateTo(`${RouteConstants.ROUTE_ACCOUNT_ID}/${account.id}`)
   }
 }

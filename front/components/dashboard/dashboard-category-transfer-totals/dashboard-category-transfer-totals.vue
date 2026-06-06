@@ -36,11 +36,10 @@ import { useActionSheet } from '~/composables/useActionSheet.js'
 
 import { useCategoryStore } from '~/stores/categoryStore'
 import { useDashboardStore } from '~/stores/dashboardStore'
-import { useDashboardStats } from '~/composables/useDashboardStats'
 
 const categoryStore = useCategoryStore()
 const dashboardStore = useDashboardStore()
-const dashboardStats = useDashboardStats()
+const dashboardStats = dashboardStore
 const { t } = useI18n()
 
 const barsList = computed(() => {
