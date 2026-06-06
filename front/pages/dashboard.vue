@@ -6,7 +6,7 @@
       </template>
     </app-top-toolbar>
 
-    <van-pull-refresh v-model="isLoadingDashboard" @refresh="onRefresh">
+    <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
       <dashboard-control v-if="!appStore.isDesktopLayout" />
 
       <div ref="dashboard" class="dynamic-masonry">
@@ -76,8 +76,12 @@ const visibleCards = computed(() => {
     .sort((a, b) => a.position - b.position)
 })
 
-const onRefresh = () => {
-  dataStore.fetchDashboard()
+const isRefreshing = ref(false)
+
+const onRefresh = async () => {
+  isRefreshing.value = true
+  await dataStore.fetchDashboard()
+  isRefreshing.value = false
 }
 
 const onRefreshDebounce = debounce(onRefresh, 200)
@@ -91,9 +95,7 @@ onMounted(() => {
   onRefreshDebounce()
 })
 
-const isLoadingDashboard = computed(() => {
-  return dataStore.isLoadingAccounts || dataStore.isLoadingDashboardTransactions || dataStore.isLoadingDashboardTransactionsLastWeek || dataStore.isLoadingBudgets
-})
+
 
 const dashboard = ref(null)
 let swipeStartAt = null
