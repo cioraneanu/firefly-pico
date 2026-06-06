@@ -47,7 +47,7 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useAccountStore } from '~/stores/useAccountStore'
+import { useAccountStore } from '~/stores/accountStore'
 import { get } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'

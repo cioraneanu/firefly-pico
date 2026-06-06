@@ -1,8 +1,8 @@
 import { addMonths } from 'date-fns'
 import { animateOnNext, animateOnPrevious } from '~/utils/AnimationUtils.js'
 import DateUtils from '~/utils/DateUtils.js'
-import { useDashboardStore } from '~/stores/useDashboardStore'
-import { useBudgetStore } from '~/stores/useBudgetStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
+import { useBudgetStore } from '~/stores/budgetStore'
 
 export const useDashboardControls = () => {
     const dashboardStore = useDashboardStore()

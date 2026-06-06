@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { useBudgetStore } from '~/stores/useBudgetStore'
+import { useBudgetStore } from '~/stores/budgetStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import { IconRefresh } from '@tabler/icons-vue'
 

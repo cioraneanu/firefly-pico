@@ -36,7 +36,7 @@
 
 <script setup>
 import _, { get } from 'lodash-es'
-import { useCurrencyStore } from '~/stores/useCurrencyStore'
+import { useCurrencyStore } from '~/stores/currencyStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import { IconRefresh } from '@tabler/icons-vue'
 

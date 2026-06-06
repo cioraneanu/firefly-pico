@@ -24,7 +24,7 @@ import { ref } from 'vue';
 import RouteConstants from '~/constants/RouteConstants'
 import { useList } from '~/composables/useList'
 import TransactionTemplate from '~/models/TransactionTemplate'
-import { useTemplateStore } from '~/stores/useTemplateStore'
+import { useTemplateStore } from '~/stores/templateStore'
 import { useToolbar } from '~/composables/useToolbar'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'

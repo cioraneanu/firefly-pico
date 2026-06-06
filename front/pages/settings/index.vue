@@ -39,7 +39,7 @@ import { REPO_URL } from '~/constants/Constants'
 
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import UIUtils from '~/utils/UIUtils.js'
-import { useDashboardStore } from '~/stores/useDashboardStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
 
 const appStore = useAppStore()
 const dashboardStore = useDashboardStore()

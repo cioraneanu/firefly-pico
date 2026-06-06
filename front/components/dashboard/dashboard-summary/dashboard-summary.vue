@@ -46,7 +46,7 @@ import { addMonths, differenceInDays, startOfDay, subDays, subMonths } from 'dat
 import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
 
-import { useDashboardStore } from '~/stores/useDashboardStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
 import { useDashboardStats } from '~/composables/useDashboardStats'
 
 const profileStore = useProfileStore()

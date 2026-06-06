@@ -34,8 +34,8 @@ import Category from '~/models/Category.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
 import { useActionSheet } from '~/composables/useActionSheet.js'
 
-import { useCategoryStore } from '~/stores/useCategoryStore'
-import { useDashboardStore } from '~/stores/useDashboardStore'
+import { useCategoryStore } from '~/stores/categoryStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
 import { useDashboardStats } from '~/composables/useDashboardStats'
 
 const categoryStore = useCategoryStore()

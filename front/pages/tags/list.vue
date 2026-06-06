@@ -20,7 +20,7 @@
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useTagStore } from '~/stores/useTagStore'
+import { useTagStore } from '~/stores/tagStore'
 import { useList } from '~/composables/useList'
 import Tag from '~/models/Tag'
 import { useToolbar } from '~/composables/useToolbar'

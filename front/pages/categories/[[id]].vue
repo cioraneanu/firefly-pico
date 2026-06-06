@@ -30,7 +30,7 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useCategoryStore } from '~/stores/useCategoryStore'
+import { useCategoryStore } from '~/stores/categoryStore'
 import _ from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'

@@ -5,7 +5,7 @@ import Utils from '~/utils/Utils'
 import ApiTransformer from '~/transformers/ApiTransformer'
 import Icon from '~/models/Icon.js'
 import Budget from '~/models/Budget.js'
-import { useCurrencyStore } from '~/stores/useCurrencyStore'
+import { useCurrencyStore } from '~/stores/currencyStore'
 
 export default class BudgetTransformer extends ApiTransformer {
   static transformFromApi(item) {

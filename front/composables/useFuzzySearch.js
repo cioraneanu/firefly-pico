@@ -1,9 +1,9 @@
 import { watch } from 'vue'
 import { get, head } from 'lodash-es'
 import MiniSearch from 'minisearch'
-import { useTagStore } from '~/stores/useTagStore'
-import { useTemplateStore } from '~/stores/useTemplateStore'
-import { useCategoryStore } from '~/stores/useCategoryStore'
+import { useTagStore } from '~/stores/tagStore'
+import { useTemplateStore } from '~/stores/templateStore'
+import { useCategoryStore } from '~/stores/categoryStore'
 
 export const useFuzzySearchResource = {
   template: {

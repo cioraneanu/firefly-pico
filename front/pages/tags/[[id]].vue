@@ -43,7 +43,7 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useTagStore } from '~/stores/useTagStore'
+import { useTagStore } from '~/stores/tagStore'
 import _, { cloneDeep, get, set } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'

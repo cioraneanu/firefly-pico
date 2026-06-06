@@ -23,7 +23,7 @@ import { useWindowScroll } from '@vueuse/core'
 import DashboardControlButtons from '~/components/dashboard/dashboard-controls/dashboard-control-buttons.vue'
 import { useDashboardControls } from '~/composables/useDashboardControls.js'
 
-import { useDashboardStore } from '~/stores/useDashboardStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
 
 const dashboardStore = useDashboardStore()
 const { showDropdown, rangeTitle, onNextMonth, onPreviousMonth, onChooseMonth } = useDashboardControls()

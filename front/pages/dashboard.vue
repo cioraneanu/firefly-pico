@@ -41,7 +41,7 @@ import DashboardTagTotalsTransfer from '~/components/dashboard/dashboard-tag-tot
 import DashboardCategoryTotalsTransfer from '~/components/dashboard/dashboard-category-totals-transfer/dashboard-category-totals-transfer.vue'
 import DashboardTodoTransactions from '~/components/dashboard/dashboard-todo-transactions/dashboard-todo-transactions.vue'
 
-import { useDashboardStore } from '~/stores/useDashboardStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
 import { useDashboardStats } from '~/composables/useDashboardStats'
 
 const dashboardStore = useDashboardStore()

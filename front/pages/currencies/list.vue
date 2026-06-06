@@ -18,7 +18,7 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useCurrencyStore } from '~/stores/useCurrencyStore'
+import { useCurrencyStore } from '~/stores/currencyStore'
 import { ref } from 'vue'
 import { useList } from '~/composables/useList'
 import { useToolbar } from '~/composables/useToolbar'

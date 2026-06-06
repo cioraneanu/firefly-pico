@@ -21,7 +21,7 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useBudgetStore } from '~/stores/useBudgetStore'
+import { useBudgetStore } from '~/stores/budgetStore'
 import { useList } from '~/composables/useList'
 import { useToolbar } from '~/composables/useToolbar'
 import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'

@@ -6,11 +6,11 @@ import Transaction from '~/models/Transaction'
 import Currency from '~/models/Currency.js'
 import { convertCurrency, convertTransactionAmountToCurrency, convertTransactionsTotalAmountToCurrency } from '~/utils/CurrencyUtils'
 import DateUtils from '~/utils/DateUtils.js'
-import { useAccountStore } from '~/stores/useAccountStore'
-import { useDashboardStore } from '~/stores/useDashboardStore'
+import { useAccountStore } from '~/stores/accountStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
 import { useProfileStore } from '~/stores/profileStore'
-import { useCurrencyStore } from '~/stores/useCurrencyStore'
-import { useBudgetStore } from '~/stores/useBudgetStore'
+import { useCurrencyStore } from '~/stores/currencyStore'
+import { useBudgetStore } from '~/stores/budgetStore'
 
 export const useDashboardStats = () => {
   const accountStore = useAccountStore()

@@ -90,7 +90,7 @@ const props = defineProps({
   },
 })
 
-import { useAccountStore } from '~/stores/useAccountStore'
+import { useAccountStore } from '~/stores/accountStore'
 const accountStore = useAccountStore()
 
 const emit = defineEmits(['onEdit', 'onDelete'])

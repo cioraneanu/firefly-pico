@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { useDashboardStore } from '~/stores/useDashboardStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
 import RouteConstants from '~/constants/RouteConstants'
 
 import '~/assets/styles/variables.css'

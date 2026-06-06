@@ -28,7 +28,7 @@
 <script setup>
 import { get } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
-import { useCurrencyStore } from '~/stores/useCurrencyStore'
+import { useCurrencyStore } from '~/stores/currencyStore'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import UIUtils from '~/utils/UIUtils.js'

@@ -28,8 +28,8 @@ import { useListFilters } from '~/composables/useListFilters.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
 import { IconSquareRoundedX } from '@tabler/icons-vue'
 
-import { useCurrencyStore } from '~/stores/useCurrencyStore'
-import { useDashboardStore } from '~/stores/useDashboardStore'
+import { useCurrencyStore } from '~/stores/currencyStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
 import { useDashboardStats } from '~/composables/useDashboardStats'
 
 const currencyStore = useCurrencyStore()

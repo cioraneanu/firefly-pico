@@ -24,7 +24,7 @@
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useAccountStore } from '~/stores/useAccountStore'
+import { useAccountStore } from '~/stores/accountStore'
 import { useList } from '~/composables/useList'
 import Account from '~/models/Account'
 import { useToolbar } from '~/composables/useToolbar'

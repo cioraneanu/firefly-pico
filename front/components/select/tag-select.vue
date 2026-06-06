@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { useTagStore } from '~/stores/useTagStore'
+import { useTagStore } from '~/stores/tagStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import Tag from '~/models/Tag'
 

@@ -7,9 +7,9 @@ import Currency from '~/models/Currency.js'
 import Account from '~/models/Account'
 import { isStringEmpty } from '~/utils/DataUtils'
 
-import { useAccountStore } from '~/stores/useAccountStore'
-import { useCategoryStore } from '~/stores/useCategoryStore'
-import { useTagStore } from '~/stores/useTagStore'
+import { useAccountStore } from '~/stores/accountStore'
+import { useCategoryStore } from '~/stores/categoryStore'
+import { useTagStore } from '~/stores/tagStore'
 
 export const useTransactionFormLogic = ({
   item,

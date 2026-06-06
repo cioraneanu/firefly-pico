@@ -34,8 +34,8 @@ const props = defineProps({
 })
 
 const profileStore = useProfileStore()
-import { useAccountStore } from '~/stores/useAccountStore'
-import { useCategoryStore } from '~/stores/useCategoryStore'
+import { useAccountStore } from '~/stores/accountStore'
+import { useCategoryStore } from '~/stores/categoryStore'
 const accountStore = useAccountStore()
 const categoryStore = useCategoryStore()
 

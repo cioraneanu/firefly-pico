@@ -29,7 +29,7 @@
 </template>
 
 <script setup>
-import { useCategoryStore } from '~/stores/useCategoryStore'
+import { useCategoryStore } from '~/stores/categoryStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import Category from '~/models/Category.js'
 import { avatarListIcons, duoToneListIcons, fluentListIcons } from '~/constants/SvgConstants.js'

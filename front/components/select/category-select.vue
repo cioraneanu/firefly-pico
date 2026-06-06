@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { useCategoryStore } from '~/stores/useCategoryStore'
+import { useCategoryStore } from '~/stores/categoryStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import { IconRefresh } from '@tabler/icons-vue'
 import Category from '~/models/Category'

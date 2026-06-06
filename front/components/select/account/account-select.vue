@@ -92,7 +92,7 @@
 </template>
 
 <script setup>
-import { useAccountStore } from '~/stores/useAccountStore'
+import { useAccountStore } from '~/stores/accountStore'
 import Account from '~/models/Account.js'
 import { useFormAttributes } from '~/composables/useFormAttributes.js'
 import { IconRefresh } from '@tabler/icons-vue'

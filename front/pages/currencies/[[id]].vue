@@ -30,7 +30,7 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useCurrencyStore } from '~/stores/useCurrencyStore'
+import { useCurrencyStore } from '~/stores/currencyStore'
 import _ from 'lodash-es'
 import { startOfDay } from 'date-fns'
 import UIUtils from '~/utils/UIUtils'

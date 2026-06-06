@@ -8,7 +8,7 @@
 </template>
 
 <script setup>
-import { useDashboardStore } from '~/stores/useDashboardStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
 import { useProfileStore } from '~/stores/profileStore'
 import { IconRotateClockwise } from '@tabler/icons-vue'
 

@@ -53,7 +53,7 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useTemplateStore } from '~/stores/useTemplateStore'
+import { useTemplateStore } from '~/stores/templateStore'
 import _, { get } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'

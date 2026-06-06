@@ -22,7 +22,7 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useCategoryStore } from '~/stores/useCategoryStore'
+import { useCategoryStore } from '~/stores/categoryStore'
 import { useList } from '~/composables/useList'
 import Category from '~/models/Category'
 import { useToolbar } from '~/composables/useToolbar'

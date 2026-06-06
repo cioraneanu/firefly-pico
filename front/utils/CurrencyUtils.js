@@ -1,6 +1,6 @@
 import { get } from 'lodash-es'
 import Transaction from '~/models/Transaction'
-import { useCurrencyStore } from '~/stores/useCurrencyStore'
+import { useCurrencyStore } from '~/stores/currencyStore'
 
 export function convertCurrency(amount, fromCurrency, toCurrency) {
   const currencyStore = useCurrencyStore()
