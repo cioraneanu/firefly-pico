@@ -374,5 +374,9 @@
     "tutorial_body": "<p>Ein <b>Profil</b> ist die Sammlung aller Konfigurationen die in in den <code>Einstellungen</code> gefunden werden können.</p><br><p>Du kannst mehrere Profile haben aber nur eines kann aktiv sein. Du kannst durch einen Tab zwischen den Profilen wechseln und sie durch einen Double-Tab bearbeiten.</p><br><p>Ein Use-Case ist mehrere Standards für <b>Transaktions-Formulare</b> zu haben: Eines für deine täglichen Ausgaben und eines für Ferien. Das Ferien Profil kann ein anderes Quell-Konto haben oder einen Tag namens \"Ferien August 2025\" automatisch anwenden. Damit wird es einfach die totalen Ausgaben für diesen Tag zu sehen.</p>"
   },
   "profile": "Profil",
-  "new_transaction": "Neue Transaktion"
+  "new_transaction": "Neue Transaktion",
+  "general": {
+    "list_empty": "Noch keine Elemente",
+    "list_empty_subtitle": "Füge einige Einträge mit dem Button oben rechts hinzu."
+  }
 }

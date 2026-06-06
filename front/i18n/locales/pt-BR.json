@@ -374,5 +374,9 @@
     "tutorial_body": "<p>Um <b>perfil</b> é a coleção de todas as configurações encontradas nas páginas de <code>Configurações</code>.</p><br><p>Você pode ter múltiplos perfis, mas apenas um pode estar ativo por vez. Você pode alternar entre eles com um toque e editá-los via toque duplo.</p><br><p>Um caso de uso é ter múltiplos padrões para o <b>formulário de transação</b>: um para seu uso diário e outro para suas férias. O perfil de férias pode ter uma conta de origem diferente, ou ter uma tag chamada \"Férias Agosto 2025\" aplicada automaticamente. Isso facilita ver sua despesa total por essa tag.</p>"
   },
   "profile": "Perfil",
-  "new_transaction": "Nova transação"
+  "new_transaction": "Nova transação",
+  "general": {
+    "list_empty": "Nenhum item ainda",
+    "list_empty_subtitle": "Adicione algumas entradas com o botão no canto superior direito."
+  }
 }
