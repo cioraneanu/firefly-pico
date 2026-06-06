@@ -51,12 +51,12 @@ export default class Tag extends BaseModel {
   }
 
   static getTagWithParents = (tag) => {
-    const dataStore = useDataStore()
+    const tagStore = useTagStore()
     let result = [tag]
     let tagParentId = get(tag, 'attributes.parent_id')
 
     while (tagParentId) {
-      let parentTag = dataStore.tagDictionaryById[tagParentId]
+      let parentTag = tagStore.tagDictionaryById[tagParentId]
 
       if (parentTag) {
         result.push(parentTag)

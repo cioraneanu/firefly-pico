@@ -18,18 +18,18 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
+import { useCurrencyStore } from '~/stores/currencyStore'
 import { ref } from 'vue'
 import { useList } from '~/composables/useList'
 import { useToolbar } from '~/composables/useToolbar'
 import CurrencyListItem from '~/components/list-items/currency-list-item.vue'
 import Currency from '~/models/Currency'
 
-const dataStore = useDataStore()
+const currencyStore = useCurrencyStore()
 
 const onEvent = (event, payload) => {
   if (event === 'onPostDelete') {
-    dataStore.currenciesList = dataStore.currenciesList.filter((item) => item.id !== payload.id)
+    currencyStore.currenciesList = currencyStore.currenciesList.filter((item) => item.id !== payload.id)
   }
 }
 
@@ -44,20 +44,20 @@ const onRefresh = async () => {
   isLoading.value = true
   isRefreshing.value = true
 
-  const dataStore = useDataStore()
-  await dataStore.fetchCurrencies()
+  const currencyStore = useCurrencyStore()
+  await currencyStore.fetchCurrencies()
 
   isLoading.value = false
   isRefreshing.value = false
 }
 
 const onLoadMore = async () => {
-  const dataStore = useDataStore()
-  list.value = dataStore.currenciesList
+  const currencyStore = useCurrencyStore()
+  list.value = currencyStore.currenciesList
 }
 
 const sortedList = computed(() =>
-  [...dataStore.currenciesList].sort((a, b) => {
+  [...currencyStore.currenciesList].sort((a, b) => {
     if (a.attributes?.default !== b.attributes?.default) {
       return b.attributes?.default - a.attributes?.default
     }

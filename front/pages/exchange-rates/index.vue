@@ -28,7 +28,7 @@
 <script setup>
 import { get } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
-import { useDataStore } from '~/stores/dataStore'
+import { useCurrencyStore } from '~/stores/currencyStore'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import UIUtils from '~/utils/UIUtils.js'
@@ -36,14 +36,14 @@ import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
 import Tag from '~/models/Tag.js'
 
 const profileStore = useProfileStore()
-const dataStore = useDataStore()
+const currencyStore = useCurrencyStore()
 
 const isRefreshing = ref(false)
 const search = ref('')
 const isSearchVisible = ref(true)
 
-const exchangeDate = computed(() => get(dataStore.exchangeRates, 'date'))
-const list = computed(() => dataStore.exchangeRatesList)
+const exchangeDate = computed(() => get(currencyStore.exchangeRates, 'date'))
+const list = computed(() => currencyStore.exchangeRatesList)
 
 const filteredList = computed(() => {
   if (search.value.length === 0) {
@@ -59,7 +59,7 @@ const filteredList = computed(() => {
 
 const onRefresh = async () => {
   isRefreshing.value = true
-  await dataStore.fetchExchangeRate()
+  await currencyStore.fetchExchangeRate()
   isRefreshing.value = false
 }
 

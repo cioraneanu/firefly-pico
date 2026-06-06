@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { useDataStore } from '~/stores/dataStore'
+import { useBudgetStore } from '~/stores/budgetStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import { IconRefresh } from '@tabler/icons-vue'
 
@@ -44,7 +44,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants'
 import Tag from '~/models/Tag.js'
 import Budget from '~/models/Budget.js'
 
-const dataStore = useDataStore()
+const budgetStore = useBudgetStore()
 const appStore = useAppStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
@@ -74,7 +74,7 @@ const filteredList = computed(() => {
 // ------ Methods ------
 
 onMounted(async () => {
-  list.value = dataStore.budgetList.filter(item => Budget.isActive(item))
+  list.value = budgetStore.budgetList.filter(item => Budget.isActive(item))
 })
 
 const onSelectCell = (value) => {
@@ -89,7 +89,7 @@ const getDisplayValue = (value) => {
 const isLoading = ref(false)
 const onRefresh = async () => {
   isLoading.value = true
-  await dataStore.fetchBudgets()
+  await budgetStore.fetchBudgets()
   isLoading.value = false
 }
 </script>

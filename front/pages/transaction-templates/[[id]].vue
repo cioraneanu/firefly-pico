@@ -53,7 +53,7 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
+import { useTemplateStore } from '~/stores/templateStore'
 import _, { get } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
@@ -74,7 +74,7 @@ const refAmount = ref(null)
 
 // ------------------------------------
 
-const dataStore = useDataStore()
+const templateStore = useTemplateStore()
 const profileStore = useProfileStore()
 const route = useRoute()
 const { t } = useI18n()
@@ -85,10 +85,10 @@ const onEvent = (event, payload) => {
   if (event === 'onPostSave') {
     let newItem = _.get(payload, 'data.data')
     newItem = TransactionTemplateTransformer.transformFromApi(newItem)
-    dataStore.transactionTemplateList = [newItem, ...dataStore.transactionTemplateList.filter((item) => !areIntEqual(item.id, itemId.value))]
+    templateStore.transactionTemplateList = [newItem, ...templateStore.transactionTemplateList.filter((item) => !areIntEqual(item.id, itemId.value))]
   }
   if (event === 'onPostDelete') {
-    dataStore.transactionTemplateList = dataStore.transactionTemplateList.filter((item) => !areIntEqual(item.id, itemId.value))
+    templateStore.transactionTemplateList = templateStore.transactionTemplateList.filter((item) => !areIntEqual(item.id, itemId.value))
   }
 }
 

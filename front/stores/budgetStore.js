@@ -7,7 +7,7 @@ import BudgetLimitRepository from '~/repository/BudgetLimitRepository.js'
 import BudgetTransformer from '~/transformers/BudgetTransformer.js'
 import BudgetLimitTransformer from '~/transformers/BudgetLimitTransformer.js'
 import DateUtils from '~/utils/DateUtils.js'
-import { useDashboardStore } from '~/stores/useDashboardStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
 import { startOfMonth, endOfMonth } from 'date-fns'
 
 export const useBudgetStore = defineStore('budget', () => {

@@ -92,7 +92,7 @@
 </template>
 
 <script setup>
-import { useDataStore } from '~/stores/dataStore.js'
+import { useAccountStore } from '~/stores/accountStore'
 import Account from '~/models/Account.js'
 import { useFormAttributes } from '~/composables/useFormAttributes.js'
 import { IconRefresh } from '@tabler/icons-vue'
@@ -100,7 +100,7 @@ import { isEqual } from 'lodash-es/lang'
 
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 const appStore = useAppStore()
-const dataStore = useDataStore()
+const accountStore = useAccountStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 
@@ -145,7 +145,7 @@ const showLiabilities = computed(() => props.allowedTypes.some((item) => isEqual
 // ------ Methods ------
 
 onMounted(async () => {
-  list.value = dataStore.accountList
+  list.value = accountStore.accountList
 })
 
 // const onSelectCell = (account) => {
@@ -176,7 +176,7 @@ const getOptionClass = (option) => {
 const isLoading = ref(false)
 const onRefresh = async () => {
   isLoading.value = true
-  await dataStore.fetchAccounts()
+  await accountStore.fetchAccounts()
   isLoading.value = false
 }
 </script>

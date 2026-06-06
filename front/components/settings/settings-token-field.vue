@@ -28,7 +28,6 @@
 
 <script setup>
 import _ from 'lodash-es'
-import { useDataStore } from '~/stores/dataStore'
 import DateUtils from '~/utils/DateUtils'
 import { addDays, startOfDay } from 'date-fns'
 import { IconClipboard, IconCopy } from '@tabler/icons-vue'
@@ -37,7 +36,6 @@ import { useI18n } from 'vue-i18n'
 import { rule } from '~/utils/ValidationUtils.js'
 
 const { t } = useI18n()
-const dataStore = useDataStore()
 
 const props = defineProps({
   label: {

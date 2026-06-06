@@ -47,7 +47,7 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
+import { useAccountStore } from '~/stores/accountStore'
 import { get } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
@@ -63,7 +63,7 @@ import { rule } from '~/utils/ValidationUtils.js'
 import AppFieldDropdown from '~/components/ui-kit/app-field-dropdown.vue'
 import AccountRepository from '~/repository/AccountRepository.js'
 
-const dataStore = useDataStore()
+const accountStore = useAccountStore()
 const profileStore = useProfileStore()
 const route = useRoute()
 const { t } = useI18n()
@@ -76,19 +76,19 @@ const form = ref(null)
 const isAdjustBalanceVisible = ref(false)
 
 const fetchItem = () => {
-  const dataStore = useDataStore()
-  item.value = dataStore.accountDictionary[useRoute().params.id]
+  const accountStore = useAccountStore()
+  item.value = accountStore.accountDictionary[useRoute().params.id]
 }
 
 const onEvent = (event, payload) => {
   if (event === 'onPostSave') {
     let newItem = get(payload, 'data.data')
     newItem = AccountTransformer.transformFromApi(newItem)
-    dataStore.accountList = [newItem, ...dataStore.accountList.filter((item) => item.id !== itemId.value)]
+    accountStore.accountList = [newItem, ...accountStore.accountList.filter((item) => item.id !== itemId.value)]
     item.value = newItem
   }
   if (event === 'onPostDelete') {
-    dataStore.accountList = dataStore.accountList.filter((item) => item.id !== itemId.value)
+    accountStore.accountList = accountStore.accountList.filter((item) => item.id !== itemId.value)
   }
 }
 

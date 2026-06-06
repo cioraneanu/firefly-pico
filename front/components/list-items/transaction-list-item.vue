@@ -90,7 +90,8 @@ const props = defineProps({
   },
 })
 
-const dataStore = useDataStore()
+import { useAccountStore } from '~/stores/accountStore'
+const accountStore = useAccountStore()
 
 const emit = defineEmits(['onEdit', 'onDelete'])
 
@@ -139,12 +140,12 @@ const timeAgo = computed(() => capitalize(formatTimeAgo(date.value)))
 
 const destinationAccount = computed(() => {
   const destinationId = get(firstTransaction.value, 'destination_id')
-  return get(dataStore.accountDictionary, destinationId)
+  return get(accountStore.accountDictionary, destinationId)
 })
 
 const sourceAccount = computed(() => {
   const sourceId = get(firstTransaction.value, 'source_id')
-  return get(dataStore.accountDictionary, sourceId)
+  return get(accountStore.accountDictionary, sourceId)
 })
 
 const profileStore = useProfileStore()

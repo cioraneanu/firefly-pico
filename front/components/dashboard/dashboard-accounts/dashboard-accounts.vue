@@ -5,7 +5,7 @@
     </div>
 
     <van-grid :column-num="2">
-      <van-grid-item v-for="account in dataStore.dashboardAccountsVisible" :key="account.id" class="cursor-pointer" @click="onShowActionSheet(account)">
+      <van-grid-item v-for="account in dashboardStore.dashboardAccountsVisible" :key="account?.id" class="cursor-pointer" @click="onShowActionSheet(account)">
         <template #icon>
           <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="24" />
         </template>
@@ -26,28 +26,25 @@
         <span class="font-400 text-muted">{{ $t('dashboard.accounts.by_currency') }}: </span>
       </div>
 
-      <span v-for="(totalValue, totalCurrency) in dataStore.dashboardAccountsTotalByCurrency" class="font-700 ms-1 mx-1 app-select-option-tag">
+      <span v-for="(totalValue, totalCurrency) in dashboardStore.dashboardAccountsTotalByCurrency" class="font-700 ms-1 mx-1 app-select-option-tag">
         {{ formatNumberForDashboard(totalValue) }} {{ totalCurrency }}
       </span>
     </div>
-
 
     <div v-if="hasAccountGroups" class="flex-center text-size-13 mb-3 gap-1 flex-wrap">
       <div class="flex-center text-size-13 me-1">
         <span class="font-400 text-muted">{{ $t('dashboard.accounts.by_group') }}: </span>
       </div>
 
-      <span v-for="(totalValue, groupName) in dataStore.dashboardAccountsTotalByGroup" class="font-700 ms-1 mx-1 app-select-option-tag">
-       {{ groupName }} | {{ formatNumberForDashboard(totalValue) }}  {{ Currency.getCode(dataStore.dashboardCurrency) }}
+      <span v-for="(totalValue, groupName) in dashboardStore.dashboardAccountsTotalByGroup" class="font-700 ms-1 mx-1 app-select-option-tag">
+        {{ groupName }} | {{ formatNumberForDashboard(totalValue) }} {{ Currency.getCode(dashboardStore.dashboardCurrency) }}
       </span>
     </div>
 
     <div v-if="hasMultipleCurrencies" class="flex-center text-size-13 mb-3 gap-1">
       <span class="font-400 text-muted">{{ $t('dashboard.accounts.total') }}: </span>
-      <span class="font-700">~{{ accountTotal }} {{ Currency.getCode(dataStore.dashboardCurrency) }}</span>
+      <span class="font-700">~{{ accountTotal }} {{ Currency.getCode(dashboardStore.dashboardCurrency) }}</span>
     </div>
-
-
   </van-cell-group>
 </template>
 
@@ -55,31 +52,31 @@
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Account from '~/models/Account.js'
 import RouteConstants from '~/constants/RouteConstants.js'
+import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
 import { IconCash, IconLibraryPlus, IconLibraryMinus } from '@tabler/icons-vue'
 import { formatNumberForDashboard } from '~/utils/NumberUtils.js'
 import { useActionSheet } from '~/composables/useActionSheet.js'
 import Currency from '../../../models/Currency.js'
+import { useDashboardStore } from '~/stores/dashboardStore.js'
 
 const profileStore = useProfileStore()
-const dataStore = useDataStore()
+const dashboardStore = useDashboardStore()
 
 const showHiddenAccounts = ref(false)
 const toggleHiddenAccounts = () => {
   showHiddenAccounts.value = !showHiddenAccounts.value
 }
 
-
-
 const accountTotal = computed(() => {
-  return formatNumberForDashboard(dataStore.dashboardAccountsEstimatedTotal)
+  return formatNumberForDashboard(dashboardStore.dashboardAccountsEstimatedTotal)
 })
 
 const getAccountAmount = (account) => {
   return `${formatNumberForDashboard(Account.getBalance(account))} ${Account.getCurrencySymbol(account)}`
 }
 
-const hasMultipleCurrencies = computed(() => dataStore.dashboardAccountsCurrencyList.length > 1)
-const hasAccountGroups = computed(() => dataStore.dashboardAccountsGroupsList.length > 0)
+const hasMultipleCurrencies = computed(() => dashboardStore.dashboardAccountsCurrencyList.length > 1)
+const hasAccountGroups = computed(() => dashboardStore.dashboardAccountsGroupsList.length > 0)
 
 const actionSheet = useActionSheet()
 const onShowActionSheet = (account) => {
@@ -97,7 +94,7 @@ const onGoToTransactions = async (account) => {
 }
 
 const onGoToAccount = async (account) => {
-  if (account) {
+  if (account?.id) {
     await navigateTo(`${RouteConstants.ROUTE_ACCOUNT_ID}/${account.id}`)
   }
 }

@@ -22,19 +22,19 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
+import { useCategoryStore } from '~/stores/categoryStore'
 import { useList } from '~/composables/useList'
 import Category from '~/models/Category'
 import { useToolbar } from '~/composables/useToolbar'
 import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 
-const dataStore = useDataStore()
+const categoryStore = useCategoryStore()
 
 
 const onEvent = (event, payload) => {
   if (event === 'onPostDelete') {
-    dataStore.categoryList = dataStore.categoryList.filter((item) => item.id !== payload.id)
+    categoryStore.categoryList = categoryStore.categoryList.filter((item) => item.id !== payload.id)
   }
 }
 
@@ -65,8 +65,8 @@ const onRefresh = async () => {
   isLoading.value = true
   isRefreshing.value = true
 
-  const dataStore = useDataStore()
-  await dataStore.fetchCategories()
+  const categoryStore = useCategoryStore()
+  await categoryStore.fetchCategories()
 
   isLoading.value = false
   isRefreshing.value = false
@@ -75,8 +75,8 @@ const onRefresh = async () => {
 }
 
 const onLoadMore = () => {
-  const dataStore = useDataStore()
-  list.value = dataStore.categoryList
+  const categoryStore = useCategoryStore()
+  list.value = categoryStore.categoryList
 }
 
 // -----

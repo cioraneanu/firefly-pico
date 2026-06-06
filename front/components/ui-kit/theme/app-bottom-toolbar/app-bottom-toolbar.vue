@@ -20,7 +20,7 @@
 
 <script setup>
 import { isEqual } from 'lodash-es'
-import { useDataStore } from '~/stores/dataStore.js'
+
 import { useProfileStore } from '~/stores/profileStore.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import { IconSquareRoundedPlusFilled } from '@tabler/icons-vue'
@@ -29,7 +29,6 @@ import { animateBottomToolbarAddButton } from '~/utils/AnimationUtils.js'
 import IconDashboard1 from '~/assets/icons/custom/dashboard1.svg'
 import IconDashboard2 from '~/assets/icons/custom/dashboard2.svg'
 
-const dataStore = useDataStore()
 const profileStore = useProfileStore()
 const appStore = useAppStore()
 const route = useRoute()

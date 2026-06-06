@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { useDataStore } from '~/stores/dataStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
 import RouteConstants from '~/constants/RouteConstants'
 
 import '~/assets/styles/variables.css'
@@ -17,7 +17,7 @@ import AppLoading from '~/components/ui-kit/app-loading.vue'
 import profile from '~/models/Profile.js'
 import { setDefaultOptions } from 'date-fns'
 
-const dataStore = useDataStore()
+const dashboardStore = useDashboardStore()
 const profileStore = useProfileStore()
 const appStore = useAppStore()
 
@@ -34,11 +34,11 @@ onMounted(async () => {
     navigateTo(`${RouteConstants.ROUTE_SETTINGS_SETUP}`)
     return
   }
-  await dataStore.init()
+  await dashboardStore.init()
 
   appStore.fetchLatestAppVersion()
   await profileStore.getProfiles({ showLoading: false })
-  await dataStore.syncEverythingIfOld()
+  await appStore.syncEverythingIfOld()
 })
 </script>
 

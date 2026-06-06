@@ -3,7 +3,7 @@ import axios from 'axios'
 
 export default class InfoRepository extends BaseRepository {
   constructor() {
-    super('api/latest-versionX')
+    super('api/latest-version')
   }
 
   async getLatestVersion({ showLoading = true } = {}) {

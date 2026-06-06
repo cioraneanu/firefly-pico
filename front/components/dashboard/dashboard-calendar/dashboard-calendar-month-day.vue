@@ -26,7 +26,7 @@ const props = defineProps({
     default: true,
   },
 })
-const dataStore = useDataStore()
+const dashboardStore = useDashboardStore()
 
 const formattedDate = computed(() => (props.isVisible ? format(props.day, 'yyyy-MM-dd') : null))
 const dayOfMonth = computed(() => (props.isVisible ? getDate(props.day) : null))
@@ -40,17 +40,17 @@ const tdClass = computed(() => {
 })
 
 const amountIncome = computed(() => {
-  const value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.income.code}`)
+  const value = get(dashboardStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.income.code}`)
   return value ? formatNumberForDashboard(value) : null
 })
 
 const amountExpense = computed(() => {
-  const value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.expense.code}`)
+  const value = get(dashboardStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.expense.code}`)
   return value ? formatNumberForDashboard(value) : null
 })
 
 const amountTransfer = computed(() => {
-  const value = get(dataStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.transfer.code}`)
+  const value = get(dashboardStore.dashboardCalendarTransactionsByDate, `${formattedDate.value}.${Transaction.types.transfer.code}`)
   return value ? formatNumberForDashboard(value) : null
 })
 

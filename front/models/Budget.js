@@ -13,7 +13,7 @@ export default class Budget extends BaseModel {
   }
 
   getEmpty() {
-    const dataStore = useDataStore()
+    const currencyStore = useCurrencyStore()
     return {
       attributes: {
         name: '',
@@ -21,7 +21,7 @@ export default class Budget extends BaseModel {
         icon: null,
         auto_budget_type: Budget.types.fixed,
         auto_budget_period: Budget.periods.monthly,
-        currency: dataStore.defaultCurrency,
+        currency: currencyStore.defaultCurrency,
       },
     }
   }
@@ -41,8 +41,8 @@ export default class Budget extends BaseModel {
   // --------
 
   static getCurrencySymbol(budget) {
-    const dataStore = useDataStore()
-    return get(budget, 'attributes.currency.attributes.symbol', get(dataStore.defaultCurrency, 'attributes.symbol'))
+    const currencyStore = useCurrencyStore()
+    return get(budget, 'attributes.currency.attributes.symbol', get(currencyStore.defaultCurrency, 'attributes.symbol'))
   }
 
   static isActive(budget) {
@@ -119,7 +119,7 @@ export default class Budget extends BaseModel {
     if (!budget) {
       return null
     }
-    const dataStore = useDataStore()
-    return dataStore.budgetLimitDictionary[budget.id]
+    const budgetStore = useBudgetStore()
+    return budgetStore.budgetLimitDictionary[budget.id]
   }
 }

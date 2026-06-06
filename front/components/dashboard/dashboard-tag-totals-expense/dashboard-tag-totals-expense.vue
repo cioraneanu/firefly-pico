@@ -39,22 +39,23 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
 import { useActionSheet } from '~/composables/useActionSheet.js'
 
-const dataStore = useDataStore()
+const dashboardStore = useDashboardStore()
+const tagStore = useTagStore()
 const { t } = useI18n()
 
 const onToggleTagMode = () => {
-  dataStore.dashboard.tagsWidgetModeOnlyRootTag = !dataStore.dashboard.tagsWidgetModeOnlyRootTag
+  dashboardStore.tagsWidgetModeOnlyRootTag = !dashboardStore.tagsWidgetModeOnlyRootTag
 }
 
-const tagModeDisplayName = computed(() => (dataStore.dashboard.tagsWidgetModeOnlyRootTag ? t('dashboard.expenses_by_tags.one_root_tag') : t('dashboard.expenses_by_tags.all_tags')))
+const tagModeDisplayName = computed(() => (dashboardStore.tagsWidgetModeOnlyRootTag ? t('dashboard.expenses_by_tags.one_root_tag') : t('dashboard.expenses_by_tags.all_tags')))
 
 const barsList = computed(() => {
-  const tagTotalDictionary = dataStore.dashboardExpensesByTag
+  const tagTotalDictionary = dashboardStore.dashboardExpensesByTag
 
   const maxAmount = Math.max(...Object.values(tagTotalDictionary))
 
   const bars = Object.keys(tagTotalDictionary).map((tagId) => {
-    const tag = dataStore.tagDictionaryById[tagId]
+    const tag = tagStore.tagDictionaryById[tagId]
     const amount = tagTotalDictionary[tagId]
     const percent = (amount / maxAmount) * 100
     return {
@@ -83,8 +84,8 @@ const onGoToTag = async (tag) => {
 }
 
 const onGoToTransactions = async (tag) => {
-  const startDate = DateUtils.dateToString(dataStore.dashboardDateStart)
-  const endDate = DateUtils.dateToString(dataStore.dashboardDateEnd)
+  const startDate = DateUtils.dateToString(dashboardStore.dashboardDateStart)
+  const endDate = DateUtils.dateToString(dashboardStore.dashboardDateEnd)
   const excludedUrl = getExcludedTransactionUrl()
 
   if (!tag) {

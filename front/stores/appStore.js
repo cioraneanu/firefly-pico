@@ -4,8 +4,16 @@ import { useLocalStorage } from '@vueuse/core'
 import ResponseUtils from '~/utils/ResponseUtils'
 import { compareVersionStrings } from '~/utils/DataUtils'
 import InfoRepository from '~/repository/InfoRepository.js'
-import { get } from 'lodash-es'
+import { get, keyBy } from 'lodash-es'
 import RouteConstants from '~/constants/RouteConstants.js'
+import { useProfileStore } from '~/stores/profileStore.js'
+import { differenceInDays, subDays } from 'date-fns'
+import { useCategoryStore } from '~/stores/categoryStore.js'
+import { useAccountStore } from '~/stores/accountStore.js'
+import { useTagStore } from '~/stores/tagStore.js'
+import { useTemplateStore } from '~/stores/templateStore.js'
+import { useCurrencyStore } from '~/stores/currencyStore.js'
+import { useBudgetStore } from '~/stores/budgetStore.js'
 
 export const useAppStore = defineStore('app', () => {
   const defaultUrl = window.location.origin
@@ -23,6 +31,16 @@ export const useAppStore = defineStore('app', () => {
   const latestAppVersion = ref(null)
 
   const windowWidth = ref(null)
+
+  const lastSync = useLocalStorage('lastSync', null, {
+    serializer: {
+      read: (v) => (v ? new Date(v) : null),
+      write: (v) => (v ? v.toISOString() : null),
+    },
+  })
+  const isSyncRequiredByMissingExtras = ref(false)
+
+  // ---
 
   const activePage = computed(() => {
     const route = useRoute()
@@ -66,12 +84,54 @@ export const useAppStore = defineStore('app', () => {
     return compareVersionStrings(latestAppVersion.value, currentAppVersion.value) > 0
   })
 
+  // -------
+
   async function fetchLatestAppVersion() {
-    let response = await new InfoRepository().getLatestVersion({ showLoading :false })
+    let response = await new InfoRepository().getLatestVersion({ showLoading: false })
     if (!ResponseUtils.isSuccess(response)) {
       return
     }
     latestAppVersion.value = get(response, 'data')
+  }
+
+  async function syncEverythingIfOld() {
+    let lastSyncTime = lastSync.value ?? subDays(new Date(), 365)
+    let now = new Date()
+    const appStore = useAppStore()
+
+    if (differenceInDays(now, lastSyncTime) < appStore.daysBetweenFullSync) {
+      return
+    }
+
+    isLoading.value = true
+    await syncEverything()
+    isLoading.value = false
+  }
+
+  async function syncEverything() {
+    const appStore = useAppStore()
+    if (!appStore.hasAuthToken) return
+
+    const categoryStore = useCategoryStore()
+    const accountStore = useAccountStore()
+    const tagStore = useTagStore()
+    const templateStore = useTemplateStore()
+    const currencyStore = useCurrencyStore()
+    const budgetStore = useBudgetStore()
+    const profileStore = useProfileStore()
+
+    await Promise.all([
+      categoryStore.fetchCategories(),
+      accountStore.fetchAccounts(),
+      tagStore.fetchTags(),
+      templateStore.fetchTransactionTemplates(),
+      currencyStore.fetchCurrencies(),
+      budgetStore.fetchBudgets(),
+      currencyStore.fetchExchangeRate(),
+      profileStore.getProfiles(),
+    ])
+
+    lastSync.value = new Date()
   }
 
   return {
@@ -90,5 +150,9 @@ export const useAppStore = defineStore('app', () => {
     hasAuthToken,
     isNewVersionAvailable,
     fetchLatestAppVersion,
+    lastSync,
+    isSyncRequiredByMissingExtras,
+    syncEverythingIfOld,
+    syncEverything,
   }
 })

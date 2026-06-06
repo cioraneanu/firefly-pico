@@ -51,7 +51,7 @@
 </template>
 
 <script setup>
-import { useDataStore } from '~/stores/dataStore'
+import { useTagStore } from '~/stores/tagStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import Tag from '~/models/Tag'
 
@@ -59,7 +59,7 @@ import { isEqual } from 'lodash-es/lang'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import { uniqBy } from 'lodash-es/array.js'
 
-const dataStore = useDataStore()
+const tagStore = useTagStore()
 const profileStore = useProfileStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
@@ -94,19 +94,10 @@ const filteredList = computed(() => {
   })
 })
 
-// const categoryList = computed(() => {
-//   if (search.value.length === 0) {
-//     return dataStore.categoryList
-//   }
-//   return dataStore.categoryList.filter(item => {
-//     return Tag.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
-//   })
-// })
-
 // ------ Methods ------
 
 onMounted(async () => {
-  list.value = dataStore.tagListHierarchy
+  list.value = tagStore.tagListHierarchy
 })
 
 const onSelectCell = (item) => {
@@ -137,7 +128,7 @@ const getDisplayValue = (value) => {
 
 const onRefresh = async () => {
   isLoading.value = true
-  await dataStore.fetchTags()
+  await tagStore.fetchTags()
   isLoading.value = false
 }
 

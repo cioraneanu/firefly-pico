@@ -7,14 +7,11 @@ import Currency from '~/models/Currency.js'
 
 export const useCurrencyStore = defineStore('currency', () => {
   const exchangeRates = useLocalStorage('exchangeRates', {})
-  const dashboardCurrency = useLocalStorage('dashboardCurrency', null, { serializer: StorageSerializers.object })
   const currenciesList = useLocalStorage('currenciesList', [])
   const isLoadingCurrencies = ref(false)
   const isLoadingExchangeRates = ref(false)
 
-  const dashboardCurrencyCode = computed(() => {
-    return Currency.getCode(dashboardCurrency.value)
-  })
+
 
   const currencyDictionary = computed(() => {
     return keyBy(currenciesList.value, 'id')
@@ -51,11 +48,9 @@ export const useCurrencyStore = defineStore('currency', () => {
 
   return {
     exchangeRates,
-    dashboardCurrency,
     currenciesList,
     isLoadingCurrencies,
     isLoadingExchangeRates,
-    dashboardCurrencyCode,
     currencyDictionary,
     defaultCurrency,
     exchangeRatesList,

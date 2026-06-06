@@ -5,6 +5,10 @@ import Category from '~/models/Category.js'
 import Budget from '~/models/Budget.js'
 import Account from '~/models/Account.js'
 import { useProfileStore } from '~/stores/profileStore.js'
+import { useCategoryStore } from '~/stores/categoryStore'
+import { useTagStore } from '~/stores/tagStore'
+import { useBudgetStore } from '~/stores/budgetStore'
+import { useAccountStore } from '~/stores/accountStore'
 import { translate } from '~/plugins/plugin-i18n.js'
 
 export default {
@@ -40,14 +44,14 @@ export default {
       filter: (item) => `category_is:"${Category.getDisplayName(item)}"`,
       display: (item) => `Category: ${Category.getDisplayName(item)}`,
       toUrl: (item) => `category_id=${item.id}`,
-      fromUrl: () => useDataStore().categoryDictionary[useRoute().query?.category_id],
+      fromUrl: () => useCategoryStore().categoryDictionary[useRoute().query?.category_id],
     },
     exceptCategory: {
       bagKey: 'excludedCategory',
       filter: (item) => `-category_is:"${Category.getDisplayName(item)}"`,
       display: (item) => `- Category: ${Category.getDisplayName(item)}`,
       toUrl: (item) => `exclude_category_id=${item.id}`,
-      fromUrl: () => useDataStore().categoryDictionary[useRoute().query?.exclude_category_id],
+      fromUrl: () => useCategoryStore().categoryDictionary[useRoute().query?.exclude_category_id],
     },
     noCategory: {
       bagKey: 'withoutCategory',
@@ -61,14 +65,14 @@ export default {
       filter: (item) => `tag_is:"${Tag.getDisplayName(item)}"`,
       display: (item) => `Tag: ${Tag.getDisplayNameEllipsized(item)}`,
       toUrl: (item) => `tag_id=${item.id}`,
-      fromUrl: () => useDataStore().tagDictionaryById[useRoute().query?.tag_id],
+      fromUrl: () => useTagStore().tagDictionaryById[useRoute().query?.tag_id],
     },
     excludeTag: {
       bagKey: 'excludedTag',
       filter: (item) => `-tag_is:"${Tag.getDisplayName(item)}"`,
       display: (item) => `- Tag: ${Tag.getDisplayNameEllipsized(item)}`,
       toUrl: (item) => `exclude_tag_id=${item.id}`,
-      fromUrl: () => useDataStore().tagDictionaryById[useRoute().query?.exclude_tag_id],
+      fromUrl: () => useTagStore().tagDictionaryById[useRoute().query?.exclude_tag_id],
     },
     noTag: {
       bagKey: 'withoutTag',
@@ -82,7 +86,7 @@ export default {
       filter: (item) => `budget_is:"${Budget.getDisplayName(item)}"`,
       display: (item) => `Budget: ${Budget.getDisplayName(item)}`,
       toUrl: (item) => `budget_id=${item.id}`,
-      fromUrl: () => useDataStore().budgetDictionary[useRoute().query?.budget_id],
+      fromUrl: () => useBudgetStore().budgetDictionary[useRoute().query?.budget_id],
     },
     noBudget: {
       bagKey: 'withoutBudget',
@@ -93,22 +97,22 @@ export default {
     },
     account: {
       bagKey: 'account',
-      filter: (item) => `account_id:"${item.map((account) => account.id)}"`,
+      filter: (item) => `account_id:"${item.map((account) => account?.id)}"`,
       display: (item) => `Account: ${item.map(Account.getDisplayName).join(', ')}`,
-      toUrl: (item) => `account_id=${item.map((account) => account.id)}`,
+      toUrl: (item) => `account_id=${item.map((account) => account?.id)}`,
       fromUrl: () => {
         let accountIds = useRoute().query?.account_id
-        return accountIds ? accountIds.split(',').map((accountId) => useDataStore().accountDictionary[accountId]) : null
+        return accountIds ? accountIds.split(',').map((accountId) => useAccountStore().accountDictionary[accountId]) : null
       },
     },
     exceptAccount: {
       bagKey: 'excludedAccount',
-      filter: (item) => `-account_id:"${item.map((account) => account.id).join(',')}"`,
+      filter: (item) => `-account_id:"${item.map((account) => account?.id).join(',')}"`,
       display: (item) => `- Account: ${item.map((account) => Account.getDisplayName(account)).join(',')}`,
-      toUrl: (item) => `exclude_account_id=${item.map((account) => account.id)}`,
+      toUrl: (item) => `exclude_account_id=${item.map((account) => account?.id)}`,
       fromUrl: () => {
         let accountIds = useRoute().query?.exclude_account_id
-        return accountIds ? accountIds.split(',').map((accountId) => useDataStore().accountDictionary[accountId]) : null
+        return accountIds ? accountIds.split(',').map((accountId) => useAccountStore().accountDictionary[accountId]) : null
       },
     },
     dateAfter: {

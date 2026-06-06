@@ -30,7 +30,7 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
+import { useCategoryStore } from '~/stores/categoryStore'
 import _ from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
@@ -42,7 +42,7 @@ import CategoryTransformer from '~/transformers/CategoryTransformer'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
 
-const dataStore = useDataStore()
+const categoryStore = useCategoryStore()
 const profileStore = useProfileStore()
 const route = useRoute()
 
@@ -53,18 +53,18 @@ const resetFields = () => {
 }
 
 const fetchItem = () => {
-  const dataStore = useDataStore()
-  item.value = dataStore.categoryDictionary[useRoute().params.id]
+  const categoryStore = useCategoryStore()
+  item.value = categoryStore.categoryDictionary[useRoute().params.id]
 }
 
 const onEvent = (event, payload) => {
   if (event === 'onPostSave') {
     let newItem = _.get(payload, 'data.data')
     newItem = CategoryTransformer.transformFromApi(newItem)
-    dataStore.categoryList = [newItem, ...dataStore.categoryList.filter((item) => item.id !== itemId.value)]
+    categoryStore.categoryList = [newItem, ...categoryStore.categoryList.filter((item) => item.id !== itemId.value)]
   }
   if (event === 'onPostDelete') {
-    dataStore.categoryList = dataStore.categoryList.filter((item) => item.id !== itemId.value)
+    categoryStore.categoryList = categoryStore.categoryList.filter((item) => item.id !== itemId.value)
   }
 }
 

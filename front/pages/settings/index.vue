@@ -39,9 +39,10 @@ import { REPO_URL } from '~/constants/Constants'
 
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import UIUtils from '~/utils/UIUtils.js'
+import { useDashboardStore } from '~/stores/dashboardStore'
 
 const appStore = useAppStore()
-const dataStore = useDataStore()
+const dashboardStore = useDashboardStore()
 const toolbar = useToolbar()
 
 const { t } = useI18n()
@@ -49,7 +50,7 @@ toolbar.init({ title: t('settings.settings_title') })
 
 
 const onSyncEverything = async () => {
-  await dataStore.syncEverything()
+  await appStore.syncEverything()
 }
 
 onMounted(() => {

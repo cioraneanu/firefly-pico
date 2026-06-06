@@ -41,7 +41,9 @@ import DashboardTagTotalsTransfer from '~/components/dashboard/dashboard-tag-tot
 import DashboardCategoryTotalsTransfer from '~/components/dashboard/dashboard-category-totals-transfer/dashboard-category-totals-transfer.vue'
 import DashboardTodoTransactions from '~/components/dashboard/dashboard-todo-transactions/dashboard-todo-transactions.vue'
 
-const dataStore = useDataStore()
+import { useDashboardStore } from '~/stores/dashboardStore'
+
+const dashboardStore = useDashboardStore()
 const appStore = useAppStore()
 const profileStore = useProfileStore()
 
@@ -80,7 +82,7 @@ const isRefreshing = ref(false)
 
 const onRefresh = async () => {
   isRefreshing.value = true
-  await dataStore.fetchDashboard()
+  await dashboardStore.fetchDashboard()
   isRefreshing.value = false
 }
 
@@ -89,7 +91,7 @@ const onRefreshDebounce = debounce(onRefresh, 200)
 onMounted(() => {
   animateDashboard()
 
-  if (dataStore.dashboard.transactionsListLastWeek.length > 0) {
+  if (dashboardStore.transactionsListLastWeek.length > 0) {
     return
   }
   onRefreshDebounce()
@@ -110,11 +112,11 @@ const { lengthX } = useSwipe(dashboard, {
     const velocity = Math.abs(lengthX.value) / duration
 
     if (lengthX.value > 100 && velocity >= 0.5) {
-      dataStore.dashboard.month = addMonths(dataStore.dashboard.month, 1)
+      dashboardStore.month = addMonths(dashboardStore.month, 1)
     }
 
     if (lengthX.value < -100 && velocity >= 0.5) {
-      dataStore.dashboard.month = addMonths(dataStore.dashboard.month, -1)
+      dashboardStore.month = addMonths(dashboardStore.month, -1)
     }
   },
 })

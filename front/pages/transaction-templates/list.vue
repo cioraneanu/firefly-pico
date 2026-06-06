@@ -24,16 +24,16 @@ import { ref } from 'vue';
 import RouteConstants from '~/constants/RouteConstants'
 import { useList } from '~/composables/useList'
 import TransactionTemplate from '~/models/TransactionTemplate'
-import { useDataStore } from '~/stores/dataStore'
+import { useTemplateStore } from '~/stores/templateStore'
 import { useToolbar } from '~/composables/useToolbar'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
 import Tag from '~/models/Tag.js'
 
-const dataStore = useDataStore()
+const templateStore = useTemplateStore()
 const onEvent = (event, payload) => {
   if (event === 'onPostDelete') {
-    dataStore.transactionTemplateList = dataStore.transactionTemplateList.filter((item) => parseInt(item.id) !== parseInt(payload.id))
+    templateStore.transactionTemplateList = templateStore.transactionTemplateList.filter((item) => parseInt(item.id) !== parseInt(payload.id))
   }
 }
 
@@ -64,16 +64,14 @@ const formClass = computed(() => ({
 
 
 const onLoadMore = async () => {
-  const dataStore = useDataStore()
-  list.value = dataStore.transactionTemplateList
+  list.value = templateStore.transactionTemplateList
 }
 
 const onRefresh = async () => {
   isLoading.value = true
   isRefreshing.value = true
 
-  const dataStore = useDataStore()
-  await dataStore.fetchTransactionTemplates()
+  await templateStore.fetchTransactionTemplates()
 
   isLoading.value = false
   isRefreshing.value = false

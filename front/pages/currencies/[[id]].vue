@@ -30,7 +30,7 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
+import { useCurrencyStore } from '~/stores/currencyStore'
 import _ from 'lodash-es'
 import { startOfDay } from 'date-fns'
 import UIUtils from '~/utils/UIUtils'
@@ -47,7 +47,7 @@ import CurrencyTransformer from '~/transformers/CurrencyTransformer'
 import Currency from '~/models/Currency'
 import { rule } from '~/utils/ValidationUtils.js'
 
-const dataStore = useDataStore()
+const currencyStore = useCurrencyStore()
 const profileStore = useProfileStore()
 const route = useRoute()
 
@@ -58,18 +58,18 @@ const resetFields = () => {
 }
 
 const fetchItem = () => {
-  const dataStore = useDataStore()
-  item.value = dataStore.currencyDictionary[useRoute().params.id]
+  const currencyStore = useCurrencyStore()
+  item.value = currencyStore.currencyDictionary[useRoute().params.id]
 }
 
 const onEvent = (event, payload) => {
   if (event === 'onPostSave') {
     let newItem = _.get(payload, 'data.data')
     newItem = CurrencyTransformer.transformFromApi(newItem)
-    dataStore.currenciesList = [newItem, ...dataStore.currenciesList.filter((item) => item.id !== itemId.value)]
+    currencyStore.currenciesList = [newItem, ...currencyStore.currenciesList.filter((item) => item.id !== itemId.value)]
   }
   if (event === 'onPostDelete') {
-    dataStore.currenciesList = dataStore.currenciesList.filter((item) => item.id !== itemId.value)
+    currencyStore.currenciesList = currencyStore.currenciesList.filter((item) => item.id !== itemId.value)
   }
 }
 

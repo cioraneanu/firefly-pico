@@ -7,12 +7,7 @@ export default class TagTransformer extends ApiTransformer {
     if (!item) {
       return null
     }
-    // const dataStore = useDataStore()
-    //
-    // let parentTagId = get(item, 'attributes.parent_id')
-    // if (parentTagId) {
-    //   item.attributes.parentTag = dataStore.tagDictionaryById[parentTagId]
-    // }
+
 
     item.attributes.date = DateUtils.stringToDate(get(item, 'attributes.date'))
     item.attributes.icon = Icon.getIcon(get(item, 'attributes.icon'))

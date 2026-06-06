@@ -1,7 +1,7 @@
 import _, { get } from 'lodash-es'
 import Account from '~/models/Account'
 import ApiTransformer from '~/transformers/ApiTransformer'
-import { useDataStore } from '~/stores/dataStore'
+import { useCurrencyStore } from '~/stores/currencyStore'
 import Icon from '~/models/Icon.js'
 import { startOfMonth } from 'date-fns'
 
@@ -11,8 +11,8 @@ export default class AccountTransformer extends ApiTransformer {
       return null
     }
 
-    const dataStore = useDataStore()
-    const currencyDictionary = dataStore.currencyDictionary
+    const currencyStore = useCurrencyStore()
+    const currencyDictionary = currencyStore.currencyDictionary
 
     // Utils.stringToData(item, 'attributes.account_role', Account.roleAssetsList)
     // Utils.stringToData(item, 'attributes.type', Account.typesList)

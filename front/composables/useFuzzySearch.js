@@ -1,6 +1,9 @@
 import { watch } from 'vue'
 import { get, head } from 'lodash-es'
 import MiniSearch from 'minisearch'
+import { useTagStore } from '~/stores/tagStore'
+import { useTemplateStore } from '~/stores/templateStore'
+import { useCategoryStore } from '~/stores/categoryStore'
 
 export const useFuzzySearchResource = {
   template: {
@@ -18,7 +21,9 @@ export const useFuzzySearchResource = {
 }
 
 export function useFuzzySearch(props) {
-  const dataStore = useDataStore()
+  const tagStore = useTagStore()
+  const templateStore = useTemplateStore()
+  const categoryStore = useCategoryStore()
 
   const fuzzyOptions = {
     prefix: true, // allow prefix search ("sana" matches "sanatate")
@@ -47,7 +52,7 @@ export function useFuzzySearch(props) {
   })
 
   watch(
-    dataStore.tagList,
+    tagStore.tagList,
     (newValue) => {
       queryTag.removeAll()
       queryTag.addAll(newValue)
@@ -56,7 +61,7 @@ export function useFuzzySearch(props) {
   )
 
   watch(
-    dataStore.transactionTemplateList,
+    templateStore.transactionTemplateList,
     (newValue) => {
       queryTemplate.removeAll()
       queryTemplate.addAll(newValue)
@@ -65,7 +70,7 @@ export function useFuzzySearch(props) {
   )
 
   watch(
-    dataStore.categoryList,
+    categoryStore.categoryList,
     (newValue) => {
       queryCategory.removeAll()
       queryCategory.addAll(newValue)
@@ -90,18 +95,18 @@ export function useFuzzySearch(props) {
       {
         score: (foundTemplate?.score ?? 0) * useFuzzySearchResource.template.weight,
         type: useFuzzySearchResource.template.type,
-        item: dataStore.transactionTemplateDictionary[foundTemplate?.id],
+        item: templateStore.transactionTemplateDictionary[foundTemplate?.id],
         match: (foundTemplate?.terms ?? []).join(" "),
       },
       {
         score: (foundTag?.score ?? 0) * useFuzzySearchResource.tag.weight,
         type: useFuzzySearchResource.tag.type,
-        item: dataStore.tagDictionaryById[foundTag?.id],
+        item: tagStore.tagDictionaryById[foundTag?.id],
       },
       {
         score: (foundCategory?.score ?? 0) * useFuzzySearchResource.category.weight,
         type: useFuzzySearchResource.category.type,
-        item: dataStore.categoryDictionary[foundCategory?.id],
+        item: categoryStore.categoryDictionary[foundCategory?.id],
       },
     ]
     // console.log({assistantGuesses})

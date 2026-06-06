@@ -27,7 +27,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useProfileStore } from '~/stores/profileStore'
-import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
@@ -37,7 +36,6 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
-const dataStore = useDataStore()
 
 const fieldsList = ref([])
 

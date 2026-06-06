@@ -5,19 +5,19 @@ import Utils from '~/utils/Utils'
 import ApiTransformer from '~/transformers/ApiTransformer'
 import Icon from '~/models/Icon.js'
 import Budget from '~/models/Budget.js'
-import { useDataStore } from '~/stores/dataStore.js'
+import { useCurrencyStore } from '~/stores/currencyStore'
 
 export default class BudgetTransformer extends ApiTransformer {
   static transformFromApi(item) {
     if (!item) {
       return null
     }
-    const dataStore = useDataStore()
+    const currencyStore = useCurrencyStore()
 
     item.attributes.icon = Icon.getIcon(get(item, 'attributes.icon'))
     item.attributes.auto_budget_type = Budget.typesList().find((type) => type.fireflyCode === item.attributes.auto_budget_type)
     item.attributes.auto_budget_period = Budget.periodsList().find((type) => type.fireflyCode === item.attributes.auto_budget_period)
-    item.attributes.currency = dataStore.currencyDictionary[get(item, 'attributes.currency_id')]
+    item.attributes.currency = currencyStore.currencyDictionary[get(item, 'attributes.currency_id')]
     item.attributes.amount = get(item, 'attributes.auto_budget_amount')
 
     return item

@@ -46,7 +46,7 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
+import { useBudgetStore } from '~/stores/budgetStore'
 import _, { get } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
@@ -61,7 +61,7 @@ import BudgetLimit from '~/models/BudgetLimit.js'
 import { rule } from '~/utils/ValidationUtils.js'
 import { TUTORIAL_CONSTANTS } from '~/constants/TutorialConstants.js'
 
-const dataStore = useDataStore()
+const budgetStore = useBudgetStore()
 const profileStore = useProfileStore()
 const route = useRoute()
 
@@ -72,8 +72,8 @@ const resetFields = () => {
 }
 
 const fetchItem = () => {
-  const dataStore = useDataStore()
-  item.value = dataStore.budgetDictionary[useRoute().params.id]
+  const budgetStore = useBudgetStore()
+  item.value = budgetStore.budgetDictionary[useRoute().params.id]
 }
 
 const isPeriodVisible = computed(() => get(type.value, 'fireflyCode') !== Budget.types.manual.fireflyCode)
@@ -89,10 +89,10 @@ const onEvent = (event, payload) => {
   if (event === 'onPostSave') {
     let newItem = _.get(payload, 'data.data')
     newItem = BudgetTransformer.transformFromApi(newItem)
-    dataStore.budgetList = [newItem, ...dataStore.budgetList.filter((item) => item.id !== itemId.value)]
+    budgetStore.budgetList = [newItem, ...budgetStore.budgetList.filter((item) => item.id !== itemId.value)]
   }
   if (event === 'onPostDelete') {
-    dataStore.budgetList = dataStore.budgetList.filter((item) => item.id !== itemId.value)
+    budgetStore.budgetList = budgetStore.budgetList.filter((item) => item.id !== itemId.value)
   }
 }
 

@@ -17,10 +17,10 @@ import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
 
-const dataStore = useDataStore()
+const dashboardStore = useDashboardStore()
 
 const barsList = computed(() => {
-  const amountsList = Object.values(dataStore.dashboardExpenseByDay)
+  const amountsList = Object.values(dashboardStore.dashboardExpenseByDay)
   const maxAmount = Math.max(...amountsList)
 
   const daysList = eachDayOfInterval({
@@ -29,7 +29,7 @@ const barsList = computed(() => {
   })
   return daysList.map((date) => {
     const weekdayName = capitalize(format(date, 'E'))
-    const amount = get(dataStore.dashboardExpenseByDay, DateUtils.dateToString(date), 0)
+    const amount = get(dashboardStore.dashboardExpenseByDay, DateUtils.dateToString(date), 0)
     const percent = (amount / maxAmount) * 100
 
     return {

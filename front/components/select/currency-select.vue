@@ -36,14 +36,14 @@
 
 <script setup>
 import _, { get } from 'lodash-es'
-import { useDataStore } from '~/stores/dataStore'
+import { useCurrencyStore } from '~/stores/currencyStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import { IconRefresh } from '@tabler/icons-vue'
 
 import Currency from '~/models/Currency'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 
-const dataStore = useDataStore()
+const currencyStore = useCurrencyStore()
 const appStore = useAppStore()
 
 const attrs = useAttrs()
@@ -77,7 +77,7 @@ const filteredList = computed(() => {
 // ------ Methods ------
 
 onMounted(async () => {
-  list.value = dataStore.currenciesList.filter((item) => get(item, 'attributes.enabled'))
+  list.value = currencyStore.currenciesList.filter((item) => get(item, 'attributes.enabled'))
 })
 
 const getDisplayValue = (value) => {
@@ -87,7 +87,7 @@ const getDisplayValue = (value) => {
 const isLoading = ref(false)
 const onRefresh = async () => {
   isLoading.value = true
-  await dataStore.fetchCurrencies()
+  await currencyStore.fetchCurrencies()
   isLoading.value = false
 }
 </script>

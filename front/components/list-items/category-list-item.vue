@@ -24,7 +24,6 @@
 
 <script setup>
 import _ from 'lodash-es'
-import { useDataStore } from '~/stores/dataStore'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import Account from '~/models/Account.js'
@@ -34,8 +33,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['onEdit', 'onDelete'])
-
-const dataStore = useDataStore()
 
 const displayName = computed(() => _.get(props.value, 'attributes.name', ' - '))
 const icon = computed(() => Account.getIcon(props.value))

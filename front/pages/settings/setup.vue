@@ -33,7 +33,12 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useProfileStore } from '~/stores/profileStore'
-import { useDataStore } from '~/stores/dataStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
+import { useAccountStore } from '~/stores/accountStore'
+import { useCategoryStore } from '~/stores/categoryStore'
+import { useTagStore } from '~/stores/tagStore'
+import { useBudgetStore } from '~/stores/budgetStore'
+import { useTemplateStore } from '~/stores/templateStore'
 import UIUtils from '~/utils/UIUtils'
 import SettingsTokenField from '~/components/settings/settings-token-field.vue'
 import { useToolbar } from '~/composables/useToolbar'
@@ -46,23 +51,28 @@ import { get } from 'lodash-es'
 import { rule } from '~/utils/ValidationUtils.js'
 
 const appStore = useAppStore()
-const dataStore = useDataStore()
+const dashboardStore = useDashboardStore()
+const accountStore = useAccountStore()
+const categoryStore = useCategoryStore()
+const tagStore = useTagStore()
+const budgetStore = useBudgetStore()
+const templateStore = useTemplateStore()
 
 const authToken = ref('')
 const picoBackendURL = ref('')
 const syncProfileInDB = ref(true)
 const daysBetweenFullSync = ref(4)
 
-const accountsCount = computed(() => dataStore.accountList.length)
-const categoriesCount = computed(() => dataStore.categoryList.length)
-const tagsCount = computed(() => dataStore.tagList.length)
-const budgetsCount = computed(() => dataStore.budgetList.length)
-const transactionTemplatesCount = computed(() => dataStore.transactionTemplateList.length)
+const accountsCount = computed(() => accountStore.accountList.length)
+const categoriesCount = computed(() => categoryStore.categoryList.length)
+const tagsCount = computed(() => tagStore.tagList.length)
+const budgetsCount = computed(() => budgetStore.budgetList.length)
+const transactionTemplatesCount = computed(() => templateStore.transactionTemplateList.length)
 const lastSync = computed(() => {
-  if (!dataStore.lastSync) {
+  if (!dashboardStore.lastSync) {
     return ' - '
   }
-  return DateUtils.dateToUIWithTime(dataStore.lastSync, DateUtils.FORMAT_ROMANIAN_DATE_HOUR_MINUTE)
+  return DateUtils.dateToUIWithTime(dashboardStore.lastSync, DateUtils.FORMAT_ROMANIAN_DATE_HOUR_MINUTE)
 })
 const { t } = useI18n()
 
@@ -93,7 +103,7 @@ const onSave = async () => {
     return
   }
 
-  await dataStore.syncEverything()
+  await appStore.syncEverything()
   UIUtils.showToastSuccess(t('settings.settings_saved'))
 }
 

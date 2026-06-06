@@ -19,12 +19,12 @@
 
 <script setup>
 import _, { get } from 'lodash-es'
-import { useDataStore } from '~/stores/dataStore'
+import { useCurrencyStore } from '~/stores/currencyStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import { IconCaretDown, IconSquareRoundedX } from '@tabler/icons-vue'
 import Currency from '~/models/Currency'
 
-const dataStore = useDataStore()
+const currencyStore = useCurrencyStore()
 const showPopover = ref(false)
 const modelValue = defineModel()
 const props = defineProps({
@@ -39,7 +39,7 @@ const currencyCode = computed(() => Currency.getCode(modelValue.value))
 // ------ Methods ------
 
 onMounted(async () => {
-  list.value = dataStore.currenciesList.filter((item) => get(item, 'attributes.enabled'))
+  list.value = currencyStore.currenciesList.filter((item) => get(item, 'attributes.enabled'))
 })
 
 const onSelect = (item) => {

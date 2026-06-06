@@ -43,7 +43,7 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
+import { useTagStore } from '~/stores/tagStore'
 import _, { cloneDeep, get, set } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
@@ -57,18 +57,18 @@ import { TUTORIAL_CONSTANTS } from '~/constants/TutorialConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
 
-const dataStore = useDataStore()
+const tagStore = useTagStore()
 const profileStore = useProfileStore()
 const route = useRoute()
 
 const form = ref(null)
 
 const fetchItem = async () => {
-  const tag = cloneDeep(dataStore.tagDictionaryById[useRoute().params.id])
+  const tag = cloneDeep(tagStore.tagDictionaryById[useRoute().params.id])
 
   const parentTagId = get(tag, 'attributes.parent_id')
   if (parentTagId) {
-    tag.attributes.parentTag = dataStore.tagDictionaryById[parentTagId]
+    tag.attributes.parentTag = tagStore.tagDictionaryById[parentTagId]
   }
   item.value = tag
 }
@@ -79,11 +79,11 @@ const onEvent = (event, payload) => {
     newItem = TagTransformer.transformFromApi(newItem)
 
     const isTodo = get(newItem, 'attributes.is_todo')
-    const oldTagsList = dataStore.tagList.map((item) => (isTodo && set(item, 'attributes.is_todo', false)) || item).filter((item) => item.id !== itemId.value)
-    dataStore.tagList = [newItem, ...oldTagsList]
+    const oldTagsList = tagStore.tagList.map((item) => (isTodo && set(item, 'attributes.is_todo', false)) || item).filter((item) => item.id !== itemId.value)
+    tagStore.tagList = [newItem, ...oldTagsList]
   }
   if (event === 'onPostDelete') {
-    dataStore.tagList = dataStore.tagList.filter((item) => parseInt(item.id) !== parseInt(itemId.value))
+    tagStore.tagList = tagStore.tagList.filter((item) => parseInt(item.id) !== parseInt(itemId.value))
   }
 }
 

@@ -4,8 +4,6 @@ import _, { get } from 'lodash-es'
 
 // by convention, composable function names start with "use"
 export function useList(prop) {
-  // const dataStore = useDataStore()
-
   const { title, routeList, routeForm } = prop
   const { model, onEvent } = prop
   const propOnLoadMore = prop.onLoadMore
@@ -42,8 +40,6 @@ export function useList(prop) {
     }
     isLoading.value = true
 
-    // let result = await new TransactionRepository().getAll()
-    // dataStore.transactionList = result.data
     page.value = page.value + 1
 
     let result = {}

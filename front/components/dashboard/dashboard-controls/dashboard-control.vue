@@ -14,7 +14,7 @@
     </div>
   </van-cell-group>
 
-  <app-month-year v-model="dataStore.dashboard.month" v-model:show-dropdown="showDropdown" />
+  <app-month-year v-model="dashboardStore.month" v-model:show-dropdown="showDropdown" />
 </template>
 
 <script setup>
@@ -23,7 +23,9 @@ import { useWindowScroll } from '@vueuse/core'
 import DashboardControlButtons from '~/components/dashboard/dashboard-controls/dashboard-control-buttons.vue'
 import { useDashboardControls } from '~/composables/useDashboardControls.js'
 
-const dataStore = useDataStore()
+import { useDashboardStore } from '~/stores/dashboardStore'
+
+const dashboardStore = useDashboardStore()
 const { showDropdown, rangeTitle, onNextMonth, onPreviousMonth, onChooseMonth } = useDashboardControls()
 
 const { y } = useWindowScroll()

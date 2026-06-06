@@ -1,6 +1,6 @@
 <template>
   <div class="text-size-14 flex-center-vertical gap-1">
-    <currency-dropdown v-model="dataStore.dashboardCurrency" />
+    <currency-dropdown v-model="dashboardStore.dashboardCurrency" />
 
     <div class="app-button-small cursor-pointer" @click="onToggleShowDashboardAccountValues">
       <app-icon :icon="profileStore.dashboard.showAccountAmounts ? TablerIconConstants.eyeHidden : TablerIconConstants.eyeVisible" :size="20" />
@@ -28,12 +28,16 @@ import { useListFilters } from '~/composables/useListFilters.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
 import { IconSquareRoundedX } from '@tabler/icons-vue'
 
-const dataStore = useDataStore()
+import { useCurrencyStore } from '~/stores/currencyStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
+
+const currencyStore = useCurrencyStore()
+const dashboardStore = useDashboardStore()
 const profileStore = useProfileStore()
 
 const transactionFiltersRef = useTemplateRef('transactionFiltersRef')
 
-const hasMultipleCurrencies = computed(() => dataStore.dashboardAccountsCurrencyList.length > 1)
+const hasMultipleCurrencies = computed(() => dashboardStore.dashboardAccountsCurrencyList.length > 1)
 
 const onToggleShowDashboardAccountValues = async () => {
   profileStore.dashboard.showAccountAmounts = !profileStore.dashboard.showAccountAmounts
@@ -51,11 +55,11 @@ const onResetFilters = () => {
 }
 
 watch(filters, (newValue) => {
-  dataStore.fetchDashboard()
+  dashboardStore.fetchDashboard()
 })
 
 watch(filtersBackendList, (newValue) => {
-  dataStore.dashboard.backendFilters = newValue
+  dashboardStore.backendFilters = newValue
 })
 
 </script>

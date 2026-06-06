@@ -7,6 +7,10 @@ import Currency from '~/models/Currency.js'
 import Account from '~/models/Account'
 import { isStringEmpty } from '~/utils/DataUtils'
 
+import { useAccountStore } from '~/stores/accountStore'
+import { useCategoryStore } from '~/stores/categoryStore'
+import { useTagStore } from '~/stores/tagStore'
+
 export const useTransactionFormLogic = ({
   item,
   itemId,
@@ -21,9 +25,11 @@ export const useTransactionFormLogic = ({
   currencyForeign,
   notes,
   budget,
-  dataStore,
   profileStore
 }) => {
+  const accountStore = useAccountStore()
+  const categoryStore = useCategoryStore()
+  const tagStore = useTagStore()
   const attemptAccountsFix = () => {
     let { source, destination } = Transaction.attemptAccountFixOnTypeChange(type.value, accountSource.value, accountDestination.value)
     accountSource.value = source
@@ -39,11 +45,11 @@ export const useTransactionFormLogic = ({
 
     amount.value = transactionTemplate.amount
     if (transactionTemplate.account_source_id) {
-      accountSource.value = dataStore.accountDictionary[transactionTemplate.account_source_id]
+      accountSource.value = accountStore.accountDictionary[transactionTemplate.account_source_id]
     }
 
     if (transactionTemplate.account_destination_id) {
-      accountDestination.value = dataStore.accountDictionary[transactionTemplate.account_destination_id]
+      accountDestination.value = accountStore.accountDictionary[transactionTemplate.account_destination_id]
     }
 
     description.value = transactionTemplate.description
@@ -76,7 +82,7 @@ export const useTransactionFormLogic = ({
 
     if (profileStore.copyTagToCategory && !category.value) {
       for (let tagName of sortedTagNames) {
-        let foundCategory = dataStore.categoryList.find((c) => tagName.toLowerCase() === Category.getDisplayName(c).toLowerCase())
+        let foundCategory = categoryStore.categoryList.find((c) => tagName.toLowerCase() === Category.getDisplayName(c).toLowerCase())
         if (foundCategory) {
           category.value = foundCategory
           break
@@ -112,7 +118,7 @@ export const useTransactionFormLogic = ({
     resetFormFields()
 
     newTag && (tags.value = Tag.getTagWithParents(newTag))
-    newIsTodo && dataStore.tagTodo && (tags.value = [...tags.value, dataStore.tagTodo])
+    newIsTodo && tagStore.tagTodo && (tags.value = [...tags.value, tagStore.tagTodo])
     newCategory && (category.value = newCategory)
     transactionTemplate ? await onTransactionTemplateSelected(transactionTemplate) : (type.value = Transaction.types.expense)
 

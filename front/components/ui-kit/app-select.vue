@@ -63,12 +63,10 @@
 
 <script setup>
 import { get } from 'lodash-es'
-import { useDataStore } from '~/stores/dataStore'
+
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import { isEqual } from 'lodash-es/lang'
 import { useSwipeToDismiss } from '~/composables/useSwipeToDismiss'
-
-const dataStore = useDataStore()
 
 const modelValue = defineModel()
 const showDropdown = defineModel('showDropdown', false)

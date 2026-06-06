@@ -24,7 +24,7 @@
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
+import { useAccountStore } from '~/stores/accountStore'
 import { useList } from '~/composables/useList'
 import Account from '~/models/Account'
 import { useToolbar } from '~/composables/useToolbar'
@@ -35,11 +35,11 @@ import TablerIconConstants from '~/constants/TablerIconConstants'
 import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 
-const dataStore = useDataStore()
+const accountStore = useAccountStore()
 
 const onEvent = (event, payload) => {
   if (event === 'onPostDelete') {
-    dataStore.accountList = dataStore.accountList.filter((item) => parseInt(item.id) !== parseInt(payload.id))
+    accountStore.accountList = accountStore.accountList.filter((item) => parseInt(item.id) !== parseInt(payload.id))
   }
 }
 
@@ -87,8 +87,8 @@ const onRefresh = async () => {
   isLoading.value = true
   isRefreshing.value = true
 
-  const dataStore = useDataStore()
-  await dataStore.fetchAccounts()
+  const accountStore = useAccountStore()
+  await accountStore.fetchAccounts()
 
   isLoading.value = false
   isRefreshing.value = false
@@ -96,8 +96,8 @@ const onRefresh = async () => {
 }
 
 const onLoadMore = () => {
-  const dataStore = useDataStore()
-  list.value = dataStore.accountList
+  const accountStore = useAccountStore()
+  list.value = accountStore.accountList
 }
 
 // const onClickBack = async () => {

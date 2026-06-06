@@ -36,7 +36,6 @@
 
 <script setup>
 import { useProfileStore } from '~/stores/profileStore'
-import { useDataStore } from '~/stores/dataStore'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import { REPO_URL } from '~/constants/Constants'
@@ -45,7 +44,6 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
-const dataStore = useDataStore()
 
 const toolbar = useToolbar()
 toolbar.init({

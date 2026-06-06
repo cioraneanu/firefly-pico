@@ -26,13 +26,15 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import AppChip from '~/components/ui-kit/app-chip.vue'
 import Budget from '~/models/Budget.js'
 
-const dataStore = useDataStore()
+const budgetStore = useBudgetStore()
+const currencyStore = useCurrencyStore()
+const dashboardStore = useDashboardStore()
 // const { t } = useI18n()
 
-const budgetList = dataStore.budgetList.filter(item => Budget.isActive(item))
+const budgetList = budgetStore.budgetList.filter(item => Budget.isActive(item))
 const hasBudgets = computed(() => budgetList.length > 0)
 
-const budgetLimitTotalFormatted = computed(() => `${formatNumberForDashboard(dataStore.budgetLimitTotal)} ${dataStore.dashboardCurrencyCode}`)
-const budgetLimitSpentFormatted = computed(() => `${formatNumberForDashboard(dataStore.budgetLimitSpent)} ${dataStore.dashboardCurrencyCode}`)
-const budgetLimitRemainingFormatted = computed(() => `${formatNumberForDashboard(dataStore.budgetLimitRemaining) } ${dataStore.dashboardCurrencyCode}`)
+const budgetLimitTotalFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitTotal)} ${dashboardStore.dashboardCurrencyCode}`)
+const budgetLimitSpentFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitSpent)} ${dashboardStore.dashboardCurrencyCode}`)
+const budgetLimitRemainingFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitRemaining) } ${dashboardStore.dashboardCurrencyCode}`)
 </script>

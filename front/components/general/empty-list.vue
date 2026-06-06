@@ -2,13 +2,13 @@
   <div class="empty-state-wrapper">
     <div class="empty-state">
       <img :src="EmptyIllustrationHalf" :srcset="`${EmptyIllustrationHalf} 1x, ${EmptyIllustration} 2x`" class="empty-illustration" alt="Empty state" />
-      <h3 class="empty-title">{{ title || $t('general.list_empty', 'No items yet') }}</h3>
+      <h3 class="empty-title">{{ title || $t('general.list_empty') }}</h3>
       <p class="empty-subtitle">
-        {{ subtitle || $t('general.list_empty_subtitle', 'Add some entries with the top-right button.') }}
+        {{ subtitle || $t('general.list_empty_subtitle') }}
       </p>
-      
+
       <div v-if="$slots.action" class="empty-action">
-        <slot name="action"></slot>
+        <slot name="action" />
       </div>
     </div>
   </div>
@@ -18,15 +18,15 @@
 import EmptyIllustration from '~/assets/images/empty-folder.png'
 import EmptyIllustrationHalf from '~/assets/images/empty-folder-half.png'
 
-const props = defineProps({
+defineProps({
   title: {
     type: String,
-    default: ''
+    default: '',
   },
   subtitle: {
     type: String,
-    default: ''
-  }
+    default: '',
+  },
 })
 </script>
 
@@ -84,15 +84,15 @@ const props = defineProps({
     width: 200px;
     margin-bottom: 32px;
   }
-  
+
   .empty-title {
     font-size: 20px;
   }
-  
+
   .empty-subtitle {
     font-size: 15px;
   }
-  
+
   .empty-action {
     margin-top: 16px;
   }

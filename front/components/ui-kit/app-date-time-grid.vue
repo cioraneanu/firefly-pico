@@ -38,7 +38,6 @@
 </template>
 
 <script setup>
-import { useDataStore } from '~/stores/dataStore'
 import DateUtils from '~/utils/DateUtils'
 import { addDays, addYears, startOfDay, subYears } from 'date-fns'
 import { useFormAttributes } from '~/composables/useFormAttributes'
@@ -48,7 +47,6 @@ import { useSwipeToDismiss } from '~/composables/useSwipeToDismiss.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import AppDateTimeGridTimePopup from '~/components/ui-kit/app-date-time-grid-time-popup.vue'
 
-const dataStore = useDataStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 

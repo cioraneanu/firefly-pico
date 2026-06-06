@@ -29,13 +29,13 @@
 </template>
 
 <script setup>
-import { useDataStore } from '~/stores/dataStore'
+import { useCategoryStore } from '~/stores/categoryStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import Category from '~/models/Category.js'
 import { avatarListIcons, duoToneListIcons, fluentListIcons } from '~/constants/SvgConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
-const dataStore = useDataStore()
+const categoryStore = useCategoryStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 
@@ -99,7 +99,7 @@ const getDisplayValue = (value) => {
 const isLoading = ref(false)
 const onRefresh = async () => {
   isLoading.value = true
-  await dataStore.fetchCategories()
+  await categoryStore.fetchCategories()
   isLoading.value = false
 }
 </script>

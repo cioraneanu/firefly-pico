@@ -34,7 +34,10 @@ const props = defineProps({
 })
 
 const profileStore = useProfileStore()
-const dataStore = useDataStore()
+import { useAccountStore } from '~/stores/accountStore'
+import { useCategoryStore } from '~/stores/categoryStore'
+const accountStore = useAccountStore()
+const categoryStore = useCategoryStore()
 
 const emit = defineEmits(['onEdit', 'onDelete'])
 
@@ -59,10 +62,10 @@ const timeHour = computed(() => (date.value ? format(date.value, 'HH') : ''))
 const timeMinute = computed(() => (date.value ? format(date.value, 'mm') : ''))
 
 const accountIcons = computed(() => {
-  const destinationAccount = get(dataStore.accountDictionary, get(firstTransaction.value, 'destination_id'))
+  const destinationAccount = get(accountStore.accountDictionary, get(firstTransaction.value, 'destination_id'))
   const destinationAccountIcon = Account.getIcon(destinationAccount) ?? TablerIconConstants.account
 
-  const sourceAccount = get(dataStore.accountDictionary, get(firstTransaction.value, 'source_id'))
+  const sourceAccount = get(accountStore.accountDictionary, get(firstTransaction.value, 'source_id'))
   const sourceAccountIcon = Account.getIcon(sourceAccount) ?? TablerIconConstants.account
 
   if (isTypeExpense.value) {
@@ -79,7 +82,7 @@ const tagIcon = computed(() => {
   return get(sortedTags, '0.attributes.icon.icon') ?? TablerIconConstants.tag
 })
 const categoryIcon = computed(() => {
-  const category = get(dataStore.categoryDictionary, get(firstTransaction.value, 'category_id'))
+  const category = get(categoryStore.categoryDictionary, get(firstTransaction.value, 'category_id'))
   return get(category, 'attributes.icon.icon') ?? TablerIconConstants.category
 })
 

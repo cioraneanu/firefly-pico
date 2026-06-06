@@ -18,7 +18,6 @@
 
 <script setup>
 import { cloneDeep, get } from 'lodash-es'
-import { useDataStore } from '~/stores/dataStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import { isEqual } from 'lodash-es/lang'
 import { useSwipeToDismiss } from '~/composables/useSwipeToDismiss'
@@ -27,7 +26,6 @@ import AccountRepository from '~/repository/AccountRepository.js'
 import AccountTransformer from '~/transformers/AccountTransformer.js'
 import UIUtils from '~/utils/UIUtils.js'
 
-const dataStore = useDataStore()
 
 const showDropdown = defineModel('showDropdown', false)
 const popupRef = ref(null)

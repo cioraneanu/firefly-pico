@@ -37,7 +37,6 @@
 
 <script setup>
 import { get } from 'lodash-es'
-import { useDataStore } from '~/stores/dataStore'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import Account from '~/models/Account.js'

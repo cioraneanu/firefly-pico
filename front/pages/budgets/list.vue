@@ -21,21 +21,21 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
+import { useBudgetStore } from '~/stores/budgetStore'
 import { useList } from '~/composables/useList'
 import { useToolbar } from '~/composables/useToolbar'
 import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import Budget from '~/models/Budget.js'
 
-const dataStore = useDataStore()
+const budgetStore = useBudgetStore()
 
-// let list = computed(() => dataStore.accountList)
+
 // let formRoute = RouteConstants.ROUTE_ACCOUNT_ID
 
 const onEvent = (event, payload) => {
   if (event === 'onPostDelete') {
-    dataStore.budgetList = dataStore.budgetList.filter((item) => item.id !== payload.id)
+    budgetStore.budgetList = budgetStore.budgetList.filter((item) => item.id !== payload.id)
   }
 }
 
@@ -70,8 +70,8 @@ const onRefresh = async () => {
   isLoading.value = true
   isRefreshing.value = true
 
-  await dataStore.fetchBudgets()
-  list.value = dataStore.budgetList
+  await budgetStore.fetchBudgets()
+  list.value = budgetStore.budgetList
 
   isLoading.value = false
   isRefreshing.value = false

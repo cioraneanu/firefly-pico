@@ -10,6 +10,7 @@ axios.interceptors.request.use(
     const requestId = Math.random().toString(36).substring(7)
     config.requestId = requestId
     config.signal = controller.signal
+    config.showLoading = config.showLoading !== false
     config.showLoading && loadingStore.addActiveRequest({ id: requestId, controller })
 
     let authToken = appStore.authToken
@@ -72,16 +73,13 @@ axios.interceptors.response.use(
   },
   async function (error) {
     let errorMessage = get(error, 'response.data.message') ?? get(error, 'message')
-    let showErrorToast = (error.config?.showErrorToast !== false)
+    let showErrorToast = error.config?.showErrorToast !== false
     errorMessage && showErrorToast && UIUtils.showToastError(`Error: ${errorMessage}`, 4000)
 
     await retryRequest(error)
 
     const loadingStore = useLoadingStore()
-    if (error.config?.showLoading !== false) {
-      loadingStore.removeActiveRequest(error.config?.requestId)
-    }
-
+    error.config?.showLoading && loadingStore.removeActiveRequest(error.config?.requestId)
     return Promise.resolve(error.response)
   },
 )

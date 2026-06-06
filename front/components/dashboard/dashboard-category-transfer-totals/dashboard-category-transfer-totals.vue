@@ -34,16 +34,20 @@ import Category from '~/models/Category.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
 import { useActionSheet } from '~/composables/useActionSheet.js'
 
-const dataStore = useDataStore()
+import { useCategoryStore } from '~/stores/categoryStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
+
+const categoryStore = useCategoryStore()
+const dashboardStore = useDashboardStore()
 const { t } = useI18n()
 
 const barsList = computed(() => {
-  const dictionary = dataStore.dashboardTransfersByCategory
+  const dictionary = dashboardStore.dashboardTransfersByCategory
 
   const maxAmount = Math.max(...Object.values(dictionary))
 
   const bars = Object.keys(dictionary).map((categoryId) => {
-    const category = dataStore.categoryDictionary[categoryId]
+    const category = categoryStore.categoryDictionary[categoryId]
     const amount = dictionary[categoryId]
     const percent = (amount / maxAmount) * 100
     return {
@@ -75,8 +79,8 @@ const onGoToCategory = async (category) => {
 }
 
 const onGoToTransactions = async (category) => {
-  const startDate = DateUtils.dateToString(dataStore.dashboardDateStart)
-  const endDate = DateUtils.dateToString(dataStore.dashboardDateEnd)
+  const startDate = DateUtils.dateToString(dashboardStore.dashboardDateStart)
+  const endDate = DateUtils.dateToString(dashboardStore.dashboardDateEnd)
   const excludedUrl = getExcludedTransactionUrl()
 
   if (!category) {
