@@ -51,7 +51,7 @@ const profileStore = useProfileStore()
 
 const cardComponents = {
   [dashboardCard.calendar.code]: DashboardCalendar,
-  [dashboardCard.accounts.code]: DashboardAccounts,
+  // [dashboardCard.accounts.code]: DashboardAccounts,
   [dashboardCard.expensesLastWeek.code]: DashboardWeekBars,
   [dashboardCard.transactionsSummary.code]: DashboardSummary,
   [dashboardCard.budgets.code]: DashboardBudgets,

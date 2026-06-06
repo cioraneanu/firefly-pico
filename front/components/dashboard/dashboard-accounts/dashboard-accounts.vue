@@ -31,14 +31,13 @@
       </span>
     </div>
 
-
     <div v-if="hasAccountGroups" class="flex-center text-size-13 mb-3 gap-1 flex-wrap">
       <div class="flex-center text-size-13 me-1">
         <span class="font-400 text-muted">{{ $t('dashboard.accounts.by_group') }}: </span>
       </div>
 
       <span v-for="(totalValue, groupName) in dashboardStats.dashboardAccountsTotalByGroup" class="font-700 ms-1 mx-1 app-select-option-tag">
-       {{ groupName }} | {{ formatNumberForDashboard(totalValue) }}  {{ Currency.getCode(currencyStore.dashboardCurrency) }}
+        {{ groupName }} | {{ formatNumberForDashboard(totalValue) }} {{ Currency.getCode(currencyStore.dashboardCurrency) }}
       </span>
     </div>
 
@@ -46,8 +45,6 @@
       <span class="font-400 text-muted">{{ $t('dashboard.accounts.total') }}: </span>
       <span class="font-700">~{{ accountTotal }} {{ Currency.getCode(currencyStore.dashboardCurrency) }}</span>
     </div>
-
-
   </van-cell-group>
 </template>
 
@@ -60,6 +57,7 @@ import { IconCash, IconLibraryPlus, IconLibraryMinus } from '@tabler/icons-vue'
 import { formatNumberForDashboard } from '~/utils/NumberUtils.js'
 import { useActionSheet } from '~/composables/useActionSheet.js'
 import Currency from '../../../models/Currency.js'
+import { useDashboardStore } from '~/stores/dashboardStore.js'
 
 const profileStore = useProfileStore()
 const currencyStore = useCurrencyStore()
@@ -69,8 +67,6 @@ const showHiddenAccounts = ref(false)
 const toggleHiddenAccounts = () => {
   showHiddenAccounts.value = !showHiddenAccounts.value
 }
-
-
 
 const accountTotal = computed(() => {
   return formatNumberForDashboard(dashboardStats.dashboardAccountsEstimatedTotal)
@@ -99,6 +95,9 @@ const onGoToTransactions = async (account) => {
 }
 
 const onGoToAccount = async (account) => {
+  console.log('wtf', { account })
+  // console.log('wtf', {account, xxx: useDashboardStore().dashboardAccountList})
+
   if (account) {
     await navigateTo(`${RouteConstants.ROUTE_ACCOUNT_ID}/${account.id}`)
   }

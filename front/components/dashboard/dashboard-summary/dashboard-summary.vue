@@ -98,7 +98,7 @@ const onPreviousMonth = () => {
 watch(
   () => dashboardStore.month,
   (newValue) => {
-    dashboardStore.fetchDashboardTransactionsForInterval()
+    dashboardStore.fetchTransactionsForInterval()
   },
 )
 

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useLocalStorage } from '@vueuse/core'
-import { startOfMonth, subMonths, getDate, differenceInDays, setDate, addMonths, subDays } from 'date-fns'
+import { startOfMonth, subMonths, getDate, differenceInDays, setDate, addMonths, subDays, startOfDay } from 'date-fns'
 import { useProfileStore } from '~/stores/profileStore'
 import { useAppStore } from '~/stores/appStore'
 import { useAccountStore } from '~/stores/accountStore'
@@ -10,12 +10,15 @@ import { useTagStore } from '~/stores/tagStore'
 import { useTemplateStore } from '~/stores/templateStore'
 import { useCurrencyStore } from '~/stores/currencyStore'
 import { useBudgetStore } from '~/stores/budgetStore'
-import { useTransactionStore } from '~/stores/transactionStore'
 import { keyBy, head } from 'lodash-es'
 import AccountRepository from '~/repository/AccountRepository'
 import AccountTransformer from '~/transformers/AccountTransformer'
 import Account from '~/models/Account'
+import TransactionRepository from '~/repository/TransactionRepository'
+import TransactionTransformer from '~/transformers/TransactionTransformer'
+import Tag from '~/models/Tag.js'
 import DateUtils from '~/utils/DateUtils.js'
+import { getExcludedTransactionFilters } from '~/utils/DashboardUtils.js'
 
 export const useDashboardStore = defineStore('dashboard', () => {
   const isLoading = ref(false)
@@ -27,9 +30,11 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const transactionsListLastWeek = ref([])
   const transactionsWithTodo = ref([])
   const tagsWidgetModeOnlyRootTag = useLocalStorage('tagsWidgetModeOnlyRootTag', true)
+  const isLoadingTransactions = ref(false)
+  const isLoadingTransactionsLastWeek = ref(false)
 
 
-  // Getters
+  // ----- Getters
   const dashboardAccountDictionary = computed(() => {
     return keyBy(dashboardAccountList.value, 'id')
   })
@@ -46,7 +51,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
   })
 
 
-  // Actions
+  // ----- Actions
   async function init() {
     const profileStore = useProfileStore()
     let now = new Date()
@@ -55,24 +60,60 @@ export const useDashboardStore = defineStore('dashboard', () => {
     month.value = subMonths(dashboardMonth, monthToSub)
   }
 
-  async function fetchDashboardTransactionsForInterval() {
-    const transactionStore = useTransactionStore()
-    transactionsList.value = await transactionStore.fetchDashboardTransactionsForInterval(
-      dashboardDateStart.value,
-      dashboardDateEnd.value,
-      backendFilters.value
-    )
+  async function fetchTransactionsForInterval() {
+    isLoadingTransactions.value = true
+
+    let filtersParts = [
+      `date_after:${DateUtils.dateToString(dashboardDateStart.value)}`,
+      `date_before:${DateUtils.dateToString(dashboardDateEnd.value)}`,
+      ...getExcludedTransactionFilters()
+    ]
+    filtersParts = [...filtersParts, ...backendFilters.value]
+    let filters = [{ field: 'query', value: filtersParts.join(' ') }]
+    let searchMethod = new TransactionRepository().searchTransaction
+    let list = await new TransactionRepository().getAllWithMerge({ filters, getAll: searchMethod })
+
+    isLoadingTransactions.value = false
+    transactionsList.value = TransactionTransformer.transformFromApiList(list)
   }
 
-  async function fetchDashboardTransactionsForWeek() {
-    const transactionStore = useTransactionStore()
-    transactionsListLastWeek.value = await transactionStore.fetchDashboardTransactionsForWeek(backendFilters.value)
+  async function fetchTransactionsForWeek() {
+    isLoadingTransactionsLastWeek.value = true
+
+    let startDate = DateUtils.dateToString(subDays(startOfDay(new Date()), 7))
+    let endDate = DateUtils.dateToString(startOfDay(new Date()))
+
+    let filtersParts = [
+      `date_after:${startDate}`,
+      `date_before:${endDate}`,
+      `type:withdrawal`,
+      ...getExcludedTransactionFilters()
+    ]
+    filtersParts = [...filtersParts, ...backendFilters.value]
+    let filters = [{ field: 'query', value: filtersParts.join(' ') }]
+    let searchMethod = new TransactionRepository().searchTransaction
+    let list = await new TransactionRepository().getAllWithMerge({ filters, getAll: searchMethod })
+
+    isLoadingTransactionsLastWeek.value = false
+    transactionsListLastWeek.value = TransactionTransformer.transformFromApiList(list)
   }
 
   async function fetchTransactionsWithTodos() {
-    const transactionStore = useTransactionStore()
     const tagStore = useTagStore()
-    transactionsWithTodo.value = await transactionStore.fetchTransactionsWithTodos(tagStore.tagTodo)
+    const tagTodo = tagStore.tagTodo
+    if (!tagTodo) {
+      transactionsWithTodo.value = []
+      return
+    }
+
+    let filters = [
+      {
+        field: 'query',
+        value: `tag_is:"${Tag.getDisplayNameEllipsized(tagTodo)}"`,
+      },
+    ]
+    let list = await new TransactionRepository().searchTransaction({ filters })
+    transactionsWithTodo.value = TransactionTransformer.transformFromApiList(list?.data ?? [])
   }
 
   async function fetchDashboard() {
@@ -86,8 +127,8 @@ export const useDashboardStore = defineStore('dashboard', () => {
       currencyStore.dashboardCurrency = dashboardCurrency
     }
     
-    await fetchDashboardTransactionsForInterval()
-    await fetchDashboardTransactionsForWeek()
+    await fetchTransactionsForInterval()
+    await fetchTransactionsForWeek()
     await fetchTransactionsWithTodos()
     currencyStore.fetchExchangeRate()
     budgetStore.fetchBudgets()
@@ -126,11 +167,12 @@ export const useDashboardStore = defineStore('dashboard', () => {
     dashboardDateStart,
     dashboardDateEnd,
     init,
-    fetchDashboardTransactionsForInterval,
-    fetchDashboardTransactionsForWeek,
+    fetchTransactionsForInterval,
+    fetchTransactionsForWeek,
     fetchTransactionsWithTodos,
     fetchDashboardAccounts,
     fetchDashboard,
-
+    isLoadingTransactions,
+    isLoadingTransactionsLastWeek,
   }
 })
