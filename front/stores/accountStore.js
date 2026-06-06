@@ -16,7 +16,7 @@ export const useAccountStore = defineStore('account', () => {
     return keyBy(accountList.value, 'id')
   })
 
-  async function fetchAccounts(dashboardCurrency) {
+  async function fetchAccounts() {
     isLoadingAccounts.value = true
     let filters = [{ field: 'date', value: DateUtils.dateToString(startOfTomorrow()) }]
     let list = await new AccountRepository().getAllWithMerge({ filters })
@@ -24,12 +24,6 @@ export const useAccountStore = defineStore('account', () => {
     list = list.filter((item) => allowedTypes.includes(item?.attributes?.type) && Account.getIsActive(item))
     accountList.value = AccountTransformer.transformFromApiList(list)
     isLoadingAccounts.value = false
-
-    if (!dashboardCurrency?.id) {
-      let currencies = list.map((item) => item?.attributes?.currency).filter((item) => !!item)
-      return head(currencies)
-    }
-    return null
   }
 
   return {

@@ -37,13 +37,13 @@
       </div>
 
       <span v-for="(totalValue, groupName) in dashboardStore.dashboardAccountsTotalByGroup" class="font-700 ms-1 mx-1 app-select-option-tag">
-        {{ groupName }} | {{ formatNumberForDashboard(totalValue) }} {{ Currency.getCode(currencyStore.dashboardCurrency) }}
+        {{ groupName }} | {{ formatNumberForDashboard(totalValue) }} {{ Currency.getCode(dashboardStore.dashboardCurrency) }}
       </span>
     </div>
 
     <div v-if="hasMultipleCurrencies" class="flex-center text-size-13 mb-3 gap-1">
       <span class="font-400 text-muted">{{ $t('dashboard.accounts.total') }}: </span>
-      <span class="font-700">~{{ accountTotal }} {{ Currency.getCode(currencyStore.dashboardCurrency) }}</span>
+      <span class="font-700">~{{ accountTotal }} {{ Currency.getCode(dashboardStore.dashboardCurrency) }}</span>
     </div>
   </van-cell-group>
 </template>
@@ -60,7 +60,6 @@ import Currency from '../../../models/Currency.js'
 import { useDashboardStore } from '~/stores/dashboardStore.js'
 
 const profileStore = useProfileStore()
-const currencyStore = useCurrencyStore()
 const dashboardStore = useDashboardStore()
 
 const showHiddenAccounts = ref(false)

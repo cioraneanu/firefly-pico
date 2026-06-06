@@ -1,6 +1,6 @@
 <template>
   <div class="text-size-14 flex-center-vertical gap-1">
-    <currency-dropdown v-model="currencyStore.dashboardCurrency" />
+    <currency-dropdown v-model="dashboardStore.dashboardCurrency" />
 
     <div class="app-button-small cursor-pointer" @click="onToggleShowDashboardAccountValues">
       <app-icon :icon="profileStore.dashboard.showAccountAmounts ? TablerIconConstants.eyeHidden : TablerIconConstants.eyeVisible" :size="20" />

@@ -34,7 +34,7 @@ const dashboardStore = useDashboardStore()
 const budgetList = budgetStore.budgetList.filter(item => Budget.isActive(item))
 const hasBudgets = computed(() => budgetList.length > 0)
 
-const budgetLimitTotalFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitTotal)} ${currencyStore.dashboardCurrencyCode}`)
-const budgetLimitSpentFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitSpent)} ${currencyStore.dashboardCurrencyCode}`)
-const budgetLimitRemainingFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitRemaining) } ${currencyStore.dashboardCurrencyCode}`)
+const budgetLimitTotalFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitTotal)} ${dashboardStore.dashboardCurrencyCode}`)
+const budgetLimitSpentFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitSpent)} ${dashboardStore.dashboardCurrencyCode}`)
+const budgetLimitRemainingFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitRemaining) } ${dashboardStore.dashboardCurrencyCode}`)
 </script>

@@ -122,7 +122,7 @@ export const useAppStore = defineStore('app', () => {
 
     await Promise.all([
       categoryStore.fetchCategories(),
-      accountStore.fetchAccounts(currencyStore.dashboardCurrency),
+      accountStore.fetchAccounts(),
       tagStore.fetchTags(),
       templateStore.fetchTransactionTemplates(),
       currencyStore.fetchCurrencies(),
