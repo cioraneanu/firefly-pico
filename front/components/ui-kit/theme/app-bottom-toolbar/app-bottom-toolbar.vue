@@ -5,8 +5,9 @@
 
     <app-bottom-toolbar-item :route="RouteConstants.ROUTE_TRANSACTION_ID">
       <template #icon>
-        <div class="flex-center flex-column">
-          <icon-square-rounded-plus-filled :size="36" color="#1976D2" />
+        <div class="flex-center flex-column position-relative">
+          <div style="position: absolute; width: 16px; height: 16px; background: white; z-index: 0; border-radius: 2px;"></div>
+          <icon-square-rounded-plus-filled :size="36" color="#1976D2" style="z-index: 1;" />
           <!--          <div class="app-bottom-toolbar-item flex-center">New</div>-->
         </div>
       </template>

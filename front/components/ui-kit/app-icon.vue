@@ -17,11 +17,18 @@ const props = defineProps({
   stroke: {
     default: 1.7,
   },
+  invertable: {
+    type: Boolean,
+    default: null,
+  },
 })
 
 const style = computed(() => `width: ${props.size}px; height: ${props.size}px`)
 
 const isColorInvertable = computed(() => {
+  if (props.invertable !== null) {
+    return props.invertable
+  }
   if (typeof props.icon === 'object') {
     return true
   }
