@@ -72,10 +72,8 @@ axios.interceptors.response.use(
   },
   async function (error) {
     let errorMessage = get(error, 'response.data.message') ?? get(error, 'message')
-
-    if (errorMessage) {
-      UIUtils.showToastError(`Error: ${errorMessage}`, 4000)
-    }
+    let showErrorToast = (error.config?.showErrorToast !== false)
+    errorMessage && showErrorToast && UIUtils.showToastError(`Error: ${errorMessage}`, 4000)
 
     await retryRequest(error)
 
