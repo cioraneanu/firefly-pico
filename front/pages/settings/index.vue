@@ -50,7 +50,7 @@ toolbar.init({ title: t('settings.settings_title') })
 
 
 const onSyncEverything = async () => {
-  await dashboardStore.syncEverything()
+  await appStore.syncEverything()
 }
 
 onMounted(() => {

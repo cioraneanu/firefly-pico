@@ -11,6 +11,7 @@ import { useCurrencyStore } from '~/stores/currencyStore'
 import Transaction from '~/models/Transaction'
 import Tag from '~/models/Tag'
 import Account from '~/models/Account.js'
+import { useAppStore } from '~/stores/appStore.js'
 
 export default class TransactionTransformer extends ApiTransformer {
   static transformFromApi(item) {
@@ -18,7 +19,7 @@ export default class TransactionTransformer extends ApiTransformer {
       return null
     }
 
-    const dashboardStore = useDashboardStore()
+    const appStore = useAppStore()
     const accountStore = useAccountStore()
     const categoryStore = useCategoryStore()
     const tagStore = useTagStore()
@@ -64,7 +65,7 @@ export default class TransactionTransformer extends ApiTransformer {
       transaction.type = Transaction.typesList.find((item) => item.fireflyCode === transaction.type)
 
       if (hasMissingCategory || hasMissingTag) {
-        dashboardStore.isSyncRequiredByMissingExtras = true
+        appStore.isSyncRequiredByMissingExtras = true
       }
 
       return transaction

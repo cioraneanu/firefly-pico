@@ -103,7 +103,7 @@ const onSave = async () => {
     return
   }
 
-  await dashboardStore.syncEverything()
+  await appStore.syncEverything()
   UIUtils.showToastSuccess(t('settings.settings_saved'))
 }
 

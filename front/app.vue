@@ -38,7 +38,7 @@ onMounted(async () => {
 
   appStore.fetchLatestAppVersion()
   await profileStore.getProfiles({ showLoading: false })
-  await dashboardStore.syncEverythingIfOld()
+  await appStore.syncEverythingIfOld()
 })
 </script>
 

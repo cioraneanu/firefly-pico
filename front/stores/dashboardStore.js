@@ -27,13 +27,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const transactionsListLastWeek = ref([])
   const transactionsWithTodo = ref([])
   const tagsWidgetModeOnlyRootTag = useLocalStorage('tagsWidgetModeOnlyRootTag', true)
-  const lastSync = useLocalStorage('lastSync', null, {
-    serializer: {
-      read: (v) => (v ? new Date(v) : null),
-      write: (v) => (v ? v.toISOString() : null),
-    },
-  })
-  const isSyncRequiredByMissingExtras = ref(false)
+
 
   // Getters
   const dashboardAccountDictionary = computed(() => {
@@ -116,45 +110,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
     return null
   }
 
-  async function syncEverythingIfOld() {
-    let lastSyncTime = lastSync.value ?? subDays(new Date(), 365)
-    let now = new Date()
-    const appStore = useAppStore()
 
-    if (differenceInDays(now, lastSyncTime) < appStore.daysBetweenFullSync) {
-      return
-    }
-
-    isLoading.value = true
-    await syncEverything()
-    isLoading.value = false
-  }
-
-  async function syncEverything() {
-    const appStore = useAppStore()
-    if (!appStore.hasAuthToken) return
-
-    const categoryStore = useCategoryStore()
-    const accountStore = useAccountStore()
-    const tagStore = useTagStore()
-    const templateStore = useTemplateStore()
-    const currencyStore = useCurrencyStore()
-    const budgetStore = useBudgetStore()
-    const profileStore = useProfileStore()
-
-    await Promise.all([
-      categoryStore.fetchCategories(),
-      accountStore.fetchAccounts(currencyStore.dashboardCurrency),
-      tagStore.fetchTags(),
-      templateStore.fetchTransactionTemplates(),
-      currencyStore.fetchCurrencies(),
-      budgetStore.fetchBudgets(),
-      currencyStore.fetchExchangeRate(),
-      profileStore.getProfiles(),
-    ])
-
-    lastSync.value = new Date()
-  }
 
   return {
     isLoading,
@@ -166,8 +122,6 @@ export const useDashboardStore = defineStore('dashboard', () => {
     transactionsListLastWeek,
     transactionsWithTodo,
     tagsWidgetModeOnlyRootTag,
-    lastSync,
-    isSyncRequiredByMissingExtras,
     dashboardAccountDictionary,
     dashboardDateStart,
     dashboardDateEnd,
@@ -177,7 +131,6 @@ export const useDashboardStore = defineStore('dashboard', () => {
     fetchTransactionsWithTodos,
     fetchDashboardAccounts,
     fetchDashboard,
-    syncEverythingIfOld,
-    syncEverything,
+
   }
 })
