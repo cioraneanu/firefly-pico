@@ -37,10 +37,9 @@ onMounted(async () => {
   await dataStore.init()
 
   appStore.fetchLatestAppVersion()
-  await profileStore.getProfiles()
+  await profileStore.getProfiles({ showLoading: false })
   await dataStore.syncEverythingIfOld()
 })
-
 </script>
 
 <style>

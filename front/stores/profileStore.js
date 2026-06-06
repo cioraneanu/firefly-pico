@@ -113,13 +113,13 @@ export const useProfileStore = defineStore('profile', () => {
     }
   }
 
-  async function getProfiles() {
+  async function getProfiles({ showLoading = true } = {}) {
     const appStore = useAppStore()
     if (!appStore.syncProfileInDB) {
       return
     }
 
-    const response = await new ProfileRepository().getAll()
+    const response = await new ProfileRepository().getAll({ showLoading })
     let responseData = response.data ?? []
     profileList.value = responseData
 
@@ -156,7 +156,7 @@ export const useProfileStore = defineStore('profile', () => {
     store.transactionFormFieldsConfig = migrateTypeList(store.transactionFormFieldsConfig, transactionFormFieldList)
     store.transactionListFieldsConfig = migrateTypeList(store.transactionListFieldsConfig, transactionListFieldList)
     store.dashboardWidgetsConfig = migrateTypeList(store.dashboardWidgetsConfig, dashboardCardList)
-    
+
     // If we changed the content of fixed lists update user settings
     startingPage.value = migrateType(startingPage.value, Page.typesList())
   }

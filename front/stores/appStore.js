@@ -38,17 +38,10 @@ export const useAppStore = defineStore('app', () => {
         RouteConstants.ROUTE_TAG_LIST,
         RouteConstants.ROUTE_TAG_ID,
       ],
-      [RouteConstants.ROUTE_SETTINGS]: [
-        RouteConstants.ROUTE_SETTINGS,
-        RouteConstants.ROUTE_SETTINGS_SETUP,
-        RouteConstants.ROUTE_SETTINGS_ABOUT,
-        RouteConstants.ROUTE_SETTINGS_UI,
-      ],
+      [RouteConstants.ROUTE_SETTINGS]: [RouteConstants.ROUTE_SETTINGS, RouteConstants.ROUTE_SETTINGS_SETUP, RouteConstants.ROUTE_SETTINGS_ABOUT, RouteConstants.ROUTE_SETTINGS_UI],
     }
 
-    return Object.entries(routeMapping).find(
-      ([, routes]) => routes.includes(route.path)
-    )?.[0]
+    return Object.entries(routeMapping).find(([, routes]) => routes.includes(route.path))?.[0]
   })
 
   const isDesktopLayout = computed(() => {
@@ -74,7 +67,7 @@ export const useAppStore = defineStore('app', () => {
   })
 
   async function fetchLatestAppVersion() {
-    let response = await new InfoRepository().getLatestVersion()
+    let response = await new InfoRepository().getLatestVersion({ showLoading :false })
     if (!ResponseUtils.isSuccess(response)) {
       return
     }

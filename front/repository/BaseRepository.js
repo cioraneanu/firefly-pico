@@ -17,9 +17,9 @@ export default class BaseRepository {
     return get(result, 'data', {})
   }
 
-  async getAll({ filters = [], page = 1, pageSize = 50 } = {}) {
+  async getAll({ filters = [], page = 1, pageSize = 50, showLoading = true } = {}) {
     let url = this.getUrlForRequest({ filters, page, pageSize })
-    let response = await axios.get(url)
+    let response = await axios.get(url, { showLoading })
     return get(response, 'data', {})
   }
 

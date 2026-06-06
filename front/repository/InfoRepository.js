@@ -6,7 +6,7 @@ export default class InfoRepository extends BaseRepository {
     super('api/latest-version')
   }
 
-  async getLatestVersion() {
-    return await axios.get(`${this.getUrl()}`)
+  async getLatestVersion({ showLoading = true } = {}) {
+    return await axios.get(`${this.getUrl()}`, { showLoading })
   }
 }
