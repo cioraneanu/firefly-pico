@@ -147,7 +147,6 @@ import AttachmentRepository from '~/repository/AttachmentRepository.js'
 import AttachmentTransformer from '~/transformers/AttachmentTransformer.js'
 import { useTransactionFormLogic } from '~/composables/useTransactionFormLogic.js'
 
-
 const profileStore = useProfileStore()
 const route = useRoute()
 
@@ -218,7 +217,7 @@ const { onAssistant, attemptAccountsFix } = useTransactionFormLogic({
   currencyForeign,
   notes,
   budget,
-  profileStore
+  profileStore,
 })
 
 const onSubDay = () => {
@@ -226,9 +225,7 @@ const onSubDay = () => {
 }
 
 const onToday = () => {
-  const newDate = startOfToday()
-  newDate.setHours(getHours(date.value), getMinutes(date.value), 0)
-  date.value = newDate
+  date.value = new Date()
 }
 
 const onAddDay = () => {
@@ -241,8 +238,6 @@ const onCreateTransactionTemplate = async () => {
 const onCreateClone = async () => {
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_ID}?transaction_id=${itemId.value}`)
 }
-
-
 
 const isTypeExpense = computed(() => isEqual(type.value, Transaction.types.expense))
 const isTypeIncome = computed(() => isEqual(type.value, Transaction.types.income))
@@ -309,7 +304,6 @@ watch(type, (newValue, oldValue) => {
   }
   attemptAccountsFix()
 })
-
 
 const showSourceAccountSuggestion = computed(() => !profileStore.defaultAccountSource && !accountSource.value)
 
