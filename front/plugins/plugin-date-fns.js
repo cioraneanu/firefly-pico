@@ -1,5 +1,5 @@
 import { setDefaultOptions } from 'date-fns'
-import { ro, enUS, zhCN, it, ptBR, de, fr, pl, ru} from 'date-fns/locale'
+import { ro, enUS, zhCN, it, ptBR, de, fr, pl, ru, es} from 'date-fns/locale'
 import { languageCode } from '~/i18n/index.js'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -25,6 +25,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         [languageCode.french]: fr,
         [languageCode.polish]: pl,
         [languageCode.russian]: ru,
+        [languageCode.spanish]: es,
       }
       let dateFnsLocale = dateFnsLocaleDictionary[newValue] || enUS
 
