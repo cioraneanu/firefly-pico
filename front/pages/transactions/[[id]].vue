@@ -87,6 +87,8 @@
 
         <budget-select v-model="budget" :style="getStyleForField(transactionFormField.budget)" />
 
+        <piggy-bank-select v-if="isTypeTransfer" v-model="piggyBank" :style="getStyleForField(transactionFormField.piggyBank)" />
+
         <transaction-attachments-list :transaction="item" :style="getStyleForField(transactionFormField.attachments)" />
       </van-cell-group>
 
@@ -164,7 +166,7 @@ const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } =
 })
 
 const pathKey = 'attributes.transactions.0'
-const { amount, amountForeign, date, tags, description, notes, budget, accountSource, accountDestination, category, type, currencyForeign } = generateChildren(item, [
+const { amount, amountForeign, date, tags, description, notes, budget, piggyBank, accountSource, accountDestination, category, type, currencyForeign } = generateChildren(item, [
   { computed: 'amount', parentKey: `${pathKey}.amount` },
   { computed: 'amountForeign', parentKey: `${pathKey}.amountForeign` },
   { computed: 'currencyForeign', parentKey: `${pathKey}.currencyForeign` },
@@ -177,6 +179,7 @@ const { amount, amountForeign, date, tags, description, notes, budget, accountSo
   { computed: 'category', parentKey: `${pathKey}.category` },
   { computed: 'type', parentKey: `${pathKey}.type` },
   { computed: 'budget', parentKey: `${pathKey}.budget` },
+  { computed: 'piggyBank', parentKey: `${pathKey}.piggyBank` },
 ])
 
 const transactions = computed(() => _.get(item.value, 'attributes.transactions', []))

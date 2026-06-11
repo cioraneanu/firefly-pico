@@ -55,6 +55,12 @@ export const transactionFormField = {
     icon: TablerIconConstants.budget,
     isVisible: true,
   },
+  piggyBank: {
+    t: 'piggy_bank',
+    code: 'piggyBank',
+    icon: TablerIconConstants.piggyBank,
+    isVisible: true,
+  },
   attachments: {
     t: 'attachments',
     code: 'attachments',

@@ -7,6 +7,7 @@ import { useAccountStore } from '~/stores/accountStore'
 import { useCategoryStore } from '~/stores/categoryStore'
 import { useTagStore } from '~/stores/tagStore'
 import { useBudgetStore } from '~/stores/budgetStore'
+import { usePiggyBankStore } from '~/stores/piggyBankStore'
 import { useCurrencyStore } from '~/stores/currencyStore'
 import Transaction from '~/models/Transaction'
 import Tag from '~/models/Tag'
@@ -24,6 +25,7 @@ export default class TransactionTransformer extends ApiTransformer {
     const categoryStore = useCategoryStore()
     const tagStore = useTagStore()
     const budgetStore = useBudgetStore()
+    const piggyBankStore = usePiggyBankStore()
     const currencyStore = useCurrencyStore()
 
     const accountsDictionary = accountStore.accountDictionary
@@ -54,6 +56,8 @@ export default class TransactionTransformer extends ApiTransformer {
       transaction.accountDestination = accountsDictionary[transaction['destination_id']]
       transaction.category = categoryDictionary[transaction['category_id']]
       transaction.budget = budgetStore.budgetDictionary[transaction['budget_id']]
+      // Firefly III does not return "piggy_bank_id" on reads, but map it in case it ever does
+      transaction.piggyBank = piggyBankStore.piggyBankDictionary[transaction['piggy_bank_id']]
       // transaction.tags = TagTransformer.transformFromApiList(transaction.tags.map(tagName => tagDictionaryByName[LanguageUtils.removeAccentsAndForceLowerCase(tagName)]))
       transaction.tags = transaction.tags.map((tagName) => {
         hasMissingTag = hasMissingTag || !tagDictionaryByName[LanguageUtils.removeAccentsAndLowerCase(tagName)]
@@ -102,6 +106,8 @@ export default class TransactionTransformer extends ApiTransformer {
       newItem.destination_name = Account.getDisplayName(accountDestination)
       newItem.category_id = _.get(item, 'category.id') ?? null
       newItem.budget_id = _.get(item, 'budget.id') ?? 0
+      // Only relevant for transfers: Firefly III creates a piggy bank event when set
+      newItem.piggy_bank_id = _.get(item, 'piggyBank.id') ?? 0
       newItem.date = DateUtils.dateToString(item.date, DateUtils.FORMAT_ENGLISH_DATE_HOUR_MINUTE)
 
       const transactionType = Transaction.getTransactionTypeForAccounts({
