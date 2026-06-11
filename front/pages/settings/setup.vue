@@ -21,6 +21,7 @@
           <app-config-stat :icon="TablerIconConstants.tag" :name="$t('settings.setup.tags')" :value="tagsCount" />
           <app-config-stat :icon="TablerIconConstants.transactionTemplate" :name="$t('settings.setup.templates')" :value="transactionTemplatesCount" />
           <app-config-stat :icon="TablerIconConstants.budget" :name="$t('settings.setup.budgets')" :value="budgetsCount" />
+          <app-config-stat :icon="TablerIconConstants.piggyBank" :name="$t('settings.setup.piggy_banks')" :value="piggyBanksCount" />
           <app-config-stat :icon="TablerIconConstants.lastSync" :name="$t('settings.setup.last_sync')" :value="lastSync" />
         </van-grid>
       </van-cell-group>
@@ -57,6 +58,7 @@ const accountsCount = computed(() => dataStore.accountList.length)
 const categoriesCount = computed(() => dataStore.categoryList.length)
 const tagsCount = computed(() => dataStore.tagList.length)
 const budgetsCount = computed(() => dataStore.budgetList.length)
+const piggyBanksCount = computed(() => dataStore.piggyBankList.length)
 const transactionTemplatesCount = computed(() => dataStore.transactionTemplateList.length)
 const lastSync = computed(() => {
   if (!dataStore.lastSync) {

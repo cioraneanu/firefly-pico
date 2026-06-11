@@ -25,6 +25,8 @@ import { uniqBy } from 'lodash/array.js'
 import BudgetRepository from '~/repository/BudgetRepository.js'
 import BudgetTransformer from '~/transformers/BudgetTransformer.js'
 import BudgetLimitTransformer from '~/transformers/BudgetLimitTransformer.js'
+import PiggyBankRepository from '~/repository/PiggyBankRepository.js'
+import PiggyBankTransformer from '~/transformers/PiggyBankTransformer.js'
 import Currency from '~/models/Currency.js'
 import DateUtils from '~/utils/DateUtils.js'
 import { startOfTomorrow } from 'date-fns/startOfTomorrow'
@@ -50,6 +52,7 @@ export const useDataStore = defineStore('data', {
       categoryList: useLocalStorage('categoryList', []),
       budgetList: useLocalStorage('budgetList', []),
       budgetLimitList: useLocalStorage('budgetLimitList', []),
+      piggyBankList: useLocalStorage('piggyBankList', []),
       accountList: useLocalStorage('accountList', []),
       tagList: useLocalStorage('tagList', []),
       currenciesList: useLocalStorage('currenciesList', []),
@@ -70,6 +73,7 @@ export const useDataStore = defineStore('data', {
       isLoadingTags: false,
       isLoadingCategories: false,
       isLoadingBudgets: false,
+      isLoadingPiggyBanks: false,
       isLoadingTransactionTemplates: false,
       isLoadingCurrencies: false,
       isLoadingExchangeRates: false,
@@ -356,7 +360,8 @@ export const useDataStore = defineStore('data', {
         state.isLoadingAccounts ||
         state.isLoadingExchangeRates ||
         state.isLoadingCurrencies ||
-        state.isLoadingBudgets
+        state.isLoadingBudgets ||
+        state.isLoadingPiggyBanks
       )
     },
 
@@ -374,6 +379,10 @@ export const useDataStore = defineStore('data', {
 
     budgetLimitDictionary: (state) => {
       return keyBy(state.budgetLimitList, 'attributes.budget_id')
+    },
+
+    piggyBankDictionary: (state) => {
+      return keyBy(state.piggyBankList, 'id')
     },
 
     accountDictionary: (state) => {
@@ -515,7 +524,8 @@ export const useDataStore = defineStore('data', {
       let async6 = this.fetchBudgets()
       let async7 = this.fetchExchangeRate()
       let async8 = useProfileStore().getProfiles()
-      await Promise.all([async1, async2, async3, async4, async5, async6, async7, async8])
+      let async9 = this.fetchPiggyBanks()
+      await Promise.all([async1, async2, async3, async4, async5, async6, async7, async8, async9])
 
       this.lastSync = new Date()
     },
@@ -555,6 +565,13 @@ export const useDataStore = defineStore('data', {
       this.budgetLimitList = BudgetLimitTransformer.transformFromApiList(budgetLimitList)
 
       this.isLoadingBudgets = false
+    },
+
+    async fetchPiggyBanks() {
+      this.isLoadingPiggyBanks = true
+      const list = await new PiggyBankRepository().getAllWithMerge()
+      this.piggyBankList = PiggyBankTransformer.transformFromApiList(list)
+      this.isLoadingPiggyBanks = false
     },
 
     async fetchTags() {

@@ -35,6 +35,8 @@
   "budget": "Budget",
   "budgets": "Budgets",
   "budget_select": "Select a budget",
+  "piggy_bank": "Piggy bank",
+  "piggy_banks": "Piggy banks",
   "attachment": "Attachment",
   "attachments": "Attachments",
   "account": "Account",
@@ -106,6 +108,7 @@
       "tags": "Tags",
       "templates": "Templates",
       "budgets": "Budgets",
+      "piggy_banks": "Piggy banks",
       "last_sync": "Last sync",
       "verifying": "Verifying...",
       "invalid_endpoint": "The provided endpoint is not correct.",
@@ -332,6 +335,17 @@
     "interval": "Interval",
     "type": "Budget type",
     "period": "Budget period"
+  },
+  "piggy_bank_page": {
+    "title_add": "Add piggy bank",
+    "title_edit": "Edit piggy bank",
+    "saved": "Saved",
+    "percent": "Percent",
+    "left_to_save": "Left to save",
+    "target_amount": "Target amount",
+    "current_amount": "Saved amount",
+    "start_date": "Start date",
+    "target_date": "Target date"
   },
   "exchange_rate_page": {
     "relative_to_usd": "Relative to USD"
