@@ -1,11 +1,17 @@
 import axios from 'axios'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 
 axios.interceptors.request.use(
   (config) => {
     const appStore = useAppStore()
+    const loadingStore = useLoadingStore()
 
     const controller = new AbortController()
+    const requestId = Math.random().toString(36).substring(7)
+    config.requestId = requestId
+    config.signal = controller.signal
+    config.showLoading = config.showLoading !== false
+    config.showLoading && loadingStore.addActiveRequest({ id: requestId, controller })
 
     let authToken = appStore.authToken
     if (!appStore.hasAuthToken) {
@@ -58,19 +64,22 @@ const retryRequest = async (error) => {
 
 axios.interceptors.response.use(
   function (response) {
+    const loadingStore = useLoadingStore()
+    response.config?.showLoading && loadingStore.removeActiveRequest(response.config?.requestId)
+
     // Any status code that lie within the range of 2xx cause this function to trigger
     // Do something with response data
     return response
   },
   async function (error) {
     let errorMessage = get(error, 'response.data.message') ?? get(error, 'message')
-
-    if (errorMessage) {
-      UIUtils.showToastError(`Error: ${errorMessage}`, 4000)
-    }
+    let showErrorToast = error.config?.showErrorToast !== false
+    errorMessage && showErrorToast && UIUtils.showToastError(`Error: ${errorMessage}`, 4000)
 
     await retryRequest(error)
 
+    const loadingStore = useLoadingStore()
+    error.config?.showLoading && loadingStore.removeActiveRequest(error.config?.requestId)
     return Promise.resolve(error.response)
   },
 )

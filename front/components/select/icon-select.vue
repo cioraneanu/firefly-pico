@@ -1,13 +1,13 @@
 <template>
   <app-select
-    :label="label ?? $t('icon')"
-    :popupTitle="$t('icon_select')"
     v-model="modelValue"
-    v-model:showDropdown="showDropdown"
+    v-model:show-dropdown="showDropdown"
     v-model:search="search"
+    :label="label ?? $t('icon')"
+    :popup-title="$t('icon_select')"
     :list="filteredList"
     :columns="6"
-    :getDisplayValue="getDisplayValue"
+    :get-display-value="getDisplayValue"
     v-bind="dynamicAttrs"
   >
     <template #left-icon>
@@ -22,20 +22,20 @@
     <template #item="{ item }">
       <div class="flex-center flex-column mt-5 text-size-12">
         <app-icon :icon="item.icon" style="width: 30px"/>
-        <div class="app-icon-item"></div>
+        <div class="app-icon-item"/>
       </div>
     </template>
   </app-select>
 </template>
 
 <script setup>
-import { useDataStore } from '~/stores/dataStore'
+import { useCategoryStore } from '~/stores/categoryStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import Category from '~/models/Category.js'
 import { avatarListIcons, duoToneListIcons, fluentListIcons } from '~/constants/SvgConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
-const dataStore = useDataStore()
+const categoryStore = useCategoryStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 
@@ -97,10 +97,9 @@ const getDisplayValue = (value) => {
 }
 
 const isLoading = ref(false)
-UIUtils.showLoadingWhen(isLoading)
 const onRefresh = async () => {
   isLoading.value = true
-  await dataStore.fetchCategories()
+  await categoryStore.fetchCategories()
   isLoading.value = false
 }
 </script>

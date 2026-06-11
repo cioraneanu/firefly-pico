@@ -1,28 +1,21 @@
 <template>
-  <div v-if="dataStore.isLoadingExtras || dataStore.isSyncRequiredByMissingExtras" class="app-bottom-loading display-flex flex-column">
-    <div v-if="dataStore.isLoadingExtras" class="flex-center-vertical gap-2">
-      <span class="text-size-14 font-weight-500">Loading extras...</span>
-      <icon-rotate-clockwise :size="24" :stroke-width="1.5" class="rotate" />
-    </div>
-
-    <div v-if="dataStore.isSyncRequiredByMissingExtras" class="flex-center-vertical gap-2">
+  <div v-if="appStore.isSyncRequiredByMissingExtras" class="app-bottom-loading display-flex flex-column">
+    <div class="flex-center-vertical gap-2">
       <span class="text-size-12 font-weight-400">Found extras that require resync.</span>
-      <van-button @click="onResync" size="small"> Sync </van-button>
+      <van-button size="small" @click="onResync"> Sync </van-button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useDataStore } from '~/stores/dataStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
 import { useProfileStore } from '~/stores/profileStore'
 import { IconRotateClockwise } from '@tabler/icons-vue'
 
-const dataStore = useDataStore()
-const profileStore = useProfileStore()
-const route = useRoute()
+const appStore = useAppStore()
 
 const onResync = async () => {
-  await dataStore.syncEverything()
+  await appStore.syncEverything()
   reloadNuxtApp()
 }
 </script>

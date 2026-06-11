@@ -1,22 +1,24 @@
-import _, { get } from 'lodash'
+import _, { get } from 'lodash-es'
 import ApiTransformer from '~/transformers/ApiTransformer'
 import Icon from '~/models/Icon.js'
 import DateUtils from '~/utils/DateUtils'
-import { useDataStore } from '~/stores/dataStore.js'
+import { useAccountStore } from '~/stores/accountStore'
+import { useCurrencyStore } from '~/stores/currencyStore'
 
 export default class PiggyBankTransformer extends ApiTransformer {
   static transformFromApi(item) {
     if (!item) {
       return null
     }
-    const dataStore = useDataStore()
+    const accountStore = useAccountStore()
+    const currencyStore = useCurrencyStore()
 
     item.attributes.icon = Icon.getIcon(get(item, 'attributes.icon'))
 
     // Firefly III >= 6.2 returns a list of linked accounts, older versions a single "account_id"
     const accountId = get(item, 'attributes.accounts.0.account_id') ?? get(item, 'attributes.account_id')
-    item.attributes.account = dataStore.accountDictionary[accountId]
-    item.attributes.currency = dataStore.currencyDictionary[get(item, 'attributes.currency_id')]
+    item.attributes.account = accountStore.accountDictionary[accountId]
+    item.attributes.currency = currencyStore.currencyDictionary[get(item, 'attributes.currency_id')]
     item.attributes.start_date = DateUtils.autoToDate(get(item, 'attributes.start_date'))
     item.attributes.target_date = DateUtils.autoToDate(get(item, 'attributes.target_date'))
 

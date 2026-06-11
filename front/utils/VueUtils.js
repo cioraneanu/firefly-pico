@@ -1,5 +1,5 @@
-import * as _ from 'lodash'
-import { isEqual } from 'lodash'
+import * as _ from 'lodash-es'
+import { isEqual } from 'lodash-es'
 import { computed } from 'vue'
 
 export function generateChildren(localVariable, newComputedSubKeys = []) {

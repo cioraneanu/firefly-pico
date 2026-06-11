@@ -1,5 +1,5 @@
 import BaseModel from '~/models/BaseModel'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import CurrencyTransformer from '~/transformers/CurrencyTransformer'
 import CurrencyRepository from '~/repository/CurrencyRepository'
 

@@ -1,7 +1,7 @@
 <!-- OK-->
 <template>
   <div>
-    <draggable v-model="modelValue" handle=".app-repeater-handle" class="w-100" itemKey="id">
+    <draggable v-model="modelValue" handle=".app-repeater-handle" class="w-100" item-key="id">
       <template #item="{ element, index }">
         <div>
           <div class="flex-center-vertical">
@@ -22,7 +22,7 @@
 
       <template #footer>
         <div>
-          <div class="app-repeater-no-values" v-if="isListEmpty">{{ $t('repeater_no_values') }}</div>
+          <div v-if="isListEmpty" class="app-repeater-no-values">{{ $t('repeater_no_values') }}</div>
           <div v-if="!props.disabled && props.isListDynamic">
             <van-button class="w-100" style="border: 1px dashed #888" @click="addItem"> {{ $t('add') }}</van-button>
           </div>
@@ -33,7 +33,7 @@
 </template>
 
 <script setup>
-import { cloneDeep, isEmpty } from 'lodash'
+import { cloneDeep, isEmpty } from 'lodash-es'
 import draggable from 'vuedraggable'
 import { computed, defineModel } from 'vue'
 import TablerIconConstants from '~/constants/TablerIconConstants'
@@ -67,7 +67,7 @@ const isListEmpty = computed(() => {
 // })
 
 const addItem = () => {
-  let oldValue = modelValue.value ?? []
+  const oldValue = modelValue.value ?? []
   oldValue.push(cloneDeep(props.emptyItem) ?? {})
   modelValue.value = oldValue
 }

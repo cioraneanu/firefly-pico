@@ -1,5 +1,5 @@
 import BaseModel from '~/models/BaseModel'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import PiggyBankTransformer from '~/transformers/PiggyBankTransformer.js'
 import PiggyBankRepository from '~/repository/PiggyBankRepository.js'
 
@@ -70,7 +70,7 @@ export default class PiggyBank extends BaseModel {
   // --------
 
   static getCurrencySymbol(piggyBank) {
-    const dataStore = useDataStore()
-    return get(piggyBank, 'attributes.currency.attributes.symbol', get(dataStore.defaultCurrency, 'attributes.symbol'))
+    const currencyStore = useCurrencyStore()
+    return get(piggyBank, 'attributes.currency.attributes.symbol', get(currencyStore.defaultCurrency, 'attributes.symbol'))
   }
 }

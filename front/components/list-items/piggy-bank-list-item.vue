@@ -31,7 +31,7 @@
 </template>
 
 <script setup>
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import PiggyBank from '~/models/PiggyBank.js'
 import Account from '~/models/Account.js'

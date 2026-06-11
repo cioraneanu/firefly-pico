@@ -1,7 +1,7 @@
 import BaseModel from '~/models/BaseModel'
 import TagRepository from '~/repository/TagRepository'
 import TagTransformer from '~/transformers/TagTransformer'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import { ellipsizeText } from '~/utils/Utils.js'
 
 export default class Tag extends BaseModel {
@@ -51,12 +51,12 @@ export default class Tag extends BaseModel {
   }
 
   static getTagWithParents = (tag) => {
-    const dataStore = useDataStore()
+    const tagStore = useTagStore()
     let result = [tag]
     let tagParentId = get(tag, 'attributes.parent_id')
 
     while (tagParentId) {
-      let parentTag = dataStore.tagDictionaryById[tagParentId]
+      let parentTag = tagStore.tagDictionaryById[tagParentId]
 
       if (parentTag) {
         result.push(parentTag)

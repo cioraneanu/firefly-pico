@@ -1,4 +1,4 @@
-import { cloneDeep, get } from 'lodash'
+import { cloneDeep, get } from 'lodash-es'
 import ApiTransformer from '~/transformers/ApiTransformer'
 import Icon from '~/models/Icon.js'
 

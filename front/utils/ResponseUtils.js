@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import _ from 'lodash-es'
 const STATUS_CODE_SUCCESS = 200
 const STATUS_CODE_SUCCESS_DELETE = 204
 

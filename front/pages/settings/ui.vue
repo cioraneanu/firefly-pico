@@ -2,19 +2,19 @@
   <div class="app-form">
     <app-top-toolbar />
 
-    <van-form @submit="onSave" class="">
+    <van-form class="" @submit="onSave">
       <van-cell-group inset>
         <div class="van-cell-group-title mb-0">{{ $t('settings.ui.theme') }}:</div>
 
-        <app-boolean :label="themeText" v-model="darkTheme">
+        <app-boolean v-model="darkTheme" :label="themeText">
           <template #icon="{ value }">
             <app-icon :size="23" :stroke-width="2.0" :icon="value ? TablerIconConstants.darkTheme : TablerIconConstants.whiteTheme" />
           </template>
         </app-boolean>
 
-        <language-select v-model="language"></language-select>
+        <language-select v-model="language"/>
 
-        <page-select v-model="startingPage"></page-select>
+        <page-select v-model="startingPage"/>
 
         <app-boolean v-model="showAnimations" :label="$t('settings.ui.show_animations')" />
 
@@ -29,7 +29,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useProfileStore } from '~/stores/profileStore'
-import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
@@ -39,8 +38,6 @@ import LanguageSelect from '~/components/select/general/language-select.vue'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
-const dataStore = useDataStore()
-
 const themeText = computed(() => (darkTheme.value ? t('settings.ui.dark') : t('settings.ui.light')))
 const darkTheme = ref(false)
 const startingPage = ref(null)
@@ -60,7 +57,7 @@ watchSettingsStore(syncedSettings)
 
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
-  let response = await profileStore.writeProfile()
+  const response = await profileStore.writeProfile()
   ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
 }
 

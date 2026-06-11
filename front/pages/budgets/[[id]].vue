@@ -6,7 +6,7 @@
       </template>
     </app-top-toolbar>
 
-    <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
+    <van-form ref="form" :name="formName" class="" @submit="saveItem" @failed="onValidationError">
       <app-card-info v-if="itemId">
         <div class="van-cell-group-title">{{ $t('status') }}:</div>
         <div class="px-3 pb-15 flex-column text-size-12">
@@ -36,7 +36,7 @@
       <div style="margin: 16px">
         <app-button-form-save />
 
-        <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
+        <app-button-form-delete v-if="itemId" class="mt-10" @click="onDelete" />
       </div>
     </van-form>
   </div>
@@ -46,8 +46,8 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
-import _, { get } from 'lodash'
+import { useBudgetStore } from '~/stores/budgetStore'
+import _, { get } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
@@ -61,8 +61,8 @@ import BudgetLimit from '~/models/BudgetLimit.js'
 import { rule } from '~/utils/ValidationUtils.js'
 import { TUTORIAL_CONSTANTS } from '~/constants/TutorialConstants.js'
 
-let dataStore = useDataStore()
-let profileStore = useProfileStore()
+const budgetStore = useBudgetStore()
+const profileStore = useProfileStore()
 const route = useRoute()
 
 const form = ref(null)
@@ -72,8 +72,8 @@ const resetFields = () => {
 }
 
 const fetchItem = () => {
-  const dataStore = useDataStore()
-  item.value = dataStore.budgetDictionary[useRoute().params.id]
+  const budgetStore = useBudgetStore()
+  item.value = budgetStore.budgetDictionary[useRoute().params.id]
 }
 
 const isPeriodVisible = computed(() => get(type.value, 'fireflyCode') !== Budget.types.manual.fireflyCode)
@@ -89,14 +89,14 @@ const onEvent = (event, payload) => {
   if (event === 'onPostSave') {
     let newItem = _.get(payload, 'data.data')
     newItem = BudgetTransformer.transformFromApi(newItem)
-    dataStore.budgetList = [newItem, ...dataStore.budgetList.filter((item) => item.id !== itemId.value)]
+    budgetStore.budgetList = [newItem, ...budgetStore.budgetList.filter((item) => item.id !== itemId.value)]
   }
   if (event === 'onPostDelete') {
-    dataStore.budgetList = dataStore.budgetList.filter((item) => item.id !== itemId.value)
+    budgetStore.budgetList = budgetStore.budgetList.filter((item) => item.id !== itemId.value)
   }
 }
 
-let { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
   routeList: RouteConstants.ROUTE_BUDGET_LIST,
   routeForm: RouteConstants.ROUTE_BUDGET_ID,
@@ -124,7 +124,7 @@ watch(name, (newValue) => {
 })
 
 const onNavigateToTransactionsList = async () => {
-  let filters = TransactionFilterUtils.filters.budget.toUrl(item.value)
+  const filters = TransactionFilterUtils.filters.budget.toUrl(item.value)
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
 }
 

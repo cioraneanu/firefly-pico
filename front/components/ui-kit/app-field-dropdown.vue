@@ -2,7 +2,7 @@
   <div class="van-cell-fake cursor-pointer app-field-dropdown">
     <van-popover v-model:show="showPopover" placement="bottom-start" class="">
       <van-cell-group>
-        <van-cell v-for="item in dropdownList" :key="item" :title="item" @click="onSelect(item)" class="cursor-pointer"/>
+        <van-cell v-for="item in dropdownList" :key="item" :title="item" class="cursor-pointer" @click="onSelect(item)"/>
       </van-cell-group>
 
       <template #reference>
@@ -14,7 +14,7 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { debounce } from 'lodash/function'
+import { debounce } from 'lodash-es/function'
 
 const modelValue = defineModel()
 const showPopover = ref(false)

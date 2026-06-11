@@ -2,7 +2,7 @@
   <div class="app-form">
     <app-top-toolbar />
 
-    <van-form @submit="onSave" class="">
+    <van-form class="" @submit="onSave">
       <van-cell-group inset>
         <account-select v-model="defaultAccountSource" :label="$t('settings.transactions.default_form_values.default_source_account')" />
 
@@ -25,7 +25,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useProfileStore } from '~/stores/profileStore'
-import { useDataStore } from '~/stores/dataStore'
+
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
@@ -34,7 +34,7 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
-const dataStore = useDataStore()
+
 
 const defaultAccountSource = ref(null)
 const defaultAccountDestination = ref(null)
@@ -56,7 +56,7 @@ watchSettingsStore(syncedSettings)
 
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
-  let response = await profileStore.writeProfile()
+  const response = await profileStore.writeProfile()
   ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
 }
 

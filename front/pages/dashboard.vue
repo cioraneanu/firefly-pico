@@ -6,7 +6,7 @@
       </template>
     </app-top-toolbar>
 
-    <van-pull-refresh v-model="isLoadingAccounts" @refresh="onRefresh">
+    <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
       <dashboard-control v-if="!appStore.isDesktopLayout" />
 
       <div ref="dashboard" class="dynamic-masonry">
@@ -22,7 +22,7 @@
 
 <script setup>
 import { useToolbar } from '~/composables/useToolbar'
-import { debounce } from 'lodash/function'
+import { debounce } from 'lodash-es/function'
 import UIUtils from '~/utils/UIUtils.js'
 import { animateDashboard } from '~/utils/AnimationUtils.js'
 import RouteConstants from '~/constants/RouteConstants.js'
@@ -41,10 +41,11 @@ import DashboardTagTotalsTransfer from '~/components/dashboard/dashboard-tag-tot
 import DashboardCategoryTotalsTransfer from '~/components/dashboard/dashboard-category-totals-transfer/dashboard-category-totals-transfer.vue'
 import DashboardTodoTransactions from '~/components/dashboard/dashboard-todo-transactions/dashboard-todo-transactions.vue'
 
-const dataStore = useDataStore()
+import { useDashboardStore } from '~/stores/dashboardStore'
+
+const dashboardStore = useDashboardStore()
 const appStore = useAppStore()
 const profileStore = useProfileStore()
-const { isLoadingAccounts } = storeToRefs(dataStore)
 
 const cardComponents = {
   [dashboardCard.calendar.code]: DashboardCalendar,
@@ -62,9 +63,9 @@ const cardComponents = {
 const visibleCards = computed(() => {
   return dashboardCardList
     .map((card) => {
-      let position = profileStore.dashboardWidgetsConfig.findIndex((item) => item.code === card.code)
-      let field = profileStore.dashboardWidgetsConfig.find((item) => item.code === card.code)
-      let isVisible = field ? field.isVisible : true
+      const position = profileStore.dashboardWidgetsConfig.findIndex((item) => item.code === card.code)
+      const field = profileStore.dashboardWidgetsConfig.find((item) => item.code === card.code)
+      const isVisible = field ? field.isVisible : true
 
       return {
         ...card,
@@ -77,8 +78,12 @@ const visibleCards = computed(() => {
     .sort((a, b) => a.position - b.position)
 })
 
-const onRefresh = () => {
-  dataStore.fetchDashboard()
+const isRefreshing = ref(false)
+
+const onRefresh = async () => {
+  isRefreshing.value = true
+  await dashboardStore.fetchDashboard()
+  isRefreshing.value = false
 }
 
 const onRefreshDebounce = debounce(onRefresh, 200)
@@ -86,15 +91,13 @@ const onRefreshDebounce = debounce(onRefresh, 200)
 onMounted(() => {
   animateDashboard()
 
-  if (dataStore.dashboard.transactionsListLastWeek.length > 0) {
+  if (dashboardStore.transactionsListLastWeek.length > 0) {
     return
   }
   onRefreshDebounce()
 })
 
-const isLoadingDashboard = computed(() => {
-  return dataStore.isLoadingAccounts || dataStore.isLoadingDashboardTransactions || dataStore.isLoadingDashboardTransactionsLastWeek
-})
+
 
 const dashboard = ref(null)
 let swipeStartAt = null
@@ -105,15 +108,15 @@ const { lengthX } = useSwipe(dashboard, {
     swipeStartAt = e.timeStamp
   },
   onSwipeEnd(e, direction) {
-    let duration = e.timeStamp - swipeStartAt
-    let velocity = Math.abs(lengthX.value) / duration
+    const duration = e.timeStamp - swipeStartAt
+    const velocity = Math.abs(lengthX.value) / duration
 
     if (lengthX.value > 100 && velocity >= 0.5) {
-      dataStore.dashboard.month = addMonths(dataStore.dashboard.month, 1)
+      dashboardStore.month = addMonths(dashboardStore.month, 1)
     }
 
     if (lengthX.value < -100 && velocity >= 0.5) {
-      dataStore.dashboard.month = addMonths(dataStore.dashboard.month, -1)
+      dashboardStore.month = addMonths(dashboardStore.month, -1)
     }
   },
 })
@@ -123,5 +126,4 @@ const toolbar = useToolbar()
 const { t } = useI18n()
 toolbar.init({ title: t('dashboard.title') })
 
-UIUtils.showLoadingWhen(isLoadingDashboard)
 </script>

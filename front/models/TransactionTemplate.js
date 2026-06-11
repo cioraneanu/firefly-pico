@@ -2,7 +2,7 @@ import BaseModel from '~/models/BaseModel'
 import TransactionTemplateTransformer from '~/transformers/TransactionTemplateTransformer'
 import TransactionTemplateRepository from '~/repository/TransactionTemplateRepository'
 import Transaction from '~/models/Transaction'
-import { get, isEqual } from 'lodash'
+import { get, isEqual } from 'lodash-es'
 
 export default class TransactionTemplate extends BaseModel {
   getTransformer() {

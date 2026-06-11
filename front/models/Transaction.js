@@ -3,7 +3,7 @@ import TransactionTransformer from '~/transformers/TransactionTransformer'
 import TransactionRepository from '~/repository/TransactionRepository'
 import { useProfileStore } from '~/stores/profileStore'
 import Account from '~/models/Account'
-import { get, includes, isEqual } from 'lodash'
+import { get } from 'lodash-es'
 import Currency from '~/models/Currency.js'
 import { formatNumber } from '~/utils/NumberUtils.js'
 
@@ -48,7 +48,7 @@ export default class Transaction extends BaseModel {
     }
   }
 
-  getFake(id) {
+  getFake() {
     return {}
   }
 
@@ -100,18 +100,44 @@ export default class Transaction extends BaseModel {
     return get(transaction, 'attributes.transactions.0.currency_code', [])
   }
 
-  static getTags(transaction) {
-    return get(transaction, 'attributes.transactions', [])
-      .map((item) => item.tags)
-      .flat()
-  }
-
-  static getCategoryId(transaction) {
-    return get(transaction, 'attributes.transactions.0.category_id', 0)
-  }
-
   static getSplits(transaction) {
     return get(transaction, 'attributes.transactions', [])
+  }
+
+  static getFirstSplit(transaction) {
+    return this.getSplits(transaction)[0]
+  }
+
+  static isSplitPayment(transaction) {
+    return this.getSplits(transaction).length > 1
+  }
+
+  static getDescription(transaction) {
+    return get(transaction, 'attributes.group_title') ?? get(this.getFirstSplit(transaction), 'description') ?? ' - '
+  }
+
+  static hasAttachments(transaction) {
+    return this.getSplits(transaction).some((item) => item.has_attachments)
+  }
+
+  static getCategories(transaction) {
+    let categories = this.getSplits(transaction)
+      .map((item) => item.category)
+      .flat()
+      .filter(Boolean)
+    return categories.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
+  }
+
+  static getNotes(transaction) {
+    return get(this.getFirstSplit(transaction), 'notes')
+  }
+
+  static getTags(transaction) {
+    let tags = this.getSplits(transaction)
+      .map((item) => item.tags)
+      .flat()
+      .filter(Boolean)
+    return tags.filter((v, i, a) => a.findIndex(t => (t.id === v.id)) === i)
   }
 
   static getAmountFormatted(transaction) {
@@ -154,22 +180,23 @@ export default class Transaction extends BaseModel {
     return this.types.expense
   }
 
+  // Keep each account if still valid for the new type; otherwise reuse the
+  // other slot's account if it fits. Allow-lists come from Account so the
+  // form and this repair stay in lockstep.
   static attemptAccountFixOnTypeChange(newType, sourceAccount, destinationAccount) {
-    let firstAsset = [sourceAccount, destinationAccount].find((account) => Account.getType(account)?.fireflyCode === Account.types.asset.fireflyCode)
+    const allowedSources = Account.getAccountTypesForTransactionTypeSource(newType).map((t) => t.fireflyCode)
+    const allowedDestinations = Account.getAccountTypesForTransactionTypeDestination(newType).map((t) => t.fireflyCode)
 
-    switch (newType.code) {
-      case Transaction.types.income.code:
-        let source = [sourceAccount, destinationAccount].find((account) => [Account.types.liability.fireflyCode, Account.types.revenue.fireflyCode, Account.types.cash.fireflyCode].includes(Account.getType(account)?.fireflyCode))
-        return { source: source, destination: firstAsset }
+    const fits = (account, allowed) => !!account && allowed.includes(Account.getType(account)?.fireflyCode)
 
-      case Transaction.types.expense.code:
-        let destination = [sourceAccount, destinationAccount].find((account) => {
-          return [Account.types.liability.fireflyCode, Account.types.expense.fireflyCode, Account.types.cash.fireflyCode].includes(Account.getType(account)?.fireflyCode)
-        })
-        return { source: firstAsset, destination: destination }
-      case Transaction.types.transfer.code:
-        let otherAsset = [sourceAccount, destinationAccount].find((account) => firstAsset?.id !== account?.id && Account.getType(account)?.code === Account.types.asset.code)
-        return { source: firstAsset, destination: otherAsset }
-    }
+    const pool = [sourceAccount, destinationAccount].filter(Boolean)
+    // Compare by id so a Transfer can't end up with the same account in both
+    // slots even if the two refs are distinct objects with the same id.
+    const pickFitting = (allowed, exclude) => pool.find((a) => a?.id !== exclude?.id && fits(a, allowed)) ?? null
+
+    const source = fits(sourceAccount, allowedSources) ? sourceAccount : pickFitting(allowedSources, null)
+    const destination = fits(destinationAccount, allowedDestinations) && destinationAccount?.id !== source?.id ? destinationAccount : pickFitting(allowedDestinations, source)
+
+    return { source, destination }
   }
 }

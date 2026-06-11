@@ -1,7 +1,7 @@
 import * as basicLightbox from 'basiclightbox'
 import axios from 'axios'
 import 'basiclightbox/dist/basicLightbox.min.css'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import { blobToJson } from '~/utils/DataUtils.js'
 
 const getAttachment = async (url) => {

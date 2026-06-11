@@ -14,7 +14,7 @@
 
 
     <van-cell-group inset style="overflow: auto">
-      <app-field-link label="Sync everything" :icon="TablerIconConstants.lastSync" @click="onSyncEverything" :isLink="false" />
+      <app-field-link label="Sync everything" :icon="TablerIconConstants.lastSync" :is-link="false" @click="onSyncEverything" />
     </van-cell-group>
 
 
@@ -28,7 +28,7 @@
         <a :href="REPO_URL">{{$t('settings.new_version_available')}}: {{ appStore.latestAppVersion }} 🎉</a>
       </div>
     </div>
-    <div></div>
+    <div/>
   </div>
 </template>
 
@@ -39,9 +39,10 @@ import { REPO_URL } from '~/constants/Constants'
 
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import UIUtils from '~/utils/UIUtils.js'
+import { useDashboardStore } from '~/stores/dashboardStore'
 
 const appStore = useAppStore()
-const dataStore = useDataStore()
+const dashboardStore = useDashboardStore()
 const toolbar = useToolbar()
 
 const { t } = useI18n()
@@ -49,9 +50,7 @@ toolbar.init({ title: t('settings.settings_title') })
 
 
 const onSyncEverything = async () => {
-  UIUtils.showToastLoading(t('settings.setup.fetching'))
-  await dataStore.syncEverything()
-  UIUtils.stopToastLoading()
+  await appStore.syncEverything()
 }
 
 onMounted(() => {

@@ -1,0 +1,383 @@
+{
+  "new": "Agregar",
+  "save": "Guardar",
+  "delete": "Borrar",
+  "add": "Agregar",
+  "search": "Buscar",
+  "success": "Éxito",
+  "search_placeholder": "Buscar...",
+  "clone": "Clonar",
+  "not_set": "Sin definir",
+  "loading": "Cargando...",
+  "items": "elementos",
+  "name": "Nombre",
+  "code": "Código",
+  "symbol": "Símbolo",
+  "description": "Descripción",
+  "notes": "Notas",
+  "ok": "Aceptar",
+  "copy": "Copiar",
+  "paste": "Pegar",
+  "copied": "Copiado",
+  "pasted": "Pegado",
+  "status": "Estado",
+  "transaction_type": "Tipo de transacción",
+  "without": "Sin",
+  "template": "Plantilla",
+  "templates": "Plantillas",
+  "category": "Categoría",
+  "categories": "Categorías",
+  "category_select": "Selecciona una categoría",
+  "tag": "Etiqueta",
+  "tags": "Etiquetas",
+  "todo": "Pendiente",
+  "tags_select": "Selecciona etiquetas",
+  "budget": "Presupuesto",
+  "budgets": "Presupuestos",
+  "budget_select": "Selecciona un presupuesto",
+  "attachment": "Adjunto",
+  "attachments": "Adjuntos",
+  "account": "Cuenta",
+  "accounts": "Cuentas",
+  "classifications": "Clasificaciones",
+  "total": "Total",
+  "select_is_empty": "Sin selección...",
+  "active": "Activo",
+  "calendar": "Calendario",
+  "date": "Fecha",
+  "date_after": "Fecha posterior a",
+  "date_before": "Fecha anterior a",
+  "sub_month": "-1 mes",
+  "this_month": "Este mes",
+  "add_month": "+1 mes",
+  "sub_day": "-1 día",
+  "today": "Hoy",
+  "add_day": "+1 día",
+  "day_of_week": "Día de la semana",
+  "amount": "Monto",
+  "amount_min": "Monto mínimo",
+  "amount_max": "Monto máximo",
+  "toolbar": {
+    "home": "Inicio",
+    "transactions": "Transacciones",
+    "extras": "Extras",
+    "settings": "Ajustes"
+  },
+  "filters": {
+    "clear": "Limpiar",
+    "applied_filters": "Filtros aplicados",
+    "apply_filters": "Aplicar filtros",
+    "transaction_filters": "Filtros de transacción"
+  },
+  "transaction": {
+    "title_list": "Lista de transacciones",
+    "split_transaction": "Dividir transacción",
+    "assistant": "Asistente",
+    "assistant_format": "Formato = [plantilla / etiqueta?] [monto?] [descripción?]",
+    "assistant_tutorial_title": "Asistente de transacciones",
+    "assistant_tutorial_body": "<p>Crea transacciones fácilmente escribiendo texto aquí (o usando el dictado de tu teléfono).</p>\n<p>Formato esperado:<br> <b>[búsqueda]&nbsp; [monto?]&nbsp; [descripción?]&nbsp; [pendiente?]</b></p>\n<p>1. La <b>búsqueda</b> revisa el nombre de tus etiquetas, categorías y plantillas de transacción. Acepta escribir solo parte del nombre e incluso equivocarte en algunas letras.<br><code> elct => electricidad</code></p>\n<p>2. El <b>monto</b> acepta expresiones matemáticas. Los números separados por espacios se suman automáticamente.</p>\n<p>3. La <b>descripción</b> es opcional. Úsala para sobrescribir el nombre predeterminado de la etiqueta.</p>\n<p>4. El <b>pendiente</b> facilita agregar la \"etiqueta de pendientes\" definida añadiendo una cadena personalizada (por defecto \"!!\"). Esto se puede cambiar en \"Ajustes\"</p>\n\n<p><b>Ejemplos</b><br>\n\"electricidad\" = etiqueta<br>\n\"natación\" = plantilla <br><br>\n\n<code>\nelectricidad 23<br> \nelc 12*2+33<br> \nelc 12+2*3 descripción personalizada<br> \nelc 25 !!<br>\nnat<br> \n\n</code>\n</p>\n\n<p>5. En la esquina superior derecha hay un selector de <b>moneda</b> que puedes cambiar al vuelo o establecer uno predeterminado desde \"Ajustes\" -> \"Asistente\". Al usarlo, tratará el <b>monto</b> como esa moneda y convertirá el valor final a la moneda de tu cuenta seleccionada. Esto es muy útil cuando viajas al extranjero.</p>",
+    "type": {
+      "expense": "Gasto",
+      "income": "Ingreso",
+      "transfer": "Transferencia"
+    },
+    "source_account": "Cuenta origen",
+    "destination_account": "Cuenta destino",
+    "make_template": "Crear plantilla",
+    "configure_fields": "Configurar campos",
+    "title_clone_transaction": "Clonar transacción",
+    "title_edit_transaction": "Editar transacción",
+    "title_add_transaction": "Agregar transacción"
+  },
+  "settings": {
+    "settings_title": "Ajustes",
+    "general": "General",
+    "required_field": "Este campo es obligatorio",
+    "settings_saved": "Ajustes guardados",
+    "setup_entry": "Configuración",
+    "setup": {
+      "title": "Configuración",
+      "pico_backend_url": "URL del backend de Pico",
+      "sync_settings_via_token": "Sincronizar ajustes entre dispositivos mediante token",
+      "days_between_sync": "Días entre sincronización completa de \"Extras\"",
+      "loaded_data_stats": "Estadísticas de datos cargados",
+      "account": "Cuenta",
+      "categories": "Categorías",
+      "tags": "Etiquetas",
+      "templates": "Plantillas",
+      "budgets": "Presupuestos",
+      "last_sync": "Última sincronización",
+      "verifying": "Verificando...",
+      "invalid_endpoint": "El endpoint proporcionado no es correcto.",
+      "invalid_token": "El token proporcionado no es correcto o ha expirado.",
+      "fetching": "Obteniendo..."
+    },
+    "ui_entry": "Interfaz de usuario",
+    "ui": {
+      "theme": "Tema",
+      "title": "Ajustes de interfaz",
+      "show_animations": "Mostrar animaciones",
+      "reset_forms_after_creation": "Reiniciar formularios después de crear",
+      "transaction_list": "Lista de transacciones",
+      "select_hero_icons": "Selecciona qué Hero Icons mostrar",
+      "hero_icons": "Hero Icons",
+      "right_side_card": "(Tarjeta derecha en la lista)",
+      "dark": "Oscuro",
+      "light": "Claro",
+      "pages": {
+        "new_transacation": "Nueva transacción",
+        "transacation_list": "Lista de transacciones",
+        "dashboard": "Panel principal"
+      }
+    },
+    "assistant_entry": "Asistente",
+    "assistant": {
+      "title": "Ajustes del asistente",
+      "substring_todo_tag": "Subcadena que agrega la etiqueta pendiente",
+      "currency": "La parte del monto en el texto del asistente se interpretará como moneda extranjera de este tipo"
+    },
+    "formatting_entry": "Formato",
+    "formatting": {
+      "title": "Ajustes de formato",
+      "numbers_format": "Formato de números",
+      "select_numbers_format": "Selecciona el formato de números preferido",
+      "date_format": "Formato de fecha",
+      "select_date_format": "Selecciona un formato de fecha",
+      "first_day_of_month": "Primer día del mes",
+      "select_first_day_of_month": "Selecciona el primer día del mes",
+      "casing": "Capitalización",
+      "force_transaction_description_lowercase": "Forzar descripción de transacción en minúsculas",
+      "force_account_name_lowercase": "Forzar nombre de cuenta en minúsculas",
+      "force_category_name_lowercase": "Forzar nombre de categoría en minúsculas",
+      "force_tag_name_lowercase": "Forzar nombre de etiqueta en minúsculas",
+      "strip_accents": "Eliminar acentos"
+    },
+    "transactions_entry": "Transacciones",
+    "transactions": {
+      "title": "Ajustes de transacciones",
+      "default_form_values_entry": "Valores por defecto del formulario",
+      "default_list_filters_entry": "Filtros por defecto de la lista",
+      "amount_increment_buttons": "Botones de incremento de monto",
+      "configure_form_fields": "Configurar campos del formulario",
+      "configure_list_fields": "Configurar campos de la lista",
+      "watchers": "Observadores",
+      "watchers_info": "Aplica solo al crear una transacción",
+      "copy_tag_to_description": "Al seleccionar una Etiqueta, copiarla a Descripción",
+      "copy_tag_to_category": "Al seleccionar una Etiqueta, copiarla a Categoría",
+      "copy_category_to_description": "Al seleccionar una Categoría, copiarla a Descripción",
+      "quick_amounts": {
+        "title": "Montos rápidos de transacción",
+        "value": "Valor"
+      },
+      "list_fields": {
+        "title": "Configurar campos de lista",
+        "fields": "Campos",
+        "select_hero_icons": "Selecciona qué Hero Icons mostrar",
+        "hero_icons": "Hero Icons",
+        "right_side_card": "(Tarjeta derecha en la lista)"
+      },
+      "form_fields": {
+        "title": "Configurar campos del formulario",
+        "always_show_foreign_currency": "Siempre mostrar campo de moneda extranjera"
+      },
+      "default_list_filters": {
+        "title": "Filtros por defecto de la lista de transacciones",
+        "info": "Se recomienda usar estos filtros solo si tienes una gran cantidad de transacciones que resulta en una carga lenta de la lista. Ej. Mostrar solo transacciones después del inicio del año actual."
+      },
+      "default_form_values": {
+        "title": "Valores por defecto de nueva transacción",
+        "default_source_account": "Cuenta origen por defecto",
+        "default_destination_account": "Cuenta destino por defecto",
+        "default_category": "Categoría por defecto",
+        "default_tags": "Etiquetas por defecto (solo preseleccionadas)",
+        "auto_tags": "Etiquetas automáticas (agregadas después de crear)",
+        "foreign_currency": "Moneda extranjera para gastos"
+      }
+    },
+    "about_entry": "Acerca de",
+    "version": "Versión",
+    "new_version_available": "Nueva versión disponible",
+    "dashboard_entry": "Panel principal",
+    "dashboard": {
+      "title": "Ajustes del panel principal",
+      "cards_order": "Orden de tarjetas del panel",
+      "config": "Configuración",
+      "show_empty_accounts": "Mostrar cuentas con monto 0",
+      "show_decimal_places": "Mostrar decimales",
+      "transaction_exclusion": "Exclusión de transacciones",
+      "cards": {
+        "accounts_summary": "Resumen de cuentas",
+        "expenses_this_week": "Gastos de esta semana",
+        "transactions_summary": "Resumen de transacciones",
+        "expenses_by_tag": "Gastos por etiquetas",
+        "expenses_by_category": "Gastos por categorías",
+        "transfers_by_tag": "Transferencias por etiquetas",
+        "transfers_by_category": "Transferencias por categorías",
+        "todo_transactions": "Transacciones pendientes"
+      }
+    },
+    "token": {
+      "label": "Token de acceso personal",
+      "placeholder": "Token personal"
+    }
+  },
+  "about": {
+    "title": "Acerca de",
+    "info": "Información",
+    "items_list_deleted": "- Los elementos de una lista se pueden eliminar deslizando en horizontal",
+    "list_updated": "- Una lista puede actualizarse deslizando hacia abajo para refrescar",
+	"popups_dismissed": "- Las ventanas emergentes que aparecen desde abajo pueden cerrarse deslizando hacia abajo",
+	"dashboard_clickable": "- En el panel principal, la mayoría de los íconos y barras de gráficos son clicables.",
+    "credits": "Créditos",
+    "developed_by": "- Desarrollado por Mihai Cioraneanu - <a href=\"{url}\">GitHub</a>",
+    "using_laravel_nuxt": "- Usando <a href=\"https://laravel.com/\" target=\"_blank\">Laravel</a> y <a href=\"https://nuxt.com/\" target=\"_blank\">Nuxt</a>",
+	"consuming_firefly": "- Consumiendo la API REST de <a href=\"https://www.firefly-iii.org\" target=\"_blank\">Firefly III</a>",
+	"ui_theme_vant": "- Con un tema de interfaz basado en <a href=\"https://vant-ui.github.io\" target=\"_blank\">Vant</a>",
+	"exchange_rate_api": "- Tipo de cambio por <a href=\"https://www.exchangerate-api.com\">Exchange Rate API</a>",
+	"iconpacks_tabler": "- Paquetes de íconos: <a href=\"https://tabler.io/icons\" target=\"_blank\">Tabler Icons</a>",
+	"iconpacks_fluent": "- Paquetes de íconos: <a href=\"https://github.com/microsoft/fluentui\" target=\"_blank\">Fluent UI System Icons</a>",
+	"iconpacks_circle_avatar": "- Paquetes de íconos: <a href=\"https://www.svgrepo.com/author/Laura%20Reen\" target=\"_blank\">Circle Avatar Vectors by Laura Reen</a>",
+	"iconpacks_svg_repo": "- Paquetes de íconos: <a href=\"https://www.svgrepo.com/\" target=\"_blank\">SVG Repo</a>",
+	"iconpacks_freepik": "- Paquetes de íconos: <a href=\"https://www.freepik.com/\" target=\"_blank\">Freepik</a>",
+	"illustrations_undraw": "- Ilustraciones: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>"
+  },
+  "page_select": {
+    "label": "Página de inicio",
+    "title": "Selecciona tu página de inicio"
+  },
+  "language_select": {
+    "title": "Selecciona tu idioma",
+    "label": "Idioma"
+  },
+  "day_select": {
+    "label": "Primer día de la semana",
+    "title": "Selecciona el primer día de la semana"
+  },
+  "account_select": {
+    "title": "Selecciona una cuenta",
+    "asset_accounts": "Cuentas de activos",
+    "expense_accounts": "Cuentas de gastos",
+    "income_accounts": "Cuentas de ingresos",
+    "liability_accounts": "Cuentas de pasivos",
+    "no_accounts": "Sin cuentas"
+  },
+  "currency_select": {
+    "title": "Selecciona una moneda"
+  },
+  "validation": {
+    "required": "Este campo es obligatorio"
+  },
+  "primary": "Principal",
+  "classification": "Clasificación",
+  "extra": "Extra",
+  "main": "Principal",
+  "exchange_rates": "Tipos de cambio",
+  "currency": "Moneda",
+  "currencies": "Monedas",
+  "show_transactions": "Mostrar transacciones",
+  "icon": "Icono",
+  "icon_select": "Selecciona un icono",
+  "icon_empty": "Sin icono",
+  "list": "Lista",
+  "percentage": "Porcentaje",
+  "repeater_no_values": "Sin valores definidos. Usa el botón 'agregar'.",
+  "account_page": {
+    "title_add": "Agregar cuenta",
+    "title_edit": "Editar cuenta",
+    "adjust_balance": "Ajustar saldo",
+    "account_type": "Tipo",
+    "account_type_asset": "Activo",
+    "account_type_revenue": "Ingreso",
+    "account_type_expense": "Gasto",
+    "account_type_liability": "Pasivo",
+    "account_type_cash": "Efectivo",
+    "account_role": "Rol",
+    "account_role_default": "Por defecto",
+    "account_role_shared": "Compartida",
+    "account_role_savings": "Ahorros",
+    "account_role_credit_card": "Tarjeta de crédito",
+    "liability_type": "Tipo de pasivo",
+    "liability_direction": "Dirección del pasivo",
+    "include_net_worth": "Incluir en el patrimonio neto",
+    "visible_on_dashboard": "Visible en el panel principal",
+    "balance": "Saldo",
+    "account_group": "Grupo"
+  },
+  "transaction_template_page": {
+    "title_add": "Agregar plantilla",
+    "title_edit": "Editar plantilla",
+    "extra_names": "Nombres extra (buscables por el asistente):"
+  },
+  "tag_page": {
+    "title_add": "Agregar etiqueta",
+    "title_edit": "Editar etiqueta",
+    "parent_tag": "Etiqueta padre",
+    "mark_as_todo": "Marcar como pendiente",
+    "end_date": "Fecha de fin"
+  },
+  "category_page": {
+    "title_add": "Agregar categoría",
+    "title_edit": "Editar categoría"
+  },
+  "currency_page": {
+    "title_add": "Agregar moneda",
+    "title_edit": "Editar moneda",
+    "decimal_places": "Decimales"
+  },
+  "budget_page": {
+    "title_add": "Agregar presupuesto",
+    "title_edit": "Editar presupuesto",
+    "spent": "Gastado",
+    "percent": "Porcentaje",
+    "interval": "Intervalo",
+    "type": "Tipo de presupuesto",
+    "period": "Período del presupuesto"
+  },
+  "exchange_rate_page": {
+    "relative_to_usd": "Relativo al USD"
+  },
+  "dashboard": {
+    "title": "Panel principal",
+    "controls": "Controles",
+    "account_total": "Saldo total",
+    "expenses_week": "Gastos de esta semana",
+    "transactions_summary": {
+      "title": "Resumen de transacciones",
+      "surplus": "Superávit",
+      "days_remaining": "Días restantes",
+      "savings_summary": "Resumen de ahorros"
+    },
+    "accounts": {
+      "by_currency": "Por moneda",
+      "by_group": "Por grupo",
+      "total": "Total"
+    },
+    "budget": {
+      "spent": "Gastado",
+      "budgeted": "Presupuestado",
+      "remaining": "Restante"
+    },
+    "expenses_by_tags": {
+      "title": "Gastos por etiquetas",
+      "all_tags": "Todas las etiquetas",
+      "one_root_tag": "Una etiqueta raíz"
+    },
+    "transfers_by_tags": {
+      "title": "Transferencias por etiquetas",
+      "all_tags": "Todas las etiquetas",
+      "one_root_tag": "Una etiqueta raíz"
+    },
+    "expenses_by_categories": "Gastos por categorías",
+    "transfers_by_categories": "Transferencias por categorías",
+    "configure_cards": "Configurar tarjetas"
+  },
+  "profile_page": {
+    "title": "Lista de perfiles",
+    "title_add": "Agregar perfil",
+    "info": "Cambia rápidamente entre todas tus configuraciones",
+    "title_edit": "Editar perfil",
+    "tutorial_body": "<p>Un <b>perfil</b> es la colección de todas las configuraciones que se encuentran en las páginas de <code>Ajustes</code>.</p><br><p>Puedes tener múltiples perfiles, pero solo uno puede estar activo a la vez. Puedes cambiar entre ellos con un <i>toque</i>, y editarlos mediante <i>doble toque</i> o <i>toque prolongado</i></p><br><p>Un caso de uso es tener múltiples valores predeterminados para el <b>formulario de transacciones</b>: uno para tu uso diario y otro para tus vacaciones. El perfil de vacaciones puede tener una cuenta origen diferente, o aplicar automáticamente una etiqueta llamada \"Vacaciones Agosto 2026\". Esto facilita ver tu gasto total por esa etiqueta.</p>"
+  },
+  "profile": "Perfil",
+  "new_transaction": "Nueva transacción"
+}

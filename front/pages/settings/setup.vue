@@ -2,13 +2,13 @@
   <div class="app-form">
     <app-top-toolbar />
 
-    <van-form @submit="onSave" class="">
+    <van-form class="" @submit="onSave">
       <van-cell-group inset>
         <!--        <div class="van-cell-group-title">Setup</div>-->
 
-        <app-field left-icon="link-o" v-model="picoBackendURL" :label="$t('settings.setup.pico_backend_url')" :rules="[rule.required()]" required />
+        <app-field v-model="picoBackendURL" left-icon="link-o" :label="$t('settings.setup.pico_backend_url')" :rules="[rule.required()]" required />
         <settings-token-field v-model="authToken" required />
-        <app-boolean left-icon="points" :label="$t('settings.setup.sync_settings_via_token')" v-model="syncProfileInDB" />
+        <app-boolean v-model="syncProfileInDB" left-icon="points" :label="$t('settings.setup.sync_settings_via_token')" />
         <app-field v-model="daysBetweenFullSync" :label="$t('settings.setup.days_between_sync')" :rules="[rule.required()]" required />
       </van-cell-group>
 
@@ -34,7 +34,13 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useProfileStore } from '~/stores/profileStore'
-import { useDataStore } from '~/stores/dataStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
+import { useAccountStore } from '~/stores/accountStore'
+import { useCategoryStore } from '~/stores/categoryStore'
+import { useTagStore } from '~/stores/tagStore'
+import { useBudgetStore } from '~/stores/budgetStore'
+import { usePiggyBankStore } from '~/stores/piggyBankStore'
+import { useTemplateStore } from '~/stores/templateStore'
 import UIUtils from '~/utils/UIUtils'
 import SettingsTokenField from '~/components/settings/settings-token-field.vue'
 import { useToolbar } from '~/composables/useToolbar'
@@ -43,28 +49,34 @@ import RouteConstants from '~/constants/RouteConstants'
 import AppConfigStat from '~/components/settings/app-config-stat.vue'
 import UserRepository from '~/repository/UserRepository'
 import TablerIconConstants from '~/constants/TablerIconConstants'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import { rule } from '~/utils/ValidationUtils.js'
 
 const appStore = useAppStore()
-const dataStore = useDataStore()
+const dashboardStore = useDashboardStore()
+const accountStore = useAccountStore()
+const categoryStore = useCategoryStore()
+const tagStore = useTagStore()
+const budgetStore = useBudgetStore()
+const piggyBankStore = usePiggyBankStore()
+const templateStore = useTemplateStore()
 
 const authToken = ref('')
 const picoBackendURL = ref('')
 const syncProfileInDB = ref(true)
 const daysBetweenFullSync = ref(4)
 
-const accountsCount = computed(() => dataStore.accountList.length)
-const categoriesCount = computed(() => dataStore.categoryList.length)
-const tagsCount = computed(() => dataStore.tagList.length)
-const budgetsCount = computed(() => dataStore.budgetList.length)
-const piggyBanksCount = computed(() => dataStore.piggyBankList.length)
-const transactionTemplatesCount = computed(() => dataStore.transactionTemplateList.length)
+const accountsCount = computed(() => accountStore.accountList.length)
+const categoriesCount = computed(() => categoryStore.categoryList.length)
+const tagsCount = computed(() => tagStore.tagList.length)
+const budgetsCount = computed(() => budgetStore.budgetList.length)
+const piggyBanksCount = computed(() => piggyBankStore.piggyBankList.length)
+const transactionTemplatesCount = computed(() => templateStore.transactionTemplateList.length)
 const lastSync = computed(() => {
-  if (!dataStore.lastSync) {
+  if (!dashboardStore.lastSync) {
     return ' - '
   }
-  return DateUtils.dateToUIWithTime(dataStore.lastSync, DateUtils.FORMAT_ROMANIAN_DATE_HOUR_MINUTE)
+  return DateUtils.dateToUIWithTime(dashboardStore.lastSync, DateUtils.FORMAT_ROMANIAN_DATE_HOUR_MINUTE)
 })
 const { t } = useI18n()
 
@@ -83,23 +95,19 @@ const onSave = async () => {
   appStore.syncProfileInDB = syncProfileInDB.value
   appStore.daysBetweenFullSync = daysBetweenFullSync.value
 
-  UIUtils.showToastLoading(t('settings.setup.verifying'))
-  let userResponse = await new UserRepository().getUser()
-  UIUtils.stopToastLoading()
+  const userResponse = await new UserRepository().getUser()
   if (!ResponseUtils.isSuccess(userResponse)) {
     UIUtils.showToastError(t('settings.setup.invalid_endpoint'))
     return
   }
 
-  let userId = get(userResponse, 'data.data.id')
+  const userId = get(userResponse, 'data.data.id')
   if (!userId) {
     UIUtils.showToastError(t('settings.setup.invalid_token'))
     return
   }
 
-  UIUtils.showToastLoading(t('settings.setup.fetching'))
-  await dataStore.syncEverything()
-  UIUtils.stopToastLoading()
+  await appStore.syncEverything()
   UIUtils.showToastSuccess(t('settings.settings_saved'))
 }
 

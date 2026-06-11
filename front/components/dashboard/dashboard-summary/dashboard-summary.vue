@@ -4,39 +4,39 @@
 
     <van-grid :column-num="3">
       <dashboard-summary-card
-        @click="onGoToTransactionsByType(Transaction.types.income)"
         :icon="TablerIconConstants.dashboardTotalIncomes"
         :title="$t('transaction.type.income')"
         :subtitle="totalIncomeFormatted"
-        subtitleClass="text-success"
+        subtitle-class="text-success"
+        @click="onGoToTransactionsByType(Transaction.types.income)"
       />
 
       <dashboard-summary-card
-        @click="onGoToTransactionsByType(Transaction.types.expense)"
         :icon="TablerIconConstants.dashboardTotalExpenses"
         :title="$t('transaction.type.expense')"
         :subtitle="totalExpenseFormatted"
-        subtitleClass="text-danger"
+        subtitle-class="text-danger"
+        @click="onGoToTransactionsByType(Transaction.types.expense)"
       />
 
       <dashboard-summary-card
-        @click="onGoToTransactionsByType(Transaction.types.transfer)"
         :icon="TablerIconConstants.dashboardTotalTransfers"
         :title="$t('transaction.type.transfer')"
         :subtitle="totalTransferFormatted"
-        subtitleClass="text-primary"
+        subtitle-class="text-primary"
+        @click="onGoToTransactionsByType(Transaction.types.transfer)"
       />
 
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardTotalSurplus" :title="$t('dashboard.transactions_summary.surplus')" :subtitle="totalSurplusFormatted" subtitleClass="" />
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" :title="$t('toolbar.transactions')" :subtitle="dataStore.totalTransactionsCount" subtitleClass="" />
+      <dashboard-summary-card :icon="TablerIconConstants.dashboardTotalSurplus" :title="$t('dashboard.transactions_summary.surplus')" :subtitle="totalSurplusFormatted" subtitle-class="" />
+      <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" :title="$t('toolbar.transactions')" :subtitle="dashboardStore.totalTransactionsCount" subtitle-class="" />
       <dashboard-summary-card :icon="TablerIconConstants.account" :title="$t('dashboard.transactions_summary.days_remaining')" :subtitle="remainingDays" />
     </van-grid>
 
     <div class="van-cell-group-title">{{ $t('dashboard.transactions_summary.savings_summary') }}:</div>
     <van-grid :column-num="3" @click="onNavigateToTransactionSavings">
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" :title="$t('toolbar.transactions')" :subtitle="dataStore.transactionsListSavingsCount" subtitleClass="" />
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardCoin" :title="$t('amount')" :subtitle="transactionsListSavingsAmount" :subtitleClass="savingsAmountClass" />
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardSavingsPercent" :title="$t('percentage')" :subtitle="savingsPercentFormatted" subtitleClass="text-primary" />
+      <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" :title="$t('toolbar.transactions')" :subtitle="dashboardStore.transactionsListSavingsCount" subtitle-class="" />
+      <dashboard-summary-card :icon="TablerIconConstants.dashboardCoin" :title="$t('amount')" :subtitle="transactionsListSavingsAmount" :subtitle-class="savingsAmountClass" />
+      <dashboard-summary-card :icon="TablerIconConstants.dashboardSavingsPercent" :title="$t('percentage')" :subtitle="savingsPercentFormatted" subtitle-class="text-primary" />
     </van-grid>
   </van-cell-group>
 </template>
@@ -46,11 +46,13 @@ import { addMonths, differenceInDays, startOfDay, subDays, subMonths } from 'dat
 import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
 
+import { useDashboardStore } from '~/stores/dashboardStore'
+
 const profileStore = useProfileStore()
-const dataStore = useDataStore()
+const dashboardStore = useDashboardStore()
 
 const startDate = computed(() => {
-  let dateCurrentMonth = startOfDay(new Date()).setDate(profileStore.dashboard.firstDayOfMonth)
+  const dateCurrentMonth = startOfDay(new Date()).setDate(profileStore.dashboard.firstDayOfMonth)
   return dateCurrentMonth > new Date() ? subMonths(dateCurrentMonth, 1) : dateCurrentMonth
 })
 
@@ -60,56 +62,56 @@ const endDate = computed(() => {
 })
 
 const rangeTitle = computed(() => {
-  let date1 = DateUtils.dateToUI(dataStore.dashboardDateStart)
-  let date2 = DateUtils.dateToUI(dataStore.dashboardDateEnd)
+  const date1 = DateUtils.dateToUI(dashboardStore.dashboardDateStart)
+  const date2 = DateUtils.dateToUI(dashboardStore.dashboardDateEnd)
   return `${date1} - ${date2}`
 })
 const remainingDays = computed(() => {
   return differenceInDays(endDate.value, startOfDay(new Date())) + 1
 })
 
-const totalExpenseFormatted = computed(() => formatNumberForDashboard(dataStore.totalExpenseThisMonth))
-const totalIncomeFormatted = computed(() => formatNumberForDashboard(dataStore.totalIncomeThisMonth))
-const totalTransferFormatted = computed(() => formatNumberForDashboard(dataStore.totalTransfersThisMonth))
-const totalSurplusFormatted = computed(() => formatNumberForDashboard(dataStore.totalSurplusThisMonth))
+const totalExpenseFormatted = computed(() => formatNumberForDashboard(dashboardStore.totalExpenseThisMonth))
+const totalIncomeFormatted = computed(() => formatNumberForDashboard(dashboardStore.totalIncomeThisMonth))
+const totalTransferFormatted = computed(() => formatNumberForDashboard(dashboardStore.totalTransfersThisMonth))
+const totalSurplusFormatted = computed(() => formatNumberForDashboard(dashboardStore.totalSurplusThisMonth))
 
 const onGoToTransactionsByType = async (transactionType) => {
-  let excludedUrl = getExcludedTransactionUrl()
-  let filters = [
+  const excludedUrl = getExcludedTransactionUrl()
+  const filters = [
     TransactionFilterUtils.filters.transactionType.toUrl(transactionType),
-    TransactionFilterUtils.filters.dateAfter.toUrl(dataStore.dashboardDateStart),
-    TransactionFilterUtils.filters.dateBefore.toUrl(dataStore.dashboardDateEnd),
+    TransactionFilterUtils.filters.dateAfter.toUrl(dashboardStore.dashboardDateStart),
+    TransactionFilterUtils.filters.dateBefore.toUrl(dashboardStore.dashboardDateEnd),
   ].join('&')
 
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}${excludedUrl}`)
 }
 
 const onNextMonth = () => {
-  dataStore.dashboard.month = addMonths(dataStore.dashboard.month, 1)
+  dashboardStore.month = addMonths(dashboardStore.month, 1)
 }
 const onPreviousMonth = () => {
-  dataStore.dashboard.month = addMonths(dataStore.dashboard.month, -1)
+  dashboardStore.month = addMonths(dashboardStore.month, -1)
 }
 
 watch(
-  () => dataStore.dashboard.month,
+  () => dashboardStore.month,
   (newValue) => {
-    dataStore.fetchDashboardTransactionsForInterval()
+    dashboardStore.fetchTransactionsForInterval()
   },
 )
 
-const transactionsListSavingsAmount = computed(() => formatNumberForDashboard(dataStore.transactionsListSavingsAmount))
-const savingsAmountClass = computed(() => (dataStore.transactionsListSavingsAmount > 0 ? 'text-success' : 'text-danger'))
+const transactionsListSavingsAmount = computed(() => formatNumberForDashboard(dashboardStore.transactionsListSavingsAmount))
+const savingsAmountClass = computed(() => (dashboardStore.transactionsListSavingsAmount > 0 ? 'text-success' : 'text-danger'))
 
 const savingsPercentFormatted = computed(() => {
-  return `${Math.trunc(dataStore.transactionsListSavingsPercentage)} %`
+  return `${Math.trunc(dashboardStore.transactionsListSavingsPercentage)} %`
 })
 const onNavigateToTransactionSavings = async () => {
-  if (dataStore.transactionsListSavings.length === 0) {
+  if (dashboardStore.transactionsListSavings.length === 0) {
     return
   }
-  let transactionIds = dataStore.transactionsListSavings.map((item) => item.id).join(',')
-  let filters = TransactionFilterUtils.filters.id.toUrl(transactionIds)
+  const transactionIds = dashboardStore.transactionsListSavings.map((item) => item.id).join(',')
+  const filters = TransactionFilterUtils.filters.id.toUrl(transactionIds)
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
 }
 </script>

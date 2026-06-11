@@ -1,17 +1,17 @@
 <template>
   <div class="text-size-14 flex-center-vertical gap-1">
-    <currency-dropdown v-model="dataStore.dashboardCurrency" />
+    <currency-dropdown v-model="dashboardStore.dashboardCurrency" />
 
     <div class="app-button-small cursor-pointer" @click="onToggleShowDashboardAccountValues">
       <app-icon :icon="profileStore.dashboard.showAccountAmounts ? TablerIconConstants.eyeHidden : TablerIconConstants.eyeVisible" :size="20" />
     </div>
 
     <div class="app-button-small">
-      <div @click="onShowFilters" class="cursor-pointer">
+      <div class="cursor-pointer" @click="onShowFilters">
         <app-icon :icon="TablerIconConstants.search" :size="18" />
         <span v-if="activeFiltersCount > 0"> {{ activeFiltersCount }}</span>
       </div>
-      <div v-if="activeFiltersCount > 0" @click="onResetFilters" class="cursor-pointer">
+      <div v-if="activeFiltersCount > 0" class="cursor-pointer" @click="onResetFilters">
         <icon-square-rounded-x :size="22" :stroke="1.5" />
       </div>
     </div>
@@ -28,12 +28,16 @@ import { useListFilters } from '~/composables/useListFilters.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
 import { IconSquareRoundedX } from '@tabler/icons-vue'
 
-const dataStore = useDataStore()
+import { useCurrencyStore } from '~/stores/currencyStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
+
+const currencyStore = useCurrencyStore()
+const dashboardStore = useDashboardStore()
 const profileStore = useProfileStore()
 
 const transactionFiltersRef = useTemplateRef('transactionFiltersRef')
 
-const hasMultipleCurrencies = computed(() => dataStore.dashboardAccountsCurrencyList.length > 1)
+const hasMultipleCurrencies = computed(() => dashboardStore.dashboardAccountsCurrencyList.length > 1)
 
 const onToggleShowDashboardAccountValues = async () => {
   profileStore.dashboard.showAccountAmounts = !profileStore.dashboard.showAccountAmounts
@@ -43,7 +47,7 @@ const onShowFilters = () => {
   transactionFiltersRef.value.show()
 }
 
-let { filters, filtersBackendList, activeFiltersCount, activeFilters } = useListFilters({
+const { filters, filtersBackendList, activeFiltersCount, activeFilters } = useListFilters({
   filterDefinitions: Object.values(TransactionFilterUtils.filters),
 })
 const onResetFilters = () => {
@@ -51,11 +55,11 @@ const onResetFilters = () => {
 }
 
 watch(filters, (newValue) => {
-  dataStore.fetchDashboard()
+  dashboardStore.fetchDashboard()
 })
 
 watch(filtersBackendList, (newValue) => {
-  dataStore.dashboard.backendFilters = newValue
+  dashboardStore.backendFilters = newValue
 })
 
 </script>

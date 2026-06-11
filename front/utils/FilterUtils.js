@@ -1,4 +1,4 @@
-import { cloneDeep, get, isArray } from 'lodash'
+import { cloneDeep, get, isArray } from 'lodash-es'
 import Transaction from '~/models/Transaction.js'
 import Tag from '~/models/Tag.js'
 import Category from '~/models/Category.js'
@@ -27,7 +27,7 @@ export const getActiveFilters = (filterDefinition, filterBag) => {
 }
 
 export const getFiltersFromURL = (filterDefinition) => {
-  let dataStore = useDataStore()
+
   const route = useRoute()
 
   return filterDefinition.reduce((result, item) => {

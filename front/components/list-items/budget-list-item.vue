@@ -8,7 +8,7 @@
             <budget-icon :value="props.value" />
           </div>
 
-          <div class="separator"></div>
+          <div class="separator"/>
 
           <div class="second_column flex-1 flex-column">
             <div v-if="displayName" class="title flex-center-vertical">
@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-import _, { get } from 'lodash'
+import _, { get } from 'lodash-es'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import Budget from '~/models/Budget.js'
 import BudgetIcon from '~/components/budget/budget-icon.vue'

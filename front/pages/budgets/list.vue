@@ -11,7 +11,7 @@
     <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
       <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
         <app-list-search v-if="isSearchVisible && list.length > 0" v-model="search" />
-        <budget-list-item v-for="item in filteredList" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
+        <budget-list-item v-for="item in filteredList" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
       </van-list>
     </van-pull-refresh>
   </div>
@@ -21,21 +21,21 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
+import { useBudgetStore } from '~/stores/budgetStore'
 import { useList } from '~/composables/useList'
 import { useToolbar } from '~/composables/useToolbar'
 import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import Budget from '~/models/Budget.js'
 
-let dataStore = useDataStore()
+const budgetStore = useBudgetStore()
 
-// let list = computed(() => dataStore.accountList)
+
 // let formRoute = RouteConstants.ROUTE_ACCOUNT_ID
 
 const onEvent = (event, payload) => {
   if (event === 'onPostDelete') {
-    dataStore.budgetList = dataStore.budgetList.filter((item) => item.id !== payload.id)
+    budgetStore.budgetList = budgetStore.budgetList.filter((item) => item.id !== payload.id)
   }
 }
 
@@ -70,8 +70,8 @@ const onRefresh = async () => {
   isLoading.value = true
   isRefreshing.value = true
 
-  await dataStore.fetchBudgets()
-  list.value = dataStore.budgetList
+  await budgetStore.fetchBudgets()
+  list.value = budgetStore.budgetList
 
   isLoading.value = false
   isRefreshing.value = false

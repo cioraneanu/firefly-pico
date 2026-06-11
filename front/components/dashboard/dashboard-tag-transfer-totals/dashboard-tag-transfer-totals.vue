@@ -8,7 +8,7 @@
     </div>
     <div class="display-flex flex-column ml-15 mr-15">
       <table>
-        <tr v-for="bar in barsList" @click="onShowActionSheet(bar)" class="cursor-pointer">
+        <tr v-for="bar in barsList" class="cursor-pointer" @click="onShowActionSheet(bar)">
           <td style="width: 1%">
             <div class="flex-center-vertical gap-1 my-1">
               <app-icon :icon="Tag.getIcon(bar.tag) ?? TablerIconConstants.tag" :size="20" />
@@ -17,7 +17,7 @@
           </td>
 
           <td>
-            <bar-chart-item-horizontal :percent="bar.percent" :getBackground="getBarColor"/>
+            <bar-chart-item-horizontal :percent="bar.percent" :get-background="getBarColor"/>
           </td>
 
           <td style="width: 1%">
@@ -31,7 +31,7 @@
   </van-cell-group>
 </template>
 <script setup>
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
 import Tag from '~/models/Tag.js'
@@ -39,22 +39,23 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils.js'
 import { useActionSheet } from '~/composables/useActionSheet.js'
 
-const dataStore = useDataStore()
+const dashboardStore = useDashboardStore()
+const tagStore = useTagStore()
 const { t } = useI18n()
 
 const onToggleTagMode = () => {
-  dataStore.dashboard.tagsWidgetModeOnlyRootTag = !dataStore.dashboard.tagsWidgetModeOnlyRootTag
+  dashboardStore.tagsWidgetModeOnlyRootTag = !dashboardStore.tagsWidgetModeOnlyRootTag
 }
 
-const tagModeDisplayName = computed(() => (dataStore.dashboard.tagsWidgetModeOnlyRootTag ? t('dashboard.expenses_by_tags.one_root_tag') : t('dashboard.expenses_by_tags.all_tags')))
+const tagModeDisplayName = computed(() => (dashboardStore.tagsWidgetModeOnlyRootTag ? t('dashboard.expenses_by_tags.one_root_tag') : t('dashboard.expenses_by_tags.all_tags')))
 
 const barsList = computed(() => {
-  const tagTotalDictionary = dataStore.dashboardTransfersByTag
+  const tagTotalDictionary = dashboardStore.dashboardTransfersByTag
 
   const maxAmount = Math.max(...Object.values(tagTotalDictionary))
 
   const bars = Object.keys(tagTotalDictionary).map((tagId) => {
-    const tag = dataStore.tagDictionaryById[tagId]
+    const tag = tagStore.tagDictionaryById[tagId]
     const amount = tagTotalDictionary[tagId]
     const percent = (amount / maxAmount) * 100
     return {
@@ -87,9 +88,9 @@ const onGoToTag = async (tag) => {
 }
 
 const onGoToTransactions = async (tag) => {
-  const startDate = DateUtils.dateToString(dataStore.dashboardDateStart)
-  const endDate = DateUtils.dateToString(dataStore.dashboardDateEnd)
-  let excludedUrl = getExcludedTransactionUrl()
+  const startDate = DateUtils.dateToString(dashboardStore.dashboardDateStart)
+  const endDate = DateUtils.dateToString(dashboardStore.dashboardDateEnd)
+  const excludedUrl = getExcludedTransactionUrl()
 
   if (!tag) {
     await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_tag=true&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.transfer.code}${excludedUrl}`)

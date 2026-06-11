@@ -1,5 +1,5 @@
 <template>
-  <app-field v-model="modelValueCustom" :icon="TablerIconConstants.fieldText1" :label="$t('notes')" :placeholder="$t('notes')" @focus="onFocus" @blur="onBlur" type="textarea" rows="1" autosize>
+  <app-field v-model="modelValueCustom" :icon="TablerIconConstants.fieldText1" :label="$t('notes')" :placeholder="$t('notes')" type="textarea" rows="1" autosize @focus="onFocus" @blur="onBlur">
     <template #right-icon>
       <van-button v-if="isMarkdown && !isFocused" size="small" class="" @click.prevent.stop="onShowPreview">
         <template #icon>
@@ -11,7 +11,7 @@
 
       <van-dialog v-model:show="isPreviewVisible" confirm-button-text="OK" :close-on-click-overlay="true" style="top: 50%;">
         <div class="p-20">
-          <div class="app-toolbar-body" style="overflow: auto; max-height: 70vh" v-html="markdown"></div>
+          <div class="app-toolbar-body" style="overflow: auto; max-height: 70vh" v-html="markdown"/>
         </div>
       </van-dialog>
     </template>

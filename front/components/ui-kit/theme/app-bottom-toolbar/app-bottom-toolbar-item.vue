@@ -1,12 +1,12 @@
 <template>
-  <div @click="onChange" class="flex-1 flex-center flex-column cursor-pointer" style="gap: 2px">
+  <div class="flex-1 flex-center flex-column cursor-pointer" :class="labelClass" style="gap: 2px" @click="onChange">
     <div class="position-relative">
       <slot name="icon">
-        <div v-if="dot" class="van-badge van-badge--dot van-badge--fixed" style="top: -2px; right: -4px"></div>
-        <app-icon :icon="icon" :size="20" />
+        <div v-if="dot" class="van-badge van-badge--dot van-badge--fixed" style="top: -2px; right: -4px"/>
+        <app-icon :icon="icon" :size="20" :invertable="!isSelected" />
       </slot>
     </div>
-    <div :class="labelClass">{{ label }}</div>
+    <div>{{ label }}</div>
   </div>
 </template>
 
@@ -65,7 +65,7 @@ const icons = {
 const isSelected = computed(() => appStore.activePage === props.route)
 
 const icon = computed(() => {
-  let isActiveKey = isSelected.value ? 'iconOn' : 'iconOff'
+  const isActiveKey = isSelected.value ? 'iconOn' : 'iconOff'
   return icons[props.route][isActiveKey]
 })
 

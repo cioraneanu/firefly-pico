@@ -7,7 +7,7 @@
 <script setup>
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import PiggyBank from '~/models/PiggyBank.js'
-import { head } from 'lodash'
+import { head } from 'lodash-es'
 import AppCircle from '~/components/ui-kit/app-circle.vue'
 
 const props = defineProps({

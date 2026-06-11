@@ -14,7 +14,7 @@
 
         <van-collapse v-model="visibleAccountTypes">
           <van-collapse-item v-for="{ accounts, typeName } in accountsGroupList" :title="typeName" :name="typeName">
-            <account-list-item v-for="item in accounts" :key="item.id" :value="item" @onEdit="onEdit" @onDelete="onDelete" />
+            <account-list-item v-for="item in accounts" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
           </van-collapse-item>
         </van-collapse>
       </van-list>
@@ -24,22 +24,22 @@
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
+import { useAccountStore } from '~/stores/accountStore'
 import { useList } from '~/composables/useList'
 import Account from '~/models/Account'
 import { useToolbar } from '~/composables/useToolbar'
 import { ref } from 'vue'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 
-let dataStore = useDataStore()
+const accountStore = useAccountStore()
 
 const onEvent = (event, payload) => {
   if (event === 'onPostDelete') {
-    dataStore.accountList = dataStore.accountList.filter((item) => parseInt(item.id) !== parseInt(payload.id))
+    accountStore.accountList = accountStore.accountList.filter((item) => parseInt(item.id) !== parseInt(payload.id))
   }
 }
 
@@ -87,8 +87,8 @@ const onRefresh = async () => {
   isLoading.value = true
   isRefreshing.value = true
 
-  const dataStore = useDataStore()
-  await dataStore.fetchAccounts()
+  const accountStore = useAccountStore()
+  await accountStore.fetchAccounts()
 
   isLoading.value = false
   isRefreshing.value = false
@@ -96,8 +96,8 @@ const onRefresh = async () => {
 }
 
 const onLoadMore = () => {
-  const dataStore = useDataStore()
-  list.value = dataStore.accountList
+  const accountStore = useAccountStore()
+  list.value = accountStore.accountList
 }
 
 // const onClickBack = async () => {

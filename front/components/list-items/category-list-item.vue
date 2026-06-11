@@ -7,7 +7,7 @@
             <app-icon :icon="icon ?? TablerIconConstants.category" :size="TablerIconConstants.defaultSize" />
           </div>
 
-          <div class="separator"></div>
+          <div class="separator"/>
 
           <div class="second_column flex-1 flex-center-vertical">
             <div v-if="displayName" class="title">{{ displayName }}</div>
@@ -23,8 +23,7 @@
 </template>
 
 <script setup>
-import _ from 'lodash'
-import { useDataStore } from '~/stores/dataStore'
+import _ from 'lodash-es'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import Account from '~/models/Account.js'
@@ -34,8 +33,6 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['onEdit', 'onDelete'])
-
-const dataStore = useDataStore()
 
 const displayName = computed(() => _.get(props.value, 'attributes.name', ' - '))
 const icon = computed(() => Account.getIcon(props.value))

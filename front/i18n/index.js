@@ -10,7 +10,8 @@ export const languageCode = {
   swiss_german: 'de-CH',
   french: 'fr-FR',
   polish: 'pl',
-  russian: 'ru-RU'
+  russian: 'ru-RU',
+  spanish: 'es-MX'
 }
 
 export const supportedLanguages = [
@@ -73,5 +74,11 @@ export const supportedLanguages = [
     file: 'ru-RU.json',
     displayName: 'Русский',
     icon: 'svgo-flags-ru',
+  },
+  {
+    code: languageCode.spanish,
+    file: 'es-MX.json',
+    displayName: 'Español (México)',
+    icon: 'svgo-flags-mx',
   },
 ]

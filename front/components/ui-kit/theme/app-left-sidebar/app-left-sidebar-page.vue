@@ -3,13 +3,12 @@
     <div class="flex-center-vertical">
       <app-icon :icon="icon" :size="20" />
       {{ label }}
-      <div v-if="dot" class="van-badge van-badge--dot"></div>
+      <div v-if="dot" class="van-badge van-badge--dot"/>
     </div>
   </nuxt-link>
 </template>
 
 <script setup>
-import { useDataStore } from '~/stores/dataStore.js'
 import { useProfileStore } from '~/stores/profileStore.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'

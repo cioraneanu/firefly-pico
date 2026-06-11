@@ -1,13 +1,13 @@
 <template>
   <app-select
-    :label="props.label ?? $t('currency')"
-    :popupTitle="$t('currency_select.title')"
     v-model="modelValue"
-    v-model:showDropdown="showDropdown"
+    v-model:show-dropdown="showDropdown"
     v-model:search="search"
+    :label="props.label ?? $t('currency')"
+    :popup-title="$t('currency_select.title')"
     :list="filteredList"
     :columns="appStore.gridColumns"
-    :getDisplayValue="getDisplayValue"
+    :get-display-value="getDisplayValue"
     v-bind="dynamicAttrs"
   >
 
@@ -23,7 +23,7 @@
     </template>
 
     <template #top-right>
-      <van-button size="small" @click="onRefresh" class="">
+      <van-button size="small" class="" @click="onRefresh">
         <app-icon :icon="TablerIconConstants.refresh" :stroke="1.7" size="14" />
       </van-button>
     </template>
@@ -35,15 +35,15 @@
 </template>
 
 <script setup>
-import _, { get } from 'lodash'
-import { useDataStore } from '~/stores/dataStore'
+import _, { get } from 'lodash-es'
+import { useCurrencyStore } from '~/stores/currencyStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import { IconRefresh } from '@tabler/icons-vue'
 
 import Currency from '~/models/Currency'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 
-const dataStore = useDataStore()
+const currencyStore = useCurrencyStore()
 const appStore = useAppStore()
 
 const attrs = useAttrs()
@@ -63,7 +63,7 @@ const showDropdown = ref(false)
 const search = ref('')
 
 
-let list = ref([])
+const list = ref([])
 
 const filteredList = computed(() => {
   if (search.value.length === 0) {
@@ -77,7 +77,7 @@ const filteredList = computed(() => {
 // ------ Methods ------
 
 onMounted(async () => {
-  list.value = dataStore.currenciesList.filter((item) => get(item, 'attributes.enabled'))
+  list.value = currencyStore.currenciesList.filter((item) => get(item, 'attributes.enabled'))
 })
 
 const getDisplayValue = (value) => {
@@ -85,10 +85,9 @@ const getDisplayValue = (value) => {
 }
 
 const isLoading = ref(false)
-UIUtils.showLoadingWhen(isLoading)
 const onRefresh = async () => {
   isLoading.value = true
-  await dataStore.fetchCurrencies()
+  await currencyStore.fetchCurrencies()
   isLoading.value = false
 }
 </script>

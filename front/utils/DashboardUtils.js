@@ -1,4 +1,4 @@
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 import Transaction from '~/models/Transaction'
 import Tag from '~/models/Tag.js'
 import Category from '~/models/Category.js'

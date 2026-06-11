@@ -6,7 +6,7 @@
       </template>
     </app-top-toolbar>
 
-    <van-form ref="form" @submit="saveItem" @failed="onValidationError" class="">
+    <van-form ref="form" class="" @submit="saveItem" @failed="onValidationError">
       <van-cell-group inset>
         <app-field v-model="name" name="Name" :label="$t('name')" :rules="[rule.required()]" />
 
@@ -20,7 +20,7 @@
       <div style="margin: 16px">
         <app-button-form-save />
 
-        <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
+        <app-button-form-delete v-if="itemId" class="mt-10" @click="onDelete" />
       </div>
     </van-form>
   </div>
@@ -30,8 +30,8 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
-import _ from 'lodash'
+import { useCurrencyStore } from '~/stores/currencyStore'
+import _ from 'lodash-es'
 import { startOfDay } from 'date-fns'
 import UIUtils from '~/utils/UIUtils'
 import DateUtils from '~/utils/DateUtils'
@@ -47,8 +47,8 @@ import CurrencyTransformer from '~/transformers/CurrencyTransformer'
 import Currency from '~/models/Currency'
 import { rule } from '~/utils/ValidationUtils.js'
 
-let dataStore = useDataStore()
-let profileStore = useProfileStore()
+const currencyStore = useCurrencyStore()
+const profileStore = useProfileStore()
 const route = useRoute()
 
 const form = ref(null)
@@ -58,22 +58,22 @@ const resetFields = () => {
 }
 
 const fetchItem = () => {
-  const dataStore = useDataStore()
-  item.value = dataStore.currencyDictionary[useRoute().params.id]
+  const currencyStore = useCurrencyStore()
+  item.value = currencyStore.currencyDictionary[useRoute().params.id]
 }
 
 const onEvent = (event, payload) => {
   if (event === 'onPostSave') {
     let newItem = _.get(payload, 'data.data')
     newItem = CurrencyTransformer.transformFromApi(newItem)
-    dataStore.currenciesList = [newItem, ...dataStore.currenciesList.filter((item) => item.id !== itemId.value)]
+    currencyStore.currenciesList = [newItem, ...currencyStore.currenciesList.filter((item) => item.id !== itemId.value)]
   }
   if (event === 'onPostDelete') {
-    dataStore.currenciesList = dataStore.currenciesList.filter((item) => item.id !== itemId.value)
+    currencyStore.currenciesList = currencyStore.currenciesList.filter((item) => item.id !== itemId.value)
   }
 }
 
-let { itemId, item, saveItem, onDelete, onNew, onValidationError } = useForm({
+const { itemId, item, saveItem, onDelete, onNew, onValidationError } = useForm({
   form: form,
   routeList: RouteConstants.ROUTE_CURRENCY_LIST,
   routeForm: RouteConstants.ROUTE_CURRENCY_ID,

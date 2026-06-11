@@ -1,9 +1,9 @@
 <template>
   <app-select
-    :label="$t('language_select.label')"
-    :popupTitle="$t('language_select.title')"
     v-model="modelValue"
-    v-model:showDropdown="showDropdown"
+    v-model:show-dropdown="showDropdown"
+    :label="$t('language_select.label')"
+    :popup-title="$t('language_select.title')"
     :list="list"
     :columns="appStore.gridColumns"
     v-bind="dynamicAttrs"
@@ -15,7 +15,7 @@
           <app-icon :icon="item.icon" :size="24" />
           <div class="text-center">{{ item.displayName }}</div>
         </div>
-        <div v-if="isActive" class="app-icon-item mt-5"></div>
+        <div v-if="isActive" class="app-icon-item mt-5"/>
       </div>
     </template>
 

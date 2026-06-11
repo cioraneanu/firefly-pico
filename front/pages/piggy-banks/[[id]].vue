@@ -43,8 +43,8 @@
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
-import _ from 'lodash'
+import { usePiggyBankStore } from '~/stores/piggyBankStore'
+import _ from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
@@ -56,8 +56,8 @@ import PiggyBank from '~/models/PiggyBank.js'
 import Account from '~/models/Account.js'
 import { rule } from '~/utils/ValidationUtils.js'
 
-let dataStore = useDataStore()
-let profileStore = useProfileStore()
+const piggyBankStore = usePiggyBankStore()
+const profileStore = useProfileStore()
 
 const form = ref(null)
 
@@ -69,8 +69,8 @@ const resetFields = () => {
 }
 
 const fetchItem = () => {
-  const dataStore = useDataStore()
-  item.value = dataStore.piggyBankDictionary[useRoute().params.id]
+  const piggyBankStore = usePiggyBankStore()
+  item.value = piggyBankStore.piggyBankDictionary[useRoute().params.id]
 }
 
 const piggyBankCurrentAmount = computed(() => PiggyBank.getCurrentAmount(item.value))
@@ -83,14 +83,14 @@ const onEvent = (event, payload) => {
   if (event === 'onPostSave') {
     let newItem = _.get(payload, 'data.data')
     newItem = PiggyBankTransformer.transformFromApi(newItem)
-    dataStore.piggyBankList = [newItem, ...dataStore.piggyBankList.filter((item) => item.id !== itemId.value)]
+    piggyBankStore.piggyBankList = [newItem, ...piggyBankStore.piggyBankList.filter((item) => item.id !== itemId.value)]
   }
   if (event === 'onPostDelete') {
-    dataStore.piggyBankList = dataStore.piggyBankList.filter((item) => item.id !== itemId.value)
+    piggyBankStore.piggyBankList = piggyBankStore.piggyBankList.filter((item) => item.id !== itemId.value)
   }
 }
 
-let { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
   form: form,
   routeList: RouteConstants.ROUTE_PIGGY_BANK_LIST,
   routeForm: RouteConstants.ROUTE_PIGGY_BANK_ID,

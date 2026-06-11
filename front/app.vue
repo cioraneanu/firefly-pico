@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-import { useDataStore } from '~/stores/dataStore'
+import { useDashboardStore } from '~/stores/dashboardStore'
 import RouteConstants from '~/constants/RouteConstants'
 
 import '~/assets/styles/variables.css'
@@ -17,9 +17,9 @@ import AppLoading from '~/components/ui-kit/app-loading.vue'
 import profile from '~/models/Profile.js'
 import { setDefaultOptions } from 'date-fns'
 
-let dataStore = useDataStore()
-let profileStore = useProfileStore()
-let appStore = useAppStore()
+const dashboardStore = useDashboardStore()
+const profileStore = useProfileStore()
+const appStore = useAppStore()
 
 const theme = computed(() => (profileStore.darkTheme ? 'dark' : 'white'))
 const pwaColor = computed(() => (profileStore.darkTheme ? '#1c1c1e' : '#ffffff'))
@@ -34,15 +34,12 @@ onMounted(async () => {
     navigateTo(`${RouteConstants.ROUTE_SETTINGS_SETUP}`)
     return
   }
-  await dataStore.init()
+  await dashboardStore.init()
 
   appStore.fetchLatestAppVersion()
-  await profileStore.getProfiles()
-  await dataStore.syncEverythingIfOld()
+  await profileStore.getProfiles({ showLoading: false })
+  await appStore.syncEverythingIfOld()
 })
-
-const { isLoading } = storeToRefs(dataStore)
-UIUtils.showLoadingWhen(isLoading)
 </script>
 
 <style>

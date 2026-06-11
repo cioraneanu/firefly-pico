@@ -42,26 +42,30 @@ FROM base AS build-container
 # Installing composer
 COPY --from=composer_base /usr/bin/composer /usr/local/bin/composer
 
-#Configure backend
+#Configure backend - Step 1: Install dependencies
 WORKDIR /var/www/html
-COPY back/ .
-RUN mv .env.example .env
-
+COPY back/composer.json back/composer.lock ./
 ENV COMPOSER_ALLOW_SUPERUSER=1
 ENV COMPOSER_PROCESS_TIMEOUT=600
+RUN composer install --no-dev --no-scripts --no-autoloader
 
-RUN composer install --no-dev --optimize-autoloader
+#Configure backend - Step 2: Copy source and finalize
+COPY back/ .
+RUN mv .env.example .env
+RUN composer dump-autoload --no-dev --optimize
 RUN php artisan key:generate
 ARG APP_VERSION
 RUN echo $APP_VERSION > /var/www/html/VERSION
 RUN tar --owner=www-data --group=www-data --exclude=.git -czf /tmp/app-back.tar.gz .
 
-#Configure frontend
+#Configure frontend - Step 1: Install dependencies
 WORKDIR /var/www/html/front
-COPY front/ .
+COPY front/package.json front/package-lock.json front/.npmrc* ./
+RUN npm ci --ignore-scripts
 
-RUN npm install \
-    && NUXT_PUBLIC_VERSION="$APP_VERSION" npm run build
+#Configure frontend - Step 2: Copy source and build
+COPY front/ .
+RUN NUXT_PUBLIC_VERSION="$APP_VERSION" npm run build
 RUN npm prune --production
 RUN npm cache clean --force
 RUN tar --owner=www-data --group=www-data \
@@ -124,23 +128,31 @@ RUN adduser \
 
 RUN mkdir -p -m 772 /tmp/nginx/ && chown -R www-data:www-data /tmp/nginx
 RUN chmod -R 772 /var/www/html/storage && chown -R www-data:www-data /var/www/html/storage
+RUN mkdir -p /var/www/html/database/data && chown -R www-data:www-data /var/www/html/database/data && chmod -R 775 /var/www/html/database/data
+RUN chown -R www-data:www-data /var/www/html/bootstrap/cache
 
 # Configure supervisor
 COPY docker/conf/supervisor/supervisord.conf /etc/supervisord.conf
 COPY docker/conf/supervisor/ /etc/supervisor.d/
+RUN mkdir -p /tmp/supervisor /tmp/crontabs && chown -R www-data:www-data /tmp/supervisor /tmp/crontabs
 
 # Configure PHP
-RUN mkdir -p /run/php/ && touch /run/php/php8.2-fpm.pid
+RUN mkdir -p /run/php/ && touch /run/php/php8.2-fpm.pid && chown -R www-data:www-data /run/php
+RUN mkdir -p /var/log/php82 && chown -R www-data:www-data /var/log/php82
 COPY docker/conf/php-fpm/ /etc/php82/
 
 # Configure nginx
 COPY docker/conf/nginx/ /etc/nginx/
+RUN chown -R www-data:www-data /var/log/nginx /var/lib/nginx /run/nginx 2>/dev/null; \
+    mkdir -p /run/nginx && chown www-data:www-data /run/nginx
 
 # Configure entrypoint
 COPY --chmod=755 docker/docker-entrypoint.d/ /docker-entrypoint.d/
 
 #set default db connection
 ENV DB_CONNECTION=sqlite
+
+USER www-data
 
 ENTRYPOINT ["/docker-entrypoint.d/start.sh"]
 CMD ["run"]

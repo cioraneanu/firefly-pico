@@ -1,5 +1,5 @@
 import BaseModel from '~/models/BaseModel'
-import { capitalize, get } from 'lodash'
+import { capitalize, get } from 'lodash-es'
 import { endOfMonth, endOfYear, isSameDay, isSameMonth, isSameYear, startOfMonth, startOfYear } from 'date-fns'
 
 export default class BudgetLimit extends BaseModel {

@@ -1,9 +1,8 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import RouteConstants from '~/constants/RouteConstants'
-import { useDataStore } from '~/stores/dataStore'
 import UIUtils from '~/utils/UIUtils'
 import Account from '~/models/Account'
-import _ from 'lodash'
+import _ from 'lodash-es'
 import Transaction from '~/models/Transaction'
 
 // by convention, composable function names start with "use"

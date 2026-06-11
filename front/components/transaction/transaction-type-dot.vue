@@ -4,7 +4,7 @@
 
 <script setup>
 
-import { isEqual } from 'lodash'
+import { isEqual } from 'lodash-es'
 import Transaction from '~/models/Transaction.js'
 
 const props = defineProps({

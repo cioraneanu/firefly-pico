@@ -1,15 +1,15 @@
 <template>
   <app-select
+    v-model="modelValue"
+    v-model:show-dropdown="showDropdown"
+    v-model:search="search"
     :label="label ?? $t('category')"
     class=""
-    :popupTitle="$t('category_select')"
-    v-model="modelValue"
-    v-model:showDropdown="showDropdown"
-    v-model:search="search"
+    :popup-title="$t('category_select')"
     :list="filteredList"
     :columns="appStore.gridColumns"
 
-    :getDisplayValue="getDisplayValue"
+    :get-display-value="getDisplayValue"
     v-bind="dynamicAttrs"
   >
     <template #left-icon>
@@ -17,7 +17,7 @@
     </template>
 
     <template #top-right>
-      <van-button size="small" @click="onRefresh" class="">
+      <van-button size="small" class="" @click="onRefresh">
         <app-icon :icon="TablerIconConstants.refresh" :stroke="1.7" size="14" />
       </van-button>
     </template>
@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { useDataStore } from '~/stores/dataStore'
+import { useCategoryStore } from '~/stores/categoryStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import { IconRefresh } from '@tabler/icons-vue'
 import Category from '~/models/Category'
@@ -44,7 +44,7 @@ import Category from '~/models/Category'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import Tag from '~/models/Tag.js'
 
-const dataStore = useDataStore()
+const categoryStore = useCategoryStore()
 const appStore = useAppStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
@@ -61,7 +61,7 @@ const modelValue = defineModel()
 const showDropdown = ref(false)
 const search = ref('')
 
-let list = ref([])
+const list = ref([])
 
 const filteredList = computed(() => {
   if (search.value.length === 0) {
@@ -74,9 +74,9 @@ const filteredList = computed(() => {
 
 const categoryList = computed(() => {
   if (search.value.length === 0) {
-    return dataStore.categoryList
+    return categoryStore.categoryList
   }
-  return dataStore.categoryList.filter((item) => {
+  return categoryStore.categoryList.filter((item) => {
     return Category.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
   })
 })
@@ -84,7 +84,7 @@ const categoryList = computed(() => {
 // ------ Methods ------
 
 onMounted(async () => {
-  list.value = dataStore.categoryList
+  list.value = categoryStore.categoryList
 })
 
 const onSelectCell = (value) => {
@@ -97,10 +97,9 @@ const getDisplayValue = (value) => {
 }
 
 const isLoading = ref(false)
-UIUtils.showLoadingWhen(isLoading)
 const onRefresh = async () => {
   isLoading.value = true
-  await dataStore.fetchCategories()
+  await categoryStore.fetchCategories()
   isLoading.value = false
 }
 </script>

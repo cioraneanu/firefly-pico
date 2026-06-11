@@ -5,8 +5,9 @@
 
     <app-bottom-toolbar-item :route="RouteConstants.ROUTE_TRANSACTION_ID">
       <template #icon>
-        <div class="flex-center flex-column">
-          <icon-square-rounded-plus-filled :size="36" color="#1976D2" />
+        <div class="flex-center flex-column position-relative">
+          <div style="position: absolute; width: 16px; height: 16px; background: white; z-index: 0; border-radius: 2px;"></div>
+          <icon-square-rounded-plus-filled :size="36" color="#1976D2" style="z-index: 1;" />
           <!--          <div class="app-bottom-toolbar-item flex-center">New</div>-->
         </div>
       </template>
@@ -18,8 +19,8 @@
 </template>
 
 <script setup>
-import { isEqual } from 'lodash'
-import { useDataStore } from '~/stores/dataStore.js'
+import { isEqual } from 'lodash-es'
+
 import { useProfileStore } from '~/stores/profileStore.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import { IconSquareRoundedPlusFilled } from '@tabler/icons-vue'
@@ -28,7 +29,6 @@ import { animateBottomToolbarAddButton } from '~/utils/AnimationUtils.js'
 import IconDashboard1 from '~/assets/icons/custom/dashboard1.svg'
 import IconDashboard2 from '~/assets/icons/custom/dashboard2.svg'
 
-const dataStore = useDataStore()
 const profileStore = useProfileStore()
 const appStore = useAppStore()
 const route = useRoute()

@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <!--    <van-cell :title="label" :value="date" @click="show = true"/>-->
-    <van-field v-model="getSelectedName" is-link readonly class="app-field" left-icon="calendar-o" :label="label" placeholder="No date" @click="onShowDropdown" v-bind="dynamicAttrs">
+    <van-field v-model="getSelectedName" is-link readonly class="app-field" left-icon="calendar-o" :label="label" placeholder="No date" v-bind="dynamicAttrs" @click="onShowDropdown">
       <template #input>
         <div>
           <div :class="labelClass">
@@ -12,7 +12,7 @@
 
       <template #right-icon>
         <div>
-          <van-icon v-if="modelValue" @click.prevent.stop="date = null" name="clear" />
+          <van-icon v-if="modelValue" name="clear" @click.prevent.stop="date = null" />
         </div>
       </template>
     </van-field>
@@ -26,14 +26,13 @@
 </template>
 
 <script setup>
-import _ from 'lodash'
-import { useDataStore } from '~/stores/dataStore'
+import _ from 'lodash-es'
+
 import DateUtils from '~/utils/DateUtils'
 import { addDays, startOfDay } from 'date-fns'
 import { useFormAttributes } from '~/composables/useFormAttributes'
 import { bindOneWay } from '~/utils/VueUtils'
 
-const dataStore = useDataStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 

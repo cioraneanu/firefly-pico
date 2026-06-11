@@ -6,7 +6,7 @@
     </div>
 
     <app-popup v-model:show="isListVisible"  :style="appStore.isDesktopLayout ? null : { height: '40%' }">
-      <profile-picker-list></profile-picker-list>
+      <profile-picker-list/>
     </app-popup>
   </div>
 </template>

@@ -1,6 +1,6 @@
 import BaseRepository from '~/repository/BaseRepository'
 import axios from 'axios'
-import { get } from 'lodash'
+import { get } from 'lodash-es'
 
 export default class CurrencyRepository extends BaseRepository {
   constructor() {
@@ -12,8 +12,8 @@ export default class CurrencyRepository extends BaseRepository {
   }
 
   async delete(id) {
-    let dataStore = useDataStore()
-    let currencyCode = dataStore.currencyDictionary[id]?.attributes?.code
+    let currencyStore = useCurrencyStore()
+    let currencyCode = currencyStore.currencyDictionary[id]?.attributes?.code
     return await axios.delete(`${this.getUrl()}/${currencyCode}`)
   }
 
