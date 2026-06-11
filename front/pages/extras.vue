@@ -7,6 +7,7 @@
       <app-field-link :label="$t('accounts')" :icon="TablerIconConstants.account" @click="onGoToAccountsList" />
       <app-field-link :label="$t('template')" :icon="TablerIconConstants.transactionTemplate" @click="onGoToTransactionTemplatesList" />
       <app-field-link :label="$t('budgets')" :icon="TablerIconConstants.budget" @click="onGoToBudgetsList" />
+      <app-field-link :label="$t('piggy_banks')" :icon="TablerIconConstants.piggyBank" @click="onGoToPiggyBanksList" />
     </van-cell-group>
 
     <van-cell-group inset style="overflow: auto">
@@ -40,6 +41,7 @@ const onGoToCurrenciesList = async () => await navigateTo(RouteConstants.ROUTE_C
 const onGoToTransactionTemplatesList = async () => await navigateTo(RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST)
 
 const onGoToBudgetsList = async () => await navigateTo(RouteConstants.ROUTE_BUDGET_LIST)
+const onGoToPiggyBanksList = async () => await navigateTo(RouteConstants.ROUTE_PIGGY_BANK_LIST)
 
 const toolbar = useToolbar()
 const { t } = useI18n()

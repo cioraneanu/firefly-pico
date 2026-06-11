@@ -14,6 +14,7 @@ import { useTagStore } from '~/stores/tagStore.js'
 import { useTemplateStore } from '~/stores/templateStore.js'
 import { useCurrencyStore } from '~/stores/currencyStore.js'
 import { useBudgetStore } from '~/stores/budgetStore.js'
+import { usePiggyBankStore } from '~/stores/piggyBankStore.js'
 
 export const useAppStore = defineStore('app', () => {
   const defaultUrl = window.location.origin
@@ -118,6 +119,7 @@ export const useAppStore = defineStore('app', () => {
     const templateStore = useTemplateStore()
     const currencyStore = useCurrencyStore()
     const budgetStore = useBudgetStore()
+    const piggyBankStore = usePiggyBankStore()
     const profileStore = useProfileStore()
 
     await Promise.all([
@@ -127,6 +129,7 @@ export const useAppStore = defineStore('app', () => {
       templateStore.fetchTransactionTemplates(),
       currencyStore.fetchCurrencies(),
       budgetStore.fetchBudgets(),
+      piggyBankStore.fetchPiggyBanks(),
       currencyStore.fetchExchangeRate(),
       profileStore.getProfiles(),
     ])

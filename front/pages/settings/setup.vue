@@ -21,6 +21,7 @@
           <app-config-stat :icon="TablerIconConstants.tag" :name="$t('settings.setup.tags')" :value="tagsCount" />
           <app-config-stat :icon="TablerIconConstants.transactionTemplate" :name="$t('settings.setup.templates')" :value="transactionTemplatesCount" />
           <app-config-stat :icon="TablerIconConstants.budget" :name="$t('settings.setup.budgets')" :value="budgetsCount" />
+          <app-config-stat :icon="TablerIconConstants.piggyBank" :name="$t('settings.setup.piggy_banks')" :value="piggyBanksCount" />
           <app-config-stat :icon="TablerIconConstants.lastSync" :name="$t('settings.setup.last_sync')" :value="lastSync" />
         </van-grid>
       </van-cell-group>
@@ -38,6 +39,7 @@ import { useAccountStore } from '~/stores/accountStore'
 import { useCategoryStore } from '~/stores/categoryStore'
 import { useTagStore } from '~/stores/tagStore'
 import { useBudgetStore } from '~/stores/budgetStore'
+import { usePiggyBankStore } from '~/stores/piggyBankStore'
 import { useTemplateStore } from '~/stores/templateStore'
 import UIUtils from '~/utils/UIUtils'
 import SettingsTokenField from '~/components/settings/settings-token-field.vue'
@@ -56,6 +58,7 @@ const accountStore = useAccountStore()
 const categoryStore = useCategoryStore()
 const tagStore = useTagStore()
 const budgetStore = useBudgetStore()
+const piggyBankStore = usePiggyBankStore()
 const templateStore = useTemplateStore()
 
 const authToken = ref('')
@@ -67,6 +70,7 @@ const accountsCount = computed(() => accountStore.accountList.length)
 const categoriesCount = computed(() => categoryStore.categoryList.length)
 const tagsCount = computed(() => tagStore.tagList.length)
 const budgetsCount = computed(() => budgetStore.budgetList.length)
+const piggyBanksCount = computed(() => piggyBankStore.piggyBankList.length)
 const transactionTemplatesCount = computed(() => templateStore.transactionTemplateList.length)
 const lastSync = computed(() => {
   if (!dashboardStore.lastSync) {

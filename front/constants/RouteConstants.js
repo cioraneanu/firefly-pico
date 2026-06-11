@@ -41,6 +41,9 @@ export default {
   ROUTE_BUDGET_LIST: '/budgets/list',
   ROUTE_BUDGET_ID: '/budgets',
 
+  ROUTE_PIGGY_BANK_LIST: '/piggy-banks/list',
+  ROUTE_PIGGY_BANK_ID: '/piggy-banks',
+
   isForm(routeForm, currentForm) {
     let regex = new RegExp(`${routeForm}/[0-9]+`)
     return regex.test(currentForm)

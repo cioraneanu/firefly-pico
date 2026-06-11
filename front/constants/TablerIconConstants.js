@@ -9,6 +9,7 @@ export const icons = {
   settings: 'IconSettings',
   tag: 'IconTag',
   budget: 'IconBasket',
+  piggyBank: 'IconPigMoney',
   attachment: 'IconPhoto',
   budgetLimit: 'IconCalendarDollar',
   currency: 'IconCoin',

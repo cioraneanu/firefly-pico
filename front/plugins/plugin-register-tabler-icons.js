@@ -65,7 +65,8 @@ import {
   IconCloudDown,
   IconPhoto,
   IconFilter2,
-  IconSearch
+  IconSearch,
+  IconPigMoney
 } from '@tabler/icons-vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -134,6 +135,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconPhoto', IconPhoto)
   nuxtApp.vueApp.component('IconFilter2', IconFilter2)
   nuxtApp.vueApp.component('IconSearch', IconSearch)
+  nuxtApp.vueApp.component('IconPigMoney', IconPigMoney)
 
   // for (let iconName in tablerIcons) {
   //   nuxtApp.vueApp.component(iconName, tablerIcons[iconName])
