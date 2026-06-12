@@ -4,11 +4,13 @@ import Tag from '~/models/Tag.js'
 import Category from '~/models/Category.js'
 import Budget from '~/models/Budget.js'
 import Account from '~/models/Account.js'
+import RecurringTransaction from '~/models/RecurringTransaction.js'
 import { useProfileStore } from '~/stores/profileStore.js'
 import { useCategoryStore } from '~/stores/categoryStore'
 import { useTagStore } from '~/stores/tagStore'
 import { useBudgetStore } from '~/stores/budgetStore'
 import { useAccountStore } from '~/stores/accountStore'
+import { useRecurringTransactionStore } from '~/stores/recurringTransactionStore'
 import { translate } from '~/plugins/plugin-i18n.js'
 
 export default {
@@ -87,6 +89,13 @@ export default {
       display: (item) => `Budget: ${Budget.getDisplayName(item)}`,
       toUrl: (item) => `budget_id=${item.id}`,
       fromUrl: () => useBudgetStore().budgetDictionary[useRoute().query?.budget_id],
+    },
+    recurrence: {
+      bagKey: 'recurrence',
+      filter: (item) => `recurrence_id:"${item.id}"`,
+      display: (item) => `Recurring: ${RecurringTransaction.getDisplayName(item)}`,
+      toUrl: (item) => `recurrence_id=${item.id}`,
+      fromUrl: () => useRecurringTransactionStore().recurringTransactionDictionary[useRoute().query?.recurrence_id],
     },
     noBudget: {
       bagKey: 'withoutBudget',

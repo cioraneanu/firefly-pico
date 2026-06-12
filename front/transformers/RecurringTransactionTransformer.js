@@ -1,0 +1,157 @@
+import _, { get } from 'lodash-es'
+import ApiTransformer from '~/transformers/ApiTransformer'
+import Icon from '~/models/Icon.js'
+import DateUtils from '~/utils/DateUtils'
+import Transaction from '~/models/Transaction.js'
+import Tag from '~/models/Tag.js'
+import RecurringTransaction from '~/models/RecurringTransaction.js'
+import { useAccountStore } from '~/stores/accountStore'
+import { useCategoryStore } from '~/stores/categoryStore'
+import { useBudgetStore } from '~/stores/budgetStore'
+import { useTagStore } from '~/stores/tagStore'
+import { useCurrencyStore } from '~/stores/currencyStore'
+
+export default class RecurringTransactionTransformer extends ApiTransformer {
+  static transformFromApi(item) {
+    if (!item) {
+      return null
+    }
+    const accountStore = useAccountStore()
+    const categoryStore = useCategoryStore()
+    const budgetStore = useBudgetStore()
+    const tagStore = useTagStore()
+    const currencyStore = useCurrencyStore()
+
+    item.attributes.icon = Icon.getIcon(get(item, 'attributes.icon'))
+    item.attributes.type = Transaction.typesList.find((type) => type.fireflyCode === get(item, 'attributes.type'))
+    item.attributes.first_date = DateUtils.autoToDate(get(item, 'attributes.first_date'))
+    item.attributes.repeat_until = DateUtils.autoToDate(get(item, 'attributes.repeat_until'))
+
+    const repetition = get(item, 'attributes.repetitions.0')
+    const repetitionType = RecurringTransaction.repetitionTypesList().find((type) => type.fireflyCode === get(repetition, 'type'))
+    const moment = `${get(repetition, 'moment') ?? ''}`
+    item.attributes.repetitionId = get(repetition, 'id')
+    item.attributes.repetitionSkip = get(repetition, 'skip')
+    item.attributes.repetitionWeekend = get(repetition, 'weekend')
+    item.attributes.repetitionType = repetitionType
+    item.attributes.repetitionWeekday = null
+    item.attributes.repetitionDay = null
+    item.attributes.repetitionWeek = null
+    item.attributes.repetitionDate = null
+
+    switch (get(repetitionType, 'fireflyCode')) {
+      case RecurringTransaction.repetitionTypes.weekly.fireflyCode:
+        item.attributes.repetitionWeekday = RecurringTransaction.weekdaysList().find((weekday) => weekday.fireflyCode === parseInt(moment))
+        break
+      case RecurringTransaction.repetitionTypes.monthly.fireflyCode:
+        item.attributes.repetitionDay = moment
+        break
+      case RecurringTransaction.repetitionTypes.ndom.fireflyCode: {
+        const [week, weekday] = moment.split(',')
+        item.attributes.repetitionWeek = week
+        item.attributes.repetitionWeekday = RecurringTransaction.weekdaysList().find((item) => item.fireflyCode === parseInt(weekday))
+        break
+      }
+      case RecurringTransaction.repetitionTypes.yearly.fireflyCode:
+        item.attributes.repetitionDate = DateUtils.autoToDate(moment)
+        break
+    }
+
+    item.attributes.occurrences = (get(repetition, 'occurrences') ?? []).map((occurrence) => DateUtils.autoToDate(occurrence)).sort((a, b) => a - b)
+
+    const transaction = get(item, 'attributes.transactions.0')
+    item.attributes.transactionId = get(transaction, 'id')
+    item.attributes.currency = currencyStore.currencyDictionary[get(transaction, 'currency_id')]
+    item.attributes.amount = Transaction.formatAmountForCurrency(get(transaction, 'amount'), item.attributes.currency) ?? get(transaction, 'amount')
+    item.attributes.description = get(transaction, 'description')
+    item.attributes.accountSource = accountStore.accountDictionary[get(transaction, 'source_id')]
+    item.attributes.accountDestination = accountStore.accountDictionary[get(transaction, 'destination_id')]
+    item.attributes.category = categoryStore.categoryDictionary[get(transaction, 'category_id')]
+    item.attributes.budget = budgetStore.budgetDictionary[get(transaction, 'budget_id')]
+    item.attributes.tags = (get(transaction, 'tags') ?? []).map((tagName) => tagStore.tagDictionaryByName[LanguageUtils.removeAccentsAndLowerCase(tagName)]).filter(Boolean)
+
+    return item
+  }
+
+  static transformToApi(item) {
+    if (!item) {
+      return null
+    }
+
+    let data = _.get(item, 'attributes')
+
+    let moment = ''
+    switch (get(data, 'repetitionType.fireflyCode')) {
+      case RecurringTransaction.repetitionTypes.weekly.fireflyCode:
+        moment = `${get(data, 'repetitionWeekday.fireflyCode') ?? ''}`
+        break
+      case RecurringTransaction.repetitionTypes.monthly.fireflyCode:
+        moment = `${get(data, 'repetitionDay') ?? ''}`
+        break
+      case RecurringTransaction.repetitionTypes.ndom.fireflyCode:
+        moment = `${get(data, 'repetitionWeek') ?? ''},${get(data, 'repetitionWeekday.fireflyCode') ?? ''}`
+        break
+      case RecurringTransaction.repetitionTypes.yearly.fireflyCode:
+        moment = DateUtils.dateToString(get(data, 'repetitionDate')) ?? ''
+        break
+    }
+
+    let repetition = {
+      type: get(data, 'repetitionType.fireflyCode'),
+      moment: moment,
+      skip: get(data, 'repetitionSkip') ?? 0,
+      weekend: get(data, 'repetitionWeekend') ?? 1,
+    }
+    let repetitionId = get(data, 'repetitionId')
+    if (repetitionId) {
+      repetition.id = repetitionId
+    }
+
+    const accountSource = get(data, 'accountSource')
+    const accountDestination = get(data, 'accountDestination')
+    // Firefly III infers the recurrence currency from the asset side of the transaction
+    const typeCode = get(data, 'type.fireflyCode')
+    const assetAccount = typeCode === Transaction.types.income.fireflyCode ? accountDestination : accountSource
+    const currencyId = get(assetAccount, 'attributes.currency_id')
+
+    let transaction = {
+      description: get(data, 'description') || get(data, 'title', ''),
+      amount: get(data, 'amount'),
+      source_id: get(accountSource, 'id'),
+      destination_id: get(accountDestination, 'id'),
+      category_id: get(data, 'category.id'),
+      budget_id: get(data, 'budget.id'),
+      tags: (get(data, 'tags') ?? []).map((tag) => Tag.getDisplayNameEllipsized(tag)),
+    }
+    if (currencyId) {
+      transaction.currency_id = currencyId
+    }
+    let transactionId = get(data, 'transactionId')
+    if (transactionId) {
+      transaction.id = transactionId
+    }
+
+    let result = {
+      type: typeCode,
+      title: get(data, 'title', ''),
+      icon: get(data, 'icon.icon'),
+      first_date: DateUtils.dateToString(get(data, 'first_date')),
+      apply_rules: true,
+      active: get(data, 'active') ?? true,
+      notes: get(data, 'notes'),
+      repetitions: [repetition],
+      transactions: [transaction],
+    }
+
+    // Firefly III rejects recurrences having both "repeat_until" and "nr_of_repetitions"
+    let repeatUntil = get(data, 'repeat_until')
+    let nrOfRepetitions = get(data, 'nr_of_repetitions')
+    if (repeatUntil) {
+      result.repeat_until = DateUtils.dateToString(repeatUntil)
+    } else if (nrOfRepetitions) {
+      result.nr_of_repetitions = parseInt(nrOfRepetitions)
+    }
+
+    return result
+  }
+}

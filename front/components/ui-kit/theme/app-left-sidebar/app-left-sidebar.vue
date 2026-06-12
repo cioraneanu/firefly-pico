@@ -24,6 +24,7 @@
         <app-left-sidebar-page :label="$t('templates')" :icon="TablerIconConstants.transactionTemplate" :route="RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST" />
         <app-left-sidebar-page :label="$t('budgets')" :icon="TablerIconConstants.budget" :route="RouteConstants.ROUTE_BUDGET_LIST" />
         <app-left-sidebar-page :label="$t('piggy_banks')" :icon="TablerIconConstants.piggyBank" :route="RouteConstants.ROUTE_PIGGY_BANK_LIST" />
+        <app-left-sidebar-page :label="$t('recurring_transactions')" :icon="TablerIconConstants.recurringTransaction" :route="RouteConstants.ROUTE_RECURRING_TRANSACTION_LIST" />
         <app-left-sidebar-page :label="$t('exchange_rates')" :icon="TablerIconConstants.exchangeRates" :route="RouteConstants.ROUTE_EXCHANGE_RATES" />
         <app-left-sidebar-page :label="$t('currencies')" :icon="TablerIconConstants.currency" :route="RouteConstants.ROUTE_CURRENCY_LIST" />
       </div>

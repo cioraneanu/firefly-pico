@@ -8,6 +8,7 @@
       <app-field-link :label="$t('template')" :icon="TablerIconConstants.transactionTemplate" @click="onGoToTransactionTemplatesList" />
       <app-field-link :label="$t('budgets')" :icon="TablerIconConstants.budget" @click="onGoToBudgetsList" />
       <app-field-link :label="$t('piggy_banks')" :icon="TablerIconConstants.piggyBank" @click="onGoToPiggyBanksList" />
+      <app-field-link :label="$t('recurring_transactions')" :icon="TablerIconConstants.recurringTransaction" @click="onGoToRecurringTransactionsList" />
     </van-cell-group>
 
     <van-cell-group inset style="overflow: auto">
@@ -42,6 +43,7 @@ const onGoToTransactionTemplatesList = async () => await navigateTo(RouteConstan
 
 const onGoToBudgetsList = async () => await navigateTo(RouteConstants.ROUTE_BUDGET_LIST)
 const onGoToPiggyBanksList = async () => await navigateTo(RouteConstants.ROUTE_PIGGY_BANK_LIST)
+const onGoToRecurringTransactionsList = async () => await navigateTo(RouteConstants.ROUTE_RECURRING_TRANSACTION_LIST)
 
 const toolbar = useToolbar()
 const { t } = useI18n()

@@ -15,6 +15,7 @@ import { useTemplateStore } from '~/stores/templateStore.js'
 import { useCurrencyStore } from '~/stores/currencyStore.js'
 import { useBudgetStore } from '~/stores/budgetStore.js'
 import { usePiggyBankStore } from '~/stores/piggyBankStore.js'
+import { useRecurringTransactionStore } from '~/stores/recurringTransactionStore.js'
 
 export const useAppStore = defineStore('app', () => {
   const defaultUrl = window.location.origin
@@ -118,6 +119,7 @@ export const useAppStore = defineStore('app', () => {
     const currencyStore = useCurrencyStore()
     const budgetStore = useBudgetStore()
     const piggyBankStore = usePiggyBankStore()
+    const recurringTransactionStore = useRecurringTransactionStore()
     const profileStore = useProfileStore()
 
     await Promise.all([
@@ -128,6 +130,7 @@ export const useAppStore = defineStore('app', () => {
       currencyStore.fetchCurrencies(),
       budgetStore.fetchBudgets(),
       piggyBankStore.fetchPiggyBanks(),
+      recurringTransactionStore.fetchRecurringTransactions(),
       currencyStore.fetchExchangeRate(),
       profileStore.getProfiles(),
     ])

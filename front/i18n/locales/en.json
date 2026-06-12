@@ -40,6 +40,8 @@
   "piggy_bank": "Piggy bank",
   "piggy_banks": "Piggy banks",
   "piggy_bank_select": "Select a piggy bank",
+  "recurring_transaction": "Recurring transaction",
+  "recurring_transactions": "Recurring transactions",
   "attachment": "Attachment",
   "attachments": "Attachments",
   "account": "Account",
@@ -112,6 +114,7 @@
       "templates": "Templates",
       "budgets": "Budgets",
       "piggy_banks": "Piggy banks",
+      "recurring_transactions": "Recurring transactions",
       "last_sync": "Last sync",
       "verifying": "Verifying...",
       "invalid_endpoint": "The provided endpoint is not correct.",
@@ -220,7 +223,8 @@
         "transfers_by_tag": "Transfers by tags",
         "transfers_by_category": "Transfers by categories",
         "todo_transactions": "Todo transactions",
-        "piggy_banks": "Piggy banks"
+        "piggy_banks": "Piggy banks",
+        "recurring_transactions": "Upcoming recurring transactions"
       }
     },
     "token": {
@@ -350,6 +354,23 @@
     "current_amount": "Saved amount",
     "start_date": "Start date",
     "target_date": "Target date"
+  },
+  "recurring_transaction_page": {
+    "title_add": "Add recurring transaction",
+    "title_edit": "Edit recurring transaction",
+    "repetition": "Repetition",
+    "repetition_type": "Repeats",
+    "weekday": "Day of the week",
+    "day_of_month": "Day of the month",
+    "week_of_month": "Week of the month (1-5)",
+    "yearly_date": "Repeats every year on",
+    "first_date": "First date",
+    "repeat_until": "Repeat until",
+    "nr_of_repetitions": "Number of repetitions",
+    "upcoming": "Upcoming occurrences",
+    "next_date": "Next",
+    "inactive": "Inactive",
+    "no_upcoming": "No upcoming recurring transactions ^_^"
   },
   "exchange_rate_page": {
     "relative_to_usd": "Relative to USD"

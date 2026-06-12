@@ -98,6 +98,8 @@ const onRefresh = async () => {
 const onLoadMore = () => {
   const accountStore = useAccountStore()
   list.value = accountStore.accountList
+  // The whole list comes from the store => stop van-list from triggering more loads on scroll
+  isFinished.value = true
 }
 
 // const onClickBack = async () => {
