@@ -12,7 +12,6 @@
     <div class="display-flex flex-column">
       <div class="flex-center-vertical gap-2">
         <app-field
-          ref="assistantTextField"
           v-model="assistantText"
           class="van-cell-no-padding compact flex-1"
           label=""
@@ -23,50 +22,15 @@
         />
       </div>
 
-      <template v-if="foundTag || foundTemplate || hasAmount">
-        <!--        <van-icon name="arrow-down" class="w-100 text-center p-10"/>-->
+      <template v-if="previewTags.length > 0 || parsed.isTodo">
         <div class="display-flex flex-center-vertical gap-2 p-5 mt-10 text-size-12 flex-wrap" style="border: 1px dashed black; border-radius: 5px">
-          <template v-if="foundTemplate">
-            <van-tag round class="assistant-tag" size="medium" type="primary">
-              <span>{{ $t('template') }}</span>
-              <span>|</span>
-              {{ foundTemplateDisplayName }}
-            </van-tag>
-          </template>
+          <van-tag v-for="previewTag in previewTags" :key="previewTag.label" round class="assistant-tag" size="medium" type="primary">
+            <span>{{ previewTag.label }}</span>
+            <span>|</span>
+            <span>{{ previewTag.value }}</span>
+          </van-tag>
 
-          <template v-if="foundTag">
-            <van-tag round class="assistant-tag" size="medium" type="primary">
-              <span>{{ $t('tag') }}</span>
-              <span>|</span>
-              {{ Tag.getDisplayNameEllipsized(foundTag) }}
-            </van-tag>
-          </template>
-
-          <template v-if="foundCategory">
-            <van-tag round class="assistant-tag" size="medium" type="primary">
-              <span>{{ $t('category') }}:</span>
-              <span>|</span>
-              {{ Category.getDisplayName(foundCategory) }}
-            </van-tag>
-          </template>
-
-          <template v-if="foundAmount">
-            <van-tag class="assistant-tag" round size="medium" type="primary">
-              <span>{{ $t('amount') }}</span>
-              <span>|</span>
-              <span>{{ foundAmount }}</span>
-            </van-tag>
-          </template>
-
-          <template v-if="foundDescription">
-            <van-tag class="assistant-tag" round size="medium" type="primary">
-              <span>{{ $t('description') }}</span>
-              <span>|</span>
-              <span>{{ ellipsizeText(foundDescription, 20) }}</span>
-            </van-tag>
-          </template>
-
-          <template v-if="isTodo">
+          <template v-if="parsed.isTodo">
             <div class="assistant-tag tag-todo">
               <span>{{ $t('todo') }}</span>
             </div>
@@ -79,118 +43,109 @@
 </template>
 
 <script setup>
-import { onMounted, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { debounce } from 'lodash-es/function'
+import { isEqual } from 'lodash-es'
+import { addDays, format } from 'date-fns'
 import Tag from '~/models/Tag'
 import AppTutorial from '~/components/ui-kit/app-tutorial.vue'
 import Category from '~/models/Category.js'
 import { ellipsizeText } from '~/utils/Utils.js'
 import { useFuzzySearchResource } from '~/composables/useFuzzySearch.js'
 
-const props = defineProps({})
-
+const { t } = useI18n()
 const profileStore = useProfileStore()
 
 const emit = defineEmits(['change'])
 
-const assistantText = defineModel()
-const assistantTextField = ref(null)
-
-const foundCategory = ref(null)
-const foundTag = ref(null)
-const foundTemplate = ref(null)
-const foundTemplateDisplayName = ref(null) // String showing either template name or the matched extra name
-const foundAmount = ref(null)
-const foundDescription = ref(null)
-const isTodo = ref(false)
-
-const hasAmount = computed(() => {
-  return foundAmount.value && foundAmount.value > 0
-})
+const assistantText = defineModel({ type: String })
 
 const fuzzySearch = useFuzzySearch()
 
-onMounted(() => {})
-
-
-
-const autoFocusField = () => {
-  // const textArea = assistantTextField.value.querySelector('textarea')
-  // assistantTextField.value.prompt()
-}
-const processAssistantText = () => {
-  let text = assistantText.value
-  if (!text || text.length === 0) {
-    foundAmount.value = '0'
-    foundTemplate.value = null
-    foundCategory.value = null
-    foundTag.value = null
-    // onSubmit()
-    return
-  }
-
-  text = RomanianLanguageUtils.fixBadWordNumbers(text)
-  text = text.replace(',', '.')
-
-  isTodo.value = profileStore.assistantTodoTagMatcher && text.endsWith(profileStore.assistantTodoTagMatcher)
-  text = isTodo.value ? text.slice(0, text.length - profileStore.assistantTodoTagMatcher.length) : text
-
-  // 3 groups: <template> <amount> <description>
-  const regex = /^(\D+)?(?:\s*(\d[\.\d\s\+\-\*\/]*))?(?:\s+(.*))?$/
-  const match = text.match(regex)
-
-  const searchWords = match[1] || ''
-
-  const numerical = match[2]
-  const { wasSuccessful, value } = evalMath(numerical)
-  foundAmount.value = numerical && wasSuccessful ? value.toString() : null
-
-  foundDescription.value = match[3] || ''
-
-  const bestGuess = fuzzySearch.search(searchWords)
-
-
-  if (bestGuess) {
-    foundTemplate.value = bestGuess.type === useFuzzySearchResource.template.type ? bestGuess.item : null
-    foundTemplateDisplayName.value = foundTemplate.value ? bestGuess.match : null
-
-    foundTag.value = bestGuess.type === useFuzzySearchResource.tag.type ? bestGuess.item : null
-    foundCategory.value = bestGuess.type === useFuzzySearchResource.category.type ? bestGuess.item : null
-  }
-}
-
-watch(assistantText, (newValue) => {
-  processReceivedTextDebounce()
+const emptyParseResult = () => ({
+  template: null,
+  templateDisplayName: null, // String showing either template name or the matched extra name
+  tag: null,
+  category: null,
+  amount: null,
+  description: null,
+  isTodo: false,
+  dateOffset: null,
 })
 
-const processReceivedTextDebounce = debounce(processAssistantText, 200)
+const parsed = ref(emptyParseResult())
 
+const parseAssistantText = () => {
+  const result = emptyParseResult()
+  let text = assistantText.value
 
-const onClear = () => {
-  assistantText.value = ''
-  foundAmount.value = null
-  foundTemplate.value = null
-  foundCategory.value = null
-  foundTag.value = null
-  foundDescription.value = null
+  if (text) {
+    text = RomanianLanguageUtils.fixBadWordNumbers(text)
+    text = text.replace(',', '.')
+
+    if (profileStore.assistantTodoTagMatcher && text.endsWith(profileStore.assistantTodoTagMatcher)) {
+      result.isTodo = true
+      text = text.slice(0, -profileStore.assistantTodoTagMatcher.length)
+    }
+
+    console.log("")
+    // "+1d" / "-5d" anywhere in the text moves the transaction date by that many days
+    text = text.replace(/(^|\s)([+-]\d+)d(?=\s|$)/i, (match, leadingSpace, days) => {
+      result.dateOffset = parseInt(days)
+      return leadingSpace
+    })
+
+    // 3 groups: <search words> <amount (math expression)> <description>
+    const match = text.match(/^(\D+)?(?:\s*(\d[.\d\s+\-*/]*))?(?:\s+(.*))?$/) ?? []
+    const [, searchWords = '', amountExpression, description = ''] = match
+
+    const { wasSuccessful, value } = evalMath(amountExpression)
+    result.amount = amountExpression && wasSuccessful ? value.toString() : null
+    result.description = description.trim()
+
+    const bestGuess = fuzzySearch.search(searchWords)
+    if (bestGuess) {
+      result.template = bestGuess.type === useFuzzySearchResource.template.type ? bestGuess.item : null
+      result.templateDisplayName = result.template ? bestGuess.match : null
+      result.tag = bestGuess.type === useFuzzySearchResource.tag.type ? bestGuess.item : null
+      result.category = bestGuess.type === useFuzzySearchResource.category.type ? bestGuess.item : null
+    }
+  }
+
+  if (!isEqual(parsed.value, result)) {
+    parsed.value = result
+  }
 }
 
+watch(assistantText, debounce(parseAssistantText, 200))
+
+const previewTags = computed(() => {
+  const result = parsed.value
+  return [
+    { label: t('template'), value: result.template ? result.templateDisplayName : null },
+    { label: t('tag'), value: result.tag ? Tag.getDisplayNameEllipsized(result.tag) : null },
+    { label: t('category'), value: result.category ? Category.getDisplayName(result.category) : null },
+    { label: t('amount'), value: result.amount },
+    { label: t('description'), value: result.description ? ellipsizeText(result.description, 20) : null },
+    { label: t('date'), value: result.dateOffset !== null ? format(addDays(new Date(), result.dateOffset), 'dd MMM') : null },
+  ].filter((previewTag) => !!previewTag.value)
+})
+
 watch(
-  [foundTemplate, foundTag, foundCategory, foundAmount, foundDescription, isTodo, () => profileStore.assistantCurrency, () => profileStore.profileActiveId],
-  ([newTemplate, newTag, newCategory, newAmount, newDescription, newIsTodo, newAssistantCurrency, _]) => {
+  [parsed, () => profileStore.assistantCurrency, () => profileStore.profileActiveId],
+  ([newParsed, newAssistantCurrency]) => {
     emit('change', {
-      transactionTemplate: newTemplate,
-      amount: newAmount,
-      tag: newTag,
-      category: newCategory,
-      description: newDescription,
-      isTodo: newIsTodo,
+      transactionTemplate: newParsed.template,
+      amount: newParsed.amount,
+      tag: newParsed.tag,
+      category: newParsed.category,
+      description: newParsed.description,
+      isTodo: newParsed.isTodo,
+      dateOffset: newParsed.dateOffset,
       assistantCurrency: newAssistantCurrency,
     })
   },
 )
-
-// -----
 </script>
 
 <style scoped></style>

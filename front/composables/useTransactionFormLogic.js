@@ -1,5 +1,6 @@
 import { watch } from 'vue'
 import { head } from 'lodash-es'
+import { addDays } from 'date-fns'
 import Category from '~/models/Category'
 import Tag from '~/models/Tag'
 import Transaction from '~/models/Transaction'
@@ -25,6 +26,7 @@ export const useTransactionFormLogic = ({
   currencyForeign,
   notes,
   budget,
+  date,
   profileStore
 }) => {
   const accountStore = useAccountStore()
@@ -114,7 +116,7 @@ export const useTransactionFormLogic = ({
     item.value = new Transaction().getEmpty()
   }
 
-  const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemplate: transactionTemplate, amount: newAmount, description: newDescription, isTodo: newIsTodo, assistantCurrency }) => {
+  const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemplate: transactionTemplate, amount: newAmount, description: newDescription, isTodo: newIsTodo, dateOffset: newDateOffset, assistantCurrency }) => {
     resetFormFields()
 
     newTag && (tags.value = Tag.getTagWithParents(newTag))
@@ -137,6 +139,9 @@ export const useTransactionFormLogic = ({
     }
 
     newDescription && (description.value = newDescription)
+    if (date && (newDateOffset || newDateOffset === 0)) {
+      date.value = addDays(new Date(), newDateOffset)
+    }
     attemptAccountsFix()
   }
 

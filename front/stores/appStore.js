@@ -104,9 +104,7 @@ export const useAppStore = defineStore('app', () => {
       return
     }
 
-    isLoading.value = true
     await syncEverything()
-    isLoading.value = false
   }
 
   async function syncEverything() {

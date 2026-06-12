@@ -220,6 +220,7 @@ const { onAssistant, attemptAccountsFix } = useTransactionFormLogic({
   currencyForeign,
   notes,
   budget,
+  date,
   profileStore,
 })
 
