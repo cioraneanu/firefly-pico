@@ -65,6 +65,8 @@ const formClass = computed(() => ({
 
 const onLoadMore = async () => {
   list.value = templateStore.transactionTemplateList
+  // The whole list comes from the store => stop van-list from triggering more loads on scroll
+  isFinished.value = true
 }
 
 const onRefresh = async () => {

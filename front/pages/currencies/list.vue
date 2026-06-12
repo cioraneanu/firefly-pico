@@ -54,6 +54,8 @@ const onRefresh = async () => {
 const onLoadMore = async () => {
   const currencyStore = useCurrencyStore()
   list.value = currencyStore.currenciesList
+  // The whole list comes from the store => stop van-list from triggering more loads on scroll
+  isFinished.value = true
 }
 
 const sortedList = computed(() =>

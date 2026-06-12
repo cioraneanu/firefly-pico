@@ -77,6 +77,8 @@ const onRefresh = async () => {
 const onLoadMore = () => {
   const categoryStore = useCategoryStore()
   list.value = categoryStore.categoryList
+  // The whole list comes from the store => stop van-list from triggering more loads on scroll
+  isFinished.value = true
 }
 
 // -----

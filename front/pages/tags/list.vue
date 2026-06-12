@@ -77,7 +77,8 @@ const onLoadMore = () => {
   const tagStore = useTagStore()
   // list.value = tagStore.tagList
   list.value = tagStore.tagListHierarchy
-
+  // The whole list comes from the store => stop van-list from triggering more loads on scroll
+  isFinished.value = true
 }
 
 const toolbar = useToolbar()

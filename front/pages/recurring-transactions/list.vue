@@ -60,12 +60,18 @@ const formClass = computed(() => ({
 }))
 
 const onRefresh = async () => {
+  if (isLoading.value) {
+    isRefreshing.value = false
+    return
+  }
   isLoading.value = true
   isRefreshing.value = true
 
   await recurringTransactionStore.fetchRecurringTransactions()
   list.value = recurringTransactionStore.recurringTransactionList
 
+  // The whole list is fetched in one go => stop van-list from requesting more pages on scroll
+  isFinished.value = true
   isLoading.value = false
   isRefreshing.value = false
 }
