@@ -7,6 +7,7 @@ use App\Http\Controllers\CurrencyController;
 use App\Http\Controllers\FireflyProxyController;
 use App\Http\Controllers\PiggyBankController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RecurrenceController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TransactionTemplateController;
@@ -40,6 +41,7 @@ Route::get("accounts/groups", [AccountController::class, 'getAccountGroups']);
 RouteUtils::makeCRUD("categories", CategoryController::class);
 RouteUtils::makeCRUD("budgets", BudgetController::class);
 RouteUtils::makeCRUD("piggy-banks", PiggyBankController::class);
+RouteUtils::makeCRUD("recurrences", RecurrenceController::class);
 RouteUtils::makeCRUD("tags", TagController::class);
 
 // RouteUtils::makeCRUD("currencies", CurrencyController::class);

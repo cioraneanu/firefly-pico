@@ -11,6 +11,7 @@ import { useTemplateStore } from '~/stores/templateStore'
 import { useCurrencyStore } from '~/stores/currencyStore'
 import { useBudgetStore } from '~/stores/budgetStore'
 import { usePiggyBankStore } from '~/stores/piggyBankStore'
+import { useRecurringTransactionStore } from '~/stores/recurringTransactionStore'
 import { keyBy, head, uniq, uniqBy } from 'lodash-es'
 import AccountRepository from '~/repository/AccountRepository'
 import AccountTransformer from '~/transformers/AccountTransformer'
@@ -122,6 +123,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
   async function fetchDashboard() {
     const budgetStore = useBudgetStore()
     const piggyBankStore = usePiggyBankStore()
+    const recurringTransactionStore = useRecurringTransactionStore()
 
     await Promise.all([
       fetchDashboardAccounts(),
@@ -130,6 +132,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
       fetchTransactionsWithTodos(),
       budgetStore.fetchBudgets(),
       piggyBankStore.fetchPiggyBanks(),
+      recurringTransactionStore.fetchRecurringTransactions(),
     ])
   }
 

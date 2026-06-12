@@ -44,6 +44,9 @@ export default {
   ROUTE_PIGGY_BANK_LIST: '/piggy-banks/list',
   ROUTE_PIGGY_BANK_ID: '/piggy-banks',
 
+  ROUTE_RECURRING_TRANSACTION_LIST: '/recurring-transactions/list',
+  ROUTE_RECURRING_TRANSACTION_ID: '/recurring-transactions',
+
   isForm(routeForm, currentForm) {
     let regex = new RegExp(`${routeForm}/[0-9]+`)
     return regex.test(currentForm)

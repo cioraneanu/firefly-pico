@@ -10,6 +10,7 @@ export const dashboardCard = {
   transfersByCategory: { t: 'settings.dashboard.cards.transfers_by_category', code: 'transfersByCategory', isVisible: true },
   todoTransactions: { t: 'settings.dashboard.cards.todo_transactions', code: 'todoTransactions', isVisible: true },
   piggyBanks: { t: 'settings.dashboard.cards.piggy_banks', code: 'piggyBanks', isVisible: true },
+  recurringTransactions: { t: 'settings.dashboard.cards.recurring_transactions', code: 'recurringTransactions', isVisible: true },
 }
 
 export const dashboardCardList = Object.values(dashboardCard)
