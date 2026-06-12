@@ -10,6 +10,7 @@ import { useTagStore } from '~/stores/tagStore'
 import { useTemplateStore } from '~/stores/templateStore'
 import { useCurrencyStore } from '~/stores/currencyStore'
 import { useBudgetStore } from '~/stores/budgetStore'
+import { usePiggyBankStore } from '~/stores/piggyBankStore'
 import { keyBy, head, uniq, uniqBy } from 'lodash-es'
 import AccountRepository from '~/repository/AccountRepository'
 import AccountTransformer from '~/transformers/AccountTransformer'
@@ -120,14 +121,15 @@ export const useDashboardStore = defineStore('dashboard', () => {
 
   async function fetchDashboard() {
     const budgetStore = useBudgetStore()
-
+    const piggyBankStore = usePiggyBankStore()
 
     await Promise.all([
       fetchDashboardAccounts(),
       fetchTransactionsForInterval(),
       fetchTransactionsForWeek(),
       fetchTransactionsWithTodos(),
-      budgetStore.fetchBudgets()
+      budgetStore.fetchBudgets(),
+      piggyBankStore.fetchPiggyBanks(),
     ])
   }
 

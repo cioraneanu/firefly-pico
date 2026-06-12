@@ -87,7 +87,7 @@
 
         <budget-select v-model="budget" :style="getStyleForField(transactionFormField.budget)" />
 
-        <piggy-bank-select v-if="isTypeTransfer" v-model="piggyBank" :style="getStyleForField(transactionFormField.piggyBank)" />
+        <piggy-bank-select v-if="isTypeTransfer && !itemId" v-model="piggyBank" :style="getStyleForField(transactionFormField.piggyBank)" />
 
         <transaction-attachments-list :transaction="item" :style="getStyleForField(transactionFormField.attachments)" />
       </van-cell-group>

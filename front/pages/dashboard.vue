@@ -40,6 +40,7 @@ import DashboardCategoryTotalsExpense from '~/components/dashboard/dashboard-cat
 import DashboardTagTotalsTransfer from '~/components/dashboard/dashboard-tag-totals-transfer/dashboard-tag-totals-transfer.vue'
 import DashboardCategoryTotalsTransfer from '~/components/dashboard/dashboard-category-totals-transfer/dashboard-category-totals-transfer.vue'
 import DashboardTodoTransactions from '~/components/dashboard/dashboard-todo-transactions/dashboard-todo-transactions.vue'
+import DashboardPiggyBanks from '~/components/dashboard/dashboard-piggy-banks/dashboard-piggy-banks.vue'
 
 import { useDashboardStore } from '~/stores/dashboardStore'
 
@@ -58,6 +59,7 @@ const cardComponents = {
   [dashboardCard.transfersByTag.code]: DashboardTagTotalsTransfer,
   [dashboardCard.transfersByCategory.code]: DashboardCategoryTotalsTransfer,
   [dashboardCard.todoTransactions.code]: DashboardTodoTransactions,
+  [dashboardCard.piggyBanks.code]: DashboardPiggyBanks,
 }
 
 const visibleCards = computed(() => {

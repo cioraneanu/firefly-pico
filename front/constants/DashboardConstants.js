@@ -9,6 +9,7 @@ export const dashboardCard = {
   transfersByTag: { t: 'settings.dashboard.cards.transfers_by_tag', code: 'transfersByTag', isVisible: true },
   transfersByCategory: { t: 'settings.dashboard.cards.transfers_by_category', code: 'transfersByCategory', isVisible: true },
   todoTransactions: { t: 'settings.dashboard.cards.todo_transactions', code: 'todoTransactions', isVisible: true },
+  piggyBanks: { t: 'settings.dashboard.cards.piggy_banks', code: 'piggyBanks', isVisible: true },
 }
 
 export const dashboardCardList = Object.values(dashboardCard)

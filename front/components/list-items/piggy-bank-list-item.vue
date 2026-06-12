@@ -4,7 +4,7 @@
       <template #title>
         <div class="list-item-container">
           <div class="first_column flex-center flex-column">
-            <piggy-bank-icon :value="props.value" />
+            <app-icon :icon="icon ?? TablerIconConstants.piggyBank" :size="TablerIconConstants.defaultSize" />
           </div>
 
           <div class="separator"></div>
@@ -18,6 +18,8 @@
               <div class="tag-gray list-item-subtitle text-size-12">{{ percent }} %</div>
               <div v-if="accountName" class="tag-gray list-item-subtitle text-size-12">{{ accountName }}</div>
               <div v-if="targetDate" class="tag-gray list-item-subtitle text-size-12">{{ targetDate }}</div>
+              <div class="flex-1" />
+              <bar-chart-item-horizontal :percent="percent" style="max-width: 90px" />
             </div>
           </div>
         </div>
@@ -35,8 +37,8 @@ import { get } from 'lodash-es'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import PiggyBank from '~/models/PiggyBank.js'
 import Account from '~/models/Account.js'
-import PiggyBankIcon from '~/components/piggy-bank/piggy-bank-icon.vue'
 import DateUtils from '~/utils/DateUtils.js'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
 const props = defineProps({
   value: Object,
@@ -44,6 +46,7 @@ const props = defineProps({
 
 const emit = defineEmits(['onEdit', 'onDelete'])
 
+const icon = computed(() => PiggyBank.getIcon(props.value))
 const displayName = computed(() => get(props.value, 'attributes.name', ' - '))
 const currentAmount = computed(() => PiggyBank.getCurrentAmount(props.value))
 const targetAmount = computed(() => PiggyBank.getTargetAmount(props.value))
