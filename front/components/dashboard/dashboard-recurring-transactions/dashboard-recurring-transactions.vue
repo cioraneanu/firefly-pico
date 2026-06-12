@@ -5,27 +5,18 @@
     </div>
 
     <template v-if="hasUpcoming">
-      <div class="display-flex flex-column ml-15 mr-15">
-        <table>
-          <tr v-for="row in upcomingList" :key="`${row.recurringTransaction.id}-${row.date}`" class="cursor-pointer" @click="onGoToRecurringTransaction(row.recurringTransaction)">
-            <td style="width: 1%">
-              <div class="flex-center-vertical gap-1 my-1">
-                <app-icon :icon="getIcon(row)" :size="TablerIconConstants.defaultSize" />
-                <span class="text-size-12 font-weight-400 flex-1">{{ ellipsizeText(row.label, 25) }}</span>
-              </div>
-            </td>
-
-            <td>
-              <span class="text-size-12 font-weight-400 text-muted">{{ row.dateFormatted }}</span>
-            </td>
-
-            <td style="width: 1%">
-              <div class="display-flex flex-column" style="align-items: flex-end">
-                <span class="text-size-12 font-weight-400" :class="row.amountClass">{{ row.amount }} {{ row.currencySymbol }}</span>
-              </div>
-            </td>
-          </tr>
-        </table>
+      <div class="display-flex flex-column ml-15 mr-15 mb-10">
+        <div
+          v-for="row in upcomingList"
+          :key="`${row.recurringTransaction.id}-${row.date}`"
+          class="flex-center-vertical gap-1 my-1 cursor-pointer"
+          @click="onGoToRecurringTransaction(row.recurringTransaction)"
+        >
+          <app-icon :icon="getIcon(row)" :size="20" />
+          <span class="text-size-12 font-weight-400 flex-1">{{ ellipsizeText(row.label, 25) }}</span>
+          <div class="tag-gray list-item-subtitle text-size-12">{{ row.dateFormatted }}</div>
+          <span class="text-size-12 font-weight-400" :class="row.amountClass" style="min-width: 70px; text-align: right">{{ row.amount }} {{ row.currencySymbol }}</span>
+        </div>
       </div>
     </template>
     <div v-else class="text-muted text-size-12 px-3 mb-15" style="margin-top: -10px">{{ $t('recurring_transaction_page.no_upcoming') }}</div>

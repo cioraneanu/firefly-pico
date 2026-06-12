@@ -7,11 +7,14 @@
     </app-top-toolbar>
 
     <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
-      <app-card-info v-if="itemId && upcomingDates.length > 0">
-        <div class="van-cell-group-title">{{ $t('recurring_transaction_page.upcoming') }}:</div>
-        <div class="px-3 pb-15 flex-column text-size-12">
-          <div v-for="date in upcomingDates" :key="date">{{ date }}</div>
-        </div>
+      <app-card-info v-if="itemId">
+        <template v-if="upcomingDates.length > 0">
+          <div class="van-cell-group-title">{{ $t('recurring_transaction_page.upcoming') }}:</div>
+          <div class="px-3 pb-15 flex-column text-size-12">
+            <div v-for="date in upcomingDates" :key="date">{{ date }}</div>
+          </div>
+        </template>
+        <app-field-link :label="$t('show_transactions')" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
       </app-card-info>
 
       <van-cell-group inset>
@@ -118,6 +121,11 @@ const fetchItem = () => {
 }
 
 const upcomingDates = computed(() => RecurringTransaction.getOccurrences(item.value).map((date) => DateUtils.dateToUI(date)))
+
+const onNavigateToTransactionsList = async () => {
+  const filters = TransactionFilterUtils.filters.recurrence.toUrl(item.value)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
+}
 
 const onEvent = (event, payload) => {
   if (event === 'onPostSave') {
