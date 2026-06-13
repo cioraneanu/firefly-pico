@@ -9,8 +9,8 @@
             <template #content="{ element, index }">
               <div class="app-field m-5 cursor-pointer" @click="onClickIsVisible(element)">
                 <div class="van-field__body flex-center-vertical gap-1 pointer-events-none prevent-select">
-                  <app-icon :icon="element.icon" :size="20" />
-                  <div class="flex-1 text-size-14">{{ element.t ? $t(element.t) : element.name }}</div>
+                  <app-icon :icon="element.icon" :size="20" :class="{ 'card-row-muted': !element.isVisible }" />
+                  <div class="flex-1 text-size-14" :class="{ 'card-row-muted': !element.isVisible }">{{ element.t ? $t(element.t) : element.name }}</div>
                   <app-icon :icon="getIsVisibleIcon(element)" :size="20" />
                 </div>
               </div>
@@ -38,13 +38,16 @@ const { t } = useI18n()
 const profileStore = useProfileStore()
 
 const fieldsList = ref([])
+// Cards whose resource is disabled are hidden from the list but kept so the
+// saved config keeps the full set of cards.
+const hiddenCards = ref([])
 
 onMounted(() => {
   init()
 })
 
 const onSave = async () => {
-  profileStore.dashboardWidgetsConfig = fieldsList.value
+  profileStore.dashboardWidgetsConfig = [...fieldsList.value, ...hiddenCards.value]
   const response = await profileStore.writeProfile()
   ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
   init()
@@ -60,7 +63,9 @@ const onClickIsVisible = (element) => {
 
 const init = () => {
   const isListOk = profileStore.dashboardWidgetsConfig.length === dashboardCardList.length
-  fieldsList.value = isListOk ? profileStore.dashboardWidgetsConfig : dashboardCardList
+  const fullList = isListOk ? profileStore.dashboardWidgetsConfig : dashboardCardList
+  hiddenCards.value = fullList.filter((card) => profileStore.isDashboardCardResourceDisabled(card.code))
+  fieldsList.value = fullList.filter((card) => !profileStore.isDashboardCardResourceDisabled(card.code))
 }
 
 const toolbar = useToolbar()
@@ -74,3 +79,9 @@ onMounted(() => {
   animateSettings()
 })
 </script>
+
+<style scoped>
+.card-row-muted {
+  opacity: 0.35;
+}
+</style>

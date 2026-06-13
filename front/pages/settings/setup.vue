@@ -13,23 +13,52 @@
       </van-cell-group>
 
       <van-cell-group inset>
-        <div class="van-cell-group-title">{{ $t('settings.setup.enabled_resources') }}</div>
-        <div class="van-cell-group-subtitle text-muted px-4 pb-2 text-size-12">{{ $t('settings.setup.enabled_resources_info') }}</div>
-
-        <app-boolean v-for="resourceItem in enabledResources" :key="resourceItem.code" v-model="resourceItem.isEnabled" :label="$t(resourceItem.t)" />
-      </van-cell-group>
-
-      <van-cell-group inset>
         <div class="van-cell-group-title">{{ $t('settings.setup.loaded_data_stats') }}</div>
+        <div class="text-muted px-4 pb-2 text-size-12">{{ $t('settings.setup.enabled_resources_info') }}</div>
 
         <van-grid :column-num="3">
           <app-config-stat :icon="TablerIconConstants.account" :name="$t('settings.setup.account')" :value="accountsCount" />
-          <app-config-stat :icon="TablerIconConstants.category" :name="$t('settings.setup.categories')" :value="categoriesCount" />
-          <app-config-stat :icon="TablerIconConstants.tag" :name="$t('settings.setup.tags')" :value="tagsCount" />
+          <app-config-stat
+            :icon="TablerIconConstants.category"
+            :name="$t('settings.setup.categories')"
+            :value="categoriesCount"
+            clickable
+            :muted="!isResourceEnabled(resource.categories.code)"
+            @click="toggleResource(resource.categories.code)"
+          />
+          <app-config-stat
+            :icon="TablerIconConstants.tag"
+            :name="$t('settings.setup.tags')"
+            :value="tagsCount"
+            clickable
+            :muted="!isResourceEnabled(resource.tags.code)"
+            @click="toggleResource(resource.tags.code)"
+          />
           <app-config-stat :icon="TablerIconConstants.transactionTemplate" :name="$t('settings.setup.templates')" :value="transactionTemplatesCount" />
-          <app-config-stat :icon="TablerIconConstants.budget" :name="$t('settings.setup.budgets')" :value="budgetsCount" />
-          <app-config-stat :icon="TablerIconConstants.piggyBank" :name="$t('settings.setup.piggy_banks')" :value="piggyBanksCount" />
-          <app-config-stat :icon="TablerIconConstants.recurringTransaction" :name="$t('settings.setup.recurring_transactions')" :value="recurringTransactionsCount" />
+          <app-config-stat
+            :icon="TablerIconConstants.budget"
+            :name="$t('settings.setup.budgets')"
+            :value="budgetsCount"
+            clickable
+            :muted="!isResourceEnabled(resource.budgets.code)"
+            @click="toggleResource(resource.budgets.code)"
+          />
+          <app-config-stat
+            :icon="TablerIconConstants.piggyBank"
+            :name="$t('settings.setup.piggy_banks')"
+            :value="piggyBanksCount"
+            clickable
+            :muted="!isResourceEnabled(resource.piggyBanks.code)"
+            @click="toggleResource(resource.piggyBanks.code)"
+          />
+          <app-config-stat
+            :icon="TablerIconConstants.recurringTransaction"
+            :name="$t('settings.setup.recurring_transactions')"
+            :value="recurringTransactionsCount"
+            clickable
+            :muted="!isResourceEnabled(resource.recurringTransactions.code)"
+            @click="toggleResource(resource.recurringTransactions.code)"
+          />
           <app-config-stat :icon="TablerIconConstants.lastSync" :name="$t('settings.setup.last_sync')" :value="lastSync" />
         </van-grid>
       </van-cell-group>
@@ -60,7 +89,7 @@ import UserRepository from '~/repository/UserRepository'
 import TablerIconConstants from '~/constants/TablerIconConstants'
 import { cloneDeep, get } from 'lodash-es'
 import { rule } from '~/utils/ValidationUtils.js'
-import { resourceList } from '~/constants/ResourceConstants.js'
+import { resource, resourceList } from '~/constants/ResourceConstants.js'
 
 const appStore = useAppStore()
 const profileStore = useProfileStore()
@@ -103,6 +132,18 @@ onMounted(() => {
   const isListOk = profileStore.enabledResourcesConfig.length === resourceList.length
   enabledResources.value = cloneDeep(isListOk ? profileStore.enabledResourcesConfig : resourceList)
 })
+
+const isResourceEnabled = (code) => {
+  const item = enabledResources.value.find((r) => r.code === code)
+  return item ? item.isEnabled : true
+}
+
+const toggleResource = (code) => {
+  const item = enabledResources.value.find((r) => r.code === code)
+  if (item) {
+    item.isEnabled = !item.isEnabled
+  }
+}
 
 const onSave = async () => {
   picoBackendURL.value = picoBackendURL.value.endsWith('/') ? picoBackendURL.value.slice(0, -1) : picoBackendURL.value
