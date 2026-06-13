@@ -1,12 +1,28 @@
-import { get } from 'lodash-es'
 import Transaction from '~/models/Transaction'
 import { useCurrencyStore } from '~/stores/currencyStore'
 
 export function convertCurrency(amount, fromCurrency, toCurrency) {
   const currencyStore = useCurrencyStore()
 
-  const exchangeSource = get(currencyStore.exchangeRates, `rates.${fromCurrency}`)
-  const exchangeDestination = get(currencyStore.exchangeRates, `rates.${toCurrency}`)
+  if (fromCurrency === toCurrency) {
+    return amount
+  }
+
+  // 1) Respect an exact user-defined rate for this pair (rate = "how many `to` for 1 `from`").
+  const userRates = currencyStore.userExchangeRatesDictionary
+  const directRate = userRates[`${fromCurrency}_${toCurrency}`]
+  if (Number.isFinite(directRate) && directRate !== 0) {
+    return amount * directRate
+  }
+  const inverseRate = userRates[`${toCurrency}_${fromCurrency}`]
+  if (Number.isFinite(inverseRate) && inverseRate !== 0) {
+    return amount / inverseRate
+  }
+
+  // 2) Fall back to USD-anchored triangulation (augmented with user-defined currencies).
+  const rates = currencyStore.effectiveExchangeRates
+  const exchangeSource = rates[fromCurrency]
+  const exchangeDestination = rates[toCurrency]
   return (1.0 * amount * exchangeDestination) / exchangeSource
 }
 

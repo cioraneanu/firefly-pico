@@ -3,6 +3,22 @@
     <app-top-toolbar />
 
     <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
+      <van-cell-group v-if="customRatesList.length > 0" inset>
+        <div class="van-cell-group-title mt-5 mb-0">{{ $t('exchange_rate_page.custom_rates') }}</div>
+        <div class="text-muted text-size-12 ml-15 mb-10">{{ $t('exchange_rate_page.custom_rates_info') }}</div>
+
+        <van-grid :column-num="2">
+          <van-grid-item v-for="customRate in customRatesList" :key="`${customRate.from}_${customRate.to}`">
+            <template #text>
+              <div>
+                <div class="flex-center text-size-14 font-weight-600">{{ customRate.from }} → {{ customRate.to }}</div>
+                <div class="flex-center text-size-10 text-muted">{{ customRate.rate }}</div>
+              </div>
+            </template>
+          </van-grid-item>
+        </van-grid>
+      </van-cell-group>
+
       <van-cell-group inset>
         <app-list-search v-model="search" />
 
@@ -10,7 +26,7 @@
         <div class="text-muted text-size-12 ml-15 mb-10">{{ $t('exchange_rate_page.relative_to_usd') }}</div>
 
         <van-grid :column-num="3">
-          <van-grid-item v-for="currency in filteredList">
+          <van-grid-item v-for="currency in filteredList" :key="currency.code">
             <template #text>
               <div>
                 <div class="flex-center text-size-14 font-weight-600">{{ currency.code }}</div>
@@ -44,6 +60,7 @@ const isSearchVisible = ref(true)
 
 const exchangeDate = computed(() => get(currencyStore.exchangeRates, 'date'))
 const list = computed(() => currencyStore.exchangeRatesList)
+const customRatesList = computed(() => currencyStore.userExchangeRates)
 
 const filteredList = computed(() => {
   if (search.value.length === 0) {
@@ -59,7 +76,7 @@ const filteredList = computed(() => {
 
 const onRefresh = async () => {
   isRefreshing.value = true
-  await currencyStore.fetchExchangeRate()
+  await Promise.all([currencyStore.fetchExchangeRate(), currencyStore.fetchUserExchangeRates()])
   isRefreshing.value = false
 }
 

@@ -373,7 +373,9 @@
     "no_upcoming": "No upcoming recurring transactions ^_^"
   },
   "exchange_rate_page": {
-    "relative_to_usd": "Relative to USD"
+    "relative_to_usd": "Relative to USD",
+    "custom_rates": "Custom rates",
+    "custom_rates_info": "Rates defined in Firefly III. These take priority over the rates above."
   },
   "dashboard": {
     "title": "Dashboard",

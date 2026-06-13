@@ -132,6 +132,7 @@ export const useAppStore = defineStore('app', () => {
       piggyBankStore.fetchPiggyBanks(),
       recurringTransactionStore.fetchRecurringTransactions(),
       currencyStore.fetchExchangeRate(),
+      currencyStore.fetchUserExchangeRates(),
       profileStore.getProfiles(),
     ])
 
