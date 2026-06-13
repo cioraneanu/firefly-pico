@@ -251,7 +251,7 @@ const getStyleForField = (fieldType) => {
   const fieldCode = fieldType.code
   const position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
   const field = profileStore.transactionFormFieldsConfig.find((item) => item.code === fieldCode)
-  const isVisible = field ? field.isVisible : true
+  const isVisible = (field ? field.isVisible : true) && !profileStore.isFieldResourceDisabled(fieldCode)
   const displayStyle = isVisible ? '' : 'display: none'
 
   if (isTypeExpense.value) {

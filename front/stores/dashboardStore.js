@@ -24,6 +24,8 @@ import TransactionTransformer from '~/transformers/TransactionTransformer'
 import Tag from '~/models/Tag.js'
 import DateUtils from '~/utils/DateUtils.js'
 import { getExcludedTransactionFilters } from '~/utils/DashboardUtils.js'
+import { dashboardCard } from '~/constants/DashboardConstants.js'
+import { resource } from '~/constants/ResourceConstants.js'
 
 export const useDashboardStore = defineStore('dashboard', () => {
   const accountStore = useAccountStore()
@@ -121,19 +123,25 @@ export const useDashboardStore = defineStore('dashboard', () => {
   }
 
   async function fetchDashboard() {
+    const profileStore = useProfileStore()
     const budgetStore = useBudgetStore()
     const piggyBankStore = usePiggyBankStore()
     const recurringTransactionStore = useRecurringTransactionStore()
 
-    await Promise.all([
-      fetchDashboardAccounts(),
-      fetchTransactionsForInterval(),
-      fetchTransactionsForWeek(),
-      fetchTransactionsWithTodos(),
-      budgetStore.fetchBudgets(),
-      piggyBankStore.fetchPiggyBanks(),
-      recurringTransactionStore.fetchRecurringTransactions(),
-    ])
+    const tasks = [fetchDashboardAccounts(), fetchTransactionsForInterval(), fetchTransactionsForWeek(), fetchTransactionsWithTodos()]
+
+    // Only fetch a resource's data if it is enabled AND its dashboard card is visible.
+    if (profileStore.isResourceEnabled(resource.budgets.code) && profileStore.isDashboardCardVisible(dashboardCard.budgets.code)) {
+      tasks.push(budgetStore.fetchBudgets())
+    }
+    if (profileStore.isResourceEnabled(resource.piggyBanks.code) && profileStore.isDashboardCardVisible(dashboardCard.piggyBanks.code)) {
+      tasks.push(piggyBankStore.fetchPiggyBanks())
+    }
+    if (profileStore.isResourceEnabled(resource.recurringTransactions.code) && profileStore.isDashboardCardVisible(dashboardCard.recurringTransactions.code)) {
+      tasks.push(recurringTransactionStore.fetchRecurringTransactions())
+    }
+
+    await Promise.all(tasks)
   }
 
   async function fetchDashboardAccounts() {

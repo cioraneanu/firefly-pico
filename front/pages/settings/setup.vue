@@ -13,6 +13,13 @@
       </van-cell-group>
 
       <van-cell-group inset>
+        <div class="van-cell-group-title">{{ $t('settings.setup.enabled_resources') }}</div>
+        <div class="van-cell-group-subtitle text-muted px-4 pb-2 text-size-12">{{ $t('settings.setup.enabled_resources_info') }}</div>
+
+        <app-boolean v-for="resourceItem in enabledResources" :key="resourceItem.code" v-model="resourceItem.isEnabled" :label="$t(resourceItem.t)" />
+      </van-cell-group>
+
+      <van-cell-group inset>
         <div class="van-cell-group-title">{{ $t('settings.setup.loaded_data_stats') }}</div>
 
         <van-grid :column-num="3">
@@ -51,10 +58,12 @@ import RouteConstants from '~/constants/RouteConstants'
 import AppConfigStat from '~/components/settings/app-config-stat.vue'
 import UserRepository from '~/repository/UserRepository'
 import TablerIconConstants from '~/constants/TablerIconConstants'
-import { get } from 'lodash-es'
+import { cloneDeep, get } from 'lodash-es'
 import { rule } from '~/utils/ValidationUtils.js'
+import { resourceList } from '~/constants/ResourceConstants.js'
 
 const appStore = useAppStore()
+const profileStore = useProfileStore()
 const dashboardStore = useDashboardStore()
 const accountStore = useAccountStore()
 const categoryStore = useCategoryStore()
@@ -68,6 +77,7 @@ const authToken = ref('')
 const picoBackendURL = ref('')
 const syncProfileInDB = ref(true)
 const daysBetweenFullSync = ref(4)
+const enabledResources = ref([])
 
 const accountsCount = computed(() => accountStore.accountList.length)
 const categoriesCount = computed(() => categoryStore.categoryList.length)
@@ -89,6 +99,9 @@ onMounted(() => {
   picoBackendURL.value = appStore.picoBackendURL
   syncProfileInDB.value = appStore.syncProfileInDB
   daysBetweenFullSync.value = appStore.daysBetweenFullSync
+
+  const isListOk = profileStore.enabledResourcesConfig.length === resourceList.length
+  enabledResources.value = cloneDeep(isListOk ? profileStore.enabledResourcesConfig : resourceList)
 })
 
 const onSave = async () => {
@@ -110,6 +123,10 @@ const onSave = async () => {
     UIUtils.showToastError(t('settings.setup.invalid_token'))
     return
   }
+
+  // Persist enabled resources before syncing so the full sync skips disabled ones
+  profileStore.enabledResourcesConfig = cloneDeep(enabledResources.value)
+  await profileStore.writeProfile()
 
   await appStore.syncEverything()
   UIUtils.showToastSuccess(t('settings.settings_saved'))

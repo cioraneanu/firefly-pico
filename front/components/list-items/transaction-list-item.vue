@@ -152,7 +152,7 @@ const profileStore = useProfileStore()
 const getStyleForField = ({ code }) => {
   const position = profileStore.transactionListFieldsConfig.findIndex((item) => item.code === code)
   const field = profileStore.transactionListFieldsConfig.find((item) => item.code === code)
-  const isVisible = field ? field.isVisible : true
+  const isVisible = (field ? field.isVisible : true) && !profileStore.isFieldResourceDisabled(code)
   const displayStyle = isVisible ? '' : 'display: none'
 
   return `order: ${position}; ${displayStyle}`

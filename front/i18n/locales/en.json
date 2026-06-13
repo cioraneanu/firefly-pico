@@ -107,6 +107,8 @@
       "pico_backend_url": "Pico backend URL",
       "sync_settings_via_token": "Sync settings across devices via token",
       "days_between_sync": "Days between full sync of \"Extras\"",
+      "enabled_resources": "Enabled resources",
+      "enabled_resources_info": "Turn off resources you don't use. Disabled ones are hidden from the dashboard and transaction forms and are not loaded from the backend.",
       "loaded_data_stats": "Loaded data stats",
       "account": "Account",
       "categories": "Categories",

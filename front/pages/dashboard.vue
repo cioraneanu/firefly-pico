@@ -70,11 +70,12 @@ const visibleCards = computed(() => {
       const position = profileStore.dashboardWidgetsConfig.findIndex((item) => item.code === card.code)
       const field = profileStore.dashboardWidgetsConfig.find((item) => item.code === card.code)
       const isVisible = field ? field.isVisible : true
+      const isResourceDisabled = profileStore.isDashboardCardResourceDisabled(card.code)
 
       return {
         ...card,
         position: position === -1 ? 999 : position,
-        isVisible,
+        isVisible: isVisible && !isResourceDisabled,
         component: cardComponents[card.code],
       }
     })

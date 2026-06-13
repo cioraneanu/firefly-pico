@@ -16,6 +16,7 @@ import { useCurrencyStore } from '~/stores/currencyStore.js'
 import { useBudgetStore } from '~/stores/budgetStore.js'
 import { usePiggyBankStore } from '~/stores/piggyBankStore.js'
 import { useRecurringTransactionStore } from '~/stores/recurringTransactionStore.js'
+import { resource } from '~/constants/ResourceConstants.js'
 
 export const useAppStore = defineStore('app', () => {
   const defaultUrl = window.location.origin
@@ -122,18 +123,22 @@ export const useAppStore = defineStore('app', () => {
     const recurringTransactionStore = useRecurringTransactionStore()
     const profileStore = useProfileStore()
 
-    await Promise.all([
-      categoryStore.fetchCategories(),
+    const tasks = [
       accountStore.fetchAccounts(),
-      tagStore.fetchTags(),
       templateStore.fetchTransactionTemplates(),
       currencyStore.fetchCurrencies(),
-      budgetStore.fetchBudgets(),
-      piggyBankStore.fetchPiggyBanks(),
-      recurringTransactionStore.fetchRecurringTransactions(),
       currencyStore.fetchExchangeRate(),
       profileStore.getProfiles(),
-    ])
+    ]
+
+    // Skip loading data for resources the user has disabled.
+    if (profileStore.isResourceEnabled(resource.categories.code)) tasks.push(categoryStore.fetchCategories())
+    if (profileStore.isResourceEnabled(resource.tags.code)) tasks.push(tagStore.fetchTags())
+    if (profileStore.isResourceEnabled(resource.budgets.code)) tasks.push(budgetStore.fetchBudgets())
+    if (profileStore.isResourceEnabled(resource.piggyBanks.code)) tasks.push(piggyBankStore.fetchPiggyBanks())
+    if (profileStore.isResourceEnabled(resource.recurringTransactions.code)) tasks.push(recurringTransactionStore.fetchRecurringTransactions())
+
+    await Promise.all(tasks)
 
     lastSync.value = new Date()
   }

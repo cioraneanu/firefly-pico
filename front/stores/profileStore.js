@@ -10,6 +10,7 @@ import ProfileRepository from '~/repository/ProfileRepository'
 import ProfileTransformer from '~/transformers/ProfileTransformer'
 import { useAppStore } from '~/stores/appStore.js'
 import { dashboardCardList } from '~/constants/DashboardConstants.js'
+import { resourceList, dashboardCardResourceMap, fieldResourceMap } from '~/constants/ResourceConstants.js'
 import Page from '~/models/Page.js'
 import { migrateType, migrateTypeList } from '~/utils/MigrateUtils.js'
 
@@ -46,6 +47,7 @@ export const useProfileStore = defineStore('profile', () => {
   const transactionFormFieldsConfig = useLocalStorage('transactionFormFieldsConfig', transactionFormFieldList)
   const transactionListFieldsConfig = useLocalStorage('transactionListFieldsConfig', transactionListFieldList)
   const dashboardWidgetsConfig = useLocalStorage('dashboardWidgetsConfig', dashboardCardList)
+  const enabledResourcesConfig = useLocalStorage('enabledResourcesConfig', resourceList)
 
   const dateFormat = useLocalStorage('dateFormat', DateUtils.FORMAT_ENGLISH_DATE)
 
@@ -92,6 +94,30 @@ export const useProfileStore = defineStore('profile', () => {
     const profileName = activeProfile.value.name.toLowerCase()
     return profileName.substring(0, 3)
   })
+
+  // Returns whether a non-required resource (budgets, categories, tags, ...) is enabled.
+  function isResourceEnabled(code) {
+    const field = enabledResourcesConfig.value.find((item) => item.code === code)
+    return field ? field.isEnabled : true
+  }
+
+  // Returns whether a dashboard card is enabled in the dashboard cards config.
+  function isDashboardCardVisible(code) {
+    const field = dashboardWidgetsConfig.value.find((item) => item.code === code)
+    return field ? field.isVisible : true
+  }
+
+  // True when the resource that gates this dashboard card is disabled entirely.
+  function isDashboardCardResourceDisabled(code) {
+    const resourceCode = dashboardCardResourceMap[code]
+    return resourceCode ? !isResourceEnabled(resourceCode) : false
+  }
+
+  // True when the resource that gates this transaction form/list field is disabled entirely.
+  function isFieldResourceDisabled(code) {
+    const resourceCode = fieldResourceMap[code]
+    return resourceCode ? !isResourceEnabled(resourceCode) : false
+  }
 
   // Actions
   function setProfile(profile) {
@@ -156,6 +182,7 @@ export const useProfileStore = defineStore('profile', () => {
     store.transactionFormFieldsConfig = migrateTypeList(store.transactionFormFieldsConfig, transactionFormFieldList)
     store.transactionListFieldsConfig = migrateTypeList(store.transactionListFieldsConfig, transactionListFieldList)
     store.dashboardWidgetsConfig = migrateTypeList(store.dashboardWidgetsConfig, dashboardCardList)
+    store.enabledResourcesConfig = migrateTypeList(store.enabledResourcesConfig, resourceList)
 
     // If we changed the content of fixed lists update user settings
     startingPage.value = migrateType(startingPage.value, Page.typesList())
@@ -185,6 +212,7 @@ export const useProfileStore = defineStore('profile', () => {
     transactionFormFieldsConfig,
     transactionListFieldsConfig,
     dashboardWidgetsConfig,
+    enabledResourcesConfig,
     dateFormat,
     copyCategoryToDescription,
     copyTagToDescription,
@@ -202,6 +230,10 @@ export const useProfileStore = defineStore('profile', () => {
     profileDictionary,
     activeProfile,
     shortProfileName,
+    isResourceEnabled,
+    isDashboardCardVisible,
+    isDashboardCardResourceDisabled,
+    isFieldResourceDisabled,
     setProfile,
     getProfileSettings,
     getProfiles,
