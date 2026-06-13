@@ -1,8 +1,8 @@
-import _, { uniq, get } from 'lodash-es'
+import { get, uniq } from 'lodash-es'
 import ApiTransformer from './ApiTransformer'
 import DateUtils from '~/utils/DateUtils'
+import LanguageUtils from '~/utils/LanguageUtils.js'
 import { useProfileStore } from '~/stores/profileStore'
-import { useDashboardStore } from '~/stores/dashboardStore'
 import { useAccountStore } from '~/stores/accountStore'
 import { useCategoryStore } from '~/stores/categoryStore'
 import { useTagStore } from '~/stores/tagStore'
@@ -21,53 +21,34 @@ export default class TransactionTransformer extends ApiTransformer {
     }
 
     const appStore = useAppStore()
-    const accountStore = useAccountStore()
-    const categoryStore = useCategoryStore()
-    const tagStore = useTagStore()
-    const budgetStore = useBudgetStore()
-    const piggyBankStore = usePiggyBankStore()
-    const currencyStore = useCurrencyStore()
-
-    const accountsDictionary = accountStore.accountDictionary
-    const categoryDictionary = categoryStore.categoryDictionary
-    const tagDictionaryByName = tagStore.tagDictionaryByName
+    const accountDictionary = useAccountStore().accountDictionary
+    const categoryDictionary = useCategoryStore().categoryDictionary
+    const tagDictionaryByName = useTagStore().tagDictionaryByName
+    const budgetDictionary = useBudgetStore().budgetDictionary
+    const piggyBankDictionary = usePiggyBankStore().piggyBankDictionary
+    const currencyDictionary = useCurrencyStore().currencyDictionary
 
     item.attributes.transactions = item.attributes.transactions.map((transaction) => {
-      /*
-        When used with multiple devices, someone can create a category that you don't have locally.
-        => show a prompt to resync your extras. There may be edge cases where even after a full resync stuff is still missing...
-        Handle that later :-)
-      */
-      // let hasMissingAccountSource = (transaction['source_id'] && !accountsDictionary[transaction['source_id']])
-      // let hasMissingAccountDestination = (transaction['destination_id'] && !accountsDictionary[transaction['destination_id']])
-      let hasMissingCategory = transaction['category_id'] && !categoryDictionary[transaction['category_id']]
-      let hasMissingTag = false
-
-      let currencyForeignId = get(transaction, 'foreign_currency_id')
-      transaction.currencyForeign = currencyForeignId ? currencyStore.currencyDictionary[currencyForeignId] : null
-
-      let currencyId = get(transaction, 'currency_id')
-      transaction.currency = currencyId ? currencyStore.currencyDictionary[currencyId] : null
+      const currencyId = get(transaction, 'currency_id')
+      const currencyForeignId = get(transaction, 'foreign_currency_id')
+      transaction.currency = currencyId ? currencyDictionary[currencyId] : null
+      transaction.currencyForeign = currencyForeignId ? currencyDictionary[currencyForeignId] : null
 
       transaction.amount = Transaction.formatAmountForCurrency(transaction?.amount, transaction.currency)
       transaction.amountForeign = Transaction.formatAmountForCurrency(transaction?.foreign_amount, transaction.currencyForeign)
       transaction.date = DateUtils.autoToDate(transaction.date)
-      transaction.accountSource = accountsDictionary[transaction['source_id']]
-      transaction.accountDestination = accountsDictionary[transaction['destination_id']]
+      transaction.accountSource = accountDictionary[transaction['source_id']]
+      transaction.accountDestination = accountDictionary[transaction['destination_id']]
       transaction.category = categoryDictionary[transaction['category_id']]
-      transaction.budget = budgetStore.budgetDictionary[transaction['budget_id']]
+      transaction.budget = budgetDictionary[transaction['budget_id']]
       // Firefly III does not return "piggy_bank_id" on reads, but map it in case it ever does
-      transaction.piggyBank = piggyBankStore.piggyBankDictionary[transaction['piggy_bank_id']]
-      // transaction.tags = TagTransformer.transformFromApiList(transaction.tags.map(tagName => tagDictionaryByName[LanguageUtils.removeAccentsAndForceLowerCase(tagName)]))
-      transaction.tags = transaction.tags.map((tagName) => {
-        hasMissingTag = hasMissingTag || !tagDictionaryByName[LanguageUtils.removeAccentsAndLowerCase(tagName)]
-        return tagDictionaryByName[LanguageUtils.removeAccentsAndLowerCase(tagName)]
-      })
+      transaction.piggyBank = piggyBankDictionary[transaction['piggy_bank_id']]
+      transaction.type = Transaction.typesList.find((type) => type.fireflyCode === transaction.type)
 
-      // let subTransactionType = Transaction.transactionTypeFromFirefly(transaction.type)
-      // transaction.type = Transaction.typesList().find(item => item.code === subTransactionType)
-      transaction.type = Transaction.typesList.find((item) => item.fireflyCode === transaction.type)
+      transaction.tags = transaction.tags.map((tagName) => tagDictionaryByName[LanguageUtils.removeAccentsAndLowerCase(tagName)])
 
+      const hasMissingCategory = transaction['category_id'] && !transaction.category
+      const hasMissingTag = transaction.tags.some((tag) => !tag)
       if (hasMissingCategory || hasMissingTag) {
         appStore.isSyncRequiredByMissingExtras = true
       }
@@ -80,62 +61,53 @@ export default class TransactionTransformer extends ApiTransformer {
 
   static transformToApi(item) {
     const profileStore = useProfileStore()
+    const id = get(item, 'data.id')
 
-    let id = _.get(item, 'data.id')
-    let newTransactions = item.attributes.transactions
+    const transactions = item.attributes.transactions.map((transaction) => {
+      const accountSource = get(transaction, 'accountSource')
+      const accountDestination = get(transaction, 'accountDestination')
 
-    newTransactions = newTransactions.map((item) => {
-      const accountSource = _.get(item, 'accountSource')
-      const accountDestination = _.get(item, 'accountDestination')
-
-      let newItem = {}
-      newItem.amount = _.get(item, 'amount', 0)
-
-      let foreignAmount = get(item, 'amountForeign', 0)
-      let foreignCurrency = get(item, 'currencyForeign.id')
-      if (foreignAmount > 0 && foreignCurrency) {
-        newItem.foreign_amount = _.get(item, 'amountForeign', 0)
-        newItem.foreign_currency_id = _.get(item, 'currencyForeign.id')
+      const newItem = {
+        amount: get(transaction, 'amount', 0),
+        description: get(transaction, 'description', ''),
+        notes: get(transaction, 'notes'),
+        source_id: get(accountSource, 'id'),
+        source_name: Account.getDisplayName(accountSource),
+        destination_id: get(accountDestination, 'id'),
+        destination_name: Account.getDisplayName(accountDestination),
+        category_id: get(transaction, 'category.id') ?? null,
+        budget_id: get(transaction, 'budget.id') ?? 0,
+        date: DateUtils.dateToString(transaction.date, DateUtils.FORMAT_ENGLISH_DATE_HOUR_MINUTE),
+        type: Transaction.getTransactionTypeForAccounts({ source: accountSource, destination: accountDestination }).fireflyCode,
       }
 
-      newItem.description = get(item, 'description', '')
-      newItem.notes = _.get(item, 'notes')
-      newItem.source_id = _.get(item, 'accountSource.id')
-      newItem.source_name = Account.getDisplayName(accountSource)
-      newItem.destination_id = _.get(item, 'accountDestination.id')
-      newItem.destination_name = Account.getDisplayName(accountDestination)
-      newItem.category_id = _.get(item, 'category.id') ?? null
-      newItem.budget_id = _.get(item, 'budget.id') ?? 0
-      // Only relevant for transfers: Firefly III creates a piggy bank event when set
-      newItem.piggy_bank_id = _.get(item, 'piggyBank.id') ?? 0
-      newItem.date = DateUtils.dateToString(item.date, DateUtils.FORMAT_ENGLISH_DATE_HOUR_MINUTE)
+      const foreignAmount = get(transaction, 'amountForeign', 0)
+      const foreignCurrencyId = get(transaction, 'currencyForeign.id')
+      if (foreignAmount > 0 && foreignCurrencyId) {
+        newItem.foreign_amount = foreignAmount
+        newItem.foreign_currency_id = foreignCurrencyId
+      }
 
-      const transactionType = Transaction.getTransactionTypeForAccounts({
-        source: accountSource,
-        destination: accountDestination,
-      })
-      newItem.type = transactionType.fireflyCode
+      const piggyBankId = get(transaction, 'piggyBank.id')
+      if (piggyBankId) {
+        newItem.piggy_bank_id = piggyBankId
+      }
 
-      // const transformedTransactionType = Transaction.transactionTypeToFirefly(transactionType)
-      // newItem.type = transformedTransactionType
-
-      let tags = item.tags ?? []
-      if (!id && profileStore.autoAddedTags && profileStore.autoAddedTags.length > 0) {
+      // Auto-added tags only apply to brand new transactions (no id yet)
+      let tags = transaction.tags ?? []
+      if (!id && profileStore.autoAddedTags?.length > 0) {
         tags = [...tags, ...profileStore.autoAddedTags]
       }
-      tags = tags.map((tag) => Tag.getDisplayNameEllipsized(tag))
-      tags = uniq(tags)
-
-      newItem.tags = tags
+      newItem.tags = uniq(tags.map((tag) => Tag.getDisplayNameEllipsized(tag)))
 
       return newItem
     })
 
     return {
-      id: id,
+      id,
       apply_rules: true,
       fire_webhooks: true,
-      transactions: newTransactions,
+      transactions,
     }
   }
 }
