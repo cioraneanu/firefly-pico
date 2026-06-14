@@ -35,6 +35,7 @@ export default class RecurringTransaction extends BaseModel {
         repetitionDate: null,
         // Firefly III requires the first date of a new recurrence to be in the future
         first_date: startOfDay(addDays(new Date(), 1)),
+        repetitionEndType: RecurringTransaction.repetitionEndTypes.forever,
         repeat_until: null,
         nr_of_repetitions: null,
         active: true,
@@ -78,6 +79,27 @@ export default class RecurringTransaction extends BaseModel {
 
   static repetitionTypesList() {
     return Object.values(this.repetitionTypes)
+  }
+
+  static get repetitionEndTypes() {
+    return {
+      forever: {
+        name: 'Repeat forever',
+        code: 'forever',
+      },
+      untilDate: {
+        name: 'Repeat until date',
+        code: 'until_date',
+      },
+      nrOfTimes: {
+        name: 'Repeat a number of times',
+        code: 'nr_of_times',
+      },
+    }
+  }
+
+  static repetitionEndTypesList() {
+    return Object.values(this.repetitionEndTypes)
   }
 
   static get weekdays() {

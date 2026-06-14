@@ -73,8 +73,27 @@
         <app-date v-if="isRepetitionYearly" v-model="repetitionDate" name="repetitionDate" :label="$t('recurring_transaction_page.yearly_date')" :icon="TablerIconConstants.settingsUserPreferencesDate" :rules="[rule.required()]" />
 
         <app-date v-model="firstDate" name="firstDate" :label="$t('recurring_transaction_page.first_date')" :icon="TablerIconConstants.settingsUserPreferencesDate" :rules="[rule.required()]" />
-        <app-date v-model="repeatUntil" :label="$t('recurring_transaction_page.repeat_until')" :icon="TablerIconConstants.settingsUserPreferencesDate" />
-        <app-field v-model="nrOfRepetitions" name="nrOfRepetitions" :label="$t('recurring_transaction_page.nr_of_repetitions')" type="number" :icon="TablerIconConstants.fieldText2" />
+
+        <recurring-repetition-end-select v-model="repetitionEndType" name="repetitionEndType" :rules="[rule.required()]" required />
+
+        <app-date
+          v-if="isEndUntilDate"
+          v-model="repeatUntil"
+          name="repeatUntil"
+          :label="$t('recurring_transaction_page.repeat_until')"
+          :icon="TablerIconConstants.settingsUserPreferencesDate"
+          :rules="[rule.required()]"
+        />
+
+        <app-field
+          v-if="isEndNrOfTimes"
+          v-model="nrOfRepetitions"
+          name="nrOfRepetitions"
+          :label="$t('recurring_transaction_page.nr_of_repetitions')"
+          type="number"
+          :icon="TablerIconConstants.fieldText2"
+          :rules="[rule.required()]"
+        />
 
         <app-boolean v-model="active" :label="$t('active')" />
 
@@ -148,7 +167,7 @@ const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } =
   onEvent: onEvent,
 })
 
-const { title, icon, type, amount, accountSource, accountDestination, category, budget, tags, description, repetitionType, repetitionWeekday, repetitionDay, repetitionWeek, repetitionDate, firstDate, repeatUntil, nrOfRepetitions, active, notes } =
+const { title, icon, type, amount, accountSource, accountDestination, category, budget, tags, description, repetitionType, repetitionWeekday, repetitionDay, repetitionWeek, repetitionDate, firstDate, repetitionEndType, repeatUntil, nrOfRepetitions, active, notes } =
   generateChildren(item, [
     { computed: 'title', parentKey: 'attributes.title' },
     { computed: 'icon', parentKey: `attributes.icon` },
@@ -166,6 +185,7 @@ const { title, icon, type, amount, accountSource, accountDestination, category, 
     { computed: 'repetitionWeek', parentKey: `attributes.repetitionWeek` },
     { computed: 'repetitionDate', parentKey: `attributes.repetitionDate` },
     { computed: 'firstDate', parentKey: `attributes.first_date` },
+    { computed: 'repetitionEndType', parentKey: `attributes.repetitionEndType` },
     { computed: 'repeatUntil', parentKey: `attributes.repeat_until` },
     { computed: 'nrOfRepetitions', parentKey: `attributes.nr_of_repetitions` },
     { computed: 'active', parentKey: `attributes.active` },
@@ -176,6 +196,19 @@ const isRepetitionWeekly = computed(() => isEqual(repetitionType.value, Recurrin
 const isRepetitionMonthly = computed(() => isEqual(repetitionType.value, RecurringTransaction.repetitionTypes.monthly))
 const isRepetitionNdom = computed(() => isEqual(repetitionType.value, RecurringTransaction.repetitionTypes.ndom))
 const isRepetitionYearly = computed(() => isEqual(repetitionType.value, RecurringTransaction.repetitionTypes.yearly))
+
+const isEndUntilDate = computed(() => isEqual(repetitionEndType.value, RecurringTransaction.repetitionEndTypes.untilDate))
+const isEndNrOfTimes = computed(() => isEqual(repetitionEndType.value, RecurringTransaction.repetitionEndTypes.nrOfTimes))
+
+// Firefly III only accepts one end condition, so clear the value that no longer applies
+watch(repetitionEndType, () => {
+  if (!isEndUntilDate.value) {
+    repeatUntil.value = null
+  }
+  if (!isEndNrOfTimes.value) {
+    nrOfRepetitions.value = null
+  }
+})
 
 const isTypeExpense = computed(() => isEqual(type.value, Transaction.types.expense))
 const isTypeIncome = computed(() => isEqual(type.value, Transaction.types.income))

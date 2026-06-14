@@ -365,6 +365,7 @@
     "week_of_month": "Week of the month (1-5)",
     "yearly_date": "Repeats every year on",
     "first_date": "First date",
+    "repetition_ends": "Repetition ends",
     "repeat_until": "Repeat until",
     "nr_of_repetitions": "Number of repetitions",
     "upcoming": "Upcoming occurrences",

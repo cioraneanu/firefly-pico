@@ -27,6 +27,14 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
     item.attributes.first_date = DateUtils.autoToDate(get(item, 'attributes.first_date'))
     item.attributes.repeat_until = DateUtils.autoToDate(get(item, 'attributes.repeat_until'))
 
+    if (item.attributes.repeat_until) {
+      item.attributes.repetitionEndType = RecurringTransaction.repetitionEndTypes.untilDate
+    } else if (get(item, 'attributes.nr_of_repetitions')) {
+      item.attributes.repetitionEndType = RecurringTransaction.repetitionEndTypes.nrOfTimes
+    } else {
+      item.attributes.repetitionEndType = RecurringTransaction.repetitionEndTypes.forever
+    }
+
     const repetition = get(item, 'attributes.repetitions.0')
     const repetitionType = RecurringTransaction.repetitionTypesList().find((type) => type.fireflyCode === get(repetition, 'type'))
     const moment = `${get(repetition, 'moment') ?? ''}`
@@ -118,11 +126,16 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
       description: get(data, 'description') || get(data, 'title', ''),
       amount: get(data, 'amount'),
       source_id: get(accountSource, 'id'),
-      destination_id: get(accountDestination, 'id'),
+      destination_id: get(accountDestination, 'id') ?? 0,
       category_id: get(data, 'category.id'),
       budget_id: get(data, 'budget.id'),
-      tags: (get(data, 'tags') ?? []).map((tag) => Tag.getDisplayNameEllipsized(tag)),
     }
+    let tags = (get(data, 'tags') ?? []).map((tag) => Tag.getDisplayNameEllipsized(tag))
+    if(tags.length > 0) {
+      transaction.tags = currencyId
+    }
+
+
     if (currencyId) {
       transaction.currency_id = currencyId
     }
@@ -143,13 +156,18 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
       transactions: [transaction],
     }
 
-    // Firefly III rejects recurrences having both "repeat_until" and "nr_of_repetitions"
-    let repeatUntil = get(data, 'repeat_until')
-    let nrOfRepetitions = get(data, 'nr_of_repetitions')
-    if (repeatUntil) {
-      result.repeat_until = DateUtils.dateToString(repeatUntil)
-    } else if (nrOfRepetitions) {
-      result.nr_of_repetitions = parseInt(nrOfRepetitions)
+    // Firefly III rejects recurrences having both "repeat_until" and "nr_of_repetitions".
+    // The unused field is explicitly nulled so switching the end mode clears the previous value.
+    const repetitionEndCode = get(data, 'repetitionEndType.code')
+    if (repetitionEndCode === RecurringTransaction.repetitionEndTypes.untilDate.code) {
+      result.repeat_until = DateUtils.dateToString(get(data, 'repeat_until'))
+      result.nr_of_repetitions = null
+    } else if (repetitionEndCode === RecurringTransaction.repetitionEndTypes.nrOfTimes.code) {
+      result.nr_of_repetitions = parseInt(get(data, 'nr_of_repetitions'))
+      result.repeat_until = null
+    } else {
+      result.repeat_until = null
+      result.nr_of_repetitions = null
     }
 
     return result
