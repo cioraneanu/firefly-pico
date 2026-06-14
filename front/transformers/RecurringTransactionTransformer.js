@@ -88,8 +88,16 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
 
     let data = _.get(item, 'attributes')
 
+    // The "moment" format Firefly expects depends on the repetition type:
+    //   daily   -> none (must be empty)
+    //   weekly  -> weekday number 1-7
+    //   monthly -> day of month 1-31
+    //   ndom    -> "<week 1-5>,<weekday 1-7>"
+    //   yearly  -> a "Y-m-d" date
+    const repetitionTypeCode = get(data, 'repetitionType.fireflyCode')
+
     let moment = ''
-    switch (get(data, 'repetitionType.fireflyCode')) {
+    switch (repetitionTypeCode) {
       case RecurringTransaction.repetitionTypes.weekly.fireflyCode:
         moment = `${get(data, 'repetitionWeekday.fireflyCode') ?? ''}`
         break
@@ -102,13 +110,20 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
       case RecurringTransaction.repetitionTypes.yearly.fireflyCode:
         moment = DateUtils.dateToString(get(data, 'repetitionDate')) ?? ''
         break
+      // daily has no moment
     }
 
     let repetition = {
-      type: get(data, 'repetitionType.fireflyCode'),
-      moment: moment,
+      type: repetitionTypeCode,
       skip: get(data, 'repetitionSkip') ?? 0,
       weekend: get(data, 'repetitionWeekend') ?? 1,
+    }
+    // Daily repetitions carry no "moment". Firefly's *update* validation rule for
+    // "moment" is `numeric`, so an empty string is rejected with
+    // "The repetitions.0.moment must be a number." Omitting the key entirely passes
+    // validation and matches what Firefly expects for a daily recurrence.
+    if (repetitionTypeCode !== RecurringTransaction.repetitionTypes.daily.fireflyCode) {
+      repetition.moment = moment
     }
     let repetitionId = get(data, 'repetitionId')
     if (repetitionId) {
@@ -126,13 +141,13 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
       description: get(data, 'description') || get(data, 'title', ''),
       amount: get(data, 'amount'),
       source_id: get(accountSource, 'id'),
-      destination_id: get(accountDestination, 'id') ?? 0,
+      destination_id: get(accountDestination, 'id'),
       category_id: get(data, 'category.id'),
       budget_id: get(data, 'budget.id'),
     }
     let tags = (get(data, 'tags') ?? []).map((tag) => Tag.getDisplayNameEllipsized(tag))
-    if(tags.length > 0) {
-      transaction.tags = currencyId
+    if (tags.length > 0) {
+      transaction.tags = tags
     }
 
 
@@ -152,8 +167,31 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
       apply_rules: true,
       active: get(data, 'active') ?? true,
       notes: get(data, 'notes'),
-      repetitions: [repetition],
       transactions: [transaction],
+    }
+
+    // Firefly's API *update* validation for "repetitions.*.moment" adds a `numeric`
+    // (and `max:10`) rule that its *create* validation does not. That rule rejects
+    // every non-numeric moment Firefly itself produces - daily (empty), ndom ("2,3"),
+    // yearly (a date) and even monthly days above 10 - so re-sending an unchanged
+    // repetition on update fails. Firefly leaves the existing repetition untouched when
+    // the "repetitions" key is absent, so we only send it when it actually changed.
+    const isUpdate = Boolean(get(item, 'id'))
+    const originalRepetition = get(data, 'repetitions.0')
+    let originalMoment = `${get(originalRepetition, 'moment') ?? ''}`
+    // Normalize the yearly moment to a plain "Y-m-d" so a date that comes back from the
+    // API with a time/timezone component still compares equal to our generated moment.
+    if (repetitionTypeCode === RecurringTransaction.repetitionTypes.yearly.fireflyCode && originalMoment) {
+      originalMoment = DateUtils.dateToString(DateUtils.autoToDate(originalMoment)) ?? originalMoment
+    }
+    const isRepetitionUnchanged =
+      isUpdate &&
+      Boolean(originalRepetition) &&
+      get(originalRepetition, 'type') === repetitionTypeCode &&
+      originalMoment === moment
+
+    if (!isRepetitionUnchanged) {
+      result.repetitions = [repetition]
     }
 
     // Firefly III rejects recurrences having both "repeat_until" and "nr_of_repetitions".
