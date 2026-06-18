@@ -4,6 +4,7 @@ import { keyBy } from 'lodash-es'
 import { useLocalStorage } from '@vueuse/core'
 import PiggyBankRepository from '~/repository/PiggyBankRepository.js'
 import PiggyBankTransformer from '~/transformers/PiggyBankTransformer.js'
+import { useProfileStore } from '~/stores/profileStore'
 
 export const usePiggyBankStore = defineStore('piggyBank', () => {
   const piggyBankList = useLocalStorage('piggyBankList', [])
@@ -14,6 +15,11 @@ export const usePiggyBankStore = defineStore('piggyBank', () => {
   })
 
   async function fetchPiggyBanks() {
+    const profileStore = useProfileStore()
+    if (!profileStore.piggyBanksEnabled) {
+      piggyBankList.value = []
+      return
+    }
     isLoadingPiggyBanks.value = true
 
     const list = await new PiggyBankRepository().getAllWithMerge()

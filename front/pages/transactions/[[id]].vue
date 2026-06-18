@@ -55,7 +55,7 @@
           v-bind="accountDestinationBinding"
         />
 
-        <category-select v-model="category" :style="getStyleForField(transactionFormField.category)" />
+        <category-select v-if="profileStore.categoriesEnabled" v-model="category" :style="getStyleForField(transactionFormField.category)" />
 
         <app-field
           v-model="description"
@@ -71,7 +71,7 @@
           :style="getStyleForField(transactionFormField.description)"
         />
 
-        <tag-select v-model="tags" :style="getStyleForField(transactionFormField.tags)" />
+        <tag-select v-if="profileStore.tagsEnabled" v-model="tags" :style="getStyleForField(transactionFormField.tags)" />
 
         <div :style="getStyleForField(transactionFormField.date)">
           <app-date-time-grid v-model="date" name="date" :rules="[rule.required()]" required />
@@ -85,9 +85,9 @@
 
         <transaction-note-field v-model="notes" :style="getStyleForField(transactionFormField.notes)" />
 
-        <budget-select v-model="budget" :style="getStyleForField(transactionFormField.budget)" />
+        <budget-select v-if="profileStore.budgetsEnabled" v-model="budget" :style="getStyleForField(transactionFormField.budget)" />
 
-        <piggy-bank-select v-if="isTypeTransfer && !itemId" v-model="piggyBank" :style="getStyleForField(transactionFormField.piggyBank)" />
+        <piggy-bank-select v-if="profileStore.piggyBanksEnabled && isTypeTransfer && !itemId" v-model="piggyBank" :style="getStyleForField(transactionFormField.piggyBank)" />
 
         <transaction-attachments-list :transaction="item" :style="getStyleForField(transactionFormField.attachments)" />
       </van-cell-group>

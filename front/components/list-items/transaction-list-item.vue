@@ -20,7 +20,7 @@
               </div>
             </div>
 
-            <div v-if="categories && props.isDetailedMode" class="list-item-subtitle gap-2" :style="getStyleForField(transactionListField.category)">
+            <div v-if="profileStore.categoriesEnabled && categories && props.isDetailedMode" class="list-item-subtitle gap-2" :style="getStyleForField(transactionListField.category)">
               <div v-for="category in categories">
                 <app-icon :icon="Category.getIcon(category) ?? TablerIconConstants.category" :size="20" />
                 {{ Category.getDisplayName(category) }}
@@ -32,14 +32,14 @@
               <span class="notes-markdown max-2-lines word-break-word" v-html="notes" />
             </div>
 
-            <div v-if="tags && props.isDetailedMode" class="tags-container" :style="getStyleForField(transactionListField.tags)">
+            <div v-if="profileStore.tagsEnabled && tags && props.isDetailedMode" class="tags-container" :style="getStyleForField(transactionListField.tags)">
               <div v-for="tag in visibleTags" class="tag">
                 <app-icon :icon="Tag.getIcon(tag) ?? TablerIconConstants.tag" :size="14" />
                 <div class="list-item-subtitle ml-5">{{ Tag.getDisplayNameEllipsized(tag, 10) }}</div>
               </div>
             </div>
 
-            <div v-if="budget && props.isDetailedMode" class="list-item-subtitle" :style="getStyleForField(transactionListField.budget)">
+            <div v-if="profileStore.budgetsEnabled && budget && props.isDetailedMode" class="list-item-subtitle" :style="getStyleForField(transactionListField.budget)">
               <app-icon :icon="TablerIconConstants.budget" :size="20" />
               {{ Budget.getDisplayName(budget) }}
             </div>
@@ -82,6 +82,7 @@ import TransactionSplitBadge from '~/components/transaction/transaction-split-ba
 import { transactionListField } from '~/constants/TransactionConstants.js'
 import { marked } from 'marked'
 import { formatTimeAgo } from '@vueuse/core'
+import { useAccountStore } from '~/stores/accountStore'
 
 const props = defineProps({
   value: Object,
@@ -90,7 +91,6 @@ const props = defineProps({
   },
 })
 
-import { useAccountStore } from '~/stores/accountStore'
 const accountStore = useAccountStore()
 
 const emit = defineEmits(['onEdit', 'onDelete'])

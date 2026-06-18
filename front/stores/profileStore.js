@@ -66,6 +66,12 @@ export const useProfileStore = defineStore('profile', () => {
 
   const heroIcons = useLocalStorage('heroIcons', [transactionListHeroIcon.tags, transactionListHeroIcon.account])
 
+  const budgetsEnabled = useLocalStorage('budgetsEnabled', true)
+  const categoriesEnabled = useLocalStorage('categoriesEnabled', true)
+  const tagsEnabled = useLocalStorage('tagsEnabled', true)
+  const piggyBanksEnabled = useLocalStorage('piggyBanksEnabled', true)
+  const recurringTransactionsEnabled = useLocalStorage('recurringTransactionsEnabled', true)
+
   const dashboard = reactive({
     firstDayOfMonth: useLocalStorage('firstDayOfMonth', 1),
     showAccountAmounts: useLocalStorage('showAccountAmounts', true),
@@ -198,6 +204,11 @@ export const useProfileStore = defineStore('profile', () => {
     lowerCaseTagName,
     stripAccents,
     heroIcons,
+    budgetsEnabled,
+    categoriesEnabled,
+    tagsEnabled,
+    piggyBanksEnabled,
+    recurringTransactionsEnabled,
     dashboard,
     profileDictionary,
     activeProfile,

@@ -21,6 +21,7 @@ export default class TransactionTransformer extends ApiTransformer {
     }
 
     const appStore = useAppStore()
+    const profileStore = useProfileStore()
     const accountDictionary = useAccountStore().accountDictionary
     const categoryDictionary = useCategoryStore().categoryDictionary
     const tagDictionaryByName = useTagStore().tagDictionaryByName
@@ -47,8 +48,8 @@ export default class TransactionTransformer extends ApiTransformer {
 
       transaction.tags = transaction.tags.map((tagName) => tagDictionaryByName[LanguageUtils.removeAccentsAndLowerCase(tagName)])
 
-      const hasMissingCategory = transaction['category_id'] && !transaction.category
-      const hasMissingTag = transaction.tags.some((tag) => !tag)
+      const hasMissingCategory = profileStore.categoriesEnabled && transaction['category_id'] && !transaction.category
+      const hasMissingTag = profileStore.tagsEnabled && transaction.tags.some((tag) => !tag)
       if (hasMissingCategory || hasMissingTag) {
         appStore.isSyncRequiredByMissingExtras = true
       }

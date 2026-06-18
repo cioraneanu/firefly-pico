@@ -13,6 +13,16 @@
       </van-cell-group>
 
       <van-cell-group inset>
+        <div class="van-cell-group-title">{{ $t('settings.setup.enabled_resources') }}</div>
+
+        <app-boolean v-model="budgetsEnabled" :label="$t('settings.setup.enable_budgets')" />
+        <app-boolean v-model="categoriesEnabled" :label="$t('settings.setup.enable_categories')" />
+        <app-boolean v-model="tagsEnabled" :label="$t('settings.setup.enable_tags')" />
+        <app-boolean v-model="piggyBanksEnabled" :label="$t('settings.setup.enable_piggy_banks')" />
+        <app-boolean v-model="recurringTransactionsEnabled" :label="$t('settings.setup.enable_recurring_transactions')" />
+      </van-cell-group>
+
+      <van-cell-group inset>
         <div class="van-cell-group-title">{{ $t('settings.setup.loaded_data_stats') }}</div>
 
         <van-grid :column-num="3">
@@ -55,6 +65,7 @@ import { get } from 'lodash-es'
 import { rule } from '~/utils/ValidationUtils.js'
 
 const appStore = useAppStore()
+const profileStore = useProfileStore()
 const dashboardStore = useDashboardStore()
 const accountStore = useAccountStore()
 const categoryStore = useCategoryStore()
@@ -68,6 +79,12 @@ const authToken = ref('')
 const picoBackendURL = ref('')
 const syncProfileInDB = ref(true)
 const daysBetweenFullSync = ref(4)
+
+const budgetsEnabled = ref(true)
+const categoriesEnabled = ref(true)
+const tagsEnabled = ref(true)
+const piggyBanksEnabled = ref(true)
+const recurringTransactionsEnabled = ref(true)
 
 const accountsCount = computed(() => accountStore.accountList.length)
 const categoriesCount = computed(() => categoryStore.categoryList.length)
@@ -89,6 +106,12 @@ onMounted(() => {
   picoBackendURL.value = appStore.picoBackendURL
   syncProfileInDB.value = appStore.syncProfileInDB
   daysBetweenFullSync.value = appStore.daysBetweenFullSync
+
+  budgetsEnabled.value = profileStore.budgetsEnabled
+  categoriesEnabled.value = profileStore.categoriesEnabled
+  tagsEnabled.value = profileStore.tagsEnabled
+  piggyBanksEnabled.value = profileStore.piggyBanksEnabled
+  recurringTransactionsEnabled.value = profileStore.recurringTransactionsEnabled
 })
 
 const onSave = async () => {
@@ -98,6 +121,13 @@ const onSave = async () => {
   appStore.picoBackendURL = picoBackendURL.value
   appStore.syncProfileInDB = syncProfileInDB.value
   appStore.daysBetweenFullSync = daysBetweenFullSync.value
+
+  profileStore.budgetsEnabled = budgetsEnabled.value
+  profileStore.categoriesEnabled = categoriesEnabled.value
+  profileStore.tagsEnabled = tagsEnabled.value
+  profileStore.piggyBanksEnabled = piggyBanksEnabled.value
+  profileStore.recurringTransactionsEnabled = recurringTransactionsEnabled.value
+  await profileStore.writeProfile()
 
   const userResponse = await new UserRepository().getUser()
   if (!ResponseUtils.isSuccess(userResponse)) {

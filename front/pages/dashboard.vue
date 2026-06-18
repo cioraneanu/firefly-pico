@@ -23,7 +23,6 @@
 <script setup>
 import { useToolbar } from '~/composables/useToolbar'
 import { debounce } from 'lodash-es/function'
-import UIUtils from '~/utils/UIUtils.js'
 import { animateDashboard } from '~/utils/AnimationUtils.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import { dashboardCard, dashboardCardList } from '~/constants/DashboardConstants.js'
@@ -64,6 +63,15 @@ const cardComponents = {
   [dashboardCard.recurringTransactions.code]: DashboardRecurringTransactions,
 }
 
+const isCardEnabled = (cardCode) => {
+  if (cardCode === dashboardCard.budgets.code && !profileStore.budgetsEnabled) return false
+  if ([dashboardCard.expensesByTag.code, dashboardCard.transfersByTag.code, dashboardCard.todoTransactions.code].includes(cardCode) && !profileStore.tagsEnabled) return false
+  if ([dashboardCard.expensesByCategory.code, dashboardCard.transfersByCategory.code].includes(cardCode) && !profileStore.categoriesEnabled) return false
+  if (cardCode === dashboardCard.piggyBanks.code && !profileStore.piggyBanksEnabled) return false
+  if (cardCode === dashboardCard.recurringTransactions.code && !profileStore.recurringTransactionsEnabled) return false
+  return true
+}
+
 const visibleCards = computed(() => {
   return dashboardCardList
     .map((card) => {
@@ -78,7 +86,7 @@ const visibleCards = computed(() => {
         component: cardComponents[card.code],
       }
     })
-    .filter((card) => card.isVisible)
+    .filter((card) => card.isVisible && isCardEnabled(card.code))
     .sort((a, b) => a.position - b.position)
 })
 
@@ -111,7 +119,7 @@ const { lengthX } = useSwipe(dashboard, {
   onSwipeStart(e) {
     swipeStartAt = e.timeStamp
   },
-  onSwipeEnd(e, direction) {
+  onSwipeEnd(e) {
     const duration = e.timeStamp - swipeStartAt
     const velocity = Math.abs(lengthX.value) / duration
 

@@ -4,7 +4,7 @@ import { useLocalStorage } from '@vueuse/core'
 import ResponseUtils from '~/utils/ResponseUtils'
 import { compareVersionStrings } from '~/utils/DataUtils'
 import InfoRepository from '~/repository/InfoRepository.js'
-import { get, keyBy } from 'lodash-es'
+import { get } from 'lodash-es'
 import RouteConstants from '~/constants/RouteConstants.js'
 import { useProfileStore } from '~/stores/profileStore.js'
 import { differenceInDays, subDays } from 'date-fns'
@@ -25,6 +25,8 @@ export const useAppStore = defineStore('app', () => {
   const picoBackendURL = useLocalStorage('picoBackendURL', defaultUrl)
   const syncProfileInDB = useLocalStorage('syncProfileInDB', true)
   const daysBetweenFullSync = useLocalStorage('daysBetweenFullSync', 4)
+
+
 
   const profileFloatButtonPosition = useLocalStorage('profileFloatButtonPosition', { y: window.innerHeight / 2.2 })
 
@@ -143,6 +145,7 @@ export const useAppStore = defineStore('app', () => {
     picoBackendURL,
     syncProfileInDB,
     daysBetweenFullSync,
+
     profileFloatButtonPosition,
     currentAppVersion,
     queryTimeout,

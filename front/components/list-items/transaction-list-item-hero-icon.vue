@@ -28,14 +28,15 @@ import Account from '~/models/Account.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Transaction from '~/models/Transaction.js'
 import { transactionListHeroIcon } from '~/constants/TransactionConstants.js'
+import { useAccountStore } from '~/stores/accountStore'
+import { useCategoryStore } from '~/stores/categoryStore'
+import { useProfileStore } from '~/stores/profileStore'
 
 const props = defineProps({
   value: Object,
 })
 
 const profileStore = useProfileStore()
-import { useAccountStore } from '~/stores/accountStore'
-import { useCategoryStore } from '~/stores/categoryStore'
 const accountStore = useAccountStore()
 const categoryStore = useCategoryStore()
 
@@ -87,8 +88,8 @@ const categoryIcon = computed(() => {
 })
 
 const isAccountIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIcon.account.code))
-const isTagIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIcon.tags.code) && !isEmpty(tags.value))
-const isCategoryIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIcon.category.code))
+const isTagIconVisible = computed(() => profileStore.tagsEnabled && profileStore.heroIcons.some((item) => item.code === transactionListHeroIcon.tags.code) && !isEmpty(tags.value))
+const isCategoryIconVisible = computed(() => profileStore.categoriesEnabled && profileStore.heroIcons.some((item) => item.code === transactionListHeroIcon.category.code))
 const isWeekdayIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIcon.dayOfWeek.code))
 const isHourIconVisible = computed(() => false)
 // const isHourIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === HERO_ICONS.hour))

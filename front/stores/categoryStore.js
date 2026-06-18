@@ -4,6 +4,7 @@ import { keyBy } from 'lodash-es'
 import { useLocalStorage } from '@vueuse/core'
 import CategoryRepository from '~/repository/CategoryRepository'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
+import { useProfileStore } from '~/stores/profileStore'
 
 export const useCategoryStore = defineStore('category', () => {
   const categoryList = useLocalStorage('categoryList', [])
@@ -14,6 +15,11 @@ export const useCategoryStore = defineStore('category', () => {
   })
 
   async function fetchCategories() {
+    const profileStore = useProfileStore()
+    if (!profileStore.categoriesEnabled) {
+      categoryList.value = []
+      return
+    }
     isLoadingCategories.value = true
     const list = await new CategoryRepository().getAllWithMerge()
     categoryList.value = CategoryTransformer.transformFromApiList(list)

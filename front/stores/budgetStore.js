@@ -9,6 +9,7 @@ import BudgetLimitTransformer from '~/transformers/BudgetLimitTransformer.js'
 import DateUtils from '~/utils/DateUtils.js'
 import { useDashboardStore } from '~/stores/dashboardStore'
 import { startOfMonth, endOfMonth } from 'date-fns'
+import { useProfileStore } from '~/stores/profileStore'
 
 export const useBudgetStore = defineStore('budget', () => {
   const budgetList = useLocalStorage('budgetList', [])
@@ -26,6 +27,13 @@ export const useBudgetStore = defineStore('budget', () => {
 
 
   async function fetchBudgets() {
+    const profileStore = useProfileStore()
+    if (!profileStore.budgetsEnabled) {
+      budgetList.value = []
+      budgetLimitList.value = []
+      return
+    }
+
     isLoadingBudgets.value = true
 
     const dashboardStore = useDashboardStore()
@@ -51,6 +59,12 @@ export const useBudgetStore = defineStore('budget', () => {
   }
 
   async function fetchBudgetLimits() {
+    const profileStore = useProfileStore()
+    if (!profileStore.budgetsEnabled) {
+      budgetLimitList.value = []
+      return
+    }
+
     isLoadingBudgets.value = true
 
     const dashboardStore = useDashboardStore()

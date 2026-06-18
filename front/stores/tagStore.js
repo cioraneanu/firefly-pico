@@ -6,6 +6,7 @@ import TagRepository from '~/repository/TagRepository'
 import TagTransformer from '~/transformers/TagTransformer'
 import { listToTree, setLevel, sortByPath, treeToList } from '~/utils/DataUtils'
 import LanguageUtils from '~/utils/LanguageUtils.js'
+import { useProfileStore } from '~/stores/profileStore'
 
 export const useTagStore = defineStore('tag', () => {
   const tagList = useLocalStorage('tagList', [])
@@ -30,6 +31,11 @@ export const useTagStore = defineStore('tag', () => {
   })
 
   async function fetchTags() {
+    const profileStore = useProfileStore()
+    if (!profileStore.tagsEnabled) {
+      tagList.value = []
+      return
+    }
     isLoadingTags.value = true
     const list = await new TagRepository().getAllWithMerge()
     tagList.value = TagTransformer.transformFromApiList(list)
