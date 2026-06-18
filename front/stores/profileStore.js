@@ -69,7 +69,7 @@ export const useProfileStore = defineStore('profile', () => {
   const budgetsEnabled = useLocalStorage('budgetsEnabled', true)
   const categoriesEnabled = useLocalStorage('categoriesEnabled', true)
   const tagsEnabled = useLocalStorage('tagsEnabled', true)
-  const piggyBanksEnabled = useLocalStorage('piggyBanksEnabled', true)
+  const piggyBanksEnabled = useLocalStorage('piggyBanksEnabled', false)
   const recurringTransactionsEnabled = useLocalStorage('recurringTransactionsEnabled', true)
 
   const dashboard = reactive({
