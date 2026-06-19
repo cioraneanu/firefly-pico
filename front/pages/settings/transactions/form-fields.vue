@@ -8,7 +8,7 @@
           <app-repeater v-model="fieldsList" :is-list-dynamic="false" :empty-item="{ value: '' }">
             <template #content="{ element, index }">
               <div class="app-field m-5 cursor-pointer" @click="onClickIsVisible(element)">
-                <div class="van-field__body flex-center-vertical gap-1 pointer-events-none prevent-select">
+                <div :class="getElementClass(element)">
                   <app-icon :icon="element.icon" :size="20" />
                   <div class="flex-1 text-size-14">{{ element.t ? $t(element.t) : element.name }}</div>
                   <app-icon :icon="getIsVisibleIcon(element)" :size="20" />
@@ -64,6 +64,13 @@ const onSave = async () => {
 
 const getIsVisibleIcon = (element) => {
   return element.isVisible ? TablerIconConstants.eyeVisible : TablerIconConstants.eyeHidden
+}
+
+const getElementClass = (element) => {
+  return {
+    'van-field__body flex-center-vertical gap-1 pointer-events-none prevent-select': true,
+    'text-muted' : !element.isVisible
+  }
 }
 
 const onClickIsVisible = (element) => {

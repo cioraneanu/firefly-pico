@@ -8,7 +8,7 @@
           <app-repeater v-model="fieldsList" :is-list-dynamic="false" :empty-item="{ value: '' }">
             <template #content="{ element }">
               <div class="app-field m-5 cursor-pointer" @click="onClickIsVisible(element)">
-                <div class="van-field__body flex-center-vertical gap-1 pointer-events-none prevent-select">
+                <div :class="getElementClass(element)">
                   <app-icon :icon="element.icon" :size="20" />
                   <div class="flex-1 text-size-14">{{ element.t ? $t(element.t) : element.name }}</div>
                   <app-icon :icon="getIsVisibleIcon(element)" :size="20" />
@@ -31,7 +31,7 @@ import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
-import { dashboardCardList } from '~/constants/DashboardConstants.js'
+import { dashboardCard, dashboardCardList } from '~/constants/DashboardConstants.js'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -55,8 +55,8 @@ const isCardEnabled = (cardCode) => {
 const onSave = async () => {
   const isListOk = profileStore.dashboardWidgetsConfig.length === dashboardCardList.length
   const fullConfig = isListOk ? profileStore.dashboardWidgetsConfig : dashboardCardList
-  
-  const disabledWidgets = fullConfig.filter(card => !isCardEnabled(card.code))
+
+  const disabledWidgets = fullConfig.filter((card) => !isCardEnabled(card.code))
   profileStore.dashboardWidgetsConfig = [...fieldsList.value, ...disabledWidgets]
 
   const response = await profileStore.writeProfile()
@@ -70,6 +70,13 @@ const getIsVisibleIcon = (element) => {
   return element.isVisible ? TablerIconConstants.eyeVisible : TablerIconConstants.eyeHidden
 }
 
+const getElementClass = (element) => {
+  return {
+    'van-field__body flex-center-vertical gap-1 pointer-events-none prevent-select': true,
+    'text-muted': !element.isVisible,
+  }
+}
+
 const onClickIsVisible = (element) => {
   element.isVisible = !element.isVisible
 }
@@ -77,7 +84,7 @@ const onClickIsVisible = (element) => {
 const init = () => {
   const isListOk = profileStore.dashboardWidgetsConfig.length === dashboardCardList.length
   const sourceList = isListOk ? profileStore.dashboardWidgetsConfig : dashboardCardList
-  fieldsList.value = sourceList.filter(card => isCardEnabled(card.code))
+  fieldsList.value = sourceList.filter((card) => isCardEnabled(card.code))
 }
 
 const toolbar = useToolbar()
