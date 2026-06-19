@@ -8,6 +8,7 @@ export default {
 
   ROUTE_SETTINGS: '/settings',
   ROUTE_SETTINGS_SETUP: '/settings/setup',
+  ROUTE_SETTINGS_ENABLED_RESOURCES: '/settings/enabled-resources',
   ROUTE_SETTINGS_UI: '/settings/ui',
   ROUTE_SETTINGS_ASSISTANT: '/settings/assistant',
   ROUTE_SETTINGS_FORMATTING: '/settings/formatting',

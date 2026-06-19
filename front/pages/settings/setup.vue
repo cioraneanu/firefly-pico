@@ -13,13 +13,7 @@
       </van-cell-group>
 
       <van-cell-group inset>
-        <div class="van-cell-group-title">{{ $t('settings.setup.enabled_resources') }}</div>
-
-        <app-boolean v-model="budgetsEnabled" :label="$t('settings.setup.enable_budgets')" />
-        <app-boolean v-model="categoriesEnabled" :label="$t('settings.setup.enable_categories')" />
-        <app-boolean v-model="tagsEnabled" :label="$t('settings.setup.enable_tags')" />
-        <app-boolean v-model="piggyBanksEnabled" :label="$t('settings.setup.enable_piggy_banks')" />
-        <app-boolean v-model="recurringTransactionsEnabled" :label="$t('settings.setup.enable_recurring_transactions')" />
+        <app-field-link :label="$t('settings.setup.enabled_resources')" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_ENABLED_RESOURCES)" />
       </van-cell-group>
 
       <van-cell-group inset>
@@ -27,12 +21,12 @@
 
         <van-grid :column-num="3">
           <app-config-stat :icon="TablerIconConstants.account" :name="$t('settings.setup.account')" :value="accountsCount" />
-          <app-config-stat :icon="TablerIconConstants.category" :name="$t('settings.setup.categories')" :value="categoriesCount" :muted="!categoriesEnabled" />
-          <app-config-stat :icon="TablerIconConstants.tag" :name="$t('settings.setup.tags')" :value="tagsCount" :muted="!tagsEnabled" />
+          <app-config-stat :icon="TablerIconConstants.category" :name="$t('settings.setup.categories')" :value="categoriesCount" :muted="!profileStore.categoriesEnabled" />
+          <app-config-stat :icon="TablerIconConstants.tag" :name="$t('settings.setup.tags')" :value="tagsCount" :muted="!profileStore.tagsEnabled" />
           <app-config-stat :icon="TablerIconConstants.transactionTemplate" :name="$t('settings.setup.templates')" :value="transactionTemplatesCount" />
-          <app-config-stat :icon="TablerIconConstants.budget" :name="$t('settings.setup.budgets')" :value="budgetsCount" :muted="!budgetsEnabled" />
-          <app-config-stat :icon="TablerIconConstants.piggyBank" :name="$t('settings.setup.piggy_banks')" :value="piggyBanksCount" :muted="!piggyBanksEnabled" />
-          <app-config-stat :icon="TablerIconConstants.recurringTransaction" :name="$t('settings.setup.recurring_transactions')" :value="recurringTransactionsCount" :muted="!recurringTransactionsEnabled" />
+          <app-config-stat :icon="TablerIconConstants.budget" :name="$t('settings.setup.budgets')" :value="budgetsCount" :muted="!profileStore.budgetsEnabled" />
+          <app-config-stat :icon="TablerIconConstants.piggyBank" :name="$t('settings.setup.piggy_banks')" :value="piggyBanksCount" :muted="!profileStore.piggyBanksEnabled" />
+          <app-config-stat :icon="TablerIconConstants.recurringTransaction" :name="$t('settings.setup.recurring_transactions')" :value="recurringTransactionsCount" :muted="!profileStore.recurringTransactionsEnabled" />
           <app-config-stat :icon="TablerIconConstants.lastSync" :name="$t('settings.setup.last_sync')" :value="lastSync" />
         </van-grid>
       </van-cell-group>
@@ -80,11 +74,7 @@ const picoBackendURL = ref('')
 const syncProfileInDB = ref(true)
 const daysBetweenFullSync = ref(4)
 
-const budgetsEnabled = ref(true)
-const categoriesEnabled = ref(true)
-const tagsEnabled = ref(true)
-const piggyBanksEnabled = ref(true)
-const recurringTransactionsEnabled = ref(true)
+
 
 const accountsCount = computed(() => accountStore.accountList.length)
 const categoriesCount = computed(() => categoryStore.categoryList.length)
@@ -106,12 +96,6 @@ onMounted(() => {
   picoBackendURL.value = appStore.picoBackendURL
   syncProfileInDB.value = appStore.syncProfileInDB
   daysBetweenFullSync.value = appStore.daysBetweenFullSync
-
-  budgetsEnabled.value = profileStore.budgetsEnabled
-  categoriesEnabled.value = profileStore.categoriesEnabled
-  tagsEnabled.value = profileStore.tagsEnabled
-  piggyBanksEnabled.value = profileStore.piggyBanksEnabled
-  recurringTransactionsEnabled.value = profileStore.recurringTransactionsEnabled
 })
 
 const onSave = async () => {
@@ -122,12 +106,7 @@ const onSave = async () => {
   appStore.syncProfileInDB = syncProfileInDB.value
   appStore.daysBetweenFullSync = daysBetweenFullSync.value
 
-  profileStore.budgetsEnabled = budgetsEnabled.value
-  profileStore.categoriesEnabled = categoriesEnabled.value
-  profileStore.tagsEnabled = tagsEnabled.value
-  profileStore.piggyBanksEnabled = piggyBanksEnabled.value
-  profileStore.recurringTransactionsEnabled = recurringTransactionsEnabled.value
-  await profileStore.writeProfile()
+
 
   const userResponse = await new UserRepository().getUser()
   if (!ResponseUtils.isSuccess(userResponse)) {
