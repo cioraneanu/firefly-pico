@@ -139,6 +139,7 @@
       "right_side_card": "(Right side card in the list)",
       "dark": "Dark",
       "light": "Light",
+      "system_preferred": "System preferred",
       "pages": {
         "new_transacation": "New transaction",
         "transacation_list": "Transactions list",

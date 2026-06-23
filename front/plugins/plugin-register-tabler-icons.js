@@ -11,6 +11,7 @@ import {
   IconCreditCard,
   IconDelta,
   IconDeviceDesktopAnalytics,
+  IconDeviceDesktop,
   IconEye,
   IconEyeX,
   IconGridDots,
@@ -47,10 +48,8 @@ import {
   IconKey,
   IconToggleLeftFilled,
   IconListTree,
-  IconSquareRoundedArrowDown,
   IconGridPattern,
   IconPercentage30,
-  IconMoneybag,
   IconBasket,
   IconCopy,
   IconLock,
@@ -90,6 +89,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconLetterCase', IconLetterCase)
   nuxtApp.vueApp.component('IconCreditCard', IconCreditCard)
   nuxtApp.vueApp.component('IconDeviceDesktopAnalytics', IconDeviceDesktopAnalytics)
+  nuxtApp.vueApp.component('IconDeviceDesktop', IconDeviceDesktop)
   nuxtApp.vueApp.component('IconCoins', IconCoins)
   nuxtApp.vueApp.component('IconRefresh', IconRefresh)
   nuxtApp.vueApp.component('IconCategory', IconCategory)

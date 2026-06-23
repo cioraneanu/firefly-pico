@@ -30,7 +30,12 @@
         <app-left-sidebar-page :label="$t('templates')" :icon="TablerIconConstants.transactionTemplate" :route="RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST" />
         <app-left-sidebar-page v-if="profileStore.budgetsEnabled" :label="$t('budgets')" :icon="TablerIconConstants.budget" :route="RouteConstants.ROUTE_BUDGET_LIST" />
         <app-left-sidebar-page v-if="profileStore.piggyBanksEnabled" :label="$t('piggy_banks')" :icon="TablerIconConstants.piggyBank" :route="RouteConstants.ROUTE_PIGGY_BANK_LIST" />
-        <app-left-sidebar-page v-if="profileStore.recurringTransactionsEnabled" :label="$t('recurring_transactions')" :icon="TablerIconConstants.recurringTransaction" :route="RouteConstants.ROUTE_RECURRING_TRANSACTION_LIST" />
+        <app-left-sidebar-page
+          v-if="profileStore.recurringTransactionsEnabled"
+          :label="$t('recurring_transactions')"
+          :icon="TablerIconConstants.recurringTransaction"
+          :route="RouteConstants.ROUTE_RECURRING_TRANSACTION_LIST"
+        />
       </div>
 
       <div class="nav-section">
@@ -63,7 +68,7 @@ const profileStore = useProfileStore()
 const appStore = useAppStore()
 
 const onChangeTheme = () => {
-  profileStore.darkTheme = !profileStore.darkTheme
+  profileStore.toggleTheme()
   profileStore.writeProfile()
 }
 </script>

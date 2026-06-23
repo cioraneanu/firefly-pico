@@ -139,6 +139,7 @@
       "right_side_card": "(Card în partea dreaptă a listei)",
       "dark": "Întunecat",
       "light": "Luminos",
+      "system_preferred": "Preferința sistemului",
       "pages": {
         "new_transacation": "Tranzacție nouă",
         "transacation_list": "Lista tranzacțiilor",

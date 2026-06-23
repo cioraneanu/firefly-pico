@@ -139,6 +139,7 @@
       "right_side_card": "(Karte auf der rechten Seite in der Liste)",
       "dark": "Dunkel",
       "light": "Hell",
+      "system_preferred": "System bevorzugt",
       "pages": {
         "new_transacation": "Neue Transaktion",
         "transacation_list": "Transaktions-Liste",

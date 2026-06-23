@@ -1,10 +1,9 @@
 import { defineStore } from 'pinia'
-import { ref, computed, reactive } from 'vue'
-import { StorageSerializers, useLocalStorage } from '@vueuse/core'
-import * as LanguageConstants from '~/constants/LanguageConstants'
+import { computed, reactive, watch } from 'vue'
+import { StorageSerializers, useLocalStorage, usePreferredDark } from '@vueuse/core'
 import DateUtils from '~/utils/DateUtils'
 import { cloneDeep, get, head, keyBy, omit } from 'lodash-es'
-import { transactionFormFieldList, transactionListFieldList, transactionListHeroIcon, transactionListHeroIconList } from '~/constants/TransactionConstants.js'
+import { transactionFormFieldList, transactionListFieldList, transactionListHeroIcon } from '~/constants/TransactionConstants.js'
 import { NUMBER_FORMAT } from '~/utils/NumberUtils.js'
 import ProfileRepository from '~/repository/ProfileRepository'
 import ProfileTransformer from '~/transformers/ProfileTransformer'
@@ -12,6 +11,7 @@ import { useAppStore } from '~/stores/appStore.js'
 import { dashboardCardList } from '~/constants/DashboardConstants.js'
 import Page from '~/models/Page.js'
 import { migrateType, migrateTypeList } from '~/utils/MigrateUtils.js'
+import ThemeMode, { isThemeMode } from '~/constants/ThemeConstants.js'
 
 export const useProfileStore = defineStore('profile', () => {
   const profileActiveId = useLocalStorage('profileActiveId', null, { serializer: StorageSerializers.number })
@@ -19,6 +19,7 @@ export const useProfileStore = defineStore('profile', () => {
 
   // Actual fields which update when you change profiles
   const darkTheme = useLocalStorage('darkTheme', false)
+  const themeMode = useLocalStorage('themeMode', darkTheme.value ? ThemeMode.dark : ThemeMode.light)
   const language = useLocalStorage('language', 'en')
   const startingPage = useLocalStorage('startingPage', Page.types.transactionNew)
   const showAnimations = useLocalStorage('showAnimations', true)
@@ -100,10 +101,41 @@ export const useProfileStore = defineStore('profile', () => {
     return profileName.substring(0, 3)
   })
 
+  const preferredDarkTheme = usePreferredDark()
+
   // Actions
+  function normalizeProfileSettings(settings = {}) {
+    if (isThemeMode(settings.themeMode)) {
+      return settings
+    }
+
+    return {
+      ...settings,
+      themeMode: settings.darkTheme ? ThemeMode.dark : ThemeMode.light,
+    }
+  }
+
+  function applyThemeMode() {
+    if (!isThemeMode(themeMode.value)) {
+      themeMode.value = darkTheme.value ? ThemeMode.dark : ThemeMode.light
+    }
+
+    darkTheme.value = themeMode.value === ThemeMode.system ? preferredDarkTheme.value : themeMode.value === ThemeMode.dark
+  }
+
+  function setThemeMode(value) {
+    themeMode.value = isThemeMode(value) ? value : ThemeMode.light
+    applyThemeMode()
+  }
+
+  function toggleTheme() {
+    setThemeMode(darkTheme.value ? ThemeMode.light : ThemeMode.dark)
+  }
+
   function setProfile(profile) {
     profileActiveId.value = profile ? parseInt(profile?.id) : null
-    useProfileStore().$patch(profile?.settings ?? {})
+    useProfileStore().$patch(normalizeProfileSettings(profile?.settings ?? {}))
+    applyThemeMode()
   }
 
   function getProfileSettings() {
@@ -166,12 +198,16 @@ export const useProfileStore = defineStore('profile', () => {
 
     // If we changed the content of fixed lists update user settings
     startingPage.value = migrateType(startingPage.value, Page.typesList())
+    applyThemeMode()
   }
+
+  watch([themeMode, preferredDarkTheme], applyThemeMode, { immediate: true, flush: 'sync' })
 
   return {
     profileActiveId,
     profileList,
     darkTheme,
+    themeMode,
     language,
     startingPage,
     showAnimations,
@@ -216,6 +252,8 @@ export const useProfileStore = defineStore('profile', () => {
     activeProfile,
     shortProfileName,
     setProfile,
+    setThemeMode,
+    toggleTheme,
     getProfileSettings,
     getProfiles,
     writeProfile,

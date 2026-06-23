@@ -124,6 +124,7 @@
       "right_side_card": "（列表右侧卡片）",
       "dark": "暗色",
       "light": "亮色",
+      "system_preferred": "跟随系统",
       "pages": {
         "new_transacation": "新交易",
         "transacation_list": "交易列表",

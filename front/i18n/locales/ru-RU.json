@@ -139,6 +139,7 @@
       "right_side_card": "(Карточка справа в списке)",
       "dark": "Темная",
       "light": "Светлая",
+      "system_preferred": "Системная",
       "pages": {
         "new_transacation": "Новая транзакция",
         "transacation_list": "Список транзакций",

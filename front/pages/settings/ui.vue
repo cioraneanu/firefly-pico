@@ -6,15 +6,13 @@
       <van-cell-group inset>
         <div class="van-cell-group-title mb-0">{{ $t('settings.ui.theme') }}:</div>
 
-        <app-boolean v-model="darkTheme" :label="themeText">
-          <template #icon="{ value }">
-            <app-icon :size="23" :stroke-width="2.0" :icon="value ? TablerIconConstants.darkTheme : TablerIconConstants.whiteTheme" />
-          </template>
-        </app-boolean>
+        <div class="theme-mode-selector van-cell-fake">
+          <app-tabs v-model="themeMode" :options="themeOptions" :aria-label="$t('settings.ui.theme')" />
+        </div>
 
-        <language-select v-model="language"/>
+        <language-select v-model="language" />
 
-        <page-select v-model="startingPage"/>
+        <page-select v-model="startingPage" />
 
         <app-boolean v-model="showAnimations" :label="$t('settings.ui.show_animations')" />
 
@@ -33,20 +31,37 @@ import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
 import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import ThemeMode from '~/constants/ThemeConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 import LanguageSelect from '~/components/select/general/language-select.vue'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
-const themeText = computed(() => (darkTheme.value ? t('settings.ui.dark') : t('settings.ui.light')))
-const darkTheme = ref(false)
+const themeMode = ref(ThemeMode.light)
 const startingPage = ref(null)
 const language = ref(null)
 const showAnimations = ref(true)
 const resetFormOnCreate = ref(false)
+const themeOptions = computed(() => [
+  {
+    label: t('settings.ui.light'),
+    value: ThemeMode.light,
+    icon: TablerIconConstants.whiteTheme,
+  },
+  {
+    label: t('settings.ui.dark'),
+    value: ThemeMode.dark,
+    icon: TablerIconConstants.darkTheme,
+  },
+  {
+    label: t('settings.ui.system_preferred'),
+    value: ThemeMode.system,
+    icon: TablerIconConstants.systemTheme,
+  },
+])
 
 const syncedSettings = [
-  { store: profileStore, path: 'darkTheme', ref: darkTheme },
+  { store: profileStore, path: 'themeMode', ref: themeMode },
   { store: profileStore, path: 'language', ref: language },
   { store: profileStore, path: 'startingPage', ref: startingPage },
   { store: profileStore, path: 'showAnimations', ref: showAnimations },
@@ -57,8 +72,11 @@ watchSettingsStore(syncedSettings)
 
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
+  profileStore.setThemeMode(themeMode.value)
   const response = await profileStore.writeProfile()
-  ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
+  if (ResponseUtils.isSuccess(response)) {
+    UIUtils.showToastSuccess(t('settings.settings_saved'))
+  }
 }
 
 const toolbar = useToolbar()
@@ -72,3 +90,9 @@ onMounted(() => {
   animateSettings()
 })
 </script>
+
+<style scoped>
+.theme-mode-selector {
+  padding: 0 16px 12px;
+}
+</style>

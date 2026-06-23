@@ -139,6 +139,7 @@
       "right_side_card": "(Scheda a destra nell'elenco)",
       "dark": "Scuro",
       "light": "Chiaro",
+      "system_preferred": "Preferenza di sistema",
       "pages": {
         "new_transacation": "Nuova transazione",
         "transacation_list": "Elenco transazioni",

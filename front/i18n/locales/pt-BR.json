@@ -139,6 +139,7 @@
       "right_side_card": "(Cartão do lado direito na lista)",
       "dark": "Escuro",
       "light": "Claro",
+      "system_preferred": "Preferido do sistema",
       "pages": {
         "new_transacation": "Nova transação",
         "transacation_list": "Lista de transações",
