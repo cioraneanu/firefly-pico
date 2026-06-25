@@ -1372,6 +1372,26 @@ img, svg {
     cursor: pointer;
 }
 
+.app-toast {
+    cursor: pointer;
+}
+
+@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
+    .van-popup.van-notify.app-toast {
+        top: auto;
+        bottom: 28px;
+        left: 28px;
+        right: auto;
+        justify-content: flex-start;
+        width: min(360px, calc(100vw - 56px));
+        min-height: 44px;
+        padding: 12px 14px;
+        border-radius: 8px;
+        box-shadow: rgba(15, 23, 42, 0.18) 0 10px 30px;
+        text-align: left;
+    }
+}
+
 
 /*--------------------------------*/
 
@@ -1481,5 +1501,4 @@ body {
 .app-field-dropdown .van-popover__wrapper {
     width: 100%;
 }
-
 
