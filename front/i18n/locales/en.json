@@ -148,6 +148,7 @@
     "assistant_entry": "Assistant",
     "assistant": {
       "title": "Assistant settings",
+      "auto_focus": "Auto focus assistant",
       "substring_todo_tag": "Substring which adds the todo tag",
       "currency": "The amount part in the assistant text will be interpreted as a foreign currency of this kind"
     },

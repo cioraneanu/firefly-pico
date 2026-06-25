@@ -148,6 +148,7 @@
     "assistant_entry": "Assistente",
     "assistant": {
       "title": "Configurações do assistente",
+      "auto_focus": "Auto focus assistant",
       "substring_todo_tag": "Substring que adiciona a tag 'a fazer' na transação",
       "currency": "A parte do valor no texto do assistente será interpretada como uma moeda estrangeira deste tipo"
     },

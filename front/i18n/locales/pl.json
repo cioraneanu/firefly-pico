@@ -148,6 +148,7 @@
     "assistant_entry": "Asystent",
     "assistant": {
       "title": "Ustawienia Asystenta",
+      "auto_focus": "Auto focus assistant",
       "substring_todo_tag": "Tekst, który dodaje tag todo",
       "currency": "Wartość podana w tekście asystenta zostanie zinterpretowana jako waluta obca tego rodzaju"
     },

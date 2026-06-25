@@ -148,6 +148,7 @@
     "assistant_entry": "Asistent",
     "assistant": {
       "title": "Setări asistent",
+      "auto_focus": "Auto focus assistant",
       "substring_todo_tag": "Subșir care adaugă eticheta de făcut",
       "currency": "Partea de sumă din textul asistentului va fi interpretată ca o valută străină de acest tip"
     },

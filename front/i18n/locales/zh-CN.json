@@ -133,6 +133,7 @@
     "assistant_entry": "助手",
     "assistant": {
       "title": "助手设置",
+      "auto_focus": "Auto focus assistant",
       "substring_todo_tag": "添加待办标签的子字符串",
       "currency": "助手文本中的金额部分将被解释为此类型的外币"
     },

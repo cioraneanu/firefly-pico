@@ -148,6 +148,7 @@
     "assistant_entry": "Assistant",
     "assistant": {
       "title": "Paramètres de l'assistant",
+      "auto_focus": "Auto focus assistant",
       "substring_todo_tag": "Sous-chaîne qui ajoute l'étiquette à faire",
       "currency": "La partie montant dans le texte de l'assistant sera interprétée comme une devise étrangère de ce type"
     },

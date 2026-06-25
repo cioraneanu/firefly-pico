@@ -148,6 +148,7 @@
     "assistant_entry": "Asistente",
     "assistant": {
       "title": "Ajustes del asistente",
+      "auto_focus": "Auto focus assistant",
       "substring_todo_tag": "Subcadena que agrega la etiqueta pendiente",
       "currency": "La parte del monto en el texto del asistente se interpretará como moneda extranjera de este tipo"
     },

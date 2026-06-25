@@ -12,6 +12,7 @@
     <div class="display-flex flex-column">
       <div class="flex-center-vertical gap-2">
         <app-field
+          ref="assistantFieldRef"
           v-model="assistantText"
           class="van-cell-no-padding compact flex-1"
           label=""
@@ -43,7 +44,7 @@
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { debounce } from 'lodash-es/function'
 import { isEqual } from 'lodash-es'
 import { addDays, format } from 'date-fns'
@@ -61,6 +62,7 @@ const emit = defineEmits(['change'])
 const assistantText = defineModel({ type: String })
 
 const fuzzySearch = useFuzzySearch()
+const assistantFieldRef = ref(null)
 
 const emptyParseResult = () => ({
   template: null,
@@ -118,6 +120,13 @@ const parseAssistantText = () => {
 }
 
 watch(assistantText, debounce(parseAssistantText, 200))
+
+onMounted(async () => {
+  if (profileStore.autoFocusAssistant) {
+    await nextTick()
+    assistantFieldRef.value?.focus()
+  }
+})
 
 const previewTags = computed(() => {
   const result = parsed.value
