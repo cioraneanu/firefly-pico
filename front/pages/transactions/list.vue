@@ -27,19 +27,24 @@
       </div>
     </div>
 
-    <empty-list v-if="isEmpty && !isLoading" />
+    <div class="main-content">
+      <empty-list v-if="isEmpty && !isLoading" />
 
-    <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
-      <van-list :class="listClass" :finished="isFinished" @load="onLoadMore">
-        <transaction-list-item v-for="item in list" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
-      </van-list>
-    </van-pull-refresh>
+      <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
+        <van-list :class="listClass" :finished="isFinished" @load="onLoadMore">
+          <template v-if="appStore.isDesktopLayout">
+            <transaction-table :list="list" @onEdit="onEdit" @onDelete="onDelete" />
+          </template>
+          <template v-else>
+            <transaction-list-item v-for="item in list" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
+          </template>
+        </van-list>
+      </van-pull-refresh>
+    </div>
 
     <transaction-filters ref="transactionFiltersRef" v-model="filters" />
   </div>
 </template>
-
-import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
@@ -47,27 +52,20 @@ import { useList } from '~/composables/useList'
 import Transaction from '~/models/Transaction'
 import { useToolbar } from '~/composables/useToolbar'
 import EmptyList from '~/components/general/empty-list.vue'
-import { ref } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import TransactionRepository from '~/repository/TransactionRepository'
-import Tag from '~/models/Tag.js'
-import Account from '~/models/Account.js'
-import Category from '~/models/Category.js'
-import { cloneDeep, get, isEqual } from 'lodash-es'
+import { cloneDeep, isEqual } from 'lodash-es'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
-import Budget from '~/models/Budget.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
 import { IconSearch, IconSquareRoundedX } from '@tabler/icons-vue'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
-import { filterBagHasValues, getActiveFilters, getFiltersFromURL, saveToUrl } from '~/utils/FilterUtils.js'
+import { filterBagHasValues, getFiltersFromURL, saveToUrl } from '~/utils/FilterUtils.js'
 import { useListFilters } from '~/composables/useListFilters.js'
 
 const appStore = useAppStore()
-const route = useRoute()
-
 
 const listClass = computed(() => ({
   'p-1': true,
-  'grid-columns-2': appStore.isDesktopLayout,
 }))
 const transactionFiltersRef = ref(null)
 
@@ -121,7 +119,6 @@ watch(filters, (newValue, oldValue) => {
 const onClearFilters = () => {
   filters.value = {}
 }
-// let filtersList = computed()
 
 const { t } = useI18n()
 const toolbar = useToolbar()
@@ -141,3 +138,9 @@ onMounted(() => {
 
 animateSwipeList(list)
 </script>
+
+<style scoped>
+.main-content {
+  min-width: 0;
+}
+</style>

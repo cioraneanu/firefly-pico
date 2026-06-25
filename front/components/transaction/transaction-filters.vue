@@ -1,63 +1,12 @@
 <template>
   <app-popup v-model:show="showDropdown" :style="style">
-      <van-form class="flex-1 display-flex flex-column qqq" style="overflow: hidden" @submit="onApplyFilters">
+      <van-form class="flex-1 display-flex flex-column" style="overflow: hidden" @submit="onApplyFilters">
         <div class="flex-center-vertical m-10 mb-0">
           <div class="flex-1 text-center font-weight-600 text-size-18">{{ $t('filters.transaction_filters') }}</div>
         </div>
 
-        <div ref="popupContentRef" class="flex-1 flex-column overflow-auto color" style="padding-bottom: 100px">
-          <app-field v-model="description" class="flex-1" :label="$t('description')" :placeholder="$t('description')" />
-
-          <template v-if="showType">
-            <transaction-type-select v-model="transactionType" />
-          </template>
-
-          <div class="display-flex van-cell-fake pl-3 align-items-baseline">
-            <div class="display-flex flex-column gap-3 align-items-center">
-              <div class="text-size-14">{{ $t('without') }}</div>
-              <app-checkbox v-model="withoutCategory" shape="square" />
-            </div>
-
-            <category-select v-model="category" :disabled="!!withoutCategory" class="flex-1" />
-          </div>
-
-          <div class="display-flex van-cell-fake pl-3 align-items-baseline">
-            <div class="display-flex flex-column gap-3 align-items-center">
-              <div class="text-size-14">{{ $t('without') }}</div>
-              <app-checkbox v-model="withoutTag" shape="square" />
-            </div>
-
-            <tag-select v-model="tag" :disabled="!!withoutTag" class="flex-1" :is-multi-select="false" :auto-select-parents="false" />
-          </div>
-
-          <div class="display-flex van-cell-fake pl-3 align-items-baseline">
-            <div class="display-flex flex-column gap-3 align-items-center">
-              <div class="text-size-14">{{ $t('without') }}</div>
-              <app-checkbox v-model="withoutBudget" shape="square" />
-            </div>
-
-            <budget-select v-model="budget" :disabled="!!withoutBudget" class="flex-1" :is-multi-select="false" :auto-select-parents="false" />
-          </div>
-
-          <account-select v-model="account" :is-multi-select="true" />
-
-          <template v-if="showDate">
-            <div class="flex-center-vertical">
-              <app-date v-model="dateStart" class="flex-1" :label="$t('date_after')" />
-              <app-date v-model="dateEnd" class="flex-1" :label="$t('date_before')" />
-            </div>
-
-            <div class="px-3 flex-center-vertical gap-1">
-              <van-button size="small" @click="onSubMonth">{{ $t('sub_month') }}</van-button>
-              <van-button size="small" @click="onCurrentMonth">{{ $t('this_month') }}</van-button>
-              <van-button size="small" @click="onAddMonth">{{ $t('add_month') }}</van-button>
-            </div>
-          </template>
-
-          <div class="display-flex">
-            <app-field v-model="amountStart" class="flex-1" :label="$t('amount_min')" :placeholder="$t('amount_min')" />
-            <app-field v-model="amountEnd" class="flex-1" :label="$t('amount_max')" :placeholder="$t('amount_max')" />
-          </div>
+        <div ref="popupContentRef" class="flex-1 overflow-hidden" style="padding-bottom: 70px">
+          <transaction-filters-content v-model="localModelValue" :show-date="showDate" :show-type="showType" />
         </div>
 
         <app-button-form-save :label="$t('filters.apply_filters')" bottom=" - var(--van-tabbar-height) + 20px">
@@ -66,60 +15,29 @@
           </template>
         </app-button-form-save>
       </van-form>
-
   </app-popup>
 </template>
 
 <script setup>
 import { useSwipeToDismiss } from '~/composables/useSwipeToDismiss'
-import { generateChildren } from '~/utils/VueUtils'
-import TagSelect from '~/components/select/tag-select.vue'
 import { cloneDeep } from 'lodash-es'
-import { addMonths, endOfMonth, startOfMonth } from 'date-fns'
 
 const modelValue = defineModel({})
 const props = defineProps({
-  showDate: {
-    default: true,
-  },
-  showType: {
-    default: true,
-  },
+  showDate: { default: true },
+  showType: { default: true },
 })
 
 const localModelValue = ref({})
-const { description, dateStart, dateEnd, amountStart, amountEnd, category, withoutCategory, tag, withoutTag, account, transactionType, withoutBudget, budget } = generateChildren(localModelValue, [
-  'description',
-  'dateStart',
-  'dateEnd',
-  'amountStart',
-  'amountEnd',
-  'category',
-  'withoutCategory',
-  'withoutTag',
-  'tag',
-  'withoutBudget',
-  'budget',
-  'account',
-  'transactionType',
-])
 const showDropdown = ref(false)
-
 const appStore = useAppStore()
 
 const style = computed(() => {
   if (appStore.isDesktopLayout) {
-    return {
-      overflow: 'hidden',
-      display: 'flex',
-      flexDirection: 'column',
-    }
+    return { overflow: 'hidden', display: 'flex', flexDirection: 'column' }
   }
-
   return {
     height: '90%',
-    // 'height': 'calc(100vh - 3rem)',
-    // 'height': '100%',
     'padding-top': '4px',
     'border-radius': '0px',
     display: 'flex',
@@ -129,7 +47,7 @@ const style = computed(() => {
 
 watch(modelValue, (newValue) => {
   localModelValue.value = cloneDeep(newValue)
-})
+}, { immediate: true })
 
 const show = () => {
   showDropdown.value = true
@@ -150,21 +68,6 @@ const isFiltered = computed(() => {
 
 const onClearFilters = () => {
   localModelValue.value = {}
-}
-
-const onSubMonth = () => {
-  dateStart.value = addMonths(dateStart.value ?? startOfMonth(new Date()), -1)
-  dateEnd.value = endOfMonth(addMonths(dateEnd.value ?? endOfMonth(new Date()), -1))
-}
-
-const onCurrentMonth = () => {
-  dateStart.value = startOfMonth(new Date())
-  dateEnd.value = endOfMonth(new Date())
-}
-
-const onAddMonth = () => {
-  dateStart.value = addMonths(dateStart.value ?? startOfMonth(new Date()), 1)
-  dateEnd.value = endOfMonth(addMonths(dateEnd.value ?? endOfMonth(new Date()), 1))
 }
 
 const popupContentRef = ref(null)
