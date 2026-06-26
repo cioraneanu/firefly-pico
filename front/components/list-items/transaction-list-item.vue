@@ -14,14 +14,14 @@
             </div>
 
             <div class="flex-column" :style="getStyleForField(transactionListField.accounts)">
-              <div v-for="displayedAccount in displayedAccounts" class="list-item-subtitle">
+              <div v-for="displayedAccount in displayedAccounts" :key="displayedAccount.id" class="list-item-subtitle">
                 <app-icon :icon="Account.getIcon(displayedAccount) ?? TablerIconConstants.account" :size="20" />
                 <span>{{ Account.getDisplayName(displayedAccount) }}</span>
               </div>
             </div>
 
             <div v-if="profileStore.categoriesEnabled && categories && props.isDetailedMode" class="list-item-subtitle gap-2" :style="getStyleForField(transactionListField.category)">
-              <div v-for="category in categories">
+              <div v-for="category in categories" :key="category.id">
                 <app-icon :icon="Category.getIcon(category) ?? TablerIconConstants.category" :size="20" />
                 {{ Category.getDisplayName(category) }}
               </div>
@@ -33,7 +33,7 @@
             </div>
 
             <div v-if="profileStore.tagsEnabled && tags && props.isDetailedMode" class="tags-container" :style="getStyleForField(transactionListField.tags)">
-              <div v-for="tag in visibleTags" class="tag">
+              <div v-for="tag in visibleTags" :key="tag.id" class="tag">
                 <app-icon :icon="Tag.getIcon(tag) ?? TablerIconConstants.tag" :size="14" />
                 <div class="list-item-subtitle ml-5">{{ Tag.getDisplayNameEllipsized(tag, 10) }}</div>
               </div>
@@ -68,10 +68,7 @@
 </template>
 
 <script setup>
-import { capitalize, get, isEqual } from 'lodash-es'
 import Category from '@/models/Category.js'
-import DateUtils from '~/utils/DateUtils'
-import Transaction from '~/models/Transaction'
 import Budget from '~/models/Budget.js'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe'
 import TablerIconConstants from '~/constants/TablerIconConstants'
@@ -80,9 +77,7 @@ import Account from '~/models/Account.js'
 import TransactionListItemHeroIcon from '~/components/list-items/transaction-list-item-hero-icon.vue'
 import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
 import { transactionListField } from '~/constants/TransactionConstants.js'
-import { marked } from 'marked'
-import { formatTimeAgo } from '@vueuse/core'
-import { useAccountStore } from '~/stores/accountStore'
+import { useTransactionListItem } from '~/composables/useTransactionListItem.js'
 
 const props = defineProps({
   value: Object,
@@ -91,72 +86,27 @@ const props = defineProps({
   },
 })
 
-const accountStore = useAccountStore()
-
 const emit = defineEmits(['onEdit', 'onDelete'])
 
-const firstTransaction = computed(() => Transaction.getFirstSplit(props.value))
-const transactionType = computed(() => get(firstTransaction.value, 'type', ' - '))
-
-const isSplitPayment = computed(() => Transaction.isSplitPayment(props.value))
-
-const displayedAccounts = computed(() => {
-  return [sourceAccount.value, destinationAccount.value].filter((item) => !!item)
-})
-
-const description = computed(() => Transaction.getDescription(props.value))
-const hasAttachments = computed(() => Transaction.hasAttachments(props.value))
-
-const categories = computed(() => Transaction.getCategories(props.value))
-const notes = computed(() => {
-  const result = Transaction.getNotes(props.value)
-  return result ? marked(result) : null
-})
-
-const tags = computed(() => Transaction.getTags(props.value))
-
-const budget = computed(() => get(firstTransaction.value, 'budget'))
-
-const isTodo = computed(() => tags.value.some((tag) => get(tag, 'attributes.is_todo')))
-const cellClass = computed(() => ({
-  'transaction-list-item-todo': isTodo.value,
-}))
-
-const visibleTags = computed(() => {
-  return tags.value.slice(0, 4)
-})
-
-const amountSign = computed(() => (isTypeExpense.value ? '-' : isTypeIncome.value ? '+' : ''))
-const transactionAmount = computed(() => `${amountSign.value}${Transaction.getAmountFormatted(props.value)}`)
-const transactionCurrency = computed(() => get(firstTransaction.value, 'currency_symbol', ' - '))
-
-const isTypeExpense = computed(() => isEqual(transactionType.value, Transaction.types.expense))
-const isTypeIncome = computed(() => isEqual(transactionType.value, Transaction.types.income))
-const isTypeTransfer = computed(() => isEqual(transactionType.value, Transaction.types.transfer))
-
-const date = computed(() => DateUtils.autoToDate(get(firstTransaction.value, 'date')))
-const dateFormatted = computed(() => DateUtils.dateToUI(date.value))
-const timeAgo = computed(() => capitalize(formatTimeAgo(date.value)))
-
-const destinationAccount = computed(() => {
-  const destinationId = get(firstTransaction.value, 'destination_id')
-  return get(accountStore.accountDictionary, destinationId)
-})
-
-const sourceAccount = computed(() => {
-  const sourceId = get(firstTransaction.value, 'source_id')
-  return get(accountStore.accountDictionary, sourceId)
-})
-
-const profileStore = useProfileStore()
-const getStyleForField = ({ code }) => {
-  const position = profileStore.transactionListFieldsConfig.findIndex((item) => item.code === code)
-  const field = profileStore.transactionListFieldsConfig.find((item) => item.code === code)
-  const isVisible = field ? field.isVisible : true
-  const displayStyle = isVisible ? '' : 'display: none'
-
-  return `order: ${position}; ${displayStyle}`
-}
+const {
+  profileStore,
+  isSplitPayment,
+  displayedAccounts,
+  description,
+  hasAttachments,
+  categories,
+  notes,
+  tags,
+  budget,
+  cellClass,
+  visibleTags,
+  transactionAmount,
+  transactionCurrency,
+  dateFormatted,
+  timeAgo,
+  getStyleForField,
+  amountStyle,
+} = useTransactionListItem(props)
 
 const onEdit = async () => {
   emit('onEdit', props.value)
@@ -165,19 +115,6 @@ const onEdit = async () => {
 const onDelete = async () => {
   emit('onDelete', props.value)
 }
-
-const amountStyle = computed(() => {
-  if (isTypeExpense.value) {
-    return `color: var(--expense2)`
-  }
-  if (isTypeIncome.value) {
-    return `color: var(--income1)`
-  }
-  if (isTypeTransfer.value) {
-    return `color: var(--transfer1)`
-  }
-  return ''
-})
 
 const swipeCell = ref(null)
 const clickWithoutSwipe = useClickWithoutSwipe({ swipeCell: swipeCell, onClick: onEdit })

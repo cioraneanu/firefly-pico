@@ -18,7 +18,7 @@
       </div>
 
       <div class="display-flex flex-wrap gap-1">
-        <div v-for="appliedFilter in filtersDisplayList" class="tag-filter">
+        <div v-for="appliedFilter in filtersDisplayList" :key="appliedFilter" class="tag-filter">
           <span class="ml-5">{{ appliedFilter }}</span>
         </div>
         <div class="cursor-pointer" style="z-index: 2" @click="onClearFilters">
@@ -33,7 +33,9 @@
       <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
         <van-list :class="listClass" :finished="isFinished" @load="onLoadMore">
           <template v-if="appStore.isDesktopLayout">
-            <transaction-table :list="list" @onEdit="onEdit" @onDelete="onDelete" />
+            <div class="transaction-desktop-list">
+              <transaction-list-item-desktop v-for="item in list" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
+            </div>
           </template>
           <template v-else>
             <transaction-list-item v-for="item in list" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
@@ -54,10 +56,10 @@ import { useToolbar } from '~/composables/useToolbar'
 import EmptyList from '~/components/general/empty-list.vue'
 import { ref, computed, watch, onMounted } from 'vue'
 import TransactionRepository from '~/repository/TransactionRepository'
-import { cloneDeep, isEqual } from 'lodash-es'
+import { isEqual } from 'lodash-es'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
-import { IconSearch, IconSquareRoundedX } from '@tabler/icons-vue'
+import { IconSquareRoundedX } from '@tabler/icons-vue'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { filterBagHasValues, getFiltersFromURL, saveToUrl } from '~/utils/FilterUtils.js'
 import { useListFilters } from '~/composables/useListFilters.js'
@@ -82,7 +84,7 @@ const onCustomGetAll = async ({ page, pageSize }) => {
   })
 }
 
-const { isLoading, isFinished, isRefreshing, page, pageSize, totalPages, listTotalCount, list, isEmpty, listPagination, onAdd, onEdit, onDelete, onLoadMore, onRefresh } = useList({
+const { isLoading, isFinished, isRefreshing, listTotalCount, list, isEmpty, onAdd, onEdit, onDelete, onLoadMore, onRefresh } = useList({
   routeList: RouteConstants.ROUTE_TRANSACTION_LIST,
   routeForm: RouteConstants.ROUTE_TRANSACTION_ID,
   model: new Transaction(),
@@ -142,5 +144,34 @@ animateSwipeList(list)
 <style scoped>
 .main-content {
   min-width: 0;
+  overflow-x: auto;
+}
+
+.transaction-desktop-list {
+  min-width: 1100px;
+  margin: 1.5rem;
+  overflow: hidden;
+  background: var(--van-background-2);
+  border-radius: 8px;
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.05),
+    0 2px 4px -1px rgba(0, 0, 0, 0.03);
+}
+
+.transaction-desktop-header {
+  display: grid;
+  grid-template-columns: 40px 110px minmax(180px, 1.8fr) minmax(140px, 1fr) minmax(140px, 1fr) minmax(120px, 0.8fr) minmax(120px, 1fr) 120px 80px;
+  padding: 1rem 1.25rem;
+  color: var(--van-text-color-2);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  background: var(--van-background-3);
+  border-bottom: 1px solid var(--van-border-color);
+}
+
+.text-right {
+  text-align: right;
 }
 </style>
