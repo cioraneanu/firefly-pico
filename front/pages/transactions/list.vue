@@ -33,8 +33,10 @@
       <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
         <van-list :class="listClass" :finished="isFinished" @load="onLoadMore">
           <template v-if="appStore.isDesktopLayout">
-            <div class="transaction-desktop-list">
-              <transaction-list-item-desktop v-for="item in list" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
+            <div class="transaction-desktop-list-wrapper">
+              <div class="transaction-desktop-list">
+                <transaction-list-item-desktop v-for="item in list" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
+              </div>
             </div>
           </template>
           <template v-else>
@@ -144,6 +146,10 @@ animateSwipeList(list)
 <style scoped>
 .main-content {
   min-width: 0;
+}
+
+.transaction-desktop-list-wrapper {
+  width: 100%;
   overflow-x: auto;
 }
 
