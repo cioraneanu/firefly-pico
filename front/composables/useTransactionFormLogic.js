@@ -1,5 +1,5 @@
 import { watch } from 'vue'
-import { head } from 'lodash-es'
+import { head, uniqBy } from 'lodash-es'
 import { addDays } from 'date-fns'
 import Category from '~/models/Category'
 import Tag from '~/models/Tag'
@@ -116,13 +116,50 @@ export const useTransactionFormLogic = ({
     item.value = new Transaction().getEmpty()
   }
 
-  const onAssistant = async ({ tag: newTag, category: newCategory, transactionTemplate: transactionTemplate, amount: newAmount, description: newDescription, isTodo: newIsTodo, dateOffset: newDateOffset, assistantCurrency }) => {
+  const appendTags = (newTags = []) => {
+    const tagsWithParents = newTags
+      .filter(Boolean)
+      .map((tag) => Tag.getTagWithParents(tag))
+      .flat()
+    tags.value = uniqBy([...(tags.value ?? []), ...tagsWithParents], 'id')
+  }
+
+  const onAssistant = async ({
+    tag: newTag,
+    tags: newTags,
+    category: newCategory,
+    transactionTemplate: transactionTemplate,
+    amount: newAmount,
+    description: newDescription,
+    notes: newNotes,
+    budget: newBudget,
+    isTodo: newIsTodo,
+    dateOffset: newDateOffset,
+    date: newDate,
+    assistantCurrency,
+    accountSource: newAccountSource,
+    accountDestination: newAccountDestination,
+    type: newType,
+  }) => {
     resetFormFields()
 
-    newTag && (tags.value = Tag.getTagWithParents(newTag))
-    newIsTodo && tagStore.tagTodo && (tags.value = [...tags.value, tagStore.tagTodo])
+    transactionTemplate ? await onTransactionTemplateSelected(transactionTemplate) : (type.value = newType ?? Transaction.types.expense)
+
+    if (newAccountSource !== undefined) {
+      accountSource.value = newAccountSource
+    }
+    if (newAccountDestination !== undefined) {
+      accountDestination.value = newAccountDestination
+    }
+    if (!newType && (newAccountSource || newAccountDestination)) {
+      type.value = Transaction.getTransactionTypeForAccounts({ source: accountSource.value, destination: accountDestination.value })
+    }
+
+    appendTags([newTag, ...(newTags ?? [])])
+    newIsTodo && tagStore.tagTodo && appendTags([tagStore.tagTodo])
     newCategory && (category.value = newCategory)
-    transactionTemplate ? await onTransactionTemplateSelected(transactionTemplate) : (type.value = Transaction.types.expense)
+    newNotes && (notes.value = newNotes)
+    newBudget && (budget.value = newBudget)
 
     if (newAmount && newAmount > 0) {
       if (!assistantCurrency || !accountSource.value || Account.getCurrencyCode(accountSource.value) === Currency.getCode(assistantCurrency)) {
@@ -139,7 +176,9 @@ export const useTransactionFormLogic = ({
     }
 
     newDescription && (description.value = newDescription)
-    if (date && (newDateOffset || newDateOffset === 0)) {
+    if (date && newDate) {
+      date.value = newDate
+    } else if (date && (newDateOffset || newDateOffset === 0)) {
       date.value = addDays(new Date(), newDateOffset)
     }
     attemptAccountsFix()

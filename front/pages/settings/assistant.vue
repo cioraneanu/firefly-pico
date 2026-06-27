@@ -11,6 +11,15 @@
         <currency-select v-model="assistantCurrency" :info="$t('settings.assistant.currency')"/>
       </van-cell-group>
 
+      <van-cell-group inset>
+        <div class="van-cell-group-title">{{ $t('settings.assistant.ramble') }}:</div>
+
+        <app-field v-model="assistantRambleEndpoint" :icon="TablerIconConstants.external" :label="$t('settings.assistant.ramble_endpoint')" placeholder="https://api.openai.com/v1/chat/completions" />
+        <app-field v-model="assistantRambleModel" :icon="TablerIconConstants.assistant" :label="$t('settings.assistant.ramble_model')" placeholder="gpt-4o-mini" />
+        <app-field v-model="assistantRambleApiKey" :icon="TablerIconConstants.key" :label="$t('settings.assistant.ramble_api_key')" type="password" autocomplete="off" />
+        <div class="text-size-12 text-muted px-3 pb-10">{{ $t('settings.assistant.ramble_info') }}</div>
+      </van-cell-group>
+
       <app-button-form-save />
     </van-form>
   </div>
@@ -32,11 +41,17 @@ const profileStore = useProfileStore()
 const assistantTodoTagMatcher = ref('')
 const assistantCurrency = ref(null)
 const autoFocusAssistant = ref(false)
+const assistantRambleEndpoint = ref('')
+const assistantRambleModel = ref('')
+const assistantRambleApiKey = ref('')
 
 const syncedSettings = [
   { store: profileStore, path: 'autoFocusAssistant', ref: autoFocusAssistant },
   { store: profileStore, path: 'assistantTodoTagMatcher', ref: assistantTodoTagMatcher },
   { store: profileStore, path: 'assistantCurrency', ref: assistantCurrency },
+  { store: profileStore, path: 'assistantRambleEndpoint', ref: assistantRambleEndpoint },
+  { store: profileStore, path: 'assistantRambleModel', ref: assistantRambleModel },
+  { store: profileStore, path: 'assistantRambleApiKey', ref: assistantRambleApiKey },
 ]
 
 watchSettingsStore(syncedSettings)

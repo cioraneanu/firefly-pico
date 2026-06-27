@@ -1,5 +1,3 @@
-import { IconCoin } from '@tabler/icons-vue'
-
 export const icons = {
   // ------ UI usage -----
   account: 'IconCreditCard',
@@ -58,6 +56,10 @@ export const icons = {
   cash: 'IconCash',
   cashBanknote: 'IconCashBanknote',
   clone: 'IconCopy',
+  close: 'IconX',
+  magic: 'IconSparkles',
+  microphone: 'IconMicrophone',
+  stop: 'IconPlayerStop',
 
   fieldIcon: 'IconFavicon',
   fieldCheckbox: 'IconToggleLeftFilled',

@@ -81,6 +81,14 @@
     "split_transaction": "Transaction fractionnée",
     "assistant": "Assistant",
     "assistant_format": "Format = [modele / etiquette?] [montant?] [description?]",
+    "assistant_dictate": "Dictate",
+    "assistant_ramble_title": "Dictate transactions",
+    "assistant_ramble_placeholder": "Say or edit transactions here...",
+    "assistant_ramble_interpret": "Interpret",
+    "assistant_ramble_preview": "Preview",
+    "assistant_ramble_create": "Create {count}",
+    "assistant_ramble_apply_first": "Use first",
+    "assistant_ramble_no_results": "No transactions found",
     "assistant_tutorial_title": "Assistant",
     "assistant_tutorial_body": "<p>Créer facilement des transactions (Ou utiliser la reconnaissance vocale de votre téléphone).</p>\n<p>Format:<br> <b>[Recherche]&nbsp; [montant?]&nbsp; [description?]&nbsp; [A pointer?]</b></p>\n<p>1. La <b>recherche</b> regardes les étiquettes, les catégories et les modèles. Il permet de saisir seulement une partie du nom et même de se tromper sur certaines lettres.<br><code> elct => électricité</code></p>\n<p>2. Le champ <b>montant</b> prend en charge les expressions mathématiques. Les nombres séparés par un espace sont automatiquement additionnés.\n<p>3. La <b>description</b> est facultative. Utilisez-la pour remplacer le nom de balise par défaut.\n<p>4. Le <b>todo</b> facilite l'ajout de la balise 'todo-tag' définie par l'utilisateur en ajoutant une chaîne personnalisée (par défaut '!!'). Cela peut être modifié dans les Paramètres.</p>\n\n<p><b>Exemples</b><br>\n\"electricite\" = etiquette<br>\n\"swimming\" = modèle <br><br>\n\n<code>\nelectricite 23<br> \nelc 12*2+33<br> \nelc 12+2*3 description<br> \nelc 25 !!<br>\nswim<br> \n\n</code>\n</p>\n\n<p>5. En haut à droite, vous trouverez un sélecteur de devise que vous pouvez modifier instantanément ou définir par défaut dans « Paramètres » → « Assistant ». Ce sélecteur traitera le montant dans la devise choisie et convertira la valeur finale dans la devise de votre compte. Cette fonctionnalité peut s'avérer très pratique lors de vos voyages à l'étranger.</p>",
     "type": {
@@ -150,7 +158,12 @@
       "title": "Paramètres de l'assistant",
       "auto_focus": "Auto focus assistant",
       "substring_todo_tag": "Sous-chaîne qui ajoute l'étiquette à faire",
-      "currency": "La partie montant dans le texte de l'assistant sera interprétée comme une devise étrangère de ce type"
+      "currency": "La partie montant dans le texte de l'assistant sera interprétée comme une devise étrangère de ce type",
+      "ramble": "Dictation / ramble",
+      "ramble_endpoint": "LLM endpoint",
+      "ramble_model": "LLM model",
+      "ramble_api_key": "LLM API key",
+      "ramble_info": "Leave these empty to use the backend environment defaults. The endpoint should be OpenAI chat-completions compatible."
     },
     "formatting_entry": "Formatage",
     "formatting": {

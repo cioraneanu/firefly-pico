@@ -26,6 +26,9 @@ export const useProfileStore = defineStore('profile', () => {
   const assistantTodoTagMatcher = useLocalStorage('assistantTodoTagMatcher', '!!')
   const assistantCurrency = useLocalStorage('assistantCurrency', null, { serializer: StorageSerializers.object })
   const autoFocusAssistant = useLocalStorage('autoFocusAssistant', false)
+  const assistantRambleEndpoint = useLocalStorage('assistantRambleEndpoint', '')
+  const assistantRambleModel = useLocalStorage('assistantRambleModel', '')
+  const assistantRambleApiKey = useLocalStorage('assistantRambleApiKey', '')
 
   const defaultAccountSource = useLocalStorage('defaultAccountSource', null, { serializer: StorageSerializers.object })
   const defaultAccountDestination = useLocalStorage('defaultAccountDestination', null, { serializer: StorageSerializers.object })
@@ -179,6 +182,9 @@ export const useProfileStore = defineStore('profile', () => {
     assistantTodoTagMatcher,
     assistantCurrency,
     autoFocusAssistant,
+    assistantRambleEndpoint,
+    assistantRambleModel,
+    assistantRambleApiKey,
     defaultAccountSource,
     defaultAccountDestination,
     defaultCategory,

@@ -8,7 +8,7 @@
 
     <div class="mb-10" />
 
-    <transaction-assistant v-if="!itemId && !isCloning" v-model="assistantText" @change="onAssistant" @keyup.enter="saveItem" />
+    <transaction-assistant v-if="!itemId && !isCloning" v-model="assistantText" @change="onAssistant" @create-many="onAssistantCreateMany" @keyup.enter="saveItem" />
 
     <transaction-type-tabs v-model="type" class="mx-3 mt-1 mb-1" />
 
@@ -120,7 +120,7 @@
 <script setup>
 import RouteConstants from '~/constants/RouteConstants'
 
-import _, { get, head, isEqual } from 'lodash-es'
+import _, { cloneDeep, get, isEqual } from 'lodash-es'
 import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
@@ -129,25 +129,19 @@ import { generateChildren } from '~/utils/VueUtils'
 import Transaction from '~/models/Transaction'
 import { useToolbar } from '~/composables/useToolbar'
 import TagSelect from '~/components/select/tag-select.vue'
-import Category from '~/models/Category'
-import Tag from '~/models/Tag'
-import { isStringEmpty } from '~/utils/DataUtils'
 import TablerIconConstants from '~/constants/TablerIconConstants'
-import { animateTransactionAmountOperatorButtons, animateTransactionForm } from '~/utils/AnimationUtils.js'
-import tag from '~/models/Tag'
-import { addDays, endOfMonth, getHours, getMinutes, startOfMonth, startOfToday } from 'date-fns'
+import { animateTransactionForm } from '~/utils/AnimationUtils.js'
+import { addDays } from 'date-fns'
 import TransactionRepository from '~/repository/TransactionRepository.js'
 import TransactionTransformer from '~/transformers/TransactionTransformer.js'
 import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
 import { useI18n } from '#imports'
 import { transactionFormField } from '~/constants/TransactionConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
-import Currency from '~/models/Currency.js'
 import TransactionNoteField from '~/components/transaction/transaction-note-field.vue'
 import TransactionAttachmentsList from '~/components/transaction/transaction-attachements/transaction-attachments-list.vue'
-import AttachmentRepository from '~/repository/AttachmentRepository.js'
-import AttachmentTransformer from '~/transformers/AttachmentTransformer.js'
 import { useTransactionFormLogic } from '~/composables/useTransactionFormLogic.js'
+import UIUtils from '~/utils/UIUtils.js'
 
 const profileStore = useProfileStore()
 const route = useRoute()
@@ -234,6 +228,29 @@ const onToday = () => {
 
 const onAddDay = () => {
   date.value = addDays(date.value, 1)
+}
+
+const onAssistantCreateMany = async (assistantTransactions) => {
+  let successCount = 0
+  const repository = new TransactionRepository()
+
+  for (const assistantTransaction of assistantTransactions) {
+    await onAssistant(assistantTransaction)
+    await nextTick()
+
+    const requestData = TransactionTransformer.transformToApi(cloneDeep(item.value))
+    const response = await repository.insert(requestData)
+    if (ResponseUtils.isSuccess(response)) {
+      successCount += 1
+    }
+  }
+
+  item.value = new Transaction().getEmpty()
+  assistantText.value = ''
+
+  if (successCount > 0) {
+    UIUtils.showToastSuccess(`${successCount} transaction${successCount === 1 ? '' : 's'} created`)
+  }
 }
 
 const onCreateTransactionTemplate = async () => {

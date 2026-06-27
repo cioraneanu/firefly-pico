@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CurrencyController;
@@ -32,6 +33,7 @@ use Illuminate\Support\Facades\Route;
 // Own resources
 Route::get('latest-version', [VersionController::class, 'getLatestVersion']);
 Route::get('user', [UserController::class, 'getUser']);
+Route::post('assistant/interpret-transactions', [AssistantController::class, 'interpretTransactions']);
 RouteUtils::makeCRUD("transaction-templates", TransactionTemplateController::class);
 
 // Firefly proxied resources
@@ -73,7 +75,6 @@ $proxyMethods = ['get', 'post', 'put', 'patch', 'delete'];
 foreach ($proxyMethods as $proxyMethod) {
     Route::$proxyMethod('{any?}', [FireflyProxyController::class, 'proxyRequest'])->where('any', '.*');
 }
-
 
 
 

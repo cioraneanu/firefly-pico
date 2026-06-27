@@ -3,7 +3,7 @@ import UIUtils from '~/utils/UIUtils'
 import * as LanguageConstants from '~/constants/LanguageConstants'
 
 // Legacy. No longer necessary since we can use the phone's dictation
-export function useSpeechRecognition({ language, onSpeechFinished }) {
+export function useSpeechRecognition({ language, onSpeechFinished, onSpeechTemporary, continuous = false, interimResults = false } = {}) {
   // state encapsulated and managed by the composable
 
   let speechRecognition = null
@@ -21,6 +21,9 @@ export function useSpeechRecognition({ language, onSpeechFinished }) {
     textTemporary.value = ''
     textFinal.value = ''
     await sleep(500)
+    if (!speechRecognition) {
+      return
+    }
     speechRecognition.lang = language.value.code
     startRecording()
   })
@@ -28,6 +31,9 @@ export function useSpeechRecognition({ language, onSpeechFinished }) {
   const startRecording = () => {
     if (!speechRecognition) {
       registerMic()
+    }
+    if (!speechRecognition) {
+      return
     }
     if (isRecording.value) {
       return
@@ -42,19 +48,12 @@ export function useSpeechRecognition({ language, onSpeechFinished }) {
   }
 
   const registerMic = () => {
-    if ('webkitSpeechRecognition' in window) {
-      // Initialize webkitSpeechRecognition
-      speechRecognition = new webkitSpeechRecognition()
-      // speechRecognition = new SpeechRecognition()
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
+    if (SpeechRecognition) {
+      speechRecognition = new SpeechRecognition()
 
-      // String for the Final Transcript
-
-      // Set the properties for the Speech Recognition object
-      // speechRecognition.continuous = true
-      // speechRecognition.interimResults = true
-
-      speechRecognition.continuous = false
-      speechRecognition.interimResults = false
+      speechRecognition.continuous = continuous
+      speechRecognition.interimResults = interimResults
       speechRecognition.lang = language.value.code ?? LanguageConstants.LANGUAGE_ENGLISH
 
       // Callback Function for the onStart Event
@@ -71,30 +70,23 @@ export function useSpeechRecognition({ language, onSpeechFinished }) {
       }
 
       speechRecognition.onresult = (event) => {
-        var transcript = event.results[0][0].transcript
-        if (onSpeechFinished) {
-          onSpeechFinished(transcript)
+        textTemporary.value = ''
+
+        for (let i = event.resultIndex; i < event.results.length; ++i) {
+          const transcript = event.results[i][0].transcript
+
+          if (event.results[i].isFinal) {
+            textFinal.value += transcript
+            onSpeechFinished?.(transcript)
+          } else {
+            textTemporary.value += transcript
+          }
         }
 
-        // // Create the interim transcript string locally because we don't want it to persist like final transcript
-        // textTemporary.value = ''
-        // // Loop through the results from the speech recognition object.
-        // for (let i = event.resultIndex; i < event.results.length; ++i) {
-        //   // If the result item is Final, add it to Final Transcript, Else add it to Interim transcript
-        //   if (event.results[i].isFinal) {
-        //     let finalText = event.results[i][0].transcript
-        //     if (onSpeechFinished) {
-        //       onSpeechFinished(finalText)
-        //     }
-        //     textFinal.value = finalText
-        //     // speechText.value += event.results[i][0].transcript;
-        //   } else {
-        //     textTemporary.value += event.results[i][0].transcript
-        //   }
-        // }
+        onSpeechTemporary?.(textTemporary.value)
       }
     } else {
-      UIUtils.showToastError('Speech recognisition not available. Please use a different browser...')
+      UIUtils.showToastError('Speech recognition not available. Please use a different browser...')
     }
   }
 

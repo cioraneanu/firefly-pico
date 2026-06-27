@@ -81,6 +81,14 @@
     "split_transaction": "Transaktion aufteilen",
     "assistant": "Assistent",
     "assistant_format": "Format = [template / tag?] [amount?] [description?]",
+    "assistant_dictate": "Dictate",
+    "assistant_ramble_title": "Dictate transactions",
+    "assistant_ramble_placeholder": "Say or edit transactions here...",
+    "assistant_ramble_interpret": "Interpret",
+    "assistant_ramble_preview": "Preview",
+    "assistant_ramble_create": "Create {count}",
+    "assistant_ramble_apply_first": "Use first",
+    "assistant_ramble_no_results": "No transactions found",
     "assistant_tutorial_title": "Transaktions-Assistent",
     "assistant_tutorial_body": "<p>Erstelle Transaktionen einfach durch das eingeben von Text hier (oder verwende die Diktierfunktion deines Telefons).</p>\n<p>Erwartetes Format:<br> <b>[search]&nbsp; [amount?]&nbsp; [description?]&nbsp; [todo?]</b></p>\n<p>1. Die <b>Suche</b> durchsucht die Namen deiner Tags, Kategorien und Transaktions-Templates. Sie unterstützt die Eingabe von Teilen des Namens und auch einige falsche Buchstaben in der Eingabe.<br><code> elkt => Elektrizität</code></p>\n<p>2. Der <b>Betrag</b> unterstützt mathematische Ausdrücke. Zahlen separiert durch Leerzeichen werden automatisch aufsummiert.</p>\n<p>3. Die <b>Beschreibung</b> ist optional. Verwende dies um den standard Tag Namen zu überschreiben.</p>\n<p>4. Die <b>To-Dos</b> machen es einfach den User definierten \"todo-tag\" durch anfügen eines massgeschneiderten Textes (Standard \"!!\"). Dies kann in den \"Einstellungen\" angepasst werden</p>\n\n<p><b>Beispiele</b><br>\n\"elektrizität\" = tag<br>\n\"schwimmen\" = template <br><br>\n\n<code>\nElektrizität 23<br> \nelk 12*2+33<br> \nelk 12+2*3 massgeschneiderte Beschreibung<br> \nelk 25 !!<br>\nschwimmen<br> \n\n</code>\n</p>\n\n<p>5. Oben rechts ist ein <b>Währung</b> Selektor welchen du on the fly editieren oder einen Standard unter \"Einstellungen\" -> \"Assistent\". Wenn verwendet wird der <b>Betrag</b> als Währung verwendet und der finale Wert in die Währung des Kontos umgewandelt. Dies kann auf Reisen sehr hilfreich sein.</p>",
     "type": {
@@ -150,7 +158,12 @@
       "title": "Assistent Einstellungen",
       "auto_focus": "Auto focus assistant",
       "substring_todo_tag": "Teiltext welcher den ToDo Tag hinzufügt",
-      "currency": "Der Betrag Teil im Assistent-Text wird als ausändische Währung dieser Art interpretiert."
+      "currency": "Der Betrag Teil im Assistent-Text wird als ausändische Währung dieser Art interpretiert.",
+      "ramble": "Dictation / ramble",
+      "ramble_endpoint": "LLM endpoint",
+      "ramble_model": "LLM model",
+      "ramble_api_key": "LLM API key",
+      "ramble_info": "Leave these empty to use the backend environment defaults. The endpoint should be OpenAI chat-completions compatible."
     },
     "formatting_entry": "Formatierung",
     "formatting": {
