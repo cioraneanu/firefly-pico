@@ -1254,12 +1254,18 @@ img, svg {
 
 .desktop-content {
     flex: 1;
+    min-width: 0;
+    overflow-x: hidden;
     padding-inline-start: 16.25rem;
 }
 
 .app-top-toolbar-desktop {
     display: flex;
     align-items: center;
+    gap: 10px;
+    box-sizing: border-box;
+    width: calc(100% - 30px);
+    min-width: 0;
     padding: 15px;
     margin: 15px;
     background: var(--white);
@@ -1268,6 +1274,17 @@ img, svg {
     top: 10px;
     z-index: 2;
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+.app-top-toolbar-desktop > .flex-1 {
+    min-width: 0;
+}
+
+.app-top-toolbar-desktop .app-toolbar-title,
+.app-top-toolbar-desktop .app-toolbar-subtitle {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .app-bottom-toolbar-item {
