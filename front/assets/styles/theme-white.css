@@ -1489,6 +1489,9 @@ img, svg {
 
 /*--------------------------------*/
 
+.app-left-sidebar {
+    z-index: 9999;
+}
 
 body {
     font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;

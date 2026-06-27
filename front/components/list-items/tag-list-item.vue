@@ -67,4 +67,3 @@ const swipeCell = ref(null)
 const clickWithoutSwipe = useClickWithoutSwipe({ swipeCell: swipeCell, onClick: onEdit })
 </script>
 
-<style></style>

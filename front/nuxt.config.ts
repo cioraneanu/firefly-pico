@@ -64,7 +64,7 @@ export default defineNuxtConfig({
   css: [
     '@/assets/styles/bootstrap.min.css',
     '@/assets/styles/variables.css',
-    '@/assets/styles/theme.css',
+    '@/assets/styles/theme-white.css',
     '@/assets/styles/theme-dark.css',
     '@/assets/styles/helper.css',
     '@/assets/styles/animations.css',
