@@ -155,7 +155,7 @@ animateSwipeList(list)
 
 .transaction-desktop-list {
   min-width: 1100px;
-  margin: 1.5rem;
+  margin: 0px 20px;
   overflow: hidden;
   background: var(--van-background-2);
   border-radius: 8px;
