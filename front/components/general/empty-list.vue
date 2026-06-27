@@ -1,13 +1,13 @@
 <template>
-  <div class="empty-state-wrapper">
-    <div class="empty-state">
-      <img :src="EmptyIllustrationHalf" :srcset="`${EmptyIllustrationHalf} 1x, ${EmptyIllustration} 2x`" class="empty-illustration" alt="Empty state" />
-      <h3 class="empty-title">{{ title || $t('general.list_empty') }}</h3>
-      <p class="empty-subtitle">
+  <div class="position-absolute-100 no-edge-top no-edge-left flex-center w-100 pointer-events-none">
+    <div class="display-flex flex-column align-items-center text-center p-20 max-width-420 pointer-events-auto">
+      <img :src="EmptyIllustrationHalf" :srcset="`${EmptyIllustrationHalf} 1x, ${EmptyIllustration} 2x`" class="img-fluid mb-24 md-width-200 md-mb-32" width="160" alt="Empty state" />
+      <h3 class="m-0 mb-8 text-size-16 md-text-size-20 font-weight-600">{{ title || $t('general.list_empty') }}</h3>
+      <p class="m-0 mb-24 text-size-13 md-text-size-15 font-weight-400 line-height-15">
         {{ subtitle || $t('general.list_empty_subtitle') }}
       </p>
 
-      <div v-if="$slots.action" class="empty-action">
+      <div v-if="$slots.action" class="mt-8 md-mt-16">
         <slot name="action" />
       </div>
     </div>
@@ -30,71 +30,3 @@ defineProps({
 })
 </script>
 
-<style scoped>
-.empty-state-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-}
-
-.empty-state {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  max-width: 420px;
-  padding: 20px;
-  pointer-events: auto;
-}
-
-.empty-illustration {
-  width: 160px;
-  max-width: 100%;
-  margin-bottom: 24px;
-}
-
-.empty-title {
-  margin: 0 0 8px;
-  font-size: 16px;
-  font-weight: 600;
-  color: var(--van-text-color, #323233);
-}
-
-.empty-subtitle {
-  margin: 0 0 24px 0;
-  font-size: 13px;
-  font-weight: 400;
-  //color: var(--van-text-color-2, #969799);
-  line-height: 1.5;
-}
-
-.empty-action {
-  margin-top: 8px;
-}
-
-/* Adjustments for desktop */
-@media (min-width: 768px) {
-  .empty-illustration {
-    width: 200px;
-    margin-bottom: 32px;
-  }
-
-  .empty-title {
-    font-size: 20px;
-  }
-
-  .empty-subtitle {
-    font-size: 15px;
-  }
-
-  .empty-action {
-    margin-top: 16px;
-  }
-}
-</style>

@@ -157,4 +157,3 @@ const showGridIcon = computed(() => {
 })
 </script>
 
-<style></style>

@@ -68,4 +68,3 @@ const onChangeTheme = () => {
 }
 </script>
 
-<style scoped></style>

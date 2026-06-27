@@ -18,8 +18,3 @@ const props = defineProps({
 })
 </script>
 
-<style>
-.img-icon {
-  height: 20px;
-}
-</style>

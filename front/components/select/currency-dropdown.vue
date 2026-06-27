@@ -47,4 +47,3 @@ const onSelect = (item) => {
 }
 </script>
 
-<style></style>

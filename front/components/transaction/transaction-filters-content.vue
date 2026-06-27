@@ -1,5 +1,5 @@
 <template>
-  <div class="transaction-filters-content">
+  <div class="display-flex flex-column h-100">
     <div class="flex-1 flex-column overflow-auto p-3 gap-2">
       <app-field v-model="description" :label="$t('description')" :placeholder="$t('description')" />
 
@@ -84,10 +84,3 @@ const onAddMonth = () => {
 }
 </script>
 
-<style scoped>
-.transaction-filters-content {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-</style>

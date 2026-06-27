@@ -33,4 +33,3 @@ const onToggle = () => {
 }
 </script>
 
-<style></style>

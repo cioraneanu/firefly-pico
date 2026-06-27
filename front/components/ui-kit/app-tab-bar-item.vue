@@ -13,4 +13,3 @@
 const props = defineProps(['route', 'name', 'icon'])
 </script>
 
-<style></style>

@@ -15,8 +15,8 @@
             </div>
           </div>
 
-          <div class="fake-input flex-1 cursor-pointer time-container" @click="onShowTimePicker">
-            <input ref="timeInput" v-model="modelValueTime" type="time" class="hidden-input" >
+          <div class="fake-input flex-1 cursor-pointer position-relative display-inline-block" @click="onShowTimePicker">
+            <input ref="timeInput" v-model="modelValueTime" type="time" class="position-absolute-100 no-edge-top no-edge-left z-index--1 opacity-0 pointer-events-none" >
             <div :class="labelDateClass">{{ getDisplayTime }}</div>
           </div>
         </div>
@@ -156,20 +156,3 @@ const onClickedAddDay = () => {
 }
 </script>
 
-<style scoped>
-.hidden-input {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  pointer-events: none;
-  z-index: -1;
-}
-
-.time-container {
-  position: relative;
-  display: inline-block;
-}
-</style>

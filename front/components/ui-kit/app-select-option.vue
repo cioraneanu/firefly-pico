@@ -25,4 +25,3 @@ const computedClass = computed(() => {
 })
 </script>
 
-<style></style>
