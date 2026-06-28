@@ -6,7 +6,7 @@
 
       <div class="flex-1" />
       <currency-dropdown v-model="profileStore.assistantCurrency" class="text-size-12" :is-clearable="true" />
-      <van-button size="mini" class="assistant-dictate-button cursor-pointer" @click="openRamblePopup">
+      <van-button size="mini" class="cursor-pointer" @click="openRamblePopup">
         <app-icon :icon="TablerIconConstants.microphone" :size="16" />
         {{ $t('transaction.assistant_dictate') }}
       </van-button>
@@ -28,7 +28,7 @@
       </div>
 
       <template v-if="previewTags.length > 0 || parsed.isTodo">
-        <div class="display-flex flex-center-vertical gap-2 p-5 mt-10 text-size-12 flex-wrap" style="border: 1px dashed black; border-radius: 5px">
+        <div class="display-flex flex-center-vertical gap-2 p-5 mt-10 text-size-12 flex-wrap border border-radius">
           <van-tag v-for="previewTag in previewTags" :key="previewTag.label" round class="assistant-tag" size="medium" type="primary">
             <span>{{ previewTag.label }}</span>
             <span>|</span>
@@ -45,67 +45,80 @@
     </div>
 
     <app-popup v-model:show="showRamblePopup">
-      <div class="assistant-ramble display-flex flex-column">
-        <div class="flex-center-vertical gap-2 px-3 py-2">
-          <div class="font-600 text-size-16 flex-1">{{ $t('transaction.assistant_ramble_title') }}</div>
+      <div class="display-flex flex-direction-column h-100 m-h-0">
+        <div class="display-flex align-items-start gap-2 px-3 py-2 border-bottom">
+          <div class="flex-1-w">
+            <div class="font-600 text-size-16">{{ $t('transaction.assistant_ramble_title') }}</div>
+            <div v-if="rambleTransactions.length > 0" class="text-size-12 text-muted mt-5">{{ $t('transaction.assistant_ramble_preview') }}</div>
+          </div>
+
           <van-button size="small" class="cursor-pointer" @click="closeRamblePopup">
             <app-icon :icon="TablerIconConstants.close" :size="18" />
           </van-button>
         </div>
 
-        <div class="assistant-ramble-body display-flex flex-column gap-2">
-          <app-field
-            v-model="rambleText"
-            class="van-cell-no-padding compact"
-            label=""
-            type="textarea"
-            rows="5"
-            autosize
-            :placeholder="$t('transaction.assistant_ramble_placeholder')"
-            :clearable="true"
-          />
+        <div class="flex-1 m-h-0 overflow-auto display-flex flex-direction-column gap-2 p-3">
+          <van-cell-group inset class="no-margin overflow-hidden">
+            <app-field
+              v-model="rambleText"
+              class="van-cell-no-padding compact"
+              label=""
+              type="textarea"
+              rows="5"
+              autosize
+              :placeholder="$t('transaction.assistant_ramble_placeholder')"
+              :clearable="true"
+            />
 
-          <div v-if="speechTemporary" class="text-size-12 text-muted px-3">{{ speechTemporary }}</div>
+            <div v-if="speechTemporary" class="display-flex flex-center-vertical gap-1 text-size-12 text-muted px-3 pb-2">
+              <app-icon :icon="TablerIconConstants.microphone" :size="14" />
+              <span>{{ speechTemporary }}</span>
+            </div>
 
-          <div class="display-flex flex-wrap gap-2 px-3">
-            <van-button :type="isRecording ? 'danger' : 'primary'" size="small" class="cursor-pointer" @click="toggleRecording">
-              <app-icon :icon="isRecording ? TablerIconConstants.stop : TablerIconConstants.microphone" :size="16" />
-              {{ isRecording ? $t('stop') : $t('transaction.assistant_dictate') }}
-            </van-button>
+            <div class="display-flex flex-wrap gap-2 px-3 py-2">
+              <van-button :type="isRecording ? 'danger' : 'primary'" size="small" class="cursor-pointer" @click="toggleRecording">
+                <app-icon :icon="isRecording ? TablerIconConstants.stop : TablerIconConstants.microphone" :size="16" />
+                {{ isRecording ? $t('stop') : $t('transaction.assistant_dictate') }}
+              </van-button>
 
-            <van-button type="primary" plain size="small" class="cursor-pointer" :loading="isInterpreting" :disabled="!rambleText.trim()" @click="interpretRambleText">
-              <app-icon :icon="TablerIconConstants.magic" :size="16" />
-              {{ $t('transaction.assistant_ramble_interpret') }}
-            </van-button>
-          </div>
+              <van-button type="primary" plain size="small" class="cursor-pointer" :loading="isInterpreting" :disabled="!rambleText.trim()" @click="interpretRambleText">
+                <app-icon :icon="TablerIconConstants.magic" :size="16" />
+                {{ $t('transaction.assistant_ramble_interpret') }}
+              </van-button>
+            </div>
+          </van-cell-group>
 
           <div v-if="rambleError" class="text-size-12 text-danger px-3">{{ rambleError }}</div>
 
           <template v-if="rambleTransactions.length > 0">
-            <div class="font-600 text-size-13 px-3 mt-2">{{ $t('transaction.assistant_ramble_preview') }}</div>
+            <div class="display-flex flex-direction-column gap-2">
+              <van-cell-group v-for="(transaction, index) in rambleTransactions" :key="transaction.id" inset class="no-margin">
+                <div class="p-10">
+                  <div class="display-flex align-items-start gap-2">
+                    <div class="tag-gray text-size-12">{{ index + 1 }}</div>
+                    <div class="flex-1-w">
+                      <div class="font-600 text-size-14 word-break-word">{{ transaction.description || '-' }}</div>
+                      <div v-if="getRambleAccountSummary(transaction)" class="text-size-12 text-muted word-break-word">{{ getRambleAccountSummary(transaction) }}</div>
+                    </div>
+                    <div class="font-600 text-size-14 text-nowrap">{{ formatRambleAmount(transaction) }}</div>
+                  </div>
 
-            <div class="display-flex flex-column gap-2 px-3">
-              <div v-for="(transaction, index) in rambleTransactions" :key="transaction.id" class="assistant-ramble-preview">
-                <div class="flex-center-vertical gap-2">
-                  <div class="font-600 flex-1">{{ index + 1 }}. {{ transaction.description || '-' }}</div>
-                  <div class="font-600">{{ formatRambleAmount(transaction) }}</div>
+                  <div class="display-flex flex-wrap gap-1 mt-10">
+                    <van-tag v-for="previewTag in getRamblePreviewTags(transaction)" :key="`${transaction.id}-${previewTag.label}`" round size="medium" type="primary">
+                      <span>{{ previewTag.label }}</span>
+                      <span>|</span>
+                      <span>{{ previewTag.value }}</span>
+                    </van-tag>
+                  </div>
                 </div>
-
-                <div class="display-flex flex-wrap gap-1 mt-2">
-                  <van-tag v-for="previewTag in getRamblePreviewTags(transaction)" :key="`${transaction.id}-${previewTag.label}`" round size="medium" type="primary">
-                    <span>{{ previewTag.label }}</span>
-                    <span>|</span>
-                    <span>{{ previewTag.value }}</span>
-                  </van-tag>
-                </div>
-              </div>
+              </van-cell-group>
             </div>
           </template>
 
-          <div v-else-if="hasInterpreted" class="text-size-12 text-muted px-3">{{ $t('transaction.assistant_ramble_no_results') }}</div>
+          <div v-else-if="hasInterpreted" class="text-size-12 text-muted text-center p-20">{{ $t('transaction.assistant_ramble_no_results') }}</div>
         </div>
 
-        <div class="assistant-ramble-actions display-flex gap-2 p-3">
+        <div class="display-flex gap-2 p-3 border-top">
           <van-button block class="cursor-pointer" :disabled="rambleTransactions.length === 0" @click="applyFirstRambleTransaction">{{ $t('transaction.assistant_ramble_apply_first') }}</van-button>
           <van-button block type="primary" class="cursor-pointer" :disabled="rambleTransactions.length === 0" @click="createRambleTransactions">
             {{ $t('transaction.assistant_ramble_create', { count: rambleTransactions.length }) }}
@@ -382,13 +395,21 @@ const getRambleErrorMessage = (error) => {
   return error?.response?.data?.error?.message ?? error?.response?.data?.message ?? error?.message ?? 'Assistant LLM request failed.'
 }
 
+const resolveAssistantAccount = (accountName) => {
+  return accountName ? (resolveAccount(accountName) ?? undefined) : undefined
+}
+
 const resolveRambleTransaction = (rawTransaction, index) => {
   const template = resolveTemplate(rawTransaction.templateName)
   const tags = resolveTags(rawTransaction.tagNames)
   const category = resolveCategory(rawTransaction.categoryName)
   const budget = resolveBudget(rawTransaction.budgetName)
-  const accountSource = resolveAccount(rawTransaction.sourceAccountName)
-  const accountDestination = resolveAccount(rawTransaction.destinationAccountName)
+  const type = resolveTransactionType(rawTransaction.type)
+  const fixedAccounts = Transaction.attemptAccountFixOnTypeChange(
+    type ?? Transaction.types.expense,
+    resolveAssistantAccount(rawTransaction.sourceAccountName) ?? profileStore.defaultAccountSource,
+    resolveAssistantAccount(rawTransaction.destinationAccountName) ?? profileStore.defaultAccountDestination,
+  )
   const assistantCurrency = resolveCurrency(rawTransaction.currencyCode)
   const rawDescription = rawTransaction.description ?? rawTransaction.templateName ?? rawTransaction.categoryName ?? rawTransaction.tagNames?.[0]
 
@@ -399,9 +420,9 @@ const resolveRambleTransaction = (rawTransaction, index) => {
     tags,
     category,
     budget,
-    accountSource,
-    accountDestination,
-    type: resolveTransactionType(rawTransaction.type),
+    accountSource: fixedAccounts.source,
+    accountDestination: fixedAccounts.destination,
+    type,
     amount: rawTransaction.amount === null || rawTransaction.amount === undefined ? null : rawTransaction.amount.toString(),
     assistantCurrency,
     currencyCode: rawTransaction.currencyCode,
@@ -447,13 +468,28 @@ const formatRambleAmount = (transaction) => {
   return [transaction.amount, transaction.currencyCode].filter(Boolean).join(' ')
 }
 
+const getAccountDisplayName = (account) => {
+  return account ? Account.getDisplayName(account) : null
+}
+
+const getRambleAccountSummary = (transaction) => {
+  const source = getAccountDisplayName(transaction.accountSource) ?? transaction.raw.sourceAccountName
+  const destination = getAccountDisplayName(transaction.accountDestination) ?? transaction.raw.destinationAccountName
+
+  if (source && destination) {
+    return `${source} -> ${destination}`
+  }
+
+  return source ?? destination ?? null
+}
+
 const getRamblePreviewTags = (transaction) => {
   return [
     { label: t('template'), value: transaction.transactionTemplate ? TransactionTemplate.getDisplayName(transaction.transactionTemplate) : transaction.raw.templateName },
     { label: t('tag'), value: transaction.tags.length > 0 ? transaction.tags.map((tag) => Tag.getDisplayNameEllipsized(tag)).join(', ') : transaction.raw.tagNames?.join(', ') },
     { label: t('category'), value: transaction.category ? Category.getDisplayName(transaction.category) : transaction.raw.categoryName },
     { label: t('budget'), value: transaction.budget ? Budget.getDisplayName(transaction.budget) : transaction.raw.budgetName },
-    { label: t('account'), value: transaction.accountSource ? Account.getDisplayName(transaction.accountSource) : transaction.raw.sourceAccountName },
+    { label: t('account'), value: getRambleAccountSummary(transaction) },
     { label: t('date'), value: transaction.date ? DateUtils.dateToUIWithTime(transaction.date) : null },
     { label: t('notes'), value: transaction.notes ? ellipsizeText(transaction.notes, 24) : null },
   ].filter((previewTag) => !!previewTag.value)
@@ -497,32 +533,3 @@ watch(showRamblePopup, (newValue) => {
   }
 })
 </script>
-
-<style scoped>
-.assistant-dictate-button {
-  height: 28px;
-  padding: 0 8px;
-}
-
-.assistant-ramble {
-  height: 100%;
-  min-height: 0;
-}
-
-.assistant-ramble-body {
-  flex: 1;
-  min-height: 0;
-  overflow: auto;
-}
-
-.assistant-ramble-preview {
-  border: 1px solid var(--van-border-color);
-  border-radius: 8px;
-  padding: 10px;
-  background: var(--van-background-2);
-}
-
-.assistant-ramble-actions {
-  border-top: 1px solid var(--van-border-color);
-}
-</style>
