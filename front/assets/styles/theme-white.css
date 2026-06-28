@@ -842,12 +842,13 @@ body {
 
 .applied-filters-container {
     background: white;
-
-    margin: 0px 40px 5px;
-    border-radius: 10px;
-
     padding: 10px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.layout-desktop .applied-filters-container {
+    margin: -5px 17px 5px;
+    border-radius: 10px;
 }
 
 .app-toolbar-title {

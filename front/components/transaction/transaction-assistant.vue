@@ -6,9 +6,8 @@
 
       <div class="flex-1" />
       <currency-dropdown v-model="profileStore.assistantCurrency" class="text-size-12" :is-clearable="true" />
-      <van-button size="mini" class="cursor-pointer" @click="openRamblePopup">
-        <app-icon :icon="TablerIconConstants.microphone" :size="16" />
-        {{ $t('transaction.assistant_dictate') }}
+      <van-button size="small" class="cursor-pointer" @click="openRamblePopup">
+        <icon-wand :size="18"/>
       </van-button>
     </div>
     <div class="text-size-12 text-muted mb-5">{{ $t('transaction.assistant_format') }}</div>
@@ -140,6 +139,7 @@ import Category from '~/models/Category.js'
 import { ellipsizeText } from '~/utils/Utils.js'
 import { useFuzzySearchResource } from '~/composables/useFuzzySearch.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import { IconWand, IconAi } from '@tabler/icons-vue'
 import AssistantRepository from '~/repository/AssistantRepository.js'
 import Account from '~/models/Account.js'
 import Budget from '~/models/Budget.js'
