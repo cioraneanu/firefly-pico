@@ -3,11 +3,71 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Base\BaseController;
+use App\Models\AssistantRamble;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class AssistantController extends BaseController
 {
+    public function createRamble(Request $request)
+    {
+        $text = $this->getPlainTextInput($request);
+
+        if (!$text) {
+            return $this->setStatusCode(self::HTTP_CODE_UNPROCESSABLE_ENTITY)->respond([
+                'message' => 'Ramble text is required.',
+            ]);
+        }
+
+        $ramble = AssistantRamble::create([
+            'text' => $text,
+        ]);
+
+        return $this->respond([
+            'data' => $ramble,
+        ]);
+    }
+
+    public function getRambleCount()
+    {
+        return $this->respond([
+            'count' => AssistantRamble::query()->count(),
+        ]);
+    }
+
+    public function getRambles()
+    {
+        return $this->respond([
+            'data' => AssistantRamble::query()->orderBy('created_at')->get(),
+        ]);
+    }
+
+    public function deleteRamble(Request $request)
+    {
+        $ramble = AssistantRamble::query()->findOrFail($request->id);
+        $ramble->delete();
+
+        return $this->respond([
+            'deleted' => 1,
+        ]);
+    }
+
+    public function deleteRambles(Request $request)
+    {
+        $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer'],
+        ]);
+
+        $deleted = AssistantRamble::query()
+            ->whereIn('id', $request->input('ids'))
+            ->delete();
+
+        return $this->respond([
+            'deleted' => $deleted,
+        ]);
+    }
+
     public function interpretTransactions(Request $request)
     {
         $request->validate([
@@ -85,6 +145,22 @@ class AssistantController extends BaseController
         return $this->respond([
             'transactions' => $this->normalizeTransactions($json),
         ]);
+    }
+
+    private function getPlainTextInput(Request $request)
+    {
+        $contentType = strtolower($request->headers->get('Content-Type', ''));
+
+        if (str_starts_with($contentType, 'text/plain')) {
+            return trim($request->getContent());
+        }
+
+        $text = $request->input('text');
+        if ($text !== null) {
+            return trim((string)$text);
+        }
+
+        return trim($request->getContent());
     }
 
     private function getInterpretationPrompt()

@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { get } from 'lodash-es'
+import BaseRepository from '~/repository/BaseRepository'
 
 const DEFAULT_ASSISTANT_LLM_ENDPOINT = 'https://api.openai.com/v1/chat/completions'
 const DEFAULT_ASSISTANT_LLM_MODEL = 'gpt-4o-mini'
@@ -83,7 +84,41 @@ const normalizeTransactions = (json) => {
     })
 }
 
-export default class AssistantRepository {
+export default class AssistantRepository extends BaseRepository {
+  constructor() {
+    super('api/assistant')
+  }
+
+  async saveRambleText(text) {
+    return axios.post(`${this.getUrl()}/rambles`, text, {
+      headers: {
+        'Content-Type': 'text/plain',
+      },
+    })
+  }
+
+  async getSavedRambleCount({ showLoading = false } = {}) {
+    const response = await axios.get(`${this.getUrl()}/rambles/count`, { showLoading })
+    return get(response, 'data', {})
+  }
+
+  async getSavedRambles() {
+    const response = await axios.get(`${this.getUrl()}/rambles`)
+    return get(response, 'data', {})
+  }
+
+  async deleteSavedRamble(id) {
+    return axios.delete(`${this.getUrl()}/rambles/${id}`)
+  }
+
+  async deleteSavedRambles(ids) {
+    return axios.delete(`${this.getUrl()}/rambles`, {
+      data: {
+        ids,
+      },
+    })
+  }
+
   async interpretTransactions(data) {
     const llm = data.llm ?? {}
     const endpoint = llm.endpoint?.trim() || DEFAULT_ASSISTANT_LLM_ENDPOINT

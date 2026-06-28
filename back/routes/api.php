@@ -33,6 +33,11 @@ use Illuminate\Support\Facades\Route;
 // Own resources
 Route::get('latest-version', [VersionController::class, 'getLatestVersion']);
 Route::get('user', [UserController::class, 'getUser']);
+Route::post('assistant/rambles', [AssistantController::class, 'createRamble']);
+Route::get('assistant/rambles/count', [AssistantController::class, 'getRambleCount']);
+Route::get('assistant/rambles', [AssistantController::class, 'getRambles']);
+Route::delete('assistant/rambles', [AssistantController::class, 'deleteRambles']);
+Route::delete('assistant/rambles/{id}', [AssistantController::class, 'deleteRamble'])->where('id', '[0-9]+');
 Route::post('assistant/interpret-transactions', [AssistantController::class, 'interpretTransactions']);
 RouteUtils::makeCRUD("transaction-templates", TransactionTemplateController::class);
 
@@ -75,6 +80,5 @@ $proxyMethods = ['get', 'post', 'put', 'patch', 'delete'];
 foreach ($proxyMethods as $proxyMethod) {
     Route::$proxyMethod('{any?}', [FireflyProxyController::class, 'proxyRequest'])->where('any', '.*');
 }
-
 
 
