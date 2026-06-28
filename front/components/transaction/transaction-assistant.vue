@@ -58,9 +58,20 @@
 
         <div class="flex-1 m-h-0 overflow-auto display-flex flex-direction-column gap-2 p-3">
           <van-cell-group inset class="no-margin overflow-hidden">
+            <div class="flex-center-vertical gap-2">
+              <div class="text-size-13">Type or use your microphone</div>
+              <van-button :type="isRecording ? 'danger' : 'primary'" size="small" class="cursor-pointer" @click="toggleRecording">
+                <app-icon :icon="isRecording ? TablerIconConstants.stop : TablerIconConstants.microphone" :size="16" />
+              </van-button>
+
+              <div v-if="speechTemporary" class="display-flex flex-center-vertical gap-1 text-size-12 text-muted px-3 pb-2">
+                <app-icon :icon="TablerIconConstants.microphone" :size="14" />
+                <span>{{ speechTemporary }}</span>
+              </div>
+            </div>
             <app-field
               v-model="rambleText"
-              class="van-cell-no-padding compact"
+              class="van-cell-no-padding compact mt-1"
               label=""
               type="textarea"
               rows="5"
@@ -69,22 +80,12 @@
               :clearable="true"
             />
 
-            <div v-if="speechTemporary" class="display-flex flex-center-vertical gap-1 text-size-12 text-muted px-3 pb-2">
-              <app-icon :icon="TablerIconConstants.microphone" :size="14" />
-              <span>{{ speechTemporary }}</span>
-            </div>
 
-            <div class="display-flex flex-wrap gap-2 px-3 py-2">
-              <van-button :type="isRecording ? 'danger' : 'primary'" size="small" class="cursor-pointer" @click="toggleRecording">
-                <app-icon :icon="isRecording ? TablerIconConstants.stop : TablerIconConstants.microphone" :size="16" />
-                {{ isRecording ? $t('stop') : $t('transaction.assistant_dictate') }}
-              </van-button>
 
-              <van-button type="primary" plain size="small" class="cursor-pointer" :loading="isInterpreting" :disabled="!rambleText.trim()" @click="interpretRambleText">
-                <app-icon :icon="TablerIconConstants.magic" :size="16" />
-                {{ $t('transaction.assistant_ramble_interpret') }}
-              </van-button>
-            </div>
+            <van-button type="" plain size="small" class="w-100 mt-2" :loading="isInterpreting" :disabled="!rambleText.trim()" @click="interpretRambleText">
+              <app-icon :icon="TablerIconConstants.magic" :size="16" />
+              {{ $t('transaction.assistant_ramble_interpret') }}
+            </van-button>
           </van-cell-group>
 
           <div v-if="rambleError" class="text-size-12 text-danger px-3">{{ rambleError }}</div>
