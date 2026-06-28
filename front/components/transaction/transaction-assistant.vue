@@ -79,6 +79,8 @@
             </van-button>
           </div>
 
+          <div v-if="rambleError" class="text-size-12 text-danger px-3">{{ rambleError }}</div>
+
           <template v-if="rambleTransactions.length > 0">
             <div class="font-600 text-size-13 px-3 mt-2">{{ $t('transaction.assistant_ramble_preview') }}</div>
 
@@ -156,6 +158,7 @@ const rambleTransactions = ref([])
 const speechTemporary = ref('')
 const isInterpreting = ref(false)
 const hasInterpreted = ref(false)
+const rambleError = ref('')
 
 const emptyParseResult = () => ({
   template: null,
@@ -183,7 +186,6 @@ const parseAssistantText = () => {
       text = text.slice(0, -profileStore.assistantTodoTagMatcher.length)
     }
 
-    console.log("")
     // "+1d" / "-5d" anywhere in the text moves the transaction date by that many days
     text = text.replace(/(^|\s)([+-]\d+)d(?=\s|$)/i, (match, leadingSpace, days) => {
       result.dateOffset = parseInt(days)
@@ -299,9 +301,7 @@ const resolveByName = (list, getNames, name) => {
     return exactMatch
   }
 
-  return list.find((item) =>
-    getNormalizedNames(item).some((itemName) => itemName.length >= 3 && (itemName.includes(normalizedName) || normalizedName.includes(itemName))),
-  )
+  return list.find((item) => getNormalizedNames(item).some((itemName) => itemName.length >= 3 && (itemName.includes(normalizedName) || normalizedName.includes(itemName))))
 }
 
 const uniqueById = (list) => {
@@ -335,11 +335,7 @@ const resolveAccount = (accountName) => {
 }
 
 const resolveCurrency = (currencyCode) => {
-  return resolveByName(
-    currencyStore.currenciesList,
-    (currency) => [Currency.getCode(currency), Currency.getName(currency), Currency.getSymbol(currency)],
-    currencyCode,
-  )
+  return resolveByName(currencyStore.currenciesList, (currency) => [Currency.getCode(currency), Currency.getName(currency), Currency.getSymbol(currency)], currencyCode)
 }
 
 const resolveDate = (date) => {
@@ -382,6 +378,10 @@ const getRambleLlmSettings = () => {
   return Object.fromEntries(Object.entries(settings).filter(([, value]) => value))
 }
 
+const getRambleErrorMessage = (error) => {
+  return error?.response?.data?.error?.message ?? error?.response?.data?.message ?? error?.message ?? 'Assistant LLM request failed.'
+}
+
 const resolveRambleTransaction = (rawTransaction, index) => {
   const template = resolveTemplate(rawTransaction.templateName)
   const tags = resolveTags(rawTransaction.tagNames)
@@ -420,6 +420,7 @@ const interpretRambleText = async () => {
   stopRecording()
   isInterpreting.value = true
   hasInterpreted.value = false
+  rambleError.value = ''
 
   try {
     const response = await new AssistantRepository().interpretTransactions({
@@ -432,6 +433,10 @@ const interpretRambleText = async () => {
     })
 
     rambleTransactions.value = (response.transactions ?? []).map(resolveRambleTransaction)
+    hasInterpreted.value = true
+  } catch (error) {
+    rambleTransactions.value = []
+    rambleError.value = getRambleErrorMessage(error)
     hasInterpreted.value = true
   } finally {
     isInterpreting.value = false
@@ -473,21 +478,18 @@ const createRambleTransactions = () => {
   closeRamblePopup()
 }
 
-watch(
-  [parsed, () => profileStore.assistantCurrency, () => profileStore.profileActiveId],
-  ([newParsed, newAssistantCurrency]) => {
-    emit('change', {
-      transactionTemplate: newParsed.template,
-      amount: newParsed.amount,
-      tag: newParsed.tag,
-      category: newParsed.category,
-      description: newParsed.description,
-      isTodo: newParsed.isTodo,
-      dateOffset: newParsed.dateOffset,
-      assistantCurrency: newAssistantCurrency,
-    })
-  },
-)
+watch([parsed, () => profileStore.assistantCurrency, () => profileStore.profileActiveId], ([newParsed, newAssistantCurrency]) => {
+  emit('change', {
+    transactionTemplate: newParsed.template,
+    amount: newParsed.amount,
+    tag: newParsed.tag,
+    category: newParsed.category,
+    description: newParsed.description,
+    isTodo: newParsed.isTodo,
+    dateOffset: newParsed.dateOffset,
+    assistantCurrency: newAssistantCurrency,
+  })
+})
 
 watch(showRamblePopup, (newValue) => {
   if (!newValue) {

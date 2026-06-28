@@ -12,6 +12,8 @@ import { dashboardCardList } from '~/constants/DashboardConstants.js'
 import Page from '~/models/Page.js'
 import { migrateType, migrateTypeList } from '~/utils/MigrateUtils.js'
 
+const frontendOnlySettings = ['assistantRambleEndpoint', 'assistantRambleModel', 'assistantRambleApiKey']
+
 export const useProfileStore = defineStore('profile', () => {
   const profileActiveId = useLocalStorage('profileActiveId', null, { serializer: StorageSerializers.number })
   const profileList = useLocalStorage('profileList', [])
@@ -106,11 +108,11 @@ export const useProfileStore = defineStore('profile', () => {
   // Actions
   function setProfile(profile) {
     profileActiveId.value = profile ? parseInt(profile?.id) : null
-    useProfileStore().$patch(profile?.settings ?? {})
+    useProfileStore().$patch(omit(profile?.settings ?? {}, frontendOnlySettings))
   }
 
   function getProfileSettings() {
-    let omitList = ['dashboard.showAccountAmounts', 'profileActiveId', 'profileList']
+    let omitList = ['dashboard.showAccountAmounts', 'profileActiveId', 'profileList', ...frontendOnlySettings]
     let data = cloneDeep(useProfileStore().$state)
     let profile = profileList.value.find((item) => item.id === profileActiveId.value)
 

@@ -8,7 +8,7 @@
 
         <app-boolean v-model="autoFocusAssistant" :label="$t('settings.assistant.auto_focus')" />
         <app-field v-model="assistantTodoTagMatcher" :icon="TablerIconConstants.fieldText2" :label="$t('settings.assistant.substring_todo_tag')" :rules="[rule.required()]" required />
-        <currency-select v-model="assistantCurrency" :info="$t('settings.assistant.currency')"/>
+        <currency-select v-model="assistantCurrency" :info="$t('settings.assistant.currency')" />
       </van-cell-group>
 
       <van-cell-group inset>
