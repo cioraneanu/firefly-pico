@@ -13,8 +13,9 @@ return new class extends Migration
     {
         Schema::create('assistant_rambles', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->string("auth_token_hash");
             $table->text('text');
+            $table->timestamps();
         });
     }
 
