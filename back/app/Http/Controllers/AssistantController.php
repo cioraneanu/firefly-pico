@@ -30,8 +30,7 @@ class AssistantController extends BaseController
     public function create(Request $request)
     {
         BaseAuthorization::checkUser();
-
-        $text = $this->getPlainTextInput($request);
+        $text = $request->get('text');
 
         if (!$text) {
             return $this->setStatusCode(self::HTTP_CODE_UNPROCESSABLE_ENTITY)->respond([

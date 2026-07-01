@@ -70,21 +70,21 @@ class RambleService
         return $this->normalizeTransactions($json);
     }
 
-    private function getPlainTextInput(Request $request)
-    {
-        $contentType = strtolower($request->headers->get('Content-Type', ''));
-
-        if (str_starts_with($contentType, 'text/plain')) {
-            return trim($request->getContent());
-        }
-
-        $text = $request->input('text');
-        if ($text !== null) {
-            return trim((string)$text);
-        }
-
-        return trim($request->getContent());
-    }
+//    private function getPlainTextInput(Request $request)
+//    {
+//        $contentType = strtolower($request->headers->get('Content-Type', ''));
+//
+//        if (str_starts_with($contentType, 'text/plain')) {
+//            return trim($request->getContent());
+//        }
+//
+//        $text = $request->input('text');
+//        if ($text !== null) {
+//            return trim((string)$text);
+//        }
+//
+//        return trim($request->getContent());
+//    }
 
     private function getInterpretationPrompt()
     {
