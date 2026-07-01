@@ -1,5 +1,5 @@
 import { watch } from 'vue'
-import { head, uniqBy } from 'lodash-es'
+import { head, isEqual, uniqBy } from 'lodash-es'
 import { addDays } from 'date-fns'
 import Category from '~/models/Category'
 import Tag from '~/models/Tag'
@@ -27,7 +27,7 @@ export const useTransactionFormLogic = ({
   notes,
   budget,
   date,
-  profileStore
+  profileStore,
 }) => {
   const accountStore = useAccountStore()
   const categoryStore = useCategoryStore()
@@ -93,9 +93,11 @@ export const useTransactionFormLogic = ({
     }
   })
 
-  watch(type, () => {
-    // Only when creating a transaction
-    if (itemId.value) {
+  watch(type, (newValue, oldValue) => {
+    // Only react to real user-driven tab switches on the new-transaction form.
+    // On initial form population, oldValue is undefined and the saved defaults
+    // are still being settled — running the repair there silently dropped them.
+    if (itemId.value || !oldValue || isEqual(newValue, oldValue)) {
       return
     }
     attemptAccountsFix()
@@ -186,6 +188,6 @@ export const useTransactionFormLogic = ({
 
   return {
     onAssistant,
-    attemptAccountsFix
+    attemptAccountsFix,
   }
 }

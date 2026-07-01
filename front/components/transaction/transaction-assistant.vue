@@ -6,7 +6,7 @@
 
       <div class="flex-1" />
       <currency-dropdown v-model="profileStore.assistantCurrency" class="text-size-12" :is-clearable="true" />
-      <transaction-assistant-ramble :assistant-text="assistantText" @change="onRambleChange" @create-many="onRambleCreateMany" />
+      <ramble :assistant-text="assistantText" />
     </div>
     <div class="text-size-12 text-muted mb-5">{{ $t('transaction.assistant_format') }}</div>
 
@@ -55,11 +55,12 @@ import { ellipsizeText } from '~/utils/Utils.js'
 import RomanianLanguageUtils from '~/utils/RomanianLanguageUtils.js'
 import { evalMath } from '~/utils/MathUtils.js'
 import { useFuzzySearchResource } from '~/composables/useFuzzySearch.js'
+import Ramble from '~/components/transaction/ramble.vue'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
 
-const emit = defineEmits(['change', 'create-many'])
+const emit = defineEmits(['change'])
 
 const assistantText = defineModel({ type: String })
 
@@ -140,14 +141,6 @@ const previewTags = computed(() => {
     { label: t('date'), value: result.dateOffset !== null ? format(addDays(new Date(), result.dateOffset), 'dd MMM') : null },
   ].filter((previewTag) => !!previewTag.value)
 })
-
-const onRambleChange = (transaction) => {
-  emit('change', transaction)
-}
-
-const onRambleCreateMany = (transactions) => {
-  emit('create-many', transactions)
-}
 
 watch([parsed, () => profileStore.assistantCurrency, () => profileStore.profileActiveId], ([newParsed, newAssistantCurrency]) => {
   emit('change', {
