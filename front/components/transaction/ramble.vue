@@ -5,7 +5,7 @@
     </van-button>
   </van-badge>
 
-  <app-popup v-model:show="showRamblePopup">
+  <app-popup v-model:show="showRamblePopup" :popup-style="ramblePopupStyle">
     <div class="display-flex flex-direction-column h-100 m-h-0">
       <div class="display-flex align-items-start gap-2 px-3 py-2 border-bottom">
         <div class="flex-1-w">
@@ -89,7 +89,9 @@
           </div>
         </template>
 
-        <div v-else-if="hasInterpreted" class="text-size-12 text-muted text-center p-20">{{ $t('transaction.assistant_ramble_no_results') }}</div>
+        <div v-else class="text-size-12 text-muted text-center p-20">
+          {{ hasInterpreted ? $t('transaction.assistant_ramble_no_results') : $t('transaction.assistant_ramble_no_transactions_yet') }}
+        </div>
       </div>
 
       <div v-if="hasCreateProgress" class="px-3 py-2 border-top">
@@ -108,7 +110,7 @@
     </div>
   </app-popup>
 
-  <app-popup v-model:show="showRambleTransactionPopup">
+  <app-popup v-model:show="showRambleTransactionPopup" :popup-style="rambleTransactionPopupStyle">
     <div class="display-flex flex-direction-column h-100 m-h-0">
       <div class="display-flex flex-center-vertical gap-2 px-3 py-2 border-bottom">
         <div class="font-600 text-size-16 flex-1">{{ $t('transaction.assistant_ramble_edit_title') }}</div>
@@ -154,6 +156,7 @@ const props = defineProps({
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
+const appStore = useAppStore()
 const assistantRepository = new AssistantRepository()
 const transactionRepository = new TransactionRepository()
 const { getRambleContext, getRambleLlmSettings, resolveRambleTransaction } = useRambleTransactionResolver()
@@ -184,6 +187,23 @@ const currentCreateIndex = ref(0)
 const editingRambleTransaction = ref(null)
 const editingTransactionFormRef = ref(null)
 const editingFormName = 'ramble-transaction-form'
+const rambleSessionId = ref(0)
+
+const ramblePopupStyle = computed(() => {
+  if (appStore.isDesktopLayout) {
+    return { height: '80vh', maxHeight: '80vh' }
+  }
+
+  return { height: '90%' }
+})
+
+const rambleTransactionPopupStyle = computed(() => {
+  if (appStore.isDesktopLayout) {
+    return { width: '94vw', maxHeight: '92vh' }
+  }
+
+  return { height: '96%' }
+})
 
 const speechLanguage = computed(() => {
   const languageMap = {
@@ -276,19 +296,27 @@ const refreshSavedRambleCount = async ({ showLoading = false } = {}) => {
 }
 
 const fetchSavedRambles = async () => {
+  const sessionId = rambleSessionId.value
   isLoadingSavedRambles.value = true
 
   try {
     const response = await assistantRepository.getSavedRambles()
+    if (sessionId !== rambleSessionId.value) {
+      return
+    }
+
     savedRambles.value = response.data ?? []
     loadedSavedRambleIds.value = savedRambles.value.map((ramble) => ramble.id).filter(Boolean)
     savedRamblesCount.value = savedRambles.value.length
   } finally {
-    isLoadingSavedRambles.value = false
+    if (sessionId === rambleSessionId.value) {
+      isLoadingSavedRambles.value = false
+    }
   }
 }
 
 const deleteLoadedSavedRambles = async () => {
+  const sessionId = rambleSessionId.value
   const loadedIds = [...loadedSavedRambleIds.value]
   if (loadedIds.length === 0) {
     return true
@@ -298,6 +326,10 @@ const deleteLoadedSavedRambles = async () => {
 
   try {
     const response = await assistantRepository.deleteSavedRambles(loadedIds)
+    if (sessionId !== rambleSessionId.value) {
+      return false
+    }
+
     if (isResponseSuccessful(response)) {
       savedRambles.value = savedRambles.value.filter((savedRamble) => !loadedIds.includes(savedRamble.id))
       loadedSavedRambleIds.value = []
@@ -305,7 +337,9 @@ const deleteLoadedSavedRambles = async () => {
       return true
     }
   } finally {
-    isDeletingLoadedSavedRambles.value = false
+    if (sessionId === rambleSessionId.value) {
+      isDeletingLoadedSavedRambles.value = false
+    }
   }
 
   return false
@@ -323,6 +357,25 @@ const openRamblePopup = async () => {
 const closeRamblePopup = () => {
   stopRecording()
   showRamblePopup.value = false
+  resetRamble()
+}
+
+const resetRamble = () => {
+  rambleSessionId.value += 1
+  rambleText.value = ''
+  savedRambles.value = []
+  loadedSavedRambleIds.value = []
+  rambleTransactions.value = []
+  speechTemporary.value = ''
+  isLoadingSavedRambles.value = false
+  isDeletingLoadedSavedRambles.value = false
+  isInterpreting.value = false
+  isCreatingRambleTransactions.value = false
+  hasInterpreted.value = false
+  rambleError.value = ''
+  currentCreateIndex.value = 0
+  showRambleTransactionPopup.value = false
+  editingRambleTransaction.value = null
 }
 
 const toggleRecording = () => {
@@ -359,6 +412,7 @@ const interpretRambleText = async () => {
     return
   }
 
+  const sessionId = rambleSessionId.value
   stopRecording()
   isInterpreting.value = true
   hasInterpreted.value = false
@@ -374,9 +428,17 @@ const interpretRambleText = async () => {
       llm: getRambleLlmSettings(),
     })
 
+    if (sessionId !== rambleSessionId.value) {
+      return
+    }
+
     const resolvedTransactions = (response.transactions ?? []).map(resolveRambleTransaction)
     const transactionDrafts = []
     for (const transaction of resolvedTransactions) {
+      if (sessionId !== rambleSessionId.value) {
+        return
+      }
+
       transactionDrafts.push({
         id: transaction.id,
         assistant: transaction,
@@ -390,11 +452,17 @@ const interpretRambleText = async () => {
     rambleTransactions.value = transactionDrafts
     hasInterpreted.value = true
   } catch (error) {
+    if (sessionId !== rambleSessionId.value) {
+      return
+    }
+
     rambleTransactions.value = []
     rambleError.value = getRambleErrorMessage(error)
     hasInterpreted.value = true
   } finally {
-    isInterpreting.value = false
+    if (sessionId === rambleSessionId.value) {
+      isInterpreting.value = false
+    }
   }
 }
 
@@ -443,6 +511,7 @@ const saveRambleTransactionEdit = async () => {
 }
 
 const createRambleTransactions = async () => {
+  const sessionId = rambleSessionId.value
   const transactionsToCreate = rambleTransactions.value.filter((transaction) => transaction.status !== createStatus.success)
   if (transactionsToCreate.length === 0) {
     return
@@ -454,6 +523,10 @@ const createRambleTransactions = async () => {
 
   try {
     for (const transaction of transactionsToCreate) {
+      if (sessionId !== rambleSessionId.value) {
+        return
+      }
+
       const transactionIndex = rambleTransactions.value.findIndex((rambleTransaction) => rambleTransaction.id === transaction.id)
       if (transactionIndex < 0) {
         continue
@@ -466,6 +539,10 @@ const createRambleTransactions = async () => {
       try {
         const requestData = TransactionTransformer.transformToApi(cloneDeep(rambleTransactions.value[transactionIndex].item))
         const response = await transactionRepository.insert(requestData)
+        if (sessionId !== rambleSessionId.value) {
+          return
+        }
+
         if (isResponseSuccessful(response)) {
           rambleTransactions.value[transactionIndex].status = createStatus.success
           rambleTransactions.value[transactionIndex].response = response
@@ -476,6 +553,10 @@ const createRambleTransactions = async () => {
         rambleTransactions.value[transactionIndex].status = createStatus.error
         rambleTransactions.value[transactionIndex].error = getTransactionCreateErrorMessage(response)
       } catch (error) {
+        if (sessionId !== rambleSessionId.value) {
+          return
+        }
+
         rambleTransactions.value[transactionIndex].status = createStatus.error
         rambleTransactions.value[transactionIndex].error = getTransactionCreateErrorMessage(error)
       }
@@ -498,8 +579,10 @@ const createRambleTransactions = async () => {
 
     closeRamblePopup()
   } finally {
-    currentCreateIndex.value = 0
-    isCreatingRambleTransactions.value = false
+    if (sessionId === rambleSessionId.value) {
+      currentCreateIndex.value = 0
+      isCreatingRambleTransactions.value = false
+    }
   }
 }
 

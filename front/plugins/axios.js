@@ -29,7 +29,7 @@ axios.interceptors.request.use(
   },
 )
 
-const MAX_RETRIES = 2
+const MAX_RETRIES = 1
 
 const retryRequest = async (error) => {
   let errorMessage = get(error, 'response.data.message') ?? get(error, 'message') ?? ''

@@ -6,6 +6,8 @@ import Transaction from '~/models/Transaction'
 import { transactionListFieldList } from '~/constants/TransactionConstants.js'
 import { useAccountStore } from '~/stores/accountStore'
 import { useProfileStore } from '~/stores/profileStore'
+import Account from '~/models/Account.js'
+import Currency from '~/models/Currency.js'
 
 export function useTransactionListItem(props) {
   const accountStore = useAccountStore()
@@ -20,12 +22,12 @@ export function useTransactionListItem(props) {
 
   const sourceAccount = computed(() => {
     const sourceId = get(firstTransaction.value, 'source_id')
-    return get(accountStore.accountDictionary, sourceId)
+    return get(accountStore.accountDictionary, sourceId) ?? get(firstTransaction.value, 'accountSource')
   })
 
   const destinationAccount = computed(() => {
     const destinationId = get(firstTransaction.value, 'destination_id')
-    return get(accountStore.accountDictionary, destinationId)
+    return get(accountStore.accountDictionary, destinationId) ?? get(firstTransaction.value, 'accountDestination')
   })
 
   const displayedAccounts = computed(() => [sourceAccount.value, destinationAccount.value].filter(Boolean))
@@ -54,7 +56,9 @@ export function useTransactionListItem(props) {
   const visibleTags = computed(() => tags.value.slice(0, 4))
   const amountSign = computed(() => (isTypeExpense.value ? '-' : isTypeIncome.value ? '+' : ''))
   const transactionAmount = computed(() => `${amountSign.value}${Transaction.getAmountFormatted(props.value)}`)
-  const transactionCurrency = computed(() => get(firstTransaction.value, 'currency_symbol', ' - '))
+  const transactionCurrency = computed(() => {
+    return get(firstTransaction.value, 'currency_symbol') ?? Currency.getSymbol(Transaction.getCurrency(props.value)) ?? Currency.getSymbol(Account.getCurrency(sourceAccount.value)) ?? ' - '
+  })
 
   const date = computed(() => DateUtils.autoToDate(get(firstTransaction.value, 'date')))
   const dateFormatted = computed(() => DateUtils.dateToUI(date.value))

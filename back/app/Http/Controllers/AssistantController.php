@@ -76,34 +76,7 @@ class AssistantController extends BaseController
 
     public function interpretTransactions(Request $request)
     {
-        $request->validate([
-            'text' => ['required', 'string'],
-            'now' => ['nullable', 'string'],
-            'timezone' => ['nullable', 'string'],
-            'language' => ['nullable', 'string'],
-            'context' => ['nullable', 'array'],
-            'llm' => ['nullable', 'array'],
-            'llm.endpoint' => ['nullable', 'string'],
-            'llm.model' => ['nullable', 'string'],
-            'llm.apiKey' => ['nullable', 'string'],
-        ]);
 
-        $llm = $request->input('llm', []);
-        $endpoint = $llm['endpoint'] ?? config('app.assistant_llm_endpoint');
-        $model = $llm['model'] ?? config('app.assistant_llm_model');
-        $apiKey = $llm['apiKey'] ?? config('app.assistant_llm_api_key');
-
-        if (!$endpoint || !$model) {
-            return $this->setStatusCode(self::HTTP_CODE_BAD_REQUEST)->respond([
-                'message' => 'Assistant LLM endpoint and model are required.',
-            ]);
-        }
-
-        $result = (new RambleService())->process($request);
-
-        return $this->respond([
-            'transactions' => $result,
-        ]);
     }
 
 
