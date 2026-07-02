@@ -120,7 +120,6 @@ export default class AssistantRepository extends BaseRepository {
 
   async interpretTransactions(data) {
     const appStore = useAppStore()
-    await appStore.fetchInfo()
 
     const llm = data.llm ?? {}
     const serverLlmConfig = appStore.assistantLlmConfig ?? {}

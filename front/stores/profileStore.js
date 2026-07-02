@@ -12,8 +12,6 @@ import { dashboardCardList } from '~/constants/DashboardConstants.js'
 import Page from '~/models/Page.js'
 import { migrateType, migrateTypeList } from '~/utils/MigrateUtils.js'
 
-const frontendOnlySettings = ['assistantRambleEndpoint', 'assistantRambleModel', 'assistantRambleApiKey']
-
 export const useProfileStore = defineStore('profile', () => {
   const profileActiveId = useLocalStorage('profileActiveId', null, { serializer: StorageSerializers.number })
   const profileList = useLocalStorage('profileList', [])
@@ -28,9 +26,6 @@ export const useProfileStore = defineStore('profile', () => {
   const assistantTodoTagMatcher = useLocalStorage('assistantTodoTagMatcher', '!!')
   const assistantCurrency = useLocalStorage('assistantCurrency', null, { serializer: StorageSerializers.object })
   const autoFocusAssistant = useLocalStorage('autoFocusAssistant', false)
-  const assistantRambleEndpoint = useLocalStorage('assistantRambleEndpoint', '')
-  const assistantRambleModel = useLocalStorage('assistantRambleModel', '')
-  const assistantRambleApiKey = useLocalStorage('assistantRambleApiKey', '')
 
   const defaultAccountSource = useLocalStorage('defaultAccountSource', null, { serializer: StorageSerializers.object })
   const defaultAccountDestination = useLocalStorage('defaultAccountDestination', null, { serializer: StorageSerializers.object })
@@ -108,11 +103,11 @@ export const useProfileStore = defineStore('profile', () => {
   // Actions
   function setProfile(profile) {
     profileActiveId.value = profile ? parseInt(profile?.id) : null
-    useProfileStore().$patch(omit(profile?.settings ?? {}, frontendOnlySettings))
+    useProfileStore().$patch(profile?.settings ?? {})
   }
 
   function getProfileSettings() {
-    let omitList = ['dashboard.showAccountAmounts', 'profileActiveId', 'profileList', ...frontendOnlySettings]
+    let omitList = ['dashboard.showAccountAmounts', 'profileActiveId', 'profileList']
     let data = cloneDeep(useProfileStore().$state)
     let profile = profileList.value.find((item) => item.id === profileActiveId.value)
 
@@ -184,9 +179,6 @@ export const useProfileStore = defineStore('profile', () => {
     assistantTodoTagMatcher,
     assistantCurrency,
     autoFocusAssistant,
-    assistantRambleEndpoint,
-    assistantRambleModel,
-    assistantRambleApiKey,
     defaultAccountSource,
     defaultAccountDestination,
     defaultCategory,

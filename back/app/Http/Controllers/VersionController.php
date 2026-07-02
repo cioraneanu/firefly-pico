@@ -13,8 +13,8 @@ class VersionController extends BaseController
     public function getInfo(AssistantLlmConfigService $assistantLlmConfigService)
     {
         return $this->respond([
-            'latestVersion' => $this->resolveLatestVersion(),
-            'assistantLlm' => $assistantLlmConfigService->getPublicConfig(),
+            'latest_version' => $this->resolveLatestVersion(),
+            'assistant_llm' => $assistantLlmConfigService->getPublicConfig(),
         ]);
     }
 

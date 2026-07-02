@@ -23,7 +23,7 @@ class AssistantLlmConfigService
         $config = $this->getConfig();
 
         return [
-            'isConfigured' => $config['isConfigured'],
+            'is_configured' => $config['isConfigured'],
             'endpoint' => $config['endpoint'],
             'model' => $config['model'],
         ];

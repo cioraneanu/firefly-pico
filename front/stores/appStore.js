@@ -26,15 +26,11 @@ export const useAppStore = defineStore('app', () => {
   const syncProfileInDB = useLocalStorage('syncProfileInDB', true)
   const daysBetweenFullSync = useLocalStorage('daysBetweenFullSync', 4)
 
-
-
   const profileFloatButtonPosition = useLocalStorage('profileFloatButtonPosition', { y: window.innerHeight / 2.2 })
 
   const currentAppVersion = ref(runtimeConfig.public.version)
   const queryTimeout = ref(runtimeConfig.public.queryTimeout)
-  const latestAppVersion = ref(null)
-  const assistantLlmConfig = ref(null)
-
+  const info = ref(null) // General info from backend, { latest_version, use_llm, etc }
 
   const windowWidth = ref(null)
 
@@ -47,6 +43,12 @@ export const useAppStore = defineStore('app', () => {
   const isSyncRequiredByMissingExtras = ref(false)
 
   // ---
+
+  const latestAppVersion = computed(() => get(info.value, 'latest_version'))
+  const llm = computed(() => get(info.value, 'assistant_llm'))
+  const llmIsConfigured = computed(() => get(llm.value, 'is_configured'))
+  const llmModel = computed(() => get(llm.value, 'model'))
+  const llmEndpoint = computed(() => get(llm.value, 'endpoint'))
 
   const activePage = computed(() => {
     const route = useRoute()
@@ -92,12 +94,12 @@ export const useAppStore = defineStore('app', () => {
 
   // -------
 
-  async function fetchLatestAppVersion() {
-    let response = await new InfoRepository().getLatestVersion({ showLoading: false })
+  async function fetchInfo() {
+    let response = await new InfoRepository().getInfo({ showLoading: false })
     if (!ResponseUtils.isSuccess(response)) {
       return
     }
-    latestAppVersion.value = get(response, 'data')
+    info.value = response?.data
   }
 
   async function syncEverythingIfOld() {
@@ -152,13 +154,19 @@ export const useAppStore = defineStore('app', () => {
     currentAppVersion,
     queryTimeout,
     latestAppVersion,
+
+    llm,
+    llmIsConfigured,
+    llmModel,
+    llmEndpoint,
+
     windowWidth,
     activePage,
     isDesktopLayout,
     gridColumns,
     hasAuthToken,
     isNewVersionAvailable,
-    fetchLatestAppVersion,
+    fetchInfo,
     lastSync,
     isSyncRequiredByMissingExtras,
     syncEverythingIfOld,

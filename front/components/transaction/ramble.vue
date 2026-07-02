@@ -159,7 +159,7 @@ const profileStore = useProfileStore()
 const appStore = useAppStore()
 const assistantRepository = new AssistantRepository()
 const transactionRepository = new TransactionRepository()
-const { getRambleContext, getRambleLlmSettings, resolveRambleTransaction } = useRambleTransactionResolver()
+const { getRambleContext, resolveRambleTransaction } = useRambleTransactionResolver()
 const { buildTransactionItemFromAssistant } = useTransactionAssistantDraft()
 
 const createStatus = {
@@ -425,7 +425,6 @@ const interpretRambleText = async () => {
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       language: profileStore.language,
       context: getRambleContext(),
-      llm: getRambleLlmSettings(),
     })
 
     if (sessionId !== rambleSessionId.value) {

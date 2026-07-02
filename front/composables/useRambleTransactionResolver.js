@@ -97,16 +97,6 @@ export const useRambleTransactionResolver = () => {
     currencies: contextNames(currencyStore.currenciesList, (currency) => [Currency.getCode(currency), Currency.getName(currency), Currency.getSymbol(currency)]),
   })
 
-  const getRambleLlmSettings = () => {
-    const settings = {
-      endpoint: profileStore.assistantRambleEndpoint?.trim(),
-      model: profileStore.assistantRambleModel?.trim(),
-      apiKey: profileStore.assistantRambleApiKey?.trim(),
-    }
-
-    return Object.fromEntries(Object.entries(settings).filter(([, value]) => value))
-  }
-
   const resolveAssistantAccount = (accountName) => {
     return accountName ? (resolveAccount(accountName) ?? undefined) : undefined
   }
@@ -146,7 +136,6 @@ export const useRambleTransactionResolver = () => {
 
   return {
     getRambleContext,
-    getRambleLlmSettings,
     resolveRambleTransaction,
   }
 }
