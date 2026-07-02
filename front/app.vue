@@ -14,8 +14,6 @@ import RouteConstants from '~/constants/RouteConstants'
 
 import '~/assets/styles/variables.css'
 import AppLoading from '~/components/ui-kit/app-loading.vue'
-import profile from '~/models/Profile.js'
-import { setDefaultOptions } from 'date-fns'
 
 const dashboardStore = useDashboardStore()
 const profileStore = useProfileStore()
@@ -36,7 +34,7 @@ onMounted(async () => {
   }
   await dashboardStore.init()
 
-  appStore.fetchLatestAppVersion()
+  appStore.fetchInfo()
   await profileStore.getProfiles({ showLoading: false })
   await appStore.syncEverythingIfOld()
 })

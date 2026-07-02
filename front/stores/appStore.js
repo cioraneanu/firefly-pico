@@ -33,6 +33,8 @@ export const useAppStore = defineStore('app', () => {
   const currentAppVersion = ref(runtimeConfig.public.version)
   const queryTimeout = ref(runtimeConfig.public.queryTimeout)
   const latestAppVersion = ref(null)
+  const assistantLlmConfig = ref(null)
+
 
   const windowWidth = ref(null)
 

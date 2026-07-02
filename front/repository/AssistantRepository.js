@@ -106,11 +106,6 @@ export default class AssistantRepository extends BaseRepository {
     return get(response, 'data', {})
   }
 
-  async getLlmConfig({ showLoading = false } = {}) {
-    const response = await axios.get(`${this.getUrl()}/llm-config`, { showLoading })
-    return get(response, 'data', {})
-  }
-
   async deleteSavedRamble(id) {
     return axios.delete(`${this.getUrl()}/rambles/${id}`)
   }
@@ -124,8 +119,11 @@ export default class AssistantRepository extends BaseRepository {
   }
 
   async interpretTransactions(data) {
+    const appStore = useAppStore()
+    await appStore.fetchInfo()
+
     const llm = data.llm ?? {}
-    const serverLlmConfig = await this.getLlmConfig({ showLoading: false })
+    const serverLlmConfig = appStore.assistantLlmConfig ?? {}
     const isServerLlmConfigured = !!serverLlmConfig.isConfigured
     const endpoint = llm.endpoint?.trim() || DEFAULT_ASSISTANT_LLM_ENDPOINT
     const model = (isServerLlmConfigured ? serverLlmConfig.model : llm.model)?.trim() || DEFAULT_ASSISTANT_LLM_MODEL

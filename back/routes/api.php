@@ -31,7 +31,7 @@ use Illuminate\Support\Facades\Route;
 
 
 // Own resources
-Route::get('latest-version', [VersionController::class, 'getLatestVersion']);
+Route::get('info', [VersionController::class, 'getInfo']);
 Route::get('user', [UserController::class, 'getUser']);
 
 RouteUtils::makeCRUD("transaction-templates", TransactionTemplateController::class);
@@ -65,7 +65,6 @@ Route::get('search/transactions', [TransactionController::class, 'getAll']);
 
 RouteUtils::makeCRUD("profiles", ProfileController::class);
 
-Route::get('assistant/llm-config', [AssistantController::class, 'getLlmConfig']);
 Route::post('assistant/rambles', [AssistantController::class, 'create']);
 Route::get('assistant/rambles/count', [AssistantController::class, 'getCount']);
 Route::get('assistant/rambles', [AssistantController::class, 'getAll']);
@@ -82,4 +81,3 @@ $proxyMethods = ['get', 'post', 'put', 'patch', 'delete'];
 foreach ($proxyMethods as $proxyMethod) {
     Route::$proxyMethod('{any?}', [FireflyProxyController::class, 'proxyRequest'])->where('any', '.*');
 }
-

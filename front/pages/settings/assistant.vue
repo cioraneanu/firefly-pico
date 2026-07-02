@@ -54,11 +54,10 @@ import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 import { rule } from '~/utils/ValidationUtils.js'
-import AssistantRepository from '~/repository/AssistantRepository.js'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
-const assistantRepository = new AssistantRepository()
+const appStore = useAppStore()
 
 const assistantTodoTagMatcher = ref('')
 const assistantCurrency = ref(null)
@@ -66,7 +65,7 @@ const autoFocusAssistant = ref(false)
 const assistantRambleEndpoint = ref('')
 const assistantRambleModel = ref('')
 const assistantRambleApiKey = ref('')
-const assistantLlmConfig = ref(null)
+const assistantLlmConfig = computed(() => appStore.assistantLlmConfig)
 const isAssistantLlmServerConfigured = computed(() => !!assistantLlmConfig.value?.isConfigured)
 
 const syncedSettings = [
@@ -88,15 +87,6 @@ const onSave = async () => {
   }
 }
 
-const fetchAssistantLlmConfig = async () => {
-  const config = await assistantRepository.getLlmConfig({ showLoading: false })
-  assistantLlmConfig.value = {
-    isConfigured: !!config.isConfigured,
-    endpoint: config.endpoint ?? '',
-    model: config.model ?? '',
-  }
-}
-
 const toolbar = useToolbar()
 toolbar.init({
   title: t('settings.assistant.title'),
@@ -104,8 +94,7 @@ toolbar.init({
   backRouteDesktop: RouteConstants.ROUTE_SETTINGS,
 })
 
-onMounted(async () => {
+onMounted(() => {
   animateSettings()
-  await fetchAssistantLlmConfig()
 })
 </script>

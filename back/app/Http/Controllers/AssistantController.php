@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Authorizations\BaseAuthorization;
 use App\Http\Controllers\Base\BaseController;
 use App\Models\AssistantRamble;
+use App\Services\AssistantLlmConfigService;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -73,17 +74,6 @@ class AssistantController extends BaseController
         ]);
     }
 
-    public function getLlmConfig()
-    {
-        $config = $this->getAssistantLlmConfig();
-
-        return $this->respond([
-            'isConfigured' => $config['isConfigured'],
-            'endpoint' => $config['endpoint'],
-            'model' => $config['model'],
-        ]);
-    }
-
     public function interpretTransactions(Request $request)
     {
         $request->validate([
@@ -95,7 +85,7 @@ class AssistantController extends BaseController
             'llm.apiKey' => ['nullable', 'string'],
         ]);
 
-        $config = $this->getAssistantLlmConfig();
+        $config = app(AssistantLlmConfigService::class)->getConfig();
         $payload = $request->input('payload');
 
         if ($config['isConfigured']) {
@@ -104,9 +94,9 @@ class AssistantController extends BaseController
             $apiKey = $config['apiKey'];
         } else {
             $llm = $request->input('llm', []);
-            $endpoint = $this->trimValue($llm['endpoint'] ?? null) ?: $config['endpoint'];
-            $model = $this->trimValue($llm['model'] ?? ($payload['model'] ?? null)) ?: $config['model'];
-            $apiKey = $this->trimValue($llm['apiKey'] ?? null);
+            $endpoint = trim((string)($llm['endpoint'] ?? '')) ?: $config['endpoint'];
+            $model = trim((string)($llm['model'] ?? ($payload['model'] ?? ''))) ?: $config['model'];
+            $apiKey = trim((string)($llm['apiKey'] ?? ''));
         }
 
         if (!$endpoint) {
@@ -153,25 +143,5 @@ class AssistantController extends BaseController
             'content' => $response->body(),
         ]);
     }
-
-    private function getAssistantLlmConfig()
-    {
-        $endpoint = $this->trimValue(config('services.assistant_llm.endpoint'));
-        $model = $this->trimValue(config('services.assistant_llm.model'));
-        $apiKey = $this->trimValue(config('services.assistant_llm.api_key'));
-
-        return [
-            'isConfigured' => $endpoint !== '' || $apiKey !== '',
-            'endpoint' => $endpoint ?: config('services.assistant_llm.defaults.endpoint'),
-            'model' => $model ?: config('services.assistant_llm.defaults.model'),
-            'apiKey' => $apiKey,
-        ];
-    }
-
-    private function trimValue($value)
-    {
-        return trim((string)($value ?? ''));
-    }
-
 
 }
