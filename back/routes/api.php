@@ -65,6 +65,7 @@ Route::get('search/transactions', [TransactionController::class, 'getAll']);
 
 RouteUtils::makeCRUD("profiles", ProfileController::class);
 
+Route::get('assistant/llm-config', [AssistantController::class, 'getLlmConfig']);
 Route::post('assistant/rambles', [AssistantController::class, 'create']);
 Route::get('assistant/rambles/count', [AssistantController::class, 'getCount']);
 Route::get('assistant/rambles', [AssistantController::class, 'getAll']);
@@ -81,5 +82,4 @@ $proxyMethods = ['get', 'post', 'put', 'patch', 'delete'];
 foreach ($proxyMethods as $proxyMethod) {
     Route::$proxyMethod('{any?}', [FireflyProxyController::class, 'proxyRequest'])->where('any', '.*');
 }
-
 

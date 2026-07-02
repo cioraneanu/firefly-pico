@@ -174,7 +174,8 @@
       "ramble_endpoint": "LLM endpoint",
       "ramble_model": "LLM model",
       "ramble_api_key": "LLM API key",
-      "ramble_info": "Stored only in this browser. Direct browser calls expose the API key on this device and require the endpoint to allow CORS."
+      "ramble_info": "Stored only in this browser. Direct browser calls expose the API key on this device and require the endpoint to allow CORS.",
+      "ramble_server_info": "Configured by the server. Browser LLM settings are disabled for this instance."
     },
     "formatting_entry": "Formatare",
     "formatting": {

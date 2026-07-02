@@ -4,7 +4,6 @@ import BaseRepository from '~/repository/BaseRepository'
 
 const DEFAULT_ASSISTANT_LLM_ENDPOINT = 'https://api.openai.com/v1/chat/completions'
 const DEFAULT_ASSISTANT_LLM_MODEL = 'gpt-4o-mini'
-const assistantLlmClient = axios.create()
 
 const getInterpretationPrompt = () =>
   [
@@ -107,6 +106,11 @@ export default class AssistantRepository extends BaseRepository {
     return get(response, 'data', {})
   }
 
+  async getLlmConfig({ showLoading = false } = {}) {
+    const response = await axios.get(`${this.getUrl()}/llm-config`, { showLoading })
+    return get(response, 'data', {})
+  }
+
   async deleteSavedRamble(id) {
     return axios.delete(`${this.getUrl()}/rambles/${id}`)
   }
@@ -121,22 +125,14 @@ export default class AssistantRepository extends BaseRepository {
 
   async interpretTransactions(data) {
     const llm = data.llm ?? {}
+    const serverLlmConfig = await this.getLlmConfig({ showLoading: false })
+    const isServerLlmConfigured = !!serverLlmConfig.isConfigured
     const endpoint = llm.endpoint?.trim() || DEFAULT_ASSISTANT_LLM_ENDPOINT
-    const model = llm.model?.trim() || DEFAULT_ASSISTANT_LLM_MODEL
+    const model = (isServerLlmConfigured ? serverLlmConfig.model : llm.model)?.trim() || DEFAULT_ASSISTANT_LLM_MODEL
     const apiKey = llm.apiKey?.trim()
 
-    const headers = {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-    }
-
-    if (apiKey) {
-      headers.Authorization = `Bearer ${apiKey}`
-    }
-
-    const response = await assistantLlmClient.post(
-      endpoint,
-      {
+    const requestData = {
+      payload: {
         model,
         temperature: 0.1,
         stream: false,
@@ -157,13 +153,28 @@ export default class AssistantRepository extends BaseRepository {
           },
         ],
       },
-      {
-        headers,
-        timeout: 60000,
-      },
-    )
+    }
 
-    const json = decodeJsonContent(get(response, 'data.choices.0.message.content'))
+    if (!isServerLlmConfigured) {
+      requestData.llm = {
+        endpoint,
+        model,
+      }
+
+      if (apiKey) {
+        requestData.llm.apiKey = apiKey
+      }
+    }
+
+    const response = await axios.post(`${this.getUrl()}/interpret-transactions`, requestData, {
+      timeout: 60000,
+    })
+
+    if (!response || response.status >= 400) {
+      throw new Error(get(response, 'data.message') ?? 'Assistant LLM request failed.')
+    }
+
+    const json = decodeJsonContent(get(response, 'data.choices.0.message.content') ?? get(response, 'data.content'))
     if (json === null) {
       throw new Error('Assistant LLM did not return valid JSON.')
     }

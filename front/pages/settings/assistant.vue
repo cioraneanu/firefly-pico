@@ -14,10 +14,30 @@
       <van-cell-group inset>
         <div class="van-cell-group-title">{{ $t('settings.assistant.ramble') }}:</div>
 
-        <app-field v-model="assistantRambleEndpoint" :icon="TablerIconConstants.external" :label="$t('settings.assistant.ramble_endpoint')" placeholder="https://api.openai.com/v1/chat/completions" />
-        <app-field v-model="assistantRambleModel" :icon="TablerIconConstants.assistant" :label="$t('settings.assistant.ramble_model')" placeholder="gpt-4o-mini" />
-        <app-field v-model="assistantRambleApiKey" :icon="TablerIconConstants.key" :label="$t('settings.assistant.ramble_api_key')" type="password" autocomplete="off" />
-        <div class="text-size-12 text-muted px-3 pb-10">{{ $t('settings.assistant.ramble_info') }}</div>
+        <template v-if="isAssistantLlmServerConfigured">
+          <van-field class="app-field" readonly :model-value="assistantLlmConfig.endpoint" :label="$t('settings.assistant.ramble_endpoint')">
+            <template #left-icon>
+              <app-icon :icon="TablerIconConstants.external" :size="20" />
+            </template>
+          </van-field>
+          <van-field class="app-field" readonly :model-value="assistantLlmConfig.model" :label="$t('settings.assistant.ramble_model')">
+            <template #left-icon>
+              <app-icon :icon="TablerIconConstants.assistant" :size="20" />
+            </template>
+          </van-field>
+          <div class="text-size-12 text-muted px-3 pb-10">{{ $t('settings.assistant.ramble_server_info') }}</div>
+        </template>
+        <template v-else-if="assistantLlmConfig">
+          <app-field
+            v-model="assistantRambleEndpoint"
+            :icon="TablerIconConstants.external"
+            :label="$t('settings.assistant.ramble_endpoint')"
+            placeholder="https://api.openai.com/v1/chat/completions"
+          />
+          <app-field v-model="assistantRambleModel" :icon="TablerIconConstants.assistant" :label="$t('settings.assistant.ramble_model')" placeholder="gpt-4o-mini" />
+          <app-field v-model="assistantRambleApiKey" :icon="TablerIconConstants.key" :label="$t('settings.assistant.ramble_api_key')" type="password" autocomplete="off" />
+          <div class="text-size-12 text-muted px-3 pb-10">{{ $t('settings.assistant.ramble_info') }}</div>
+        </template>
       </van-cell-group>
 
       <app-button-form-save />
@@ -26,7 +46,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useProfileStore } from '~/stores/profileStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'
@@ -34,9 +54,11 @@ import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 import { rule } from '~/utils/ValidationUtils.js'
+import AssistantRepository from '~/repository/AssistantRepository.js'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
+const assistantRepository = new AssistantRepository()
 
 const assistantTodoTagMatcher = ref('')
 const assistantCurrency = ref(null)
@@ -44,6 +66,8 @@ const autoFocusAssistant = ref(false)
 const assistantRambleEndpoint = ref('')
 const assistantRambleModel = ref('')
 const assistantRambleApiKey = ref('')
+const assistantLlmConfig = ref(null)
+const isAssistantLlmServerConfigured = computed(() => !!assistantLlmConfig.value?.isConfigured)
 
 const syncedSettings = [
   { store: profileStore, path: 'autoFocusAssistant', ref: autoFocusAssistant },
@@ -64,6 +88,15 @@ const onSave = async () => {
   }
 }
 
+const fetchAssistantLlmConfig = async () => {
+  const config = await assistantRepository.getLlmConfig({ showLoading: false })
+  assistantLlmConfig.value = {
+    isConfigured: !!config.isConfigured,
+    endpoint: config.endpoint ?? '',
+    model: config.model ?? '',
+  }
+}
+
 const toolbar = useToolbar()
 toolbar.init({
   title: t('settings.assistant.title'),
@@ -71,7 +104,8 @@ toolbar.init({
   backRouteDesktop: RouteConstants.ROUTE_SETTINGS,
 })
 
-onMounted(() => {
+onMounted(async () => {
   animateSettings()
+  await fetchAssistantLlmConfig()
 })
 </script>

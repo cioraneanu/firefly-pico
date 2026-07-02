@@ -57,11 +57,6 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
     'firefly_url' => env('FIREFLY_URL', ''),
-
-    'assistant_llm_endpoint' => env('ASSISTANT_LLM_ENDPOINT', 'https://api.openai.com/v1/chat/completions'),
-    'assistant_llm_model' => env('ASSISTANT_LLM_MODEL', env('OPENAI_MODEL', 'gpt-4o-mini')),
-    'assistant_llm_api_key' => env('ASSISTANT_LLM_API_KEY', env('OPENAI_API_KEY', '')),
-
     'asset_url' => env('ASSET_URL'),
 
     /*
