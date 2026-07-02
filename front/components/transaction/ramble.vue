@@ -1,5 +1,5 @@
 <template>
-  <van-badge :content="savedRamblesCount" :show-zero="false">
+  <van-badge v-if="appStore.llmIsConfigured" :content="savedRamblesCount" :show-zero="false">
     <van-button size="small" class="cursor-pointer" @click="openRamblePopup">
       <icon-wand :size="18" />
     </van-button>

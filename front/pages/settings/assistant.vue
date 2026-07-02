@@ -12,16 +12,16 @@
       </van-cell-group>
 
       <van-cell-group inset>
-        <div class="van-cell-group-title">{{ $t('settings.assistant.ramble') }}:</div>
+        <div class="van-cell-group-title">LLM STATUS:</div>
         <div class="p-3">
           <div v-if="appStore.llmIsConfigured">
-            <div class="font-600 text-size-14">LLM configured</div>
+            <div class="font-600 text-size-14">Configured</div>
             <div class="font-400 text-size-13">Endpoint: {{ appStore.llmEndpoint }}</div>
             <div class="font-400 text-size-13">Model: {{ appStore.llmModel }}</div>
           </div>
 
           <div v-else>
-            <div class="font-600 text-size-14">LLM not configured.</div>
+            <div class="font-600 text-size-14">Not configured</div>
             <div class="font-400 text-size-13 text-muted">If you want to use provide these docker environment variables:</div>
             <div class="font-400 text-size-13 text-muted gap-2 display-flex flex-wrap">
               <div class="tag-gray">ASSISTANT_LLM_ENDPOINT</div>

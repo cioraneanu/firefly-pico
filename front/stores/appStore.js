@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { useLocalStorage } from '@vueuse/core'
+import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import ResponseUtils from '~/utils/ResponseUtils'
 import { compareVersionStrings } from '~/utils/DataUtils'
 import InfoRepository from '~/repository/InfoRepository.js'
@@ -30,7 +30,9 @@ export const useAppStore = defineStore('app', () => {
 
   const currentAppVersion = ref(runtimeConfig.public.version)
   const queryTimeout = ref(runtimeConfig.public.queryTimeout)
-  const info = ref(null) // General info from backend, { latest_version, use_llm, etc }
+
+  // General info from backend, { latest_version, use_llm, etc }
+  const info = useLocalStorage('info', null, { serializer: StorageSerializers.object })
 
   const windowWidth = ref(null)
 
