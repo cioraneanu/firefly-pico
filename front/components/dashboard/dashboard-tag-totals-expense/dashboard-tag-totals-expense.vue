@@ -68,7 +68,7 @@ const amountModeTabs = computed(() => [
 ])
 
 const barsList = computed(() => {
-  const tagTotalDictionary = dashboardStore.netAmountMode ? dashboardStore.dashboardNetByTag : dashboardStore.dashboardExpensesByTag
+  const tagTotalDictionary = dashboardStore.dashboardExpensesByTag
 
   const maxAmount = Math.max(...Object.values(tagTotalDictionary))
 

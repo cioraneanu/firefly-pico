@@ -63,7 +63,7 @@ const amountModeTabs = computed(() => [
 ])
 
 const barsList = computed(() => {
-  const dictionary = dashboardStore.netAmountMode ? dashboardStore.dashboardNetByCategory : dashboardStore.dashboardExpensesByCategory
+  const dictionary = dashboardStore.dashboardExpensesByCategory
 
   const maxAmount = Math.max(...Object.values(dictionary))
 

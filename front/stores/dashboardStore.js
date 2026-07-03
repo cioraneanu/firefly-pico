@@ -223,79 +223,51 @@ export const useDashboardStore = defineStore('dashboard', () => {
   })
 
   const dashboardExpensesByCategory = computed(() => {
-    return transactionsListExpense.value.reduce((result, transaction) => {
+    const transactions = netAmountMode.value ? [...transactionsListExpense.value, ...transactionsListIncome.value] : transactionsListExpense.value
+    const totals = transactions.reduce((result, transaction) => {
+      const multiplier = Transaction.getTypeCode(transaction) === Transaction.types.income.code ? -1 : 1
       const splits = Transaction.getSplits(transaction)
       for (let split of splits) {
         const categoryId = split.category_id
         const oldTotal = result[categoryId] ?? 0
-        result[categoryId] = oldTotal + convertCurrency(split.amount, split.currency_code, Currency.getCode(dashboardCurrency.value))
+        result[categoryId] = oldTotal + multiplier * convertCurrency(split.amount, split.currency_code, Currency.getCode(dashboardCurrency.value))
+      }
+      return result
+    }, {})
+
+    if (!netAmountMode.value) return totals
+
+    return Object.keys(totals).reduce((result, categoryId) => {
+      if (totals[categoryId] > 0) {
+        result[categoryId] = totals[categoryId]
       }
       return result
     }, {})
   })
 
   const dashboardExpensesByTag = computed(() => {
-    return transactionsListExpense.value.reduce((result, transaction) => {
+    const transactions = netAmountMode.value ? [...transactionsListExpense.value, ...transactionsListIncome.value] : transactionsListExpense.value
+    const totals = transactions.reduce((result, transaction) => {
+      const multiplier = Transaction.getTypeCode(transaction) === Transaction.types.income.code ? -1 : 1
       let tags = Transaction.getTags(transaction)
       let rootTag = tags.find((tag) => !tag?.attributes?.parent_id) ?? tags[0]
       let targetTags = tagsWidgetModeOnlyRootTag.value ? [rootTag] : tags
       for (let targetTag of targetTags) {
         let tagId = targetTag?.id ?? 0
         let oldTotal = result[tagId] ?? 0
-        result[tagId] = oldTotal + convertTransactionAmountToCurrency(transaction, Currency.getCode(dashboardCurrency.value))
-      }
-      return result
-    }, {})
-  })
-
-  const dashboardNetByCategory = computed(() => {
-    const incomeByCategory = transactionsListIncome.value.reduce((result, transaction) => {
-      const splits = Transaction.getSplits(transaction)
-      for (let split of splits) {
-        const categoryId = split.category_id
-        const oldTotal = result[categoryId] ?? 0
-        result[categoryId] = oldTotal + convertCurrency(split.amount, split.currency_code, Currency.getCode(dashboardCurrency.value))
+        result[tagId] = oldTotal + multiplier * convertTransactionAmountToCurrency(transaction, Currency.getCode(dashboardCurrency.value))
       }
       return result
     }, {})
 
-    const result = {}
-    const allCategoryIds = new Set([...Object.keys(dashboardExpensesByCategory.value), ...Object.keys(incomeByCategory)])
-    for (const categoryId of allCategoryIds) {
-      const expense = dashboardExpensesByCategory.value[categoryId] ?? 0
-      const income = incomeByCategory[categoryId] ?? 0
-      const net = income - expense
-      if (net < 0) {
-        result[categoryId] = Math.abs(net)
-      }
-    }
-    return result
-  })
+    if (!netAmountMode.value) return totals
 
-  const dashboardNetByTag = computed(() => {
-    const incomeByTag = transactionsListIncome.value.reduce((result, transaction) => {
-      let tags = Transaction.getTags(transaction)
-      let rootTag = tags.find((tag) => !tag?.attributes?.parent_id) ?? tags[0]
-      let targetTags = tagsWidgetModeOnlyRootTag.value ? [rootTag] : tags
-      for (let targetTag of targetTags) {
-        let tagId = targetTag?.id ?? 0
-        let oldTotal = result[tagId] ?? 0
-        result[tagId] = oldTotal + convertTransactionAmountToCurrency(transaction, Currency.getCode(dashboardCurrency.value))
+    return Object.keys(totals).reduce((result, tagId) => {
+      if (totals[tagId] > 0) {
+        result[tagId] = totals[tagId]
       }
       return result
     }, {})
-
-    const result = {}
-    const allTagIds = new Set([...Object.keys(dashboardExpensesByTag.value), ...Object.keys(incomeByTag)])
-    for (const tagId of allTagIds) {
-      const expense = dashboardExpensesByTag.value[tagId] ?? 0
-      const income = incomeByTag[tagId] ?? 0
-      const net = income - expense
-      if (net < 0) {
-        result[tagId] = Math.abs(net)
-      }
-    }
-    return result
   })
 
   const dashboardTransfersByCategory = computed(() => {
@@ -444,8 +416,6 @@ export const useDashboardStore = defineStore('dashboard', () => {
     transactionsListTransfers,
     dashboardExpensesByCategory,
     dashboardExpensesByTag,
-    dashboardNetByCategory,
-    dashboardNetByTag,
     dashboardTransfersByCategory,
     dashboardTransfersByTag,
     transactionsLatest,
