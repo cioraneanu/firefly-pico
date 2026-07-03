@@ -1,9 +1,25 @@
 <template>
   <van-cell-group inset>
-    <div class="van-cell-group-title">{{ $t('dashboard.expenses_by_categories') }}:</div>
+    <div class="van-cell-group-title flex-center-vertical">
+      <div class="flex-1">{{ $t('dashboard.expenses_by_categories') }}:</div>
+      <van-popover v-model:show="showOptionsPopover" placement="bottom-end">
+        <div class="dashboard-card-options">
+          <div class="dashboard-card-option">
+            <div class="dashboard-card-option-label">{{ $t('amount') }}</div>
+            <app-tabs v-model="dashboardStore.netAmountMode" :items="amountModeTabs" />
+          </div>
+        </div>
+
+        <template #reference>
+          <button type="button" class="dashboard-card-icon-button">
+            <app-icon :icon="TablerIconConstants.settings" :size="18" />
+          </button>
+        </template>
+      </van-popover>
+    </div>
     <div class="display-flex flex-column ml-15 mr-15">
       <table>
-        <tr v-for="bar in barsList" class="cursor-pointer" @click="onShowActionSheet(bar)">
+        <tr v-for="bar in barsList" :key="bar.category?.id ?? 'not-set'" class="cursor-pointer" @click="onShowActionSheet(bar)">
           <td style="width: 1%">
             <div class="flex-center-vertical gap-1 my-1">
               <app-icon :icon="Category.getIcon(bar.category) ?? TablerIconConstants.category" :size="20" />
@@ -26,7 +42,6 @@
   </van-cell-group>
 </template>
 <script setup>
-import { get } from 'lodash-es'
 import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
@@ -40,9 +55,15 @@ import { useDashboardStore } from '~/stores/dashboardStore'
 const categoryStore = useCategoryStore()
 const dashboardStore = useDashboardStore()
 const { t } = useI18n()
+const showOptionsPopover = ref(false)
+
+const amountModeTabs = computed(() => [
+  { label: t('transaction.type.expense'), value: false },
+  { label: 'Net', value: true },
+])
 
 const barsList = computed(() => {
-  const dictionary = dashboardStore.dashboardExpensesByCategory
+  const dictionary = dashboardStore.netAmountMode ? dashboardStore.dashboardNetByCategory : dashboardStore.dashboardExpensesByCategory
 
   const maxAmount = Math.max(...Object.values(dictionary))
 
@@ -60,7 +81,7 @@ const barsList = computed(() => {
   return bars.sort((a, b) => b.percent - a.percent).slice(0, 15)
 })
 
-const getBarColor = (bar) => {
+const getBarColor = () => {
   return '#F06292'
 }
 
@@ -81,12 +102,49 @@ const onGoToTransactions = async (category) => {
   const startDate = DateUtils.dateToString(dashboardStore.dashboardDateStart)
   const endDate = DateUtils.dateToString(dashboardStore.dashboardDateEnd)
   const excludedUrl = getExcludedTransactionUrl()
+  const typeParam = dashboardStore.netAmountMode ? '' : `&type=${Transaction.types.expense.code}`
 
   if (!category) {
-    await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_category=true&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}${excludedUrl}`)
+    await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_category=true&date_start=${startDate}&date_end=${endDate}${typeParam}${excludedUrl}`)
     return
   }
 
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?category_id=${category.id}&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}${excludedUrl}`)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?category_id=${category.id}&date_start=${startDate}&date_end=${endDate}${typeParam}${excludedUrl}`)
 }
 </script>
+
+<style scoped>
+.dashboard-card-icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 1px solid var(--van-border-color);
+  border-radius: 8px;
+  background: var(--van-cell-background);
+  color: var(--van-text-color);
+  cursor: pointer;
+}
+
+.dashboard-card-options {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 220px;
+  padding: 10px;
+}
+
+.dashboard-card-option {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.dashboard-card-option-label {
+  color: var(--van-text-color-2);
+  font-size: 12px;
+  font-weight: 600;
+}
+</style>
