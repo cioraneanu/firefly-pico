@@ -1102,6 +1102,20 @@ img, svg {
     padding: 3px 5px;
 }
 
+.app-button-icon {
+    border: 1px solid var(--van-border-color);
+    border-radius: 8px;
+    background: var(--van-cell-background);
+    color: var(--van-text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    cursor: pointer;
+}
+
 .app-chip {
     box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     border-radius: 7px;

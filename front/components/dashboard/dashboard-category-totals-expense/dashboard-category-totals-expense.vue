@@ -11,7 +11,7 @@
         </div>
 
         <template #reference>
-          <button type="button" class="app-button-small cursor-pointer">
+          <button type="button" class="app-button-icon">
             <app-icon :icon="TablerIconConstants.settings" :size="18" />
           </button>
         </template>
