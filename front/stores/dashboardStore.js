@@ -42,7 +42,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const transactionsListLastWeek = ref([])
   const transactionsWithTodo = ref([])
   const tagsWidgetModeOnlyRootTag = useLocalStorage('tagsWidgetModeOnlyRootTag', true)
-  const categoriesNetAmountMode = useLocalStorage('categoriesNetAmountMode', false)
+  const widgetsNetAmountMode = useLocalStorage('widgetsNetAmountMode', false)
   const isLoadingTransactions = ref(false)
   const isLoadingTransactionsLastWeek = ref(false)
   const dashboardCurrency = useLocalStorage('dashboardCurrency', null, { serializer: StorageSerializers.object })
@@ -223,7 +223,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
   })
 
   const dashboardExpensesByCategory = computed(() => {
-    const transactions = categoriesNetAmountMode.value ? [...transactionsListExpense.value, ...transactionsListIncome.value] : transactionsListExpense.value
+    const transactions = widgetsNetAmountMode.value ? [...transactionsListExpense.value, ...transactionsListIncome.value] : transactionsListExpense.value
     const totals = transactions.reduce((result, transaction) => {
       const multiplier = Transaction.getTypeCode(transaction) === Transaction.types.income.code ? -1 : 1
       const splits = Transaction.getSplits(transaction)
@@ -235,7 +235,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
       return result
     }, {})
 
-    if (!categoriesNetAmountMode.value) return totals
+    if (!widgetsNetAmountMode.value) return totals
 
     return Object.keys(totals).reduce((result, categoryId) => {
       if (totals[categoryId] > 0) {
@@ -246,7 +246,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
   })
 
   const dashboardExpensesByTag = computed(() => {
-    const transactions = categoriesNetAmountMode.value ? [...transactionsListExpense.value, ...transactionsListIncome.value] : transactionsListExpense.value
+    const transactions = widgetsNetAmountMode.value ? [...transactionsListExpense.value, ...transactionsListIncome.value] : transactionsListExpense.value
     const totals = transactions.reduce((result, transaction) => {
       const multiplier = Transaction.getTypeCode(transaction) === Transaction.types.income.code ? -1 : 1
       let tags = Transaction.getTags(transaction)
@@ -260,7 +260,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
       return result
     }, {})
 
-    if (!categoriesNetAmountMode.value) return totals
+    if (!widgetsNetAmountMode.value) return totals
 
     return Object.keys(totals).reduce((result, tagId) => {
       if (totals[tagId] > 0) {
@@ -390,7 +390,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
     transactionsListLastWeek,
     transactionsWithTodo,
     tagsWidgetModeOnlyRootTag,
-    categoriesNetAmountMode,
+    widgetsNetAmountMode,
     dashboardAccountDictionary,
     dashboardDateStart,
     dashboardDateEnd,

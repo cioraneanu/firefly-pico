@@ -6,7 +6,7 @@
         <div class="display-flex flex-column gap-2 p-10">
           <div class="display-flex flex-column gap-1">
             <div class="text-size-12 font-weight-600 text-muted">{{ $t('amount') }}</div>
-            <app-tabs v-model="dashboardStore.categoriesNetAmountMode" :items="amountModeTabs" />
+            <app-tabs v-model="dashboardStore.widgetsNetAmountMode" :items="amountModeTabs" />
           </div>
         </div>
 
@@ -102,7 +102,7 @@ const onGoToTransactions = async (category) => {
   const startDate = DateUtils.dateToString(dashboardStore.dashboardDateStart)
   const endDate = DateUtils.dateToString(dashboardStore.dashboardDateEnd)
   const excludedUrl = getExcludedTransactionUrl()
-  const typeParam = dashboardStore.categoriesNetAmountMode ? '' : `&type=${Transaction.types.expense.code}`
+  const typeParam = dashboardStore.widgetsNetAmountMode ? '' : `&type=${Transaction.types.expense.code}`
 
   if (!category) {
     await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_category=true&date_start=${startDate}&date_end=${endDate}${typeParam}${excludedUrl}`)
