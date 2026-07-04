@@ -36,20 +36,20 @@ defineProps({
   gap: 4px;
   padding: 4px;
   border: 0;
-  border-radius: 999px;
-  background: var(--van-background-2-5);
-  box-shadow: inset 0 0 0 1px rgba(120, 120, 128, 0.12);
+  border-radius: 12px;
+  background: #f4f4f5;
+  box-shadow: inset 0 0 0 1px rgba(24, 24, 27, 0.06);
 }
 
 .app-tabs-item {
-  min-height: 30px;
-  padding: 0 14px;
+  min-height: 32px;
+  padding: 0 16px;
   border: 0;
-  border-radius: 999px;
+  border-radius: 9px;
   background: transparent;
-  color: var(--van-text-color-2);
+  color: #52525b;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1;
   cursor: pointer;
   transition:
@@ -59,14 +59,32 @@ defineProps({
 }
 
 .app-tabs-item:hover {
-  color: var(--van-text-color);
+  color: #18181b;
 }
 
 .app-tabs-item.active {
-  background: var(--van-cell-background);
-  color: var(--van-text-color);
+  background: #006fee;
+  color: #fff;
   box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 111, 238, 0.28),
     0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.van-theme-dark .app-tabs {
+  background: #27272a;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+}
+
+.van-theme-dark .app-tabs-item {
+  color: #d4d4d8;
+}
+
+.van-theme-dark .app-tabs-item:hover {
+  color: #fff;
+}
+
+.van-theme-dark .app-tabs-item.active {
+  background: #006fee;
+  color: #fff;
 }
 </style>
