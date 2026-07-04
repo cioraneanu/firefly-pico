@@ -366,6 +366,10 @@
     },
     "expenses_by_categories": "费用分类",
     "transfers_by_categories": "转账分类",
+    "amount_modes": {
+      "expenses_only": "仅支出",
+      "net_amount": "净额"
+    },
     "configure_cards": "配置卡"
   },
   "profile_page": {

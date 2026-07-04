@@ -418,6 +418,10 @@
     },
     "expenses_by_categories": "Despesas por categorias",
     "transfers_by_categories": "Transferências por categorias",
+    "amount_modes": {
+      "expenses_only": "Somente despesas",
+      "net_amount": "Valor líquido"
+    },
     "configure_cards": "Configurar cartões"
   },
   "profile_page": {

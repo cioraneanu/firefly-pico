@@ -58,8 +58,8 @@ const { t } = useI18n()
 const showOptionsPopover = ref(false)
 
 const amountModeTabs = computed(() => [
-  { label: t('transaction.type.expense'), value: false },
-  { label: 'Net', value: true },
+  { label: t('dashboard.amount_modes.expenses_only'), value: false },
+  { label: t('dashboard.amount_modes.net_amount'), value: true },
 ])
 
 const barsList = computed(() => {

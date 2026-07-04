@@ -418,6 +418,10 @@
     },
     "expenses_by_categories": "Cheltuieli pe categorii",
     "transfers_by_categories": "Transferuri pe categorii",
+    "amount_modes": {
+      "expenses_only": "Doar cheltuieli",
+      "net_amount": "Sumă netă"
+    },
     "configure_cards": "Configurare secțiuni"
   },
   "profile_page": {

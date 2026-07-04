@@ -418,6 +418,10 @@
     },
     "expenses_by_categories": "Gastos por categorías",
     "transfers_by_categories": "Transferencias por categorías",
+    "amount_modes": {
+      "expenses_only": "Solo gastos",
+      "net_amount": "Monto neto"
+    },
     "configure_cards": "Configurar tarjetas"
   },
   "profile_page": {

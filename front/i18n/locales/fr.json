@@ -418,6 +418,10 @@
     },
     "expenses_by_categories": "Dépenses par catégories",
     "transfers_by_categories": "Transferts par catégories",
+    "amount_modes": {
+      "expenses_only": "Dépenses uniquement",
+      "net_amount": "Montant net"
+    },
     "configure_cards": "Configurer les cartes"
   },
   "profile_page": {

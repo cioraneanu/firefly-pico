@@ -418,6 +418,10 @@
     },
     "expenses_by_categories": "Расходы по категориям",
     "transfers_by_categories": "Переводы по категориям",
+    "amount_modes": {
+      "expenses_only": "Только расходы",
+      "net_amount": "Чистая сумма"
+    },
     "configure_cards": "Настроить карточки"
   },
   "profile_page": {

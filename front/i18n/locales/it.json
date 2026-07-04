@@ -418,6 +418,10 @@
     },
     "expenses_by_categories": "Spese per categorie",
     "transfers_by_categories": "Trasferimenti per categorie",
+    "amount_modes": {
+      "expenses_only": "Solo spese",
+      "net_amount": "Importo netto"
+    },
     "configure_cards": "Configura schede"
   },
   "profile_page": {
