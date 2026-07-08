@@ -58,10 +58,23 @@ back/
 - Read the nearby code before editing. This project has strong local patterns; follow them instead of introducing new architecture.
 - Keep changes small and directly connected to the request. Avoid drive-by refactors, formatting churn, or dependency updates unless they are part of the task.
 - Protect user work. Check `git status --short` before larger edits and never overwrite unrelated modified files.
-- Prefer existing helpers, constants, repositories, stores, transformers, and UI-kit components over one-off logic.
-- Follow naming conventions: `PascalCase` for Vue components (`MyComponent.vue`) and PHP classes, and `camelCase` for JS/TS composables and utilities (`useMyFeature.js`).
+- Prefer existing helpers, constants, repositories, stores, transformers, and UI-kit components over one-off logic. Before writing a utility, check `front/utils/` — it likely already exists (`DateUtils`, `NumberUtils`, `UIUtils`, `ResponseUtils`, etc.).
+- A new feature should be mostly declarative glue over existing building blocks (`useForm()`, `useList()`, `generateChildren()`, UI-kit components). If you are writing many lines of imperative logic for a CRUD page, you are off-pattern.
+- Prefer `computed` over `watch`; prefer store dictionaries (`categoryDictionary`, `tagDictionary`, …) over `.find()` scans for id lookups.
+- Do not create abstractions, props, or options for hypothetical future use. Do not generalize a component used in one place.
+- Follow naming conventions: `PascalCase` for Vue components (`MyComponent.vue`) and PHP classes, `camelCase` for JS composables and utilities (`useMyFeature.js`), `kebab-case` for UI-kit/page component filenames (`app-field.vue`, `category-list-item.vue`).
 - When behavior touches both `front/` and `back/`, trace the full flow: route constant, page/component, repository, backend route/controller/model/migration if applicable.
 - Validate the narrowest thing that proves the change, then broaden only when risk warrants it.
+
+## Code Style & Formatting
+
+Prettier is the source of truth (`front/.prettierrc`). Write code that already matches it so diffs stay clean:
+
+- Single quotes, **no semicolons**, trailing commas, 2-space indent, `printWidth: 200` (don't wrap lines early).
+- Run `npm run lint:fix` from `front/` after JS/Vue changes; `vendor/bin/pint` is for PHP but only when formatting is part of the task.
+- Plain JavaScript only — no TypeScript syntax, no JSDoc type annotations, even though `tsconfig.json` exists.
+- Vue SFC order is `<template>` then `<script setup>`. No `<style>` blocks (see pitfalls).
+- The codebase uses `let` liberally even for non-reassigned locals; either is fine — do not "fix" existing declarations.
 
 ## Common Pitfalls (Do NOT)
 
@@ -82,6 +95,33 @@ back/
 - Do NOT modify existing migration files — create new ones.
 - Do NOT use `moment` or `dayjs` — use `date-fns`.
 - Do NOT use native fetch or `$fetch` — use the repository layer (which uses axios).
+
+## Page Recipes
+
+Every entity screen follows the same two-page shape. Copy an existing entity (e.g. `pages/categories/`) instead of inventing structure.
+
+**Form page (`pages/{entity}/[[id]].vue`)** — handles both create and edit:
+
+- Root `<div class="app-form">` containing `<app-top-toolbar>`, then `<van-form :name="formName" @submit="saveItem" @failed="onValidationError">` with fields inside `<van-cell-group inset>`.
+- Wire everything through `useForm({ routeList, routeForm, model, resetFields, fetchItem, onEvent })` — it provides `item`, `itemId`, `saveItem`, `onDelete`, `onNew`, `onValidationError`, `formName`.
+- Bind fields to `item` sub-paths with `generateChildren(item, [{ computed: 'name', parentKey: 'attributes.name' }])` from `VueUtils` — never hand-write per-field computeds.
+- Validation rules come from `rule` in `utils/ValidationUtils.js` (e.g. `:rules="[rule.required()]"`).
+- Buttons: `<app-button-form-save />` and `<app-button-form-delete v-if="itemId" @click="onDelete" />`.
+- Finish with `useToolbar().init({ title: itemId.value ? t('..._page.title_edit') : t('..._page.title_add'), backRoute })`.
+- Sync the entity store in `onEvent` on `onPostSave` / `onPostDelete`.
+
+**List page (`pages/{entity}/list.vue`)**:
+
+- Root `<div :class="formClass">` (adds `empty` when list is empty) with `<app-top-toolbar>` + `<app-button-list-add @click="onAdd" />`, `<empty-list v-if="isEmpty" />`, then `<van-pull-refresh>` wrapping `<van-list>` with a `{entity}-list-item` per row.
+- Wire through `useList({ routeList, routeForm, model, onEvent })`.
+- Store-backed lists set `isFinished.value = true` in `onLoadMore` and refresh via the store's `fetch{Entity}()`.
+- Optional client-side search: `<app-list-search v-model="search" />` + a `filteredList` computed.
+- Call `animateSwipeList(list)` and `useToolbar().init(...)` at the end.
+
+**Adding a whole new entity** (front to back):
+
+1. `back/`: model in `app/Models`, controller extending `BaseControllerFirefly` (constructor calls `parent::__construct('/api/v1/{firefly-endpoint}', Model::class)` — often the whole class), `RouteUtils::makeCRUD('{entities}', Controller::class)` in `routes/api.php`, migration if Pico stores extra fields.
+2. `front/`: model extending `BaseModel` (with `getTransformer()`, `getRepository()`, `getEmpty()`, static display helpers), repository extending `BaseRepository`, transformer extending `ApiTransformer` (`transformFromApi` / `transformToApi`), store following the store pattern below, the two pages above, routes in `RouteConstants.js`, i18n keys in all 10 locale files, an entry point (menu/extras page) for navigation.
 
 ## Common Commands
 
@@ -140,7 +180,20 @@ Use the command that matches the scope of the change. Do not run expensive Docke
 - Icons come from Tabler constants (`TablerIconConstants.js`), SVG components (via nuxt-svgo from `assets/icons/`), or Vant built-in icons. Use `TablerIconConstants` for new icons. Avoid adding a new icon system.
 - Routes should be mirrored through `front/constants/RouteConstants.js` where app navigation depends on constants.
 
+### UI Feedback and Interaction
 
+- Toasts and dialogs go through `UIUtils` (`showToastSuccess`, `showToastError`, `showDeleteConfirmation`) — never call Vant's `showToast`/`showDialog` directly from pages.
+- Deletes always require `UIUtils.showDeleteConfirmation(...)` first.
+- `front/assets/styles/helper.css` has utility classes (`display-flex`, `flex-center`, `flex-1`, spacing like `mt-10`/`p-1`, `opacity-*`) — reach for those before writing new CSS.
+- Navigation uses `navigateTo(RouteConstants.ROUTE_...)`, not raw path strings or `router.push`.
+
+## Back-End Notes
+
+### Controllers and Routing
+
+- Proxied entities extend `BaseControllerFirefly` and are often just a constructor: `parent::__construct('/api/v1/{endpoint}', Model::class)`. Only add methods for Pico-specific behavior.
+- Register routes with `RouteUtils::makeCRUD('{entities}', Controller::class)` — it wires `getOne`/`getAll`/`create`/`update`/`delete`. Unmatched routes fall through to the catch-all Firefly proxy.
+- Validation lives in static classes under `App\Validations\`, authorization under `App\Authorizations\`.
 
 ### Global Helpers
 
