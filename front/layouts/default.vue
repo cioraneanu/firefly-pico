@@ -14,7 +14,7 @@
       <app-bottom-toolbar />
     </template>
 
-    <profile-picker-float v-if="!appStore.isDesktopLayout" />
+    <profile-picker-float v-if="profileStore.dashboard.isProfileFloatVisible && !appStore.isDesktopLayout" />
     <app-bottom-loading />
   </div>
 </template>
@@ -23,9 +23,11 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/constants/RouteConstants.js'
+import { useProfileStore } from '~/stores/profileStore'
 
 const device = useDevice()
 const appStore = useAppStore()
+const profileStore = useProfileStore()
 
 const layoutClass = computed(() => {
   return {

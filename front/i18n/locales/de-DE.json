@@ -132,6 +132,7 @@
       "theme": "Theme",
       "title": "UI Einstellungen",
       "show_animations": "Animationen anzeigen",
+      "is_profile_float_visible": "Profil-Button auf Dashboard anzeigen",
       "reset_forms_after_creation": "Formulare nach Erzeugung zurücksetzten",
       "transaction_list": "Transaktions-Liste",
       "select_hero_icons": "Auswählen welche Hero Icons angzeig werden",
