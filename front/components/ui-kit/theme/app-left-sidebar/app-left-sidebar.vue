@@ -43,12 +43,13 @@ import { useProfileStore } from '~/stores/profileStore.js'
 import RouteConstants from '~/constants/RouteConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { IconChevronUp, IconChevronDown } from '@tabler/icons-vue'
+import { useLocalStorage } from '@vueuse/core'
 
 const profileStore = useProfileStore()
 const appStore = useAppStore()
 const { t } = useI18n()
 
-const expandedSections = ref({
+const expandedSections = useLocalStorage('leftSidebarExpandedSections', {
   main: true,
   classifications: true,
   secondary: true,

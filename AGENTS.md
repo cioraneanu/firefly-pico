@@ -140,6 +140,48 @@ Use the command that matches the scope of the change. Do not run expensive Docke
 - Icons come from Tabler constants (`TablerIconConstants.js`), SVG components (via nuxt-svgo from `assets/icons/`), or Vant built-in icons. Use `TablerIconConstants` for new icons. Avoid adding a new icon system.
 - Routes should be mirrored through `front/constants/RouteConstants.js` where app navigation depends on constants.
 
+### UI Design Language
+
+Read this before generating any UI so new screens look like they belong. The app feels like a polished native mobile finance app (Vant-based), with a newer "slate" desktop shell around it.
+
+**Overall feel**
+
+- Compact, information-dense, small type: titles 14px/600–700, subtitles 12–13px/400, section headers 14px 600 UPPERCASE, micro-badges 10–11px. Body font is the system stack (`ui-sans-serif, system-ui, ...`) — no custom fonts.
+- Everything is a soft rounded rectangle: cells/cards 6–10px radius, buttons and inputs 5–10px, amount pills 25px. No sharp corners anywhere.
+- Depth comes from soft layered shadows, not borders: signature shadows are `rgba(149,157,165,0.2) 0 8px 24px` (toolbars/sidebar), `rgba(0,0,0,0.24) 0 3px 8px` (buttons/floating elements), and hairline `0 0 0 1px` rings on bars/tabs. Helpers `shadow-depth1..5`, `shadow-soft-1` exist in `helper.css`.
+- Dashed 1px borders are the visual code for "add / optional / informational" affordances (`.app-card-info`, `.add-attachment`, `.suggestion-button`, `.currency-dropdown`, `.badge`).
+- Scrollbars are hidden globally. Interactive cards use `user-select: none`. Almost every icon is a Tabler icon at 14–20px with stroke ~1.5–2, including a leading icon on nearly every form field and list-item subtitle row.
+
+**Layout: mobile vs desktop**
+
+- The switch is `appStore.isDesktopLayout` = window width > 800px AND a desktop device (`useDevice()`), NOT a CSS media query. Components branch in the template (`v-if="appStore.isDesktopLayout"`); many have separate mobile/desktop variants (e.g. `transaction-list-item.vue` vs `transaction-list-item-desktop.vue`, `app-top-toolbar` renders `van-nav-bar` on mobile vs a floating card on desktop). New UI must handle both branches.
+- **Mobile** (`layouts/default.vue`): fixed top `van-nav-bar` (centered bold 14px title, optional grey 12px subtitle, left back-arrow), scrollable content, fixed bottom `van-tabbar` with 5 items — Dashboard, Transactions, a center red rounded-square "+" button that pokes above the bar, Extras, Settings (11px labels, selected item blue `#1565C0`). Safe-area insets (`env(safe-area-inset-*)`) are respected top and bottom. A blue (`#1E88E5`) profile-picker floating button hugs the right edge (rounded on the left side only). The tabbar hides when the on-screen keyboard is up.
+- **Desktop**: fixed left sidebar, 15rem wide, full height; content gets `padding-inline-start: 16.25rem`. The sidebar is the newer Tailwind-flavored "slate" aesthetic (rem units, slate hex comments): white surface, `#e2e8f0` right border, nav links 0.875rem/500 in slate-500 `#64748b` that hover/activate to slate-100 bg + slate-900 text, uppercase 0.75rem slate-400 section labels, collapsible sections persisted in localStorage. Top of sidebar: full-width black (`#0f172a`, hover `#1e293b`) "New transaction" button. Bottom: profile picker, theme toggle, Settings. Pages get a sticky floating toolbar card (`.app-top-toolbar-desktop`: white, 10px radius, 15px padding/margin, soft shadow, `top: 10px`) instead of the nav-bar.
+- Content max widths: forms/cards use Vant inset groups (16px side margins); the dashboard uses CSS-columns masonry (`.dynamic-masonry`, `column-width: 500px`) so cards flow into 1 column on mobile and 2–3 on desktop.
+
+**Color**
+
+- All colors live as CSS custom properties in `assets/styles/variables.css` with light values on `:root` and dark overrides on `.van-theme-dark`. `--white`/`--black` intentionally invert in dark mode — use them for "surface" and "ink", not literal colors.
+- Transaction-type semantics (used consistently in dots, pills, borders, charts): expense = pink `#ec407a` (`--expense1..3`), income = green `#66bb6a` (`--income1..3`), transfer = light blue `#4fc3f7` (`--transfer1..3`). Amounts render as white-text pills: `.amount-expense` (`#ef5350`) / `.amount-income` (`#66bb6a`).
+- Primary action green `#00a261` (`--primary-action`) for add/confirm accents; Vant primary buttons are solid black in light mode and green in dark mode. General accent blue `#1E88E5`/`#1976D2`/`#42a5f5` marks profile UI, attachments, "today", links.
+- Neutral surfaces: page bg `--van-background`, input/field bg `--van-background-2-5` (`#f7f8fa` light / `#2f2f2f` dark), muted text `#999`/`#aaa` or `--van-text-color-3`.
+- Filter chips and "applied" states are near-black `#333` pills with white 12px text.
+
+**Recurring component patterns**
+
+- **Forms** (`useForm()` pages): root `div.app-form` (large bottom padding for the floating button), `van-form` > `van-cell-group inset`. Every input is a ui-kit wrapper (`app-field`, `app-select`, `app-date`, `app-boolean`, ...) rendering a Vant cell: label on the left (shared `10.5em` label column), a leading Tabler icon, and the input body as a grey rounded box (bg `--van-background-2-5`, radius 5px, padding 8px 12px). Save is `app-button-form-save`: a floating round black pill button — full-width fixed above the tabbar on mobile (rides up with the keyboard), fixed 200px at bottom-right 50px on desktop. Delete is a secondary button below the save, never beside it.
+- **Lists** (`useList()` pages): `van-pull-refresh` + `van-list` infinite scroll. Each row is a `van-swipe-cell` — tap to edit, swipe left to reveal a full-height red Delete button. Row anatomy: optional 30px icon column, middle column with `.list-item-title` (14px/700) and icon-prefixed `.list-item-subtitle` lines (13px, grey), right column right-aligned with amount pill, date, and muted relative time. Small outlined `.tag` chips wrap in a 5px-gap flex row. Empty states are a centered faded icon + 12px grey text (`.empty-list`). Filtering opens from a toolbar search icon; active filters appear as dark chips in a white sticky `.applied-filters-container` bar.
+- **Dashboard**: masonry of cards, each a `van-cell-group inset` with an uppercase `.van-cell-group-title`; stat tiles are `van-grid` cells (icon above 12px title above bold value, value colored by semantic type). Month is changed by horizontal swipe (animated slide) or the sticky date control; pull-to-refresh reloads. Users can reorder/hide cards, and cards respect feature toggles from `profileStore` (`tagsEnabled`, `budgetsEnabled`, ...) — new UI for an optional feature must check those.
+- **Feedback**: toasts via `van-notify` (`.app-toast`) — full-width top banner on mobile, repositioned to a bottom-left 360px rounded card on desktop. Blocking loads use `app-loading` (centered white rounded card + spinner over a dim overlay); background syncs use `app-bottom-loading` (small bordered pill, bottom-left, above the tabbar).
+- **Motion**: subtle and short. Page transitions 0.15s fade+blur (`app.vue`), transition classes in `animations.css` (`zoom-fade`, `fade`), anime.js helpers in `utils/AnimationUtils.js` (save button pop, list stagger, dashboard month slide). Gate non-trivial animation behind `profileStore.showAnimations`.
+
+**Dark theme**
+
+- Toggled at runtime via `<van-config-provider :theme>` adding `.van-theme-dark` — not `prefers-color-scheme`. Any new class with hardcoded light colors needs a matching `.van-theme-dark` override in `theme-dark.css` (this is the established pattern; check both themes for every UI change).
+- Dark surfaces: cells `#1c1c1e`–`#2a2a2a`, sidebar `#111`, borders `#444`/`#666`, links light blue `#03a9f4`. Semantic pink/green/blue stay the same but text on colored pills flips to black; primary buttons turn green `#00a261`.
+
+**Cohesion checklist for new UI**: branch mobile/desktop via `appStore.isDesktopLayout`; compose from Vant + existing ui-kit wrappers; put styles in `theme-white.css` (+ dark override) using the CSS variables and helper classes (`flex-center-vertical`, `gap-*`, `text-size-*`, `font-weight-*`) rather than scoped styles; 6–10px radius + soft shadow; a Tabler icon on every field/row; small text; i18n every label.
+
 
 
 ### Global Helpers
