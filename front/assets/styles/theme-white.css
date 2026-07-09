@@ -903,7 +903,7 @@ body {
     position: fixed !important;
     left: 20px;
     bottom: calc(env(safe-area-inset-bottom) + 4.5rem);
-    z-index: 4;
+    z-index: 2002;
     border-radius: 6px;
     border: 1.5px solid #999;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,
@@ -1553,4 +1553,44 @@ body {
 
 .app-field-dropdown .van-popover__wrapper {
     width: 100%;
+}
+
+/* ---------------------------- Ramble ---------------------------- */
+
+.ramble-divider {
+    border-top: 1px solid var(--van-border-color);
+}
+
+.ramble-divider-bottom {
+    border-bottom: 1px solid var(--van-border-color);
+}
+
+.ramble-transaction-item + .ramble-transaction-item,
+.ramble-saved-item + .ramble-saved-item {
+    border-top: 1px solid var(--van-border-color);
+}
+
+.ramble-body {
+    background: var(--van-background);
+}
+
+/* The input card and preview list use overflow:hidden, which lets them shrink to fit
+   the flex column instead of overflowing it. Keep their natural height so the body scrolls. */
+.ramble-body > * {
+    flex-shrink: 0;
+}
+
+.ramble-transaction-item-success,
+.ramble-transaction-item-error {
+    margin: 4px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.ramble-transaction-item-success {
+    border: 2px solid var(--van-success-color, #07c160);
+}
+
+.ramble-transaction-item-error {
+    border: 2px solid var(--van-danger-color, #ee0a24);
 }

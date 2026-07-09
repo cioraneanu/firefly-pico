@@ -1,10 +1,7 @@
 <template>
-  <div class="display-flex flex-direction-column gap-1">
-    <div class="display-flex flex-center-vertical gap-2 px-2">
-      <div class="tag-gray text-size-12">{{ props.index + 1 }}</div>
+  <div class="ramble-transaction-item" :class="statusClass">
+    <div v-if="isCreating || transaction.error" class="flex-center-vertical gap-2 px-3 pt-2">
       <van-loading v-if="isCreating" size="14" />
-      <van-tag v-else-if="isCreated" type="success" size="medium">{{ $t('transaction.assistant_ramble_status_created') }}</van-tag>
-      <van-tag v-else-if="isFailed" type="danger" size="medium">{{ $t('transaction.assistant_ramble_status_failed') }}</van-tag>
       <div v-if="transaction.error" class="text-size-12 text-danger word-break-word flex-1-w">{{ transaction.error }}</div>
     </div>
 
@@ -15,13 +12,6 @@
 <script setup>
 import TransactionListItem from '~/components/list-items/transaction-list-item.vue'
 
-const props = defineProps({
-  index: {
-    type: Number,
-    required: true,
-  },
-})
-
 const emit = defineEmits(['delete', 'edit'])
 const transaction = defineModel({
   type: Object,
@@ -31,6 +21,18 @@ const transaction = defineModel({
 const isCreating = computed(() => transaction.value.status === 'creating')
 const isCreated = computed(() => transaction.value.status === 'success')
 const isFailed = computed(() => transaction.value.status === 'error')
+
+const statusClass = computed(() => {
+  if (isCreated.value) {
+    return 'ramble-transaction-item-success'
+  }
+
+  if (isFailed.value) {
+    return 'ramble-transaction-item-error'
+  }
+
+  return null
+})
 
 const onDelete = () => {
   if (isCreating.value) {

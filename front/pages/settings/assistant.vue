@@ -12,23 +12,34 @@
       </van-cell-group>
 
       <van-cell-group inset>
-        <div class="van-cell-group-title">LLM STATUS:</div>
-        <div class="p-3">
-          <div v-if="appStore.llmIsConfigured">
-            <div class="font-600 text-size-14">Configured</div>
-            <div class="font-400 text-size-13">Endpoint: {{ appStore.llmEndpoint }}</div>
-            <div class="font-400 text-size-13">Model: {{ appStore.llmModel }}</div>
+        <div class="van-cell-group-title">{{ $t('settings.assistant.llm_status') }}:</div>
+        <div class="p-3 pt-0 display-flex flex-column gap-2">
+          <div class="flex-center-vertical gap-2">
+            <div class="icon-type" :class="appStore.llmIsConfigured ? 'color-income' : 'color-expense'" />
+            <div class="font-600 text-size-14">{{ appStore.llmIsConfigured ? $t('settings.assistant.llm_configured') : $t('settings.assistant.llm_not_configured') }}</div>
           </div>
 
-          <div v-else>
-            <div class="font-600 text-size-14">Not configured</div>
-            <div class="font-400 text-size-13 text-muted">If you want to use provide these docker environment variables:</div>
-            <div class="font-400 text-size-13 text-muted gap-2 display-flex flex-wrap">
+          <template v-if="appStore.llmIsConfigured">
+            <div class="flex-center-vertical gap-1 text-size-13">
+              <app-icon :icon="TablerIconConstants.external" :size="16" />
+              <span class="text-muted">{{ $t('settings.assistant.ramble_endpoint') }}:</span>
+              <span class="word-break-word">{{ appStore.llmEndpoint }}</span>
+            </div>
+            <div class="flex-center-vertical gap-1 text-size-13">
+              <app-icon :icon="TablerIconConstants.magic" :size="16" />
+              <span class="text-muted">{{ $t('settings.assistant.ramble_model') }}:</span>
+              <span class="word-break-word">{{ appStore.llmModel }}</span>
+            </div>
+          </template>
+
+          <template v-else>
+            <div class="text-size-13 text-muted">{{ $t('settings.assistant.llm_not_configured_info') }}</div>
+            <div class="text-size-12 gap-1 display-flex flex-wrap">
               <div class="tag-gray">ASSISTANT_LLM_ENDPOINT</div>
               <div class="tag-gray">ASSISTANT_LLM_MODEL</div>
               <div class="tag-gray">ASSISTANT_LLM_API_KEY</div>
             </div>
-          </div>
+          </template>
         </div>
       </van-cell-group>
 
@@ -38,7 +49,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useProfileStore } from '~/stores/profileStore'
 import UIUtils from '~/utils/UIUtils'
 import { useToolbar } from '~/composables/useToolbar'

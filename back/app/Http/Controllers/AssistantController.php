@@ -31,6 +31,9 @@ class AssistantController extends BaseController
     {
         BaseAuthorization::checkUser();
         $text = $request->get('text');
+        if (!$text && str_contains((string)$request->header('Content-Type'), 'text/plain')) {
+            $text = trim($request->getContent());
+        }
 
         if (!$text) {
             return $this->setStatusCode(self::HTTP_CODE_UNPROCESSABLE_ENTITY)->respond([

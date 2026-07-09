@@ -84,6 +84,7 @@
     "assistant_dictate": "Dictate",
     "assistant_ramble_title": "Dictate transactions",
     "assistant_ramble_placeholder": "Say or edit transactions here...",
+    "assistant_ramble_input_hint": "Wpisz lub podyktuj swoje transakcje",
     "assistant_ramble_interpret": "Interpret",
     "assistant_ramble_preview": "Preview",
     "assistant_ramble_create": "Create {count}",
@@ -97,8 +98,6 @@
     "assistant_ramble_progress": "{created}/{total} created",
     "assistant_ramble_progress_failed": "{created}/{total} created, {failed} failed",
     "assistant_ramble_progress_creating": "Creating {current}/{total}",
-    "assistant_ramble_status_created": "Created",
-    "assistant_ramble_status_failed": "Failed",
     "assistant_ramble_edit_title": "Edit ramble transaction",
     "assistant_tutorial_title": "Asystent transakcji",
     "assistant_tutorial_body": "<p>Z łatwością twórz transakcje, wpisując tutaj tekst (lub korzystając z funkcji dyktowania w telefonie).</p>\n<p>Oczekiwany format:<br> <b>[wyszukiwanie]&nbsp; [kwota?]&nbsp; [opis?]&nbsp; [zadanie?]</b></p>\n<p>1. <b>Wyszukiwanie</b> przeszukuje nazwy tagów, kategorii i szablonów transakcji. Obsługuje wpisywanie tylko części nazwy, a nawet błędne litery.<br><code> elct => electricity</code></p>\n<p>2. <b>Kwota</b> obsługuje wyrażenia matematyczne. Liczby oddzielone spacją są automatycznie sumowane. </p>\n<p>3. Pole <b>opis</b> jest opcjonalne. Służy do nadpisania domyślnej nazwy tagu.</p>\n<p>4. Pole <b>zadanie</b> ułatwia dodanie zdefiniowanego przez użytkownika „tagu zadania” poprzez dołączenie niestandardowego ciągu znaków (domyślnie „!!”). Można to zmienić w „Ustawieniach”</p>\n\n<p><b>Przykłady</b><br>\n„electricity” = tag<br>\n„swimming” = szablon <br><br>\n\n<code>\nelectricity 23<br> \nelc 12*2+33<br> \nelc 12+2*3 niestandardowy opis<br> \nelc 25 !!<br>\nswim<br> \n\n</code>\n</p>\n\n<p>5. W prawym górnym rogu znajduje się selektor <b>waluty</b>, który można zmieniać na bieżąco lub ustawić domyślną wartość w menu „Ustawienia” -> „Asystent”. Po użyciu selektora <b>kwota</b> zostanie potraktowana jako ta waluta, a ostateczna wartość zostanie przeliczona na wybraną walutę konta. Może to być bardzo przydatne podczas podróży zagranicznych.</p>",
@@ -175,7 +174,11 @@
       "ramble_model": "LLM model",
       "ramble_api_key": "LLM API key",
       "ramble_info": "Stored only in this browser. Direct browser calls expose the API key on this device and require the endpoint to allow CORS.",
-      "ramble_server_info": "Configured by the server. Browser LLM settings are disabled for this instance."
+      "ramble_server_info": "Configured by the server. Browser LLM settings are disabled for this instance.",
+      "llm_status": "LLM asystenta",
+      "llm_configured": "Skonfigurowano na serwerze",
+      "llm_not_configured": "Nie skonfigurowano",
+      "llm_not_configured_info": "Aby włączyć, ustaw te zmienne środowiskowe w backendzie Pico:"
     },
     "formatting_entry": "Formatowanie",
     "formatting": {

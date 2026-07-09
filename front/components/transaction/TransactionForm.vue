@@ -94,7 +94,7 @@ import TransactionAttachmentsList from '~/components/transaction/transaction-att
 import TransactionNoteField from '~/components/transaction/transaction-note-field.vue'
 import { transactionFormField } from '~/constants/TransactionConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
-import { useTransactionFormBindings } from '~/composables/useTransactionFormBindings.js'
+import { useTransactionForm } from '~/composables/useTransactionForm.js'
 import { getGUID } from '~/utils/Utils.js'
 
 const props = defineProps({
@@ -146,7 +146,7 @@ const {
   accountSourceBinding,
   accountDestinationBinding,
   showSourceAccountSuggestion,
-} = useTransactionFormBindings({ item, itemId, profileStore })
+} = useTransactionForm({ item, itemId, profileStore })
 
 const isFormDisabled = computed(() => props.disabled || isSplitTransaction.value)
 

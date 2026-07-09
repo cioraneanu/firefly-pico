@@ -113,7 +113,7 @@ export const useRambleTransactionResolver = () => {
       resolveAssistantAccount(rawTransaction.destinationAccountName) ?? profileStore.defaultAccountDestination,
     )
     const assistantCurrency = resolveCurrency(rawTransaction.currencyCode)
-    const rawDescription = rawTransaction.description ?? rawTransaction.templateName ?? rawTransaction.categoryName ?? rawTransaction.tagNames?.[0]
+    const rawDescription = rawTransaction.description || rawTransaction.templateName || rawTransaction.categoryName || rawTransaction.tagNames?.[0] || 'Transaction'
 
     return {
       id: `${Date.now()}-${index}`,
@@ -128,7 +128,7 @@ export const useRambleTransactionResolver = () => {
       amount: rawTransaction.amount === null || rawTransaction.amount === undefined ? null : rawTransaction.amount.toString(),
       assistantCurrency,
       currencyCode: rawTransaction.currencyCode,
-      description: rawDescription ?? '',
+      description: rawDescription,
       notes: rawTransaction.notes,
       date: resolveDate(rawTransaction.occurredAt),
     }

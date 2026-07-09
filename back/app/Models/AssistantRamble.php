@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Erp\MilitaryUnitDivision;
 use Illuminate\Database\Eloquent\Builder;
 
 class AssistantRamble extends BaseModel
