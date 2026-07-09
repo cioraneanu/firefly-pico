@@ -3,12 +3,20 @@
     <div class="p-2 display-flex flex-column gap-2">
       <div class="flex-center-vertical gap-2">
         <div class="flex-1-w text-size-12 text-muted">{{ $t('transaction.assistant_ramble_input_hint') }}</div>
-        <van-button :type="isRecording ? 'danger' : 'primary'" size="small" round class="cursor-pointer" @click="toggleRecording">
+        <van-button :type="isRecording ? 'danger' : 'primary'" size="small" round class="cursor-pointer" :disabled="isDisabled" @click="toggleRecording">
           <app-icon :icon="isRecording ? TablerIconConstants.stop : TablerIconConstants.microphone" :size="16" />
         </van-button>
       </div>
 
-      <app-field v-model="rambleText" class="van-cell-no-padding compact" label="" type="textarea" rows="4" autosize :placeholder="$t('transaction.assistant_ramble_placeholder')" :clearable="true" />
+      <app-text-area
+        v-model="rambleText"
+        class="van-cell-no-padding compact"
+        label=""
+        :visible-lines="2"
+        :placeholder="$t('transaction.assistant_ramble_placeholder')"
+        :clearable="true"
+        :disabled="isDisabled"
+      />
 
       <div v-if="isRecording && speechTemporary" class="flex-center-vertical gap-1 text-size-12 text-muted">
         <app-icon :icon="TablerIconConstants.microphone" :size="14" />
@@ -16,20 +24,20 @@
       </div>
 
       <div class="flex-center-vertical flex-wrap gap-1">
-        <van-button size="small" plain class="cursor-pointer" :loading="isLoadingSaved" @click="emit('loadSaved')">
+        <van-button size="small" plain class="cursor-pointer" :loading="isLoadingSaved" :disabled="isDisabled" @click="emit('loadSaved')">
           <app-icon :icon="TablerIconConstants.list" :size="16" />
           {{ $t('transaction.assistant_ramble_load_saved') }}
           <template v-if="savedRamblesCount > 0"> ({{ savedRamblesCount }})</template>
         </van-button>
 
-        <van-button v-if="savedRambles.length > 0" size="small" type="danger" plain class="cursor-pointer" :loading="isDeletingSaved" @click="emit('deleteSaved')">
+        <van-button v-if="savedRambles.length > 0" size="small" type="danger" plain class="cursor-pointer" :loading="isDeletingSaved" :disabled="isDisabled" @click="emit('deleteSaved')">
           <van-icon name="delete-o" size="16" />
           {{ $t('transaction.assistant_ramble_delete_saved') }}
         </van-button>
 
         <div class="flex-1" />
 
-        <van-button size="small" type="primary" class="cursor-pointer" :loading="isInterpreting" :disabled="!canInterpret" @click="onInterpret">
+        <van-button size="small" type="primary" class="cursor-pointer" :loading="isInterpreting" :disabled="isDisabled || !canInterpret" @click="onInterpret">
           <app-icon :icon="TablerIconConstants.magic" :size="16" />
           {{ $t('transaction.assistant_ramble_interpret') }}
         </van-button>
@@ -65,6 +73,10 @@ const props = defineProps({
     default: false,
   },
   isInterpreting: {
+    type: Boolean,
+    default: false,
+  },
+  isDisabled: {
     type: Boolean,
     default: false,
   },
@@ -110,6 +122,10 @@ const { startRecording, stopRecording, isRecording } = useSpeechRecognition({
 const canInterpret = computed(() => !!rambleText.value.trim() || props.savedRambles.length > 0)
 
 const toggleRecording = () => {
+  if (props.isDisabled) {
+    return
+  }
+
   if (isRecording.value) {
     stopRecording()
     return
@@ -119,6 +135,10 @@ const toggleRecording = () => {
 }
 
 const onInterpret = () => {
+  if (props.isDisabled) {
+    return
+  }
+
   stopRecording()
   emit('interpret')
 }

@@ -6,64 +6,73 @@
   </van-badge>
 
   <app-popup v-model:show="showRamblePopup" :popup-style="ramblePopupStyle">
-    <div class="display-flex flex-direction-column h-100 m-h-0">
-      <div class="flex-center-vertical gap-2 px-3 py-2 ramble-divider-bottom">
-        <icon-wand :size="20" />
-        <div class="flex-1-w">
-          <div class="font-600 text-size-16">{{ $t('transaction.assistant_ramble_title') }}</div>
-          <div v-if="savedRamblesCount > 0" class="text-size-12 text-muted">{{ $t('transaction.assistant_ramble_saved_count', { count: savedRamblesCount }) }}</div>
-        </div>
-        <van-button size="small" class="cursor-pointer" @click="closeRamblePopup">
-          <app-icon :icon="TablerIconConstants.close" :size="18" />
-        </van-button>
-      </div>
-
-      <div class="flex-1 m-h-0 overflow-auto display-flex flex-direction-column gap-2 p-3 ramble-body">
-        <ramble-input-card
-          ref="inputCardRef"
-          v-model="rambleText"
-          :saved-rambles="savedRambles"
-          :saved-rambles-count="savedRamblesCount"
-          :is-loading-saved="isLoadingSavedRambles"
-          :is-deleting-saved="isDeletingLoadedSavedRambles"
-          :is-interpreting="isInterpreting"
-          @interpret="interpretRambleText"
-          @load-saved="fetchSavedRambles"
-          @delete-saved="deleteLoadedSavedRambles"
-        />
-
-        <div v-if="rambleError" class="text-size-12 text-danger px-2">{{ rambleError }}</div>
-
-        <template v-if="rambleTransactions.length > 0">
-          <div class="text-size-12 font-600 text-muted text-uppercase px-2 mt-2">{{ $t('transaction.assistant_ramble_preview') }} ({{ rambleTransactions.length }})</div>
-          <van-cell-group inset class="no-margin overflow-hidden">
-            <ramble-transaction-item
-              v-for="(transaction, index) in rambleTransactions"
-              :key="transaction.id"
-              v-model="rambleTransactions[index]"
-              @delete="removeRambleTransaction"
-              @edit="openRambleTransaction"
-            />
-          </van-cell-group>
-        </template>
-
-        <div v-else class="text-size-12 text-muted text-center p-20">
-          {{ hasInterpreted ? $t('transaction.assistant_ramble_no_results') : $t('transaction.assistant_ramble_no_transactions_yet') }}
-        </div>
-      </div>
-
-      <div v-if="hasCreateProgress || rambleTransactions.length > 0" class="p-3 ramble-divider">
-        <div v-if="hasCreateProgress" class="mb-2">
-          <div class="flex-center-vertical gap-2 text-size-12 text-muted mb-2">
-            <van-loading v-if="isCreatingRambleTransactions" size="16" />
-            <div>{{ createProgressLabel }}</div>
+    <div class="display-flex flex-direction-column h-100 m-h-0 position-relative" :aria-busy="isInterpreting">
+      <div class="display-flex flex-direction-column h-100 m-h-0" :class="{ 'pointer-events-none': isRambleFormDisabled }" :inert="isRambleFormDisabled">
+        <div class="flex-center-vertical gap-2 px-3 py-2 ramble-divider-bottom">
+          <icon-wand :size="20" />
+          <div class="flex-1-w">
+            <div class="font-600 text-size-16">{{ $t('transaction.assistant_ramble_title') }}</div>
+            <div v-if="savedRamblesCount > 0" class="text-size-12 text-muted">{{ $t('transaction.assistant_ramble_saved_count', { count: savedRamblesCount }) }}</div>
           </div>
-          <van-progress :percentage="createProgressPercentage" />
+          <van-button size="small" class="cursor-pointer" @click="closeRamblePopup">
+            <app-icon :icon="TablerIconConstants.close" :size="18" />
+          </van-button>
         </div>
 
-        <van-button block type="primary" class="cursor-pointer" :loading="isCreatingRambleTransactions" :disabled="createButtonCount === 0" @click="createRambleTransactions">
-          {{ createButtonLabel }}
-        </van-button>
+        <div class="flex-1 m-h-0 overflow-auto display-flex flex-direction-column gap-2 p-3 ramble-body">
+          <ramble-input-card
+            ref="inputCardRef"
+            v-model="rambleText"
+            :saved-rambles="savedRambles"
+            :saved-rambles-count="savedRamblesCount"
+            :is-loading-saved="isLoadingSavedRambles"
+            :is-deleting-saved="isDeletingLoadedSavedRambles"
+            :is-interpreting="isInterpreting"
+            :is-disabled="isRambleFormDisabled"
+            @interpret="interpretRambleText"
+            @load-saved="fetchSavedRambles"
+            @delete-saved="deleteLoadedSavedRambles"
+          />
+
+          <div v-if="rambleError" class="text-size-12 text-danger px-2">{{ rambleError }}</div>
+
+          <template v-if="rambleTransactions.length > 0">
+            <div class="text-size-12 font-600 text-muted text-uppercase px-2 mt-2">{{ $t('transaction.assistant_ramble_preview') }} ({{ rambleTransactions.length }})</div>
+            <van-cell-group inset class="no-margin overflow-hidden">
+              <ramble-transaction-item
+                v-for="(transaction, index) in rambleTransactions"
+                :key="transaction.id"
+                v-model="rambleTransactions[index]"
+                @delete="removeRambleTransaction"
+                @edit="openRambleTransaction"
+              />
+            </van-cell-group>
+          </template>
+
+          <div v-else class="text-size-12 text-muted text-center p-20">
+            {{ hasInterpreted ? $t('transaction.assistant_ramble_no_results') : $t('transaction.assistant_ramble_no_transactions_yet') }}
+          </div>
+        </div>
+
+        <div v-if="hasCreateProgress || rambleTransactions.length > 0" class="p-3 ramble-divider">
+          <div v-if="hasCreateProgress" class="mb-2">
+            <div class="flex-center-vertical gap-2 text-size-12 text-muted mb-2">
+              <van-loading v-if="isCreatingRambleTransactions" size="16" />
+              <div>{{ createProgressLabel }}</div>
+            </div>
+            <van-progress :percentage="createProgressPercentage" />
+          </div>
+
+          <van-button block type="primary" class="cursor-pointer" :loading="isCreatingRambleTransactions" :disabled="createButtonCount === 0" @click="createRambleTransactions">
+            {{ createButtonLabel }}
+          </van-button>
+        </div>
+      </div>
+
+      <div v-if="isInterpreting" class="ramble-dialog-loading flex-center">
+        <div class="ramble-dialog-loading-card flex-center flex-direction-column">
+          <van-loading size="28" />
+        </div>
       </div>
     </div>
   </app-popup>
@@ -143,6 +152,7 @@ const failedRambleTransactionsCount = computed(() => rambleTransactions.value.fi
 const processedRambleTransactionsCount = computed(() => createdRambleTransactionsCount.value + failedRambleTransactionsCount.value)
 const createButtonCount = computed(() => rambleTransactions.value.filter((transaction) => transaction.status !== createStatus.success).length)
 const hasCreateProgress = computed(() => isCreatingRambleTransactions.value || processedRambleTransactionsCount.value > 0)
+const isRambleFormDisabled = computed(() => isInterpreting.value)
 const createProgressPercentage = computed(() => {
   if (rambleTransactions.value.length === 0) {
     return 0
