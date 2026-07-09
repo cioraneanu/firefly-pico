@@ -26,7 +26,12 @@
           <app-config-stat :icon="TablerIconConstants.transactionTemplate" :name="$t('settings.setup.templates')" :value="transactionTemplatesCount" />
           <app-config-stat :icon="TablerIconConstants.budget" :name="$t('settings.setup.budgets')" :value="budgetsCount" :muted="!profileStore.budgetsEnabled" />
           <app-config-stat :icon="TablerIconConstants.piggyBank" :name="$t('settings.setup.piggy_banks')" :value="piggyBanksCount" :muted="!profileStore.piggyBanksEnabled" />
-          <app-config-stat :icon="TablerIconConstants.recurringTransaction" :name="$t('settings.setup.recurring_transactions')" :value="recurringTransactionsCount" :muted="!profileStore.recurringTransactionsEnabled" />
+          <app-config-stat
+            :icon="TablerIconConstants.recurringTransaction"
+            :name="$t('settings.setup.recurring_transactions')"
+            :value="recurringTransactionsCount"
+            :muted="!profileStore.recurringTransactionsEnabled"
+          />
           <app-config-stat :icon="TablerIconConstants.lastSync" :name="$t('settings.setup.last_sync')" :value="lastSync" />
         </van-grid>
       </van-cell-group>
@@ -84,10 +89,7 @@ const piggyBanksCount = computed(() => piggyBankStore.piggyBankList.length)
 const recurringTransactionsCount = computed(() => recurringTransactionStore.recurringTransactionList.length)
 const transactionTemplatesCount = computed(() => templateStore.transactionTemplateList.length)
 const lastSync = computed(() => {
-  if (!dashboardStore.lastSync) {
-    return ' - '
-  }
-  return DateUtils.dateToUIWithTime(dashboardStore.lastSync, DateUtils.FORMAT_ROMANIAN_DATE_HOUR_MINUTE)
+  return appStore.lastSync ? DateUtils.dateToUIWithTime(appStore.lastSync) : ' - '
 })
 const { t } = useI18n()
 

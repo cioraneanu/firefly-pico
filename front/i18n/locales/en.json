@@ -151,6 +151,7 @@
       "theme": "Theme",
       "title": "UI settings",
       "show_animations": "Show animations",
+      "is_profile_float_visible": "Show profile floating button on dashboard",
       "reset_forms_after_creation": "Reset forms after creation",
       "transaction_list": "Transaction list",
       "select_hero_icons": "Select what Hero Icons to show",
@@ -443,6 +444,10 @@
     },
     "expenses_by_categories": "Expenses by categories",
     "transfers_by_categories": "Transfers by categories",
+    "amount_modes": {
+      "expenses_only": "Expenses only",
+      "net_amount": "Net amount"
+    },
     "configure_cards": "Configure cards"
   },
   "profile_page": {

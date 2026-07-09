@@ -31,7 +31,7 @@
       <empty-list v-if="isEmpty && !isLoading" />
 
       <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
-        <van-list :class="listClass" :finished="isFinished" @load="onLoadMore">
+        <van-list :class="listClass" :finished="isFinished" :scroller="listScroller" @load="onLoadMore">
           <template v-if="appStore.isDesktopLayout">
             <div class="transaction-desktop-list-wrapper">
               <div class="transaction-desktop-list">
@@ -67,6 +67,8 @@ import { filterBagHasValues, getFiltersFromURL, saveToUrl } from '~/utils/Filter
 import { useListFilters } from '~/composables/useListFilters.js'
 
 const appStore = useAppStore()
+
+const listScroller = computed(() => (appStore.isDesktopLayout ? window : undefined))
 
 const listClass = computed(() => ({
   'p-1': true,

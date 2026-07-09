@@ -16,6 +16,7 @@ import { useCurrencyStore } from '~/stores/currencyStore.js'
 import { useBudgetStore } from '~/stores/budgetStore.js'
 import { usePiggyBankStore } from '~/stores/piggyBankStore.js'
 import { useRecurringTransactionStore } from '~/stores/recurringTransactionStore.js'
+import DateUtils from '~/utils/DateUtils.js'
 
 export const useAppStore = defineStore('app', () => {
   const defaultUrl = window.location.origin
@@ -36,12 +37,7 @@ export const useAppStore = defineStore('app', () => {
 
   const windowWidth = ref(null)
 
-  const lastSync = useLocalStorage('lastSync', null, {
-    serializer: {
-      read: (v) => (v ? new Date(v) : null),
-      write: (v) => (v ? v.toISOString() : null),
-    },
-  })
+  const lastSync = useLocalStorage('lastSync', null, DateUtils.storageSerializer)
   const isSyncRequiredByMissingExtras = ref(false)
 
   // ---

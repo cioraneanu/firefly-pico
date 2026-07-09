@@ -9,8 +9,12 @@
     <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
       <dashboard-control v-if="!appStore.isDesktopLayout" />
 
-      <div ref="dashboard" class="dynamic-masonry">
-        <component :is="card.component" v-for="card in visibleCards" :key="card.code" />
+      <div ref="dashboard" class="dashboard-cards-frame" :class="{ 'dashboard-cards-back': isDashboardCardsBack }">
+        <transition :name="profileStore.showAnimations ? 'dashboard-cards' : ''" mode="out-in">
+          <div :key="+dashboardStore.month" class="dynamic-masonry">
+            <component :is="card.component" v-for="card in visibleCards" :key="card.code" />
+          </div>
+        </transition>
       </div>
 
       <app-card-info style="order: 99">
@@ -91,6 +95,7 @@ const visibleCards = computed(() => {
 })
 
 const isRefreshing = ref(false)
+const isDashboardCardsBack = ref(false)
 
 const onRefresh = async () => {
   isRefreshing.value = true
@@ -109,7 +114,14 @@ onMounted(() => {
   onRefreshDebounce()
 })
 
+watch(
+  () => dashboardStore.month,
+  (newMonth, oldMonth) => {
+    if (!oldMonth) return
 
+    isDashboardCardsBack.value = newMonth < oldMonth
+  },
+)
 
 const dashboard = ref(null)
 let swipeStartAt = null
@@ -133,9 +145,37 @@ const { lengthX } = useSwipe(dashboard, {
   },
 })
 
-
 const toolbar = useToolbar()
 const { t } = useI18n()
 toolbar.init({ title: t('dashboard.title') })
-
 </script>
+
+<style scoped>
+.dashboard-cards-frame {
+  --enter-x: 36px;
+  --leave-x: -36px;
+  overflow-x: hidden;
+}
+
+.dashboard-cards-back {
+  --enter-x: -36px;
+  --leave-x: 36px;
+}
+
+.dashboard-cards-enter-active,
+.dashboard-cards-leave-active {
+  transition:
+    transform 0.22s cubic-bezier(0.2, 0, 0, 1),
+    opacity 0.18s ease;
+}
+
+.dashboard-cards-enter-from {
+  opacity: 0;
+  transform: translateX(var(--enter-x));
+}
+
+.dashboard-cards-leave-to {
+  opacity: 0;
+  transform: translateX(var(--leave-x));
+}
+</style>

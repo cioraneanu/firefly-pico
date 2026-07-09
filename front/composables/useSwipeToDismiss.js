@@ -3,7 +3,7 @@ import { useScroll, useSwipe } from '@vueuse/core'
 // Used to keep track of the current number of visible popups, so that one gesture only closes the latest and not all of them.
 let globalZIndex = 0
 
-export function useSwipeToDismiss({ onSwipe, swipeRef, showDropdown }) {
+export function useSwipeToDismiss({ onSwipe, swipeRef, scrollRef, showDropdown }) {
   let zIndex = null
   let isScrollOnTop = false
   let swipeStartAt = null
@@ -20,7 +20,7 @@ export function useSwipeToDismiss({ onSwipe, swipeRef, showDropdown }) {
     zIndex = null
   })
 
-  const { x, y } = useScroll(swipeRef)
+  const { y } = useScroll(scrollRef ?? swipeRef)
 
   const { lengthY: swipeYDistance } = useSwipe(swipeRef, {
     disableTextSelect: true,
@@ -31,12 +31,12 @@ export function useSwipeToDismiss({ onSwipe, swipeRef, showDropdown }) {
         isScrollOnTop = true
       }
     },
-    onSwipeEnd(e, direction) {
+    onSwipeEnd(e) {
       let duration = e.timeStamp - swipeStartAt
       let velocity = Math.abs(swipeYDistance.value) / duration
       // console.log('velocity', {duration, velocity, swipeYDistance: swipeYDistance.value})
 
-      if (zIndex === globalZIndex && swipeYDistance.value < -100 && velocity >= 1.0) {
+      if (zIndex === globalZIndex && isScrollOnTop && swipeYDistance.value < -100 && velocity >= 1.0) {
         onSwipe()
       }
 
