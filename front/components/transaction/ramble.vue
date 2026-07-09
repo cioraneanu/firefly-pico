@@ -274,7 +274,15 @@ const getRambleErrorMessage = (error) => {
 }
 
 const getTransactionCreateErrorMessage = (error) => {
-  return error?.response?.data?.message ?? error?.response?.data?.error?.message ?? error?.data?.message ?? error?.message ?? 'Failed to create transaction.'
+  return (
+    error?.data?.payload?.message ??
+    error?.response?.data?.payload?.message ??
+    error?.response?.data?.message ??
+    error?.response?.data?.error?.message ??
+    error?.data?.message ??
+    error?.message ??
+    'Failed to create transaction.'
+  )
 }
 
 const getInterpretationText = () => {

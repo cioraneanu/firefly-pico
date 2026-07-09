@@ -199,16 +199,18 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
     newBudget && (budget.value = newBudget)
 
     if (newAmount && newAmount > 0) {
-      if (!assistantCurrency || !accountSource.value || Account.getCurrencyCode(accountSource.value) === Currency.getCode(assistantCurrency)) {
-        amount.value = newAmount
-      } else {
+      const accountCurrencyCode = Account.getCurrencyCode(accountSource.value)
+      const assistantCurrencyCode = Currency.getCode(assistantCurrency)
+      const isForeignAmount = assistantCurrencyCode && accountCurrencyCode && accountCurrencyCode !== assistantCurrencyCode
+      // Attempt to compute "amount" via exchange rate. Falls back to the raw amount when the
+      // account currency or exchange rates are unknown, since converting would yield NaN.
+      const convertedAmount = isForeignAmount ? convertCurrency(newAmount, assistantCurrencyCode, accountCurrencyCode) : NaN
+      if (Number.isFinite(convertedAmount)) {
         amountForeign.value = newAmount
         currencyForeign.value = assistantCurrency
-        // Attempt to compute "amount" via exchange rate
-        if (accountSource.value) {
-          let sourceAccountDecimalPlaces = Account.getCurrencyDecimalPlaces(accountSource.value)
-          amount.value = convertCurrency(amountForeign.value, Currency.getCode(currencyForeign.value), Account.getCurrencyCode(accountSource.value)).toFixed(sourceAccountDecimalPlaces)
-        }
+        amount.value = convertedAmount.toFixed(Account.getCurrencyDecimalPlaces(accountSource.value) ?? 2)
+      } else {
+        amount.value = newAmount
       }
     }
 

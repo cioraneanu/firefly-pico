@@ -1587,10 +1587,12 @@ body {
     overflow: hidden;
 }
 
-.ramble-transaction-item-success {
+/* Doubled class so these beat the `.ramble-transaction-item + .ramble-transaction-item`
+   divider rule, which otherwise overrides the colored border-top. */
+.ramble-transaction-item.ramble-transaction-item-success {
     border: 2px solid var(--van-success-color, #07c160);
 }
 
-.ramble-transaction-item-error {
+.ramble-transaction-item.ramble-transaction-item-error {
     border: 2px solid var(--van-danger-color, #ee0a24);
 }
