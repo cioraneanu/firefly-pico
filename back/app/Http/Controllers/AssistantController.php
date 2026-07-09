@@ -16,12 +16,14 @@ class AssistantController extends BaseController
 
     public function getAll(Request $request)
     {
+        BaseAuthorization::checkUser();
         $list = AssistantRamble::query()->allowed()->orderBy('created_at')->get();
         return $this->respond(['data' => $list,]);
     }
 
     public function getCount(Request $request)
     {
+        BaseAuthorization::checkUser();
         $list = AssistantRamble::query()->allowed()->count();
         return $this->respond(['count' => $list,]);
     }
@@ -43,7 +45,7 @@ class AssistantController extends BaseController
 
         $ramble = AssistantRamble::create([
             'text' => $text,
-            'auth_token_hash' => getAuthTokenHash()
+            'user_id' => getUserId()
         ]);
 
         return $this->respond([
@@ -53,7 +55,8 @@ class AssistantController extends BaseController
 
     public function deleteRamble(Request $request)
     {
-        $ramble = AssistantRamble::query()->findOrFail($request->id);
+        BaseAuthorization::checkUser();
+        $ramble = AssistantRamble::query()->allowed()->findOrFail($request->id);
         $ramble->delete();
 
         return $this->respond([
@@ -63,12 +66,14 @@ class AssistantController extends BaseController
 
     public function deleteRambles(Request $request)
     {
+        BaseAuthorization::checkUser();
         $request->validate([
             'ids' => ['required', 'array'],
             'ids.*' => ['integer'],
         ]);
 
         $deleted = AssistantRamble::query()
+            ->allowed()
             ->whereIn('id', $request->input('ids'))
             ->delete();
 
@@ -79,6 +84,7 @@ class AssistantController extends BaseController
 
     public function interpretTransactions(Request $request)
     {
+        BaseAuthorization::checkUser();
         $request->validate([
             'payload' => ['required', 'array'],
             'payload.messages' => ['required', 'array'],

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('assistant_rambles', function (Blueprint $table) {
             $table->id();
-            $table->string("auth_token_hash");
+            $table->string("user_id")->index();
             $table->text('text');
             $table->timestamps();
         });

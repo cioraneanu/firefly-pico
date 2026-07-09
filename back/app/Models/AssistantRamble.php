@@ -7,11 +7,11 @@ use Illuminate\Database\Eloquent\Builder;
 class AssistantRamble extends BaseModel
 {
     protected $fillable = [
-        'text', 'auth_token_hash'
+        'text', 'user_id'
     ];
 
     public function scopeAllowed(Builder $query)
     {
-        return $query->where('auth_token_hash', getAuthTokenHash());
+        return $query->where('user_id', getUserId());
     }
 }

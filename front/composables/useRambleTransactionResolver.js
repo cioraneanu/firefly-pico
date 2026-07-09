@@ -1,3 +1,5 @@
+import { computed } from 'vue'
+import { uniqBy } from 'lodash-es'
 import Tag from '~/models/Tag'
 import Category from '~/models/Category.js'
 import Account from '~/models/Account.js'
@@ -18,53 +20,69 @@ export const useRambleTransactionResolver = () => {
 
   const normalizeName = (value) => LanguageUtils.removeAccentsAndLowerCase(value).trim()
 
-  const resolveByName = (list, getNames, name) => {
+  // Normalizing names (accent stripping + lowercasing) is the hot part of resolving, so each
+  // store list is indexed once and only re-indexed when the list itself changes.
+  const buildNormalizedIndex = (list, getNames) =>
+    list.map((item) => {
+      const names = getNames(item).filter(Boolean)
+      return {
+        item,
+        names,
+        normalizedNames: names.map(normalizeName).filter(Boolean),
+      }
+    })
+
+  const getTagNames = (tag) => [Tag.getDisplayName(tag)]
+  const getCategoryNames = (category) => [Category.getDisplayName(category)]
+  const getTemplateNames = (template) => TransactionTemplate.getAllNames(template)
+  const getBudgetNames = (budget) => [Budget.getDisplayName(budget)]
+  const getAccountNames = (account) => [Account.getDisplayName(account)]
+  const getCurrencyNames = (currency) => [Currency.getCode(currency), Currency.getName(currency), Currency.getSymbol(currency)]
+
+  const tagIndex = computed(() => buildNormalizedIndex(tagStore.tagList, getTagNames))
+  const categoryIndex = computed(() => buildNormalizedIndex(categoryStore.categoryList, getCategoryNames))
+  const templateIndex = computed(() => buildNormalizedIndex(templateStore.transactionTemplateList, getTemplateNames))
+  const budgetIndex = computed(() => buildNormalizedIndex(budgetStore.budgetList, getBudgetNames))
+  const accountIndex = computed(() => buildNormalizedIndex(accountStore.accountList, getAccountNames))
+  const currencyIndex = computed(() => buildNormalizedIndex(currencyStore.currenciesList, getCurrencyNames))
+
+  const resolveByName = (index, name) => {
     const normalizedName = normalizeName(name)
     if (!normalizedName) {
       return null
     }
 
-    const getNormalizedNames = (item) => getNames(item).filter(Boolean).map(normalizeName)
-    const exactMatch = list.find((item) => getNormalizedNames(item).some((itemName) => itemName === normalizedName))
+    const exactMatch = index.find((entry) => entry.normalizedNames.some((itemName) => itemName === normalizedName))
     if (exactMatch) {
-      return exactMatch
+      return exactMatch.item
     }
 
-    return list.find((item) => getNormalizedNames(item).some((itemName) => itemName.length >= 3 && (itemName.includes(normalizedName) || normalizedName.includes(itemName))))
-  }
-
-  const uniqueById = (list) => {
-    const result = []
-    for (const item of list.filter(Boolean)) {
-      if (!result.some((existing) => existing.id === item.id)) {
-        result.push(item)
-      }
-    }
-    return result
+    const partialMatch = index.find((entry) => entry.normalizedNames.some((itemName) => itemName.length >= 3 && (itemName.includes(normalizedName) || normalizedName.includes(itemName))))
+    return partialMatch?.item ?? null
   }
 
   const resolveTags = (tagNames = []) => {
-    return uniqueById(tagNames.map((tagName) => resolveByName(tagStore.tagList, (tag) => [Tag.getDisplayName(tag)], tagName)))
+    return uniqBy(tagNames.map((tagName) => resolveByName(tagIndex.value, tagName)).filter(Boolean), 'id')
   }
 
   const resolveCategory = (categoryName) => {
-    return resolveByName(categoryStore.categoryList, (category) => [Category.getDisplayName(category)], categoryName)
+    return resolveByName(categoryIndex.value, categoryName)
   }
 
   const resolveTemplate = (templateName) => {
-    return resolveByName(templateStore.transactionTemplateList, (template) => TransactionTemplate.getAllNames(template), templateName)
+    return resolveByName(templateIndex.value, templateName)
   }
 
   const resolveBudget = (budgetName) => {
-    return resolveByName(budgetStore.budgetList, (budget) => [Budget.getDisplayName(budget)], budgetName)
+    return resolveByName(budgetIndex.value, budgetName)
   }
 
   const resolveAccount = (accountName) => {
-    return resolveByName(accountStore.accountList, (account) => [Account.getDisplayName(account)], accountName)
+    return resolveByName(accountIndex.value, accountName)
   }
 
   const resolveCurrency = (currencyCode) => {
-    return resolveByName(currencyStore.currenciesList, (currency) => [Currency.getCode(currency), Currency.getName(currency), Currency.getSymbol(currency)], currencyCode)
+    return resolveByName(currencyIndex.value, currencyCode)
   }
 
   const resolveDate = (date) => {
@@ -80,22 +98,23 @@ export const useRambleTransactionResolver = () => {
     return Transaction.typesList.find((transactionType) => transactionType.code === type) ?? null
   }
 
-  const contextNames = (list, getNames) => {
-    return list
-      .map((item) => getNames(item))
+  const contextNames = (index) => {
+    return index
+      .map((entry) => entry.names)
       .flat()
-      .filter(Boolean)
       .slice(0, 200)
   }
 
-  const getRambleContext = () => ({
-    tags: contextNames(tagStore.tagList, (tag) => [Tag.getDisplayName(tag)]),
-    categories: contextNames(categoryStore.categoryList, (category) => [Category.getDisplayName(category)]),
-    templates: contextNames(templateStore.transactionTemplateList, (template) => TransactionTemplate.getAllNames(template)),
-    budgets: contextNames(budgetStore.budgetList, (budget) => [Budget.getDisplayName(budget)]),
-    accounts: contextNames(accountStore.accountList, (account) => [Account.getDisplayName(account)]),
-    currencies: contextNames(currencyStore.currenciesList, (currency) => [Currency.getCode(currency), Currency.getName(currency), Currency.getSymbol(currency)]),
-  })
+  const rambleContext = computed(() => ({
+    tags: contextNames(tagIndex.value),
+    categories: contextNames(categoryIndex.value),
+    templates: contextNames(templateIndex.value),
+    budgets: contextNames(budgetIndex.value),
+    accounts: contextNames(accountIndex.value),
+    currencies: contextNames(currencyIndex.value),
+  }))
+
+  const getRambleContext = () => rambleContext.value
 
   const resolveAssistantAccount = (accountName) => {
     return accountName ? (resolveAccount(accountName) ?? undefined) : undefined

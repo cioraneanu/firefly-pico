@@ -20,7 +20,7 @@ axios.interceptors.request.use(
     }
 
     config.headers['Authorization'] = `Bearer ${authToken}`
-    config.timeout = appStore.queryTimeout
+    config.timeout = config.timeout || appStore.queryTimeout
     return config
   },
   (error) => {

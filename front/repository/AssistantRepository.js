@@ -89,14 +89,6 @@ export default class AssistantRepository extends BaseRepository {
     super('api/assistant')
   }
 
-  async saveRambleText(text) {
-    return axios.post(`${this.getUrl()}/rambles`, text, {
-      headers: {
-        'Content-Type': 'text/plain',
-      },
-    })
-  }
-
   async getSavedRambleCount({ showLoading = false } = {}) {
     const response = await axios.get(`${this.getUrl()}/rambles/count`, { showLoading })
     return get(response, 'data', {})
@@ -105,10 +97,6 @@ export default class AssistantRepository extends BaseRepository {
   async getSavedRambles() {
     const response = await axios.get(`${this.getUrl()}/rambles`)
     return get(response, 'data', {})
-  }
-
-  async deleteSavedRamble(id) {
-    return axios.delete(`${this.getUrl()}/rambles/${id}`)
   }
 
   async deleteSavedRambles(ids) {
@@ -123,10 +111,9 @@ export default class AssistantRepository extends BaseRepository {
     const appStore = useAppStore()
 
     const llm = data.llm ?? {}
-    const serverLlmConfig = appStore.assistantLlmConfig ?? {}
-    const isServerLlmConfigured = !!serverLlmConfig.isConfigured
+    const isServerLlmConfigured = !!appStore.llmIsConfigured
     const endpoint = llm.endpoint?.trim() || DEFAULT_ASSISTANT_LLM_ENDPOINT
-    const model = (isServerLlmConfigured ? serverLlmConfig.model : llm.model)?.trim() || DEFAULT_ASSISTANT_LLM_MODEL
+    const model = (isServerLlmConfigured ? appStore.llmModel : llm.model)?.trim() || DEFAULT_ASSISTANT_LLM_MODEL
     const apiKey = llm.apiKey?.trim()
 
     const requestData = {

@@ -443,7 +443,7 @@ const createRambleTransactions = async () => {
     }
 
     if (successCount > 0) {
-      UIUtils.showToastSuccess(`${successCount} transaction${successCount === 1 ? '' : 's'} created`)
+      UIUtils.showToastSuccess(t('transaction.assistant_ramble_created_toast', successCount))
     }
 
     if (failedRambleTransactionsCount.value > 0) {

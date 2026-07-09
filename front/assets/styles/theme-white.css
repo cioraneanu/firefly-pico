@@ -913,7 +913,7 @@ body {
     position: fixed !important;
     left: 20px;
     bottom: calc(env(safe-area-inset-bottom) + 4.5rem);
-    z-index: 2002;
+    z-index: 4;
     border-radius: 6px;
     border: 1.5px solid #999;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 6px 12px -2px,

@@ -16,7 +16,13 @@ class AssistantRambleTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        Http::fake(['*/api/v1/about/user' => Http::response(['data' => ['id' => '1']])]);
+        Http::fake(function ($request) {
+            return match ($request->header('Authorization')[0] ?? $request->header('authorization')[0] ?? '') {
+                'Bearer test-token' => Http::response(['data' => ['id' => '1']]),
+                'Bearer other-token' => Http::response(['data' => ['id' => '2']]),
+                default => Http::response(null, 401),
+            };
+        });
     }
 
     private function headers($token = null)
@@ -31,7 +37,7 @@ class AssistantRambleTest extends TestCase
         $response->assertOk();
         $this->assertDatabaseHas('assistant_rambles', [
             'text' => 'coffee 5 eur',
-            'auth_token_hash' => hash('sha256', $this->token),
+            'user_id' => '1',
         ]);
     }
 
@@ -51,10 +57,18 @@ class AssistantRambleTest extends TestCase
         $this->assertDatabaseCount('assistant_rambles', 0);
     }
 
-    public function test_count_and_list_are_scoped_to_token()
+    public function test_create_ramble_without_valid_token_fails()
     {
-        AssistantRamble::create(['text' => 'mine', 'auth_token_hash' => hash('sha256', $this->token)]);
-        AssistantRamble::create(['text' => 'other', 'auth_token_hash' => hash('sha256', 'other-token')]);
+        $response = $this->postJson('api/assistant/rambles', ['text' => 'coffee 5 eur']);
+
+        $response->assertStatus(401);
+        $this->assertDatabaseCount('assistant_rambles', 0);
+    }
+
+    public function test_count_and_list_are_scoped_to_user()
+    {
+        AssistantRamble::create(['text' => 'mine', 'user_id' => '1']);
+        AssistantRamble::create(['text' => 'other', 'user_id' => '2']);
 
         $this->getJson('api/assistant/rambles/count', $this->headers())->assertOk()->assertJson(['count' => 1]);
         $this->getJson('api/assistant/rambles', $this->headers())->assertOk()->assertJsonCount(1, 'data')->assertJsonPath('data.0.text', 'mine');
@@ -62,9 +76,46 @@ class AssistantRambleTest extends TestCase
 
     public function test_delete_rambles_by_ids()
     {
-        $ramble = AssistantRamble::create(['text' => 'mine', 'auth_token_hash' => hash('sha256', $this->token)]);
+        $ramble = AssistantRamble::create(['text' => 'mine', 'user_id' => '1']);
 
         $this->deleteJson('api/assistant/rambles', ['ids' => [$ramble->id]], $this->headers())->assertOk()->assertJson(['deleted' => 1]);
         $this->assertDatabaseCount('assistant_rambles', 0);
+    }
+
+    public function test_delete_rambles_cannot_delete_other_users_rambles()
+    {
+        $mine = AssistantRamble::create(['text' => 'mine', 'user_id' => '1']);
+        $other = AssistantRamble::create(['text' => 'other', 'user_id' => '2']);
+
+        $this->deleteJson('api/assistant/rambles', ['ids' => [$mine->id, $other->id]], $this->headers())->assertOk()->assertJson(['deleted' => 1]);
+        $this->assertDatabaseHas('assistant_rambles', ['id' => $other->id]);
+    }
+
+    public function test_delete_single_ramble_of_other_user_fails()
+    {
+        $other = AssistantRamble::create(['text' => 'other', 'user_id' => '2']);
+
+        $this->deleteJson("api/assistant/rambles/{$other->id}", [], $this->headers())->assertNotFound();
+        $this->assertDatabaseHas('assistant_rambles', ['id' => $other->id]);
+    }
+
+    public function test_delete_rambles_without_valid_token_fails()
+    {
+        $ramble = AssistantRamble::create(['text' => 'mine', 'user_id' => '1']);
+
+        $this->deleteJson('api/assistant/rambles', ['ids' => [$ramble->id]])->assertStatus(401);
+        $this->deleteJson("api/assistant/rambles/{$ramble->id}")->assertStatus(401);
+        $this->assertDatabaseCount('assistant_rambles', 1);
+    }
+
+    public function test_interpret_transactions_without_valid_token_fails()
+    {
+        $response = $this->postJson('api/assistant/interpret-transactions', [
+            'payload' => ['messages' => [['role' => 'user', 'content' => 'coffee 5 eur']]],
+            'llm' => ['endpoint' => 'https://example.com/v1/chat/completions'],
+        ]);
+
+        $response->assertStatus(401);
+        Http::assertNotSent(fn($request) => str_contains($request->url(), 'example.com'));
     }
 }

@@ -202,13 +202,16 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
       const accountCurrencyCode = Account.getCurrencyCode(accountSource.value)
       const assistantCurrencyCode = Currency.getCode(assistantCurrency)
       const isForeignAmount = assistantCurrencyCode && accountCurrencyCode && accountCurrencyCode !== assistantCurrencyCode
-      // Attempt to compute "amount" via exchange rate. Falls back to the raw amount when the
-      // account currency or exchange rates are unknown, since converting would yield NaN.
-      const convertedAmount = isForeignAmount ? convertCurrency(newAmount, assistantCurrencyCode, accountCurrencyCode) : NaN
-      if (Number.isFinite(convertedAmount)) {
+      if (isForeignAmount) {
+        // Keep the stated foreign amount/currency even when no exchange rate is available,
+        // so the amount is never silently booked as the account currency. Without a rate,
+        // "amount" stays empty and the user has to fill it in before saving.
         amountForeign.value = newAmount
         currencyForeign.value = assistantCurrency
-        amount.value = convertedAmount.toFixed(Account.getCurrencyDecimalPlaces(accountSource.value) ?? 2)
+        const convertedAmount = convertCurrency(newAmount, assistantCurrencyCode, accountCurrencyCode)
+        if (Number.isFinite(convertedAmount)) {
+          amount.value = convertedAmount.toFixed(Account.getCurrencyDecimalPlaces(accountSource.value) ?? 2)
+        }
       } else {
         amount.value = newAmount
       }
