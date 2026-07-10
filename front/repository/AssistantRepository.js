@@ -2,9 +2,6 @@ import axios from 'axios'
 import { get } from 'lodash-es'
 import BaseRepository from '~/repository/BaseRepository'
 
-const DEFAULT_ASSISTANT_LLM_ENDPOINT = 'https://api.openai.com/v1/chat/completions'
-const DEFAULT_ASSISTANT_LLM_MODEL = 'gpt-4o-mini'
-
 const getInterpretationPrompt = () =>
   [
     'You extract financial transactions from natural language.',
@@ -108,17 +105,8 @@ export default class AssistantRepository extends BaseRepository {
   }
 
   async interpretTransactions(data) {
-    const appStore = useAppStore()
-
-    const llm = data.llm ?? {}
-    const isServerLlmConfigured = !!appStore.llmIsConfigured
-    const endpoint = llm.endpoint?.trim() || DEFAULT_ASSISTANT_LLM_ENDPOINT
-    const model = (isServerLlmConfigured ? appStore.llmModel : llm.model)?.trim() || DEFAULT_ASSISTANT_LLM_MODEL
-    const apiKey = llm.apiKey?.trim()
-
     const requestData = {
       payload: {
-        model,
         temperature: 0.1,
         stream: false,
         messages: [
@@ -138,17 +126,6 @@ export default class AssistantRepository extends BaseRepository {
           },
         ],
       },
-    }
-
-    if (!isServerLlmConfigured) {
-      requestData.llm = {
-        endpoint,
-        model,
-      }
-
-      if (apiKey) {
-        requestData.llm.apiKey = apiKey
-      }
     }
 
     const response = await axios.post(`${this.getUrl()}/interpret-transactions`, requestData, {

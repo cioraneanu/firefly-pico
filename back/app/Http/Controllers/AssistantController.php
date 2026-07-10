@@ -88,48 +88,33 @@ class AssistantController extends BaseController
         $request->validate([
             'payload' => ['required', 'array'],
             'payload.messages' => ['required', 'array'],
-            'llm' => ['sometimes', 'array'],
-            'llm.endpoint' => ['nullable', 'string'],
-            'llm.model' => ['nullable', 'string'],
-            'llm.apiKey' => ['nullable', 'string'],
         ]);
 
         $config = app(AssistantLlmConfigService::class)->getConfig();
-        $payload = $request->input('payload');
 
-        if ($config['isConfigured']) {
-            $endpoint = $config['endpoint'];
-            $model = $config['model'];
-            $apiKey = $config['apiKey'];
-        } else {
-            $llm = $request->input('llm', []);
-            $endpoint = trim((string)($llm['endpoint'] ?? '')) ?: $config['endpoint'];
-            $model = trim((string)($llm['model'] ?? ($payload['model'] ?? ''))) ?: $config['model'];
-            $apiKey = trim((string)($llm['apiKey'] ?? ''));
-        }
-
-        if (!$endpoint) {
+        if (!$config['isConfigured']) {
             return $this->setStatusCode(self::HTTP_CODE_UNPROCESSABLE_ENTITY)->respond([
-                'message' => 'Assistant LLM endpoint is required.',
+                'message' => 'Assistant LLM is not configured.',
             ]);
         }
 
-        $payload['model'] = $model;
+        $payload = $request->input('payload');
+        $payload['model'] = $config['model'];
 
         $headers = [
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
         ];
 
-        if ($apiKey) {
-            $headers['Authorization'] = "Bearer $apiKey";
+        if ($config['apiKey']) {
+            $headers['Authorization'] = "Bearer {$config['apiKey']}";
         }
 
         try {
             $response = Http::withHeaders($headers)
                 ->connectTimeout(10)
                 ->timeout(60)
-                ->post($endpoint, $payload);
+                ->post($config['endpoint'], $payload);
         } catch (ConnectionException $exception) {
             return $this->setStatusCode(502)->respond([
                 'message' => $exception->getMessage() ?: 'Assistant LLM request failed.',
