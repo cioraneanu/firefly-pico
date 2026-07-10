@@ -1,0 +1,141 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Authorizations\BaseAuthorization;
+use App\Http\Controllers\Base\BaseController;
+use App\Models\AssistantRamble;
+use App\Services\AssistantLlmConfigService;
+use Illuminate\Http\Client\ConnectionException;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+
+class AssistantController extends BaseController
+{
+
+
+    public function getAll(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        $list = AssistantRamble::query()->allowed()->orderBy('created_at')->get();
+        return $this->respond(['data' => $list,]);
+    }
+
+    public function getCount(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        $list = AssistantRamble::query()->allowed()->count();
+        return $this->respond(['count' => $list,]);
+    }
+
+
+    public function create(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        $text = $request->get('text');
+        if (!$text && str_contains((string)$request->header('Content-Type'), 'text/plain')) {
+            $text = trim($request->getContent());
+        }
+
+        if (!$text) {
+            return $this->setStatusCode(self::HTTP_CODE_UNPROCESSABLE_ENTITY)->respond([
+                'message' => 'Ramble text is required.',
+            ]);
+        }
+
+        $ramble = AssistantRamble::create([
+            'text' => $text,
+            'user_id' => getUserId()
+        ]);
+
+        return $this->respond([
+            'data' => $ramble,
+        ]);
+    }
+
+    public function deleteRamble(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        $ramble = AssistantRamble::query()->allowed()->findOrFail($request->id);
+        $ramble->delete();
+
+        return $this->respond([
+            'deleted' => 1,
+        ]);
+    }
+
+    public function deleteRambles(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        $request->validate([
+            'ids' => ['required', 'array'],
+            'ids.*' => ['integer'],
+        ]);
+
+        $deleted = AssistantRamble::query()
+            ->allowed()
+            ->whereIn('id', $request->input('ids'))
+            ->delete();
+
+        return $this->respond([
+            'deleted' => $deleted,
+        ]);
+    }
+
+    public function interpretTransactions(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        $request->validate([
+            'payload' => ['required', 'array'],
+            'payload.messages' => ['required', 'array'],
+        ]);
+
+        $config = app(AssistantLlmConfigService::class)->getConfig();
+
+        if (!$config['isConfigured']) {
+            return $this->setStatusCode(self::HTTP_CODE_UNPROCESSABLE_ENTITY)->respond([
+                'message' => 'Assistant LLM is not configured.',
+            ]);
+        }
+
+        $payload = $request->input('payload');
+        $payload['model'] = $config['model'];
+
+        $headers = [
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json',
+        ];
+
+        if ($config['apiKey']) {
+            $headers['Authorization'] = "Bearer {$config['apiKey']}";
+        }
+
+        try {
+            $response = Http::withHeaders($headers)
+                ->connectTimeout(10)
+                ->timeout(60)
+                ->post($config['endpoint'], $payload);
+        } catch (ConnectionException $exception) {
+            return $this->setStatusCode(502)->respond([
+                'message' => $exception->getMessage() ?: 'Assistant LLM request failed.',
+            ]);
+        }
+
+        $responseBody = $response->json();
+
+        if (!$response->successful()) {
+            return $this->setStatusCode($response->status())->respond([
+                'message' => data_get($responseBody, 'error.message') ?? data_get($responseBody, 'message') ?? 'Assistant LLM request failed.',
+            ]);
+        }
+
+        if (is_array($responseBody)) {
+            return $this->respond($responseBody);
+        }
+
+        return $this->respond([
+            'content' => $response->body(),
+        ]);
+    }
+
+}

@@ -31,4 +31,14 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'assistant_llm' => [
+        'endpoint' => env('ASSISTANT_LLM_ENDPOINT'),
+        'model' => env('ASSISTANT_LLM_MODEL'),
+        'api_key' => env('ASSISTANT_LLM_API_KEY'),
+        'defaults' => [
+            'endpoint' => 'https://api.openai.com/v1/chat/completions',
+            'model' => 'gpt-4o-mini',
+        ],
+    ],
+
 ];

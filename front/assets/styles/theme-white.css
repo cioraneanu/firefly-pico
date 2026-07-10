@@ -207,6 +207,16 @@ body {
     margin-right: 20px;
 }
 
+.app-text-area:not(.app-text-area-focused) .van-field__control {
+    max-height: calc(var(--app-text-area-visible-lines, 2) * 1.5em);
+    overflow-y: hidden;
+}
+
+.app-text-area.app-text-area-focused .van-field__control {
+    max-height: none;
+    overflow-y: auto;
+}
+
 .compact.app-field-text .van-field__body {
     margin-right: 0px;
 }
@@ -1553,4 +1563,62 @@ body {
 
 .app-field-dropdown .van-popover__wrapper {
     width: 100%;
+}
+
+/* ---------------------------- Ramble ---------------------------- */
+
+.ramble-divider {
+    border-top: 1px solid var(--van-border-color);
+}
+
+.ramble-divider-bottom {
+    border-bottom: 1px solid var(--van-border-color);
+}
+
+.ramble-transaction-item + .ramble-transaction-item,
+.ramble-saved-item + .ramble-saved-item {
+    border-top: 1px solid var(--van-border-color);
+}
+
+.ramble-body {
+    background: var(--van-background);
+}
+
+.ramble-dialog-loading {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    background: rgba(255, 255, 255, 0.62);
+}
+
+.ramble-dialog-loading-card {
+    min-width: 96px;
+    min-height: 80px;
+    padding: 20px;
+    border-radius: 10px;
+    background: var(--van-cell-background);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+/* The input card and preview list use overflow:hidden, which lets them shrink to fit
+   the flex column instead of overflowing it. Keep their natural height so the body scrolls. */
+.ramble-body > * {
+    flex-shrink: 0;
+}
+
+.ramble-transaction-item-success,
+.ramble-transaction-item-error {
+    margin: 4px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Doubled class so these beat the `.ramble-transaction-item + .ramble-transaction-item`
+   divider rule, which otherwise overrides the colored border-top. */
+.ramble-transaction-item.ramble-transaction-item-success {
+    border: 2px solid var(--van-success-color, #07c160);
+}
+
+.ramble-transaction-item.ramble-transaction-item-error {
+    border: 2px solid var(--van-danger-color, #ee0a24);
 }

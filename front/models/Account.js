@@ -206,7 +206,13 @@ export default class Account extends BaseModel {
     if (!account) {
       return null
     }
-    return get(account, 'attributes.currency')
+    const currency = get(account, 'attributes.currency')
+    if (currency) {
+      return currency
+    }
+    // Accounts transformed before currencies were loaded only carry currency_id.
+    const currencyId = get(account, 'attributes.currency_id')
+    return currencyId ? (useCurrencyStore().currencyDictionary[currencyId] ?? null) : null
   }
 
   static getCurrencySymbol(account) {

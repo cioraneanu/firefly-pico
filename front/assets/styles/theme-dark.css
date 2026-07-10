@@ -344,6 +344,10 @@
     box-shadow: rgba(0, 0, 0, 0.4) 0px 3px 8px;
 }
 
+.van-theme-dark .ramble-dialog-loading {
+    background: rgba(0, 0, 0, 0.55);
+}
+
 .van-theme-dark .budget-icon {
     background: #333;
 }

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CurrencyController;
@@ -30,8 +31,9 @@ use Illuminate\Support\Facades\Route;
 
 
 // Own resources
-Route::get('latest-version', [VersionController::class, 'getLatestVersion']);
+Route::get('info', [VersionController::class, 'getInfo']);
 Route::get('user', [UserController::class, 'getUser']);
+
 RouteUtils::makeCRUD("transaction-templates", TransactionTemplateController::class);
 
 // Firefly proxied resources
@@ -63,6 +65,12 @@ Route::get('search/transactions', [TransactionController::class, 'getAll']);
 
 RouteUtils::makeCRUD("profiles", ProfileController::class);
 
+Route::post('assistant/rambles', [AssistantController::class, 'create']);
+Route::get('assistant/rambles/count', [AssistantController::class, 'getCount']);
+Route::get('assistant/rambles', [AssistantController::class, 'getAll']);
+Route::delete('assistant/rambles', [AssistantController::class, 'deleteRambles']);
+Route::delete('assistant/rambles/{id}', [AssistantController::class, 'deleteRamble'])->where('id', '[0-9]+');
+Route::post('assistant/interpret-transactions', [AssistantController::class, 'interpretTransactions']);
 
 Route::get('/test', function (Request $request) {
     return "Test!";
@@ -73,7 +81,3 @@ $proxyMethods = ['get', 'post', 'put', 'patch', 'delete'];
 foreach ($proxyMethods as $proxyMethod) {
     Route::$proxyMethod('{any?}', [FireflyProxyController::class, 'proxyRequest'])->where('any', '.*');
 }
-
-
-
-

@@ -15,13 +15,12 @@ axios.interceptors.request.use(
 
     let authToken = appStore.authToken
     if (!appStore.hasAuthToken) {
-      const router = useRouter()
       UIUtils.showToastError('No personal access token...')
       controller.abort()
     }
 
     config.headers['Authorization'] = `Bearer ${authToken}`
-    config.timeout = appStore.queryTimeout
+    config.timeout = config.timeout || appStore.queryTimeout
     return config
   },
   (error) => {
@@ -29,7 +28,7 @@ axios.interceptors.request.use(
   },
 )
 
-const MAX_RETRIES = 2
+const MAX_RETRIES = 1
 
 const retryRequest = async (error) => {
   let errorMessage = get(error, 'response.data.message') ?? get(error, 'message') ?? ''

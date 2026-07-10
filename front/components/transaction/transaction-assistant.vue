@@ -6,6 +6,7 @@
 
       <div class="flex-1" />
       <currency-dropdown v-model="profileStore.assistantCurrency" class="text-size-12" :is-clearable="true" />
+      <ramble :assistant-text="assistantText" />
     </div>
     <div class="text-size-12 text-muted mb-5">{{ $t('transaction.assistant_format') }}</div>
 
@@ -24,7 +25,7 @@
       </div>
 
       <template v-if="previewTags.length > 0 || parsed.isTodo">
-        <div class="display-flex flex-center-vertical gap-2 p-5 mt-10 text-size-12 flex-wrap" style="border: 1px dashed black; border-radius: 5px">
+        <div class="display-flex flex-center-vertical gap-2 p-5 mt-10 text-size-12 flex-wrap border border-radius">
           <van-tag v-for="previewTag in previewTags" :key="previewTag.label" round class="assistant-tag" size="medium" type="primary">
             <span>{{ previewTag.label }}</span>
             <span>|</span>
@@ -39,7 +40,6 @@
         </div>
       </template>
     </div>
-
   </div>
 </template>
 
@@ -52,7 +52,10 @@ import Tag from '~/models/Tag'
 import AppTutorial from '~/components/ui-kit/app-tutorial.vue'
 import Category from '~/models/Category.js'
 import { ellipsizeText } from '~/utils/Utils.js'
+import RomanianLanguageUtils from '~/utils/RomanianLanguageUtils.js'
+import { evalMath } from '~/utils/MathUtils.js'
 import { useFuzzySearchResource } from '~/composables/useFuzzySearch.js'
+import Ramble from '~/components/transaction/ramble.vue'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
@@ -90,7 +93,6 @@ const parseAssistantText = () => {
       text = text.slice(0, -profileStore.assistantTodoTagMatcher.length)
     }
 
-    console.log("")
     // "+1d" / "-5d" anywhere in the text moves the transaction date by that many days
     text = text.replace(/(^|\s)([+-]\d+)d(?=\s|$)/i, (match, leadingSpace, days) => {
       result.dateOffset = parseInt(days)
@@ -140,20 +142,16 @@ const previewTags = computed(() => {
   ].filter((previewTag) => !!previewTag.value)
 })
 
-watch(
-  [parsed, () => profileStore.assistantCurrency, () => profileStore.profileActiveId],
-  ([newParsed, newAssistantCurrency]) => {
-    emit('change', {
-      transactionTemplate: newParsed.template,
-      amount: newParsed.amount,
-      tag: newParsed.tag,
-      category: newParsed.category,
-      description: newParsed.description,
-      isTodo: newParsed.isTodo,
-      dateOffset: newParsed.dateOffset,
-      assistantCurrency: newAssistantCurrency,
-    })
-  },
-)
+watch([parsed, () => profileStore.assistantCurrency, () => profileStore.profileActiveId], ([newParsed, newAssistantCurrency]) => {
+  emit('change', {
+    transactionTemplate: newParsed.template,
+    amount: newParsed.amount,
+    tag: newParsed.tag,
+    category: newParsed.category,
+    description: newParsed.description,
+    isTodo: newParsed.isTodo,
+    dateOffset: newParsed.dateOffset,
+    assistantCurrency: newAssistantCurrency,
+  })
+})
 </script>
-

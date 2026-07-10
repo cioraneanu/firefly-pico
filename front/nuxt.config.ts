@@ -31,7 +31,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       version: process.env.NUXT_PUBLIC_VERSION ?? pkg.version,
-      queryTimeout: 4000,
+      queryTimeout: 8000,
     },
   },
   vite: {
