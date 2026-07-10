@@ -1,66 +1,64 @@
 <template>
   <van-swipe-cell ref="swipeCell" v-bind="clickWithoutSwipe">
-    <div class="list-item-container align-items-center cursor-pointer border-bottom p-2 gap-2" :class="cellClass">
-      <div class="col-auto flex-center">
-        <div class="icon-type" :class="typeClass" />
+    <div class="transaction-desktop-row cursor-pointer" :class="cellClass">
+      <div class="transaction-desktop-type flex-center">
+        <div class="transaction-desktop-type-dot" :class="typeClass" />
       </div>
 
-      <div class="col-1 px-1 line-height-normal">
-        <div class="text-size-13 font-weight-600">{{ dateFormatted }}</div>
-        <div class="text-size-12 text-muted">{{ timeAgo }}</div>
+      <div class="transaction-desktop-date line-height-normal">
+        <div class="font-weight-600">{{ dateFormatted }}</div>
+        <div class="transaction-desktop-muted">{{ timeAgo }}</div>
       </div>
 
-      <div class="col-3 px-1 overflow-hidden line-height-normal">
+      <div class="transaction-desktop-description overflow-hidden line-height-normal">
         <div class="flex-center-vertical gap-1">
-          <span class="text-size-13 max-2-lines word-break-word">{{ description }}</span>
+          <span class="transaction-desktop-title max-2-lines word-break-word">{{ description }}</span>
           <app-icon v-if="hasAttachments" :icon="TablerIconConstants.attachment" :size="14" color="#1E88E5" />
         </div>
-        <div v-if="notes" class="text-size-12 text-muted ellipse-text" v-html="notes" />
+        <div v-if="notes" class="transaction-desktop-muted ellipse-text" v-html="notes" />
       </div>
 
-      <div class="col-2 px-1 overflow-hidden">
-        <div class="display-flex flex-wrap gap-1">
-          <div v-for="account in displayedAccounts" :key="account.id" class="tag-gray list-item-subtitle text-size-12 overflow-hidden">
+      <div class="transaction-desktop-accounts overflow-hidden">
+        <div class="transaction-desktop-chips">
+          <div v-for="account in displayedAccounts" :key="account.id" class="transaction-desktop-chip overflow-hidden">
             <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="14" />
             <span class="ellipse-text">{{ Account.getDisplayName(account) }}</span>
           </div>
         </div>
       </div>
 
-      <div class="col-2 px-1 overflow-hidden">
-        <div v-if="profileStore.categoriesEnabled" class="display-flex flex-wrap gap-1">
-          <div v-for="category in categories" :key="category.id" class="tag-gray list-item-subtitle text-size-12 overflow-hidden">
+      <div class="transaction-desktop-categories overflow-hidden">
+        <div v-if="profileStore.categoriesEnabled" class="transaction-desktop-chips">
+          <div v-for="category in categories" :key="category.id" class="transaction-desktop-chip overflow-hidden">
             <app-icon :icon="Category.getIcon(category) ?? TablerIconConstants.category" :size="14" />
             <span class="ellipse-text">{{ Category.getDisplayName(category) }}</span>
           </div>
         </div>
       </div>
 
-      <div class="col-1 px-1 overflow-hidden">
-        <div v-if="profileStore.tagsEnabled" class="display-flex flex-wrap gap-1">
-          <div v-for="tag in visibleTags" :key="tag.id" class="tag">
+      <div class="transaction-desktop-tags overflow-hidden">
+        <div v-if="profileStore.tagsEnabled" class="transaction-desktop-chips">
+          <div v-for="tag in visibleTags" :key="tag.id" class="transaction-desktop-chip transaction-desktop-chip-outline">
             <app-icon :icon="Tag.getIcon(tag) ?? TablerIconConstants.tag" :size="14" />
             <div class="list-item-subtitle ml-5">{{ Tag.getDisplayNameEllipsized(tag, 10) }}</div>
           </div>
 
-          <div v-if="tags.length > visibleTags.length" class="text-size-12 text-muted ml-1">+{{ tags.length - visibleTags.length }}</div>
+          <div v-if="tags.length > visibleTags.length" class="transaction-desktop-more">+{{ tags.length - visibleTags.length }}</div>
         </div>
       </div>
 
-      <div class="col-1 px-1 overflow-hidden">
-        <div v-if="profileStore.budgetsEnabled && budget" class="tag-gray list-item-subtitle text-size-12 overflow-hidden">
+      <div class="transaction-desktop-budget overflow-hidden">
+        <div v-if="profileStore.budgetsEnabled && budget" class="transaction-desktop-chip overflow-hidden">
           <app-icon :icon="TablerIconConstants.budget" :size="14" />
           <span class="ellipse-text">{{ Budget.getDisplayName(budget) }}</span>
         </div>
       </div>
 
-      <div class="col-1 px-1 text-right line-height-normal">
-        <div class="text-size-13 font-weight-700" :style="amountStyle">{{ transactionAmount }} {{ transactionCurrency }}</div>
-        <div v-if="isSplitPayment" class="text-size-10 font-weight-700 text-muted text-uppercase">{{ $t('split') }}</div>
+      <div class="transaction-desktop-amount text-right line-height-normal">
+        <div class="transaction-desktop-amount-value" :style="amountStyle">{{ transactionAmount }} {{ transactionCurrency }}</div>
+        <div v-if="isSplitPayment" class="transaction-desktop-split text-uppercase">{{ $t('split') }}</div>
       </div>
-
     </div>
-
 
     <template #right>
       <van-button class="delete-button" square type="danger" text="Delete" @click="onDelete" />

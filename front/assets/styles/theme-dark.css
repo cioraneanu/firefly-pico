@@ -348,6 +348,21 @@
     background: rgba(0, 0, 0, 0.55);
 }
 
+.van-theme-dark .transaction-desktop-row {
+    border-color: #3f3f46;
+    color: #f1f5f9;
+}
+
+.van-theme-dark .transaction-desktop-row:hover,
+.van-theme-dark .transaction-desktop-chip {
+    background: #222;
+}
+
+.van-theme-dark .transaction-desktop-chip {
+    border-color: #444;
+    color: #cbd5e1;
+}
+
 .van-theme-dark .budget-icon {
     background: #333;
 }
