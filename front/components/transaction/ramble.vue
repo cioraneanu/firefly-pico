@@ -194,6 +194,9 @@ const isResponseSuccessful = (response) => {
 }
 
 const refreshSavedRambleCount = async ({ showLoading = false } = {}) => {
+  if (!appStore.llmIsConfigured) {
+    return
+  }
   const response = await assistantRepository.getSavedRambleCount({ showLoading })
   savedRamblesCount.value = response.count ?? savedRambles.value.length
 }
