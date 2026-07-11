@@ -33,8 +33,7 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
     } else if (get(item, 'attributes.nr_of_repetitions')) {
       item.attributes.repetitionEndType = RecurringTransaction.repetitionEndTypes.nrOfTimes
     } else {
-      // Current Firefly III versions require an end condition when saving.
-      item.attributes.repetitionEndType = RecurringTransaction.repetitionEndTypes.untilDate
+      item.attributes.repetitionEndType = RecurringTransaction.repetitionEndTypes.forever
     }
 
     const repetition = get(item, 'attributes.repetitions.0')

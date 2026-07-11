@@ -68,8 +68,8 @@
           :icon="TablerIconConstants.settingsUserPreferencesDate"
           :rules="[rule.required(), rule.integerRange(1, 31)]"
           :disabled="!!itemId"
-          min="1"
-          max="31"
+          :min="1"
+          :max="31"
           required
         />
 
@@ -82,8 +82,8 @@
           :icon="TablerIconConstants.settingsUserPreferencesDate"
           :rules="[rule.required(), rule.integerRange(1, 5)]"
           :disabled="!!itemId"
-          min="1"
-          max="5"
+          :min="1"
+          :max="5"
           required
         />
 
@@ -132,8 +132,8 @@
           type="number"
           :icon="TablerIconConstants.fieldText2"
           :rules="[rule.required(), rule.integerRange(1, 255)]"
-          min="1"
-          max="255"
+          :min="1"
+          :max="255"
           required
         />
 
