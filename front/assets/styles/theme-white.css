@@ -207,16 +207,6 @@ body {
     margin-right: 20px;
 }
 
-.app-text-area:not(.app-text-area-focused) .van-field__control {
-    max-height: calc(var(--app-text-area-visible-lines, 2) * 1.5em);
-    overflow-y: hidden;
-}
-
-.app-text-area.app-text-area-focused .van-field__control {
-    max-height: none;
-    overflow-y: auto;
-}
-
 .compact.app-field-text .van-field__body {
     margin-right: 0px;
 }
@@ -1575,13 +1565,219 @@ body {
     border-bottom: 1px solid var(--van-border-color);
 }
 
-.ramble-transaction-item + .ramble-transaction-item,
-.ramble-saved-item + .ramble-saved-item {
+.ramble-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--van-border-color);
+}
+
+.ramble-header-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 13px;
+    background: var(--black);
+    color: var(--white);
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+/* Square icon-only round buttons (close, mic, delete saved) */
+.ramble-icon-button {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+/* Compact trigger that sits next to the currency picker in the assistant card title */
+.van-button.ramble-trigger-button {
+    height: 28px;
+    background: var(--black);
+    color: var(--white);
+    padding: 0 8px;
+    border-radius: 8px;
+}
+
+/* The badge wrapper around the trigger is a block element; without this the button
+   sits on the text baseline and looks vertically misaligned next to the currency picker. */
+.vant-card-title .van-badge__wrapper {
+    display: flex;
+    align-items: center;
+}
+
+/* Secondary action: outlined so it doesn't compete with the black Create button in the footer */
+.van-button.ramble-interpret-button {
+    background: #fafafa;
+    border: 2px solid #000;
+    color: black;
+    font-weight: 600;
+}
+
+.ramble-transaction-item + .ramble-transaction-item {
     border-top: 1px solid var(--van-border-color);
 }
 
 .ramble-body {
     background: var(--van-background);
+}
+
+.ramble-composer-input .van-field__control {
+    line-height: 1.5;
+}
+
+.ramble-recording {
+    animation: ramble-recording-pulse 1.6s ease-out infinite;
+}
+
+@keyframes ramble-recording-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(238, 10, 36, 0.35);
+    }
+    70% {
+        box-shadow: 0 0 0 9px rgba(238, 10, 36, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(238, 10, 36, 0);
+    }
+}
+
+.ramble-live-dot {
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--van-danger-color);
+    animation: ramble-live-blink 1.2s ease-in-out infinite;
+}
+
+@keyframes ramble-live-blink {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.35;
+    }
+}
+
+.ramble-saved-item {
+    padding: 8px 12px;
+    border-radius: 10px;
+    background: var(--van-background-2-5);
+    border-left: 3px solid var(--van-border-color);
+}
+
+.ramble-section-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--van-text-color-3);
+}
+
+.ramble-count-pill {
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--black);
+    color: var(--white);
+}
+
+.ramble-error {
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--expense3);
+    color: var(--van-danger-color);
+}
+
+.ramble-empty {
+    padding: 36px 16px;
+}
+
+.ramble-empty-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--van-background-2-5);
+    color: var(--van-text-color-3);
+    margin-bottom: 4px;
+}
+
+.ramble-footer {
+    border-top: 1px solid var(--van-border-color);
+}
+
+/* ---------------------- Assistant LLM status card ---------------------- */
+
+.llm-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.llm-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.llm-status-pill-on {
+    color: #1b8a4a;
+    background: var(--income3);
+}
+
+.llm-status-pill-off {
+    color: var(--expense1);
+    background: var(--expense3);
+}
+
+.llm-detail-panel {
+    padding: 2px 12px;
+    border-radius: 10px;
+    background: var(--van-background-2-5);
+}
+
+.llm-detail-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0;
+    font-size: 13px;
+}
+
+.llm-detail-row + .llm-detail-row {
+    border-top: 1px solid var(--van-border-color);
+}
+
+.llm-detail-label {
+    flex-shrink: 0;
+}
+
+.llm-detail-value {
+    margin-left: auto;
+    text-align: right;
+    font-weight: 500;
+    min-width: 0;
+}
+
+.llm-env-chip {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: var(--van-background-2-5);
+    border: 1px solid var(--van-border-color);
 }
 
 .ramble-dialog-loading {

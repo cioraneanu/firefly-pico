@@ -17,6 +17,7 @@ export function useSpeechRecognition({ language, onSpeechFinished, onSpeechTempo
       return
     }
 
+    const wasRecording = isRecording.value
     stopRecording()
     textTemporary.value = ''
     textFinal.value = ''
@@ -25,7 +26,9 @@ export function useSpeechRecognition({ language, onSpeechFinished, onSpeechTempo
       return
     }
     speechRecognition.lang = language.value.code
-    startRecording()
+    if (wasRecording) {
+      startRecording()
+    }
   })
 
   const startRecording = () => {

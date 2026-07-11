@@ -77,6 +77,7 @@
     "assistant_ramble_title": "Dictate transactions",
     "assistant_ramble_placeholder": "Say or edit transactions here...",
     "assistant_ramble_input_hint": "输入或口述您的交易",
+    "assistant_ramble_listening": "正在聆听...",
     "assistant_ramble_interpret": "Interpret",
     "assistant_ramble_preview": "Preview",
     "assistant_ramble_create": "Create {count}",
@@ -160,6 +161,7 @@
       "ramble_info": "Stored only in this browser. Direct browser calls expose the API key on this device and require the endpoint to allow CORS.",
       "ramble_server_info": "Configured by the server. Browser LLM settings are disabled for this instance.",
       "llm_status": "助手 LLM",
+      "llm_status_subtitle": "为语音记账功能提供支持",
       "llm_configured": "已在服务器上配置",
       "llm_not_configured": "未配置",
       "llm_not_configured_info": "要启用它，请在 Pico 后端设置这些环境变量："

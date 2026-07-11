@@ -18,7 +18,6 @@ export const icons = {
   exchangeRates: 'IconReplace',
   assistant: 'IconMessageChatbot',
 
-
   settingsAppConfig: 'IconTool',
   settingsUserPreferences: 'IconMoodCog',
   settingsUserPreferencesDate: 'IconCalendarEvent',
@@ -60,6 +59,7 @@ export const icons = {
   magic: 'IconSparkles',
   microphone: 'IconMicrophone',
   stop: 'IconPlayerStop',
+  ramble: 'IconMessageCircleBolt',
 
   fieldIcon: 'IconFavicon',
   fieldCheckbox: 'IconToggleLeftFilled',
@@ -67,7 +67,6 @@ export const icons = {
   fieldSelect2: 'IconGridPattern',
   fieldText1: 'IconBlockquote',
   fieldText2: 'IconWriting',
-
 
   article: 'IconArticle',
   key: 'IconKey',
@@ -82,7 +81,6 @@ export const icons = {
   order: 'IconMenuOrder',
   list: 'IconListDetails',
   amountButtons: 'IconBusinessplan',
-
 
   // ------ Icon Select -----
 

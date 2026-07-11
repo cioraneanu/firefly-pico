@@ -84,6 +84,7 @@
     "assistant_ramble_title": "Dictate transactions",
     "assistant_ramble_placeholder": "Say or edit transactions here...",
     "assistant_ramble_input_hint": "Scrie sau dictează tranzacțiile",
+    "assistant_ramble_listening": "Ascult...",
     "assistant_ramble_interpret": "Interpret",
     "assistant_ramble_preview": "Preview",
     "assistant_ramble_create": "Create {count}",
@@ -175,6 +176,7 @@
       "ramble_info": "Stored only in this browser. Direct browser calls expose the API key on this device and require the endpoint to allow CORS.",
       "ramble_server_info": "Configured by the server. Browser LLM settings are disabled for this instance.",
       "llm_status": "Asistent LLM",
+      "llm_status_subtitle": "Alimentează funcția de dictare a tranzacțiilor",
       "llm_configured": "Configurat pe server",
       "llm_not_configured": "Neconfigurat",
       "llm_not_configured_info": "Pentru a-l activa, setează aceste variabile de mediu pe backend-ul Pico:"

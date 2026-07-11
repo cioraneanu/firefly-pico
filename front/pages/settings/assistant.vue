@@ -12,32 +12,41 @@
       </van-cell-group>
 
       <van-cell-group inset>
-        <div class="van-cell-group-title">{{ $t('settings.assistant.llm_status') }}:</div>
-        <div class="p-3 pt-0 display-flex flex-column gap-2">
+        <div class="p-3 display-flex flex-column gap-3">
           <div class="flex-center-vertical gap-2">
-            <div class="icon-type" :class="appStore.llmIsConfigured ? 'color-income' : 'color-expense'" />
-            <div class="font-600 text-size-14">{{ appStore.llmIsConfigured ? $t('settings.assistant.llm_configured') : $t('settings.assistant.llm_not_configured') }}</div>
+            <div class="ramble-header-icon flex-center">
+              <app-icon :icon="TablerIconConstants.ramble" :size="20" :stroke="1.6" />
+            </div>
+            <div class="flex-1-w">
+              <div class="font-600 text-size-14 line-height-normal">{{ $t('settings.assistant.llm_status') }}</div>
+              <div class="text-size-12 text-muted">{{ $t('settings.assistant.llm_status_subtitle') }}</div>
+            </div>
           </div>
-
-          <template v-if="appStore.llmIsConfigured">
-            <div class="flex-center-vertical gap-1 text-size-13">
+          <div class="display-flex">
+            <div class="llm-status-pill" :class="appStore.llmIsConfigured ? 'llm-status-pill-on' : 'llm-status-pill-off'">
+              <span class="llm-status-dot" />
+              {{ appStore.llmIsConfigured ? $t('settings.assistant.llm_configured') : $t('settings.assistant.llm_not_configured') }}
+            </div>
+          </div>
+          <div v-if="appStore.llmIsConfigured" class="llm-detail-panel">
+            <div class="llm-detail-row">
               <app-icon :icon="TablerIconConstants.external" :size="16" />
-              <span class="text-muted">{{ $t('settings.assistant.ramble_endpoint') }}:</span>
-              <span class="word-break-word">{{ appStore.llmEndpoint }}</span>
+              <span class="llm-detail-label text-muted">{{ $t('settings.assistant.ramble_endpoint') }}</span>
+              <span class="llm-detail-value word-break-word">{{ appStore.llmEndpoint }}</span>
             </div>
-            <div class="flex-center-vertical gap-1 text-size-13">
+            <div class="llm-detail-row">
               <app-icon :icon="TablerIconConstants.magic" :size="16" />
-              <span class="text-muted">{{ $t('settings.assistant.ramble_model') }}:</span>
-              <span class="word-break-word">{{ appStore.llmModel }}</span>
+              <span class="llm-detail-label text-muted">{{ $t('settings.assistant.ramble_model') }}</span>
+              <span class="llm-detail-value word-break-word">{{ appStore.llmModel }}</span>
             </div>
-          </template>
+          </div>
 
           <template v-else>
             <div class="text-size-13 text-muted">{{ $t('settings.assistant.llm_not_configured_info') }}</div>
-            <div class="text-size-12 gap-1 display-flex flex-wrap">
-              <div class="tag-gray">ASSISTANT_LLM_ENDPOINT</div>
-              <div class="tag-gray">ASSISTANT_LLM_MODEL</div>
-              <div class="tag-gray">ASSISTANT_LLM_API_KEY</div>
+            <div class="display-flex flex-wrap gap-1">
+              <div class="llm-env-chip">ASSISTANT_LLM_ENDPOINT</div>
+              <div class="llm-env-chip">ASSISTANT_LLM_MODEL</div>
+              <div class="llm-env-chip">ASSISTANT_LLM_API_KEY</div>
             </div>
           </template>
         </div>

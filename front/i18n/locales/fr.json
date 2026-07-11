@@ -84,6 +84,7 @@
     "assistant_ramble_title": "Dictate transactions",
     "assistant_ramble_placeholder": "Say or edit transactions here...",
     "assistant_ramble_input_hint": "Saisissez ou dictez vos transactions",
+    "assistant_ramble_listening": "Écoute en cours...",
     "assistant_ramble_interpret": "Interpret",
     "assistant_ramble_preview": "Preview",
     "assistant_ramble_create": "Create {count}",
@@ -175,6 +176,7 @@
       "ramble_info": "Stored only in this browser. Direct browser calls expose the API key on this device and require the endpoint to allow CORS.",
       "ramble_server_info": "Configured by the server. Browser LLM settings are disabled for this instance.",
       "llm_status": "LLM de l'assistant",
+      "llm_status_subtitle": "Alimente la fonction de dictée des transactions",
       "llm_configured": "Configuré sur le serveur",
       "llm_not_configured": "Non configuré",
       "llm_not_configured_info": "Pour l'activer, définissez ces variables d'environnement sur le backend Pico :"
