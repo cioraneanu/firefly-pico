@@ -40,7 +40,6 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
     const repetition = get(item, 'attributes.repetitions.0')
     const repetitionType = RecurringTransaction.repetitionTypesList().find((type) => type.fireflyCode === get(repetition, 'type'))
     const moment = `${get(repetition, 'moment') ?? ''}`
-    item.attributes.repetitionId = get(repetition, 'id')
     item.attributes.repetitionSkip = get(repetition, 'skip')
     item.attributes.repetitionWeekend = get(repetition, 'weekend')
     item.attributes.repetitionType = repetitionType
@@ -122,18 +121,8 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
       skip: get(data, 'repetitionSkip') ?? 0,
       weekend: get(data, 'repetitionWeekend') ?? 1,
     }
-    // Daily repetitions use an empty "moment" on create. Firefly's *update* validation rule for
-    // "moment" is `numeric`, so an empty string is rejected with
-    // "The repetitions.0.moment must be a number." Omitting the key entirely passes
-    // validation and matches what Firefly expects for a daily recurrence.
+    repetition.moment = moment
     const isUpdate = Boolean(get(item, 'id'))
-    if (!isUpdate || repetitionTypeCode !== RecurringTransaction.repetitionTypes.daily.fireflyCode) {
-      repetition.moment = moment
-    }
-    let repetitionId = get(data, 'repetitionId')
-    if (repetitionId) {
-      repetition.id = repetitionId
-    }
 
     const accountSource = get(data, 'accountSource')
     const accountDestination = get(data, 'accountDestination')
@@ -196,21 +185,10 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
     // Firefly's API *update* validation for "repetitions.*.moment" adds a `numeric`
     // (and `max:10`) rule that its *create* validation does not. That rule rejects
     // every non-numeric moment Firefly itself produces - daily (empty), ndom ("2,3"),
-    // yearly (a date) and even monthly days above 10 - so re-sending an unchanged
-    // repetition on update fails. Firefly leaves the existing repetition untouched when
-    // the "repetitions" key is absent, so we only send it when it actually changed.
-    const originalRepetition = get(data, 'repetitions.0')
-    let originalMoment = `${get(originalRepetition, 'moment') ?? ''}`
-    // Normalize the yearly moment to a plain "Y-m-d" so a date that comes back from the
-    // API with a time/timezone component still compares equal to our generated moment.
-    if (repetitionTypeCode === RecurringTransaction.repetitionTypes.yearly.fireflyCode && originalMoment) {
-      originalMoment = DateUtils.dateToString(DateUtils.autoToDate(originalMoment)) ?? originalMoment
-    }
-    const isRepetitionUnchanged = isUpdate && Boolean(originalRepetition) && get(originalRepetition, 'type') === repetitionTypeCode && originalMoment === moment
-
-    // Firefly's update validator cannot accept several valid moment formats. The
-    // edit form keeps recurrence timing read-only and leaves it untouched.
-    if (!isUpdate && !isRepetitionUnchanged) {
+    // yearly (a date) and even monthly days above 10. The edit form keeps recurrence
+    // timing read-only, and Firefly leaves the existing repetition untouched when the
+    // "repetitions" key is absent, so we only send it on create.
+    if (!isUpdate) {
       result.repetitions = [repetition]
     }
 

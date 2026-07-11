@@ -85,10 +85,6 @@ export default class RecurringTransaction extends BaseModel {
 
   static get repetitionEndTypes() {
     return {
-      forever: {
-        name: 'Repeat forever',
-        code: 'forever',
-      },
       untilDate: {
         name: 'Repeat until date',
         code: 'until_date',

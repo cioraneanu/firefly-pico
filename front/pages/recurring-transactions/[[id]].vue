@@ -309,7 +309,11 @@ watch(type, (newValue, oldValue) => {
   accountDestination.value = destination
 })
 
-watch([accountSource, accountDestination], () => {
+watch([accountSource, accountDestination], (_, [oldSource, oldDestination]) => {
+  // Skip the initial item load so an existing foreign amount isn't wiped just by opening the form
+  if (oldSource === undefined && oldDestination === undefined) {
+    return
+  }
   if (isForeignAmountVisible.value) {
     currencyForeign.value = Account.getCurrency(accountDestination.value)
     return
