@@ -162,27 +162,7 @@
 			<key>WFWorkflowActionParameters</key>
 			<dict>
 				<key>Text</key>
-				<dict>
-					<key>Value</key>
-					<dict>
-						<key>attachmentsByRange</key>
-						<dict>
-							<key>{7, 1}</key>
-							<dict>
-								<key>OutputName</key>
-								<string>Contents of URL</string>
-								<key>OutputUUID</key>
-								<string>A1776E5C-5E89-4A25-A940-3B1D2B7CDA39</string>
-								<key>Type</key>
-								<string>ActionOutput</string>
-							</dict>
-						</dict>
-						<key>string</key>
-						<string>Saved: &#xfffc;</string>
-					</dict>
-					<key>WFSerializationType</key>
-					<string>WFTextTokenString</string>
-				</dict>
+				<string>Ramble saved</string>
 			</dict>
 		</dict>
 	</array>
