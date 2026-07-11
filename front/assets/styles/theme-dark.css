@@ -422,6 +422,11 @@
     background: #222;
 }
 
+.van-theme-dark .ramble-modern-badge .van-badge {
+    background: #82181a;
+    color: #fff;
+}
+
 .van-theme-dark .transaction-amount-operations .button {
     background: #000;
     border: 1px solid #999;

@@ -2,11 +2,12 @@
   <van-cell-group inset class="ramble-composer no-margin overflow-hidden">
     <div class="p-3 display-flex flex-column gap-2">
       <div class="flex-center-vertical flex-wrap gap-2">
-        <van-button round size="small" plain class="cursor-pointer" :loading="isLoadingSaved" :disabled="isDisabled" @click="emit('loadSaved')">
-          <app-icon :icon="TablerIconConstants.list" :size="16" />
-          {{ $t('transaction.assistant_ramble_load_saved') }}
-          <template v-if="savedRamblesCount > 0"> ({{ savedRamblesCount }})</template>
-        </van-button>
+        <van-badge :content="savedRamblesCount" :show-zero="false" max="99" class="ramble-modern-badge">
+          <van-button round size="small" plain class="cursor-pointer" :loading="isLoadingSaved" :disabled="isDisabled" @click="emit('loadSaved')">
+            <app-icon :icon="TablerIconConstants.list" :size="16" />
+            {{ $t('transaction.assistant_ramble_load_saved') }}
+          </van-button>
+        </van-badge>
 
         <van-button
           v-if="savedRambles.length > 0"
@@ -14,13 +15,14 @@
           size="small"
           type="danger"
           plain
-          class="cursor-pointer ramble-icon-button"
+          class="cursor-pointer"
           :loading="isDeletingSaved"
           :disabled="isDisabled"
           :title="$t('transaction.assistant_ramble_delete_saved')"
           @click="emit('deleteSaved')"
         >
           <van-icon name="delete-o" size="16" />
+          {{ $t('delete') }}
         </van-button>
 
         <div class="flex-1" />
@@ -39,6 +41,18 @@
         </van-button>
 
         <speech-language-dropdown v-if="appStore.isDesktopLayout" v-model="speechLanguageCode" class="text-size-13" />
+      </div>
+
+      <div v-if="savedRambles.length > 0" class="ramble-saved-list display-flex flex-column gap-2">
+        <div v-for="savedRamble in savedRambles" :key="savedRamble.id" class="ramble-saved-item display-flex gap-2">
+          <div class="flex-1-w">
+            <div class="text-size-13 word-break-word">{{ savedRamble.text }}</div>
+            <div class="text-size-11 text-muted mt-1">{{ formatCreatedAt(savedRamble.created_at) }}</div>
+          </div>
+          <van-button round size="small" plain type="danger" class="cursor-pointer ramble-icon-button" :disabled="isDisabled" :title="$t('delete')" @click="emit('deleteRamble', savedRamble)">
+            <van-icon name="delete-o" size="15" />
+          </van-button>
+        </div>
       </div>
 
       <app-text-area
@@ -61,10 +75,6 @@
         {{ $t('transaction.assistant_ramble_interpret') }}
       </van-button>
     </div>
-
-    <div v-if="savedRambles.length > 0" class="ramble-saved-list display-flex flex-column gap-2 p-3 pt-0">
-      <div v-for="savedRamble in savedRambles" :key="savedRamble.id" class="ramble-saved-item text-size-13 word-break-word">{{ savedRamble.text }}</div>
-    </div>
   </van-cell-group>
 </template>
 
@@ -74,6 +84,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import * as LanguageConstants from '~/constants/LanguageConstants.js'
 import SpeechLanguageDropdown from '~/components/select/speech-language-dropdown.vue'
 import { useSpeechRecognition } from '~/composables/useSpeechRecognition.js'
+import DateUtils from '~/utils/DateUtils.js'
 
 const props = defineProps({
   savedRambles: {
@@ -102,7 +113,7 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['interpret', 'loadSaved', 'deleteSaved'])
+const emit = defineEmits(['interpret', 'loadSaved', 'deleteSaved', 'deleteRamble'])
 const rambleText = defineModel({ type: String, default: '' })
 
 const profileStore = useProfileStore()
@@ -151,6 +162,7 @@ const { startRecording, stopRecording, isRecording } = useSpeechRecognition({
 })
 
 const canInterpret = computed(() => !!rambleText.value.trim() || props.savedRambles.length > 0)
+const formatCreatedAt = (createdAt) => (createdAt ? DateUtils.dateToUIWithTime(new Date(createdAt)) : '')
 
 const toggleRecording = () => {
   if (props.isDisabled) {

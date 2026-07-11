@@ -126,7 +126,12 @@ class AssistantController extends BaseController
 
     private function appendContext(&$payload, $globalContext, $userContext)
     {
-        $context = implode("\n", array_filter([trim((string)$globalContext), trim((string)$userContext)]));
+        $globalContext = trim((string)$globalContext);
+        $userContext = trim((string)$userContext);
+        $context = implode("\n\n", array_filter([
+            $globalContext ? "Backend context (default):\n{$globalContext}" : null,
+            $userContext ? "Frontend context (higher priority):\n{$userContext}\nWhen the frontend and backend contexts conflict, follow the frontend context." : null,
+        ]));
         if (!$context) {
             return;
         }

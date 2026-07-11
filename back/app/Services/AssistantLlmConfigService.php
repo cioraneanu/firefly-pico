@@ -9,7 +9,9 @@ class AssistantLlmConfigService
         $endpoint = $this->trimValue(config('services.assistant_llm.endpoint'));
         $model = $this->trimValue(config('services.assistant_llm.model'));
         $apiKey = $this->trimValue(config('services.assistant_llm.api_key'));
-        $context = $this->trimValue(config('services.assistant_llm.context'));
+        // Read this value at runtime as well so container-provided context is not
+        // lost when Laravel's configuration was cached before startup.
+        $context = $this->trimValue(getenv('ASSISTANT_LLM_CONTEXT') ?: config('services.assistant_llm.context'));
 
         return [
             'isConfigured' => $endpoint !== '' || $apiKey !== '',

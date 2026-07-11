@@ -12,6 +12,7 @@ const getInterpretationPrompt = () =>
     'description is required for every transaction and must never be null or empty. Keep it short (1-6 words). When the user does not state one, derive it from the merchant, place, category, tag, or template that best summarizes the transaction.',
     'Split one utterance into multiple transactions when the user says "another", "and one", "plus", or otherwise describes more than one payment.',
     'Use the provided now and timezone to resolve relative dates and times such as yesterday, today, 30 minutes ago, or last Friday.',
+    'Saved rambles include their original createdAt timestamp. Resolve their implicit dates relative to createdAt, not now.',
     'Use ISO-8601 for occurredAt when a date or relative time is stated. If only a date is stated, keep the current local time from now.',
     'Use ISO 4217 codes for currencyCode, for example EUR, USD, RON. Leave currencyCode null when the user did not state a currency.',
     'Do not invent local resource names. Only set tagNames, categoryName, templateName, budgetName, sourceAccountName, or destinationAccountName when the user explicitly asks for them or the name is present in the supplied context.',
@@ -104,6 +105,10 @@ export default class AssistantRepository extends BaseRepository {
     })
   }
 
+  async deleteSavedRamble(id) {
+    return axios.delete(`${this.getUrl()}/rambles/${id}`)
+  }
+
   async interpretTransactions(data) {
     const requestData = {
       context: data.externalContext,
@@ -119,6 +124,7 @@ export default class AssistantRepository extends BaseRepository {
             role: 'user',
             content: JSON.stringify({
               text: data.text,
+              savedRambles: data.savedRambles ?? [],
               now: data.now,
               timezone: data.timezone,
               language: data.language,

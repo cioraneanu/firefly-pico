@@ -1,5 +1,5 @@
 <template>
-  <van-badge v-if="appStore.llmIsConfigured" :content="savedRamblesCount" :show-zero="false" max="99">
+  <van-badge v-if="appStore.llmIsConfigured" :content="savedRamblesCount" :show-zero="false" max="99" class="ramble-modern-badge">
     <van-button size="small" class="cursor-pointer ramble-trigger-button" @click="openRamblePopup">
       <app-icon :icon="TablerIconConstants.ramble" :size="16" />
     </van-button>
@@ -36,6 +36,7 @@
             @interpret="interpretRambleText"
             @load-saved="fetchSavedRambles"
             @delete-saved="deleteLoadedSavedRambles"
+            @delete-ramble="deleteSavedRamble"
           />
 
           <div v-if="rambleError" class="ramble-error text-size-12">{{ rambleError }}</div>
@@ -243,11 +244,15 @@ const fetchSavedRambles = async () => {
   }
 }
 
-const deleteLoadedSavedRambles = async () => {
+const deleteLoadedSavedRambles = async ({ confirm = true } = {}) => {
   const sessionId = rambleSessionId.value
   const loadedIds = [...loadedSavedRambleIds.value]
   if (loadedIds.length === 0) {
     return true
+  }
+
+  if (confirm && !(await UIUtils.showDeleteConfirmation(t('transaction.assistant_ramble_delete_confirm_title'), t('transaction.assistant_ramble_delete_confirm_message')))) {
+    return false
   }
 
   isDeletingLoadedSavedRambles.value = true
@@ -271,6 +276,19 @@ const deleteLoadedSavedRambles = async () => {
   }
 
   return false
+}
+
+const deleteSavedRamble = async (ramble) => {
+  if (!(await UIUtils.showDeleteConfirmation(t('transaction.assistant_ramble_delete_confirm_title'), t('transaction.assistant_ramble_delete_one_confirm_message')))) {
+    return
+  }
+
+  const response = await assistantRepository.deleteSavedRamble(ramble.id)
+  if (isResponseSuccessful(response)) {
+    savedRambles.value = savedRambles.value.filter((savedRamble) => savedRamble.id !== ramble.id)
+    loadedSavedRambleIds.value = loadedSavedRambleIds.value.filter((id) => id !== ramble.id)
+    await refreshSavedRambleCount({ showLoading: false })
+  }
 }
 
 const openRamblePopup = async () => {
@@ -342,7 +360,8 @@ const interpretRambleText = async () => {
 
   try {
     const response = await assistantRepository.interpretTransactions({
-      text,
+      text: rambleText.value.trim(),
+      savedRambles: savedRambles.value.map((ramble) => ({ text: ramble.text, createdAt: ramble.created_at })),
       now: new Date().toISOString(),
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       language: profileStore.language,
@@ -476,7 +495,7 @@ const createRambleTransactions = async () => {
       return
     }
 
-    const savedRamblesDeleted = !hasLoadedSavedRambles.value || (await deleteLoadedSavedRambles())
+    const savedRamblesDeleted = !hasLoadedSavedRambles.value || (await deleteLoadedSavedRambles({ confirm: false }))
     if (!savedRamblesDeleted) {
       rambleError.value = 'Transactions were created, but saved rambles could not be deleted.'
       return

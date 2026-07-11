@@ -6,12 +6,11 @@
 
       <div class="flex-1" />
       <currency-dropdown v-model="profileStore.assistantCurrency" class="text-size-12" :is-clearable="true" />
-      <ramble :assistant-text="assistantText" />
     </div>
     <div class="text-size-12 text-muted mb-5">{{ $t('transaction.assistant_format') }}</div>
 
     <div class="display-flex flex-column">
-      <div class="flex-center-vertical gap-2">
+      <div class="flex-center-vertical gap-2 transaction-assistant-input-row">
         <app-field
           ref="assistantFieldRef"
           v-model="assistantText"
@@ -22,6 +21,7 @@
           autosize
           :clearable="true"
         />
+        <ramble :assistant-text="assistantText" />
       </div>
 
       <template v-if="previewTags.length > 0 || parsed.isTodo">
