@@ -176,6 +176,7 @@
       "ramble_info": "Stored only in this browser. Direct browser calls expose the API key on this device and require the endpoint to allow CORS.",
       "ramble_server_info": "Configured by the server. Browser LLM settings are disabled for this instance.",
       "llm_status": "LLM asystenta",
+      "llm_status_subtitle": "Zasila funkcję dyktowania transakcji",
       "llm_configured": "Skonfigurowano na serwerze",
       "llm_not_configured": "Nie skonfigurowano",
       "llm_not_configured_info": "Aby włączyć, ustaw te zmienne środowiskowe w backendzie Pico:"

@@ -357,6 +357,16 @@
     box-shadow: none;
 }
 
+.van-theme-dark .llm-status-pill-on {
+    color: #7bd28a;
+    background: rgba(102, 187, 106, 0.18);
+}
+
+.van-theme-dark .llm-status-pill-off {
+    color: #ff8aa8;
+    background: rgba(236, 64, 122, 0.16);
+}
+
 .van-theme-dark .transaction-desktop-row {
     border-color: #3f3f46;
     color: #f1f5f9;

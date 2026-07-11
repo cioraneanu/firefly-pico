@@ -1588,6 +1588,20 @@ body {
     flex-shrink: 0;
 }
 
+/* Compact trigger that sits next to the currency picker in the assistant card title */
+.van-button.ramble-trigger-button {
+    height: 26px;
+    padding: 0 8px;
+    border-radius: 8px;
+}
+
+/* The badge wrapper around the trigger is a block element; without this the button
+   sits on the text baseline and looks vertically misaligned next to the currency picker. */
+.vant-card-title .van-badge__wrapper {
+    display: flex;
+    align-items: center;
+}
+
 .ramble-transaction-item + .ramble-transaction-item {
     border-top: 1px solid var(--van-border-color);
 }
@@ -1686,6 +1700,74 @@ body {
 
 .ramble-footer {
     border-top: 1px solid var(--van-border-color);
+}
+
+/* ---------------------- Assistant LLM status card ---------------------- */
+
+.llm-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.llm-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.llm-status-pill-on {
+    color: #1b8a4a;
+    background: var(--income3);
+}
+
+.llm-status-pill-off {
+    color: var(--expense1);
+    background: var(--expense3);
+}
+
+.llm-detail-panel {
+    padding: 2px 12px;
+    border-radius: 10px;
+    background: var(--van-background-2-5);
+}
+
+.llm-detail-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0;
+    font-size: 13px;
+}
+
+.llm-detail-row + .llm-detail-row {
+    border-top: 1px solid var(--van-border-color);
+}
+
+.llm-detail-label {
+    flex-shrink: 0;
+}
+
+.llm-detail-value {
+    margin-left: auto;
+    text-align: right;
+    font-weight: 500;
+    min-width: 0;
+}
+
+.llm-env-chip {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: var(--van-background-2-5);
+    border: 1px solid var(--van-border-color);
 }
 
 .ramble-dialog-loading {

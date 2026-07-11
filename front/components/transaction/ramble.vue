@@ -1,12 +1,12 @@
 <template>
   <van-badge v-if="appStore.llmIsConfigured" :content="savedRamblesCount" :show-zero="false" max="99">
-    <van-button size="small" class="cursor-pointer" @click="openRamblePopup">
-      <app-icon :icon="TablerIconConstants.ramble" :size="18" />
+    <van-button size="small" class="cursor-pointer ramble-trigger-button" @click="openRamblePopup">
+      <app-icon :icon="TablerIconConstants.ramble" :size="16" />
     </van-button>
   </van-badge>
 
   <app-popup v-model:show="showRamblePopup" :popup-style="ramblePopupStyle">
-    <div class="display-flex flex-direction-column h-100 m-h-0 position-relative" :aria-busy="isInterpreting">
+    <div ref="popupRef" class="display-flex flex-direction-column h-100 m-h-0 position-relative" :aria-busy="isInterpreting">
       <div class="display-flex flex-direction-column h-100 m-h-0" :class="{ 'pointer-events-none': isRambleFormDisabled }" :inert="isRambleFormDisabled">
         <div class="ramble-header flex-center-vertical gap-2">
           <div class="ramble-header-icon flex-center">
@@ -23,7 +23,7 @@
           </van-button>
         </div>
 
-        <div class="flex-1 m-h-0 overflow-auto display-flex flex-direction-column gap-3 p-3 ramble-body">
+        <div ref="popupContentRef" class="flex-1 m-h-0 overflow-auto display-flex flex-direction-column gap-3 p-3 ramble-body">
           <ramble-input-card
             ref="inputCardRef"
             v-model="rambleText"
@@ -101,6 +101,7 @@ import RambleInputCard from '~/components/transaction/ramble/ramble-input-card.v
 import RambleTransactionItem from '~/components/transaction/ramble/ramble-transaction-item.vue'
 import RambleTransactionEditPopup from '~/components/transaction/ramble/ramble-transaction-edit-popup.vue'
 import { useRambleTransactionResolver } from '~/composables/useRambleTransactionResolver.js'
+import { useSwipeToDismiss } from '~/composables/useSwipeToDismiss'
 import { useTransactionAssistantDraft } from '~/composables/useTransactionAssistantDraft.js'
 import TransactionRepository from '~/repository/TransactionRepository.js'
 import TransactionTransformer from '~/transformers/TransactionTransformer.js'
@@ -144,7 +145,16 @@ const rambleError = ref('')
 const currentCreateIndex = ref(0)
 const editingRambleTransaction = ref(null)
 const inputCardRef = ref(null)
+const popupRef = ref(null)
+const popupContentRef = ref(null)
 const rambleSessionId = ref(0)
+
+useSwipeToDismiss({
+  onSwipe: () => closeRamblePopup(),
+  swipeRef: popupRef,
+  scrollRef: popupContentRef,
+  showDropdown: showRamblePopup,
+})
 
 const ramblePopupStyle = computed(() => {
   if (appStore.isDesktopLayout) {
