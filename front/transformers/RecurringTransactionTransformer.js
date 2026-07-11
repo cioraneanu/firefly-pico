@@ -32,7 +32,8 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
     } else if (get(item, 'attributes.nr_of_repetitions')) {
       item.attributes.repetitionEndType = RecurringTransaction.repetitionEndTypes.nrOfTimes
     } else {
-      item.attributes.repetitionEndType = RecurringTransaction.repetitionEndTypes.forever
+      // Current Firefly III versions require an end condition when saving.
+      item.attributes.repetitionEndType = RecurringTransaction.repetitionEndTypes.untilDate
     }
 
     const repetition = get(item, 'attributes.repetitions.0')
@@ -70,7 +71,9 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
     const transaction = get(item, 'attributes.transactions.0')
     item.attributes.transactionId = get(transaction, 'id')
     item.attributes.currency = currencyStore.currencyDictionary[get(transaction, 'currency_id')]
+    item.attributes.currencyForeign = currencyStore.currencyDictionary[get(transaction, 'foreign_currency_id')]
     item.attributes.amount = Transaction.formatAmountForCurrency(get(transaction, 'amount'), item.attributes.currency) ?? get(transaction, 'amount')
+    item.attributes.amountForeign = Transaction.formatAmountForCurrency(get(transaction, 'foreign_amount'), item.attributes.currencyForeign) ?? get(transaction, 'foreign_amount')
     item.attributes.description = get(transaction, 'description')
     item.attributes.accountSource = accountStore.accountDictionary[get(transaction, 'source_id')]
     item.attributes.accountDestination = accountStore.accountDictionary[get(transaction, 'destination_id')]
@@ -118,11 +121,12 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
       skip: get(data, 'repetitionSkip') ?? 0,
       weekend: get(data, 'repetitionWeekend') ?? 1,
     }
-    // Daily repetitions carry no "moment". Firefly's *update* validation rule for
+    // Daily repetitions use an empty "moment" on create. Firefly's *update* validation rule for
     // "moment" is `numeric`, so an empty string is rejected with
     // "The repetitions.0.moment must be a number." Omitting the key entirely passes
     // validation and matches what Firefly expects for a daily recurrence.
-    if (repetitionTypeCode !== RecurringTransaction.repetitionTypes.daily.fireflyCode) {
+    const isUpdate = Boolean(get(item, 'id'))
+    if (!isUpdate || repetitionTypeCode !== RecurringTransaction.repetitionTypes.daily.fireflyCode) {
       repetition.moment = moment
     }
     let repetitionId = get(data, 'repetitionId')
@@ -142,20 +146,31 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
     let transaction = {
       description: get(data, 'description') || get(data, 'title', ''),
       amount: get(data, 'amount'),
-      source_id: get(accountSource, 'id'),
+      source_id: accountSource?.id ?? null,
       destination_id: accountDestination?.id ?? null,
-      // ...(accountDestination ? { destination_id: get(accountDestination) } : {}),
-      ...(categoryId ? { category_id: categoryId } : {}),
-      ...(budgetId ? { budget_id: budgetId } : {}),
+    }
+
+    if (categoryId || isUpdate) {
+      transaction.category_id = categoryId ?? null
+    }
+    if (budgetId || isUpdate) {
+      transaction.budget_id = budgetId ?? null
     }
 
     let tags = (get(data, 'tags') ?? []).map((tag) => Tag.getDisplayNameEllipsized(tag))
-    if (tags.length > 0) {
-      transaction.tags = tags
-    }
+    transaction.tags = tags.length > 0 ? tags : null
 
     if (currencyId) {
       transaction.currency_id = currencyId
+    }
+    const foreignAmount = get(data, 'amountForeign')
+    const foreignCurrencyId = get(data, 'currencyForeign.id')
+    if (parseFloat(foreignAmount) > 0 && foreignCurrencyId) {
+      transaction.foreign_amount = foreignAmount
+      transaction.foreign_currency_id = foreignCurrencyId
+    } else if (isUpdate) {
+      transaction.foreign_amount = null
+      transaction.foreign_currency_id = null
     }
     let transactionId = get(data, 'transactionId')
     if (transactionId) {
@@ -179,7 +194,6 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
     // yearly (a date) and even monthly days above 10 - so re-sending an unchanged
     // repetition on update fails. Firefly leaves the existing repetition untouched when
     // the "repetitions" key is absent, so we only send it when it actually changed.
-    const isUpdate = Boolean(get(item, 'id'))
     const originalRepetition = get(data, 'repetitions.0')
     let originalMoment = `${get(originalRepetition, 'moment') ?? ''}`
     // Normalize the yearly moment to a plain "Y-m-d" so a date that comes back from the
@@ -189,7 +203,9 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
     }
     const isRepetitionUnchanged = isUpdate && Boolean(originalRepetition) && get(originalRepetition, 'type') === repetitionTypeCode && originalMoment === moment
 
-    if (!isRepetitionUnchanged) {
+    // Firefly's update validator cannot accept several valid moment formats. The
+    // edit form keeps recurrence timing read-only and leaves it untouched.
+    if (!isUpdate && !isRepetitionUnchanged) {
       result.repetitions = [repetition]
     }
 

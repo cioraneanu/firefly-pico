@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <!--    <van-cell :title="label" :value="date" @click="show = true"/>-->
-    <van-field v-model="getSelectedName" is-link readonly class="app-field" :label="label" placeholder="No date" v-bind="dynamicAttrs" @click="show = true">
+    <van-field v-model="getSelectedName" is-link readonly class="app-field" :label="label" placeholder="No date" v-bind="dynamicAttrs" @click="onShow">
       <template v-if="attrs.icon" #left-icon>
         <app-icon :icon="attrs.icon" :size="20" />
       </template>
@@ -16,7 +16,7 @@
 
       <template #right-icon>
         <div>
-          <van-icon v-if="modelValue" name="clear" class="cursor-pointer" @click.prevent.stop="modelValue = null" />
+          <van-icon v-if="modelValue && !attrs.disabled" name="clear" class="cursor-pointer" @click.prevent.stop="modelValue = null" />
         </div>
       </template>
     </van-field>
@@ -61,6 +61,12 @@ const props = defineProps({
 })
 
 const show = ref(false)
+
+const onShow = () => {
+  if (!attrs.disabled) {
+    show.value = true
+  }
+}
 
 const labelClass = computed(() => {
   return {

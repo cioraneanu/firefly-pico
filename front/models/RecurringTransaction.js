@@ -1,6 +1,6 @@
 import BaseModel from '~/models/BaseModel'
 import { get } from 'lodash-es'
-import { addDays, startOfDay } from 'date-fns'
+import { addDays, addYears, startOfDay } from 'date-fns'
 import DateUtils from '~/utils/DateUtils'
 import Transaction from '~/models/Transaction.js'
 import RecurringTransactionTransformer from '~/transformers/RecurringTransactionTransformer.js'
@@ -22,6 +22,8 @@ export default class RecurringTransaction extends BaseModel {
         icon: null,
         type: Transaction.types.expense,
         amount: '',
+        amountForeign: '',
+        currencyForeign: null,
         description: '',
         accountSource: null,
         accountDestination: null,
@@ -35,8 +37,8 @@ export default class RecurringTransaction extends BaseModel {
         repetitionDate: null,
         // Firefly III requires the first date of a new recurrence to be in the future
         first_date: startOfDay(addDays(new Date(), 1)),
-        repetitionEndType: RecurringTransaction.repetitionEndTypes.forever,
-        repeat_until: null,
+        repetitionEndType: RecurringTransaction.repetitionEndTypes.untilDate,
+        repeat_until: startOfDay(addYears(new Date(), 1)),
         nr_of_repetitions: null,
         active: true,
         notes: '',
@@ -99,7 +101,8 @@ export default class RecurringTransaction extends BaseModel {
   }
 
   static repetitionEndTypesList() {
-    return Object.values(this.repetitionEndTypes)
+    // Firefly III's REST API requires exactly one end condition.
+    return [this.repetitionEndTypes.untilDate, this.repetitionEndTypes.nrOfTimes]
   }
 
   static get weekdays() {
