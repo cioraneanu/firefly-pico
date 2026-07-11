@@ -1,5 +1,5 @@
 <template>
-  <div class="speech-language-dropdown cursor-pointer">
+  <div class="speech-language-dropdown cursor-pointer currency-dropdown">
     <van-popover v-model:show="showPopover" :actions="languages" @select="onSelect">
       <template #reference>
         <div class="flex-center-vertical gap-1" :class="$attrs.class">

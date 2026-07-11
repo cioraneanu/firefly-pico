@@ -1590,7 +1590,9 @@ body {
 
 /* Compact trigger that sits next to the currency picker in the assistant card title */
 .van-button.ramble-trigger-button {
-    height: 26px;
+    height: 28px;
+    background: var(--black);
+    color: var(--white);
     padding: 0 8px;
     border-radius: 8px;
 }
@@ -1600,6 +1602,14 @@ body {
 .vant-card-title .van-badge__wrapper {
     display: flex;
     align-items: center;
+}
+
+/* Secondary action: outlined so it doesn't compete with the black Create button in the footer */
+.van-button.ramble-interpret-button {
+    background: #fafafa;
+    border: 2px solid #000;
+    color: black;
+    font-weight: 600;
 }
 
 .ramble-transaction-item + .ramble-transaction-item {

@@ -55,7 +55,7 @@
         <span class="word-break-word flex-1-w text-muted">{{ speechTemporary || $t('transaction.assistant_ramble_listening') }}</span>
       </div>
 
-      <van-button block round type="primary" class="cursor-pointer mt-1" :loading="isInterpreting" :disabled="isDisabled || !canInterpret" @click="onInterpret">
+      <van-button block round class="cursor-pointer mt-1 ramble-interpret-button" :loading="isInterpreting" :disabled="isDisabled || !canInterpret" @click="onInterpret">
         <app-icon :icon="TablerIconConstants.magic" :size="16" />
         {{ $t('transaction.assistant_ramble_interpret') }}
       </van-button>

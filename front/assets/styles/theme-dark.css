@@ -357,6 +357,12 @@
     box-shadow: none;
 }
 
+.van-theme-dark .van-button.ramble-interpret-button {
+    background: #2a2a2c;
+    border-color: #f5f5f5;
+    color: #f5f5f5;
+}
+
 .van-theme-dark .llm-status-pill-on {
     color: #7bd28a;
     background: rgba(102, 187, 106, 0.18);
