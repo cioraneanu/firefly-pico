@@ -311,7 +311,10 @@
     "title": "Wybierz walutę"
   },
   "validation": {
-    "required": "Pole jest obowiązkowe"
+    "required": "Pole jest obowiązkowe",
+    "positive": "Wartość musi być większa niż 0",
+    "integer_range": "Wartość musi mieścić się w zakresie od {min} do {max}",
+    "date_after": "Data musi być późniejsza niż data minimalna"
   },
   "primary": "Podstawowe",
   "secondary": "Wtórny",

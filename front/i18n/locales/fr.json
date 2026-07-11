@@ -311,7 +311,10 @@
     "title": "Sélectionnez une devise"
   },
   "validation": {
-    "required": "Ce champ est obligatoire"
+    "required": "Ce champ est obligatoire",
+    "positive": "La valeur doit être supérieure à 0",
+    "integer_range": "La valeur doit être comprise entre {min} et {max}",
+    "date_after": "La date doit être postérieure à la date minimale"
   },
   "primary": "Principal",
   "secondary": "Secondaire",

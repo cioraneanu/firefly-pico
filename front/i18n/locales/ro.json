@@ -311,7 +311,10 @@
     "title": "Selectează o valută"
   },
   "validation": {
-    "required": "Câmpul este obligatoriu"
+    "required": "Câmpul este obligatoriu",
+    "positive": "Valoarea trebuie să fie mai mare decât 0",
+    "integer_range": "Valoarea trebuie să fie între {min} și {max}",
+    "date_after": "Data trebuie să fie ulterioară datei minime"
   },
   "primary": "Principale",
   "secondary": "Secundar",

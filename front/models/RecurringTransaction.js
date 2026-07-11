@@ -48,7 +48,7 @@ export default class RecurringTransaction extends BaseModel {
 
   // ------------
 
-  getFake(id) {
+  getFake() {
     return {}
   }
 

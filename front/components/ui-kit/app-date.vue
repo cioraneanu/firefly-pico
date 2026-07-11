@@ -34,7 +34,7 @@
 
     <!--    <van-cell title="Cell title" :value="getSelectedName" is-link @click="show = true" />-->
 
-    <van-calendar v-model:show="show" :show-confirm="false" color="#000" :min-date="minDate" @confirm="onConfirm">
+    <van-calendar v-model:show="show" :show-confirm="false" color="#000" :min-date="props.minDate" :max-date="props.maxDate" @confirm="onConfirm">
       <template #title>
         <div ref="appCalendar">Select a date</div>
       </template>
@@ -57,6 +57,14 @@ const props = defineProps({
   label: {
     type: String,
     default: 'Date',
+  },
+  minDate: {
+    type: Date,
+    default: () => subYears(new Date(), 5),
+  },
+  maxDate: {
+    type: Date,
+    default: undefined,
   },
 })
 
@@ -86,8 +94,6 @@ const onConfirm = (value) => {
   modelValue.value = value
   // emit('update:modelValue', value)
 }
-
-const minDate = subYears(new Date(), 5)
 
 const onClickedMinusDay = () => {
   modelValue.value = addDays(modelValue.value, -1)

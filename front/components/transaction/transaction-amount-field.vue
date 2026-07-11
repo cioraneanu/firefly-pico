@@ -80,7 +80,7 @@
     <table v-if="showQuickButtons && !disabled" class="ml-15">
       <tbody>
         <tr>
-          <td v-for="quickButton in quickButtons">
+          <td v-for="quickButton in quickButtons" :key="quickButton">
             <van-button class="w-100 transaction-amount-button" type="default" size="normal" @mousedown.prevent.stop="onQuickButton(quickButton)">
               {{ quickButton }}
             </van-button>

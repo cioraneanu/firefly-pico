@@ -3,6 +3,7 @@ import ApiTransformer from '~/transformers/ApiTransformer'
 import Icon from '~/models/Icon.js'
 import DateUtils from '~/utils/DateUtils'
 import Transaction from '~/models/Transaction.js'
+import Account from '~/models/Account.js'
 import Tag from '~/models/Tag.js'
 import RecurringTransaction from '~/models/RecurringTransaction.js'
 import { useAccountStore } from '~/stores/accountStore'
@@ -136,18 +137,22 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
 
     const accountSource = get(data, 'accountSource')
     const accountDestination = get(data, 'accountDestination')
-    // Firefly III infers the recurrence currency from the asset side of the transaction
     const typeCode = get(data, 'type.fireflyCode')
-    const assetAccount = typeCode === Transaction.types.income.fireflyCode ? accountDestination : accountSource
-    const currencyId = get(assetAccount, 'attributes.currency_id')
+    const isIncomeFromLiability = typeCode === Transaction.types.income.fireflyCode && get(Account.getType(accountSource), 'fireflyCode') === Account.types.liability.fireflyCode
+    const amountAccount = typeCode === Transaction.types.income.fireflyCode && !isIncomeFromLiability ? accountDestination : accountSource
+    const currencyId = get(Account.getCurrency(amountAccount), 'id')
     const categoryId = get(data, 'category.id')
     const budgetId = get(data, 'budget.id')
 
     let transaction = {
       description: get(data, 'description') || get(data, 'title', ''),
       amount: get(data, 'amount'),
-      source_id: accountSource?.id ?? null,
-      destination_id: accountDestination?.id ?? null,
+    }
+    if (accountSource || !isUpdate) {
+      transaction.source_id = accountSource?.id ?? null
+    }
+    if (accountDestination || !isUpdate) {
+      transaction.destination_id = accountDestination?.id ?? null
     }
 
     if (categoryId || isUpdate) {

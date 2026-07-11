@@ -311,7 +311,10 @@
     "title": "Selecione uma moeda"
   },
   "validation": {
-    "required": "Campo obrigatório"
+    "required": "Campo obrigatório",
+    "positive": "O valor deve ser maior que 0",
+    "integer_range": "O valor deve estar entre {min} e {max}",
+    "date_after": "A data deve ser posterior à data mínima"
   },
   "primary": "Primário",
   "secondary": "Secundário",
