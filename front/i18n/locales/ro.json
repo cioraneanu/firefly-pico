@@ -84,6 +84,7 @@
     "assistant_ramble_title": "Dictate transactions",
     "assistant_ramble_placeholder": "Say or edit transactions here...",
     "assistant_ramble_input_hint": "Scrie sau dictează tranzacțiile",
+    "assistant_ramble_listening": "Ascult...",
     "assistant_ramble_interpret": "Interpret",
     "assistant_ramble_preview": "Preview",
     "assistant_ramble_create": "Create {count}",

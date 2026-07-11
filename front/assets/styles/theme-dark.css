@@ -348,6 +348,15 @@
     background: rgba(0, 0, 0, 0.55);
 }
 
+.van-theme-dark .ramble-error {
+    background: rgba(236, 64, 122, 0.16);
+    color: #ff8aa8;
+}
+
+.van-theme-dark .ramble-header-icon {
+    box-shadow: none;
+}
+
 .van-theme-dark .transaction-desktop-row {
     border-color: #3f3f46;
     color: #f1f5f9;

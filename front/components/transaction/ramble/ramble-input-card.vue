@@ -1,51 +1,66 @@
 <template>
-  <van-cell-group inset class="no-margin overflow-hidden">
-    <div class="p-2 display-flex flex-column gap-2">
-      <div class="flex-center-vertical gap-2">
-        <div class="flex-1-w text-size-12 text-muted">{{ $t('transaction.assistant_ramble_input_hint') }}</div>
-        <van-button :type="isRecording ? 'danger' : 'primary'" size="small" round class="cursor-pointer" :disabled="isDisabled" @click="toggleRecording">
-          <app-icon :icon="isRecording ? TablerIconConstants.stop : TablerIconConstants.microphone" :size="16" />
-        </van-button>
-      </div>
-
+  <van-cell-group inset class="ramble-composer no-margin overflow-hidden">
+    <div class="p-3 display-flex flex-column gap-2">
       <app-text-area
         v-model="rambleText"
-        class="van-cell-no-padding compact"
+        class="van-cell-no-padding compact ramble-composer-input"
         label=""
-        :visible-lines="2"
+        :visible-lines="3"
         :placeholder="$t('transaction.assistant_ramble_placeholder')"
         :clearable="true"
         :disabled="isDisabled"
       />
 
-      <div v-if="isRecording && speechTemporary" class="flex-center-vertical gap-1 text-size-12 text-muted">
-        <app-icon :icon="TablerIconConstants.microphone" :size="14" />
-        <span class="word-break-word">{{ speechTemporary }}</span>
+      <div v-if="isRecording" class="flex-center-vertical gap-2 text-size-12">
+        <span class="ramble-live-dot" />
+        <span class="word-break-word flex-1-w text-muted">{{ speechTemporary || $t('transaction.assistant_ramble_listening') }}</span>
       </div>
 
-      <div class="flex-center-vertical flex-wrap gap-1">
-        <van-button size="small" plain class="cursor-pointer" :loading="isLoadingSaved" :disabled="isDisabled" @click="emit('loadSaved')">
+      <div class="flex-center-vertical flex-wrap gap-2 pt-1">
+        <van-button
+          round
+          size="small"
+          :type="isRecording ? 'danger' : 'default'"
+          class="cursor-pointer ramble-icon-button"
+          :class="{ 'ramble-recording': isRecording }"
+          :disabled="isDisabled"
+          @click="toggleRecording"
+        >
+          <app-icon :icon="isRecording ? TablerIconConstants.stop : TablerIconConstants.microphone" :size="16" />
+        </van-button>
+
+        <van-button round size="small" plain class="cursor-pointer" :loading="isLoadingSaved" :disabled="isDisabled" @click="emit('loadSaved')">
           <app-icon :icon="TablerIconConstants.list" :size="16" />
           {{ $t('transaction.assistant_ramble_load_saved') }}
           <template v-if="savedRamblesCount > 0"> ({{ savedRamblesCount }})</template>
         </van-button>
 
-        <van-button v-if="savedRambles.length > 0" size="small" type="danger" plain class="cursor-pointer" :loading="isDeletingSaved" :disabled="isDisabled" @click="emit('deleteSaved')">
+        <van-button
+          v-if="savedRambles.length > 0"
+          round
+          size="small"
+          type="danger"
+          plain
+          class="cursor-pointer ramble-icon-button"
+          :loading="isDeletingSaved"
+          :disabled="isDisabled"
+          :title="$t('transaction.assistant_ramble_delete_saved')"
+          @click="emit('deleteSaved')"
+        >
           <van-icon name="delete-o" size="16" />
-          {{ $t('transaction.assistant_ramble_delete_saved') }}
         </van-button>
 
         <div class="flex-1" />
 
-        <van-button size="small" type="primary" class="cursor-pointer" :loading="isInterpreting" :disabled="isDisabled || !canInterpret" @click="onInterpret">
+        <van-button round size="small" type="primary" class="cursor-pointer" :loading="isInterpreting" :disabled="isDisabled || !canInterpret" @click="onInterpret">
           <app-icon :icon="TablerIconConstants.magic" :size="16" />
           {{ $t('transaction.assistant_ramble_interpret') }}
         </van-button>
       </div>
     </div>
 
-    <div v-if="savedRambles.length > 0" class="ramble-divider">
-      <div v-for="savedRamble in savedRambles" :key="savedRamble.id" class="ramble-saved-item px-2 py-1 text-size-13 word-break-word">{{ savedRamble.text }}</div>
+    <div v-if="savedRambles.length > 0" class="ramble-saved-list display-flex flex-column gap-2 p-3 pt-0">
+      <div v-for="savedRamble in savedRambles" :key="savedRamble.id" class="ramble-saved-item text-size-13 word-break-word">{{ savedRamble.text }}</div>
     </div>
   </van-cell-group>
 </template>

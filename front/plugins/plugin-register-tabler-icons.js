@@ -70,6 +70,7 @@ import {
   IconMicrophone,
   IconPlayerStop,
   IconSparkles,
+  IconMessageCircleBolt,
   IconX,
 } from '@tabler/icons-vue'
 
@@ -145,6 +146,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconMicrophone', IconMicrophone)
   nuxtApp.vueApp.component('IconPlayerStop', IconPlayerStop)
   nuxtApp.vueApp.component('IconSparkles', IconSparkles)
+  nuxtApp.vueApp.component('IconMessageCircleBolt', IconMessageCircleBolt)
   nuxtApp.vueApp.component('IconX', IconX)
 
   // for (let iconName in tablerIcons) {
