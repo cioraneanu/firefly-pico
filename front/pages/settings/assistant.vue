@@ -41,12 +41,22 @@
             </div>
           </div>
 
+          <app-text-area v-model="assistantLlmContext" :label="$t('settings.assistant.llm_context')" :placeholder="$t('settings.assistant.llm_context_placeholder')" :visible-lines="2" />
+
+          <div  v-if="appStore.llmIsConfigured" class="flex-center">
+          <van-button round size="small" plain :loading="isTestingLlm" @click="testLlm">
+            <app-icon :icon="TablerIconConstants.magic" :size="16" />
+            {{ $t('settings.assistant.llm_test') }}
+          </van-button>
+          </div>
+
           <template v-else>
             <div class="text-size-13 text-muted">{{ $t('settings.assistant.llm_not_configured_info') }}</div>
             <div class="display-flex flex-wrap gap-1">
               <div class="llm-env-chip">ASSISTANT_LLM_ENDPOINT</div>
               <div class="llm-env-chip">ASSISTANT_LLM_MODEL</div>
               <div class="llm-env-chip">ASSISTANT_LLM_API_KEY</div>
+              <div class="llm-env-chip">ASSISTANT_LLM_CONTEXT</div>
             </div>
           </template>
         </div>
@@ -66,6 +76,7 @@ import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
 import { rule } from '~/utils/ValidationUtils.js'
+import AssistantRepository from '~/repository/AssistantRepository.js'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
@@ -74,11 +85,14 @@ const appStore = useAppStore()
 const assistantTodoTagMatcher = ref('')
 const assistantCurrency = ref(null)
 const autoFocusAssistant = ref(false)
+const assistantLlmContext = ref('')
+const isTestingLlm = ref(false)
 
 const syncedSettings = [
   { store: profileStore, path: 'autoFocusAssistant', ref: autoFocusAssistant },
   { store: profileStore, path: 'assistantTodoTagMatcher', ref: assistantTodoTagMatcher },
   { store: profileStore, path: 'assistantCurrency', ref: assistantCurrency },
+  { store: profileStore, path: 'assistantLlmContext', ref: assistantLlmContext },
 ]
 
 watchSettingsStore(syncedSettings)
@@ -89,6 +103,19 @@ const onSave = async () => {
   if (ResponseUtils.isSuccess(response)) {
     UIUtils.showToastSuccess(t('settings.settings_saved'))
   }
+}
+
+const testLlm = async () => {
+  isTestingLlm.value = true
+  const response = await new AssistantRepository().testLlm()
+  isTestingLlm.value = false
+
+  if (ResponseUtils.isSuccess(response)) {
+    UIUtils.showToastSuccess(t('settings.assistant.llm_test_success'))
+    return
+  }
+
+  UIUtils.showToastError(response?.data?.message ?? t('settings.assistant.llm_test_failed'))
 }
 
 const toolbar = useToolbar()

@@ -180,7 +180,12 @@
       "llm_status_subtitle": "Treibt die Diktierfunktion für Transaktionen an",
       "llm_configured": "Auf dem Server konfiguriert",
       "llm_not_configured": "Nicht konfiguriert",
-      "llm_not_configured_info": "Zum Aktivieren setze diese Umgebungsvariablen im Pico-Backend:"
+      "llm_not_configured_info": "Zum Aktivieren setze diese Umgebungsvariablen im Pico-Backend:",
+      "llm_context": "Additional LLM context",
+      "llm_context_placeholder": "For example: Return descriptions in English",
+      "llm_test": "Test LLM configuration",
+      "llm_test_success": "LLM configuration works",
+      "llm_test_failed": "LLM configuration test failed"
     },
     "formatting_entry": "Formatierung",
     "formatting": {

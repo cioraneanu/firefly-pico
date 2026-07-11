@@ -9,12 +9,14 @@ class AssistantLlmConfigService
         $endpoint = $this->trimValue(config('services.assistant_llm.endpoint'));
         $model = $this->trimValue(config('services.assistant_llm.model'));
         $apiKey = $this->trimValue(config('services.assistant_llm.api_key'));
+        $context = $this->trimValue(config('services.assistant_llm.context'));
 
         return [
             'isConfigured' => $endpoint !== '' || $apiKey !== '',
             'endpoint' => $endpoint ?: config('services.assistant_llm.defaults.endpoint'),
             'model' => $model ?: config('services.assistant_llm.defaults.model'),
             'apiKey' => $apiKey,
+            'context' => $context,
         ];
     }
 

@@ -180,7 +180,12 @@
       "llm_status_subtitle": "Powers the dictate transactions feature",
       "llm_configured": "Configured on the server",
       "llm_not_configured": "Not configured",
-      "llm_not_configured_info": "To enable it, set these environment variables on the Pico backend:"
+      "llm_not_configured_info": "To enable it, set these environment variables on the Pico backend:",
+      "llm_context": "Additional LLM context",
+      "llm_context_placeholder": "For example: Return descriptions in English",
+      "llm_test": "Test LLM configuration",
+      "llm_test_success": "LLM configuration works",
+      "llm_test_failed": "LLM configuration test failed"
     },
     "formatting_entry": "Formatting",
     "formatting": {

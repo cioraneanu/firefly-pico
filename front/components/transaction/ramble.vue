@@ -346,6 +346,7 @@ const interpretRambleText = async () => {
       now: new Date().toISOString(),
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
       language: profileStore.language,
+      externalContext: profileStore.assistantLlmContext,
       context: getRambleContext(),
     })
 

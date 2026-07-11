@@ -179,7 +179,12 @@
       "llm_status_subtitle": "Alimenta o recurso de ditar transações",
       "llm_configured": "Configurado no servidor",
       "llm_not_configured": "Não configurado",
-      "llm_not_configured_info": "Para ativar, defina estas variáveis de ambiente no backend do Pico:"
+      "llm_not_configured_info": "Para ativar, defina estas variáveis de ambiente no backend do Pico:",
+      "llm_context": "Additional LLM context",
+      "llm_context_placeholder": "For example: Return descriptions in English",
+      "llm_test": "Test LLM configuration",
+      "llm_test_success": "LLM configuration works",
+      "llm_test_failed": "LLM configuration test failed"
     },
     "formatting_entry": "Formatação",
     "formatting": {

@@ -2,22 +2,6 @@
   <van-cell-group inset class="ramble-composer no-margin overflow-hidden">
     <div class="p-3 display-flex flex-column gap-2">
       <div class="flex-center-vertical flex-wrap gap-2">
-        <van-button
-          round
-          size="small"
-          :type="isRecording ? 'danger' : 'default'"
-          class="cursor-pointer ramble-icon-button"
-          :class="{ 'ramble-recording': isRecording }"
-          :disabled="isDisabled"
-          @click="toggleRecording"
-        >
-          <app-icon :icon="isRecording ? TablerIconConstants.stop : TablerIconConstants.microphone" :size="16" />
-        </van-button>
-
-        <speech-language-dropdown v-model="speechLanguageCode" class="text-size-13" />
-
-        <div class="flex-1" />
-
         <van-button round size="small" plain class="cursor-pointer" :loading="isLoadingSaved" :disabled="isDisabled" @click="emit('loadSaved')">
           <app-icon :icon="TablerIconConstants.list" :size="16" />
           {{ $t('transaction.assistant_ramble_load_saved') }}
@@ -38,13 +22,30 @@
         >
           <van-icon name="delete-o" size="16" />
         </van-button>
+
+        <div class="flex-1" />
+
+        <van-button
+          v-if="appStore.isDesktopLayout"
+          round
+          size="small"
+          :type="isRecording ? 'danger' : 'default'"
+          class="cursor-pointer ramble-icon-button"
+          :class="{ 'ramble-recording': isRecording }"
+          :disabled="isDisabled"
+          @click="toggleRecording"
+        >
+          <app-icon :icon="isRecording ? TablerIconConstants.stop : TablerIconConstants.microphone" :size="16" />
+        </van-button>
+
+        <speech-language-dropdown v-if="appStore.isDesktopLayout" v-model="speechLanguageCode" class="text-size-13" />
       </div>
 
       <app-text-area
         v-model="rambleText"
         class="van-cell-no-padding compact ramble-composer-input"
         label=""
-        :visible-lines="3"
+        :visible-lines="2"
         :placeholder="$t('transaction.assistant_ramble_placeholder')"
         :clearable="true"
         :disabled="isDisabled"
@@ -105,6 +106,7 @@ const emit = defineEmits(['interpret', 'loadSaved', 'deleteSaved'])
 const rambleText = defineModel({ type: String, default: '' })
 
 const profileStore = useProfileStore()
+const appStore = useAppStore()
 const speechTemporary = ref('')
 
 // The app UI language is only the initial default. The dropdown selection is remembered per browser.

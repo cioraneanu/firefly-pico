@@ -368,6 +368,10 @@
     background: rgba(102, 187, 106, 0.18);
 }
 
+.van-theme-dark .llm-detail-panel {
+    border: 1px solid #444;
+}
+
 .van-theme-dark .llm-status-pill-off {
     color: #ff8aa8;
     background: rgba(236, 64, 122, 0.16);

@@ -99,7 +99,50 @@ class AssistantController extends BaseController
         }
 
         $payload = $request->input('payload');
+        $this->appendContext($payload, $config['context'], $request->input('context'));
         $payload['model'] = $config['model'];
+
+        return $this->sendLlmRequest($config, $payload);
+    }
+
+    public function testLlm(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        $config = app(AssistantLlmConfigService::class)->getConfig();
+
+        if (!$config['isConfigured']) {
+            return $this->setStatusCode(self::HTTP_CODE_UNPROCESSABLE_ENTITY)->respond([
+                'message' => 'Assistant LLM is not configured.',
+            ]);
+        }
+
+        return $this->sendLlmRequest($config, [
+            'model' => $config['model'],
+            'temperature' => 0,
+            'max_tokens' => 1,
+            'messages' => [['role' => 'user', 'content' => 'Reply OK.']],
+        ]);
+    }
+
+    private function appendContext(&$payload, $globalContext, $userContext)
+    {
+        $context = implode("\n", array_filter([trim((string)$globalContext), trim((string)$userContext)]));
+        if (!$context) {
+            return;
+        }
+
+        foreach ($payload['messages'] as &$message) {
+            if (fget($message, 'role') === 'system') {
+                $message['content'] = rtrim((string)fget($message, 'content')) . "\n" . $context;
+                return;
+            }
+        }
+
+        $payload['messages'][] = ['role' => 'system', 'content' => $context];
+    }
+
+    private function sendLlmRequest($config, $payload)
+    {
 
         $headers = [
             'Accept' => 'application/json',

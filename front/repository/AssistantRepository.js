@@ -106,6 +106,7 @@ export default class AssistantRepository extends BaseRepository {
 
   async interpretTransactions(data) {
     const requestData = {
+      context: data.externalContext,
       payload: {
         temperature: 0.1,
         stream: false,
@@ -144,5 +145,9 @@ export default class AssistantRepository extends BaseRepository {
     return {
       transactions: normalizeTransactions(json),
     }
+  }
+
+  async testLlm() {
+    return axios.post(`${this.getUrl()}/test-llm`, {}, { timeout: 60000 })
   }
 }
