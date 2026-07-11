@@ -21,12 +21,13 @@
               <div class="font-600 text-size-14 line-height-normal">{{ $t('settings.assistant.llm_status') }}</div>
               <div class="text-size-12 text-muted">{{ $t('settings.assistant.llm_status_subtitle') }}</div>
             </div>
+          </div>
+          <div class="display-flex">
             <div class="llm-status-pill" :class="appStore.llmIsConfigured ? 'llm-status-pill-on' : 'llm-status-pill-off'">
               <span class="llm-status-dot" />
               {{ appStore.llmIsConfigured ? $t('settings.assistant.llm_configured') : $t('settings.assistant.llm_not_configured') }}
             </div>
           </div>
-
           <div v-if="appStore.llmIsConfigured" class="llm-detail-panel">
             <div class="llm-detail-row">
               <app-icon :icon="TablerIconConstants.external" :size="16" />
