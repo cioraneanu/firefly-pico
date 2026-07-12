@@ -17,8 +17,6 @@
         <div class="title flex-1">{{ $t('filters.applied_filters') }}</div>
         <van-button size="small" class="search-total-toggle" @click="onToggleSearchTotal">
           <div class="flex-center-vertical gap-1">
-            <app-icon :icon="TablerIconConstants.cash" size="16" :stroke="1.9" />
-            <span>{{ $t('filters.total') }}</span>
             <icon-chevron-up v-if="showSearchTotal" :size="14" :stroke="1.9" />
             <icon-chevron-down v-else :size="14" :stroke="1.9" />
           </div>

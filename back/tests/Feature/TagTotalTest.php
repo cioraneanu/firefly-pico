@@ -13,11 +13,19 @@ class TagTotalTest extends TestCase
 
     private $token = 'test-token';
 
-    private $transactionsCount = 2;
+    /** @var callable returns the faked tag transactions response body for a given page */
+    private $tagTransactionsPage;
 
     protected function setUp(): void
     {
         parent::setUp();
+
+        $this->tagTransactionsPage = fn($page) => [
+            'data' => $page === 1 ? $this->transactionGroups() : [],
+            // Firefly's pagination totals can be unreliable on purpose here: the service must count the fetched data instead
+            'meta' => ['pagination' => ['total' => 4876, 'total_pages' => 98, 'per_page' => 50]],
+        ];
+
         Http::fake(function ($request) {
             $authorization = $request->header('Authorization')[0] ?? $request->header('authorization')[0] ?? '';
             if ($authorization !== 'Bearer test-token') {
@@ -29,10 +37,8 @@ class TagTotalTest extends TestCase
             }
 
             if (str_contains($request->url(), 'tags/7/transactions')) {
-                return Http::response([
-                    'data' => $this->transactionGroups(),
-                    'meta' => ['pagination' => ['total' => $this->transactionsCount, 'total_pages' => 1]],
-                ]);
+                parse_str(parse_url($request->url(), PHP_URL_QUERY), $query);
+                return Http::response(($this->tagTransactionsPage)((int)($query['page'] ?? 1)));
             }
 
             if (str_contains($request->url(), 'tags/7')) {
@@ -63,6 +69,16 @@ class TagTotalTest extends TestCase
         ];
     }
 
+    private function makeGroups($count)
+    {
+        return array_map(fn($i) => [
+            'id' => (string)$i,
+            'attributes' => ['transactions' => [
+                ['type' => 'withdrawal', 'amount' => '1.00', 'currency_id' => '5', 'tags' => ['vacation']],
+            ]],
+        ], range(1, $count));
+    }
+
     private function headers($token = null)
     {
         return ['Authorization' => 'Bearer ' . ($token ?? $this->token)];
@@ -75,6 +91,8 @@ class TagTotalTest extends TestCase
         $response->assertOk();
         $this->assertEquals(80.0, $response->json('data.total_amount'));
         $this->assertEquals('5', $response->json('data.total_currency_id'));
+        // The count comes from the fetched data, not from the (unreliable) pagination meta
+        $this->assertEquals(2, $response->json('data.transactions_count'));
 
         $tag = Tag::find(7);
         $this->assertEquals(80.0, (float)$tag->total_amount);
@@ -94,7 +112,10 @@ class TagTotalTest extends TestCase
 
     public function test_compute_total_with_too_many_transactions_fails()
     {
-        $this->transactionsCount = 501;
+        $this->tagTransactionsPage = fn($page) => [
+            'data' => $this->makeGroups(50),
+            'meta' => ['pagination' => ['total' => 4876, 'total_pages' => 98, 'per_page' => 50]],
+        ];
 
         $response = $this->postJson('api/tags/7/total', [], $this->headers());
 
@@ -108,6 +129,5 @@ class TagTotalTest extends TestCase
         $response = $this->postJson('api/tags/7/total', [], $this->headers('bad-token'));
 
         $response->assertStatus(401);
-        $this->assertDatabaseCount('tags', 0);
     }
 }

@@ -1089,6 +1089,11 @@ svg {
     justify-content: center;
 }
 
+/* The pull-to-refresh head hangs above the list and steals clicks from the applied filters bar */
+.van-pull-refresh__head {
+    pointer-events: none;
+}
+
 .search-total-toggle {
     border-radius: 8px !important;
 }

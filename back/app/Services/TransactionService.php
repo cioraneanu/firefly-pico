@@ -50,7 +50,7 @@ class TransactionService
 
             $transactionsCount += count($data);
             if ($maxTransactions && $transactionsCount > $maxTransactions) {
-                throw new GeneralException("The task is too big. The search matches more than $maxTransactions transactions.", BaseController::HTTP_CODE_UNPROCESSABLE_ENTITY);
+                throw new GeneralException("The task is too big. More than $maxTransactions transactions match.", BaseController::HTTP_CODE_UNPROCESSABLE_ENTITY);
             }
 
             foreach ($data as $transactionGroup) {

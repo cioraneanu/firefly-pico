@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use App\Exceptions\GeneralException;
-use App\Http\Controllers\Base\BaseController;
 use App\Models\Tag;
 
 class TagService
@@ -20,15 +18,8 @@ class TagService
         $tagUrl = config('app.firefly_url') . "/api/v1/tags/$tagId";
         $tagName = fget($transactionService->getFromFirefly($tagUrl), 'data.attributes.tag');
 
-        $transactionsUrl = "$tagUrl/transactions";
-        $transactionsCount = fget($transactionService->getFromFirefly($transactionsUrl, ['limit' => 1, 'page' => 1]), 'meta.pagination.total') ?? 0;
-
-        if ($transactionsCount > TransactionService::COMPUTE_TOTAL_MAX_TRANSACTIONS) {
-            throw new GeneralException("The task is too big. \"$tagName\" has $transactionsCount transactions (max " . TransactionService::COMPUTE_TOTAL_MAX_TRANSACTIONS . ").", BaseController::HTTP_CODE_UNPROCESSABLE_ENTITY);
-        }
-
         $splitFilter = fn($split) => in_array($tagName, fget($split, 'tags') ?? []);
-        [$totals] = $transactionService->sumTransactions($transactionsUrl, [], $splitFilter);
+        [$totals, $transactionsCount] = $transactionService->sumTransactions("$tagUrl/transactions", [], $splitFilter, TransactionService::COMPUTE_TOTAL_MAX_TRANSACTIONS);
         [$totalAmount, $totalCurrencyId] = TransactionService::dominantTotal($totals);
 
         Tag::updateOrCreate(['id' => $tagId], [
