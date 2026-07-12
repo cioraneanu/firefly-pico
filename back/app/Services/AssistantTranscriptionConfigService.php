@@ -18,6 +18,17 @@ class AssistantTranscriptionConfigService
         ];
     }
 
+    public function getPublicConfig()
+    {
+        $config = $this->getConfig();
+
+        return [
+            'is_configured' => $config['isConfigured'],
+            'endpoint' => $config['endpoint'],
+            'model' => $config['model'],
+        ];
+    }
+
     private function trimValue($value)
     {
         return trim((string)($value ?? ''));

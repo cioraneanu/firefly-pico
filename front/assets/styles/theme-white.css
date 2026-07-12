@@ -1788,6 +1788,9 @@ body {
     text-align: right;
     font-weight: 500;
     min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .llm-env-chip {
