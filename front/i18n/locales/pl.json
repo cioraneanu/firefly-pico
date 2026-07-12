@@ -74,7 +74,9 @@
     "clear": "Wyczyść",
     "applied_filters": "Zastosowane filtry",
     "apply_filters": "Zastosuj filtry",
-    "transaction_filters": "Filtry transakcji"
+    "transaction_filters": "Filtry transakcji",
+    "total": "Suma",
+    "compute_total": "Oblicz sumę"
   },
   "transaction": {
     "title_list": "Lista transakcji",

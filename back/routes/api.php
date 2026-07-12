@@ -62,6 +62,7 @@ Route::get('budget-limits', [BudgetController::class, 'getBudgetLimits']);
 
 RouteUtils::makeCRUD("transactions", TransactionController::class);
 Route::get('search/transactions', [TransactionController::class, 'getAll']);
+Route::get('search/transactions/total', [TransactionController::class, 'computeSearchTotal']);
 
 
 RouteUtils::makeCRUD("profiles", ProfileController::class);

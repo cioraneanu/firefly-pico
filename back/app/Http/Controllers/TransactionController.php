@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Authorizations\BaseAuthorization;
 use App\Exceptions\FireflyException;
 use App\Http\Controllers\Base\BaseControllerFirefly;
+use App\Services\TransactionService;
 use Illuminate\Http\Request;
 
 
@@ -30,5 +32,10 @@ class TransactionController extends BaseControllerFirefly
 
     // ---------------------------
 
+    public function computeSearchTotal(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        return $this->respond(['data' => app(TransactionService::class)->computeSearchTotal($request->query('query'))]);
+    }
 
 }

@@ -15,6 +15,10 @@
     <div v-if="filtersDisplayList.length > 0" class="applied-filters-container">
       <div class="flex-center-vertical">
         <div class="title flex-1">{{ $t('filters.applied_filters') }}</div>
+        <div class="tag-filter cursor-pointer gap-1" @click="onComputeSearchTotal">
+          <app-icon :icon="TablerIconConstants.cash" size="16" :stroke="1.9" />
+          <span>{{ searchTotalLabel }}</span>
+        </div>
       </div>
 
       <div class="display-flex flex-wrap gap-1">
@@ -58,7 +62,8 @@ import { useToolbar } from '~/composables/useToolbar'
 import EmptyList from '~/components/general/empty-list.vue'
 import { ref, computed, watch, onMounted } from 'vue'
 import TransactionRepository from '~/repository/TransactionRepository'
-import { isEqual } from 'lodash-es'
+import { get, isEqual } from 'lodash-es'
+import Currency from '~/models/Currency.js'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
 import { IconSquareRoundedX } from '@tabler/icons-vue'
@@ -112,6 +117,7 @@ watch(filtersBackendList, (newValue, oldValue) => {
   if (isEqual(newValue, oldValue)) {
     return
   }
+  searchTotal.value = null
   onRefresh()
 })
 
@@ -127,6 +133,30 @@ const onClearFilters = () => {
 }
 
 const { t } = useI18n()
+
+const searchTotal = ref(null)
+const isComputingSearchTotal = ref(false)
+
+const searchTotalLabel = computed(() => {
+  const totalFormatted = Currency.formatAmountWithSymbol(get(searchTotal.value, 'total_amount'), get(searchTotal.value, 'total_currency_id'))
+  return totalFormatted ? `${t('filters.total')}: ${totalFormatted}` : t('filters.compute_total')
+})
+
+const onComputeSearchTotal = async () => {
+  if (isComputingSearchTotal.value) {
+    return
+  }
+  isComputingSearchTotal.value = true
+  const searchFilters = [{ field: 'query', value: filtersBackendList.value.join(' ') }]
+  const response = await transactionRepository.searchTransactionsTotal({ filters: searchFilters })
+  isComputingSearchTotal.value = false
+
+  // On error the axios interceptor already shows the backend message in a toast
+  if (!ResponseUtils.isSuccess(response)) {
+    return
+  }
+  searchTotal.value = get(response, 'data.data')
+}
 const toolbar = useToolbar()
 toolbar.init({
   title: t('transaction.title_list'),
