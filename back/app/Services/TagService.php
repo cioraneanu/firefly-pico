@@ -28,7 +28,8 @@ class TagService
         }
 
         $splitFilter = fn($split) => in_array($tagName, fget($split, 'tags') ?? []);
-        [$totalAmount, $totalCurrencyId] = $transactionService->sumTransactions($transactionsUrl, [], $splitFilter);
+        [$totals] = $transactionService->sumTransactions($transactionsUrl, [], $splitFilter);
+        [$totalAmount, $totalCurrencyId] = TransactionService::dominantTotal($totals);
 
         Tag::updateOrCreate(['id' => $tagId], [
             'total_amount' => $totalAmount,
