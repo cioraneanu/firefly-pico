@@ -304,7 +304,10 @@
     "title": "选择货币"
   },
   "validation": {
-    "required": "必填字段"
+    "required": "必填字段",
+    "positive": "值必须大于 0",
+    "integer_range": "值必须在 {min} 和 {max} 之间",
+    "date_after": "日期必须晚于最早日期"
   },
   "primary": "主要",
   "classification": "分类",

@@ -321,7 +321,10 @@
     "title": "Seleziona una valuta"
   },
   "validation": {
-    "required": "Campo obbligatorio"
+    "required": "Campo obbligatorio",
+    "positive": "Il valore deve essere maggiore di 0",
+    "integer_range": "Il valore deve essere compreso tra {min} e {max}",
+    "date_after": "La data deve essere successiva alla data minima"
   },
   "primary": "Principale",
   "secondary": "Secondario",

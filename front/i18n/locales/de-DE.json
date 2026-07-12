@@ -322,7 +322,10 @@
     "title": "Wähle eine Währung"
   },
   "validation": {
-    "required": "Feld ist erforderlich"
+    "required": "Feld ist erforderlich",
+    "positive": "Der Wert muss größer als 0 sein",
+    "integer_range": "Der Wert muss zwischen {min} und {max} liegen",
+    "date_after": "Das Datum muss nach dem Mindestdatum liegen"
   },
   "primary": "Primary",
   "secondary": "Sekundär",

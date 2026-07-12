@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <!--    <van-cell :title="label" :value="date" @click="show = true"/>-->
-    <van-field v-model="getSelectedName" is-link readonly class="app-field" :label="label" placeholder="No date" v-bind="dynamicAttrs" @click="show = true">
+    <van-field v-model="getSelectedName" is-link readonly class="app-field" :label="label" placeholder="No date" v-bind="dynamicAttrs" @click="onShow">
       <template v-if="attrs.icon" #left-icon>
         <app-icon :icon="attrs.icon" :size="20" />
       </template>
@@ -16,7 +16,7 @@
 
       <template #right-icon>
         <div>
-          <van-icon v-if="modelValue" name="clear" class="cursor-pointer" @click.prevent.stop="modelValue = null" />
+          <van-icon v-if="modelValue && !attrs.disabled" name="clear" class="cursor-pointer" @click.prevent.stop="modelValue = null" />
         </div>
       </template>
     </van-field>
@@ -34,7 +34,7 @@
 
     <!--    <van-cell title="Cell title" :value="getSelectedName" is-link @click="show = true" />-->
 
-    <van-calendar v-model:show="show" :show-confirm="false" color="#000" :min-date="minDate" @confirm="onConfirm">
+    <van-calendar v-model:show="show" :show-confirm="false" color="#000" :min-date="props.minDate" :max-date="props.maxDate" @confirm="onConfirm">
       <template #title>
         <div ref="appCalendar">Select a date</div>
       </template>
@@ -58,9 +58,23 @@ const props = defineProps({
     type: String,
     default: 'Date',
   },
+  minDate: {
+    type: Date,
+    default: () => subYears(new Date(), 5),
+  },
+  maxDate: {
+    type: Date,
+    default: undefined,
+  },
 })
 
 const show = ref(false)
+
+const onShow = () => {
+  if (!attrs.disabled) {
+    show.value = true
+  }
+}
 
 const labelClass = computed(() => {
   return {
@@ -80,8 +94,6 @@ const onConfirm = (value) => {
   modelValue.value = value
   // emit('update:modelValue', value)
 }
-
-const minDate = subYears(new Date(), 5)
 
 const onClickedMinusDay = () => {
   modelValue.value = addDays(modelValue.value, -1)

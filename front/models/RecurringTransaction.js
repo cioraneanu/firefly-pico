@@ -22,6 +22,8 @@ export default class RecurringTransaction extends BaseModel {
         icon: null,
         type: Transaction.types.expense,
         amount: '',
+        amountForeign: '',
+        currencyForeign: null,
         description: '',
         accountSource: null,
         accountDestination: null,
@@ -46,7 +48,7 @@ export default class RecurringTransaction extends BaseModel {
 
   // ------------
 
-  getFake(id) {
+  getFake() {
     return {}
   }
 

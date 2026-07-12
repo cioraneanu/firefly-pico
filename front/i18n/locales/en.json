@@ -322,7 +322,10 @@
     "title": "Select a currency"
   },
   "validation": {
-    "required": "Field is required"
+    "required": "Field is required",
+    "positive": "Value must be greater than 0",
+    "integer_range": "Value must be between {min} and {max}",
+    "date_after": "Date must be later than the minimum date"
   },
   "primary": "Primary",
   "secondary": "Secondary",

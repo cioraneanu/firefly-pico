@@ -45,7 +45,7 @@
           placeholder="Foreign amount "
           label="Foreign amount"
           class="flex-1 flex-center-vertical app-field transaction-amount-field transaction-foreign-amount-field"
-          v-bind="attrs"
+          v-bind="foreignAmountBindings"
           label-align="top"
           @click="() => inputAmountForeign.focus()"
         >
@@ -80,7 +80,7 @@
     <table v-if="showQuickButtons && !disabled" class="ml-15">
       <tbody>
         <tr>
-          <td v-for="quickButton in quickButtons">
+          <td v-for="quickButton in quickButtons" :key="quickButton">
             <van-button class="w-100 transaction-amount-button" type="default" size="normal" @mousedown.prevent.stop="onQuickButton(quickButton)">
               {{ quickButton }}
             </van-button>
@@ -104,14 +104,25 @@ const device = useDevice()
 const profileStore = useProfileStore()
 const attrs = useAttrs()
 const amountBindings = computed(() => {
+  const rules = [...(attrs.rules ?? [])]
+  if (props.isAmountRequired) {
+    rules.unshift({ required: true, message: 'Amount is required' })
+  }
   return {
     ...attrs,
-    ...(props.isAmountRequired
-      ? {
-          required: true,
-          rules: [{ required: true, message: 'Amount is required' }],
-        }
-      : {}),
+    required: props.isAmountRequired || attrs.required,
+    rules,
+  }
+})
+const foreignAmountBindings = computed(() => {
+  const rules = [...(attrs.rules ?? [])]
+  if (props.isForeignAmountRequired) {
+    rules.unshift({ required: true, message: 'Foreign amount is required' })
+  }
+  return {
+    ...attrs,
+    required: props.isForeignAmountRequired || attrs.required,
+    rules,
   }
 })
 
@@ -138,6 +149,10 @@ const props = defineProps({
     default: false,
   },
   isAmountRequired: {
+    type: Boolean,
+    default: false,
+  },
+  isForeignAmountRequired: {
     type: Boolean,
     default: false,
   },
