@@ -1733,6 +1733,14 @@ body {
 
 /* ---------------------- Assistant LLM status card ---------------------- */
 
+.assistant-llm-context.app-field {
+    padding: 0;
+}
+
+.assistant-llm-context.app-field-text .van-field__body {
+    margin-right: 0;
+}
+
 .llm-status-pill {
     display: inline-flex;
     align-items: center;

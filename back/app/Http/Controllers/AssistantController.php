@@ -155,6 +155,20 @@ class AssistantController extends BaseController
         ]);
     }
 
+    public function testTranscription(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        $result = app(AssistantTranscriptionService::class)->testConfiguration();
+
+        if (!$result['successful']) {
+            return $this->setStatusCode($result['status'])->respond([
+                'message' => $result['message'],
+            ]);
+        }
+
+        return $this->respond(['success' => true]);
+    }
+
     private function appendContext(&$payload, $globalContext, $userContext)
     {
         $globalContext = trim((string)$globalContext);

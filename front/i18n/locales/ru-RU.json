@@ -193,7 +193,10 @@
       "llm_context_placeholder": "For example: Return descriptions in English",
       "llm_test": "Test LLM configuration",
       "llm_test_success": "LLM configuration works",
-      "llm_test_failed": "LLM configuration test failed"
+      "llm_test_failed": "LLM configuration test failed",
+      "transcription_test": "Test transcription configuration",
+      "transcription_test_success": "Transcription configuration works",
+      "transcription_test_failed": "Transcription configuration test failed"
     },
     "formatting_entry": "Форматирование",
     "formatting": {

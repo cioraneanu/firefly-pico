@@ -41,13 +41,13 @@
             </div>
           </div>
 
-          <app-text-area v-model="assistantLlmContext" :label="$t('settings.assistant.llm_context')" :placeholder="$t('settings.assistant.llm_context_placeholder')" :visible-lines="2" />
+          <app-text-area v-model="assistantLlmContext" class="assistant-llm-context" :label="$t('settings.assistant.llm_context')" :placeholder="$t('settings.assistant.llm_context_placeholder')" :visible-lines="2" />
 
-          <div  v-if="appStore.llmIsConfigured" class="flex-center">
-          <van-button round size="small" plain :loading="isTestingLlm" @click="testLlm">
-            <app-icon :icon="TablerIconConstants.magic" :size="16" />
-            {{ $t('settings.assistant.llm_test') }}
-          </van-button>
+          <div v-if="appStore.llmIsConfigured" class="flex-center">
+            <van-button round size="small" plain :loading="isTestingLlm" @click="testLlm">
+              <app-icon :icon="TablerIconConstants.magic" :size="16" />
+              {{ $t('settings.assistant.llm_test') }}
+            </van-button>
           </div>
 
           <template v-else>
@@ -92,6 +92,13 @@
             </div>
           </div>
 
+          <div v-if="appStore.transcriptionIsConfigured" class="flex-center">
+            <van-button round size="small" plain :loading="isTestingTranscription" @click="testTranscription">
+              <app-icon :icon="TablerIconConstants.microphone" :size="16" />
+              {{ $t('settings.assistant.transcription_test') }}
+            </van-button>
+          </div>
+
           <template v-else>
             <div class="text-size-13 text-muted">{{ $t('settings.assistant.llm_not_configured_info') }}</div>
             <div class="display-flex flex-wrap gap-1">
@@ -128,6 +135,7 @@ const assistantCurrency = ref(null)
 const autoFocusAssistant = ref(false)
 const assistantLlmContext = ref('')
 const isTestingLlm = ref(false)
+const isTestingTranscription = ref(false)
 
 const syncedSettings = [
   { store: profileStore, path: 'autoFocusAssistant', ref: autoFocusAssistant },
@@ -166,6 +174,19 @@ const testLlm = async () => {
   }
 
   UIUtils.showToastError(response?.data?.message ?? t('settings.assistant.llm_test_failed'))
+}
+
+const testTranscription = async () => {
+  isTestingTranscription.value = true
+  const response = await new AssistantRepository().testTranscription()
+  isTestingTranscription.value = false
+
+  if (ResponseUtils.isSuccess(response)) {
+    UIUtils.showToastSuccess(t('settings.assistant.transcription_test_success'))
+    return
+  }
+
+  UIUtils.showToastError(response?.data?.message ?? t('settings.assistant.transcription_test_failed'))
 }
 
 const toolbar = useToolbar()

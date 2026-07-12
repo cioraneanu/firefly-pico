@@ -74,6 +74,7 @@ Route::delete('assistant/rambles', [AssistantController::class, 'deleteRambles']
 Route::delete('assistant/rambles/{id}', [AssistantController::class, 'deleteRamble'])->where('id', '[0-9]+');
 Route::post('assistant/interpret-transactions', [AssistantController::class, 'interpretTransactions']);
 Route::post('assistant/test-llm', [AssistantController::class, 'testLlm']);
+Route::post('assistant/test-transcription', [AssistantController::class, 'testTranscription']);
 
 Route::get('/test', function (Request $request) {
     return "Test!";

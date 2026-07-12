@@ -161,4 +161,8 @@ export default class AssistantRepository extends BaseRepository {
   async testLlm() {
     return axios.post(`${this.getUrl()}/test-llm`, {}, { timeout: 60000 })
   }
+
+  async testTranscription() {
+    return axios.post(`${this.getUrl()}/test-transcription`, {}, { timeout: 120000 })
+  }
 }

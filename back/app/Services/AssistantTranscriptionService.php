@@ -34,6 +34,37 @@ class AssistantTranscriptionService
         }
     }
 
+    public function testConfiguration(): array
+    {
+        $config = $this->configService->getConfig();
+        if (!$config['isConfigured']) {
+            return ['successful' => false, 'status' => 422, 'message' => 'Assistant transcription is not configured.'];
+        }
+
+        $sampleRate = 8000;
+        $audio = str_repeat("\0", $sampleRate / 4 * 2);
+        $wav = 'RIFF' . pack('V', 36 + strlen($audio)) . 'WAVEfmt ' . pack('VvvVVvv', 16, 1, 1, $sampleRate, $sampleRate * 2, 2, 16) . 'data' . pack('V', strlen($audio)) . $audio;
+        $request = Http::acceptJson()->connectTimeout(10)->timeout(120);
+        if ($config['apiKey']) {
+            $request = $request->withToken($config['apiKey']);
+        }
+
+        try {
+            $response = $request->attach('file', $wav, 'test.wav')->post($config['endpoint'], [
+                'model' => $config['model'],
+                'response_format' => 'json',
+            ]);
+        } catch (ConnectionException $exception) {
+            return ['successful' => false, 'status' => 502, 'message' => $exception->getMessage() ?: 'Assistant transcription request failed.'];
+        }
+
+        return [
+            'successful' => $response->successful(),
+            'status' => $response->successful() ? 200 : $response->status(),
+            'message' => fget($response->json(), 'error.message') ?? fget($response->json(), 'message') ?? 'Assistant transcription request failed.',
+        ];
+    }
+
     private function transcribe(AssistantRamble $ramble, array $config): void
     {
         $ramble->is_transcribed = true;
