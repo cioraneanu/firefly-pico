@@ -42,4 +42,14 @@ return [
         ],
     ],
 
+    'assistant_transcription' => [
+        'endpoint' => env('ASSISTANT_TRANSCRIPTION_ENDPOINT'),
+        'model' => env('ASSISTANT_TRANSCRIPTION_MODEL'),
+        'api_key' => env('ASSISTANT_TRANSCRIPTION_API_KEY'),
+        'defaults' => [
+            'endpoint' => 'https://api.openai.com/v1/audio/transcriptions',
+            'model' => 'gpt-4o-mini-transcribe',
+        ],
+    ],
+
 ];

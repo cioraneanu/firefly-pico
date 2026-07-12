@@ -47,6 +47,10 @@ export const useAppStore = defineStore('app', () => {
   const llmIsConfigured = computed(() => get(llm.value, 'is_configured'))
   const llmModel = computed(() => get(llm.value, 'model'))
   const llmEndpoint = computed(() => get(llm.value, 'endpoint'))
+  const transcription = computed(() => get(info.value, 'assistant_transcription'))
+  const transcriptionIsConfigured = computed(() => get(transcription.value, 'is_configured'))
+  const transcriptionModel = computed(() => get(transcription.value, 'model'))
+  const transcriptionEndpoint = computed(() => get(transcription.value, 'endpoint'))
 
   const activePage = computed(() => {
     const route = useRoute()
@@ -157,6 +161,11 @@ export const useAppStore = defineStore('app', () => {
     llmIsConfigured,
     llmModel,
     llmEndpoint,
+
+    transcription,
+    transcriptionIsConfigured,
+    transcriptionModel,
+    transcriptionEndpoint,
 
     windowWidth,
     activePage,

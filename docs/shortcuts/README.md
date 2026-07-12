@@ -37,6 +37,10 @@ Create a new shortcut in Shortcuts with these actions:
    - File: Dictated Text
 6. Optional: Show Result with the response.
 
+## Voice recordings
+
+Instead of dictated text, the endpoint also accepts an audio recording as a `multipart/form-data` upload in a `voice` field (`Record Audio` action + `Get Contents of URL` with Request Body `Form`, add a `File` field named `voice`). Accepted formats include m4a, mp3, wav, ogg/opus, webm and flac (max 25 MB). When the backend has `ASSISTANT_TRANSCRIPTION_ENDPOINT`/`ASSISTANT_TRANSCRIPTION_API_KEY` configured, the recording is transcribed automatically the first time the rambles are loaded, and the app shows a play button next to rambles that carry a recording. A single request can include both `text` and `voice`.
+
 The readable source lives in `Firefly Pico Ramble.shortcut.plist`; regenerate the unsigned binary plist with:
 
 ```sh

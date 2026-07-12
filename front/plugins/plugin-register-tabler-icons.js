@@ -68,6 +68,7 @@ import {
   IconRepeat,
   IconCalendarRepeat,
   IconMicrophone,
+  IconPlayerPlay,
   IconPlayerStop,
   IconSparkles,
   IconMessageCircleBolt,
@@ -144,6 +145,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconRepeat', IconRepeat)
   nuxtApp.vueApp.component('IconCalendarRepeat', IconCalendarRepeat)
   nuxtApp.vueApp.component('IconMicrophone', IconMicrophone)
+  nuxtApp.vueApp.component('IconPlayerPlay', IconPlayerPlay)
   nuxtApp.vueApp.component('IconPlayerStop', IconPlayerStop)
   nuxtApp.vueApp.component('IconSparkles', IconSparkles)
   nuxtApp.vueApp.component('IconMessageCircleBolt', IconMessageCircleBolt)

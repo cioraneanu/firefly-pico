@@ -4,17 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Base\BaseController;
 use App\Services\AssistantLlmConfigService;
+use App\Services\AssistantTranscriptionConfigService;
 use Illuminate\Support\Facades\Http;
 
 
 class VersionController extends BaseController
 {
 
-    public function getInfo(AssistantLlmConfigService $assistantLlmConfigService)
+    public function getInfo(AssistantLlmConfigService $assistantLlmConfigService, AssistantTranscriptionConfigService $assistantTranscriptionConfigService)
     {
         return $this->respond([
             'latest_version' => $this->resolveLatestVersion(),
             'assistant_llm' => $assistantLlmConfigService->getPublicConfig(),
+            'assistant_transcription' => $assistantTranscriptionConfigService->getPublicConfig(),
         ]);
     }
 

@@ -97,6 +97,11 @@ export default class AssistantRepository extends BaseRepository {
     return get(response, 'data', {})
   }
 
+  async getSavedRambleVoice(id) {
+    const response = await axios.get(`${this.getUrl()}/rambles/${id}/voice`, { responseType: 'blob' })
+    return get(response, 'data', null)
+  }
+
   async deleteSavedRambles(ids) {
     return axios.delete(`${this.getUrl()}/rambles`, {
       data: {

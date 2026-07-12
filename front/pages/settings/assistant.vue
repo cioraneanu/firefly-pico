@@ -32,12 +32,12 @@
             <div class="llm-detail-row">
               <app-icon :icon="TablerIconConstants.external" :size="16" />
               <span class="llm-detail-label text-muted">{{ $t('settings.assistant.ramble_endpoint') }}</span>
-              <span class="llm-detail-value word-break-word">{{ appStore.llmEndpoint }}</span>
+              <span class="llm-detail-value cursor-pointer" :title="appStore.llmEndpoint" @click="showFullDetailValue(appStore.llmEndpoint)">{{ appStore.llmEndpoint }}</span>
             </div>
             <div class="llm-detail-row">
               <app-icon :icon="TablerIconConstants.magic" :size="16" />
               <span class="llm-detail-label text-muted">{{ $t('settings.assistant.ramble_model') }}</span>
-              <span class="llm-detail-value word-break-word">{{ appStore.llmModel }}</span>
+              <span class="llm-detail-value cursor-pointer" :title="appStore.llmModel" @click="showFullDetailValue(appStore.llmModel)">{{ appStore.llmModel }}</span>
             </div>
           </div>
 
@@ -57,6 +57,47 @@
               <div class="llm-env-chip">ASSISTANT_LLM_MODEL</div>
               <div class="llm-env-chip">ASSISTANT_LLM_API_KEY</div>
               <div class="llm-env-chip">ASSISTANT_LLM_CONTEXT</div>
+            </div>
+          </template>
+        </div>
+      </van-cell-group>
+
+      <van-cell-group inset>
+        <div class="p-3 display-flex flex-column gap-3">
+          <div class="flex-center-vertical gap-2">
+            <div class="ramble-header-icon flex-center">
+              <app-icon :icon="TablerIconConstants.microphone" :size="20" :stroke="1.6" />
+            </div>
+            <div class="flex-1-w">
+              <div class="font-600 text-size-14 line-height-normal">{{ $t('settings.assistant.transcription_status') }}</div>
+              <div class="text-size-12 text-muted">{{ $t('settings.assistant.transcription_status_subtitle') }}</div>
+            </div>
+          </div>
+          <div class="display-flex">
+            <div class="llm-status-pill" :class="appStore.transcriptionIsConfigured ? 'llm-status-pill-on' : 'llm-status-pill-off'">
+              <span class="llm-status-dot" />
+              {{ appStore.transcriptionIsConfigured ? $t('settings.assistant.llm_configured') : $t('settings.assistant.llm_not_configured') }}
+            </div>
+          </div>
+          <div v-if="appStore.transcriptionIsConfigured" class="llm-detail-panel">
+            <div class="llm-detail-row">
+              <app-icon :icon="TablerIconConstants.external" :size="16" />
+              <span class="llm-detail-label text-muted">{{ $t('settings.assistant.transcription_endpoint') }}</span>
+              <span class="llm-detail-value cursor-pointer" :title="appStore.transcriptionEndpoint" @click="showFullDetailValue(appStore.transcriptionEndpoint)">{{ appStore.transcriptionEndpoint }}</span>
+            </div>
+            <div class="llm-detail-row">
+              <app-icon :icon="TablerIconConstants.magic" :size="16" />
+              <span class="llm-detail-label text-muted">{{ $t('settings.assistant.transcription_model') }}</span>
+              <span class="llm-detail-value cursor-pointer" :title="appStore.transcriptionModel" @click="showFullDetailValue(appStore.transcriptionModel)">{{ appStore.transcriptionModel }}</span>
+            </div>
+          </div>
+
+          <template v-else>
+            <div class="text-size-13 text-muted">{{ $t('settings.assistant.llm_not_configured_info') }}</div>
+            <div class="display-flex flex-wrap gap-1">
+              <div class="llm-env-chip">ASSISTANT_TRANSCRIPTION_ENDPOINT</div>
+              <div class="llm-env-chip">ASSISTANT_TRANSCRIPTION_MODEL</div>
+              <div class="llm-env-chip">ASSISTANT_TRANSCRIPTION_API_KEY</div>
             </div>
           </template>
         </div>
@@ -103,6 +144,15 @@ const onSave = async () => {
   if (ResponseUtils.isSuccess(response)) {
     UIUtils.showToastSuccess(t('settings.settings_saved'))
   }
+}
+
+// Desktop gets the native title tooltip on hover; on mobile a tap shows the full value.
+const showFullDetailValue = (value) => {
+  if (!value) {
+    return
+  }
+
+  UIUtils.showToast(value, 'primary', 3000)
 }
 
 const testLlm = async () => {

@@ -1608,8 +1608,8 @@ body {
     justify-content: center;
     padding: 3px 6px;
     border: 0;
-    border-radius: 4px;
-    background: #ee0a24;
+    border-radius: 6px;
+    background: rgb(25, 118, 210);;
     color: #fff;
     font-size: 9px;
     font-weight: 500;
@@ -1788,6 +1788,9 @@ body {
     text-align: right;
     font-weight: 500;
     min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .llm-env-chip {
@@ -1797,22 +1800,6 @@ body {
     border-radius: 6px;
     background: var(--van-background-2-5);
     border: 1px solid var(--van-border-color);
-}
-
-.ramble-dialog-loading {
-    position: absolute;
-    inset: 0;
-    z-index: 3;
-    background: rgba(255, 255, 255, 0.62);
-}
-
-.ramble-dialog-loading-card {
-    min-width: 96px;
-    min-height: 80px;
-    padding: 20px;
-    border-radius: 10px;
-    background: var(--van-cell-background);
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
 /* The input card and preview list use overflow:hidden, which lets them shrink to fit

@@ -344,10 +344,6 @@
     box-shadow: rgba(0, 0, 0, 0.4) 0px 3px 8px;
 }
 
-.van-theme-dark .ramble-dialog-loading {
-    background: rgba(0, 0, 0, 0.55);
-}
-
 .van-theme-dark .ramble-error {
     background: rgba(236, 64, 122, 0.16);
     color: #ff8aa8;

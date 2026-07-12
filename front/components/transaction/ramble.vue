@@ -81,12 +81,6 @@
           </van-button>
         </div>
       </div>
-
-      <div v-if="isInterpreting" class="ramble-dialog-loading flex-center">
-        <div class="ramble-dialog-loading-card flex-center flex-direction-column">
-          <van-loading size="28" />
-        </div>
-      </div>
     </div>
   </app-popup>
 
@@ -96,6 +90,7 @@
 <script setup>
 import { cloneDeep } from 'lodash-es'
 import { computed, onMounted, ref, watch } from 'vue'
+import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import AssistantRepository from '~/repository/AssistantRepository.js'
 import RambleInputCard from '~/components/transaction/ramble/ramble-input-card.vue'
@@ -502,6 +497,7 @@ const createRambleTransactions = async () => {
     }
 
     closeRamblePopup()
+    await navigateTo(RouteConstants.ROUTE_TRANSACTION_LIST)
   } finally {
     if (sessionId === rambleSessionId.value) {
       currentCreateIndex.value = 0
