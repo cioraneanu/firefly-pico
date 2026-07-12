@@ -81,8 +81,12 @@ export function useList(prop) {
     totalPages.value = _.get(result, 'meta.pagination.total_pages', 0)
     listTotalCount.value = _.get(result, 'meta.pagination.total', 0)
 
-    // await new Promise(resolve => setTimeout(resolve, 3000))
-    isFinished.value = page.value >= totalPages.value
+    // A page with fewer items than the page size is the last one. Don't rely on the pagination
+    // meta alone => Firefly's search endpoint reports totals for all transactions, not just the matches.
+    isFinished.value = page.value >= totalPages.value || newList.length < pageSize.value
+    if (isFinished.value) {
+      listTotalCount.value = list.value.length
+    }
     isLoading.value = false
   }
 

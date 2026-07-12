@@ -15,10 +15,14 @@
     <div v-if="filtersDisplayList.length > 0" class="applied-filters-container">
       <div class="flex-center-vertical">
         <div class="title flex-1">{{ $t('filters.applied_filters') }}</div>
-        <div class="tag-filter cursor-pointer gap-1" @click="onComputeSearchTotal">
-          <app-icon :icon="TablerIconConstants.cash" size="16" :stroke="1.9" />
-          <span>{{ searchTotalLabel }}</span>
-        </div>
+        <van-button size="small" class="search-total-toggle" @click="onToggleSearchTotal">
+          <div class="flex-center-vertical gap-1">
+            <app-icon :icon="TablerIconConstants.cash" size="16" :stroke="1.9" />
+            <span>{{ $t('filters.total') }}</span>
+            <icon-chevron-up v-if="showSearchTotal" :size="14" :stroke="1.9" />
+            <icon-chevron-down v-else :size="14" :stroke="1.9" />
+          </div>
+        </van-button>
       </div>
 
       <div class="display-flex flex-wrap gap-1">
@@ -28,6 +32,14 @@
         <div class="cursor-pointer" style="z-index: 2" @click="onClearFilters">
           <icon-square-rounded-x :size="26" :stroke="1.5" />
         </div>
+      </div>
+
+      <div v-if="showSearchTotal" class="search-total-row">
+        <van-button size="small" class="search-total-compute-button" :loading="isComputingSearchTotal" @click="onComputeSearchTotal">
+          {{ $t('filters.compute_total') }}
+        </van-button>
+        <div class="search-total-amount flex-1">{{ searchTotalFormatted ?? '—' }}</div>
+        <currency-dropdown v-model="searchTotalCurrency" />
       </div>
     </div>
 
@@ -62,11 +74,12 @@ import { useToolbar } from '~/composables/useToolbar'
 import EmptyList from '~/components/general/empty-list.vue'
 import { ref, computed, watch, onMounted } from 'vue'
 import TransactionRepository from '~/repository/TransactionRepository'
-import { get, isEqual } from 'lodash-es'
+import { get, isEqual, maxBy } from 'lodash-es'
 import Currency from '~/models/Currency.js'
+import { convertCurrency } from '~/utils/CurrencyUtils.js'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
-import { IconSquareRoundedX } from '@tabler/icons-vue'
+import { IconChevronDown, IconChevronUp, IconSquareRoundedX } from '@tabler/icons-vue'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { filterBagHasValues, getFiltersFromURL, saveToUrl } from '~/utils/FilterUtils.js'
 import { useListFilters } from '~/composables/useListFilters.js'
@@ -134,12 +147,34 @@ const onClearFilters = () => {
 
 const { t } = useI18n()
 
+const currencyStore = useCurrencyStore()
+
+const showSearchTotal = ref(false)
 const searchTotal = ref(null)
+const searchTotalCurrency = ref(null)
 const isComputingSearchTotal = ref(false)
 
-const searchTotalLabel = computed(() => {
-  const totalFormatted = Currency.formatAmountWithSymbol(get(searchTotal.value, 'total_amount'), get(searchTotal.value, 'total_currency_id'))
-  return totalFormatted ? `${t('filters.total')}: ${totalFormatted}` : t('filters.compute_total')
+const onToggleSearchTotal = () => {
+  showSearchTotal.value = !showSearchTotal.value
+  if (showSearchTotal.value && !get(currencyStore.exchangeRates, 'rates')) {
+    currencyStore.fetchExchangeRate()
+  }
+}
+
+const searchTotalFormatted = computed(() => {
+  const totals = get(searchTotal.value, 'totals') ?? []
+  const targetCode = Currency.getCode(searchTotalCurrency.value)
+  if (totals.length === 0 || !targetCode) {
+    return null
+  }
+  const amount = totals.reduce((result, total) => {
+    const convertedAmount = total.currency_code === targetCode ? total.amount : convertCurrency(total.amount, total.currency_code, targetCode)
+    return result + convertedAmount
+  }, 0)
+  if (isNaN(amount)) {
+    return null
+  }
+  return Currency.formatAmountWithSymbol(amount, get(searchTotalCurrency.value, 'id'))
 })
 
 const onComputeSearchTotal = async () => {
@@ -156,7 +191,13 @@ const onComputeSearchTotal = async () => {
     return
   }
   searchTotal.value = get(response, 'data.data')
+
+  if (!searchTotalCurrency.value) {
+    const dominantTotal = maxBy(get(searchTotal.value, 'totals') ?? [], 'count')
+    searchTotalCurrency.value = currencyStore.currenciesList.find((currency) => Currency.getCode(currency) === dominantTotal?.currency_code) ?? currencyStore.defaultCurrency
+  }
 }
+
 const toolbar = useToolbar()
 toolbar.init({
   title: t('transaction.title_list'),

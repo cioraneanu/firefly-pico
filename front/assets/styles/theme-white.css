@@ -1089,6 +1089,30 @@ svg {
     justify-content: center;
 }
 
+.search-total-toggle {
+    border-radius: 8px !important;
+}
+
+.search-total-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--van-border-color);
+}
+
+.search-total-row .search-total-amount {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.search-total-compute-button {
+    background: transparent !important;
+    border: 1px solid var(--van-text-color) !important;
+    border-radius: 8px !important;
+}
+
 .app-button-small {
     border: 1px solid var(--van-text-color-2);
     border-radius: 5px;
