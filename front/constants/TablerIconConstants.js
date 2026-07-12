@@ -59,6 +59,7 @@ export const icons = {
   magic: 'IconSparkles',
   microphone: 'IconMicrophone',
   stop: 'IconPlayerStop',
+  play: 'IconPlayerPlay',
   ramble: 'IconMessageCircleBolt',
 
   fieldIcon: 'IconFavicon',

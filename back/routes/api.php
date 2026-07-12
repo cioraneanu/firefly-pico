@@ -68,6 +68,7 @@ RouteUtils::makeCRUD("profiles", ProfileController::class);
 Route::post('assistant/rambles', [AssistantController::class, 'create']);
 Route::get('assistant/rambles/count', [AssistantController::class, 'getCount']);
 Route::get('assistant/rambles', [AssistantController::class, 'getAll']);
+Route::get('assistant/rambles/{id}/voice', [AssistantController::class, 'getRambleVoice'])->where('id', '[0-9]+');
 Route::delete('assistant/rambles', [AssistantController::class, 'deleteRambles']);
 Route::delete('assistant/rambles/{id}', [AssistantController::class, 'deleteRamble'])->where('id', '[0-9]+');
 Route::post('assistant/interpret-transactions', [AssistantController::class, 'interpretTransactions']);

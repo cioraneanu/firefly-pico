@@ -49,6 +49,19 @@
             <div class="text-size-13 word-break-word">{{ savedRamble.text }}</div>
             <div class="text-size-11 text-muted mt-1">{{ formatCreatedAt(savedRamble.created_at) }}</div>
           </div>
+          <van-button
+            v-if="savedRamble.has_voice"
+            round
+            size="small"
+            plain
+            class="cursor-pointer ramble-icon-button"
+            :disabled="isDisabled"
+            :loading="loadingVoiceRambleId === savedRamble.id"
+            :title="playingVoiceRambleId === savedRamble.id ? $t('transaction.assistant_ramble_stop_playback') : $t('transaction.assistant_ramble_play')"
+            @click="toggleSavedRambleVoice(savedRamble)"
+          >
+            <app-icon :icon="playingVoiceRambleId === savedRamble.id ? TablerIconConstants.stop : TablerIconConstants.play" :size="15" />
+          </van-button>
           <van-button round size="small" plain type="danger" class="cursor-pointer ramble-icon-button" :disabled="isDisabled" :title="$t('delete')" @click="emit('deleteRamble', savedRamble)">
             <van-icon name="delete-o" size="15" />
           </van-button>
@@ -84,6 +97,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import * as LanguageConstants from '~/constants/LanguageConstants.js'
 import SpeechLanguageDropdown from '~/components/select/speech-language-dropdown.vue'
 import { useSpeechRecognition } from '~/composables/useSpeechRecognition.js'
+import AssistantRepository from '~/repository/AssistantRepository.js'
 import DateUtils from '~/utils/DateUtils.js'
 
 const props = defineProps({
@@ -163,6 +177,53 @@ const { startRecording, stopRecording, isRecording } = useSpeechRecognition({
 
 const canInterpret = computed(() => !!rambleText.value.trim() || props.savedRambles.length > 0)
 const formatCreatedAt = (createdAt) => (createdAt ? DateUtils.dateToUIWithTime(new Date(createdAt)) : '')
+
+const assistantRepository = new AssistantRepository()
+const playingVoiceRambleId = ref(null)
+const loadingVoiceRambleId = ref(null)
+let voiceAudio = null
+let voiceObjectUrl = null
+
+const stopSavedRambleVoice = () => {
+  voiceAudio?.pause()
+  voiceAudio = null
+  if (voiceObjectUrl) {
+    URL.revokeObjectURL(voiceObjectUrl)
+    voiceObjectUrl = null
+  }
+  playingVoiceRambleId.value = null
+}
+
+const toggleSavedRambleVoice = async (savedRamble) => {
+  if (playingVoiceRambleId.value === savedRamble.id) {
+    stopSavedRambleVoice()
+    return
+  }
+
+  stopSavedRambleVoice()
+  loadingVoiceRambleId.value = savedRamble.id
+
+  try {
+    const voiceBlob = await assistantRepository.getSavedRambleVoice(savedRamble.id)
+    if (loadingVoiceRambleId.value !== savedRamble.id || !voiceBlob) {
+      return
+    }
+
+    voiceObjectUrl = URL.createObjectURL(voiceBlob)
+    voiceAudio = new Audio(voiceObjectUrl)
+    voiceAudio.onended = stopSavedRambleVoice
+    playingVoiceRambleId.value = savedRamble.id
+    await voiceAudio.play()
+  } catch {
+    stopSavedRambleVoice()
+  } finally {
+    if (loadingVoiceRambleId.value === savedRamble.id) {
+      loadingVoiceRambleId.value = null
+    }
+  }
+}
+
+onBeforeUnmount(stopSavedRambleVoice)
 
 const toggleRecording = () => {
   if (props.isDisabled) {

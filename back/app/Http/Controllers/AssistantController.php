@@ -6,9 +6,11 @@ use App\Authorizations\BaseAuthorization;
 use App\Http\Controllers\Base\BaseController;
 use App\Models\AssistantRamble;
 use App\Services\AssistantLlmConfigService;
+use App\Services\AssistantTranscriptionService;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 
 class AssistantController extends BaseController
 {
@@ -18,6 +20,7 @@ class AssistantController extends BaseController
     {
         BaseAuthorization::checkUser();
         $list = AssistantRamble::query()->allowed()->orderBy('created_at')->get();
+        app(AssistantTranscriptionService::class)->transcribePending($list);
         return $this->respond(['data' => $list,]);
     }
 
@@ -32,25 +35,46 @@ class AssistantController extends BaseController
     public function create(Request $request)
     {
         BaseAuthorization::checkUser();
-        $text = $request->get('text');
+        $request->validate([
+            'voice' => ['nullable', 'file', 'mimes:mp3,mpga,wav,m4a,mp4,aac,ogg,oga,opus,webm,flac', 'max:25600'],
+        ]);
+
+        $text = trim((string)$request->get('text'));
         if (!$text && str_contains((string)$request->header('Content-Type'), 'text/plain')) {
             $text = trim($request->getContent());
         }
 
-        if (!$text) {
+        $voiceFile = $request->file('voice');
+        if (!$text && !$voiceFile) {
             return $this->setStatusCode(self::HTTP_CODE_UNPROCESSABLE_ENTITY)->respond([
-                'message' => 'Ramble text is required.',
+                'message' => 'Ramble text or voice recording is required.',
             ]);
         }
 
         $ramble = AssistantRamble::create([
-            'text' => $text,
+            'text' => $text ?: null,
+            'voice_path' => $voiceFile ? $voiceFile->store('assistant-rambles', 'local') : null,
             'user_id' => getUserId()
         ]);
 
         return $this->respond([
             'data' => $ramble,
         ]);
+    }
+
+    public function getRambleVoice(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        $ramble = AssistantRamble::query()->allowed()->findOrFail($request->id);
+
+        $disk = Storage::disk('local');
+        if (!$ramble->voice_path || !$disk->exists($ramble->voice_path)) {
+            return $this->setStatusCode(self::HTTP_CODE_NOT_FOUND)->respond([
+                'message' => 'This ramble has no voice recording.',
+            ]);
+        }
+
+        return $disk->response($ramble->voice_path);
     }
 
     public function deleteRamble(Request $request)
@@ -72,10 +96,17 @@ class AssistantController extends BaseController
             'ids.*' => ['integer'],
         ]);
 
-        $deleted = AssistantRamble::query()
+        // Delete through the models (not a bulk query) so the deleted event
+        // fires and each ramble's voice file is removed from disk.
+        $rambles = AssistantRamble::query()
             ->allowed()
             ->whereIn('id', $request->input('ids'))
-            ->delete();
+            ->get();
+
+        $deleted = 0;
+        foreach ($rambles as $ramble) {
+            $deleted += $ramble->delete() ? 1 : 0;
+        }
 
         return $this->respond([
             'deleted' => $deleted,

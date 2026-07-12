@@ -85,6 +85,8 @@
     "assistant_ramble_placeholder": "Say or edit transactions here...",
     "assistant_ramble_input_hint": "Type or dictate your transactions",
     "assistant_ramble_listening": "Listening...",
+    "assistant_ramble_play": "Play recording",
+    "assistant_ramble_stop_playback": "Stop playback",
     "assistant_ramble_interpret": "Interpret",
     "assistant_ramble_preview": "Preview",
     "assistant_ramble_create": "Create {count}",

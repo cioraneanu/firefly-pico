@@ -4,7 +4,9 @@ namespace Tests\Feature;
 
 use App\Models\AssistantRamble;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 class AssistantRambleTest extends TestCase
@@ -16,13 +18,26 @@ class AssistantRambleTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Storage::fake('local');
         Http::fake(function ($request) {
+            if (str_contains($request->url(), 'audio/transcriptions')) {
+                return Http::response(['text' => 'voice transcription']);
+            }
+
             return match ($request->header('Authorization')[0] ?? $request->header('authorization')[0] ?? '') {
                 'Bearer test-token' => Http::response(['data' => ['id' => '1']]),
                 'Bearer other-token' => Http::response(['data' => ['id' => '2']]),
                 default => Http::response(null, 401),
             };
         });
+    }
+
+    private function createVoiceRamble($userId = '1', $text = null)
+    {
+        $path = 'assistant-rambles/' . uniqid() . '.m4a';
+        Storage::disk('local')->put($path, 'fake-audio');
+
+        return AssistantRamble::create(['text' => $text, 'voice_path' => $path, 'user_id' => $userId]);
     }
 
     private function headers($token = null)
@@ -55,6 +70,90 @@ class AssistantRambleTest extends TestCase
 
         $response->assertStatus(422);
         $this->assertDatabaseCount('assistant_rambles', 0);
+    }
+
+    public function test_create_ramble_with_voice_upload()
+    {
+        $file = UploadedFile::fake()->create('voice.m4a', 10, 'audio/mp4');
+
+        $response = $this->post('api/assistant/rambles', ['voice' => $file], $this->headers());
+
+        $response->assertOk()->assertJsonPath('data.has_voice', true);
+        $ramble = AssistantRamble::first();
+        $this->assertNotNull($ramble->voice_path);
+        $this->assertNull($ramble->text);
+        Storage::disk('local')->assertExists($ramble->voice_path);
+    }
+
+    public function test_create_ramble_with_non_audio_voice_fails()
+    {
+        $file = UploadedFile::fake()->create('voice.txt', 10, 'text/plain');
+
+        $this->post('api/assistant/rambles', ['voice' => $file], ['Accept' => 'application/json'] + $this->headers())->assertStatus(422);
+        $this->assertDatabaseCount('assistant_rambles', 0);
+    }
+
+    public function test_get_rambles_transcribes_voice_ramble_only_once()
+    {
+        config(['services.assistant_transcription.api_key' => 'transcription-key']);
+        $this->createVoiceRamble();
+
+        $this->getJson('api/assistant/rambles', $this->headers())
+            ->assertOk()
+            ->assertJsonPath('data.0.text', 'voice transcription')
+            ->assertJsonPath('data.0.is_transcribed', true);
+
+        $this->getJson('api/assistant/rambles', $this->headers())->assertOk();
+
+        $transcriptionRequests = Http::recorded(fn($request) => str_contains($request->url(), 'audio/transcriptions'));
+        $this->assertCount(1, $transcriptionRequests);
+    }
+
+    public function test_get_rambles_appends_transcription_to_existing_text()
+    {
+        config(['services.assistant_transcription.api_key' => 'transcription-key']);
+        $this->createVoiceRamble('1', 'typed text');
+
+        $this->getJson('api/assistant/rambles', $this->headers())
+            ->assertOk()
+            ->assertJsonPath('data.0.text', "typed text\nvoice transcription");
+    }
+
+    public function test_get_rambles_skips_transcription_when_not_configured()
+    {
+        $this->createVoiceRamble();
+
+        $this->getJson('api/assistant/rambles', $this->headers())
+            ->assertOk()
+            ->assertJsonPath('data.0.is_transcribed', false);
+
+        $transcriptionRequests = Http::recorded(fn($request) => str_contains($request->url(), 'audio/transcriptions'));
+        $this->assertCount(0, $transcriptionRequests);
+    }
+
+    public function test_get_ramble_voice_streams_file_and_is_scoped_to_user()
+    {
+        $mine = $this->createVoiceRamble('1');
+        $other = $this->createVoiceRamble('2');
+
+        $this->get("api/assistant/rambles/{$mine->id}/voice", $this->headers())->assertOk();
+        $this->get("api/assistant/rambles/{$other->id}/voice", $this->headers())->assertNotFound();
+    }
+
+    public function test_delete_ramble_deletes_voice_file()
+    {
+        $ramble = $this->createVoiceRamble();
+
+        $this->deleteJson("api/assistant/rambles/{$ramble->id}", [], $this->headers())->assertOk();
+        Storage::disk('local')->assertMissing($ramble->voice_path);
+    }
+
+    public function test_delete_rambles_by_ids_deletes_voice_files()
+    {
+        $ramble = $this->createVoiceRamble();
+
+        $this->deleteJson('api/assistant/rambles', ['ids' => [$ramble->id]], $this->headers())->assertOk()->assertJson(['deleted' => 1]);
+        Storage::disk('local')->assertMissing($ramble->voice_path);
     }
 
     public function test_create_ramble_without_valid_token_fails()
