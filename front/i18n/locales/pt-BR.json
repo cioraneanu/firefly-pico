@@ -379,7 +379,10 @@
     "title_edit": "Editar tag",
     "parent_tag": "Tag pai",
     "mark_as_todo": "Marcar como 'a fazer'",
-    "end_date": "Data de término"
+    "end_date": "Data de término",
+    "total": "Total",
+    "compute_total": "Calcular total",
+    "total_success": "Total da tag atualizado"
   },
   "category_page": {
     "title_add": "Adicionar categoria",

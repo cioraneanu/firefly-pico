@@ -379,7 +379,10 @@
     "title_edit": "Modifica tag",
     "parent_tag": "Tag padre",
     "mark_as_todo": "Contrassegna come da fare",
-    "end_date": "Data di fine"
+    "end_date": "Data di fine",
+    "total": "Totale",
+    "compute_total": "Calcola totale",
+    "total_success": "Totale del tag aggiornato"
   },
   "category_page": {
     "title_add": "Aggiungi categoria",

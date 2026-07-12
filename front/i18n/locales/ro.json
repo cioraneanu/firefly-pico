@@ -379,7 +379,10 @@
     "title_edit": "Editează etichetă",
     "parent_tag": "Etichetă părinte",
     "mark_as_todo": "Marchează ca 'de făcut'",
-    "end_date": "Data de sfârşit"
+    "end_date": "Data de sfârşit",
+    "total": "Total",
+    "compute_total": "Calculează totalul",
+    "total_success": "Totalul etichetei a fost actualizat"
   },
   "category_page": {
     "title_add": "Adaugă categorie",

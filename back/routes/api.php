@@ -45,6 +45,7 @@ RouteUtils::makeCRUD("budgets", BudgetController::class);
 RouteUtils::makeCRUD("piggy-banks", PiggyBankController::class);
 RouteUtils::makeCRUD("recurrences", RecurrenceController::class);
 RouteUtils::makeCRUD("tags", TagController::class);
+Route::post("tags/{id}/total", [TagController::class, 'computeTotal'])->where('id', '[0-9]+');
 
 // RouteUtils::makeCRUD("currencies", CurrencyController::class);
 

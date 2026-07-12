@@ -380,7 +380,10 @@
     "title_edit": "Tag bearbeiten",
     "parent_tag": "Parent Tag",
     "mark_as_todo": "Als To-Do markieren",
-    "end_date": "End-Datum"
+    "end_date": "End-Datum",
+    "total": "Summe",
+    "compute_total": "Summe berechnen",
+    "total_success": "Tag-Summe aktualisiert"
   },
   "category_page": {
     "title_add": "Kategorie hinzufügen",

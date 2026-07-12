@@ -379,7 +379,10 @@
     "title_edit": "Modifier une étiquette",
     "parent_tag": "Étiquette parente",
     "mark_as_todo": "Marquer comme à faire",
-    "end_date": "Date de fin"
+    "end_date": "Date de fin",
+    "total": "Total",
+    "compute_total": "Calculer le total",
+    "total_success": "Total de l’étiquette mis à jour"
   },
   "category_page": {
     "title_add": "Ajouter une catégorie",

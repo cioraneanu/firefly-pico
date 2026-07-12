@@ -1,6 +1,7 @@
 import BaseModel from '~/models/BaseModel'
 import TagRepository from '~/repository/TagRepository'
 import TagTransformer from '~/transformers/TagTransformer'
+import Currency from '~/models/Currency.js'
 import { get } from 'lodash-es'
 import { ellipsizeText } from '~/utils/Utils.js'
 
@@ -48,6 +49,18 @@ export default class Tag extends BaseModel {
 
   static getDisplayNameEllipsized(tag, ellipsizeLength = 100) {
     return ellipsizeText(this.getDisplayName(tag), ellipsizeLength)
+  }
+
+  static getTotalFormatted(tag) {
+    const amount = get(tag, 'attributes.total_amount')
+    if (amount === null || amount === undefined) {
+      return null
+    }
+    const currency = useCurrencyStore().currencyDictionary[get(tag, 'attributes.total_currency_id')]
+    const decimals = Currency.getDecimalPlaces(currency) ?? 2
+    const formattedAmount = parseFloat(amount).toFixed(decimals)
+    const symbol = Currency.getSymbol(currency)
+    return symbol ? `${formattedAmount} ${symbol}` : formattedAmount
   }
 
   static getTagWithParents = (tag) => {

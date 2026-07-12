@@ -361,7 +361,10 @@
     "title_edit": "编辑标签",
     "parent_tag": "父标签",
     "mark_as_todo": "标记为待办",
-    "end_date": "结束日期"
+    "end_date": "结束日期",
+    "total": "总计",
+    "compute_total": "计算总计",
+    "total_success": "标签总计已更新"
   },
   "category_page": {
     "title_add": "添加类别",

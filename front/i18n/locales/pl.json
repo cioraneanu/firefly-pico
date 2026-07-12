@@ -379,7 +379,10 @@
     "title_edit": "Edytuj tag",
     "parent_tag": "Tag nadrzędny",
     "mark_as_todo": "Oznacz jako to-do",
-    "end_date": "Data zakończenia"
+    "end_date": "Data zakończenia",
+    "total": "Suma",
+    "compute_total": "Oblicz sumę",
+    "total_success": "Suma tagu zaktualizowana"
   },
   "category_page": {
     "title_add": "Dodaj kategorię",

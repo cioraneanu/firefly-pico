@@ -379,7 +379,10 @@
     "title_edit": "Editar etiqueta",
     "parent_tag": "Etiqueta padre",
     "mark_as_todo": "Marcar como pendiente",
-    "end_date": "Fecha de fin"
+    "end_date": "Fecha de fin",
+    "total": "Total",
+    "compute_total": "Calcular total",
+    "total_success": "Total de la etiqueta actualizado"
   },
   "category_page": {
     "title_add": "Agregar categoría",
