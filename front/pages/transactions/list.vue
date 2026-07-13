@@ -16,10 +16,7 @@
       <div class="flex-center-vertical">
         <div class="title flex-1">{{ $t('filters.applied_filters') }}</div>
         <van-button size="small" class="search-total-toggle" @click="onToggleSearchTotal">
-          <div class="flex-center-vertical gap-1">
-            <icon-chevron-up v-if="showSearchTotal" :size="14" :stroke="1.9" />
-            <icon-chevron-down v-else :size="14" :stroke="1.9" />
-          </div>
+          <icon-settings :size="14" :stroke="1.9" />
         </van-button>
       </div>
 
@@ -33,10 +30,11 @@
       </div>
 
       <div v-if="showSearchTotal" class="search-total-row">
-        <van-button size="small" class="search-total-compute-button" :loading="isComputingSearchTotal" @click="onComputeSearchTotal">
+        <van-button size="mini" class="search-total-compute-button" :loading="isComputingSearchTotal" @click="onComputeSearchTotal">
           {{ $t('filters.compute_total') }}
         </van-button>
-        <div class="search-total-amount flex-1">{{ searchTotalFormatted ?? '—' }}</div>
+        <div class="flex-1"/>
+        <div class="search-total-amount">{{ searchTotalFormatted }}</div>
         <currency-dropdown v-model="searchTotalCurrency" />
       </div>
     </div>
@@ -77,7 +75,7 @@ import Currency from '~/models/Currency.js'
 import { convertCurrency } from '~/utils/CurrencyUtils.js'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
-import { IconChevronDown, IconChevronUp, IconSquareRoundedX } from '@tabler/icons-vue'
+import { IconChevronDown, IconChevronUp, IconSquareRoundedX, IconSettings } from '@tabler/icons-vue'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { filterBagHasValues, getFiltersFromURL, saveToUrl } from '~/utils/FilterUtils.js'
 import { useListFilters } from '~/composables/useListFilters.js'
