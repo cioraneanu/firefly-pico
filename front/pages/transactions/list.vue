@@ -15,6 +15,9 @@
     <div v-if="filtersDisplayList.length > 0" class="applied-filters-container">
       <div class="flex-center-vertical">
         <div class="title flex-1">{{ $t('filters.applied_filters') }}</div>
+        <van-button size="small" class="search-total-toggle" @click="onToggleSearchTotal">
+          <icon-settings :size="14" :stroke="1.9" />
+        </van-button>
       </div>
 
       <div class="display-flex flex-wrap gap-1">
@@ -24,6 +27,15 @@
         <div class="cursor-pointer" style="z-index: 2" @click="onClearFilters">
           <icon-square-rounded-x :size="26" :stroke="1.5" />
         </div>
+      </div>
+
+      <div v-if="showSearchTotal" class="search-total-row">
+        <van-button size="mini" class="search-total-compute-button" :loading="isComputingSearchTotal" @click="onComputeSearchTotal">
+          {{ $t('filters.compute_total') }}
+        </van-button>
+        <div class="flex-1"/>
+        <div class="search-total-amount">{{ searchTotalFormatted }}</div>
+        <currency-dropdown v-model="searchTotalCurrency" />
       </div>
     </div>
 
@@ -58,10 +70,12 @@ import { useToolbar } from '~/composables/useToolbar'
 import EmptyList from '~/components/general/empty-list.vue'
 import { ref, computed, watch, onMounted } from 'vue'
 import TransactionRepository from '~/repository/TransactionRepository'
-import { isEqual } from 'lodash-es'
+import { get, isEqual, maxBy } from 'lodash-es'
+import Currency from '~/models/Currency.js'
+import { convertCurrency } from '~/utils/CurrencyUtils.js'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
-import { IconSquareRoundedX } from '@tabler/icons-vue'
+import { IconChevronDown, IconChevronUp, IconSquareRoundedX, IconSettings } from '@tabler/icons-vue'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { filterBagHasValues, getFiltersFromURL, saveToUrl } from '~/utils/FilterUtils.js'
 import { useListFilters } from '~/composables/useListFilters.js'
@@ -112,6 +126,7 @@ watch(filtersBackendList, (newValue, oldValue) => {
   if (isEqual(newValue, oldValue)) {
     return
   }
+  searchTotal.value = null
   onRefresh()
 })
 
@@ -127,6 +142,58 @@ const onClearFilters = () => {
 }
 
 const { t } = useI18n()
+
+const currencyStore = useCurrencyStore()
+
+const showSearchTotal = ref(false)
+const searchTotal = ref(null)
+const searchTotalCurrency = ref(null)
+const isComputingSearchTotal = ref(false)
+
+const onToggleSearchTotal = () => {
+  showSearchTotal.value = !showSearchTotal.value
+  if (showSearchTotal.value && !get(currencyStore.exchangeRates, 'rates')) {
+    currencyStore.fetchExchangeRate()
+  }
+}
+
+const searchTotalFormatted = computed(() => {
+  const totals = get(searchTotal.value, 'totals') ?? []
+  const targetCode = Currency.getCode(searchTotalCurrency.value)
+  if (totals.length === 0 || !targetCode) {
+    return null
+  }
+  const amount = totals.reduce((result, total) => {
+    const convertedAmount = total.currency_code === targetCode ? total.amount : convertCurrency(total.amount, total.currency_code, targetCode)
+    return result + convertedAmount
+  }, 0)
+  if (isNaN(amount)) {
+    return null
+  }
+  return Currency.formatAmountWithSymbol(amount, get(searchTotalCurrency.value, 'id'))
+})
+
+const onComputeSearchTotal = async () => {
+  if (isComputingSearchTotal.value) {
+    return
+  }
+  isComputingSearchTotal.value = true
+  const searchFilters = [{ field: 'query', value: filtersBackendList.value.join(' ') }]
+  const response = await transactionRepository.searchTransactionsTotal({ filters: searchFilters })
+  isComputingSearchTotal.value = false
+
+  // On error the axios interceptor already shows the backend message in a toast
+  if (!ResponseUtils.isSuccess(response)) {
+    return
+  }
+  searchTotal.value = get(response, 'data.data')
+
+  if (!searchTotalCurrency.value) {
+    const dominantTotal = maxBy(get(searchTotal.value, 'totals') ?? [], 'count')
+    searchTotalCurrency.value = currencyStore.currenciesList.find((currency) => Currency.getCode(currency) === dominantTotal?.currency_code) ?? currencyStore.defaultCurrency
+  }
+}
+
 const toolbar = useToolbar()
 toolbar.init({
   title: t('transaction.title_list'),

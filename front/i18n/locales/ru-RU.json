@@ -74,7 +74,9 @@
     "clear": "Очистить",
     "applied_filters": "Примененные фильтры",
     "apply_filters": "Применить фильтры",
-    "transaction_filters": "Фильтры транзакций"
+    "transaction_filters": "Фильтры транзакций",
+    "total": "Итого",
+    "compute_total": "Рассчитать итог"
   },
   "transaction": {
     "title_list": "Список транзакций",

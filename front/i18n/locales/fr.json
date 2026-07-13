@@ -74,7 +74,9 @@
     "clear": "Effacer",
     "applied_filters": "Filtres appliqués",
     "apply_filters": "Appliquer les filtres",
-    "transaction_filters": "Filtres sur les transactions"
+    "transaction_filters": "Filtres sur les transactions",
+    "total": "Total",
+    "compute_total": "Calculer le total"
   },
   "transaction": {
     "title_list": "Transactions",

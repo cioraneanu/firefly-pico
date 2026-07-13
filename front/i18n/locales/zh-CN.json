@@ -67,7 +67,9 @@
     "clear": "清除",
     "applied_filters": "已应用的过滤器",
     "apply_filters": "应用过滤器",
-    "transaction_filters": "交易过滤器"
+    "transaction_filters": "交易过滤器",
+    "total": "总计",
+    "compute_total": "计算总计"
   },
   "transaction": {
     "title_list": "交易列表",

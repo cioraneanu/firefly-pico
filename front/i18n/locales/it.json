@@ -74,7 +74,9 @@
     "clear": "Pulisci",
     "applied_filters": "Filtri applicati",
     "apply_filters": "Applica filtri",
-    "transaction_filters": "Filtri transazioni"
+    "transaction_filters": "Filtri transazioni",
+    "total": "Totale",
+    "compute_total": "Calcola totale"
   },
   "transaction": {
     "title_list": "Elenco transazioni",

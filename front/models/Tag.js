@@ -52,15 +52,7 @@ export default class Tag extends BaseModel {
   }
 
   static getTotalFormatted(tag) {
-    const amount = get(tag, 'attributes.total_amount')
-    if (amount === null || amount === undefined) {
-      return null
-    }
-    const currency = useCurrencyStore().currencyDictionary[get(tag, 'attributes.total_currency_id')]
-    const decimals = Currency.getDecimalPlaces(currency) ?? 2
-    const formattedAmount = parseFloat(amount).toFixed(decimals)
-    const symbol = Currency.getSymbol(currency)
-    return symbol ? `${formattedAmount} ${symbol}` : formattedAmount
+    return Currency.formatAmountWithSymbol(get(tag, 'attributes.total_amount'), get(tag, 'attributes.total_currency_id'))
   }
 
   static getTagWithParents = (tag) => {
@@ -78,5 +70,4 @@ export default class Tag extends BaseModel {
     }
     return result
   }
-
 }
