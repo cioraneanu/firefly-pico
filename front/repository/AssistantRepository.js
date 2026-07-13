@@ -15,9 +15,10 @@ const getInterpretationPrompt = () =>
     'Saved rambles include their original createdAt timestamp. Resolve their implicit dates relative to createdAt, not now.',
     'Use ISO-8601 for occurredAt when a date or relative time is stated. If only a date is stated, keep the current local time from now.',
     'Use ISO 4217 codes for currencyCode, for example EUR, USD, RON. Leave currencyCode null when the user did not state a currency.',
-    'Actively match every meaningful word of the input against the supplied context lists (tags, categories, templates, budgets, accounts). Matching is forgiving: ignore case, diacritics, word order, singular/plural, and other inflections, and accept close partial matches ("comand" matches "comandate"). Fill every field that has a match: a matching tag goes in tagNames, a matching category in categoryName, a matching template in templateName, and so on. The same word may match several lists at once; set all of the matching fields.',
+    'Match meaningful input words against the supplied context lists (tags, categories, templates, budgets, accounts). Lexical matching is forgiving: ignore case, diacritics, word order, singular/plural, and other inflections, and accept close partial matches ("comand" matches "comandate"). Fill each field that has a clear lexical match: a matching tag goes in tagNames, a matching category in categoryName, a matching template in templateName, and so on. The same explicit word may match several lists at once; set all of those matching fields.',
     'For terse inputs like "<word> <amount>", treat the word as the transaction subject: use it as the description and match it against the context lists to fill tagNames, categoryName, or templateName.',
-    'Do not invent names that are missing from the supplied context. When a word matches nothing there, attempt to figure out what the user did based on his lists (Example for text = "Bought an air conditionar", and you could match it to a tag named "home", or "electronics"). If you are not sure about your guess just leave non essential fields null. If the user explicitly says "tag food", put food in tagNames even without a context match.',
+    'Be conservative with semantic guesses. When there is no lexical match, set a supplied tag or category only when it is the single obvious real-world classification of the stated item or service. Prefer a direct, specific classification over broad labels such as necessities, shopping, or food. For example, an air conditioner clearly fits a supplied home tag better than necessities or food. If more than one candidate is plausible, the relationship is indirect, or confidence is not high, leave tagNames empty and categoryName null. Do not add both a child tag and its parent; the application adds tag ancestors automatically.',
+    'Do not invent names that are missing from the supplied context. If the user explicitly says "tag food", put food in tagNames even without a context match.',
     'Prefer type expense unless the user clearly describes income or a transfer.',
   ].join('\n')
 
@@ -119,7 +120,7 @@ export default class AssistantRepository extends BaseRepository {
     const requestData = {
       context: data.externalContext,
       payload: {
-        temperature: 0.1,
+        temperature: 0,
         stream: false,
         messages: [
           {
