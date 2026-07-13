@@ -17,7 +17,7 @@ const getInterpretationPrompt = () =>
     'Use ISO 4217 codes for currencyCode, for example EUR, USD, RON. Leave currencyCode null when the user did not state a currency.',
     'Actively match every meaningful word of the input against the supplied context lists (tags, categories, templates, budgets, accounts). Matching is forgiving: ignore case, diacritics, word order, singular/plural, and other inflections, and accept close partial matches ("comand" matches "comandate"). Fill every field that has a match: a matching tag goes in tagNames, a matching category in categoryName, a matching template in templateName, and so on. The same word may match several lists at once; set all of the matching fields.',
     'For terse inputs like "<word> <amount>", treat the word as the transaction subject: use it as the description and match it against the context lists to fill tagNames, categoryName, or templateName.',
-    'Do not invent names that are missing from the supplied context. When a word matches nothing there, leave those fields null and only use the word in the description. If the user explicitly says "tag food", put food in tagNames even without a context match.',
+    'Do not invent names that are missing from the supplied context. When a word matches nothing there, attempt to figure out what the user did based on his lists (Example for text = "Bought an air conditionar", and you could match it to a tag named "home", or "electronics"). If you are not sure about your guess just leave non essential fields null. If the user explicitly says "tag food", put food in tagNames even without a context match.',
     'Prefer type expense unless the user clearly describes income or a transfer.',
   ].join('\n')
 
