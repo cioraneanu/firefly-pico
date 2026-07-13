@@ -84,6 +84,12 @@ class AssistantTranscriptionService
             return '';
         }
 
+        // An empty file cannot be transcribed, and attach() drops empty contents which breaks the multipart request.
+        $contents = $disk->get($ramble->voice_path);
+        if (!$contents) {
+            return '';
+        }
+
         $request = Http::acceptJson()->connectTimeout(10)->timeout(120);
         if ($config['apiKey']) {
             $request = $request->withToken($config['apiKey']);
@@ -91,7 +97,7 @@ class AssistantTranscriptionService
 
         try {
             $response = $request
-                ->attach('file', $disk->get($ramble->voice_path), basename($ramble->voice_path))
+                ->attach('file', $contents, basename($ramble->voice_path))
                 ->post($config['endpoint'], [
                     'model' => $config['model'],
                     'response_format' => 'json',

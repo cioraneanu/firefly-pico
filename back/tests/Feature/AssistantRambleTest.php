@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Jobs\TranscribeAssistantRamble;
 use App\Models\AssistantRamble;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
@@ -83,6 +85,29 @@ class AssistantRambleTest extends TestCase
         $this->assertNotNull($ramble->voice_path);
         $this->assertNull($ramble->text);
         Storage::disk('local')->assertExists($ramble->voice_path);
+    }
+
+    public function test_create_ramble_with_voice_queues_transcription_job()
+    {
+        Queue::fake();
+        config(['queue.default' => 'redis']);
+        $file = UploadedFile::fake()->create('voice.m4a', 10, 'audio/mp4');
+
+        $this->post('api/assistant/rambles', ['voice' => $file], $this->headers())->assertOk();
+
+        Queue::assertPushed(TranscribeAssistantRamble::class);
+    }
+
+    public function test_create_ramble_with_voice_transcribes_after_response_on_sync_queue()
+    {
+        config(['services.assistant_transcription.api_key' => 'transcription-key']);
+        $file = UploadedFile::fake()->createWithContent('voice.m4a', 'fake-audio');
+
+        $this->post('api/assistant/rambles', ['voice' => $file], $this->headers())->assertOk();
+
+        $ramble = AssistantRamble::first();
+        $this->assertTrue($ramble->is_transcribed);
+        $this->assertSame('voice transcription', $ramble->text);
     }
 
     public function test_create_ramble_with_non_audio_voice_fails()

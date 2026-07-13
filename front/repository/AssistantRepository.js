@@ -9,14 +9,15 @@ const getInterpretationPrompt = () =>
     'The JSON object must have a transactions array.',
     'Each transaction must use this shape:',
     '{"amount": number|null, "currencyCode": string|null, "description": string, "tagNames": string[], "categoryName": string|null, "templateName": string|null, "budgetName": string|null, "sourceAccountName": string|null, "destinationAccountName": string|null, "type": "expense|income|transfer|null", "occurredAt": string|null, "notes": string|null}',
-    'description is required for every transaction and must never be null or empty. Keep it short (1-6 words). When the user does not state one, derive it from the merchant, place, category, tag, or template that best summarizes the transaction.',
+    'description is required for every transaction and must never be null or empty. It must be a short noun phrase (1-4 words) naming the merchant, place, item, or service, kept in the user\'s language. Strip verbs, actions, and filler words: "Am cumparat de la farmacie de 22 lei" gives description "farmacie", "bought some groceries at Lidl" gives "Lidl". Never include amounts or currencies. When the user does not state a subject, derive the description from the category, tag, or template that best summarizes the transaction.',
     'Split one utterance into multiple transactions when the user says "another", "and one", "plus", or otherwise describes more than one payment.',
     'Use the provided now and timezone to resolve relative dates and times such as yesterday, today, 30 minutes ago, or last Friday.',
     'Saved rambles include their original createdAt timestamp. Resolve their implicit dates relative to createdAt, not now.',
     'Use ISO-8601 for occurredAt when a date or relative time is stated. If only a date is stated, keep the current local time from now.',
     'Use ISO 4217 codes for currencyCode, for example EUR, USD, RON. Leave currencyCode null when the user did not state a currency.',
-    'Do not invent local resource names. Only set tagNames, categoryName, templateName, budgetName, sourceAccountName, or destinationAccountName when the user explicitly asks for them or the name is present in the supplied context.',
-    'If a user says "tag food", put food in tagNames. If they say "for pharmacy", use pharmacy as description unless it clearly matches a supplied tag, category, or template.',
+    'Actively match every meaningful word of the input against the supplied context lists (tags, categories, templates, budgets, accounts). Matching is forgiving: ignore case, diacritics, word order, singular/plural, and other inflections, and accept close partial matches ("comand" matches "comandate"). Fill every field that has a match: a matching tag goes in tagNames, a matching category in categoryName, a matching template in templateName, and so on. The same word may match several lists at once; set all of the matching fields.',
+    'For terse inputs like "<word> <amount>", treat the word as the transaction subject: use it as the description and match it against the context lists to fill tagNames, categoryName, or templateName.',
+    'Do not invent names that are missing from the supplied context. When a word matches nothing there, attempt to figure out what the user did based on his lists (Example for text = "Bought an air conditionar", and you could match it to a tag named "home", or "electronics"). If you are not sure about your guess just leave non essential fields null. If the user explicitly says "tag food", put food in tagNames even without a context match.',
     'Prefer type expense unless the user clearly describes income or a transfer.',
   ].join('\n')
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Authorizations\BaseAuthorization;
 use App\Http\Controllers\Base\BaseController;
+use App\Jobs\TranscribeAssistantRamble;
 use App\Models\AssistantRamble;
 use App\Services\AssistantLlmConfigService;
 use App\Services\AssistantTranscriptionService;
@@ -56,6 +57,13 @@ class AssistantController extends BaseController
             'voice_path' => $voiceFile ? $voiceFile->store('assistant-rambles', 'local') : null,
             'user_id' => getUserId()
         ]);
+
+        if ($ramble->voice_path) {
+            // Without a real queue, transcribe in-process after the response so saving stays fast.
+            config('queue.default') === 'sync'
+                ? TranscribeAssistantRamble::dispatchAfterResponse($ramble)
+                : TranscribeAssistantRamble::dispatch($ramble);
+        }
 
         return $this->respond([
             'data' => $ramble,

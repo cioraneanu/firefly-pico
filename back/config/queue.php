@@ -66,7 +66,8 @@ return [
             'driver' => 'redis',
             'connection' => 'default',
             'queue' => env('REDIS_QUEUE', 'default'),
-            'retry_after' => 90,
+            // Must stay above the Horizon worker timeout (see config/horizon.php) or long transcriptions run twice.
+            'retry_after' => 300,
             'block_for' => null,
             'after_commit' => false,
         ],
