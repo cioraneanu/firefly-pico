@@ -12,7 +12,7 @@
       <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
         <app-list-search v-if="isSearchVisible && list.length > 0" v-model="search">
           <template #right>
-            <van-popover v-model:show="showFilterPopover" placement="bottom-end">
+            <van-popover v-model:show="showFilterPopover" placement="bottom-end" overlay :overlay-style="{ background: 'transparent' }">
               <div class="display-flex flex-column gap-1 p-10">
                 <div class="text-size-12 font-weight-600 text-muted">{{ $t('transaction_type') }}</div>
                 <app-tabs v-model="filterTransactionType" :items="transactionTypeTabs" />
