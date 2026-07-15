@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\GeneralException;
 use App\Models\AssistantRamble;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Support\Facades\Http;
@@ -34,11 +35,11 @@ class AssistantTranscriptionService
         }
     }
 
-    public function testConfiguration(): array
+    public function testConfiguration(): void
     {
         $config = $this->configService->getConfig();
         if (!$config['isConfigured']) {
-            return ['successful' => false, 'status' => 422, 'message' => 'Assistant transcription is not configured.'];
+            throw new GeneralException('Assistant transcription is not configured.', 422);
         }
 
         $sampleRate = 8000;
@@ -55,14 +56,15 @@ class AssistantTranscriptionService
                 'response_format' => 'json',
             ]);
         } catch (ConnectionException $exception) {
-            return ['successful' => false, 'status' => 502, 'message' => $exception->getMessage() ?: 'Assistant transcription request failed.'];
+            throw new GeneralException($exception->getMessage() ?: 'Assistant transcription request failed.', 502);
         }
 
-        return [
-            'successful' => $response->successful(),
-            'status' => $response->successful() ? 200 : $response->status(),
-            'message' => fget($response->json(), 'error.message') ?? fget($response->json(), 'message') ?? 'Assistant transcription request failed.',
-        ];
+        if (!$response->successful()) {
+            throw new GeneralException(
+                fget($response->json(), 'error.message') ?? fget($response->json(), 'message') ?? 'Assistant transcription request failed.',
+                $response->status()
+            );
+        }
     }
 
     private function transcribe(AssistantRamble $ramble, array $config): void
