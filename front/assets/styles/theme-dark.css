@@ -374,7 +374,7 @@
 }
 
 .van-theme-dark .transaction-desktop-row {
-    border-color: #3f3f46;
+    border-color: #2e2e33;
     color: #f1f5f9;
 }
 
@@ -386,6 +386,10 @@
 .van-theme-dark .transaction-desktop-chip {
     border-color: #444;
     color: #cbd5e1;
+}
+
+.van-theme-dark .transaction-desktop-account {
+    color: #a1a1aa;
 }
 
 .van-theme-dark .budget-icon {

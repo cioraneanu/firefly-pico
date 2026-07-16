@@ -1868,72 +1868,99 @@ body {
 
 /* ------------------------ Desktop transactions ------------------------ */
 
+/* Columns: type | date | description | amount | accounts | categories | tags | budget.
+   The important fields (date, description, amount) stay on the left so they remain
+   visible at any width; categorisation columns drop off as the container narrows. */
 .transaction-desktop-row {
     display: grid;
-    grid-template-columns: 28px 96px minmax(210px, 2fr) minmax(150px, 1.2fr) minmax(140px, 1fr) minmax(120px, 0.9fr) minmax(120px, 0.9fr) minmax(120px, auto);
+    grid-template-columns: 3px 84px minmax(200px, 1.9fr) 110px minmax(150px, 1.2fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(110px, 0.9fr);
     align-items: center;
     gap: 14px;
-    min-height: 68px;
-    padding: 10px 16px;
-    border-bottom: 1px solid #e2e8f0;
+    min-height: 46px;
+    padding: 5px 16px;
+    border-bottom: 1px solid #eef2f7;
     background: var(--van-cell-background);
     color: #0f172a;
-    transition: background-color 0.15s ease,
-    box-shadow 0.15s ease;
+    transition: background-color 0.12s ease;
 }
 
 .transaction-desktop-row:hover {
-    position: relative;
-    z-index: 1;
     background: #f8fafc;
-    box-shadow: inset 3px 0 0 #cbd5e1;
 }
 
-.transaction-desktop-row:last-child {
+.transaction-desktop-list .van-swipe-cell:last-child .transaction-desktop-row {
     border-bottom: 0;
 }
 
 .transaction-desktop-type-dot {
-    width: 5px;
-    height: 34px;
-    border-radius: 5px;
+    width: 3px;
+    height: 20px;
+    border-radius: 3px;
 }
 
-.transaction-desktop-date,
-.transaction-desktop-title,
+.transaction-desktop-date-value {
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.transaction-desktop-title {
+    font-size: 13px;
+    font-weight: 600;
+}
+
 .transaction-desktop-amount-value {
     font-size: 13px;
-}
-
-.transaction-desktop-title,
-.transaction-desktop-amount-value {
     font-weight: 650;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
 }
 
 .transaction-desktop-muted {
-    margin-top: 3px;
+    margin-top: 1px;
     color: #94a3b8;
     font-size: 11px;
+}
+
+.transaction-desktop-notes * {
+    display: inline;
+    margin: 0;
+}
+
+.transaction-desktop-accounts {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+
+.transaction-desktop-account {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #475569;
+    font-size: 12px;
+    line-height: 1.35;
 }
 
 .transaction-desktop-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 4px;
 }
 
 .transaction-desktop-chip {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
     max-width: 100%;
-    padding: 3px 7px;
+    padding: 2px 7px;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
     background: #f8fafc;
     color: #475569;
     font-size: 11px;
-    line-height: 1.25;
+    line-height: 1.35;
 }
 
 .transaction-desktop-chip-outline {
@@ -1949,4 +1976,36 @@ body {
 
 .transaction-desktop-amount {
     white-space: nowrap;
+}
+
+/* Progressively drop the categorisation columns when the list gets narrow,
+   keeping type, date, description, amount and accounts always visible. */
+@container transaction-list (max-width: 1080px) {
+    .transaction-desktop-row {
+        grid-template-columns: 3px 84px minmax(200px, 1.9fr) 110px minmax(150px, 1.2fr) minmax(130px, 1fr) minmax(130px, 1fr);
+    }
+
+    .transaction-desktop-budget {
+        display: none;
+    }
+}
+
+@container transaction-list (max-width: 920px) {
+    .transaction-desktop-row {
+        grid-template-columns: 3px 84px minmax(200px, 1.9fr) 110px minmax(150px, 1.2fr) minmax(130px, 1fr);
+    }
+
+    .transaction-desktop-tags {
+        display: none;
+    }
+}
+
+@container transaction-list (max-width: 780px) {
+    .transaction-desktop-row {
+        grid-template-columns: 3px 84px minmax(160px, 2fr) 110px minmax(130px, 1fr);
+    }
+
+    .transaction-desktop-categories {
+        display: none;
+    }
 }
