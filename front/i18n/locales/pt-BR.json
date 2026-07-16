@@ -109,6 +109,7 @@
     "assistant_tutorial_title": "Assistente de transações",
     "assistant_tutorial_body": "\n      <p>Crie transações facilmente digitando texto aqui (ou usando o ditado do seu telefone).</p>\n      <p>Formato esperado:<br> <b>[busca]&nbsp; [valor?]&nbsp; [descrição?]&nbsp; [a fazer?]</b></p>\n      <p>1. A <b>busca</b> procura no nome das suas tags, categorias e modelos de transação. Suporta inserir apenas parte do nome e até mesmo errar algumas letras.<br><code> elet => eletricidade</code></p>\n      <p>2. O <b>valor</b> suporta expressões matemáticas. Números separados por espaço são automaticamente somados.</p>\n      <p>3. A <b>descrição</b> é opcional. Use para sobrescrever o nome padrão da tag.</p>\n      <p>4. O <b>a fazer</b> facilita adicionar a \"tag de a fazer\" definida pelo usuário anexando uma string personalizada (padrão \"!!\"). Isso pode ser alterado em \"Configurações\"</p>\n      \n      <p><b>Exemplos</b><br>\n      \"eletricidade\" = tag<br>\n      \"natacao\" = modelo <br><br>\n      \n      <code>\n      eletricidade 23<br> \n      elet 12*2+33<br> \n      elet 12+2*3 descrição personalizada<br> \n      elet 25 !!<br>\n      natacao<br> \n    \n      </code>\n      </p>\n    ",
     "type": {
+      "all": "Todas",
       "expense": "Despesa",
       "income": "Receita",
       "transfer": "Transferência"

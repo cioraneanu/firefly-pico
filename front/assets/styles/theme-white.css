@@ -1581,6 +1581,10 @@ body {
     width: 100%;
 }
 
+.van-popover__content {
+    max-width: calc(100vw - 24px);
+}
+
 /* ---------------------------- Ramble ---------------------------- */
 
 .ramble-divider {
