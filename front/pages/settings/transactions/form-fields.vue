@@ -38,6 +38,7 @@ import RouteConstants from '~/constants/RouteConstants'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { transactionFormFieldList, transactionListHeroIconList } from '~/constants/TransactionConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/utils/SettingUtils.js'
+import { migrateTypeList } from '~/utils/MigrateUtils.js'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -78,8 +79,7 @@ const onClickIsVisible = (element) => {
 }
 
 const init = () => {
-  const isListOk = profileStore.transactionFormFieldsConfig.length === transactionFormFieldList.length
-  fieldsList.value = isListOk ? profileStore.transactionFormFieldsConfig : transactionFormFieldList
+  fieldsList.value = migrateTypeList(profileStore.transactionFormFieldsConfig, transactionFormFieldList)
 }
 
 const toolbar = useToolbar()

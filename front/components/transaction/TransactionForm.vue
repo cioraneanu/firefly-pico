@@ -72,6 +72,15 @@
         </div>
       </div>
 
+      <app-date
+        v-for="extraDateField in transactionExtraDateFieldList"
+        :key="extraDateField.code"
+        v-model="extraDates[extraDateField.code].value"
+        :label="$t(extraDateField.t)"
+        :icon="extraDateField.icon"
+        :style="getStyleForField(extraDateField)"
+      />
+
       <transaction-note-field v-model="notes" :style="getStyleForField(transactionFormField.notes)" />
 
       <budget-select v-if="profileStore.budgetsEnabled" v-model="budget" :style="getStyleForField(transactionFormField.budget)" />
@@ -92,7 +101,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants'
 import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
 import TransactionAttachmentsList from '~/components/transaction/transaction-attachements/transaction-attachments-list.vue'
 import TransactionNoteField from '~/components/transaction/transaction-note-field.vue'
-import { transactionFormField } from '~/constants/TransactionConstants.js'
+import { transactionFormField, transactionExtraDateFieldList } from '~/constants/TransactionConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
 import { useTransactionForm } from '~/composables/useTransactionForm.js'
 import { getGUID } from '~/utils/Utils.js'
@@ -122,6 +131,7 @@ const {
   amount,
   amountForeign,
   date,
+  extraDates,
   tags,
   description,
   notes,

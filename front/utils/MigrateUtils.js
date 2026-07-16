@@ -11,16 +11,20 @@ export function migrateType(value, list, compareKey = 'code') {
 }
 
 export function migrateTypeList(userList, targetList, compareKey = 'code') {
-  if (userList.length !== targetList.length) {
+  if (!Array.isArray(userList)) {
     return targetList
   }
+
+  // Keep the user's order and choices (like "isVisible"), drop items no longer in the target list
   let newList = userList
+    .filter((userItem) => targetList.some((targetItem) => get(targetItem, compareKey) === get(userItem, compareKey)))
     .map((userItem) => {
-      let defaultItem = targetList.find((targetItem) => targetItem.code === userItem.code)
+      let defaultItem = targetList.find((targetItem) => get(targetItem, compareKey) === get(userItem, compareKey))
       // We added new keys like "t" in the default item and we want to preserve user choice like "userItem.isVisible"
       return { ...defaultItem, ...userItem }
     })
-    .filter((item) => !!item)
 
-  return userList.length === targetList.length ? newList : targetList
+  // Append newly added items with their default settings
+  let missingItems = targetList.filter((targetItem) => !userList.some((userItem) => get(userItem, compareKey) === get(targetItem, compareKey)))
+  return [...newList, ...missingItems]
 }

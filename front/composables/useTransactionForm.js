@@ -5,7 +5,7 @@ import Category from '~/models/Category'
 import Tag from '~/models/Tag'
 import Currency from '~/models/Currency.js'
 import Transaction from '~/models/Transaction'
-import { transactionFormField } from '~/constants/TransactionConstants.js'
+import { transactionFormField, transactionExtraDateFieldList } from '~/constants/TransactionConstants.js'
 import { generateChildren } from '~/utils/VueUtils'
 import { isStringEmpty } from '~/utils/DataUtils'
 import { useAccountStore } from '~/stores/accountStore'
@@ -34,6 +34,11 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
     { computed: 'budget', parentKey: `${transactionPathKey}.budget` },
     { computed: 'piggyBank', parentKey: `${transactionPathKey}.piggyBank` },
   ])
+
+  const extraDates = generateChildren(
+    item,
+    transactionExtraDateFieldList.map((field) => ({ computed: field.code, parentKey: `${transactionPathKey}.${field.code}` })),
+  )
 
   const isTypeExpense = computed(() => isEqual(type.value, Transaction.types.expense))
   const isTypeIncome = computed(() => isEqual(type.value, Transaction.types.income))
@@ -242,7 +247,8 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
     const fieldCode = fieldType.code
     const position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
     const field = profileStore.transactionFormFieldsConfig.find((item) => item.code === fieldCode)
-    const isVisible = field ? field.isVisible : true
+    // Fields missing from the saved config (added in a newer app version) keep their default visibility
+    const isVisible = field ? field.isVisible : fieldType.isVisible
     const displayStyle = isVisible ? '' : 'display: none'
 
     if (isTypeExpense.value) {
@@ -293,6 +299,7 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
     amount,
     amountForeign,
     date,
+    extraDates,
     tags,
     description,
     notes,
