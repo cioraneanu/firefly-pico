@@ -131,6 +131,9 @@
     "setup": {
       "title": "Установка",
       "pico_backend_url": "URL бэкенда Pico",
+      "http_headers": "HTTP-заголовки",
+      "http_header_key": "Ключ",
+      "http_header_value": "Значение",
       "sync_settings_via_token": "Синхронизация настроек через токен",
       "days_between_sync": "Дней между полной синхронизацией \"Дополнительно\"",
       "enabled_resources": "Включенные ресурсы",

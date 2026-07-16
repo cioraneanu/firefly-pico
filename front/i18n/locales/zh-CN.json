@@ -124,6 +124,9 @@
     "setup": {
       "title": "设置",
       "pico_backend_url": "Pico 后端 URL",
+      "http_headers": "HTTP 请求头",
+      "http_header_key": "名称",
+      "http_header_value": "值",
       "sync_settings_via_token": "通过令牌同步设置",
       "days_between_sync": "“额外”完全同步的天数",
       "loaded_data_stats": "已加载数据统计",

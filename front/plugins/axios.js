@@ -19,6 +19,11 @@ axios.interceptors.request.use(
       controller.abort()
     }
 
+    appStore.picoBackendHeaders?.forEach(({ key, value }) => {
+      if (key?.trim()) {
+        config.headers[key.trim()] = value
+      }
+    })
     config.headers['Authorization'] = `Bearer ${authToken}`
     config.timeout = config.timeout || appStore.queryTimeout
     return config

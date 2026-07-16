@@ -131,6 +131,9 @@
     "setup": {
       "title": "Configurare",
       "pico_backend_url": "URL backend Pico",
+      "http_headers": "Antete HTTP",
+      "http_header_key": "Cheie",
+      "http_header_value": "Valoare",
       "sync_settings_via_token": "Sincronizează setările între dispozitive prin token",
       "days_between_sync": "Zile între sincronizarea completă a \"Extra\"",
       "enabled_resources": "Resurse activate",

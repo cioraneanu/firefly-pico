@@ -131,6 +131,9 @@
     "setup": {
       "title": "Initialisation",
       "pico_backend_url": "Pico URL",
+      "http_headers": "En-têtes HTTP",
+      "http_header_key": "Clé",
+      "http_header_value": "Valeur",
       "sync_settings_via_token": "Token Firefly iii",
       "days_between_sync": "Nombre de jour avant synchronisation complète \"Extras\"",
       "enabled_resources": "Ressources activées",

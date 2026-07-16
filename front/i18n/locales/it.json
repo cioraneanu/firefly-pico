@@ -131,6 +131,9 @@
     "setup": {
       "title": "Configurazione",
       "pico_backend_url": "URL backend Pico",
+      "http_headers": "Intestazioni HTTP",
+      "http_header_key": "Chiave",
+      "http_header_value": "Valore",
       "sync_settings_via_token": "Sincronizza le impostazioni tra dispositivi tramite token",
       "days_between_sync": "Giorni tra una sincronizzazione completa degli \"Extra\"",
       "enabled_resources": "Risorse abilitate",

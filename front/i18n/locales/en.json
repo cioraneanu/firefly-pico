@@ -131,6 +131,9 @@
     "setup": {
       "title": "Setup",
       "pico_backend_url": "Pico backend URL",
+      "http_headers": "HTTP headers",
+      "http_header_key": "Key",
+      "http_header_value": "Value",
       "sync_settings_via_token": "Sync settings across devices via token",
       "days_between_sync": "Days between full sync of \"Extras\"",
       "enabled_resources": "Enabled resources",

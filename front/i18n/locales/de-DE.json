@@ -131,6 +131,9 @@
     "setup": {
       "title": "Einrichtung",
       "pico_backend_url": "Pico backend URL",
+      "http_headers": "HTTP-Header",
+      "http_header_key": "Schlüssel",
+      "http_header_value": "Wert",
       "sync_settings_via_token": "Einstellungen mit Token zwischen Geräten synchronisieren",
       "days_between_sync": "Tage zwischen vollständiger Synchronisierung von \"Extras\"",
       "enabled_resources": "Aktivierte Ressourcen",

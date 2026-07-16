@@ -24,6 +24,7 @@ export const useAppStore = defineStore('app', () => {
 
   const authToken = useLocalStorage('authToken', '')
   const picoBackendURL = useLocalStorage('picoBackendURL', defaultUrl)
+  const picoBackendHeaders = useLocalStorage('picoBackendHeaders', [])
   const syncProfileInDB = useLocalStorage('syncProfileInDB', true)
   const daysBetweenFullSync = useLocalStorage('daysBetweenFullSync', 4)
 
@@ -149,6 +150,7 @@ export const useAppStore = defineStore('app', () => {
   return {
     authToken,
     picoBackendURL,
+    picoBackendHeaders,
     syncProfileInDB,
     daysBetweenFullSync,
 
