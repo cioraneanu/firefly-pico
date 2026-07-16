@@ -1868,14 +1868,28 @@ body {
 
 /* ------------------------ Desktop transactions ------------------------ */
 
-/* Columns: type | date | description | amount | accounts | categories | tags | budget.
-   The important fields (date, description, amount) stay on the left so they remain
-   visible at any width; categorisation columns drop off as the container narrows. */
+/* Columns: type | amount | date | description | accounts | categories | tags | budget.
+   The grid lives on the list container and every row joins it via subgrid, so the
+   amount column (max-content) is sized by the widest amount in the list and stays
+   aligned across rows no matter how many digits a currency needs.
+   Subgrid subtracts the row's 16px horizontal padding from the edge tracks, hence
+   19px (16px padding + 3px type bar) and +16px on the last track of every template. */
+.transaction-desktop-list {
+    display: grid;
+    grid-template-columns: 19px max-content minmax(200px, 1.9fr) 84px minmax(150px, 1.2fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(126px, 0.9fr);
+    column-gap: 14px;
+}
+
+.transaction-desktop-list > .van-swipe-cell,
+.transaction-desktop-list .van-swipe-cell__wrapper,
 .transaction-desktop-row {
     display: grid;
-    grid-template-columns: 3px 84px minmax(200px, 1.9fr) 110px minmax(150px, 1.2fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(110px, 0.9fr);
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+}
+
+.transaction-desktop-row {
     align-items: center;
-    gap: 14px;
     min-height: 46px;
     padding: 5px 16px;
     border-bottom: 1px solid #eef2f7;
@@ -1911,8 +1925,8 @@ body {
 }
 
 .transaction-desktop-amount-value {
-    font-size: 13px;
-    font-weight: 650;
+    font-size: 12px;
+    font-weight: 600;
     white-space: nowrap;
     font-variant-numeric: tabular-nums;
 }
@@ -1981,8 +1995,8 @@ body {
 /* Progressively drop the categorisation columns when the list gets narrow,
    keeping type, date, description, amount and accounts always visible. */
 @container transaction-list (max-width: 1080px) {
-    .transaction-desktop-row {
-        grid-template-columns: 3px 84px minmax(200px, 1.9fr) 110px minmax(150px, 1.2fr) minmax(130px, 1fr) minmax(130px, 1fr);
+    .transaction-desktop-list {
+        grid-template-columns: 19px max-content 84px minmax(200px, 1.9fr) minmax(150px, 1.2fr) minmax(130px, 1fr) minmax(146px, 1fr);
     }
 
     .transaction-desktop-budget {
@@ -1991,8 +2005,8 @@ body {
 }
 
 @container transaction-list (max-width: 920px) {
-    .transaction-desktop-row {
-        grid-template-columns: 3px 84px minmax(200px, 1.9fr) 110px minmax(150px, 1.2fr) minmax(130px, 1fr);
+    .transaction-desktop-list {
+        grid-template-columns: 19px max-content 84px minmax(200px, 1.9fr) minmax(150px, 1.2fr) minmax(146px, 1fr);
     }
 
     .transaction-desktop-tags {
@@ -2001,8 +2015,8 @@ body {
 }
 
 @container transaction-list (max-width: 780px) {
-    .transaction-desktop-row {
-        grid-template-columns: 3px 84px minmax(160px, 2fr) 110px minmax(130px, 1fr);
+    .transaction-desktop-list {
+        grid-template-columns: 19px max-content 84px minmax(160px, 2fr) minmax(146px, 1fr);
     }
 
     .transaction-desktop-categories {

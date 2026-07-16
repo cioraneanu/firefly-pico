@@ -16,7 +16,7 @@
         <div v-if="notes" class="transaction-desktop-muted transaction-desktop-notes ellipse-text" v-html="notes" />
       </div>
 
-      <div class="transaction-desktop-amount text-right line-height-normal">
+      <div class="transaction-desktop-amount text-left line-height-normal">
         <div class="transaction-desktop-amount-value" :style="amountStyle">{{ transactionAmount }} {{ transactionCurrency }}</div>
         <div v-if="isSplitPayment" class="transaction-desktop-split text-uppercase">{{ $t('split') }}</div>
       </div>
