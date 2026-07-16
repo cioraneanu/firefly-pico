@@ -374,7 +374,7 @@
 }
 
 .van-theme-dark .transaction-desktop-row {
-    border-color: #3f3f46;
+    border-color: #2e2e33;
     color: #f1f5f9;
 }
 
@@ -386,6 +386,28 @@
 .van-theme-dark .transaction-desktop-chip {
     border-color: #444;
     color: #cbd5e1;
+}
+
+.van-theme-dark .account-badge {
+    /*border-color: #0c4a6e;*/
+    /*background: rgba(14, 165, 233, 0.1);*/
+    /*color: #7dd3fc;*/
+}
+
+.van-theme-dark .category-badge {
+    /*border-color: #4c1d95;*/
+    /*background: rgba(139, 92, 246, 0.1);*/
+    /*color: #c4b5fd;*/
+}
+
+.van-theme-dark .tag-badge {
+    /*border-color: #713f12;*/
+    /*background: rgba(245, 158, 11, 0.1);*/
+    /*color: #fcd34d;*/
+}
+
+.van-theme-dark .account-flow-arrow {
+    color: #71717a;
 }
 
 .van-theme-dark .budget-icon {

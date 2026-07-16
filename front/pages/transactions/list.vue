@@ -219,11 +219,10 @@ animateSwipeList(list)
 
 .transaction-desktop-list-wrapper {
   width: 100%;
-  overflow-x: auto;
+  container: transaction-list / inline-size;
 }
 
 .transaction-desktop-list {
-  min-width: 1100px;
   margin: 0px 20px;
   overflow: hidden;
   background: var(--van-background-2);
@@ -231,19 +230,6 @@ animateSwipeList(list)
   box-shadow:
     0 4px 6px -1px rgba(0, 0, 0, 0.05),
     0 2px 4px -1px rgba(0, 0, 0, 0.03);
-}
-
-.transaction-desktop-header {
-  display: grid;
-  grid-template-columns: 40px 110px minmax(180px, 1.8fr) minmax(140px, 1fr) minmax(140px, 1fr) minmax(120px, 0.8fr) minmax(120px, 1fr) 120px 80px;
-  padding: 1rem 1.25rem;
-  color: var(--van-text-color-2);
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-  background: var(--van-background-3);
-  border-bottom: 1px solid var(--van-border-color);
 }
 
 .text-right {

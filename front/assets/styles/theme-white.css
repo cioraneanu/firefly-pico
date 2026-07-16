@@ -1866,78 +1866,157 @@ body {
     border: 2px solid var(--van-danger-color, #ee0a24);
 }
 
+/* ------------------------ Entity badges ------------------------ */
+
+/* Shared shell for account/category/tag badges; each entity gets a distinct
+   border hue so they are easy to tell apart at a glance. */
+.app-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 100%;
+    padding: 2px 7px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 11px;
+    line-height: 1.35;
+}
+
+.account-badge {
+    /*border-color: #7dd3fc;*/
+    /*background: #f0f9ff;*/
+    /*color: #075985;*/
+}
+
+.category-badge {
+    /*border-color: #c4b5fd;*/
+    /*background: #f5f3ff;*/
+    /*color: #5b21b6;*/
+}
+
+.tag-badge {
+    /*border-color: #fcd34d;*/
+    /*background: #fffbeb;*/
+    /*color: #854d0e;*/
+}
+
+.account-badges-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3px;
+}
+
+.account-flow-arrow {
+    flex-shrink: 0;
+    color: #94a3b8;
+}
+
 /* ------------------------ Desktop transactions ------------------------ */
 
+/* Columns: type | date | description | amount | accounts | classification (categories + tags) | budget.
+   The grid lives on the list container and every row joins it via subgrid, so the
+   amount column (max-content) is sized by the widest amount in the list and stays
+   aligned across rows no matter how many digits a currency needs.
+   Subgrid subtracts the row's 16px horizontal padding from the edge tracks, hence
+   19px (16px padding + 3px type bar) and +16px on the last track of every template. */
+.transaction-desktop-list {
+    display: grid;
+    grid-template-columns: 19px max-content minmax(200px, 1.9fr) max-content minmax(160px, 1.2fr) minmax(150px, 1.3fr) minmax(126px, 0.9fr);
+    column-gap: 14px;
+}
+
+.transaction-desktop-list > .van-swipe-cell,
+.transaction-desktop-list .van-swipe-cell__wrapper,
 .transaction-desktop-row {
     display: grid;
-    grid-template-columns: 28px 96px minmax(210px, 2fr) minmax(150px, 1.2fr) minmax(140px, 1fr) minmax(120px, 0.9fr) minmax(120px, 0.9fr) minmax(120px, auto);
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+}
+
+.transaction-desktop-row {
     align-items: center;
-    gap: 14px;
-    min-height: 68px;
-    padding: 10px 16px;
-    border-bottom: 1px solid #e2e8f0;
+    min-height: 46px;
+    padding: 5px 16px;
+    border-bottom: 1px solid #eef2f7;
     background: var(--van-cell-background);
     color: #0f172a;
-    transition: background-color 0.15s ease,
-    box-shadow 0.15s ease;
+    transition: background-color 0.12s ease;
 }
 
 .transaction-desktop-row:hover {
-    position: relative;
-    z-index: 1;
     background: #f8fafc;
-    box-shadow: inset 3px 0 0 #cbd5e1;
 }
 
-.transaction-desktop-row:last-child {
+.transaction-desktop-list .van-swipe-cell:last-child .transaction-desktop-row {
     border-bottom: 0;
 }
 
 .transaction-desktop-type-dot {
-    width: 5px;
-    height: 34px;
-    border-radius: 5px;
+    width: 3px;
+    height: 20px;
+    border-radius: 3px;
 }
 
-.transaction-desktop-date,
-.transaction-desktop-title,
-.transaction-desktop-amount-value {
+.transaction-desktop-date-value {
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.transaction-desktop-title {
     font-size: 13px;
+    font-weight: 600;
 }
 
-.transaction-desktop-title,
 .transaction-desktop-amount-value {
-    font-weight: 650;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
 }
 
 .transaction-desktop-muted {
-    margin-top: 3px;
+    margin-top: 1px;
     color: #94a3b8;
     font-size: 11px;
+}
+
+.transaction-desktop-notes * {
+    display: inline;
+    margin: 0;
+}
+
+/* Keep source -> destination on one line; the badges themselves truncate. */
+.transaction-desktop-accounts {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.transaction-desktop-accounts .app-badge {
+    min-width: 0;
 }
 
 .transaction-desktop-chips {
     display: flex;
     flex-wrap: wrap;
-    gap: 5px;
+    gap: 4px;
 }
 
 .transaction-desktop-chip {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 4px;
     max-width: 100%;
-    padding: 3px 7px;
+    padding: 2px 7px;
     border: 1px solid #e2e8f0;
     border-radius: 6px;
     background: #f8fafc;
     color: #475569;
     font-size: 11px;
-    line-height: 1.25;
-}
-
-.transaction-desktop-chip-outline {
-    background: transparent;
+    line-height: 1.35;
 }
 
 .transaction-desktop-more,
@@ -1949,4 +2028,26 @@ body {
 
 .transaction-desktop-amount {
     white-space: nowrap;
+}
+
+/* Progressively drop the categorisation columns when the list gets narrow,
+   keeping type, date, description, amount and accounts always visible. */
+@container transaction-list (max-width: 1080px) {
+    .transaction-desktop-list {
+        grid-template-columns: 19px max-content minmax(200px, 1.9fr) max-content minmax(160px, 1.2fr) minmax(166px, 1.3fr);
+    }
+
+    .transaction-desktop-budget {
+        display: none;
+    }
+}
+
+@container transaction-list (max-width: 840px) {
+    .transaction-desktop-list {
+        grid-template-columns: 19px max-content minmax(180px, 2fr) max-content minmax(176px, 1.2fr);
+    }
+
+    .transaction-desktop-classification {
+        display: none;
+    }
 }
