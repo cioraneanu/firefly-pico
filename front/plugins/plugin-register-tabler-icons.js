@@ -73,6 +73,7 @@ import {
   IconSparkles,
   IconMessageCircleBolt,
   IconX,
+  IconArrowNarrowRight,
 } from '@tabler/icons-vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -150,6 +151,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconSparkles', IconSparkles)
   nuxtApp.vueApp.component('IconMessageCircleBolt', IconMessageCircleBolt)
   nuxtApp.vueApp.component('IconX', IconX)
+  nuxtApp.vueApp.component('IconArrowNarrowRight', IconArrowNarrowRight)
 
   // for (let iconName in tablerIcons) {
   //   nuxtApp.vueApp.component(iconName, tablerIcons[iconName])

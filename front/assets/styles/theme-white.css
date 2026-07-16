@@ -1866,9 +1866,55 @@ body {
     border: 2px solid var(--van-danger-color, #ee0a24);
 }
 
+/* ------------------------ Entity badges ------------------------ */
+
+/* Shared shell for account/category/tag badges; each entity gets a distinct
+   border hue so they are easy to tell apart at a glance. */
+.app-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 100%;
+    padding: 2px 7px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 11px;
+    line-height: 1.35;
+}
+
+.account-badge {
+    /*border-color: #7dd3fc;*/
+    /*background: #f0f9ff;*/
+    /*color: #075985;*/
+}
+
+.category-badge {
+    /*border-color: #c4b5fd;*/
+    /*background: #f5f3ff;*/
+    /*color: #5b21b6;*/
+}
+
+.tag-badge {
+    /*border-color: #fcd34d;*/
+    /*background: #fffbeb;*/
+    /*color: #854d0e;*/
+}
+
+.account-badges-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3px;
+}
+
+.account-flow-arrow {
+    flex-shrink: 0;
+    color: #94a3b8;
+}
+
 /* ------------------------ Desktop transactions ------------------------ */
 
-/* Columns: type | amount | date | description | accounts | categories | tags | budget.
+/* Columns: type | date | description | amount | accounts | classification (categories + tags) | budget.
    The grid lives on the list container and every row joins it via subgrid, so the
    amount column (max-content) is sized by the widest amount in the list and stays
    aligned across rows no matter how many digits a currency needs.
@@ -1876,7 +1922,7 @@ body {
    19px (16px padding + 3px type bar) and +16px on the last track of every template. */
 .transaction-desktop-list {
     display: grid;
-    grid-template-columns: 19px max-content minmax(200px, 1.9fr) 84px minmax(150px, 1.2fr) minmax(130px, 1fr) minmax(130px, 1fr) minmax(126px, 0.9fr);
+    grid-template-columns: 19px max-content minmax(200px, 1.9fr) max-content minmax(160px, 1.2fr) minmax(150px, 1.3fr) minmax(126px, 0.9fr);
     column-gap: 14px;
 }
 
@@ -1942,19 +1988,15 @@ body {
     margin: 0;
 }
 
+/* Keep source -> destination on one line; the badges themselves truncate. */
 .transaction-desktop-accounts {
     display: flex;
-    flex-direction: column;
-    gap: 1px;
+    align-items: center;
+    gap: 3px;
 }
 
-.transaction-desktop-account {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    color: #475569;
-    font-size: 12px;
-    line-height: 1.35;
+.transaction-desktop-accounts .app-badge {
+    min-width: 0;
 }
 
 .transaction-desktop-chips {
@@ -1977,10 +2019,6 @@ body {
     line-height: 1.35;
 }
 
-.transaction-desktop-chip-outline {
-    background: transparent;
-}
-
 .transaction-desktop-more,
 .transaction-desktop-split {
     color: #94a3b8;
@@ -1996,7 +2034,7 @@ body {
    keeping type, date, description, amount and accounts always visible. */
 @container transaction-list (max-width: 1080px) {
     .transaction-desktop-list {
-        grid-template-columns: 19px max-content 84px minmax(200px, 1.9fr) minmax(150px, 1.2fr) minmax(130px, 1fr) minmax(146px, 1fr);
+        grid-template-columns: 19px max-content minmax(200px, 1.9fr) max-content minmax(160px, 1.2fr) minmax(166px, 1.3fr);
     }
 
     .transaction-desktop-budget {
@@ -2004,22 +2042,12 @@ body {
     }
 }
 
-@container transaction-list (max-width: 920px) {
+@container transaction-list (max-width: 840px) {
     .transaction-desktop-list {
-        grid-template-columns: 19px max-content 84px minmax(200px, 1.9fr) minmax(150px, 1.2fr) minmax(146px, 1fr);
+        grid-template-columns: 19px max-content minmax(180px, 2fr) max-content minmax(176px, 1.2fr);
     }
 
-    .transaction-desktop-tags {
-        display: none;
-    }
-}
-
-@container transaction-list (max-width: 780px) {
-    .transaction-desktop-list {
-        grid-template-columns: 19px max-content 84px minmax(160px, 2fr) minmax(146px, 1fr);
-    }
-
-    .transaction-desktop-categories {
+    .transaction-desktop-classification {
         display: none;
     }
 }

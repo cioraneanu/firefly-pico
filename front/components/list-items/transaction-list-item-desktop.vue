@@ -22,29 +22,22 @@
       </div>
 
       <div class="transaction-desktop-accounts overflow-hidden">
-        <div v-for="account in displayedAccounts" :key="account.id" class="transaction-desktop-account overflow-hidden">
-          <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="13" />
-          <span class="ellipse-text">{{ Account.getDisplayName(account) }}</span>
-        </div>
+        <template v-for="(account, index) in displayedAccounts" :key="account.id">
+          <app-icon v-if="index > 0" icon="IconArrowNarrowRight" :size="14" class="account-flow-arrow" />
+          <account-badge :value="account" />
+        </template>
       </div>
 
-      <div class="transaction-desktop-categories overflow-hidden">
-        <div v-if="profileStore.categoriesEnabled" class="transaction-desktop-chips">
-          <div v-for="category in categories" :key="category.id" class="transaction-desktop-chip overflow-hidden">
-            <app-icon :icon="Category.getIcon(category) ?? TablerIconConstants.category" :size="13" />
-            <span class="ellipse-text">{{ Category.getDisplayName(category) }}</span>
-          </div>
-        </div>
-      </div>
+      <div class="transaction-desktop-classification overflow-hidden">
+        <div class="transaction-desktop-chips">
+          <template v-if="profileStore.categoriesEnabled">
+            <category-badge v-for="category in categories" :key="`category-${category.id}`" :value="category" />
+          </template>
 
-      <div class="transaction-desktop-tags overflow-hidden">
-        <div v-if="profileStore.tagsEnabled" class="transaction-desktop-chips">
-          <div v-for="tag in visibleTags" :key="tag.id" class="transaction-desktop-chip transaction-desktop-chip-outline">
-            <app-icon :icon="Tag.getIcon(tag) ?? TablerIconConstants.tag" :size="13" />
-            <span class="ellipse-text">{{ Tag.getDisplayNameEllipsized(tag, 10) }}</span>
-          </div>
-
-          <div v-if="tags.length > visibleTags.length" class="transaction-desktop-more">+{{ tags.length - visibleTags.length }}</div>
+          <template v-if="profileStore.tagsEnabled">
+            <tag-badge v-for="tag in visibleTags" :key="`tag-${tag.id}`" :value="tag" />
+            <div v-if="tags.length > visibleTags.length" class="transaction-desktop-more">+{{ tags.length - visibleTags.length }}</div>
+          </template>
         </div>
       </div>
 
@@ -63,10 +56,7 @@
 </template>
 
 <script setup>
-import Account from '~/models/Account.js'
 import Budget from '~/models/Budget.js'
-import Category from '~/models/Category.js'
-import Tag from '~/models/Tag.js'
 import { useTransactionListItem } from '~/composables/useTransactionListItem.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe.js'
