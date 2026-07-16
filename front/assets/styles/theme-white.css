@@ -1883,19 +1883,26 @@ body {
 }
 
 .account-badge {
-    /*border-color: #7dd3fc;*/
+    font-size: 13px;
+    font-weight: 400;
+    border: 1.5px solid #7dd3fc;
     /*background: #f0f9ff;*/
     /*color: #075985;*/
 }
 
 .category-badge {
-    /*border-color: #c4b5fd;*/
+    font-size: 13px;
+    font-weight: 400;
+    border: 1.5px solid #c4b5fd;
+
     /*background: #f5f3ff;*/
     /*color: #5b21b6;*/
 }
 
 .tag-badge {
-    /*border-color: #fcd34d;*/
+    font-size: 13px;
+    font-weight: 400;
+    border: 1.5px solid #888;
     /*background: #fffbeb;*/
     /*color: #854d0e;*/
 }

@@ -12,7 +12,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 defineProps({
   value: Object,
   iconSize: {
-    default: 13,
+    default: 18,
   },
 })
 </script>
