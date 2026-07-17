@@ -150,7 +150,7 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
       transaction.budget_id = budgetId ?? null
     }
 
-    let tags = (get(data, 'tags') ?? []).map((tag) => Tag.getDisplayNameEllipsized(tag))
+    let tags = (get(data, 'tags') ?? []).map((tag) => Tag.getDisplayName(tag))
     transaction.tags = tags.length > 0 ? tags : null
 
     if (currencyId) {

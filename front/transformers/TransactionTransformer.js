@@ -104,7 +104,7 @@ export default class TransactionTransformer extends ApiTransformer {
       if (!id && profileStore.autoAddedTags?.length > 0) {
         tags = [...tags, ...profileStore.autoAddedTags]
       }
-      newItem.tags = uniq(tags.map((tag) => Tag.getDisplayNameEllipsized(tag)))
+      newItem.tags = uniq(tags.map((tag) => Tag.getDisplayName(tag)))
 
       return newItem
     })

@@ -103,7 +103,7 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
     }
 
     // Give child tags more priority for more granularity
-    const sortedTagNames = sortByPath(newValue, 'level', false).map((tag) => Tag.getDisplayNameEllipsized(tag))
+    const sortedTagNames = sortByPath(newValue, 'level', false).map((tag) => Tag.getDisplayName(tag))
 
     if (profileStore.copyTagToDescription && isStringEmpty(description.value)) {
       // The first one is the one with the highest level
