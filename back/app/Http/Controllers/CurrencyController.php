@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exceptions\GeneralException;
 use App\Http\Controllers\Base\BaseController;
 use App\Http\Controllers\Base\BaseControllerFirefly;
+use App\Services\ExchangeRateService;
 use App\Utils\CurrencyUtils;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Cache;
@@ -31,7 +32,7 @@ class CurrencyController extends BaseControllerFirefly
 
         $date = Carbon::now()->startOfDay()->format("Y-m-d");
         $cacheKey = "exchange_$date";
-        return Cache::remember($cacheKey, 60 * 60 * 24 * 5, function () {
+        $data = Cache::remember($cacheKey, 60 * 60 * 24 * 5, function () {
             $rates = collect();
             $updatedAt = null;
 
@@ -60,6 +61,8 @@ class CurrencyController extends BaseControllerFirefly
                 'currencies' => CurrencyUtils::CURRENCIES
             ];
         });
+
+        return app(ExchangeRateService::class)->mergeFireflyRates($data);
     }
 
 
