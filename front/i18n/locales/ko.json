@@ -74,22 +74,54 @@
     "clear": "초기화",
     "applied_filters": "적용된 필터",
     "apply_filters": "필터 적용",
-    "transaction_filters": "거래 필터"
+    "transaction_filters": "거래 필터",
+    "total": "합계",
+    "compute_total": "합계 계산"
   },
   "transaction": {
     "title_list": "거래 목록",
     "split_transaction": "거래 분할",
     "assistant": "어시스턴트",
     "assistant_format": "형식 = [템플릿 / 태그?] [금액?] [설명?] [±N일?]",
+    "assistant_ramble_title": "거래 받아쓰기",
+    "assistant_ramble_placeholder": "여기에 거래를 말하거나 입력하세요...",
+    "assistant_ramble_input_hint": "거래를 입력하거나 말하세요",
+    "assistant_ramble_listening": "듣는 중...",
+    "assistant_ramble_play": "녹음 재생",
+    "assistant_ramble_stop_playback": "재생 중지",
+    "assistant_ramble_interpret": "해석",
+    "assistant_ramble_preview": "미리보기",
+    "assistant_ramble_create": "{count}개 만들기",
+    "assistant_ramble_created_toast": "거래 1건이 생성되었습니다 | 거래 {count}건이 생성되었습니다",
+    "assistant_ramble_no_transactions_yet": "아직 거래가 없습니다",
+    "assistant_ramble_no_results": "거래를 찾을 수 없습니다",
+    "assistant_ramble_saved_count": "저장된 받아쓰기 {count}개 대기 중",
+    "assistant_ramble_load_saved": "저장된 항목 불러오기",
+    "assistant_ramble_delete_saved": "저장된 받아쓰기 삭제",
+    "assistant_ramble_delete_confirm_title": "저장된 받아쓰기를 삭제하시겠습니까?",
+    "assistant_ramble_delete_confirm_message": "이 작업은 불러온 모든 받아쓰기를 데이터베이스에서 영구적으로 삭제합니다.",
+    "assistant_ramble_delete_one_confirm_message": "이 작업은 이 받아쓰기를 데이터베이스에서 영구적으로 삭제합니다.",
+    "assistant_ramble_retry_failed": "{count}개 다시 시도",
+    "assistant_ramble_progress": "{created}/{total}개 생성됨",
+    "assistant_ramble_progress_failed": "{created}/{total}개 생성됨, {failed}개 실패",
+    "assistant_ramble_progress_creating": "{current}/{total}개 생성 중",
+    "assistant_ramble_edit_title": "받아쓰기 거래 수정",
     "assistant_tutorial_title": "거래 어시스턴트",
     "assistant_tutorial_body": "<p>여기에 텍스트를 입력하기만 하면 손쉽게 거래를 만들 수 있습니다 (또는 휴대폰의 음성 입력 기능을 사용하세요).</p>\n<p>예상 형식:<br> <b>[검색어]&nbsp; [금액?]&nbsp; [설명?]&nbsp; [할 일?]</b></p>\n<p>1. <b>검색어</b>는 태그, 카테고리, 거래 템플릿의 이름에서 찾습니다. 이름의 일부만 입력하거나 철자가 조금 틀려도 인식할 수 있습니다.<br><code> elct => electricity</code></p>\n<p>2. <b>금액</b>은 수식을 지원합니다. 공백으로 구분된 숫자는 자동으로 합산됩니다.</p>\n<p>3. <b>설명</b>은 선택 사항입니다. 기본 태그 이름을 덮어쓸 때 사용하세요.</p>\n<p>4. <b>할 일</b>은 사용자가 지정한 문자열(기본값 \"!!\")을 덧붙여 \"할 일 태그\"를 쉽게 추가할 수 있게 해줍니다. 이 값은 \"설정\"에서 변경할 수 있습니다.</p>\n<p>5. <b>날짜</b>는 텍스트 어디에서든 <code>+1d</code> / <code>-5d</code>(더하거나 뺄 일수)를 입력해 오늘을 기준으로 이동할 수 있습니다.</p>\n\n<p><b>예시</b><br>\n\"electricity\" = 태그<br>\n\"swimming\" = 템플릿 <br><br>\n\n<code>\nelectricity 23<br> \nelc 12*2+33<br> \nelc 12+2*3 사용자 지정 설명<br> \nelc 25 !!<br>\nelc 25 -1d<br>\nswim<br> \n\n</code>\n</p>\n\n<p>6. 오른쪽 상단에는 즉시 변경하거나 \"설정\" -> \"어시스턴트\"에서 기본값을 지정할 수 있는 <b>통화</b> 선택기가 있습니다. 이를 사용하면 <b>금액</b>을 해당 통화로 처리하여 선택한 계좌 통화로 최종 값을 환산합니다. 해외에 나갈 때 매우 유용합니다.</p>",
     "type": {
+      "all": "전체",
       "expense": "지출",
       "income": "수입",
       "transfer": "이체"
     },
     "source_account": "출발 계좌",
     "destination_account": "도착 계좌",
+    "interest_date": "이자일",
+    "book_date": "기표일",
+    "process_date": "처리일",
+    "due_date": "만기일",
+    "payment_date": "결제일",
+    "invoice_date": "청구일",
     "make_template": "템플릿 만들기",
     "configure_fields": "필드 설정",
     "title_clone_transaction": "거래 복제",
@@ -105,6 +137,9 @@
     "setup": {
       "title": "설정",
       "pico_backend_url": "Pico 백엔드 URL",
+      "http_headers": "HTTP 헤더",
+      "http_header_key": "키",
+      "http_header_value": "값",
       "sync_settings_via_token": "토큰으로 기기 간 설정 동기화",
       "days_between_sync": "\"추가 기능\" 전체 동기화 주기(일)",
       "enabled_resources": "사용할 항목",
@@ -132,6 +167,7 @@
       "theme": "테마",
       "title": "UI 설정",
       "show_animations": "애니메이션 표시",
+      "is_profile_float_visible": "대시보드에 프로필 플로팅 버튼 표시",
       "reset_forms_after_creation": "생성 후 양식 초기화",
       "transaction_list": "거래 목록",
       "select_hero_icons": "표시할 히어로 아이콘 선택",
@@ -148,8 +184,32 @@
     "assistant_entry": "어시스턴트",
     "assistant": {
       "title": "어시스턴트 설정",
+      "auto_focus": "어시스턴트 자동 포커스",
       "substring_todo_tag": "할 일 태그를 추가하는 문자열",
-      "currency": "어시스턴트 텍스트의 금액 부분은 이 통화의 외화로 해석됩니다"
+      "currency": "어시스턴트 텍스트의 금액 부분은 이 통화의 외화로 해석됩니다",
+      "ramble": "받아쓰기",
+      "ramble_endpoint": "LLM 엔드포인트",
+      "ramble_model": "LLM 모델",
+      "ramble_api_key": "LLM API 키",
+      "ramble_info": "이 브라우저에만 저장됩니다. 브라우저에서 직접 호출하면 이 기기에서 API 키가 노출되며, 엔드포인트가 CORS를 허용해야 합니다.",
+      "ramble_server_info": "서버에서 설정됩니다. 이 인스턴스에서는 브라우저 LLM 설정이 비활성화되어 있습니다.",
+      "llm_status": "어시스턴트 LLM",
+      "llm_status_subtitle": "거래 받아쓰기 기능을 지원합니다",
+      "llm_configured": "서버에 설정됨",
+      "llm_not_configured": "설정되지 않음",
+      "llm_not_configured_info": "활성화하려면 Pico 백엔드에 다음 환경 변수를 설정하세요:",
+      "transcription_status": "음성 텍스트 변환",
+      "transcription_status_subtitle": "받아쓰기 음성 녹음을 텍스트로 변환합니다",
+      "transcription_endpoint": "음성 변환 엔드포인트",
+      "transcription_model": "음성 변환 모델",
+      "llm_context": "추가 LLM 컨텍스트",
+      "llm_context_placeholder": "예: 설명을 영어로 반환",
+      "llm_test": "LLM 설정 테스트",
+      "llm_test_success": "LLM 설정이 정상 작동합니다",
+      "llm_test_failed": "LLM 설정 테스트 실패",
+      "transcription_test": "음성 변환 설정 테스트",
+      "transcription_test_success": "음성 변환 설정이 정상 작동합니다",
+      "transcription_test_failed": "음성 변환 설정 테스트 실패"
     },
     "formatting_entry": "서식",
     "formatting": {
@@ -206,7 +266,8 @@
         "default_category": "기본 카테고리",
         "default_tags": "기본 태그(미리 선택된 태그만)",
         "auto_tags": "자동 태그(생성 후 추가됨)",
-        "foreign_currency": "지출용 외화"
+        "foreign_currency": "지출용 외화",
+        "set_default_time_to_midnight": "기본 시간을 00:00으로 설정"
       }
     },
     "about_entry": "정보",
@@ -282,7 +343,10 @@
     "title": "통화를 선택하세요"
   },
   "validation": {
-    "required": "필수 항목입니다"
+    "required": "필수 항목입니다",
+    "positive": "값은 0보다 커야 합니다",
+    "integer_range": "값은 {min}에서 {max} 사이여야 합니다",
+    "date_after": "날짜는 최소 날짜보다 늦어야 합니다"
   },
   "primary": "기본",
   "secondary": "보조",
@@ -331,7 +395,10 @@
     "title_edit": "태그 수정",
     "parent_tag": "상위 태그",
     "mark_as_todo": "할 일로 표시",
-    "end_date": "종료일"
+    "end_date": "종료일",
+    "total": "합계",
+    "compute_total": "합계 계산",
+    "total_success": "태그 합계가 업데이트되었습니다"
   },
   "category_page": {
     "title_add": "카테고리 추가",
@@ -416,6 +483,10 @@
     },
     "expenses_by_categories": "카테고리별 지출",
     "transfers_by_categories": "카테고리별 이체",
+    "amount_modes": {
+      "expenses_only": "지출만",
+      "net_amount": "순액"
+    },
     "configure_cards": "카드 설정"
   },
   "profile_page": {
