@@ -63,6 +63,12 @@ export const sanitizeAmount = (inputString) => {
   })
 }
 
+export function isPureNumber(value, decimalSeparator = '.') {
+  if (!value || value === '') return false
+  const normalized = value.replace(decimalSeparator, '.')
+  return /^-?\d+(\.\d+)?$/.test(normalized)
+}
+
 export const roundNumber = (number, digits = 2) => {
   let digitsNumber = Math.pow(10, digits)
   return Math.round((number + Number.EPSILON) * digitsNumber) / digitsNumber

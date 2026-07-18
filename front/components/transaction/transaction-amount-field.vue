@@ -16,13 +16,14 @@
           <div class="flex-center-vertical w-100">
             <input
               ref="inputAmount"
-              v-model="amount"
+              :value="displayValue"
               style="width: 100%; border: none; background: transparent; height: 24px"
               type="text"
               inputmode="decimal"
               class="transaction-amount-field-input"
               @focus="onFocus"
               @blur="onBlur"
+              @input="onInput"
             >
             <van-button v-if="isConvertButtonVisible" size="small" class="" @click="convertAmountToForeign">
               <template #icon>
@@ -99,10 +100,30 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Currency from '~/models/Currency.js'
 import { animateTransactionAmountOperatorButtons } from '~/utils/AnimationUtils.js'
 import { useCurrencyConversion } from '~/composables/useCurrencyConversion.js'
+import { useAmountFormat } from '~/composables/useAmountFormat'
 
 const device = useDevice()
 const profileStore = useProfileStore()
 const attrs = useAttrs()
+
+const amount = defineModel('amount')
+const amountForeign = defineModel('amountForeign')
+const currencyForeign = defineModel('currencyForeign')
+
+const localeCode = computed(() => profileStore.numberFormat.code)
+
+const {
+  displayValue,
+  onInput,
+  onFocus,
+  onBlur,
+  refreshDisplay,
+  isFocused,
+} = useAmountFormat({
+  modelValue: amount,
+  currencyDecimalPlaces: computed(() => Currency.getDecimalPlaces(props.currency)),
+  localeCode,
+})
 const amountBindings = computed(() => {
   return {
     ...attrs,
@@ -114,11 +135,6 @@ const amountBindings = computed(() => {
       : {}),
   }
 })
-
-const amount = defineModel('amount')
-const amountForeign = defineModel('amountForeign')
-const currencyForeign = defineModel('currencyForeign')
-const isFocused = ref(false)
 
 const props = defineProps({
   showQuickButtons: {
@@ -161,26 +177,10 @@ const onQuickButton = async (quickButton) => {
   const value = !amount.value || amount.value === '' ? '0' : amount.value
   const newAmount = parseFloat(value) + parseFloat(quickButton)
   amount.value = newAmount.toFixed(currencyDecimalPlaces.value ?? 0)
+  refreshDisplay()
 }
 
-const onFocus = () => {
-  isFocused.value = true
-}
-
-const onBlur = async () => {
-  await nextTick()
-  isFocused.value = false
-  let newAmount = await evaluateModelValue(amount.value)
-  if (newAmount) {
-    newAmount = currencyDecimalPlaces.value ? newAmount.toFixed(currencyDecimalPlaces.value) : newAmount.toString()
-  }
-  amount.value = newAmount
-
-  // On iOS if you hide the keyboard via the "Done" button, onBlur gets called but it's not actually blurred. This is a temp fix...
-  inputAmount.value?.blur()
-}
-
-const { evaluateModelValue, convertAmountToForeign, convertForeignToAmount } = useCurrencyConversion({
+const { convertAmountToForeign, convertForeignToAmount } = useCurrencyConversion({
   amount,
   amountForeign,
   currencyForeign,
@@ -191,13 +191,9 @@ const { evaluateModelValue, convertAmountToForeign, convertForeignToAmount } = u
   currency: computed(() => props.currency)
 })
 
-watch(amount, (newValue) => {
-  amount.value = sanitizeAmount(newValue)
-})
-
 const onOperation = async (button) => {
   amount.value = sanitizeAmount(amount.value + button.value)
-  // moveInputCursorToEnd(input, amount)
+  refreshDisplay()
 }
 
 watch(isFocused, (newValue) => {
