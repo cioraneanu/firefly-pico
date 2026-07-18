@@ -13,6 +13,7 @@ import frFR from 'vant/es/locale/lang/fr-FR'
 import plPL from 'vant/es/locale/lang/pl-PL'
 import ruRU from 'vant/es/locale/lang/ru-RU'
 import es from 'vant/es/locale/lang/es-ES'
+import koKR from 'vant/es/locale/lang/ko-KR'
 
 import { languageCode } from '~/i18n/index.js'
 
@@ -32,6 +33,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         [languageCode.polish]: plPL,
         [languageCode.russian]: ruRU,
         [languageCode.spanish]: es,
+        [languageCode.korean]: koKR,
       }
       let locale = localeDictionary[newValue] || enUS
       Locale.use(newValue, locale)
