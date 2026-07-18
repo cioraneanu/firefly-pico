@@ -4,6 +4,7 @@ import { parseLocaleNumber, formatLocaleNumber, getLocaleSeparators } from '~/ut
 
 export function useAmountFormat({ modelValue, currencyDecimalPlaces, localeCode }) {
   const isFocused = ref(false)
+  const dirty = ref(false)
   const displayValue = ref(modelValue.value ?? '')
 
   const hasMathOperators = (val) => {
@@ -59,10 +60,12 @@ export function useAmountFormat({ modelValue, currencyDecimalPlaces, localeCode 
 
   const onFocus = () => {
     isFocused.value = true
+    dirty.value = false
     displayValue.value = modelValue.value ?? ''
   }
 
   const onInput = (e) => {
+    dirty.value = true
     const raw = e.target.value
     const cursorPos = e.target.selectionStart
 
@@ -86,16 +89,21 @@ export function useAmountFormat({ modelValue, currencyDecimalPlaces, localeCode 
   const onBlur = () => {
     isFocused.value = false
     const raw = displayValue.value
+
+    if (!dirty.value) {
+      displayValue.value = formatForDisplay(modelValue.value)
+      return
+    }
+
     const parsed = parseLocaleNumber(raw, localeCode.value)
     const clean = removeEndOperators(parsed)
     const { wasSuccessful, value } = evalMath(clean)
 
     if (wasSuccessful && value !== null) {
       const dp = currencyDecimalPlaces.value ?? 2
-      const formatted = Number.isInteger(value)
-        ? formatLocaleNumber(value.toString(), localeCode.value, Math.min(dp, 2))
-        : formatLocaleNumber(value.toString(), localeCode.value, dp)
-      modelValue.value = value.toString()
+      const rounded = Number.isInteger(value) ? value : parseFloat(value.toFixed(dp))
+      const formatted = formatLocaleNumber(rounded.toString(), localeCode.value, dp)
+      modelValue.value = rounded.toString()
       displayValue.value = formatted
     } else {
       displayValue.value = raw
