@@ -14,6 +14,7 @@ export const evalMath = (value) => {
   try {
     let sanitizedValue = sanitizeMathString(value)
     let newValue = parser.evaluate(sanitizedValue)
+    newValue = parseFloat(newValue.toPrecision(10))
     return {
       wasSuccessful: true,
       hasChanged: newValue !== value,
