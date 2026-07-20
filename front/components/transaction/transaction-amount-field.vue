@@ -106,36 +106,6 @@ const device = useDevice()
 const profileStore = useProfileStore()
 const attrs = useAttrs()
 
-const amount = defineModel('amount')
-const amountForeign = defineModel('amountForeign')
-const currencyForeign = defineModel('currencyForeign')
-
-const localeCode = computed(() => profileStore.numberFormat.code)
-
-const {
-  displayValue,
-  onInput,
-  onFocus,
-  onBlur,
-  refreshDisplay,
-  isFocused,
-} = useAmountFormat({
-  modelValue: amount,
-  currencyDecimalPlaces: computed(() => Currency.getDecimalPlaces(props.currency)),
-  localeCode,
-})
-const amountBindings = computed(() => {
-  return {
-    ...attrs,
-    ...(props.isAmountRequired
-      ? {
-          required: true,
-          rules: [{ required: true, message: 'Amount is required' }],
-        }
-      : {}),
-  }
-})
-
 const props = defineProps({
   showQuickButtons: {
     type: Boolean,
@@ -159,6 +129,40 @@ const props = defineProps({
   },
 })
 
+const amount = defineModel('amount')
+const amountForeign = defineModel('amountForeign')
+const currencyForeign = defineModel('currencyForeign')
+
+const inputAmount = ref(null)
+const inputAmountForeign = ref(null)
+
+const localeCode = computed(() => profileStore.numberFormat.code)
+
+const {
+  displayValue,
+  onInput,
+  onFocus,
+  onBlur,
+  refreshDisplay,
+  isFocused,
+} = useAmountFormat({
+  modelValue: amount,
+  currencyDecimalPlaces: computed(() => Currency.getDecimalPlaces(props.currency)),
+  localeCode,
+  inputRef: inputAmount,
+})
+const amountBindings = computed(() => {
+  return {
+    ...attrs,
+    ...(props.isAmountRequired
+      ? {
+          required: true,
+          rules: [{ required: true, message: 'Amount is required' }],
+        }
+      : {}),
+  }
+})
+
 const currencySymbol = computed(() => Currency.getSymbol(props.currency))
 
 const currencyCode = computed(() => Currency.getCode(props.currency))
@@ -167,9 +171,6 @@ const currencyForeignCode = computed(() => Currency.getCode(currencyForeign.valu
 const currencyDecimalPlaces = computed(() => Currency.getDecimalPlaces(props.currency))
 const currencyForeignDecimalPlaces = computed(() => Currency.getDecimalPlaces(currencyForeign.value))
 const isConvertButtonVisible = computed(() => props.isForeignAmountVisible && currencyForeign.value)
-
-const inputAmount = ref(null)
-const inputAmountForeign = ref(null)
 
 const quickButtons = profileStore.quickValueButtons
 

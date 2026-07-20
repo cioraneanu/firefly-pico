@@ -35,7 +35,7 @@ export function parseLocaleNumber(value, localeCode) {
   let result = value
   if (group !== '.') {
     result = result.replaceAll(group, '')
-  } else {
+  } else if (result.includes(decimal)) {
     result = result.replace(/\.(?=\d{3})/g, '')
   }
   result = result.replace(decimal, '.')

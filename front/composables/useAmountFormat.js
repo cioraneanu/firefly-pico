@@ -1,8 +1,8 @@
 import { ref, watch } from 'vue'
-import { evalMath, removeEndOperators } from '~/utils/MathUtils'
+import { evalMath, removeEndOperators, sanitizeAmount } from '~/utils/MathUtils'
 import { parseLocaleNumber, formatLocaleNumber, getLocaleSeparators } from '~/utils/NumberUtils'
 
-export function useAmountFormat({ modelValue, currencyDecimalPlaces, localeCode }) {
+export function useAmountFormat({ modelValue, currencyDecimalPlaces, localeCode, inputRef }) {
   const isFocused = ref(false)
   const dirty = ref(false)
   const displayValue = ref(modelValue.value ?? '')
@@ -70,16 +70,32 @@ export function useAmountFormat({ modelValue, currencyDecimalPlaces, localeCode 
     const cursorPos = e.target.selectionStart
 
     if (hasMathOperators(raw)) {
-      displayValue.value = raw
-      modelValue.value = raw
+      const normalized = parseLocaleNumber(raw, localeCode.value)
+      const sanitized = sanitizeAmount(normalized)
+      displayValue.value = sanitized
+      modelValue.value = sanitized
+      e.target.value = sanitized
       return
     }
 
-    const parsed = parseLocaleNumber(raw, localeCode.value)
-    modelValue.value = parsed
+    const { decimal } = getLocaleSeparators(localeCode.value)
 
-    const formatted = formatThousandsOnly(parsed, localeCode.value)
+    let clean = ''
+    let seenDecimal = false
+    for (const c of raw) {
+      if (/\d/.test(c)) {
+        clean += c
+      } else if ((c === '.' || c === decimal) && !seenDecimal) {
+        seenDecimal = true
+        clean += '.'
+      }
+    }
+
+    modelValue.value = clean
+
+    const formatted = formatThousandsOnly(clean, localeCode.value)
     displayValue.value = formatted
+    e.target.value = formatted
 
     requestAnimationFrame(() => {
       restoreCursor(e.target, raw, cursorPos, formatted)
@@ -87,11 +103,13 @@ export function useAmountFormat({ modelValue, currencyDecimalPlaces, localeCode 
   }
 
   const onBlur = () => {
+    if (!isFocused.value) return
     isFocused.value = false
     const raw = displayValue.value
 
     if (!dirty.value) {
       displayValue.value = formatForDisplay(modelValue.value)
+      inputRef?.value?.blur()
       return
     }
 
@@ -108,6 +126,8 @@ export function useAmountFormat({ modelValue, currencyDecimalPlaces, localeCode 
     } else {
       displayValue.value = raw
     }
+
+    inputRef?.value?.blur()
   }
 
   watch(modelValue, () => {
