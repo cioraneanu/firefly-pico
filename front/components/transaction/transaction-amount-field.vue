@@ -46,7 +46,7 @@
           placeholder="Foreign amount "
           label="Foreign amount"
           class="flex-1 flex-center-vertical app-field transaction-amount-field transaction-foreign-amount-field"
-          v-bind="attrs"
+          v-bind="foreignAmountBindings"
           label-align="top"
           @click="() => inputAmountForeign.focus()"
         >
@@ -127,6 +127,10 @@ const props = defineProps({
     type: Boolean,
     default: false,
   },
+  isForeignAmountRequired: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const amount = defineModel('amount')
@@ -152,14 +156,25 @@ const {
   inputRef: inputAmount,
 })
 const amountBindings = computed(() => {
+  const rules = [...(attrs.rules ?? [])]
+  if (props.isAmountRequired) {
+    rules.unshift({ required: true, message: 'Amount is required' })
+  }
   return {
     ...attrs,
-    ...(props.isAmountRequired
-      ? {
-          required: true,
-          rules: [{ required: true, message: 'Amount is required' }],
-        }
-      : {}),
+    required: props.isAmountRequired || attrs.required,
+    rules,
+  }
+})
+const foreignAmountBindings = computed(() => {
+  const rules = [...(attrs.rules ?? [])]
+  if (props.isForeignAmountRequired) {
+    rules.unshift({ required: true, message: 'Foreign amount is required' })
+  }
+  return {
+    ...attrs,
+    required: props.isForeignAmountRequired || attrs.required,
+    rules,
   }
 })
 
