@@ -19,6 +19,7 @@ export default class TransactionTemplate extends BaseModel {
       type: type,
       amount: '',
       tags: [],
+      extra_names: [],
       description: '',
       notes: '',
       accountSource: null,
@@ -29,7 +30,7 @@ export default class TransactionTemplate extends BaseModel {
 
   // ------------
 
-  getFake(id) {
+  getFake() {
     return {}
   }
 

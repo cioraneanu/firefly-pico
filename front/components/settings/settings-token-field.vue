@@ -56,4 +56,3 @@ const onPaste = async () => {
 }
 </script>
 
-<style></style>

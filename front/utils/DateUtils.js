@@ -1,6 +1,15 @@
 import { format, parse, parseISO } from 'date-fns'
 
 class DateUtils {
+  static get storageSerializer() {
+    return {
+      serializer: {
+        read: (v) => (v === null || v === 'null' ? null : new Date(v)),
+        write: (v) => (v === null ? 'null' : v.toISOString()),
+      },
+    }
+  }
+
   /// ======================== THE REAL DATE UTIL STARTS HERE ============================
   /// --------------------------------- CONSTANTS ----------------------------------------
 

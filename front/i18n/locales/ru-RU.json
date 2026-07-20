@@ -74,22 +74,54 @@
     "clear": "Очистить",
     "applied_filters": "Примененные фильтры",
     "apply_filters": "Применить фильтры",
-    "transaction_filters": "Фильтры транзакций"
+    "transaction_filters": "Фильтры транзакций",
+    "total": "Итого",
+    "compute_total": "Рассчитать итог"
   },
   "transaction": {
     "title_list": "Список транзакций",
     "split_transaction": "Разделенная транзакция",
     "assistant": "Ассистент",
     "assistant_format": "Формат = [шаблон / тег?] [сумма?] [описание?]",
+    "assistant_ramble_title": "Dictate transactions",
+    "assistant_ramble_placeholder": "Say or edit transactions here...",
+    "assistant_ramble_input_hint": "Введите или продиктуйте ваши транзакции",
+    "assistant_ramble_listening": "Слушаю...",
+    "assistant_ramble_play": "Воспроизвести запись",
+    "assistant_ramble_stop_playback": "Остановить воспроизведение",
+    "assistant_ramble_interpret": "Interpret",
+    "assistant_ramble_preview": "Preview",
+    "assistant_ramble_create": "Create {count}",
+    "assistant_ramble_created_toast": "1 transaction created | {count} transactions created",
+    "assistant_ramble_no_transactions_yet": "No transactions yet",
+    "assistant_ramble_no_results": "No transactions found",
+    "assistant_ramble_saved_count": "{count} saved rambles waiting",
+    "assistant_ramble_load_saved": "Load saved",
+    "assistant_ramble_delete_saved": "Delete saved rambles",
+    "assistant_ramble_delete_confirm_title": "Delete saved rambles?",
+    "assistant_ramble_delete_confirm_message": "This permanently deletes all loaded rambles from the database.",
+    "assistant_ramble_delete_one_confirm_message": "This permanently deletes this ramble from the database.",
+    "assistant_ramble_retry_failed": "Retry {count}",
+    "assistant_ramble_progress": "{created}/{total} created",
+    "assistant_ramble_progress_failed": "{created}/{total} created, {failed} failed",
+    "assistant_ramble_progress_creating": "Creating {current}/{total}",
+    "assistant_ramble_edit_title": "Edit ramble transaction",
     "assistant_tutorial_title": "Ассистент транзакций",
     "assistant_tutorial_body": "<p>Легко создавайте транзакции, вводя текст здесь (или используя диктовку на телефоне).</p>\n<p>Ожидаемый формат:<br> <b>[поиск]&nbsp; [сумма?]&nbsp; [описание?]&nbsp; [задача?]</b></p>\n<p>1. <b>Поиск</b> ищет по названиям ваших тегов, категорий и шаблонов транзакций. Он поддерживает ввод части названия и даже допускает некоторые ошибки в написании.<br><code> элек => электричество</code></p>\n<p>2. <b>Сумма</b> поддерживает математические выражения. Числа, разделенные пробелом, автоматически складываются.</p>\n<p>3. <b>Описание</b> необязательно. Используйте его, чтобы перезаписать имя тега по умолчанию.</p>\n<p>4. <b>Задача</b> позволяет легко добавить определенный пользователем \"тег задачи\", добавляя специальную строку (по умолчанию \"!!\"). Это можно изменить в \"Настройках\".</p>\n\n<p><b>Примеры</b><br>\n\"электричество\" = тег<br>\n\"бассейн\" = шаблон <br><br>\n\n<code>\nэлектричество 23<br> \nэлек 12*2+33<br> \nэлек 12+2*3 свое описание<br> \nэлек 25 !!<br>\nбас<br> \n\n</code>\n</p>\n\n<p>5. В правом верхнем углу есть выбор <b>валюты</b>, которую можно изменить на лету или установить по умолчанию в меню \"Настройки\" -> \"Ассистент\". При использовании этой функции <b>сумма</b> будет рассматриваться как указанная валюта и сконвертируется в валюту вашего выбранного счета. Это очень полезно в поездках за границу.</p>",
     "type": {
+      "all": "Все",
       "expense": "Расход",
       "income": "Доход",
       "transfer": "Перевод"
     },
     "source_account": "Счет списания",
     "destination_account": "Счет зачисления",
+    "interest_date": "Дата начисления процентов",
+    "book_date": "Дата учета",
+    "process_date": "Дата обработки",
+    "due_date": "Срок оплаты",
+    "payment_date": "Дата оплаты",
+    "invoice_date": "Дата счета",
     "make_template": "Создать шаблон",
     "configure_fields": "Настроить поля",
     "title_clone_transaction": "Клонировать транзакцию",
@@ -105,6 +137,9 @@
     "setup": {
       "title": "Установка",
       "pico_backend_url": "URL бэкенда Pico",
+      "http_headers": "HTTP-заголовки",
+      "http_header_key": "Ключ",
+      "http_header_value": "Значение",
       "sync_settings_via_token": "Синхронизация настроек через токен",
       "days_between_sync": "Дней между полной синхронизацией \"Дополнительно\"",
       "enabled_resources": "Включенные ресурсы",
@@ -148,8 +183,32 @@
     "assistant_entry": "Ассистент",
     "assistant": {
       "title": "Настройки ассистента",
+      "auto_focus": "Auto focus assistant",
       "substring_todo_tag": "Подстрока, добавляющая тег задачи",
-      "currency": "Сумма в тексте ассистента будет интерпретироваться как иностранная валюта этого типа"
+      "currency": "Сумма в тексте ассистента будет интерпретироваться как иностранная валюта этого типа",
+      "ramble": "Dictation / ramble",
+      "ramble_endpoint": "LLM endpoint",
+      "ramble_model": "LLM model",
+      "ramble_api_key": "LLM API key",
+      "ramble_info": "Stored only in this browser. Direct browser calls expose the API key on this device and require the endpoint to allow CORS.",
+      "ramble_server_info": "Configured by the server. Browser LLM settings are disabled for this instance.",
+      "llm_status": "LLM ассистента",
+      "llm_status_subtitle": "Обеспечивает функцию диктовки транзакций",
+      "llm_configured": "Настроено на сервере",
+      "llm_not_configured": "Не настроено",
+      "llm_not_configured_info": "Чтобы включить, задайте эти переменные окружения на бэкенде Pico:",
+      "transcription_status": "Расшифровка голоса",
+      "transcription_status_subtitle": "Преобразует голосовые записи в текст",
+      "transcription_endpoint": "Endpoint расшифровки",
+      "transcription_model": "Модель расшифровки",
+      "llm_context": "Additional LLM context",
+      "llm_context_placeholder": "For example: Return descriptions in English",
+      "llm_test": "Test LLM configuration",
+      "llm_test_success": "LLM configuration works",
+      "llm_test_failed": "LLM configuration test failed",
+      "transcription_test": "Test transcription configuration",
+      "transcription_test_success": "Transcription configuration works",
+      "transcription_test_failed": "Transcription configuration test failed"
     },
     "formatting_entry": "Форматирование",
     "formatting": {
@@ -206,7 +265,8 @@
         "default_category": "Категория по умолчанию",
         "default_tags": "Теги по умолчанию (только предвыбранные)",
         "auto_tags": "Авто-теги (добавляются после создания)",
-        "foreign_currency": "Иностранная валюта для расходов"
+        "foreign_currency": "Иностранная валюта для расходов",
+        "set_default_time_to_midnight": "Установить время по умолчанию на 00:00"
       }
     },
     "about_entry": "О приложении",
@@ -282,7 +342,10 @@
     "title": "Выберите валюту"
   },
   "validation": {
-    "required": "Поле обязательно для заполнения"
+    "required": "Поле обязательно для заполнения",
+    "positive": "Значение должно быть больше 0",
+    "integer_range": "Значение должно быть от {min} до {max}",
+    "date_after": "Дата должна быть позже минимальной даты"
   },
   "primary": "Основной",
   "secondary": "вторичный",
@@ -331,7 +394,10 @@
     "title_edit": "Редактировать тег",
     "parent_tag": "Родительский тег",
     "mark_as_todo": "Пометить как задачу",
-    "end_date": "Дата окончания"
+    "end_date": "Дата окончания",
+    "total": "Итого",
+    "compute_total": "Рассчитать итог",
+    "total_success": "Итог тега обновлён"
   },
   "category_page": {
     "title_add": "Добавить категорию",
@@ -416,6 +482,10 @@
     },
     "expenses_by_categories": "Расходы по категориям",
     "transfers_by_categories": "Переводы по категориям",
+    "amount_modes": {
+      "expenses_only": "Только расходы",
+      "net_amount": "Чистая сумма"
+    },
     "configure_cards": "Настроить карточки"
   },
   "profile_page": {

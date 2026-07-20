@@ -31,6 +31,14 @@ if (!function_exists('getUser')) {
 }
 
 
+if (!function_exists('getUserId')) {
+    function getUserId()
+    {
+        return data_get(getUser(), 'data.id');
+    }
+}
+
+
 if (!function_exists('fget')) {
 
     function fget($variable, $fields, $default = null, $params = [])

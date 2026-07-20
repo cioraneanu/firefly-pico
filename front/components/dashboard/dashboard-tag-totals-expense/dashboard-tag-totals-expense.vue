@@ -2,13 +2,28 @@
   <van-cell-group inset>
     <div class="van-cell-group-title flex-center-vertical">
       <div class="flex-1">{{ $t('dashboard.expenses_by_tags.title') }}:</div>
-      <div>
-        <van-button size="small" @click="onToggleTagMode">{{ tagModeDisplayName }}</van-button>
-      </div>
+      <van-popover v-model:show="showOptionsPopover" placement="bottom-end">
+        <div class="display-flex flex-column gap-2 p-10">
+          <div class="display-flex flex-column gap-1">
+            <div class="text-size-12 font-weight-600 text-muted">{{ $t('tags') }}</div>
+            <app-tabs v-model="dashboardStore.tagsWidgetModeOnlyRootTag" :items="tagModeTabs" />
+          </div>
+          <div class="display-flex flex-column gap-1">
+            <div class="text-size-12 font-weight-600 text-muted">{{ $t('amount') }}</div>
+            <app-tabs v-model="dashboardStore.widgetsNetAmountMode" :items="amountModeTabs" />
+          </div>
+        </div>
+
+        <template #reference>
+          <button type="button" class="app-button-icon">
+            <app-icon :icon="TablerIconConstants.settings" :size="18" />
+          </button>
+        </template>
+      </van-popover>
     </div>
     <div class="display-flex flex-column ml-15 mr-15">
       <table>
-        <tr v-for="bar in barsList" class="cursor-pointer" @click="onShowActionSheet(bar)">
+        <tr v-for="bar in barsList" :key="bar.tag_id" class="cursor-pointer" @click="onShowActionSheet(bar)">
           <td style="width: 1%">
             <div class="flex-center-vertical gap-1 my-1">
               <app-icon :icon="Tag.getIcon(bar.tag) ?? TablerIconConstants.tag" :size="20" />
@@ -31,7 +46,6 @@
   </van-cell-group>
 </template>
 <script setup>
-import { get } from 'lodash-es'
 import RouteConstants from '~/constants/RouteConstants.js'
 import Transaction from '~/models/Transaction.js'
 import Tag from '~/models/Tag.js'
@@ -42,12 +56,16 @@ import { useActionSheet } from '~/composables/useActionSheet.js'
 const dashboardStore = useDashboardStore()
 const tagStore = useTagStore()
 const { t } = useI18n()
+const showOptionsPopover = ref(false)
 
-const onToggleTagMode = () => {
-  dashboardStore.tagsWidgetModeOnlyRootTag = !dashboardStore.tagsWidgetModeOnlyRootTag
-}
-
-const tagModeDisplayName = computed(() => (dashboardStore.tagsWidgetModeOnlyRootTag ? t('dashboard.expenses_by_tags.one_root_tag') : t('dashboard.expenses_by_tags.all_tags')))
+const tagModeTabs = computed(() => [
+  { label: t('dashboard.expenses_by_tags.one_root_tag'), value: true },
+  { label: t('dashboard.expenses_by_tags.all_tags'), value: false },
+])
+const amountModeTabs = computed(() => [
+  { label: t('dashboard.amount_modes.expenses_only'), value: false },
+  { label: t('dashboard.amount_modes.net_amount'), value: true },
+])
 
 const barsList = computed(() => {
   const tagTotalDictionary = dashboardStore.dashboardExpensesByTag
@@ -87,12 +105,13 @@ const onGoToTransactions = async (tag) => {
   const startDate = DateUtils.dateToString(dashboardStore.dashboardDateStart)
   const endDate = DateUtils.dateToString(dashboardStore.dashboardDateEnd)
   const excludedUrl = getExcludedTransactionUrl()
+  const typeParam = dashboardStore.widgetsNetAmountMode ? '' : `&type=${Transaction.types.expense.code}`
 
   if (!tag) {
-    await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_tag=true&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}${excludedUrl}`)
+    await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_tag=true&date_start=${startDate}&date_end=${endDate}${typeParam}${excludedUrl}`)
     return
   }
 
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${tag.id}&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.expense.code}${excludedUrl}`)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${tag.id}&date_start=${startDate}&date_end=${endDate}${typeParam}${excludedUrl}`)
 }
 </script>

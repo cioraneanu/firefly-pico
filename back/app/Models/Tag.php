@@ -10,12 +10,16 @@ class Tag extends BaseModel
         'icon',
         'parent_id',
         'is_todo',
+        'total_amount',
+        'total_currency_id',
     ];
 
     public static $extraFields = [
         'icon',
         'parent_id',
-        'is_todo'
+        'is_todo',
+        'total_amount',
+        'total_currency_id'
     ];
 
     protected $with = [];

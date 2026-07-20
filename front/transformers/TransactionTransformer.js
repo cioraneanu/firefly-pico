@@ -11,6 +11,7 @@ import { usePiggyBankStore } from '~/stores/piggyBankStore'
 import { useCurrencyStore } from '~/stores/currencyStore'
 import Transaction from '~/models/Transaction'
 import Tag from '~/models/Tag'
+import { transactionExtraDateFieldList } from '~/constants/TransactionConstants.js'
 import Account from '~/models/Account.js'
 import { useAppStore } from '~/stores/appStore.js'
 
@@ -38,6 +39,7 @@ export default class TransactionTransformer extends ApiTransformer {
       transaction.amount = Transaction.formatAmountForCurrency(transaction?.amount, transaction.currency)
       transaction.amountForeign = Transaction.formatAmountForCurrency(transaction?.foreign_amount, transaction.currencyForeign)
       transaction.date = DateUtils.autoToDate(transaction.date)
+      transactionExtraDateFieldList.forEach((field) => (transaction[field.code] = DateUtils.autoToDate(transaction[field.fireflyCode])))
       transaction.accountSource = accountDictionary[transaction['source_id']]
       transaction.accountDestination = accountDictionary[transaction['destination_id']]
       transaction.category = categoryDictionary[transaction['category_id']]
@@ -81,6 +83,9 @@ export default class TransactionTransformer extends ApiTransformer {
         date: DateUtils.dateToString(transaction.date, DateUtils.FORMAT_ENGLISH_DATE_HOUR_MINUTE),
         type: Transaction.getTransactionTypeForAccounts({ source: accountSource, destination: accountDestination }).fireflyCode,
       }
+
+      // Send null when unset so clearing an extra date in the form also clears it in Firefly
+      transactionExtraDateFieldList.forEach((field) => (newItem[field.fireflyCode] = DateUtils.dateToString(get(transaction, field.code))))
 
       const foreignAmount = get(transaction, 'amountForeign', 0)
       const foreignCurrencyId = get(transaction, 'currencyForeign.id')

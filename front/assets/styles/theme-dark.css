@@ -344,6 +344,66 @@
     box-shadow: rgba(0, 0, 0, 0.4) 0px 3px 8px;
 }
 
+.van-theme-dark .ramble-error {
+    background: rgba(236, 64, 122, 0.16);
+    color: #ff8aa8;
+}
+
+.van-theme-dark .ramble-header-icon {
+    box-shadow: none;
+}
+
+.van-theme-dark .van-button.ramble-interpret-button {
+    background: #2a2a2c;
+    border-color: #f5f5f5;
+    color: #f5f5f5;
+}
+
+.van-theme-dark .llm-status-pill-on {
+    color: #7bd28a;
+    background: rgba(102, 187, 106, 0.18);
+}
+
+.van-theme-dark .llm-detail-panel {
+    border: 1px solid #444;
+}
+
+.van-theme-dark .llm-status-pill-off {
+    color: #ff8aa8;
+    background: rgba(236, 64, 122, 0.16);
+}
+
+.van-theme-dark .transaction-desktop-row {
+    border-color: #2e2e33;
+    color: #f1f5f9;
+}
+
+.van-theme-dark .transaction-desktop-row:hover,
+.van-theme-dark .transaction-desktop-chip {
+    background: #222;
+}
+
+.van-theme-dark .transaction-desktop-chip {
+    border-color: #444;
+    color: #cbd5e1;
+}
+
+.van-theme-dark .account-badge {
+    border: 1.5px dashed #777;
+}
+
+.van-theme-dark .category-badge {
+    border: 1.5px dashed #777;
+}
+
+.van-theme-dark .tag-badge {
+    border: 1.5px dashed #777;
+}
+
+.van-theme-dark .account-flow-arrow {
+    color: #71717a;
+}
+
 .van-theme-dark .budget-icon {
     background: #333;
 }
@@ -372,6 +432,11 @@
 
 .van-theme-dark .transaction-amount-operations {
     background: #222;
+}
+
+.van-theme-dark .ramble-modern-badge .van-badge {
+    background: #82181a;
+    color: #fff;
 }
 
 .van-theme-dark .transaction-amount-operations .button {

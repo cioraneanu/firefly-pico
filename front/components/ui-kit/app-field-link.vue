@@ -25,4 +25,3 @@ const binding = computed(() => ({
 }))
 </script>
 
-<style></style>

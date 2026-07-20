@@ -42,4 +42,3 @@ const onToggle = () => {
 const icon = computed(() => (modelValue.value ? TablerIconConstants.booleanCheckOn : TablerIconConstants.booleanCheckOff))
 </script>
 
-<style></style>

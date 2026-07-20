@@ -1,0 +1,20 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "front-dev",
+      "cwd": "front",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000,
+      "autoPort": true
+    },
+    {
+      "name": "pico-docs",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev", "--prefix", "/Users/mihaicioraneanu/Documents/Projects/frontend/firefly-pico-docs"],
+      "port": 3000,
+      "autoPort": true
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-import { cloneDeep, get } from 'lodash-es'
+import { get } from 'lodash-es'
 import ApiTransformer from './ApiTransformer'
 import { useAccountStore } from '~/stores/accountStore'
 import { useCategoryStore } from '~/stores/categoryStore'
@@ -43,15 +43,13 @@ export default class TransactionTemplateTransformer extends ApiTransformer {
       return null
     }
 
-    const source = get(item, 'account_source')
-    const destination = get(item, 'account_destination')
     // const transactionType = Transaction.getTransactionTypeForAccounts({ source, destination })
     const transactionType = get(item, 'type')
 
     return {
       id: get(item, 'id'),
       name: get(item, 'name'),
-      extra_names: (item.extra_names ?? []).map((item) => item.value),
+      extra_names: (item.extra_names ?? []).map((item) => item.value?.trim()).filter(Boolean),
       amount: get(item, 'amount'),
       description: get(item, 'description'),
       notes: get(item, 'notes'),

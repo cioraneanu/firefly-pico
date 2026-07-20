@@ -6,7 +6,13 @@
       <van-cell-group inset>
         <!--        <div class="van-cell-group-title">Setup</div>-->
 
-        <app-field v-model="picoBackendURL" left-icon="link-o" :label="$t('settings.setup.pico_backend_url')" :rules="[rule.required()]" required />
+        <app-field v-model="picoBackendURL" left-icon="link-o" :label="$t('settings.setup.pico_backend_url')" :rules="[rule.required()]" required>
+          <template #button>
+            <van-button size="small" native-type="button" :aria-label="$t('settings.setup.http_headers')" @click.stop="showHeadersDialog = true">
+              <app-icon :icon="TablerIconConstants.settings" :size="18" />
+            </van-button>
+          </template>
+        </app-field>
         <settings-token-field v-model="authToken" required />
         <app-boolean v-model="syncProfileInDB" left-icon="points" :label="$t('settings.setup.sync_settings_via_token')" />
         <app-field v-model="daysBetweenFullSync" :label="$t('settings.setup.days_between_sync')" :rules="[rule.required()]" required />
@@ -26,13 +32,35 @@
           <app-config-stat :icon="TablerIconConstants.transactionTemplate" :name="$t('settings.setup.templates')" :value="transactionTemplatesCount" />
           <app-config-stat :icon="TablerIconConstants.budget" :name="$t('settings.setup.budgets')" :value="budgetsCount" :muted="!profileStore.budgetsEnabled" />
           <app-config-stat :icon="TablerIconConstants.piggyBank" :name="$t('settings.setup.piggy_banks')" :value="piggyBanksCount" :muted="!profileStore.piggyBanksEnabled" />
-          <app-config-stat :icon="TablerIconConstants.recurringTransaction" :name="$t('settings.setup.recurring_transactions')" :value="recurringTransactionsCount" :muted="!profileStore.recurringTransactionsEnabled" />
+          <app-config-stat
+            :icon="TablerIconConstants.recurringTransaction"
+            :name="$t('settings.setup.recurring_transactions')"
+            :value="recurringTransactionsCount"
+            :muted="!profileStore.recurringTransactionsEnabled"
+          />
           <app-config-stat :icon="TablerIconConstants.lastSync" :name="$t('settings.setup.last_sync')" :value="lastSync" />
         </van-grid>
       </van-cell-group>
 
       <app-button-form-save />
     </van-form>
+
+    <van-dialog v-model:show="showHeadersDialog" :title="$t('settings.setup.http_headers')" :confirm-button-text="$t('ok')" width="100%" style="margin: 20px; max-height: 500px">
+      <div class="p-20 overflow-auto" style="max-height: 400px">
+        <div class="display-flex font-600 text-size-13">
+          <div class="flex-1">{{ $t('settings.setup.http_header_key') }}</div>
+          <div class="flex-1">{{ $t('settings.setup.http_header_value') }}</div>
+        </div>
+        <app-repeater v-model="picoBackendHeaders" :empty-item="{ key: '', value: '' }" :is-draggable="false">
+          <template #content="{ element }">
+            <div class="display-flex gap-1 mb-2">
+              <app-field v-model="element.key" class="flex-1 p-0" :placeholder="$t('settings.setup.http_header_key')" />
+              <app-field v-model="element.value" class="flex-1 p-0" :placeholder="$t('settings.setup.http_header_value')" />
+            </div>
+          </template>
+        </app-repeater>
+      </div>
+    </van-dialog>
   </div>
 </template>
 
@@ -55,7 +83,7 @@ import RouteConstants from '~/constants/RouteConstants'
 import AppConfigStat from '~/components/settings/app-config-stat.vue'
 import UserRepository from '~/repository/UserRepository'
 import TablerIconConstants from '~/constants/TablerIconConstants'
-import { get } from 'lodash-es'
+import { cloneDeep, get } from 'lodash-es'
 import { rule } from '~/utils/ValidationUtils.js'
 
 const appStore = useAppStore()
@@ -71,10 +99,10 @@ const templateStore = useTemplateStore()
 
 const authToken = ref('')
 const picoBackendURL = ref('')
+const picoBackendHeaders = ref([])
 const syncProfileInDB = ref(true)
 const daysBetweenFullSync = ref(4)
-
-
+const showHeadersDialog = ref(false)
 
 const accountsCount = computed(() => accountStore.accountList.length)
 const categoriesCount = computed(() => categoryStore.categoryList.length)
@@ -84,16 +112,14 @@ const piggyBanksCount = computed(() => piggyBankStore.piggyBankList.length)
 const recurringTransactionsCount = computed(() => recurringTransactionStore.recurringTransactionList.length)
 const transactionTemplatesCount = computed(() => templateStore.transactionTemplateList.length)
 const lastSync = computed(() => {
-  if (!dashboardStore.lastSync) {
-    return ' - '
-  }
-  return DateUtils.dateToUIWithTime(dashboardStore.lastSync, DateUtils.FORMAT_ROMANIAN_DATE_HOUR_MINUTE)
+  return appStore.lastSync ? DateUtils.dateToUIWithTime(appStore.lastSync) : ' - '
 })
 const { t } = useI18n()
 
 onMounted(() => {
   authToken.value = appStore.authToken
   picoBackendURL.value = appStore.picoBackendURL
+  picoBackendHeaders.value = cloneDeep(appStore.picoBackendHeaders)
   syncProfileInDB.value = appStore.syncProfileInDB
   daysBetweenFullSync.value = appStore.daysBetweenFullSync
 })
@@ -103,10 +129,9 @@ const onSave = async () => {
 
   appStore.authToken = authToken.value
   appStore.picoBackendURL = picoBackendURL.value
+  appStore.picoBackendHeaders = picoBackendHeaders.value.filter(({ key }) => key?.trim()).map(({ key, value }) => ({ key: key.trim(), value }))
   appStore.syncProfileInDB = syncProfileInDB.value
   appStore.daysBetweenFullSync = daysBetweenFullSync.value
-
-
 
   const userResponse = await new UserRepository().getUser()
   if (!ResponseUtils.isSuccess(userResponse)) {

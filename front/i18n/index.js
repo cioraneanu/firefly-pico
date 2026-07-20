@@ -11,7 +11,8 @@ export const languageCode = {
   french: 'fr-FR',
   polish: 'pl',
   russian: 'ru-RU',
-  spanish: 'es-MX'
+  spanish: 'es-MX',
+  korean: 'ko',
 }
 
 export const supportedLanguages = [
@@ -80,5 +81,11 @@ export const supportedLanguages = [
     file: 'es-MX.json',
     displayName: 'Español (México)',
     icon: 'svgo-flags-mx',
+  },
+  {
+    code: languageCode.korean,
+    file: 'ko.json',
+    displayName: '한국어',
+    icon: 'svgo-flags-kr',
   },
 ]

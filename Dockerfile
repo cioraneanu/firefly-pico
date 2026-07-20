@@ -9,6 +9,7 @@ RUN apk add --no-cache \
     nginx \
     nodejs \
     npm \
+    redis \
     supervisor \
     php82 \
     php82-session \
@@ -33,6 +34,8 @@ RUN apk add --no-cache \
     php82-pdo_mysql \
     php82-pdo_pgsql \
     php82-pdo_sqlite \
+    php82-pcntl \
+    php82-posix \
     php82-tokenizer
 RUN ln -s /usr/bin/php82 /usr/bin/php
 
@@ -141,6 +144,10 @@ RUN mkdir -p /run/php/ && touch /run/php/php8.2-fpm.pid && chown -R www-data:www
 RUN mkdir -p /var/log/php82 && chown -R www-data:www-data /var/log/php82
 COPY docker/conf/php-fpm/ /etc/php82/
 
+# Configure redis (backs the Horizon job queue)
+COPY docker/conf/redis/redis.conf /etc/redis-pico.conf
+RUN mkdir -p /tmp/redis && chown -R www-data:www-data /tmp/redis
+
 # Configure nginx
 COPY docker/conf/nginx/ /etc/nginx/
 RUN chown -R www-data:www-data /var/log/nginx /var/lib/nginx /run/nginx 2>/dev/null; \
@@ -151,6 +158,10 @@ COPY --chmod=755 docker/docker-entrypoint.d/ /docker-entrypoint.d/
 
 #set default db connection
 ENV DB_CONNECTION=sqlite
+
+#queued jobs (voice transcription) run on the bundled redis through Horizon
+ENV QUEUE_CONNECTION=redis
+ENV REDIS_CLIENT=predis
 
 USER www-data
 

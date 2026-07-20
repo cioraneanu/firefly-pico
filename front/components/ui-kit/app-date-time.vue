@@ -145,4 +145,3 @@ const onClickedAddDay = () => {
 }
 </script>
 
-<style></style>

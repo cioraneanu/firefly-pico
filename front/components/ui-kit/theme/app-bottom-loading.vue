@@ -20,4 +20,3 @@ const onResync = async () => {
 }
 </script>
 
-<style></style>

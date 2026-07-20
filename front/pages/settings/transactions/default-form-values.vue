@@ -15,6 +15,8 @@
         <tag-select v-model="autoAddedTags" :label="$t('settings.transactions.default_form_values.auto_tags')" />
 
         <currency-select v-model="defaultForeignCurrency" :label="$t('settings.transactions.default_form_values.foreign_currency')" />
+
+        <app-boolean v-model="defaultTransactionTimeAtMidnight" :label="$t('settings.transactions.default_form_values.set_default_time_to_midnight')" />
       </van-cell-group>
 
       <app-button-form-save />
@@ -35,13 +37,13 @@ import { useI18n } from 'vue-i18n'
 const { t } = useI18n()
 const profileStore = useProfileStore()
 
-
 const defaultAccountSource = ref(null)
 const defaultAccountDestination = ref(null)
 const defaultCategory = ref(null)
 const defaultTags = ref([])
 const autoAddedTags = ref([])
 const defaultForeignCurrency = ref([])
+const defaultTransactionTimeAtMidnight = ref(false)
 
 const syncedSettings = [
   { store: profileStore, path: 'defaultAccountSource', ref: defaultAccountSource },
@@ -50,6 +52,7 @@ const syncedSettings = [
   { store: profileStore, path: 'defaultTags', ref: defaultTags },
   { store: profileStore, path: 'autoAddedTags', ref: autoAddedTags },
   { store: profileStore, path: 'defaultForeignCurrency', ref: defaultForeignCurrency },
+  { store: profileStore, path: 'defaultTransactionTimeAtMidnight', ref: defaultTransactionTimeAtMidnight },
 ]
 
 watchSettingsStore(syncedSettings)

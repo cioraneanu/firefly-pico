@@ -15,6 +15,15 @@ services:
       - DB_USERNAME=firefly-pico
       - DB_PASSWORD=very-secure-pwd
       - TZ=Europe/London
+      # Optional: AI assistant "Ramble" (any OpenAI compatible API)
+      # - ASSISTANT_LLM_ENDPOINT=https://api.openai.com/v1/chat/completions
+      # - ASSISTANT_LLM_MODEL=gpt-4o-mini
+      # - ASSISTANT_LLM_API_KEY=your-api-key
+      # - ASSISTANT_LLM_CONTEXT=
+      # Optional: voice transcription for audio rambles
+      # - ASSISTANT_TRANSCRIPTION_ENDPOINT=https://api.openai.com/v1/audio/transcriptions
+      # - ASSISTANT_TRANSCRIPTION_MODEL=gpt-4o-mini-transcribe
+      # - ASSISTANT_TRANSCRIPTION_API_KEY=your-api-key
     depends_on:
       - firefly-pico-postgresql
     networks:

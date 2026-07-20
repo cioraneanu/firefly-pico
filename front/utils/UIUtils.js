@@ -1,38 +1,41 @@
+import { showConfirmDialog, showNotify } from 'vant'
+
 export default class UIUtils {
+  static toastClassName = 'app-toast'
+
+  static toastTypes = {
+    success: 'success',
+    error: 'danger',
+  }
 
   static showToastSuccess(message, duration = 1000) {
-    const instance = showNotify({
-      type: 'success',
-      message: message,
-      duration: duration,
-      onClick: (event) => {
-        instance?.close()
-      },
-    })
+    return UIUtils.showToast(message, UIUtils.toastTypes.success, duration)
   }
 
   static showToastError(message, duration = 3000) {
+    return UIUtils.showToast(message, UIUtils.toastTypes.error, duration)
+  }
+
+  static showToast(message, type, duration) {
     const instance = showNotify({
-      type: 'danger',
-      message: message,
-      duration: duration,
-      onClick: (event) => {
+      type,
+      message,
+      duration,
+      className: UIUtils.toastClassName,
+      onClick: () => {
         instance?.close()
       },
     })
-  }
 
+    return instance
+  }
 
   static async showDeleteConfirmation(title, message) {
-    return new Promise((resolve, reject) => {
-      showConfirmDialog({
-        title: title,
-        message: message,
-      })
-        .then(() => resolve(true))
-        .catch(() => resolve(false))
+    return showConfirmDialog({
+      title,
+      message,
     })
+      .then(() => true)
+      .catch(() => false)
   }
-
 }
-

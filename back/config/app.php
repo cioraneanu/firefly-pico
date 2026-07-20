@@ -57,8 +57,6 @@ return [
 
     'url' => env('APP_URL', 'http://localhost'),
     'firefly_url' => env('FIREFLY_URL', ''),
-    'openai_api_key' => env('OPENAI_API_KEY', ''),
-
     'asset_url' => env('ASSET_URL'),
 
     /*
@@ -169,6 +167,7 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
+        App\Providers\HorizonServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
     ])->toArray(),
 

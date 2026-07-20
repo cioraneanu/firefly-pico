@@ -25,8 +25,12 @@ export default class Transaction extends BaseModel {
       }) ?? Transaction.types.expense
 
     let date = new Date()
-    let minute = Math.ceil(date.getMinutes() / 10) * 10
-    date.setMinutes(minute)
+    if (profileStore.defaultTransactionTimeAtMidnight) {
+      date.setHours(0, 0, 0, 0)
+    } else {
+      let minute = Math.ceil(date.getMinutes() / 10) * 10
+      date.setMinutes(minute)
+    }
 
     return {
       attributes: {

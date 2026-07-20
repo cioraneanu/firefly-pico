@@ -8,7 +8,6 @@ export default class TransactionRepository extends BaseRepository {
     this.searchTransaction = this.searchTransaction.bind(this)
   }
 
-
   async searchTransaction({ filters = [], page = 1, pageSize = 50 } = {}) {
     const appStore = useAppStore()
     const url = `${appStore.picoBackendURL}/api/search/transactions`
@@ -16,5 +15,11 @@ export default class TransactionRepository extends BaseRepository {
     let response = await axios.get(searchUrl)
     return get(response, 'data', {})
   }
-}
 
+  async searchTransactionsTotal({ filters = [] } = {}) {
+    const appStore = useAppStore()
+    const url = `${appStore.picoBackendURL}/api/search/transactions/total`
+    let searchUrl = this.getUrlForRequest({ filters, page: null, pageSize: null, url })
+    return await axios.get(searchUrl)
+  }
+}

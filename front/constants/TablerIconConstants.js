@@ -1,5 +1,3 @@
-import { IconCoin } from '@tabler/icons-vue'
-
 export const icons = {
   // ------ UI usage -----
   account: 'IconCreditCard',
@@ -19,7 +17,6 @@ export const icons = {
   dashboard: 'IconDeviceDesktopAnalytics',
   exchangeRates: 'IconReplace',
   assistant: 'IconMessageChatbot',
-
 
   settingsAppConfig: 'IconTool',
   settingsUserPreferences: 'IconMoodCog',
@@ -58,6 +55,12 @@ export const icons = {
   cash: 'IconCash',
   cashBanknote: 'IconCashBanknote',
   clone: 'IconCopy',
+  close: 'IconX',
+  magic: 'IconSparkles',
+  microphone: 'IconMicrophone',
+  stop: 'IconPlayerStop',
+  play: 'IconPlayerPlay',
+  ramble: 'IconMessageCircleBolt',
 
   fieldIcon: 'IconFavicon',
   fieldCheckbox: 'IconToggleLeftFilled',
@@ -65,7 +68,6 @@ export const icons = {
   fieldSelect2: 'IconGridPattern',
   fieldText1: 'IconBlockquote',
   fieldText2: 'IconWriting',
-
 
   article: 'IconArticle',
   key: 'IconKey',
@@ -80,7 +82,6 @@ export const icons = {
   order: 'IconMenuOrder',
   list: 'IconListDetails',
   amountButtons: 'IconBusinessplan',
-
 
   // ------ Icon Select -----
 

@@ -16,7 +16,7 @@
             </div>
 
             <div class="subtitle display-flex flex-wrap gap-2">
-              <span v-if="accountType" class="tag-gray list-item-subtitle">{{ $t('account_page.account_type') }}: {{ accountType }}</span>
+              <span v-if="accountType" class="tag-gray list-item-subtitle">{{ accountType }}</span>
               <span v-if="accountRole" class="tag-gray list-item-subtitle">{{ $t('account_page.account_role') }}: {{ accountRole }}</span>
               <span v-if="accountGroup" class="tag-gray list-item-subtitle">{{ $t('account_page.account_group') }}: {{ accountGroup }}</span>
             </div>
@@ -73,4 +73,3 @@ const swipeCell = ref(null)
 const clickWithoutSwipe = useClickWithoutSwipe({ swipeCell: swipeCell, onClick: onEdit })
 </script>
 
-<style></style>

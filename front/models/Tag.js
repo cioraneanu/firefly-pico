@@ -1,6 +1,7 @@
 import BaseModel from '~/models/BaseModel'
 import TagRepository from '~/repository/TagRepository'
 import TagTransformer from '~/transformers/TagTransformer'
+import Currency from '~/models/Currency.js'
 import { get } from 'lodash-es'
 import { ellipsizeText } from '~/utils/Utils.js'
 
@@ -50,6 +51,10 @@ export default class Tag extends BaseModel {
     return ellipsizeText(this.getDisplayName(tag), ellipsizeLength)
   }
 
+  static getTotalFormatted(tag) {
+    return Currency.formatAmountWithSymbol(get(tag, 'attributes.total_amount'), get(tag, 'attributes.total_currency_id'))
+  }
+
   static getTagWithParents = (tag) => {
     const tagStore = useTagStore()
     let result = [tag]
@@ -65,5 +70,4 @@ export default class Tag extends BaseModel {
     }
     return result
   }
-
 }

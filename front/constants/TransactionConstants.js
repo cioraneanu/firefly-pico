@@ -37,6 +37,48 @@ export const transactionFormField = {
     icon: TablerIconConstants.settingsUserPreferencesDate,
     isVisible: true,
   },
+  interestDate: {
+    t: 'transaction.interest_date',
+    code: 'interestDate',
+    fireflyCode: 'interest_date',
+    icon: TablerIconConstants.settingsUserPreferencesDate,
+    isVisible: false,
+  },
+  bookDate: {
+    t: 'transaction.book_date',
+    code: 'bookDate',
+    fireflyCode: 'book_date',
+    icon: TablerIconConstants.settingsUserPreferencesDate,
+    isVisible: false,
+  },
+  processDate: {
+    t: 'transaction.process_date',
+    code: 'processDate',
+    fireflyCode: 'process_date',
+    icon: TablerIconConstants.settingsUserPreferencesDate,
+    isVisible: false,
+  },
+  dueDate: {
+    t: 'transaction.due_date',
+    code: 'dueDate',
+    fireflyCode: 'due_date',
+    icon: TablerIconConstants.settingsUserPreferencesDate,
+    isVisible: false,
+  },
+  paymentDate: {
+    t: 'transaction.payment_date',
+    code: 'paymentDate',
+    fireflyCode: 'payment_date',
+    icon: TablerIconConstants.settingsUserPreferencesDate,
+    isVisible: false,
+  },
+  invoiceDate: {
+    t: 'transaction.invoice_date',
+    code: 'invoiceDate',
+    fireflyCode: 'invoice_date',
+    icon: TablerIconConstants.settingsUserPreferencesDate,
+    isVisible: false,
+  },
   notes: {
     t: 'notes',
     code: 'notes',
@@ -109,5 +151,6 @@ export const transactionListHeroIcon = {
 }
 
 export const transactionListFieldList = Object.values(transactionListField)
+export const transactionExtraDateFieldList = Object.values(transactionFormField).filter((field) => field.fireflyCode)
 export const transactionListHeroIconList = Object.values(transactionListHeroIcon)
 export const transactionFormFieldList = Object.values(transactionFormField)

@@ -31,4 +31,25 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    'assistant_llm' => [
+        'endpoint' => env('ASSISTANT_LLM_ENDPOINT'),
+        'model' => env('ASSISTANT_LLM_MODEL'),
+        'api_key' => env('ASSISTANT_LLM_API_KEY'),
+        'context' => env('ASSISTANT_LLM_CONTEXT'),
+        'defaults' => [
+            'endpoint' => 'https://api.openai.com/v1/chat/completions',
+            'model' => 'gpt-4o-mini',
+        ],
+    ],
+
+    'assistant_transcription' => [
+        'endpoint' => env('ASSISTANT_TRANSCRIPTION_ENDPOINT'),
+        'model' => env('ASSISTANT_TRANSCRIPTION_MODEL'),
+        'api_key' => env('ASSISTANT_TRANSCRIPTION_API_KEY'),
+        'defaults' => [
+            'endpoint' => 'https://api.openai.com/v1/audio/transcriptions',
+            'model' => 'gpt-4o-mini-transcribe',
+        ],
+    ],
+
 ];

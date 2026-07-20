@@ -17,7 +17,7 @@
           <span>{{ $t('transaction_template_page.extra_names') }}</span>
           <app-repeater v-model="extra_names" :empty-item="{ value: '' }">
             <template #content="{ element, index }">
-              <app-field v-model="element.value" placeholder="Name" class="compact" :name="`extra-name-${index}`" required :rules="[rule.required()]" />
+              <app-field v-model="element.value" placeholder="Name" class="compact" :name="`extra-name-${index}`" />
             </template>
           </app-repeater>
         </div>
@@ -35,7 +35,6 @@
         <tag-select v-model="tags" />
 
         <budget-select v-model="budget" />
-
 
         <app-field v-model="notes" :label="$t('notes')" type="textarea" :icon="TablerIconConstants.fieldText1" rows="1" autosize />
       </van-cell-group>
@@ -55,7 +54,6 @@ import { ref } from 'vue';
 import RouteConstants from '~/constants/RouteConstants'
 import { useTemplateStore } from '~/stores/templateStore'
 import _, { get } from 'lodash-es'
-import { useProfileStore } from '~/stores/profileStore'
 import { ref } from 'vue'
 import { useForm } from '~/composables/useForm'
 import Account from '~/models/Account'
@@ -68,14 +66,12 @@ import TransactionTransformer from '~/transformers/TransactionTransformer'
 import { areIntEqual } from '~/utils/DataUtils'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
-import { transactionFormField } from '~/constants/TransactionConstants.js'
 
 const refAmount = ref(null)
 
 // ------------------------------------
 
 const templateStore = useTemplateStore()
-const profileStore = useProfileStore()
 const route = useRoute()
 const { t } = useI18n()
 
@@ -99,8 +95,6 @@ const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } =
   model: new TransactionTemplate(),
   onEvent: onEvent,
 })
-
-const voicesList = ref([])
 
 const { name, extra_names, amount, tags, description, notes, account_source, account_destination, category, type, budget } = generateChildren(item, [
   { computed: 'type', parentKey: `type` },
@@ -135,6 +129,8 @@ onMounted(async () => {
   }
 
   amount.value = sourceTransaction.amount
+  name.value = sourceTransaction.description
+  type.value = sourceTransaction.type
   description.value = sourceTransaction.description
   notes.value = sourceTransaction.notes
   account_source.value = sourceTransaction.accountSource
