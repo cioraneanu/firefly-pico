@@ -1,6 +1,6 @@
-import { ref, watch } from 'vue'
+import { ref, watch, nextTick } from 'vue'
 import { evalMath, removeEndOperators, sanitizeAmount } from '~/utils/MathUtils'
-import { parseLocaleNumber, formatLocaleNumber, getLocaleSeparators } from '~/utils/NumberUtils'
+import { formatLocaleNumber, getLocaleSeparators } from '~/utils/NumberUtils'
 
 export function useAmountFormat({ modelValue, currencyDecimalPlaces, localeCode, inputRef }) {
   const isFocused = ref(false)
@@ -70,19 +70,27 @@ export function useAmountFormat({ modelValue, currencyDecimalPlaces, localeCode,
     const cursorPos = e.target.selectionStart
 
     if (hasMathOperators(raw)) {
-      const normalized = parseLocaleNumber(raw, localeCode.value)
-      const sanitized = sanitizeAmount(normalized)
+      const sanitized = sanitizeAmount(raw)
       displayValue.value = sanitized
       modelValue.value = sanitized
       e.target.value = sanitized
+      restoreCursor(e.target, raw, cursorPos, sanitized)
+      nextTick(() => {
+        restoreCursor(e.target, raw, cursorPos, sanitized)
+      })
       return
     }
 
-    const { decimal } = getLocaleSeparators(localeCode.value)
+    const { group, decimal } = getLocaleSeparators(localeCode.value)
+
+    let stripped = raw
+    if (group === '.') {
+      stripped = raw.replace(/\.(?=\d{3})/g, '')
+    }
 
     let clean = ''
     let seenDecimal = false
-    for (const c of raw) {
+    for (const c of stripped) {
       if (/\d/.test(c)) {
         clean += c
       } else if ((c === '.' || c === decimal) && !seenDecimal) {
@@ -94,12 +102,21 @@ export function useAmountFormat({ modelValue, currencyDecimalPlaces, localeCode,
     modelValue.value = clean
 
     const formatted = formatThousandsOnly(clean, localeCode.value)
-    displayValue.value = formatted
-    e.target.value = formatted
+    const userTypedGroupSep = group === ','
+      ? raw.includes(',')
+      : /\.(?=\d{3})/.test(raw)
 
-    requestAnimationFrame(() => {
+    if (userTypedGroupSep) {
+      displayValue.value = raw
+      e.target.value = raw
+    } else {
+      displayValue.value = formatted
+      e.target.value = formatted
       restoreCursor(e.target, raw, cursorPos, formatted)
-    })
+      nextTick(() => {
+        restoreCursor(e.target, raw, cursorPos, formatted)
+      })
+    }
   }
 
   const onBlur = () => {
@@ -113,8 +130,7 @@ export function useAmountFormat({ modelValue, currencyDecimalPlaces, localeCode,
       return
     }
 
-    const parsed = parseLocaleNumber(raw, localeCode.value)
-    const clean = removeEndOperators(parsed)
+    const clean = removeEndOperators(modelValue.value)
     const { wasSuccessful, value } = evalMath(clean)
 
     if (wasSuccessful && value !== null) {
