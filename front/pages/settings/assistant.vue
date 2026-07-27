@@ -90,7 +90,14 @@
               <span class="llm-detail-label text-muted">{{ $t('settings.assistant.transcription_model') }}</span>
               <span class="llm-detail-value cursor-pointer" :title="appStore.transcriptionModel" @click="showFullDetailValue(appStore.transcriptionModel)">{{ appStore.transcriptionModel }}</span>
             </div>
+            <div class="llm-detail-row">
+              <app-icon :icon="TablerIconConstants.language" :size="16" />
+              <span class="llm-detail-label text-muted">{{ $t('settings.assistant.transcription_language') }}</span>
+              <span class="llm-detail-value">{{ appStore.transcriptionLanguage || $t('settings.assistant.transcription_language_auto') }}</span>
+            </div>
           </div>
+
+          <div v-if="appStore.transcriptionIsConfigured && !appStore.transcriptionLanguage" class="text-size-12 text-muted">{{ $t('settings.assistant.transcription_language_info') }}</div>
 
           <div v-if="appStore.transcriptionIsConfigured" class="flex-center">
             <van-button round size="small" plain :loading="isTestingTranscription" @click="testTranscription">
@@ -105,6 +112,7 @@
               <div class="llm-env-chip">ASSISTANT_TRANSCRIPTION_ENDPOINT</div>
               <div class="llm-env-chip">ASSISTANT_TRANSCRIPTION_MODEL</div>
               <div class="llm-env-chip">ASSISTANT_TRANSCRIPTION_API_KEY</div>
+              <div class="llm-env-chip">ASSISTANT_TRANSCRIPTION_LANGUAGE</div>
             </div>
           </template>
         </div>

@@ -15,6 +15,7 @@ services:
       # - ASSISTANT_TRANSCRIPTION_ENDPOINT=https://api.openai.com/v1/audio/transcriptions
       # - ASSISTANT_TRANSCRIPTION_MODEL=gpt-4o-mini-transcribe
       # - ASSISTANT_TRANSCRIPTION_API_KEY=your-api-key
+      # - ASSISTANT_TRANSCRIPTION_LANGUAGE=en
     volumes:
       - ./firefly-pico-data:/var/www/html/database/data
     restart: unless-stopped

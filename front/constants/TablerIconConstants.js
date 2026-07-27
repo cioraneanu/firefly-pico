@@ -61,6 +61,7 @@ export const icons = {
   stop: 'IconPlayerStop',
   play: 'IconPlayerPlay',
   ramble: 'IconMessageCircleBolt',
+  language: 'IconLanguage',
 
   fieldIcon: 'IconFavicon',
   fieldCheckbox: 'IconToggleLeftFilled',

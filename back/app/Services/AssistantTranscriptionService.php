@@ -14,17 +14,20 @@ class AssistantTranscriptionService
     }
 
     /**
-     * Transcribe every voice ramble in the collection that was never attempted before.
-     * Each ramble is attempted exactly once: is_transcribed marks the attempt, not success.
+     * Transcribe every voice ramble in the collection that was not transcribed yet.
+     * is_transcribed marks a completed transcription: a request that failed leaves it
+     * false so a later load retries it instead of losing the recording.
+     *
+     * @param string|null $language Language of these recordings, overriding the configured one.
      */
-    public function transcribePending($rambles): void
+    public function transcribePending($rambles, $language = null): void
     {
         $pending = $rambles->filter(fn($ramble) => $ramble->voice_path && !$ramble->is_transcribed);
         if ($pending->isEmpty()) {
             return;
         }
 
-        $config = $this->configService->getConfig();
+        $config = $this->configService->getConfig($language);
         if (!$config['isConfigured']) {
             return;
         }
@@ -32,6 +35,29 @@ class AssistantTranscriptionService
         foreach ($pending as $ramble) {
             $this->transcribe($ramble, $config);
         }
+
+        $this->purgeEmpty($pending);
+    }
+
+    /**
+     * Delete the rambles that transcribed into nothing (silence, or a recording without
+     * speech). They carry no text and would only show up as blank rows in the app.
+     * Returns the rambles that were kept.
+     */
+    public function purgeEmpty($rambles)
+    {
+        return $rambles->reject(function (AssistantRamble $ramble) {
+            if (!$ramble->is_transcribed || trim((string)$ramble->text) !== '') {
+                return false;
+            }
+
+            // Purging runs twice over the same models when a listing transcribes them.
+            if ($ramble->exists) {
+                $ramble->delete();
+            }
+
+            return true;
+        })->values();
     }
 
     public function testConfiguration(): array
@@ -50,10 +76,7 @@ class AssistantTranscriptionService
         }
 
         try {
-            $response = $request->attach('file', $wav, 'test.wav')->post($config['endpoint'], [
-                'model' => $config['model'],
-                'response_format' => 'json',
-            ]);
+            $response = $request->attach('file', $wav, 'test.wav')->post($config['endpoint'], $this->buildPayload($config));
         } catch (ConnectionException $exception) {
             return ['successful' => false, 'status' => 502, 'message' => $exception->getMessage() ?: 'Assistant transcription request failed.'];
         }
@@ -67,9 +90,13 @@ class AssistantTranscriptionService
 
     private function transcribe(AssistantRamble $ramble, array $config): void
     {
-        $ramble->is_transcribed = true;
-
         $text = $this->requestTranscription($ramble, $config);
+        if ($text === null) {
+            // The request itself failed. Leave the ramble alone so it is retried later.
+            return;
+        }
+
+        $ramble->is_transcribed = true;
         if ($text !== '') {
             $ramble->text = trim(implode("\n", array_filter([trim((string)$ramble->text), $text])));
         }
@@ -77,7 +104,10 @@ class AssistantTranscriptionService
         $ramble->save();
     }
 
-    private function requestTranscription(AssistantRamble $ramble, array $config): string
+    /**
+     * The transcribed text, '' when the recording holds no speech, null when the request failed.
+     */
+    private function requestTranscription(AssistantRamble $ramble, array $config): ?string
     {
         $disk = Storage::disk('local');
         if (!$disk->exists($ramble->voice_path)) {
@@ -98,18 +128,29 @@ class AssistantTranscriptionService
         try {
             $response = $request
                 ->attach('file', $contents, basename($ramble->voice_path))
-                ->post($config['endpoint'], [
-                    'model' => $config['model'],
-                    'response_format' => 'json',
-                ]);
+                ->post($config['endpoint'], $this->buildPayload($config));
         } catch (ConnectionException) {
-            return '';
+            return null;
         }
 
         if (!$response->successful()) {
-            return '';
+            return null;
         }
 
         return trim((string)data_get($response->json(), 'text'));
+    }
+
+    /**
+     * language is an optional hint of the OpenAI transcription API. It keeps short utterances
+     * ("farmacie 23") from being detected as the wrong language and transcribed as gibberish,
+     * so it is sent whenever it is configured.
+     */
+    private function buildPayload(array $config): array
+    {
+        return array_filter([
+            'model' => $config['model'],
+            'response_format' => 'json',
+            'language' => $config['language'],
+        ], fn($value) => $value !== '' && $value !== null);
     }
 }

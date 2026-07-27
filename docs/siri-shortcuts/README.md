@@ -41,6 +41,12 @@ Create a new shortcut in Shortcuts with these actions:
 
 Instead of dictated text, the endpoint also accepts an audio recording as a `multipart/form-data` upload in a `voice` field (`Record Audio` action + `Get Contents of URL` with Request Body `Form`, add a `File` field named `voice`). Accepted formats include m4a, mp3, wav, ogg/opus, webm and flac (max 25 MB). When the backend has `ASSISTANT_TRANSCRIPTION_ENDPOINT`/`ASSISTANT_TRANSCRIPTION_API_KEY` configured, the recording is transcribed automatically the first time the rambles are loaded, and the app shows a play button next to rambles that carry a recording. A single request can include both `text` and `voice`.
 
+Short utterances such as "farmacie 23" give the transcription model too little to detect the language from, and it then transcribes them as gibberish. Set `ASSISTANT_TRANSCRIPTION_LANGUAGE` to the language you speak, as an ISO-639-1 code (`ro`, `en`, `de`; `ro-RO` is accepted and reduced to `ro`).
+
+The same value can be sent per recording as a `language` form field, which overrides the environment for that request. Use this when one shortcut records in a different language than your default.
+
+Recordings that transcribe into nothing (silence, or no speech at all) are deleted together with their audio instead of being kept as blank rambles. A recording whose transcription request failed is kept and retried the next time the rambles are loaded.
+
 The readable source lives in `Firefly Pico Ramble.shortcut.plist`; regenerate the unsigned binary plist with:
 
 ```sh

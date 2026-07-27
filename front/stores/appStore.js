@@ -52,6 +52,7 @@ export const useAppStore = defineStore('app', () => {
   const transcriptionIsConfigured = computed(() => get(transcription.value, 'is_configured'))
   const transcriptionModel = computed(() => get(transcription.value, 'model'))
   const transcriptionEndpoint = computed(() => get(transcription.value, 'endpoint'))
+  const transcriptionLanguage = computed(() => get(transcription.value, 'language'))
 
   const activePage = computed(() => {
     const route = useRoute()
@@ -168,6 +169,7 @@ export const useAppStore = defineStore('app', () => {
     transcriptionIsConfigured,
     transcriptionModel,
     transcriptionEndpoint,
+    transcriptionLanguage,
 
     windowWidth,
     activePage,

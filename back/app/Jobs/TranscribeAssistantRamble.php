@@ -19,12 +19,12 @@ class TranscribeAssistantRamble implements ShouldQueue
 
     public $deleteWhenMissingModels = true;
 
-    public function __construct(public AssistantRamble $ramble)
+    public function __construct(public AssistantRamble $ramble, public ?string $language = null)
     {
     }
 
     public function handle(AssistantTranscriptionService $transcriptionService): void
     {
-        $transcriptionService->transcribePending(fcollect([$this->ramble]));
+        $transcriptionService->transcribePending(fcollect([$this->ramble]), $this->language);
     }
 }

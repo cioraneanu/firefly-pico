@@ -21,14 +21,17 @@ class AssistantController extends BaseController
     {
         BaseAuthorization::checkUser();
         $list = AssistantRamble::query()->allowed()->orderBy('created_at')->get();
-        app(AssistantTranscriptionService::class)->transcribePending($list);
+        $transcriptionService = app(AssistantTranscriptionService::class);
+        $transcriptionService->transcribePending($list);
+        // Also drops rambles left empty by an earlier transcription, so they stop showing up as blank rows.
+        $list = $transcriptionService->purgeEmpty($list);
         return $this->respond(['data' => $list,]);
     }
 
     public function getCount(Request $request)
     {
         BaseAuthorization::checkUser();
-        $list = AssistantRamble::query()->allowed()->count();
+        $list = AssistantRamble::query()->allowed()->withoutEmptyTranscription()->count();
         return $this->respond(['count' => $list,]);
     }
 
@@ -38,6 +41,7 @@ class AssistantController extends BaseController
         BaseAuthorization::checkUser();
         $request->validate([
             'voice' => ['nullable', 'file', 'mimes:mp3,mpga,wav,m4a,mp4,aac,ogg,oga,opus,webm,flac', 'max:25600'],
+            'language' => ['nullable', 'string', 'max:20'],
         ]);
 
         $text = trim((string)$request->get('text'));
@@ -59,10 +63,13 @@ class AssistantController extends BaseController
         ]);
 
         if ($ramble->voice_path) {
+            // The caller (a shortcut, for instance) can say which language it recorded in.
+            $language = trim((string)$request->get('language')) ?: null;
+
             // Without a real queue, transcribe in-process after the response so saving stays fast.
             config('queue.default') === 'sync'
-                ? TranscribeAssistantRamble::dispatchAfterResponse($ramble)
-                : TranscribeAssistantRamble::dispatch($ramble);
+                ? TranscribeAssistantRamble::dispatchAfterResponse($ramble, $language)
+                : TranscribeAssistantRamble::dispatch($ramble, $language);
         }
 
         return $this->respond([

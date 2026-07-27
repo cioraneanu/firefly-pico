@@ -72,6 +72,7 @@ import {
   IconPlayerStop,
   IconSparkles,
   IconMessageCircleBolt,
+  IconLanguage,
   IconX,
   IconArrowNarrowRight,
 } from '@tabler/icons-vue'
@@ -150,6 +151,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconPlayerStop', IconPlayerStop)
   nuxtApp.vueApp.component('IconSparkles', IconSparkles)
   nuxtApp.vueApp.component('IconMessageCircleBolt', IconMessageCircleBolt)
+  nuxtApp.vueApp.component('IconLanguage', IconLanguage)
   nuxtApp.vueApp.component('IconX', IconX)
   nuxtApp.vueApp.component('IconArrowNarrowRight', IconArrowNarrowRight)
 

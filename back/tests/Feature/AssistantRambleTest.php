@@ -17,13 +17,16 @@ class AssistantRambleTest extends TestCase
 
     private $token = 'test-token';
 
+    // Tests override this to fake a different transcription outcome.
+    private $transcriptionStub = null;
+
     protected function setUp(): void
     {
         parent::setUp();
         Storage::fake('local');
         Http::fake(function ($request) {
             if (str_contains($request->url(), 'audio/transcriptions')) {
-                return Http::response(['text' => 'voice transcription']);
+                return $this->transcriptionStub ? ($this->transcriptionStub)() : Http::response(['text' => 'voice transcription']);
             }
 
             return match ($request->header('Authorization')[0] ?? $request->header('authorization')[0] ?? '') {
@@ -40,6 +43,13 @@ class AssistantRambleTest extends TestCase
         Storage::disk('local')->put($path, 'fake-audio');
 
         return AssistantRamble::create(['text' => $text, 'voice_path' => $path, 'user_id' => $userId]);
+    }
+
+    private function transcriptionField($name)
+    {
+        $request = Http::recorded(fn($request) => str_contains($request->url(), 'audio/transcriptions'))->first()[0] ?? null;
+
+        return fcollect($request?->data())->firstWhere('name', $name)['contents'] ?? null;
     }
 
     private function headers($token = null)
@@ -154,6 +164,94 @@ class AssistantRambleTest extends TestCase
 
         $transcriptionRequests = Http::recorded(fn($request) => str_contains($request->url(), 'audio/transcriptions'));
         $this->assertCount(0, $transcriptionRequests);
+    }
+
+    public function test_transcription_sends_configured_language()
+    {
+        config([
+            'services.assistant_transcription.api_key' => 'transcription-key',
+            'services.assistant_transcription.language' => 'ro-RO',
+        ]);
+        $this->createVoiceRamble();
+
+        $this->getJson('api/assistant/rambles', $this->headers())->assertOk();
+
+        $this->assertSame('ro', $this->transcriptionField('language'));
+    }
+
+    public function test_transcription_language_is_omitted_when_not_configured()
+    {
+        config(['services.assistant_transcription.api_key' => 'transcription-key']);
+        $this->createVoiceRamble();
+
+        $this->getJson('api/assistant/rambles', $this->headers())->assertOk();
+
+        $this->assertNull($this->transcriptionField('language'));
+    }
+
+    public function test_create_ramble_language_overrides_configured_language()
+    {
+        config([
+            'services.assistant_transcription.api_key' => 'transcription-key',
+            'services.assistant_transcription.language' => 'ro',
+        ]);
+        $file = UploadedFile::fake()->createWithContent('voice.m4a', 'fake-audio');
+
+        $this->post('api/assistant/rambles', ['voice' => $file, 'language' => 'de'], $this->headers())->assertOk();
+
+        $this->assertSame('de', $this->transcriptionField('language'));
+    }
+
+    public function test_empty_transcription_deletes_the_ramble_and_its_voice_file()
+    {
+        config(['services.assistant_transcription.api_key' => 'transcription-key']);
+        $this->transcriptionStub = fn() => Http::response(['text' => '   ']);
+        $ramble = $this->createVoiceRamble();
+
+        $this->getJson('api/assistant/rambles', $this->headers())->assertOk()->assertJsonCount(0, 'data');
+
+        $this->assertDatabaseCount('assistant_rambles', 0);
+        Storage::disk('local')->assertMissing($ramble->voice_path);
+    }
+
+    public function test_empty_transcription_keeps_a_ramble_that_already_has_text()
+    {
+        config(['services.assistant_transcription.api_key' => 'transcription-key']);
+        $this->transcriptionStub = fn() => Http::response(['text' => '']);
+        $this->createVoiceRamble('1', 'typed text');
+
+        $this->getJson('api/assistant/rambles', $this->headers())
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.text', 'typed text');
+    }
+
+    public function test_failed_transcription_keeps_the_ramble_for_a_later_retry()
+    {
+        config(['services.assistant_transcription.api_key' => 'transcription-key']);
+        $this->transcriptionStub = fn() => Http::response(['error' => ['message' => 'boom']], 500);
+        $ramble = $this->createVoiceRamble();
+
+        $this->getJson('api/assistant/rambles', $this->headers())
+            ->assertOk()
+            ->assertJsonCount(1, 'data')
+            ->assertJsonPath('data.0.is_transcribed', false);
+        Storage::disk('local')->assertExists($ramble->voice_path);
+
+        $this->transcriptionStub = null;
+        $this->getJson('api/assistant/rambles', $this->headers())->assertOk()->assertJsonPath('data.0.text', 'voice transcription');
+    }
+
+    public function test_previously_emptied_rambles_are_cleaned_up_and_not_counted()
+    {
+        $ramble = $this->createVoiceRamble();
+        $ramble->update(['is_transcribed' => true]);
+
+        $this->getJson('api/assistant/rambles/count', $this->headers())->assertOk()->assertJson(['count' => 0]);
+        $this->getJson('api/assistant/rambles', $this->headers())->assertOk()->assertJsonCount(0, 'data');
+
+        $this->assertDatabaseCount('assistant_rambles', 0);
+        Storage::disk('local')->assertMissing($ramble->voice_path);
     }
 
     public function test_get_ramble_voice_streams_file_and_is_scoped_to_user()

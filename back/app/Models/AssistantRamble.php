@@ -41,4 +41,14 @@ class AssistantRamble extends BaseModel
     {
         return $query->where('user_id', getUserId());
     }
+
+    // Recordings that transcribed into nothing. They are deleted on the next listing.
+    public function scopeWithoutEmptyTranscription(Builder $query)
+    {
+        return $query->whereNot(function (Builder $query) {
+            $query->where('is_transcribed', true)->where(function (Builder $query) {
+                $query->whereNull('text')->orWhere('text', '');
+            });
+        });
+    }
 }
