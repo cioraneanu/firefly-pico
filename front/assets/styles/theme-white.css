@@ -203,7 +203,7 @@ body {
 }
 
 .app-field-text .van-field__body {
-    margin-right: 20px;
+    margin-right: 0;
 }
 
 .compact.app-field-text .van-field__body {
@@ -1891,13 +1891,13 @@ body {
 .category-badge {
     font-size: 13px;
     font-weight: 400;
-    border: 1.5px dashed #cbd5e1;
+    border: 1.5px dashed #bab5b5;
 }
 
 .tag-badge {
     font-size: 13px;
     font-weight: 400;
-    border: 1.5px dashed #cbd5e1;
+    border: 1.5px dashed #bab5b5;
 }
 
 .account-badges-row {

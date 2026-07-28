@@ -393,11 +393,11 @@
 }
 
 .van-theme-dark .category-badge {
-    border: 1.5px dashed #777;
+    border: 1.5px dashed #aaa;
 }
 
 .van-theme-dark .tag-badge {
-    border: 1.5px dashed #777;
+    border: 1.5px dashed #aaa;
 }
 
 .van-theme-dark .account-flow-arrow {

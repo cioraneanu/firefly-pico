@@ -126,6 +126,7 @@ onMounted(() => {
 
 const onSave = async () => {
   picoBackendURL.value = picoBackendURL.value.endsWith('/') ? picoBackendURL.value.slice(0, -1) : picoBackendURL.value
+  authToken.value = authToken.value.trim().replace(/^Bearer\s+/i, '')
 
   appStore.authToken = authToken.value
   appStore.picoBackendURL = picoBackendURL.value
@@ -145,6 +146,7 @@ const onSave = async () => {
     return
   }
 
+  await appStore.fetchInfo()
   await appStore.syncEverything()
   UIUtils.showToastSuccess(t('settings.settings_saved'))
 }
