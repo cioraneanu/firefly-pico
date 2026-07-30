@@ -1,61 +1,34 @@
-# Firefly Pico Ramble Shortcut
+# Firefly Pico Siri Shortcuts
 
-`Firefly Pico Ramble.shortcut.plist` is a readable Siri Shortcut source plist for quickly saving spoken rambles into Firefly Pico.
+Two ready-made, signed shortcut templates for sending rambles to Firefly Pico from your iPhone. Tap the file to import it into the Shortcuts app.
 
-iOS does not import unsigned generated `.shortcut` files directly. If you see "Importing unsigned shortcut file is not supported", build the shortcut manually in the Shortcuts app or recreate it on a Mac and share it through Shortcuts/iCloud.
+| File | What it does |
+| --- | --- |
+| `pico-text-template-signed.shortcut` | Dictates text, then POSTs it as `text/plain` to `{Pico URL}/api/assistant/rambles`. |
+| `pico-voice-template-signed.shortcut` | Records audio, then uploads it as `multipart/form-data` in a `voice` field to the same endpoint. The backend transcribes it. |
 
-When run, it:
+## What to configure
 
-1. Dictates text until you tap to stop.
-2. POSTs the dictated text as `text/plain` to `{Firefly Pico URL}/api/assistant/rambles`.
-3. Sends these headers:
-   - `Authorization: {Authorization Header}`
-   - `Content-Type: text/plain`
-   - `Accept: application/json`
+After importing, open the shortcut and edit the first two `Text` actions:
 
-Use these values in the first two Text actions:
+1. **Firefly Pico URL** — e.g. `https://your-domain.com`, no trailing slash.
+2. **Authorization header** — replace the `<ADD FIREFLY PERSONAL TOKEN HERE>` placeholder with your Firefly III personal access token. Keep the `Bearer ` prefix.
 
-- Firefly Pico URL, without a trailing slash.
-- Authorization header value, for example `Bearer your-token`.
+Nothing else needs changing.
 
-## Manual iPhone Setup
+Optional, voice shortcut only: a `language` form field (ISO-639-1, e.g. `ro`, `en`) overrides the server's `ASSISTANT_TRANSCRIPTION_LANGUAGE` for that request. Useful if you record in a different language than your default.
 
-Create a new shortcut in Shortcuts with these actions:
+## Notes on voice
 
-1. Text: your Firefly Pico URL, for example `https://your-domain.com`.
-2. Text: your full authorization header, for example `Bearer your-token`.
-3. Dictate Text: stop listening `On Tap`.
-4. URL: use the first Text action and append `/api/assistant/rambles`.
-5. Get Contents of URL:
-   - URL: the URL action above.
-   - Method: `POST`.
-   - Headers:
-     - `Accept`: `application/json`
-     - `Authorization`: the second Text action
-     - `Content-Type`: `text/plain`
-   - Request Body: `File`
-   - File: Dictated Text
-6. Optional: Show Result with the response.
+- Accepted formats: m4a, mp3, wav, ogg/opus, webm, flac (max 25 MB).
+- Transcription requires `ASSISTANT_TRANSCRIPTION_ENDPOINT` and `ASSISTANT_TRANSCRIPTION_API_KEY` on the backend; recordings are transcribed the first time rambles are loaded.
+- Short utterances ("farmacie 23") give the model too little to detect the language — set `ASSISTANT_TRANSCRIPTION_LANGUAGE` to avoid gibberish.
+- Recordings that transcribe to nothing (silence) are deleted; failed requests are retried on the next load.
 
-## Voice recordings
+## Building your own
 
-Instead of dictated text, the endpoint also accepts an audio recording as a `multipart/form-data` upload in a `voice` field (`Record Audio` action + `Get Contents of URL` with Request Body `Form`, add a `File` field named `voice`). Accepted formats include m4a, mp3, wav, ogg/opus, webm and flac (max 25 MB). When the backend has `ASSISTANT_TRANSCRIPTION_ENDPOINT`/`ASSISTANT_TRANSCRIPTION_API_KEY` configured, the recording is transcribed automatically the first time the rambles are loaded, and the app shows a play button next to rambles that carry a recording. A single request can include both `text` and `voice`.
+iOS refuses unsigned `.shortcut` files ("Importing unsigned shortcut file is not supported"). Sign them on a Mac:
 
-Short utterances such as "farmacie 23" give the transcription model too little to detect the language from, and it then transcribes them as gibberish. Set `ASSISTANT_TRANSCRIPTION_LANGUAGE` to the language you speak, as an ISO-639-1 code (`ro`, `en`, `de`; `ro-RO` is accepted and reduced to `ro`).
-
-The same value can be sent per recording as a `language` form field, which overrides the environment for that request. Use this when one shortcut records in a different language than your default.
-
-Recordings that transcribe into nothing (silence, or no speech at all) are deleted together with their audio instead of being kept as blank rambles. A recording whose transcription request failed is kept and retried the next time the rambles are loaded.
-
-The readable source lives in `Firefly Pico Ramble.shortcut.plist`; regenerate the unsigned binary plist with:
-
-```sh
-cp 'docs/shortcuts/Firefly Pico Ramble.shortcut.plist' 'docs/shortcuts/Firefly Pico Ramble.shortcut'
-plutil -convert binary1 'docs/shortcuts/Firefly Pico Ramble.shortcut'
-```
-
-
-Signing the shortcut:
 ```sh
 shortcuts sign --mode anyone --input "pico.shortcut" --output "pico-signed.shortcut"
 ```
