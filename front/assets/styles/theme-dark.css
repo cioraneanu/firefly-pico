@@ -239,6 +239,10 @@
     color: var(--van-text-color-4) !important;
 }
 
+.van-theme-dark .transaction-notes-markdown pre {
+    color: inherit;
+}
+
 .van-theme-dark .list-item-title {
     color: var(--van-cell-text-color);
 }

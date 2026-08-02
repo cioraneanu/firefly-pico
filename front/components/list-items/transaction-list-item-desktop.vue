@@ -13,7 +13,7 @@
           <span class="transaction-desktop-title ellipse-text">{{ description }}</span>
           <app-icon v-if="hasAttachments" :icon="TablerIconConstants.attachment" :size="13" color="#1E88E5" />
         </div>
-        <div v-if="notes" class="transaction-desktop-muted transaction-desktop-notes ellipse-text" v-html="notes" />
+        <div v-if="notes" class="transaction-notes-markdown transaction-desktop-muted transaction-desktop-notes ellipse-text" v-html="notes" />
       </div>
 
       <div class="transaction-desktop-amount text-left line-height-normal">
