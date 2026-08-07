@@ -11,6 +11,9 @@ services:
       - 6976:80
     environment:
       - FIREFLY_URL=http://firefly-app:8080
+      # Optional: on hosts that don't let non-root processes bind port 80 (e.g. Synology
+      # Container Manager), change the mapping above to 6976:8080 and uncomment this:
+      # - NGINX_PORT=8080
       - DB_CONNECTION=pgsql
       - DB_HOST=firefly-pico-postgresql
       - DB_PORT=5432
