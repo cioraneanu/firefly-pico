@@ -21,24 +21,18 @@ class AssistantTranscriptionService
     {
         $config = $this->configService->getConfig($language);
         if (!$config['isConfigured']) {
-            \Log::error('Transcription not configured');
             return null;
         }
 
         $disk = Storage::disk('local');
         if (!$disk->exists($filePath)) {
-            \Log::error('File does not exist: ' . $filePath);
             return null;
         }
 
         $contents = $disk->get($filePath);
         if (!$contents) {
-            \Log::error('File is empty: ' . $filePath);
             return null;
         }
-
-        $size = strlen($contents);
-        \Log::info('Transcribing file: ' . $filePath . ' size=' . $size . ' provider=' . $config['provider']);
 
         $request = $this->buildHttpRequest($config);
 
@@ -47,19 +41,14 @@ class AssistantTranscriptionService
                 ->attach('file', $contents, basename($filePath))
                 ->post($this->buildEndpoint($config), $this->buildPayload($config));
         } catch (ConnectionException $e) {
-            \Log::error('ConnectionException: ' . $e->getMessage());
             return null;
         }
-
-        $status = $response->status();
-        $body = $response->json();
-        \Log::info('Transcription response status=' . $status . ' body=' . json_encode($body));
 
         if (!$response->successful()) {
             return null;
         }
 
-        return $this->extractTranscript($body);
+        return $this->extractTranscript($response->json());
     }
 
     /**

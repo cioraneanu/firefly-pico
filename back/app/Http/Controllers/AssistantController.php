@@ -191,16 +191,6 @@ class AssistantController extends BaseController
     public function transcribe(Request $request)
     {
         BaseAuthorization::checkUser();
-
-        \Log::info('Transcribe request received. Has file audio: ' . ($request->hasFile('audio') ? 'yes' : 'no'));
-        \Log::info('All files: ' . json_encode(array_keys($request->allFiles())));
-        \Log::info('All inputs: ' . json_encode(array_keys($request->all())));
-
-        if ($request->hasFile('audio')) {
-            $file = $request->file('audio');
-            \Log::info('Audio file: size=' . $file->getSize() . ' mime=' . $file->getMimeType() . ' error=' . $file->getError() . ' valid=' . ($file->isValid() ? 'yes' : 'no'));
-        }
-
         $request->validate([
             'audio' => ['required', 'file', 'max:25600'],
             'language' => ['nullable', 'string', 'max:20'],
@@ -209,8 +199,6 @@ class AssistantController extends BaseController
         $audioFile = $request->file('audio');
         $tempPath = $audioFile->store('temp-transcriptions', 'local');
         $language = trim((string)$request->get('language')) ?: null;
-
-        \Log::info('Stored temp file: ' . $tempPath);
 
         $text = app(AssistantTranscriptionService::class)->transcribeFile($tempPath, $language);
 
