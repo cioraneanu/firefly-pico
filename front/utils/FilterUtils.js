@@ -7,7 +7,6 @@ import Account from '~/models/Account.js'
 import { useProfileStore } from '~/stores/profileStore.js'
 import { translate } from '~/plugins/plugin-i18n.js'
 
-const route = useRoute()
 
 export const getActiveFilters = (filterDefinition, filterBag) => {
   return filterDefinition

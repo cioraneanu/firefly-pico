@@ -34,8 +34,8 @@ const profileStore = useProfileStore()
 
 
 const account = ref(null)
-const dateStart = ref([])
-const dateEnd = ref([])
+const dateStart = ref(null)
+const dateEnd = ref(null)
 
 const syncedSettings = [
   { store: profileStore, path: 'transactionListDefaultFilterAccount', ref: account },

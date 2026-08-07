@@ -1,8 +1,8 @@
 <template>
-  <div v-if="appStore.isDesktopLayout" class="profile-picker-wrapper">
+  <div v-if="appStore.isDesktopLayout" class="flex-1-w overflow-hidden">
     <div class="profile-picker-dashboard-button flex-center" @click="isListVisible = true">
       <icon-nut size="20" stroke="1.6"  />
-      <div class="profile-picker-dashboard-button-text">{{ $t('profile') }}: {{ profileStore.activeProfile?.name ?? $t('not_set') }}</div>
+      <div class="profile-picker-dashboard-button-text flex-1-w ellipse-text">{{ $t('profile') }}: {{ profileStore.activeProfile?.name ?? $t('not_set') }}</div>
     </div>
 
     <app-popup v-model:show="isListVisible"  :style="appStore.isDesktopLayout ? null : { height: '40%' }">
@@ -28,21 +28,4 @@ const position = computed({
   },
 })
 </script>
-
-<style scoped>
-.profile-picker-wrapper {
-  min-width: 0;
-  overflow: hidden;
-  flex: 1;
-}
-
-
-.profile-picker-dashboard-button .profile-picker-dashboard-button-text {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  min-width: 0;
-  flex: 1;
-}
-</style>
 

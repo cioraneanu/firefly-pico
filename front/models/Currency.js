@@ -53,4 +53,15 @@ export default class Currency extends BaseModel {
   static getDisplayName(currency) {
     return `${this.getName(currency)}, ${this.getSymbol(currency)}`
   }
+
+  static formatAmountWithSymbol(amount, currencyId) {
+    if (amount === null || amount === undefined) {
+      return null
+    }
+    const currency = useCurrencyStore().currencyDictionary[currencyId]
+    const decimals = this.getDecimalPlaces(currency) ?? 2
+    const formattedAmount = parseFloat(amount).toFixed(decimals)
+    const symbol = this.getSymbol(currency)
+    return symbol ? `${formattedAmount} ${symbol}` : formattedAmount
+  }
 }

@@ -19,6 +19,7 @@
         <app-boolean v-model="showAnimations" :label="$t('settings.ui.show_animations')" />
 
         <app-boolean v-model="resetFormOnCreate" :label="$t('settings.ui.reset_forms_after_creation')" />
+        <app-boolean v-model="isProfileFloatVisible" :label="$t('settings.ui.is_profile_float_visible')" />
       </van-cell-group>
 
       <app-button-form-save />
@@ -44,6 +45,7 @@ const startingPage = ref(null)
 const language = ref(null)
 const showAnimations = ref(true)
 const resetFormOnCreate = ref(false)
+const isProfileFloatVisible = ref(true)
 
 const syncedSettings = [
   { store: profileStore, path: 'darkTheme', ref: darkTheme },
@@ -51,6 +53,7 @@ const syncedSettings = [
   { store: profileStore, path: 'startingPage', ref: startingPage },
   { store: profileStore, path: 'showAnimations', ref: showAnimations },
   { store: profileStore, path: 'resetFormOnCreate', ref: resetFormOnCreate },
+  { store: profileStore, path: 'dashboard.isProfileFloatVisible', ref: isProfileFloatVisible },
 ]
 
 watchSettingsStore(syncedSettings)

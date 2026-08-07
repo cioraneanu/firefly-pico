@@ -10,13 +10,24 @@
 
     <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
       <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
-        <app-list-search v-if="isSearchVisible && list.length > 0" v-model="search" />
+        <app-list-search v-if="isSearchVisible && list.length > 0" v-model="search">
+          <template #right>
+            <van-popover v-model:show="showFilterPopover" placement="bottom-end" overlay :overlay-style="{ background: 'transparent' }">
+              <div class="display-flex flex-column gap-1 p-10">
+                <div class="text-size-12 font-weight-600 text-muted">{{ $t('account_page.account_type') }}</div>
+                <app-tabs v-model="filterAccountType" :items="accountTypeTabs" />
+              </div>
 
-        <van-collapse v-model="visibleAccountTypes">
-          <van-collapse-item v-for="{ accounts, typeName } in accountsGroupList" :title="typeName" :name="typeName">
-            <account-list-item v-for="item in accounts" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
-          </van-collapse-item>
-        </van-collapse>
+              <template #reference>
+                <button type="button" class="app-button-icon">
+                  <app-icon :icon="TablerIconConstants.settings" :size="18" />
+                </button>
+              </template>
+            </van-popover>
+          </template>
+        </app-list-search>
+
+        <account-list-item v-for="item in filteredList" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
       </van-list>
     </van-pull-refresh>
   </div>
@@ -35,6 +46,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants'
 import AppListSearch from '~/components/ui-kit/theme/app-list-search.vue'
 import { animateSwipeList } from '~/utils/AnimationUtils.js'
 
+const { t } = useI18n()
 const accountStore = useAccountStore()
 
 const onEvent = (event, payload) => {
@@ -54,28 +66,29 @@ const { isLoading, isFinished, isRefreshing, list, isEmpty, onAdd, onEdit, onDel
 const search = ref('')
 const isSearchVisible = ref(true)
 
-const visibleAccountTypes = ref(Object.values(Account.types).map((account) => account.name))
+const accountTypesSorted = [Account.types.asset, Account.types.expense, Account.types.liability, Account.types.revenue, Account.types.cash]
+
+const showFilterPopover = ref(false)
+const filterAccountType = ref('all')
+const accountTypeTabs = computed(() => [
+  { label: t('transaction.type.all'), value: 'all' },
+  ...accountTypesSorted.map((type) => ({ label: t(type.t), value: type.fireflyCode })),
+])
+
+const getTypeSortIndex = (account) => {
+  const index = accountTypesSorted.findIndex((type) => type.fireflyCode === get(Account.getType(account), 'fireflyCode'))
+  return index === -1 ? accountTypesSorted.length : index
+}
 
 const filteredList = computed(() => {
-  if (search.value.length === 0) {
-    return list.value
+  let result = list.value
+  if (filterAccountType.value !== 'all') {
+    result = result.filter((item) => get(Account.getType(item), 'fireflyCode') === filterAccountType.value)
   }
-  return list.value.filter((item) => Account.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1)
-})
-
-const accountsGroupList = computed(() => {
-  const groupedAccounts = filteredList.value.reduce((result, account) => {
-    const typeName = get(Account.getType(account), 'name')
-    result[typeName] = [...(result[typeName] ?? []), account]
-    return result
-  }, {})
-
-  return Object.keys(groupedAccounts)
-    .sort()
-    .map((typeName) => ({
-      typeName,
-      accounts: groupedAccounts[typeName],
-    }))
+  if (search.value.length > 0) {
+    result = result.filter((item) => Account.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1)
+  }
+  return [...result].sort((a, b) => getTypeSortIndex(a) - getTypeSortIndex(b))
 })
 
 const formClass = computed(() => ({
@@ -107,7 +120,6 @@ const onLoadMore = () => {
 // }
 
 const toolbar = useToolbar()
-const { t } = useI18n()
 toolbar.init({
   title: t('accounts'),
   titleIcon: TablerIconConstants.account,

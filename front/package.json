@@ -1,5 +1,5 @@
 {
-  "version": "1.10.0",
+  "version": "1.12.0",
   "private": true,
   "scripts": {
     "start": "npm run dev -- -o",
@@ -43,7 +43,7 @@
     "marked": "^16.1.2",
     "minisearch": "^7.1.2",
     "pinia": "^3.0.3",
-    "vant": "^4.9.21",
+    "vant": "^4.9.24",
     "vuedraggable": "^4.1.0"
   },
   "overrides": {

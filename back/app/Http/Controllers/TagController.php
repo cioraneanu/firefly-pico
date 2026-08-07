@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Authorizations\BaseAuthorization;
 use App\Http\Controllers\Base\BaseControllerFirefly;
 use App\Models\Tag;
+use App\Services\TagService;
+use Illuminate\Http\Request;
 
 
 class TagController extends BaseControllerFirefly
@@ -32,13 +35,23 @@ class TagController extends BaseControllerFirefly
             'parent_id' => request()->parent_id,
             'is_todo' => request()->is_todo,
         ];
-        Tag::updateOrCreate($find, $fill);
+        $tag = Tag::updateOrCreate($find, $fill);
 
+        $fill['total_amount'] = $tag->total_amount;
+        $fill['total_currency_id'] = $tag->total_currency_id;
 
         foreach ($fill as $key => $value) {
             fset($item, "data.attributes.$key", $value);
         }
         return $item;
+    }
+
+    // ---------------------------
+
+    public function computeTotal(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        return $this->respond(['data' => app(TagService::class)->computeTotal($request->id)]);
     }
 
 }

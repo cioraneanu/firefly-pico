@@ -9,27 +9,37 @@
 <script setup>
 const props = defineProps({
   teleport: {
+    type: String,
     default: 'body',
   },
   zIndex: {
     type: [String, Number],
+    default: undefined,
+  },
+  popupStyle: {
+    type: [String, Object, Array],
+    default: null,
   },
 })
 
 const appStore = useAppStore()
 
+const mergePopupStyle = (style) => {
+  return [style, props.popupStyle].filter(Boolean)
+}
+
 const popupProps = computed(() => {
   if (appStore.isDesktopLayout) {
     return {
       position: 'center',
-      style: { width: '80vw', maxHeight: '70vh', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', overflow: 'hidden' },
+      style: mergePopupStyle({ width: '80vw', maxHeight: '70vh', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }),
     }
   }
 
   return {
     round: true,
     position: 'bottom',
-    style: { height: '90%', paddingTop: '4px' },
+    style: mergePopupStyle({ height: '90%', paddingTop: '4px' }),
   }
 })
 </script>

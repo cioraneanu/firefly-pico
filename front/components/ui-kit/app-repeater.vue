@@ -76,4 +76,3 @@ const removeItemAtIndex = (index) => {
 }
 </script>
 
-<style scoped></style>

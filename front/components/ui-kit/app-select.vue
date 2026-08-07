@@ -16,7 +16,7 @@
         <slot name="input">
           <div v-if="isEmpty" class="text-placeholder">{{ $t('select_is_empty') }}</div>
           <div class="display-flex flex-wrap" style="gap: 4px">
-            <div v-for="item in modelValueList" class="app-select-option-tag flex-center-vertical gap-2">
+            <div v-for="item in modelValueList" :key="getDisplayName(item)" class="app-select-option-tag flex-center-vertical gap-2">
               <slot name="inputItemContent" :item="item">
                 <span class="font-weight-400 text-size-12">{{ getDisplayName(item) }}</span>
               </slot>
@@ -28,14 +28,13 @@
     </van-field>
 
     <app-popup v-model:show="showDropdown" :teleport="props.teleport" :z-index="props.zIndex">
-      <div class="display-flex flex-column h-100" style="min-height: 0;">
+      <div ref="popupRef" class="display-flex flex-column h-100" style="min-height: 0">
+        <div v-if="props.popupTitle" class="van-popup-title">{{ props.popupTitle }}</div>
 
-      <div v-if="props.popupTitle" class="van-popup-title">{{ props.popupTitle }}</div>
-
-        <div v-if="hasSearch" style="margin-right: 12px;" class="p-1 flex-center-vertical gap-1">
+        <div v-if="hasSearch" style="margin-right: 12px" class="p-1 flex-center-vertical gap-1">
           <van-search v-model="search" :placeholder="$t('search_placeholder')" class="flex-1" />
 
-          <slot name="top-right"/>
+          <slot name="top-right" />
         </div>
 
         <div ref="popupContentRef" class="flex-column overflow-auto">
@@ -54,9 +53,6 @@
           </slot>
         </div>
       </div>
-
-
-
     </app-popup>
   </div>
 </template>
@@ -217,7 +213,8 @@ const onHideDropdown = () => {
 
 useSwipeToDismiss({
   onSwipe: onHideDropdown,
-  swipeRef: popupContentRef,
+  swipeRef: popupRef,
+  scrollRef: popupContentRef,
   showDropdown: showDropdown,
 })
 </script>

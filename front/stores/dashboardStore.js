@@ -24,6 +24,8 @@ import TransactionTransformer from '~/transformers/TransactionTransformer'
 import Tag from '~/models/Tag.js'
 import DateUtils from '~/utils/DateUtils.js'
 import { getExcludedTransactionFilters } from '~/utils/DashboardUtils.js'
+import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
+import { useListFilters } from '~/composables/useListFilters.js'
 
 export const useDashboardStore = defineStore('dashboard', () => {
   const accountStore = useAccountStore()
@@ -40,6 +42,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const transactionsListLastWeek = ref([])
   const transactionsWithTodo = ref([])
   const tagsWidgetModeOnlyRootTag = useLocalStorage('tagsWidgetModeOnlyRootTag', true)
+  const widgetsNetAmountMode = useLocalStorage('widgetsNetAmountMode', false)
   const isLoadingTransactions = ref(false)
   const isLoadingTransactionsLastWeek = ref(false)
   const dashboardCurrency = useLocalStorage('dashboardCurrency', null, { serializer: StorageSerializers.object })
@@ -110,13 +113,17 @@ export const useDashboardStore = defineStore('dashboard', () => {
       return
     }
 
-    let filters = [
-      {
-        field: 'query',
-        value: `tag_is:"${Tag.getDisplayNameEllipsized(tagTodo)}"`,
-      },
-    ]
-    let list = await new TransactionRepository().searchTransaction({ filters })
+    const { filters, filtersBackendList } = useListFilters({
+      filterDefinitions: Object.values(TransactionFilterUtils.filters),
+    })
+
+    filters.value = {
+      ...TransactionFilterUtils.getPredefinedFilters(),
+      tag: tagTodo,
+    }
+    const requestFilters = [{ field: 'query', value: filtersBackendList.value.join(' ') }]
+
+    let list = await new TransactionRepository().searchTransaction({ filters: requestFilters })
     transactionsWithTodo.value = TransactionTransformer.transformFromApiList(list?.data ?? [])
   }
 
@@ -216,26 +223,48 @@ export const useDashboardStore = defineStore('dashboard', () => {
   })
 
   const dashboardExpensesByCategory = computed(() => {
-    return transactionsListExpense.value.reduce((result, transaction) => {
+    const transactions = widgetsNetAmountMode.value ? [...transactionsListExpense.value, ...transactionsListIncome.value] : transactionsListExpense.value
+    const totals = transactions.reduce((result, transaction) => {
+      const multiplier = Transaction.getTypeCode(transaction) === Transaction.types.income.code ? -1 : 1
       const splits = Transaction.getSplits(transaction)
       for (let split of splits) {
         const categoryId = split.category_id
         const oldTotal = result[categoryId] ?? 0
-        result[categoryId] = oldTotal + convertCurrency(split.amount, split.currency_code, Currency.getCode(dashboardCurrency.value))
+        result[categoryId] = oldTotal + multiplier * convertCurrency(split.amount, split.currency_code, Currency.getCode(dashboardCurrency.value))
+      }
+      return result
+    }, {})
+
+    if (!widgetsNetAmountMode.value) return totals
+
+    return Object.keys(totals).reduce((result, categoryId) => {
+      if (totals[categoryId] > 0) {
+        result[categoryId] = totals[categoryId]
       }
       return result
     }, {})
   })
 
   const dashboardExpensesByTag = computed(() => {
-    return transactionsListExpense.value.reduce((result, transaction) => {
+    const transactions = widgetsNetAmountMode.value ? [...transactionsListExpense.value, ...transactionsListIncome.value] : transactionsListExpense.value
+    const totals = transactions.reduce((result, transaction) => {
+      const multiplier = Transaction.getTypeCode(transaction) === Transaction.types.income.code ? -1 : 1
       let tags = Transaction.getTags(transaction)
       let rootTag = tags.find((tag) => !tag?.attributes?.parent_id) ?? tags[0]
       let targetTags = tagsWidgetModeOnlyRootTag.value ? [rootTag] : tags
       for (let targetTag of targetTags) {
         let tagId = targetTag?.id ?? 0
         let oldTotal = result[tagId] ?? 0
-        result[tagId] = oldTotal + convertTransactionAmountToCurrency(transaction, Currency.getCode(dashboardCurrency.value))
+        result[tagId] = oldTotal + multiplier * convertTransactionAmountToCurrency(transaction, Currency.getCode(dashboardCurrency.value))
+      }
+      return result
+    }, {})
+
+    if (!widgetsNetAmountMode.value) return totals
+
+    return Object.keys(totals).reduce((result, tagId) => {
+      if (totals[tagId] > 0) {
+        result[tagId] = totals[tagId]
       }
       return result
     }, {})
@@ -361,6 +390,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
     transactionsListLastWeek,
     transactionsWithTodo,
     tagsWidgetModeOnlyRootTag,
+    widgetsNetAmountMode,
     dashboardAccountDictionary,
     dashboardDateStart,
     dashboardDateEnd,

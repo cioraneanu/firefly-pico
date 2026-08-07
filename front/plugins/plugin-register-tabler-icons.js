@@ -47,10 +47,8 @@ import {
   IconKey,
   IconToggleLeftFilled,
   IconListTree,
-  IconSquareRoundedArrowDown,
   IconGridPattern,
   IconPercentage30,
-  IconMoneybag,
   IconBasket,
   IconCopy,
   IconLock,
@@ -69,6 +67,14 @@ import {
   IconPigMoney,
   IconRepeat,
   IconCalendarRepeat,
+  IconMicrophone,
+  IconPlayerPlay,
+  IconPlayerStop,
+  IconSparkles,
+  IconMessageCircleBolt,
+  IconLanguage,
+  IconX,
+  IconArrowNarrowRight,
 } from '@tabler/icons-vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -140,6 +146,14 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconPigMoney', IconPigMoney)
   nuxtApp.vueApp.component('IconRepeat', IconRepeat)
   nuxtApp.vueApp.component('IconCalendarRepeat', IconCalendarRepeat)
+  nuxtApp.vueApp.component('IconMicrophone', IconMicrophone)
+  nuxtApp.vueApp.component('IconPlayerPlay', IconPlayerPlay)
+  nuxtApp.vueApp.component('IconPlayerStop', IconPlayerStop)
+  nuxtApp.vueApp.component('IconSparkles', IconSparkles)
+  nuxtApp.vueApp.component('IconMessageCircleBolt', IconMessageCircleBolt)
+  nuxtApp.vueApp.component('IconLanguage', IconLanguage)
+  nuxtApp.vueApp.component('IconX', IconX)
+  nuxtApp.vueApp.component('IconArrowNarrowRight', IconArrowNarrowRight)
 
   // for (let iconName in tablerIcons) {
   //   nuxtApp.vueApp.component(iconName, tablerIcons[iconName])

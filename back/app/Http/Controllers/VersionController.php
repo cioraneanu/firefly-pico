@@ -2,18 +2,26 @@
 
 namespace App\Http\Controllers;
 
-use App\Exceptions\FireflyException;
 use App\Http\Controllers\Base\BaseController;
-use App\Http\Controllers\Base\BaseControllerFirefly;
-use Illuminate\Http\Request;
+use App\Services\AssistantLlmConfigService;
+use App\Services\AssistantTranscriptionConfigService;
 use Illuminate\Support\Facades\Http;
 
 
 class VersionController extends BaseController
 {
 
+    public function getInfo(AssistantLlmConfigService $assistantLlmConfigService, AssistantTranscriptionConfigService $assistantTranscriptionConfigService)
+    {
+        return $this->respond([
+            'latest_version' => $this->resolveLatestVersion(),
+            'assistant_llm' => $assistantLlmConfigService->getPublicConfig(),
+            'assistant_transcription' => $assistantTranscriptionConfigService->getPublicConfig(),
+        ]);
+    }
 
-    public function getLatestVersion(Request $request)
+
+    private function resolveLatestVersion()
     {
         $versionFile = base_path('VERSION');
         $includeDev = false;
@@ -46,6 +54,4 @@ class VersionController extends BaseController
         $versions = array_reverse($versions);
         return $versions[0] ?? null;
     }
-
-
 }

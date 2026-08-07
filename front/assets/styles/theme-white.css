@@ -96,7 +96,6 @@ body {
     /*margin: 0 auto;*/
 }
 
-
 .transaction-amount-operations {
     position: fixed !important;
     right: 20px;
@@ -204,7 +203,7 @@ body {
 }
 
 .app-field-text .van-field__body {
-    margin-right: 20px;
+    margin-right: 0;
 }
 
 .compact.app-field-text .van-field__body {
@@ -218,7 +217,6 @@ body {
 .van-field--label-top .van-icon-arrow.van-cell__right-icon {
     margin-top: 7px;
 }
-
 
 .van-cell-fake {
     position: relative;
@@ -241,7 +239,8 @@ body {
     border-bottom: 0 !important;
 }
 
-.van-hairline--top-bottom:after, .van-hairline-unset--top-bottom:after {
+.van-hairline--top-bottom:after,
+.van-hairline-unset--top-bottom:after {
     border-bottom: 0 !important;
     /*border-width: 0 !important;*/
 }
@@ -249,7 +248,6 @@ body {
 .van-collapse-item .van-cell:after {
     border-bottom: 0 !important;
 }
-
 
 /*.van-cell-group > div:nth-child(even) {background: #fff !important;}*/
 /*.van-cell-group > div:nth-child(odd) {background: #fafafa !important;}*/
@@ -595,7 +593,6 @@ body {
     border: 1px solid #aaa !important;
 }
 
-
 /*---------------------------------*/
 
 .vant-card {
@@ -784,7 +781,8 @@ body {
 
 .transaction-list-item-todo {
     background: #fffbfc;
-    border: 2px solid pink;
+    border: 2px solid pink !important;
+    border-radius: 6px;
 }
 
 .van-cell {
@@ -842,13 +840,13 @@ body {
 
 .applied-filters-container {
     background: white;
-
-    margin-top: 0px;
-    /*margin-top: 45px;*/
-
-    /*margin-top: -5px;*/
     padding: 10px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+
+.layout-desktop .applied-filters-container {
+    margin: -5px 17px 5px;
+    border-radius: 10px;
 }
 
 .app-toolbar-title {
@@ -962,9 +960,8 @@ body {
     /*background: transparent !important;*/
 }
 
-
 .svg-add-icon-bg {
-    opacity: 1.0;
+    opacity: 1;
     fill: #4caf50;
 }
 
@@ -985,10 +982,10 @@ label {
     margin-bottom: 0px;
 }
 
-img, svg {
-    vertical-align: middle
+img,
+svg {
+    vertical-align: middle;
 }
-
 
 .app-loading {
     background: #fff;
@@ -1017,7 +1014,7 @@ img, svg {
 }
 
 .transaction-foreign-amount-field .van-field__body {
-    border: 1.5px solid #0288D1;
+    border: 1.5px solid #0288d1;
 }
 
 .budget-icon {
@@ -1029,7 +1026,7 @@ img, svg {
 }
 
 .split-transaction-badge {
-    background: #FF7043;
+    background: #ff7043;
     color: #fff;
     border-radius: 8px;
     padding: 2px 6px;
@@ -1092,6 +1089,35 @@ img, svg {
     justify-content: center;
 }
 
+/* The pull-to-refresh head hangs above the list and steals clicks from the applied filters bar */
+.van-pull-refresh__head {
+    pointer-events: none;
+}
+
+.search-total-toggle {
+    border-radius: 8px !important;
+}
+
+.search-total-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--van-border-color);
+}
+
+.search-total-row .search-total-amount {
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.search-total-compute-button {
+    background: transparent !important;
+    border: 1px solid var(--van-text-color) !important;
+    border-radius: 8px !important;
+}
+
 .app-button-small {
     border: 1px solid var(--van-text-color-2);
     border-radius: 5px;
@@ -1102,8 +1128,23 @@ img, svg {
     padding: 3px 5px;
 }
 
+.app-button-icon {
+    border: 1px solid var(--van-border-color);
+    border-radius: 8px;
+    background: var(--van-cell-background);
+    color: var(--van-text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    cursor: pointer;
+}
+
 .app-chip {
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px,
+    rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
     border-radius: 7px;
     padding: 3px 8px;
     border: 1px solid var(--semi-black);
@@ -1119,14 +1160,12 @@ img, svg {
     font-weight: 400;
 }
 
-
 .badge-excluded-net-worth {
-    background: #E3F2FD;
+    background: #e3f2fd;
     padding: 0px 5px;
-    color: #1565C0;
+    color: #1565c0;
     border-radius: 3px;
 }
-
 
 .profile-picker {
     padding: 10px 18px 0px 18px;
@@ -1156,13 +1195,11 @@ img, svg {
     justify-content: center;
 }
 
-
 .profile-picker-card.active {
-    background: #1E88E5;
+    background: #1e88e5;
     color: #fff;
     border: 0;
 }
-
 
 .profile-picker-card-add {
     border-radius: 5px;
@@ -1180,9 +1217,8 @@ img, svg {
     border-bottom-left-radius: 10px !important;
     border-top-left-radius: 10px !important;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-    background: #1E88E5 !important;
+    background: #1e88e5 !important;
 }
-
 
 .currency-dropdown {
     display: flex;
@@ -1196,7 +1232,6 @@ img, svg {
 .currency-dropdown.borderless {
     border: none;
 }
-
 
 .notes-markdown {
     flex: 1;
@@ -1251,15 +1286,20 @@ img, svg {
     left: 0;
 }
 
-
 .desktop-content {
     flex: 1;
+    min-width: 0;
+    overflow-x: hidden;
     padding-inline-start: 16.25rem;
 }
 
 .app-top-toolbar-desktop {
     display: flex;
     align-items: center;
+    gap: 10px;
+    box-sizing: border-box;
+    width: calc(100% - 30px);
+    min-width: 0;
     padding: 15px;
     margin: 15px;
     background: var(--white);
@@ -1270,6 +1310,17 @@ img, svg {
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 
+.app-top-toolbar-desktop > .flex-1 {
+    min-width: 0;
+}
+
+.app-top-toolbar-desktop .app-toolbar-title,
+.app-top-toolbar-desktop .app-toolbar-subtitle {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .app-bottom-toolbar-item {
     font-size: 11px;
     font-weight: 500;
@@ -1277,15 +1328,16 @@ img, svg {
 
 .app-bottom-toolbar-item.selected {
     font-weight: 700;
-    color: #1565C0;
+    color: #1565c0;
 }
 
-.van-hairline--top-bottom:after, .van-hairline-unset--top-bottom:after {
+.van-hairline--top-bottom:after,
+.van-hairline-unset--top-bottom:after {
     border-width: 0 !important;
 }
 
-
-.add-transaction-btn-mobile, .add-transaction-btn-desktop {
+.add-transaction-btn-mobile,
+.add-transaction-btn-desktop {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1303,7 +1355,8 @@ img, svg {
     border-radius: 0.975rem; /* rounded-md */
     background-color: #ee2524; /* slate-900 */
     border: 2px solid white;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 0px 5px -1px, rgba(0, 0, 0, 0.3) 0px -1px 3px -1px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 0px 5px -1px,
+    rgba(0, 0, 0, 0.3) 0px -1px 3px -1px;
 }
 
 .add-transaction-btn-desktop {
@@ -1372,6 +1425,25 @@ img, svg {
     cursor: pointer;
 }
 
+.app-toast {
+    cursor: pointer;
+}
+
+@media (min-width: 801px) and (hover: hover) and (pointer: fine) {
+    .van-popup.van-notify.app-toast {
+        top: auto;
+        bottom: 28px;
+        left: 28px;
+        right: auto;
+        justify-content: flex-start;
+        width: min(360px, calc(100vw - 56px));
+        min-height: 44px;
+        padding: 12px 14px;
+        border-radius: 8px;
+        box-shadow: rgba(15, 23, 42, 0.18) 0 10px 30px;
+        text-align: left;
+    }
+}
 
 /*--------------------------------*/
 
@@ -1387,8 +1459,7 @@ img, svg {
     height: 100vh;
     /*padding: 20px;*/
     box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    width: 15.00rem;
-
+    width: 15rem;
 
     a {
         display: flex;
@@ -1460,18 +1531,46 @@ img, svg {
     letter-spacing: 0.05em;
 }
 
+.section-label-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 0 0 0.75rem;
+    border: 0;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+    font-family: inherit;
+    text-align: left;
+}
+
+.section-label-toggle svg {
+    flex-shrink: 0;
+}
+
 .mt-auto {
     margin-top: auto;
 }
 
 /* Deep selector to style the child component (app-left-sidebar-page) */
 
-
 /*--------------------------------*/
 
+.app-left-sidebar {
+    z-index: 2001;
+}
 
 body {
-    font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    font-family: ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
 }
 
 .van-nav-bar__right:active {
@@ -1482,4 +1581,473 @@ body {
     width: 100%;
 }
 
+.van-popover__content {
+    max-width: calc(100vw - 24px);
+}
 
+/* ---------------------------- Ramble ---------------------------- */
+
+.ramble-divider {
+    border-top: 1px solid var(--van-border-color);
+}
+
+.ramble-divider-bottom {
+    border-bottom: 1px solid var(--van-border-color);
+}
+
+.ramble-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--van-border-color);
+}
+
+.ramble-header-icon {
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 13px;
+    background: var(--black);
+    color: var(--white);
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+}
+
+/* Square icon-only round buttons (close, mic, delete saved) */
+.ramble-icon-button {
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    flex-shrink: 0;
+}
+
+/* Compact trigger that sits next to the currency picker in the assistant card title */
+.van-button.ramble-trigger-button {
+    width: 40px;
+    height: 40px;
+    background: var(--black);
+    color: var(--white);
+    padding: 0;
+    border-radius: 8px;
+}
+
+/* The badge wrapper around the trigger is a block element; without this the button
+   sits on the text baseline and looks vertically misaligned next to the currency picker. */
+.vant-card-title .van-badge__wrapper {
+    display: flex;
+    align-items: center;
+}
+
+.ramble-modern-badge .van-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3px 6px;
+    border: 0;
+    border-radius: 6px;
+    background: rgb(25, 118, 210);;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 500;
+}
+
+.transaction-assistant-input-row > .app-field {
+    min-width: 0;
+}
+
+/* Secondary action: outlined so it doesn't compete with the black Create button in the footer */
+.van-button.ramble-interpret-button {
+    background: #fafafa;
+    border: 2px solid #000;
+    color: black;
+    font-weight: 600;
+}
+
+.van-button.ramble-interpret-button.van-button--disabled {
+    opacity: 0.25;
+}
+
+.ramble-transaction-item + .ramble-transaction-item {
+    border-top: 1px solid var(--van-border-color);
+}
+
+.ramble-body {
+    background: var(--van-background);
+}
+
+.ramble-composer-input .van-field__control {
+    line-height: 1.5;
+}
+
+.ramble-recording {
+    animation: ramble-recording-pulse 1.6s ease-out infinite;
+}
+
+@keyframes ramble-recording-pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(238, 10, 36, 0.35);
+    }
+    70% {
+        box-shadow: 0 0 0 9px rgba(238, 10, 36, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(238, 10, 36, 0);
+    }
+}
+
+.ramble-live-dot {
+    width: 8px;
+    height: 8px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--van-danger-color);
+    animation: ramble-live-blink 1.2s ease-in-out infinite;
+}
+
+@keyframes ramble-live-blink {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.35;
+    }
+}
+
+.ramble-saved-item {
+    padding: 8px 12px;
+    align-items: center;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.ramble-section-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--van-text-color-3);
+}
+
+.ramble-count-pill {
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--black);
+    color: var(--white);
+}
+
+.ramble-error {
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--expense3);
+    color: var(--van-danger-color);
+}
+
+.ramble-empty {
+    padding: 36px 16px;
+}
+
+.ramble-empty-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--van-background-2-5);
+    color: var(--van-text-color-3);
+    margin-bottom: 4px;
+}
+
+.ramble-footer {
+    border-top: 1px solid var(--van-border-color);
+}
+
+/* ---------------------- Assistant LLM status card ---------------------- */
+
+.assistant-llm-context.app-field {
+    padding: 0;
+}
+
+.assistant-llm-context.app-field-text .van-field__body {
+    margin-right: 0;
+}
+
+.llm-status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.llm-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+}
+
+.llm-status-pill-on {
+    color: #1b8a4a;
+    background: var(--income3);
+}
+
+.llm-status-pill-off {
+    color: var(--expense1);
+    background: var(--expense3);
+}
+
+.llm-detail-panel {
+    padding: 2px 12px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+.llm-detail-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 0;
+    font-size: 13px;
+}
+
+.llm-detail-row + .llm-detail-row {
+    border-top: 1px solid var(--van-border-color);
+}
+
+.llm-detail-label {
+    flex-shrink: 0;
+}
+
+.llm-detail-value {
+    margin-left: auto;
+    text-align: right;
+    font-weight: 500;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.llm-env-chip {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    background: var(--van-background-2-5);
+    border: 1px solid var(--van-border-color);
+}
+
+/* The input card and preview list use overflow:hidden, which lets them shrink to fit
+   the flex column instead of overflowing it. Keep their natural height so the body scrolls. */
+.ramble-body > * {
+    flex-shrink: 0;
+}
+
+.ramble-transaction-item-success,
+.ramble-transaction-item-error {
+    margin: 4px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Doubled class so these beat the `.ramble-transaction-item + .ramble-transaction-item`
+   divider rule, which otherwise overrides the colored border-top. */
+.ramble-transaction-item.ramble-transaction-item-success {
+    border: 2px solid var(--van-success-color, #07c160);
+}
+
+.ramble-transaction-item.ramble-transaction-item-error {
+    border: 2px solid var(--van-danger-color, #ee0a24);
+}
+
+/* ------------------------ Entity badges ------------------------ */
+
+/* Shared shell for account/category/tag badges; each entity gets a distinct
+   border hue so they are easy to tell apart at a glance. */
+.app-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 100%;
+    padding: 2px 7px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 11px;
+    line-height: 1.35;
+}
+
+.account-badge {
+    font-size: 13px;
+    font-weight: 400;
+    border: 1.5px solid #bbb;
+}
+
+.category-badge {
+    font-size: 13px;
+    font-weight: 400;
+    border: 1.5px dashed #bab5b5;
+}
+
+.tag-badge {
+    font-size: 13px;
+    font-weight: 400;
+    border: 1.5px dashed #bab5b5;
+}
+
+.account-badges-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 3px;
+}
+
+.account-flow-arrow {
+    flex-shrink: 0;
+    color: #94a3b8;
+}
+
+/* ------------------------ Desktop transactions ------------------------ */
+
+/* Columns: type | date | description | amount | accounts | classification (categories + tags) | budget.
+   The grid lives on the list container and every row joins it via subgrid, so the
+   amount column (max-content) is sized by the widest amount in the list and stays
+   aligned across rows no matter how many digits a currency needs.
+   Subgrid subtracts the row's 16px horizontal padding from the edge tracks, hence
+   19px (16px padding + 3px type bar) and +16px on the last track of every template. */
+.transaction-desktop-list {
+    display: grid;
+    grid-template-columns: 19px max-content minmax(200px, 1.9fr) max-content minmax(160px, 1.2fr) minmax(150px, 1.3fr) minmax(126px, 0.9fr);
+    column-gap: 14px;
+}
+
+.transaction-desktop-list > .van-swipe-cell,
+.transaction-desktop-list .van-swipe-cell__wrapper,
+.transaction-desktop-row {
+    display: grid;
+    grid-column: 1 / -1;
+    grid-template-columns: subgrid;
+}
+
+.transaction-desktop-row {
+    align-items: center;
+    min-height: 46px;
+    padding: 5px 16px;
+    border-bottom: 1px solid #eef2f7;
+    background: var(--van-cell-background);
+    color: #0f172a;
+    transition: background-color 0.12s ease;
+}
+
+.transaction-desktop-row:hover {
+    background: #f8fafc;
+}
+
+.transaction-desktop-list .van-swipe-cell:last-child .transaction-desktop-row {
+    border-bottom: 0;
+}
+
+.transaction-desktop-type-dot {
+    width: 3px;
+    height: 20px;
+    border-radius: 3px;
+}
+
+.transaction-desktop-date-value {
+    font-size: 12.5px;
+    font-weight: 600;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.transaction-desktop-title {
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.transaction-desktop-amount-value {
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+}
+
+.transaction-desktop-muted {
+    margin-top: 1px;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.transaction-desktop-notes * {
+    display: inline;
+    margin: 0;
+}
+
+/* Keep source -> destination on one line; the badges themselves truncate. */
+.transaction-desktop-accounts {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.transaction-desktop-accounts .app-badge {
+    min-width: 0;
+}
+
+.transaction-desktop-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.transaction-desktop-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 100%;
+    padding: 2px 7px;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: #f8fafc;
+    color: #475569;
+    font-size: 11px;
+    line-height: 1.35;
+}
+
+.transaction-desktop-more,
+.transaction-desktop-split {
+    color: #94a3b8;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.transaction-desktop-amount {
+    white-space: nowrap;
+}
+
+/* Progressively drop the categorisation columns when the list gets narrow,
+   keeping type, date, description, amount and accounts always visible. */
+@container transaction-list (max-width: 1080px) {
+    .transaction-desktop-list {
+        grid-template-columns: 19px max-content minmax(200px, 1.9fr) max-content minmax(160px, 1.2fr) minmax(166px, 1.3fr);
+    }
+
+    .transaction-desktop-budget {
+        display: none;
+    }
+}
+
+@container transaction-list (max-width: 840px) {
+    .transaction-desktop-list {
+        grid-template-columns: 19px max-content minmax(180px, 2fr) max-content minmax(176px, 1.2fr);
+    }
+
+    .transaction-desktop-classification {
+        display: none;
+    }
+}

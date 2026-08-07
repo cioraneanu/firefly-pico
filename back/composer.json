@@ -7,6 +7,8 @@
     "require": {
         "php": "^8.2",
         "laravel/framework": "^12.15.0",
+        "laravel/horizon": "^5.48",
+        "predis/predis": "^3.5",
         "spatie/laravel-query-builder": "^6.3.2"
     },
     "require-dev": {

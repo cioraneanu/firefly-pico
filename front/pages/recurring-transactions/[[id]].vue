@@ -6,27 +6,36 @@
       </template>
     </app-top-toolbar>
 
-    <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
+    <van-form ref="form" :name="formName" class="" @submit="saveItem" @failed="onValidationError">
       <app-card-info v-if="itemId">
         <template v-if="upcomingDates.length > 0">
           <div class="van-cell-group-title">{{ $t('recurring_transaction_page.upcoming') }}:</div>
           <div class="px-3 display-flex gap-1 flex-wrap text-size-12">
-            <div v-for="date in upcomingDates" class="tag-gray" :key="date">{{ date }}</div>
+            <div v-for="date in upcomingDates" :key="date" class="tag-gray">{{ date }}</div>
           </div>
         </template>
         <app-field-link :label="$t('show_transactions')" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
       </app-card-info>
 
       <van-cell-group inset>
-        <app-field v-model="title" name="Name" :label="$t('name')" rows="1" autosize :icon="TablerIconConstants.fieldText2" :rules="[rule.required()]" />
+        <app-field v-model="title" name="Name" :label="$t('name')" rows="1" autosize maxlength="255" :icon="TablerIconConstants.fieldText2" :rules="[rule.required()]" required />
 
         <icon-select v-model="icon" />
 
-        <transaction-type-select v-model="type" name="transactionType" :rules="[rule.required()]" required />
+        <transaction-type-select v-model="type" name="transactionType" :rules="[rule.required()]" :disabled="!!itemId" required />
 
-        <app-field v-model="amount" name="amount" :label="$t('amount')" type="number" :icon="TablerIconConstants.cashBanknote" :rules="[rule.required()]" />
+        <transaction-amount-field
+          v-model:amount="amount"
+          v-model:amount-foreign="amountForeign"
+          v-model:currency-foreign="currencyForeign"
+          :currency="amountCurrency"
+          :is-foreign-amount-visible="isForeignAmountVisible"
+          :is-foreign-amount-required="isForeignAmountVisible"
+          :is-amount-required="true"
+          :rules="[rule.positive()]"
+        />
 
-        <account-select v-model="accountSource" name="accountSource" :label="$t('transaction.source_account')" :allowed-types="accountSourceAllowedTypes" v-bind="accountSourceBinding" required />
+        <account-select v-model="accountSource" name="accountSource" :label="$t('transaction.source_account')" :allowed-types="accountSourceAllowedTypes" v-bind="accountSourceBinding" />
 
         <account-select
           v-model="accountDestination"
@@ -40,15 +49,15 @@
         <budget-select v-model="budget" />
         <tag-select v-model="tags" />
 
-        <app-field v-model="description" name="description" :label="$t('description')" rows="1" autosize :icon="TablerIconConstants.fieldText1" :rules="[rule.required()]" required />
+        <app-field v-model="description" name="description" :label="$t('description')" rows="1" autosize maxlength="255" :icon="TablerIconConstants.fieldText1" :rules="[rule.required()]" required />
       </van-cell-group>
 
       <van-cell-group inset>
         <div class="van-cell-group-title">{{ $t('recurring_transaction_page.repetition') }}:</div>
 
-        <recurring-repetition-type-select v-model="repetitionType" name="repetitionType" :rules="[rule.required()]" required />
+        <recurring-repetition-type-select v-model="repetitionType" name="repetitionType" :rules="[rule.required()]" :disabled="!!itemId" required />
 
-        <weekday-select v-if="isRepetitionWeekly || isRepetitionNdom" v-model="repetitionWeekday" name="repetitionWeekday" :rules="[rule.required()]" required />
+        <weekday-select v-if="isRepetitionWeekly || isRepetitionNdom" v-model="repetitionWeekday" name="repetitionWeekday" :rules="[rule.required()]" :disabled="!!itemId" required />
 
         <app-field
           v-if="isRepetitionMonthly"
@@ -57,7 +66,11 @@
           :label="$t('recurring_transaction_page.day_of_month')"
           type="number"
           :icon="TablerIconConstants.settingsUserPreferencesDate"
-          :rules="[rule.required()]"
+          :rules="[rule.required(), rule.integerRange(1, 31)]"
+          :disabled="!!itemId"
+          :min="1"
+          :max="31"
+          required
         />
 
         <app-field
@@ -67,7 +80,11 @@
           :label="$t('recurring_transaction_page.week_of_month')"
           type="number"
           :icon="TablerIconConstants.settingsUserPreferencesDate"
-          :rules="[rule.required()]"
+          :rules="[rule.required(), rule.integerRange(1, 5)]"
+          :disabled="!!itemId"
+          :min="1"
+          :max="5"
+          required
         />
 
         <app-date
@@ -77,9 +94,21 @@
           :label="$t('recurring_transaction_page.yearly_date')"
           :icon="TablerIconConstants.settingsUserPreferencesDate"
           :rules="[rule.required()]"
+          :disabled="!!itemId"
+          :max-date="maxFireflyDate"
+          required
         />
 
-        <app-date v-model="firstDate" name="firstDate" :label="$t('recurring_transaction_page.first_date')" :icon="TablerIconConstants.settingsUserPreferencesDate" :rules="[rule.required()]" />
+        <app-date
+          v-model="firstDate"
+          name="firstDate"
+          :label="$t('recurring_transaction_page.first_date')"
+          :icon="TablerIconConstants.settingsUserPreferencesDate"
+          :rules="firstDateRules"
+          :min-date="firstDateMin"
+          :max-date="maxFireflyDate"
+          required
+        />
 
         <recurring-repetition-end-select v-model="repetitionEndType" name="repetitionEndType" :rules="[rule.required()]" required />
 
@@ -89,7 +118,10 @@
           name="repeatUntil"
           :label="$t('recurring_transaction_page.repeat_until')"
           :icon="TablerIconConstants.settingsUserPreferencesDate"
-          :rules="[rule.required()]"
+          :rules="repeatUntilRules"
+          :min-date="firstDate"
+          :max-date="maxFireflyDate"
+          required
         />
 
         <app-field
@@ -99,7 +131,10 @@
           :label="$t('recurring_transaction_page.nr_of_repetitions')"
           type="number"
           :icon="TablerIconConstants.fieldText2"
-          :rules="[rule.required()]"
+          :rules="[rule.required(), rule.integerRange(1, 255)]"
+          :min="1"
+          :max="255"
+          required
         />
 
         <app-boolean v-model="active" :label="$t('active')" />
@@ -110,7 +145,7 @@
       <div style="margin: 16px">
         <app-button-form-save />
 
-        <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
+        <app-button-form-delete v-if="itemId" class="mt-10" @click="onDelete" />
       </div>
     </van-form>
   </div>
@@ -132,6 +167,7 @@ import Transaction from '~/models/Transaction.js'
 import Account from '~/models/Account.js'
 import DateUtils from '~/utils/DateUtils.js'
 import { rule } from '~/utils/ValidationUtils.js'
+import { addDays, startOfDay, subYears } from 'date-fns'
 
 const recurringTransactionStore = useRecurringTransactionStore()
 const profileStore = useProfileStore()
@@ -179,6 +215,8 @@ const {
   icon,
   type,
   amount,
+  amountForeign,
+  currencyForeign,
   accountSource,
   accountDestination,
   category,
@@ -201,6 +239,8 @@ const {
   { computed: 'icon', parentKey: `attributes.icon` },
   { computed: 'type', parentKey: `attributes.type` },
   { computed: 'amount', parentKey: `attributes.amount` },
+  { computed: 'amountForeign', parentKey: `attributes.amountForeign` },
+  { computed: 'currencyForeign', parentKey: `attributes.currencyForeign` },
   { computed: 'accountSource', parentKey: `attributes.accountSource` },
   { computed: 'accountDestination', parentKey: `attributes.accountDestination` },
   { computed: 'category', parentKey: `attributes.category` },
@@ -227,6 +267,10 @@ const isRepetitionYearly = computed(() => isEqual(repetitionType.value, Recurrin
 
 const isEndUntilDate = computed(() => isEqual(repetitionEndType.value, RecurringTransaction.repetitionEndTypes.untilDate))
 const isEndNrOfTimes = computed(() => isEqual(repetitionEndType.value, RecurringTransaction.repetitionEndTypes.nrOfTimes))
+const maxFireflyDate = new Date(2038, 0, 16)
+const firstDateMin = computed(() => (itemId.value ? subYears(new Date(), 5) : startOfDay(addDays(new Date(), 1))))
+const firstDateRules = computed(() => [rule.required(), ...(!itemId.value ? [rule.afterDate(new Date())] : [])])
+const repeatUntilRules = computed(() => [rule.required(), rule.afterDate(firstDate.value, true)])
 
 // Firefly III only accepts one end condition, so clear the value that no longer applies
 watch(repetitionEndType, () => {
@@ -244,12 +288,46 @@ const isTypeTransfer = computed(() => isEqual(type.value, Transaction.types.tran
 
 const accountSourceAllowedTypes = computed(() => Account.getAccountTypesForTransactionTypeSource(type.value))
 const accountDestinationAllowedTypes = computed(() => Account.getAccountTypesForTransactionTypeDestination(type.value))
+const isIncomeFromLiability = computed(() => isTypeIncome.value && isEqual(Account.getType(accountSource.value), Account.types.liability))
+const amountCurrency = computed(() => Account.getCurrency(isTypeIncome.value && !isIncomeFromLiability.value ? accountDestination.value : accountSource.value))
+
+const isForeignAmountVisible = computed(() => {
+  const sourceCurrency = Account.getCurrency(accountSource.value)
+  const destinationCurrency = Account.getCurrency(accountDestination.value)
+  const currencyAwareTypes = [Account.types.asset.fireflyCode, Account.types.liability.fireflyCode]
+  const sourceType = Account.getType(accountSource.value)?.fireflyCode
+  const destinationType = Account.getType(accountDestination.value)?.fireflyCode
+  return Boolean(currencyAwareTypes.includes(sourceType) && currencyAwareTypes.includes(destinationType) && sourceCurrency && destinationCurrency && sourceCurrency.id !== destinationCurrency.id)
+})
+
+watch(type, (newValue, oldValue) => {
+  if (itemId.value || !oldValue || isEqual(newValue, oldValue)) {
+    return
+  }
+  const { source, destination } = Transaction.attemptAccountFixOnTypeChange(newValue, accountSource.value, accountDestination.value)
+  accountSource.value = source
+  accountDestination.value = destination
+})
+
+watch([accountSource, accountDestination], (_, [oldSource, oldDestination]) => {
+  // Skip the initial item load so an existing foreign amount isn't wiped just by opening the form
+  if (oldSource === undefined && oldDestination === undefined) {
+    return
+  }
+  if (isForeignAmountVisible.value) {
+    currencyForeign.value = Account.getCurrency(accountDestination.value)
+    return
+  }
+  amountForeign.value = ''
+  currencyForeign.value = null
+})
 
 const accountSourceBinding = computed(() => {
   const isRequired = isTypeExpense.value || isTypeTransfer.value
   return {
     required: isRequired,
-    rules: isRequired ? [{ required: true, message: 'Source account is required!' }] : [],
+    clearable: isRequired || !itemId.value,
+    rules: isRequired ? [rule.required()] : [],
   }
 })
 
@@ -257,7 +335,8 @@ const accountDestinationBinding = computed(() => {
   const isRequired = isTypeIncome.value || isTypeTransfer.value
   return {
     required: isRequired,
-    rules: isRequired ? [{ required: true, message: 'Destination account is required!' }] : [],
+    clearable: isRequired || !itemId.value,
+    rules: isRequired ? [rule.required()] : [],
   }
 })
 

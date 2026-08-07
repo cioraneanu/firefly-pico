@@ -1,8 +1,7 @@
 <template>
   <div class="">
     <!--    <van-cell :title="label" :value="date" @click="show = true"/>-->
-    <van-field v-model="getSelectedName" is-link readonly class="app-field" :label="label" placeholder="No date" v-bind="dynamicAttrs" @click="show = true">
-
+    <van-field v-model="getSelectedName" is-link readonly class="app-field" :label="label" placeholder="No date" v-bind="dynamicAttrs" @click="onShow">
       <template v-if="attrs.icon" #left-icon>
         <app-icon :icon="attrs.icon" :size="20" />
       </template>
@@ -17,7 +16,7 @@
 
       <template #right-icon>
         <div>
-          <van-icon v-if="modelValue" name="clear" class="cursor-pointer" @click.prevent.stop="date = null" />
+          <van-icon v-if="modelValue && !attrs.disabled" name="clear" class="cursor-pointer" @click.prevent.stop="modelValue = null" />
         </div>
       </template>
     </van-field>
@@ -35,7 +34,7 @@
 
     <!--    <van-cell title="Cell title" :value="getSelectedName" is-link @click="show = true" />-->
 
-    <van-calendar v-model:show="show" :show-confirm="false" color="#000" :min-date="minDate" @confirm="onConfirm">
+    <van-calendar v-model:show="show" :show-confirm="false" color="#000" :min-date="props.minDate" :max-date="props.maxDate" @confirm="onConfirm">
       <template #title>
         <div ref="appCalendar">Select a date</div>
       </template>
@@ -52,56 +51,58 @@ import { useSwipeToDismiss } from '~/composables/useSwipeToDismiss.js'
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 
+const modelValue = defineModel()
+
 const props = defineProps({
-  modelValue: Object,
   label: {
     type: String,
     default: 'Date',
   },
-})
-
-const emit = defineEmits(['update:modelValue'])
-
-const date = computed({
-  get() {
-    return props.modelValue
+  minDate: {
+    type: Date,
+    default: () => subYears(new Date(), 5),
   },
-  set(value) {
-    emit('update:modelValue', value)
+  maxDate: {
+    type: Date,
+    default: undefined,
   },
 })
 
 const show = ref(false)
 
+const onShow = () => {
+  if (!attrs.disabled) {
+    show.value = true
+  }
+}
+
 const labelClass = computed(() => {
   return {
-    'text-muted': !props.modelValue,
+    'text-muted': !modelValue.value,
   }
 })
 
 const getSelectedName = computed(() => {
-  if (!props.modelValue) {
+  if (!modelValue.value) {
     return 'No date'
   }
-  return DateUtils.dateToUI(props.modelValue)
+  return DateUtils.dateToUI(modelValue.value)
 })
 
 const onConfirm = (value) => {
   show.value = false
-  date.value = value
+  modelValue.value = value
   // emit('update:modelValue', value)
 }
 
-const minDate = subYears(new Date(), 5)
-
 const onClickedMinusDay = () => {
-  date.value = addDays(date.value, -1)
+  modelValue.value = addDays(modelValue.value, -1)
 }
 const onClickedToday = () => {
-  date.value = startOfDay(new Date())
+  modelValue.value = startOfDay(new Date())
 }
 const onClickedAddDay = () => {
-  date.value = addDays(date.value, 1)
+  modelValue.value = addDays(modelValue.value, 1)
 }
 
 const appCalendar = ref(null)
@@ -113,5 +114,3 @@ useSwipeToDismiss({
   showDropdown: show,
 })
 </script>
-
-<style></style>

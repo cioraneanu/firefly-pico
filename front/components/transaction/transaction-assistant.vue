@@ -10,8 +10,9 @@
     <div class="text-size-12 text-muted mb-5">{{ $t('transaction.assistant_format') }}</div>
 
     <div class="display-flex flex-column">
-      <div class="flex-center-vertical gap-2">
+      <div class="flex-center-vertical gap-2 transaction-assistant-input-row">
         <app-field
+          ref="assistantFieldRef"
           v-model="assistantText"
           class="van-cell-no-padding compact flex-1"
           label=""
@@ -20,10 +21,11 @@
           autosize
           :clearable="true"
         />
+        <ramble :assistant-text="assistantText" />
       </div>
 
       <template v-if="previewTags.length > 0 || parsed.isTodo">
-        <div class="display-flex flex-center-vertical gap-2 p-5 mt-10 text-size-12 flex-wrap" style="border: 1px dashed black; border-radius: 5px">
+        <div class="display-flex flex-center-vertical gap-2 p-5 mt-10 text-size-12 flex-wrap border border-radius">
           <van-tag v-for="previewTag in previewTags" :key="previewTag.label" round class="assistant-tag" size="medium" type="primary">
             <span>{{ previewTag.label }}</span>
             <span>|</span>
@@ -38,12 +40,11 @@
         </div>
       </template>
     </div>
-
   </div>
 </template>
 
 <script setup>
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { debounce } from 'lodash-es/function'
 import { isEqual } from 'lodash-es'
 import { addDays, format } from 'date-fns'
@@ -51,7 +52,10 @@ import Tag from '~/models/Tag'
 import AppTutorial from '~/components/ui-kit/app-tutorial.vue'
 import Category from '~/models/Category.js'
 import { ellipsizeText } from '~/utils/Utils.js'
+import RomanianLanguageUtils from '~/utils/RomanianLanguageUtils.js'
+import { evalMath } from '~/utils/MathUtils.js'
 import { useFuzzySearchResource } from '~/composables/useFuzzySearch.js'
+import Ramble from '~/components/transaction/ramble.vue'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
@@ -61,6 +65,7 @@ const emit = defineEmits(['change'])
 const assistantText = defineModel({ type: String })
 
 const fuzzySearch = useFuzzySearch()
+const assistantFieldRef = ref(null)
 
 const emptyParseResult = () => ({
   template: null,
@@ -88,7 +93,6 @@ const parseAssistantText = () => {
       text = text.slice(0, -profileStore.assistantTodoTagMatcher.length)
     }
 
-    console.log("")
     // "+1d" / "-5d" anywhere in the text moves the transaction date by that many days
     text = text.replace(/(^|\s)([+-]\d+)d(?=\s|$)/i, (match, leadingSpace, days) => {
       result.dateOffset = parseInt(days)
@@ -119,6 +123,13 @@ const parseAssistantText = () => {
 
 watch(assistantText, debounce(parseAssistantText, 200))
 
+onMounted(async () => {
+  if (profileStore.autoFocusAssistant) {
+    await nextTick()
+    assistantFieldRef.value?.focus()
+  }
+})
+
 const previewTags = computed(() => {
   const result = parsed.value
   return [
@@ -131,21 +142,16 @@ const previewTags = computed(() => {
   ].filter((previewTag) => !!previewTag.value)
 })
 
-watch(
-  [parsed, () => profileStore.assistantCurrency, () => profileStore.profileActiveId],
-  ([newParsed, newAssistantCurrency]) => {
-    emit('change', {
-      transactionTemplate: newParsed.template,
-      amount: newParsed.amount,
-      tag: newParsed.tag,
-      category: newParsed.category,
-      description: newParsed.description,
-      isTodo: newParsed.isTodo,
-      dateOffset: newParsed.dateOffset,
-      assistantCurrency: newAssistantCurrency,
-    })
-  },
-)
+watch([parsed, () => profileStore.assistantCurrency, () => profileStore.profileActiveId], ([newParsed, newAssistantCurrency]) => {
+  emit('change', {
+    transactionTemplate: newParsed.template,
+    amount: newParsed.amount,
+    tag: newParsed.tag,
+    category: newParsed.category,
+    description: newParsed.description,
+    isTodo: newParsed.isTodo,
+    dateOffset: newParsed.dateOffset,
+    assistantCurrency: newAssistantCurrency,
+  })
+})
 </script>
-
-<style scoped></style>

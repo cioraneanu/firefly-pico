@@ -8,6 +8,7 @@
 
     <app-card-info v-if="itemId">
       <app-field-link :label="$t('show_transactions')" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
+      <app-field-link :label="computeTotalLabel" :icon="TablerIconConstants.cash" @click="onComputeTotal" />
     </app-card-info>
 
     <van-form ref="form" :name="formName" class="" @submit="saveItem" @failed="onValidationError">
@@ -52,10 +53,12 @@ import { generateChildren } from '~/utils/VueUtils'
 import Tag from '~/models/Tag'
 import { useToolbar } from '~/composables/useToolbar'
 import TagTransformer from '~/transformers/TagTransformer'
+import TagRepository from '~/repository/TagRepository'
 import TagSelect from '~/components/select/tag-select.vue'
 import { TUTORIAL_CONSTANTS } from '~/constants/TutorialConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
+import UIUtils from '~/utils/UIUtils.js'
 
 const tagStore = useTagStore()
 const profileStore = useProfileStore()
@@ -121,6 +124,39 @@ toolbar.init({
 const onNavigateToTransactionsList = async () => {
   const filters = TransactionFilterUtils.filters.tag.toUrl(item.value)
   await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
+}
+
+const computeTotalLabel = computed(() => {
+  const totalFormatted = Tag.getTotalFormatted(item.value)
+  return totalFormatted ? `${t('tag_page.total')}: ${totalFormatted}` : t('tag_page.compute_total')
+})
+
+const isComputingTotal = ref(false)
+const onComputeTotal = async () => {
+  if (isComputingTotal.value) {
+    return
+  }
+  isComputingTotal.value = true
+  const response = await new TagRepository().computeTotal(itemId.value)
+  isComputingTotal.value = false
+
+  // On error the axios interceptor already shows the backend message in a toast
+  if (!ResponseUtils.isSuccess(response)) {
+    return
+  }
+
+  const totalAmount = get(response, 'data.data.total_amount')
+  const totalCurrencyId = get(response, 'data.data.total_currency_id')
+  set(item.value, 'attributes.total_amount', totalAmount)
+  set(item.value, 'attributes.total_currency_id', totalCurrencyId)
+
+  const storeTag = tagStore.tagDictionaryById[itemId.value]
+  if (storeTag) {
+    set(storeTag, 'attributes.total_amount', totalAmount)
+    set(storeTag, 'attributes.total_currency_id', totalCurrencyId)
+  }
+
+  UIUtils.showToastSuccess(t('tag_page.total_success'))
 }
 
 watch(tag, (newValue) => {

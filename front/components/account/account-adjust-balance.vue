@@ -76,4 +76,3 @@ useSwipeToDismiss({
 })
 </script>
 
-<style></style>

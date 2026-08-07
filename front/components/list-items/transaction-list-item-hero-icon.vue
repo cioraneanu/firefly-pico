@@ -63,10 +63,11 @@ const timeHour = computed(() => (date.value ? format(date.value, 'HH') : ''))
 const timeMinute = computed(() => (date.value ? format(date.value, 'mm') : ''))
 
 const accountIcons = computed(() => {
-  const destinationAccount = get(accountStore.accountDictionary, get(firstTransaction.value, 'destination_id'))
+  // Draft transactions (e.g. ramble previews) embed the account objects instead of ids.
+  const destinationAccount = get(accountStore.accountDictionary, get(firstTransaction.value, 'destination_id')) ?? get(firstTransaction.value, 'accountDestination')
   const destinationAccountIcon = Account.getIcon(destinationAccount) ?? TablerIconConstants.account
 
-  const sourceAccount = get(accountStore.accountDictionary, get(firstTransaction.value, 'source_id'))
+  const sourceAccount = get(accountStore.accountDictionary, get(firstTransaction.value, 'source_id')) ?? get(firstTransaction.value, 'accountSource')
   const sourceAccountIcon = Account.getIcon(sourceAccount) ?? TablerIconConstants.account
 
   if (isTypeExpense.value) {
@@ -83,7 +84,7 @@ const tagIcon = computed(() => {
   return get(sortedTags, '0.attributes.icon.icon') ?? TablerIconConstants.tag
 })
 const categoryIcon = computed(() => {
-  const category = get(categoryStore.categoryDictionary, get(firstTransaction.value, 'category_id'))
+  const category = get(categoryStore.categoryDictionary, get(firstTransaction.value, 'category_id')) ?? get(firstTransaction.value, 'category')
   return get(category, 'attributes.icon.icon') ?? TablerIconConstants.category
 })
 
