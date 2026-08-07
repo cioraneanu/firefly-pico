@@ -152,12 +152,18 @@ RUN mkdir -p /tmp/redis && chown -R www-data:www-data /tmp/redis
 COPY docker/conf/nginx/ /etc/nginx/
 RUN chown -R www-data:www-data /var/log/nginx /var/lib/nginx /run/nginx 2>/dev/null; \
     mkdir -p /run/nginx && chown www-data:www-data /run/nginx
+# The entrypoint renders http.d/default.conf from the template, so www-data must be able to write there
+RUN chown -R www-data:www-data /etc/nginx/http.d
 
 # Configure entrypoint
 COPY --chmod=755 docker/docker-entrypoint.d/ /docker-entrypoint.d/
 
 #set default db connection
 ENV DB_CONNECTION=sqlite
+
+#port nginx listens on inside the container. Set it to an unprivileged port (e.g. 8080)
+#on hosts that don't allow non-root processes to bind port 80 (Synology, podman, hardened kernels)
+ENV NGINX_PORT=80
 
 #queued jobs (voice transcription) run on the bundled redis through Horizon
 ENV QUEUE_CONNECTION=redis

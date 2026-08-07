@@ -6,6 +6,10 @@ services:
       - "6976:80"
     environment:
       - FIREFLY_URL=https://firefly.domain.com
+      # Optional: port nginx listens on inside the container. Defaults to 80.
+      # On hosts that don't let non-root processes bind port 80 (e.g. Synology Container
+      # Manager), set an unprivileged port and map it: ports: - "6976:8080"
+      # - NGINX_PORT=8080
       # Optional: AI assistant "Ramble" (any OpenAI compatible API)
       # - ASSISTANT_LLM_ENDPOINT=https://api.openai.com/v1/chat/completions
       # - ASSISTANT_LLM_MODEL=gpt-4o-mini
