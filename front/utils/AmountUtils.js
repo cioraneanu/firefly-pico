@@ -1,9 +1,14 @@
+const separatorsCache = new Map()
+
 export const getNumberSeparators = (locale) => {
-  const parts = new Intl.NumberFormat(locale).formatToParts(1234.5)
-  return {
-    decimal: parts.find(({ type }) => type === 'decimal')?.value ?? '.',
-    group: parts.find(({ type }) => type === 'group')?.value ?? ',',
+  if (!separatorsCache.has(locale)) {
+    const parts = new Intl.NumberFormat(locale).formatToParts(1234.5)
+    separatorsCache.set(locale, {
+      decimal: parts.find(({ type }) => type === 'decimal')?.value ?? '.',
+      group: parts.find(({ type }) => type === 'group')?.value ?? ',',
+    })
   }
+  return separatorsCache.get(locale)
 }
 
 export const normalizeAmount = (value, locale) => {
@@ -23,4 +28,14 @@ export const formatAmount = (value, locale) => {
   const [integer, fraction] = value.split('.')
   const formatted = integer.replace(/\B(?=(\d{3})+(?!\d))/g, group)
   return fraction === undefined ? formatted : `${formatted}${decimal}${fraction}`
+}
+
+// Position right after the Nth digit, so the caret survives separators being added or removed.
+export const caretAfterDigits = (value, digits) => {
+  if (digits <= 0) return 0
+  let seen = 0
+  for (let index = 0; index < value.length; index++) {
+    if (/\d/.test(value[index]) && ++seen === digits) return index + 1
+  }
+  return value.length
 }

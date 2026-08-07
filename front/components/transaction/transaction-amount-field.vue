@@ -16,14 +16,13 @@
           <div class="flex-center-vertical w-100">
             <input
               ref="inputAmount"
-              :value="displayAmount"
+              v-bind="amountInput"
               style="width: 100%; border: none; background: transparent; height: 24px"
               type="text"
               inputmode="decimal"
               class="transaction-amount-field-input"
               @focus="onFocus"
               @blur="onBlur"
-              @input="onAmountInput"
             >
             <van-button v-if="isConvertButtonVisible" size="small" class="" @click="convertAmountToForeign">
               <template #icon>
@@ -62,7 +61,7 @@
 
           <template #input>
             <div class="flex-center-vertical gap-1 w-100">
-              <input ref="inputAmountForeign" v-model="amountForeign" style="width: 100%; border: none; background: transparent; height: 24px" type="text" inputmode="decimal" >
+              <input ref="inputAmountForeign" v-bind="amountForeignInput" style="width: 100%; border: none; background: transparent; height: 24px" type="text" inputmode="decimal" >
 
               <van-button v-if="isConvertButtonVisible" size="small" class="" @click="convertForeignToAmount">
                 <template #icon>
@@ -172,17 +171,15 @@ const isConvertButtonVisible = computed(() => props.isForeignAmountVisible && cu
 const inputAmount = ref(null)
 const inputAmountForeign = ref(null)
 
-const { displayAmount, onAmountInput } = useAmountInput({
-  amount,
-  locale: computed(() => profileStore.numberFormat.code),
-})
+const amountInput = useAmountInput(amount)
+const amountForeignInput = useAmountInput(amountForeign)
 
 const quickButtons = profileStore.quickValueButtons
 
 const onQuickButton = async (quickButton) => {
   const value = !amount.value || amount.value === '' ? '0' : amount.value
   const newAmount = parseFloat(value) + parseFloat(quickButton)
-  amount.value = newAmount.toFixed(currencyDecimalPlaces.value ?? 0)
+  amount.value = newAmount.toFixed(currencyDecimalPlaces.value ?? 2)
 }
 
 const onFocus = () => {
@@ -193,8 +190,9 @@ const onBlur = async () => {
   await nextTick()
   isFocused.value = false
   let newAmount = await evaluateModelValue(amount.value)
-  if (newAmount) {
-    newAmount = currencyDecimalPlaces.value ? newAmount.toFixed(currencyDecimalPlaces.value) : newAmount.toString()
+  if (newAmount != null) {
+    // Not `? :` on the decimal places: 0 is a real value (JPY) and null means "no currency yet".
+    newAmount = newAmount.toFixed(currencyDecimalPlaces.value ?? 2)
   }
   amount.value = newAmount
 
