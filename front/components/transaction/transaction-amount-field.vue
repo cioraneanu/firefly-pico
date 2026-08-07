@@ -16,13 +16,14 @@
           <div class="flex-center-vertical w-100">
             <input
               ref="inputAmount"
-              v-model="amount"
+              :value="displayAmount"
               style="width: 100%; border: none; background: transparent; height: 24px"
               type="text"
               inputmode="decimal"
               class="transaction-amount-field-input"
               @focus="onFocus"
               @blur="onBlur"
+              @input="onAmountInput"
             >
             <van-button v-if="isConvertButtonVisible" size="small" class="" @click="convertAmountToForeign">
               <template #icon>
@@ -99,6 +100,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Currency from '~/models/Currency.js'
 import { animateTransactionAmountOperatorButtons } from '~/utils/AnimationUtils.js'
 import { useCurrencyConversion } from '~/composables/useCurrencyConversion.js'
+import { useAmountInput } from '~/composables/useAmountInput.js'
 
 const device = useDevice()
 const profileStore = useProfileStore()
@@ -170,6 +172,11 @@ const isConvertButtonVisible = computed(() => props.isForeignAmountVisible && cu
 const inputAmount = ref(null)
 const inputAmountForeign = ref(null)
 
+const { displayAmount, onAmountInput } = useAmountInput({
+  amount,
+  locale: computed(() => profileStore.numberFormat.code),
+})
+
 const quickButtons = profileStore.quickValueButtons
 
 const onQuickButton = async (quickButton) => {
@@ -206,13 +213,8 @@ const { evaluateModelValue, convertAmountToForeign, convertForeignToAmount } = u
   currency: computed(() => props.currency)
 })
 
-watch(amount, (newValue) => {
-  amount.value = sanitizeAmount(newValue)
-})
-
 const onOperation = async (button) => {
   amount.value = sanitizeAmount(amount.value + button.value)
-  // moveInputCursorToEnd(input, amount)
 }
 
 watch(isFocused, (newValue) => {
