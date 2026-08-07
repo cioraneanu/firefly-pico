@@ -1,5 +1,18 @@
 #!/bin/sh
 
+# Render the nginx site config. NGINX_PORT lets users pick an unprivileged port on hosts
+# where a non-root process may not bind port 80 (Synology Container Manager, podman, ...)
+NGINX_PORT="${NGINX_PORT:-80}"
+case "$NGINX_PORT" in
+    ''|*[!0-9]*)
+        echo "Invalid NGINX_PORT '$NGINX_PORT', falling back to 80"
+        NGINX_PORT=80
+        ;;
+esac
+sed "s/\${NGINX_PORT}/$NGINX_PORT/g" \
+    /etc/nginx/http.d/default.conf.template > /etc/nginx/http.d/default.conf
+echo "nginx will listen on port $NGINX_PORT"
+
 if [ "$DB_CONNECTION" == "sqlite" ]; then
     echo "Using a SQLite database"
 else

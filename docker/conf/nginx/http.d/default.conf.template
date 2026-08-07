@@ -2,7 +2,7 @@
 # chance access to any other virtualhost.
 
 server {
-        listen 80;
+        listen ${NGINX_PORT};
         server_name _;
         root /var/www/html/public;
 
