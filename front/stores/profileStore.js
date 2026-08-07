@@ -1,10 +1,9 @@
 import { defineStore } from 'pinia'
-import { ref, computed, reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import { StorageSerializers, useLocalStorage } from '@vueuse/core'
-import * as LanguageConstants from '~/constants/LanguageConstants'
 import DateUtils from '~/utils/DateUtils'
 import { cloneDeep, get, head, keyBy, omit } from 'lodash-es'
-import { transactionFormFieldList, transactionListFieldList, transactionListHeroIcon, transactionListHeroIconList } from '~/constants/TransactionConstants.js'
+import { transactionFormFieldList, transactionListFieldList, transactionListHeroIcon } from '~/constants/TransactionConstants.js'
 import { NUMBER_FORMAT } from '~/utils/NumberUtils.js'
 import ProfileRepository from '~/repository/ProfileRepository'
 import ProfileTransformer from '~/transformers/ProfileTransformer'
@@ -26,6 +25,9 @@ export const useProfileStore = defineStore('profile', () => {
 
   const assistantTodoTagMatcher = useLocalStorage('assistantTodoTagMatcher', '!!')
   const assistantCurrency = useLocalStorage('assistantCurrency', null, { serializer: StorageSerializers.object })
+  const autoFocusAssistant = useLocalStorage('autoFocusAssistant', false)
+  const assistantLlmContext = useLocalStorage('assistantLlmContext', '')
+  const useExternalStt = useLocalStorage('useExternalStt', false)
 
   const defaultAccountSource = useLocalStorage('defaultAccountSource', null, { serializer: StorageSerializers.object })
   const defaultAccountDestination = useLocalStorage('defaultAccountDestination', null, { serializer: StorageSerializers.object })
@@ -74,6 +76,7 @@ export const useProfileStore = defineStore('profile', () => {
   const recurringTransactionsEnabled = useLocalStorage('recurringTransactionsEnabled', true)
 
   const dashboard = reactive({
+    isProfileFloatVisible: useLocalStorage('isProfileFloatVisible', true),
     firstDayOfMonth: useLocalStorage('firstDayOfMonth', 1),
     showAccountAmounts: useLocalStorage('showAccountAmounts', true),
     showDecimal: useLocalStorage('showDecimals', false),
@@ -178,6 +181,9 @@ export const useProfileStore = defineStore('profile', () => {
     resetFormOnCreate,
     assistantTodoTagMatcher,
     assistantCurrency,
+    autoFocusAssistant,
+    assistantLlmContext,
+    useExternalStt,
     defaultAccountSource,
     defaultAccountDestination,
     defaultCategory,

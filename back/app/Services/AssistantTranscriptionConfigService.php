@@ -36,6 +36,7 @@ class AssistantTranscriptionConfigService
             'endpoint' => $config['endpoint'],
             'model' => $config['model'],
             'language' => $config['language'],
+            'provider' => $config['provider'],
         ];
     }
 

@@ -78,6 +78,21 @@ class AssistantTranscriptionService
             return ['successful' => false, 'status' => 502, 'message' => $exception->getMessage() ?: 'Assistant transcription request failed.'];
         }
 
+        // Deepgram returns 400 for silent/no-speech audio, which means the endpoint/key are valid
+        if (!$response->successful() && $config['provider'] === 'deepgram' && $response->status() === 400) {
+            $json = $response->json();
+            $errCode = $json['err_code'] ?? '';
+            $errMsg = $json['err_msg'] ?? '';
+            // Deepgram "1001" = No speech detected, "1003" = No audio data
+            if (in_array($errCode, ['1001', '1003']) || str_contains($errMsg, 'No speech') || str_contains($errMsg, 'audio')) {
+                return [
+                    'successful' => true,
+                    'status' => 200,
+                    'message' => 'Deepgram connection OK (no speech in test audio)',
+                ];
+            }
+        }
+
         $message = $this->extractErrorMessage($response);
 
         return [
