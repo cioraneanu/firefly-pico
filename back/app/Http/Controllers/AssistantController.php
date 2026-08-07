@@ -192,7 +192,7 @@ class AssistantController extends BaseController
     {
         BaseAuthorization::checkUser();
         $request->validate([
-            'audio' => ['required', 'file', 'mimes:webm,mp4,ogg,oga,opus,wav,m4a,mp3,mpga,aac,flac', 'max:25600'],
+            'audio' => ['required', 'file', 'max:25600'],
             'language' => ['nullable', 'string', 'max:20'],
         ]);
 
