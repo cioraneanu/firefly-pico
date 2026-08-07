@@ -14,10 +14,6 @@ export const evalMath = (value) => {
   try {
     let sanitizedValue = sanitizeMathString(value)
     let newValue = parser.evaluate(sanitizedValue)
-    // Strip IEEE-754 noise: 1000.20*3 evaluates to 3000.6000000000004.
-    if (typeof newValue === 'number' && Number.isFinite(newValue)) {
-      newValue = parseFloat(newValue.toPrecision(12))
-    }
     return {
       wasSuccessful: true,
       hasChanged: newValue !== value,

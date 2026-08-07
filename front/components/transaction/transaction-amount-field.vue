@@ -61,7 +61,7 @@
 
           <template #input>
             <div class="flex-center-vertical gap-1 w-100">
-              <input ref="inputAmountForeign" v-bind="amountForeignInput" style="width: 100%; border: none; background: transparent; height: 24px" type="text" inputmode="decimal" >
+              <input ref="inputAmountForeign" v-model="amountForeign" style="width: 100%; border: none; background: transparent; height: 24px" type="text" inputmode="decimal" >
 
               <van-button v-if="isConvertButtonVisible" size="small" class="" @click="convertForeignToAmount">
                 <template #icon>
@@ -171,8 +171,7 @@ const isConvertButtonVisible = computed(() => props.isForeignAmountVisible && cu
 const inputAmount = ref(null)
 const inputAmountForeign = ref(null)
 
-const amountInput = useAmountInput(amount)
-const amountForeignInput = useAmountInput(amountForeign)
+const { input: amountInput, onFocus: onAmountInputFocus, onBlur: onAmountInputBlur } = useAmountInput(amount)
 
 const quickButtons = profileStore.quickValueButtons
 
@@ -184,17 +183,20 @@ const onQuickButton = async (quickButton) => {
 
 const onFocus = () => {
   isFocused.value = true
+  onAmountInputFocus()
 }
 
 const onBlur = async () => {
   await nextTick()
   isFocused.value = false
+  const currentAmount = amount.value
   let newAmount = await evaluateModelValue(amount.value)
   if (newAmount != null) {
     // Not `? :` on the decimal places: 0 is a real value (JPY) and null means "no currency yet".
     newAmount = newAmount.toFixed(currencyDecimalPlaces.value ?? 2)
   }
-  amount.value = newAmount
+  amount.value = newAmount ?? currentAmount
+  onAmountInputBlur()
 
   // On iOS if you hide the keyboard via the "Done" button, onBlur gets called but it's not actually blurred. This is a temp fix...
   inputAmount.value?.blur()
