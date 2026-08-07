@@ -192,7 +192,6 @@ const onBlur = async () => {
   const currentAmount = amount.value
   let newAmount = await evaluateModelValue(amount.value)
   if (newAmount != null) {
-    // Not `? :` on the decimal places: 0 is a real value (JPY) and null means "no currency yet".
     newAmount = newAmount.toFixed(currencyDecimalPlaces.value ?? 2)
   }
   amount.value = newAmount ?? currentAmount
