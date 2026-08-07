@@ -11,7 +11,7 @@
 
       <van-dialog v-model:show="isPreviewVisible" confirm-button-text="OK" :close-on-click-overlay="true" style="top: 50%;">
         <div class="p-20">
-          <div class="app-toolbar-body" style="overflow: auto; max-height: 70vh" v-html="markdown"/>
+          <div class="transaction-notes-markdown app-toolbar-body" style="overflow: auto; max-height: 70vh" v-html="markdown"/>
         </div>
       </van-dialog>
     </template>

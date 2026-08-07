@@ -26,7 +26,7 @@
 
             <div v-if="notes && props.isDetailedMode" class="list-item-subtitle" :style="getStyleForField(transactionListField.notes)">
               <app-icon :icon="TablerIconConstants.fieldText1" :size="20" />
-              <span class="notes-markdown max-2-lines word-break-word" v-html="notes" />
+              <span class="transaction-notes-markdown notes-markdown max-2-lines word-break-word" v-html="notes" />
             </div>
 
             <div v-if="profileStore.tagsEnabled && tags && props.isDetailedMode" class="tags-container" :style="getStyleForField(transactionListField.tags)">
