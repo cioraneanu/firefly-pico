@@ -4,6 +4,8 @@ import UIUtils from '~/utils/UIUtils'
 /**
  * Browser-native audio recorder using MediaRecorder API.
  * Records microphone audio as webm/opus blob for uploading to backend STT.
+ *
+ * Returns Promises so callers can await stopRecording() and get the actual blob.
  */
 export function useAudioRecorder() {
   const isRecording = ref(false)
@@ -12,6 +14,8 @@ export function useAudioRecorder() {
   let mediaRecorder = null
   let audioChunks = []
   let stream = null
+  let stopResolve = null
+  let stopPromise = null
 
   // Check browser support
   const checkSupport = () => {
@@ -30,6 +34,8 @@ export function useAudioRecorder() {
     }
 
     audioChunks = []
+    stopResolve = null
+    stopPromise = null
 
     try {
       stream = await navigator.mediaDevices.getUserMedia({ audio: true })
@@ -54,7 +60,6 @@ export function useAudioRecorder() {
     try {
       mediaRecorder = new MediaRecorder(stream, mimeType ? { mimeType } : {})
     } catch (err) {
-      // Fallback without specifying mimeType
       mediaRecorder = new MediaRecorder(stream)
     }
 
@@ -67,12 +72,22 @@ export function useAudioRecorder() {
     mediaRecorder.onstop = () => {
       isRecording.value = false
       // Stop all tracks to release the microphone
-      stream.getTracks().forEach((track) => track.stop())
+      stream?.getTracks().forEach((track) => track.stop())
+
+      const mimeType = mediaRecorder?.mimeType || 'audio/webm'
+      const blob = new Blob(audioChunks, { type: mimeType })
+      console.log('[useAudioRecorder] onstop blob size:', blob.size, 'type:', blob.type)
+
+      if (stopResolve) {
+        stopResolve(blob)
+      }
+      audioChunks = []
+      stopResolve = null
     }
 
     mediaRecorder.onerror = (event) => {
       UIUtils.showToastError(`Recording error: ${event.message || 'Unknown error'}`)
-      stopRecording()
+      stopRecording().catch(() => {})
     }
 
     mediaRecorder.start()
@@ -82,17 +97,19 @@ export function useAudioRecorder() {
 
   const stopRecording = () => {
     if (!isRecording.value || !mediaRecorder) {
-      return null
+      return Promise.resolve(null)
     }
 
-    mediaRecorder.stop()
-    isRecording.value = false
+    if (mediaRecorder.state === 'recording') {
+      mediaRecorder.stop()
+    }
 
-    const mimeType = mediaRecorder.mimeType || 'audio/webm'
-    const blob = new Blob(audioChunks, { type: mimeType })
-    audioChunks = []
+    // Create a promise that resolves when onstop fires
+    stopPromise = new Promise((resolve) => {
+      stopResolve = resolve
+    })
 
-    return blob
+    return stopPromise
   }
 
   // Check support on creation

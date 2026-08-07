@@ -264,16 +264,19 @@ const toggleSavedRambleVoice = async (savedRamble) => {
 
 onBeforeUnmount(stopSavedRambleVoice)
 
-const toggleRecording = () => {
+const toggleRecording = async () => {
   if (props.isDisabled) {
     return
   }
 
   if (isRecording.value) {
     if (isAudioRecording.value) {
-      const blob = stopAudioRecording()
-      if (blob) {
-        transcribeAudioBlob(blob)
+      const blob = await stopAudioRecording()
+      console.log('[ramble-input-card] Received blob:', blob?.size, blob?.type)
+      if (blob && blob.size > 0) {
+        await transcribeAudioBlob(blob)
+      } else if (blob && blob.size === 0) {
+        UIUtils.showToastError('Recording was empty. Please speak louder or closer to the microphone.')
       }
     } else {
       stopWebSpeech()
@@ -283,26 +286,28 @@ const toggleRecording = () => {
 
   // Start recording
   if (useExternalSttRecording.value) {
-    startAudioRecording()
+    const started = await startAudioRecording()
+    if (!started) {
+      UIUtils.showToastError('Could not start audio recording.')
+    }
   } else {
     startWebSpeech()
   }
 }
 
-const onInterpret = () => {
+const onInterpret = async () => {
   if (props.isDisabled) {
     return
   }
 
   // If recording with external audio, stop and transcribe first
   if (isAudioRecording.value) {
-    const blob = stopAudioRecording()
-    if (blob) {
-      transcribeAudioBlob(blob).then(() => {
-        emit('interpret')
-      })
-      return
+    const blob = await stopAudioRecording()
+    if (blob && blob.size > 0) {
+      await transcribeAudioBlob(blob)
     }
+    emit('interpret')
+    return
   }
 
   stopWebSpeech()
@@ -310,11 +315,11 @@ const onInterpret = () => {
 }
 
 defineExpose({
-  stopRecording: () => {
+  stopRecording: async () => {
     if (isAudioRecording.value) {
-      const blob = stopAudioRecording()
-      if (blob) {
-        transcribeAudioBlob(blob)
+      const blob = await stopAudioRecording()
+      if (blob && blob.size > 0) {
+        await transcribeAudioBlob(blob)
       }
     } else {
       stopWebSpeech()
