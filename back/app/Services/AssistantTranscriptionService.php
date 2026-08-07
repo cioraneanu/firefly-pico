@@ -14,6 +14,44 @@ class AssistantTranscriptionService
     }
 
     /**
+     * Transcribe a single audio file and return the text.
+     * Used for live audio recording in the browser.
+     */
+    public function transcribeFile(string $filePath, ?string $language = null): ?string
+    {
+        $config = $this->configService->getConfig($language);
+        if (!$config['isConfigured']) {
+            return null;
+        }
+
+        $disk = Storage::disk('local');
+        if (!$disk->exists($filePath)) {
+            return null;
+        }
+
+        $contents = $disk->get($filePath);
+        if (!$contents) {
+            return null;
+        }
+
+        $request = $this->buildHttpRequest($config);
+
+        try {
+            $response = $request
+                ->attach('file', $contents, basename($filePath))
+                ->post($config['endpoint'], $this->buildPayload($config));
+        } catch (ConnectionException) {
+            return null;
+        }
+
+        if (!$response->successful()) {
+            return null;
+        }
+
+        return $this->extractTranscript($response->json());
+    }
+
+    /**
      * Transcribe every voice ramble in the collection that was not transcribed yet.
      * is_transcribed marks a completed transcription: a request that failed leaves it
      * false so a later load retries it instead of losing the recording.

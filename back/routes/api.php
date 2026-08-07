@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AccountController;
+use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CurrencyController;
@@ -30,8 +31,9 @@ use Illuminate\Support\Facades\Route;
 
 
 // Own resources
-Route::get('latest-version', [VersionController::class, 'getLatestVersion']);
+Route::get('info', [VersionController::class, 'getInfo']);
 Route::get('user', [UserController::class, 'getUser']);
+
 RouteUtils::makeCRUD("transaction-templates", TransactionTemplateController::class);
 
 // Firefly proxied resources
@@ -43,6 +45,7 @@ RouteUtils::makeCRUD("budgets", BudgetController::class);
 RouteUtils::makeCRUD("piggy-banks", PiggyBankController::class);
 RouteUtils::makeCRUD("recurrences", RecurrenceController::class);
 RouteUtils::makeCRUD("tags", TagController::class);
+Route::post("tags/{id}/total", [TagController::class, 'computeTotal'])->where('id', '[0-9]+');
 
 // RouteUtils::makeCRUD("currencies", CurrencyController::class);
 
@@ -59,10 +62,21 @@ Route::get('budget-limits', [BudgetController::class, 'getBudgetLimits']);
 
 RouteUtils::makeCRUD("transactions", TransactionController::class);
 Route::get('search/transactions', [TransactionController::class, 'getAll']);
+Route::get('search/transactions/total', [TransactionController::class, 'computeSearchTotal']);
 
 
 RouteUtils::makeCRUD("profiles", ProfileController::class);
 
+Route::post('assistant/rambles', [AssistantController::class, 'create']);
+Route::get('assistant/rambles/count', [AssistantController::class, 'getCount']);
+Route::get('assistant/rambles', [AssistantController::class, 'getAll']);
+Route::get('assistant/rambles/{id}/voice', [AssistantController::class, 'getRambleVoice'])->where('id', '[0-9]+');
+Route::delete('assistant/rambles', [AssistantController::class, 'deleteRambles']);
+Route::delete('assistant/rambles/{id}', [AssistantController::class, 'deleteRamble'])->where('id', '[0-9]+');
+Route::post('assistant/interpret-transactions', [AssistantController::class, 'interpretTransactions']);
+Route::post('assistant/test-llm', [AssistantController::class, 'testLlm']);
+Route::post('assistant/test-transcription', [AssistantController::class, 'testTranscription']);
+Route::post('assistant/transcribe', [AssistantController::class, 'transcribe']);
 
 Route::get('/test', function (Request $request) {
     return "Test!";
@@ -73,7 +87,3 @@ $proxyMethods = ['get', 'post', 'put', 'patch', 'delete'];
 foreach ($proxyMethods as $proxyMethod) {
     Route::$proxyMethod('{any?}', [FireflyProxyController::class, 'proxyRequest'])->where('any', '.*');
 }
-
-
-
-
