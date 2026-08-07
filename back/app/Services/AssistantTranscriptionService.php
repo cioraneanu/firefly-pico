@@ -21,34 +21,45 @@ class AssistantTranscriptionService
     {
         $config = $this->configService->getConfig($language);
         if (!$config['isConfigured']) {
+            \Log::error('Transcription not configured');
             return null;
         }
 
         $disk = Storage::disk('local');
         if (!$disk->exists($filePath)) {
+            \Log::error('File does not exist: ' . $filePath);
             return null;
         }
 
         $contents = $disk->get($filePath);
         if (!$contents) {
+            \Log::error('File is empty: ' . $filePath);
             return null;
         }
+
+        $size = strlen($contents);
+        \Log::info('Transcribing file: ' . $filePath . ' size=' . $size . ' provider=' . $config['provider']);
 
         $request = $this->buildHttpRequest($config);
 
         try {
             $response = $request
                 ->attach('file', $contents, basename($filePath))
-                ->post($config['endpoint'], $this->buildPayload($config));
-        } catch (ConnectionException) {
+                ->post($this->buildEndpoint($config), $this->buildPayload($config));
+        } catch (ConnectionException $e) {
+            \Log::error('ConnectionException: ' . $e->getMessage());
             return null;
         }
+
+        $status = $response->status();
+        $body = $response->json();
+        \Log::info('Transcription response status=' . $status . ' body=' . json_encode($body));
 
         if (!$response->successful()) {
             return null;
         }
 
-        return $this->extractTranscript($response->json());
+        return $this->extractTranscript($body);
     }
 
     /**
@@ -111,7 +122,7 @@ class AssistantTranscriptionService
         $request = $this->buildHttpRequest($config);
 
         try {
-            $response = $request->attach('file', $wav, 'test.wav')->post($config['endpoint'], $this->buildPayload($config));
+            $response = $request->attach('file', $wav, 'test.wav')->post($this->buildEndpoint($config), $this->buildPayload($config));
         } catch (ConnectionException $exception) {
             return ['successful' => false, 'status' => 502, 'message' => $exception->getMessage() ?: 'Assistant transcription request failed.'];
         }
@@ -177,7 +188,7 @@ class AssistantTranscriptionService
         try {
             $response = $request
                 ->attach('file', $contents, basename($ramble->voice_path))
-                ->post($config['endpoint'], $this->buildPayload($config));
+                ->post($this->buildEndpoint($config), $this->buildPayload($config));
         } catch (ConnectionException) {
             return null;
         }
@@ -222,15 +233,36 @@ class AssistantTranscriptionService
         ], fn($value) => $value !== '' && $value !== null);
 
         if ($config['provider'] === 'deepgram') {
-            // Deepgram expects 'diarize', 'punctuate', 'smart_format' etc. as query params
-            // But we keep it simple: just model + language in body, any extras via query string in endpoint
-            unset($payload['response_format']);
+            // Deepgram parameters go in query string, not body
+            return [];
         } else {
             // OpenAI requires response_format
             $payload['response_format'] = 'json';
         }
 
         return $payload;
+    }
+
+    /**
+     * Build the full endpoint URL with query parameters for providers that need them.
+     */
+    private function buildEndpoint(array $config): string
+    {
+        $endpoint = $config['endpoint'];
+
+        if ($config['provider'] === 'deepgram') {
+            $params = array_filter([
+                'model' => $config['model'],
+                'language' => $config['language'],
+                'smart_format' => 'true',
+                'punctuate' => 'true',
+            ], fn($value) => $value !== '' && $value !== null);
+
+            $separator = str_contains($endpoint, '?') ? '&' : '?';
+            return $endpoint . $separator . http_build_query($params);
+        }
+
+        return $endpoint;
     }
 
     /**
