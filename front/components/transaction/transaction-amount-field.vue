@@ -16,7 +16,7 @@
           <div class="flex-center-vertical w-100">
             <input
               ref="inputAmount"
-              v-model="amount"
+              v-bind="amountInput"
               style="width: 100%; border: none; background: transparent; height: 24px"
               type="text"
               inputmode="decimal"
@@ -99,6 +99,7 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import Currency from '~/models/Currency.js'
 import { animateTransactionAmountOperatorButtons } from '~/utils/AnimationUtils.js'
 import { useCurrencyConversion } from '~/composables/useCurrencyConversion.js'
+import { useAmountInput } from '~/composables/useAmountInput.js'
 
 const device = useDevice()
 const profileStore = useProfileStore()
@@ -170,26 +171,31 @@ const isConvertButtonVisible = computed(() => props.isForeignAmountVisible && cu
 const inputAmount = ref(null)
 const inputAmountForeign = ref(null)
 
+const { input: amountInput, onFocus: onAmountInputFocus, onBlur: onAmountInputBlur } = useAmountInput(amount)
+
 const quickButtons = profileStore.quickValueButtons
 
 const onQuickButton = async (quickButton) => {
   const value = !amount.value || amount.value === '' ? '0' : amount.value
   const newAmount = parseFloat(value) + parseFloat(quickButton)
-  amount.value = newAmount.toFixed(currencyDecimalPlaces.value ?? 0)
+  amount.value = newAmount.toFixed(currencyDecimalPlaces.value ?? 2)
 }
 
 const onFocus = () => {
   isFocused.value = true
+  onAmountInputFocus()
 }
 
 const onBlur = async () => {
   await nextTick()
   isFocused.value = false
+  const currentAmount = amount.value
   let newAmount = await evaluateModelValue(amount.value)
-  if (newAmount) {
-    newAmount = currencyDecimalPlaces.value ? newAmount.toFixed(currencyDecimalPlaces.value) : newAmount.toString()
+  if (newAmount != null) {
+    newAmount = newAmount.toFixed(currencyDecimalPlaces.value ?? 2)
   }
-  amount.value = newAmount
+  amount.value = newAmount ?? currentAmount
+  onAmountInputBlur()
 
   // On iOS if you hide the keyboard via the "Done" button, onBlur gets called but it's not actually blurred. This is a temp fix...
   inputAmount.value?.blur()
@@ -206,13 +212,8 @@ const { evaluateModelValue, convertAmountToForeign, convertForeignToAmount } = u
   currency: computed(() => props.currency)
 })
 
-watch(amount, (newValue) => {
-  amount.value = sanitizeAmount(newValue)
-})
-
 const onOperation = async (button) => {
   amount.value = sanitizeAmount(amount.value + button.value)
-  // moveInputCursorToEnd(input, amount)
 }
 
 watch(isFocused, (newValue) => {
