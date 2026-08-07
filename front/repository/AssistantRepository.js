@@ -171,10 +171,13 @@ export default class AssistantRepository extends BaseRepository {
 
   async transcribeAudio(blob, language = null) {
     const formData = new FormData()
+    // Append with explicit filename so Laravel detects it as a file
     formData.append('audio', blob, 'recording.webm')
     if (language) {
       formData.append('language', language)
     }
+
+    console.log('[AssistantRepository] Sending blob:', blob.size, blob.type)
 
     return axios.post(`${this.getUrl()}/transcribe`, formData, {
       headers: { 'Content-Type': 'multipart/form-data' },
