@@ -15,12 +15,22 @@ export const useAmountInput = (amount) => {
 
     // Deleting a group separator is otherwise a no-op, since re-formatting puts it straight
     // back. Drop the digit next to it instead, the way a native number field behaves.
-    const { group } = getNumberSeparators(locale.value)
+    const { decimal, group } = getNumberSeparators(locale.value)
     if (value.length === displayAmount.value.length - 1 && displayAmount.value[cursor] === group) {
       const digit = event.inputType === 'deleteContentForward' ? cursor : cursor - 1
       if (digit >= 0 && digit < value.length) {
         value = value.slice(0, digit) + value.slice(digit + 1)
         cursor = digit
+      }
+    }
+
+    // We insert group separators ourselves, so a typed "." is only ever meant as a decimal
+    // point -- even in locales that group with "." and would otherwise strip it. Pasted text
+    // has no keystroke to read, so normalizeAmount still has to guess there.
+    if (event.inputType === 'insertText' && event.data === '.' && decimal !== '.') {
+      const withoutTyped = value.slice(0, cursor - 1) + value.slice(cursor)
+      if (!withoutTyped.includes(decimal)) {
+        value = value.slice(0, cursor - 1) + decimal + value.slice(cursor)
       }
     }
 
