@@ -81,6 +81,10 @@
   "transaction": {
     "title_list": "Lista tranzacțiilor",
     "split_transaction": "Împarte tranzacția",
+    "title_split_details": "Detalii tranzacție împărțită",
+    "split_count": "{count} părți",
+    "total_amount": "Sumă totală",
+    "subscription": "Abonament",
     "assistant": "Asistent",
     "assistant_format": "Format = [șablon / etichetă?] [sumă?] [descriere?]",
     "assistant_ramble_title": "Dictate transactions",

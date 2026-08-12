@@ -8,9 +8,9 @@
     <div class="flex-center-vertical flex-wrap gap-1 mt-2">
       <van-loading v-if="isLoading" />
 
-      <transaction-attachment v-for="item in list" :key="item.id" :value="item" @result="fetchAttachments" @is-loading="onLoadingChange" />
+      <transaction-attachment v-for="item in list" :key="item.id" :value="item" :read-only="readOnly" @result="fetchAttachments" @is-loading="onLoadingChange" />
 
-      <div v-if="!isLoading" class="add-attachment flex-center">
+      <div v-if="!isLoading && !readOnly" class="add-attachment flex-center">
         <icon-plus :size="30" :stroke="0.8" />
         <input type="file" @change="onUpload" >
       </div>
@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { IconSquarePlus, IconPlus } from '@tabler/icons-vue'
+import { IconPlus } from '@tabler/icons-vue'
 import TransactionAttachment from '~/components/transaction/transaction-attachements/transaction-attachment.vue'
 import AttachmentRepository from '~/repository/AttachmentRepository.js'
 import { get, head } from 'lodash-es'
@@ -31,7 +31,14 @@ const isLoading = ref(false)
 const list = ref([])
 
 const props = defineProps({
-  transaction: {},
+  transaction: {
+    type: Object,
+    default: () => ({}),
+  },
+  readOnly: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const transactionId = computed(() => props.transaction?.id)
@@ -45,9 +52,15 @@ const fetchAttachments = async () => {
   isLoading.value = false
 }
 
-watch(transactionId, (newValue) => {
-  fetchAttachments()
-})
+watch(
+  transactionId,
+  (newValue) => {
+    if (newValue) {
+      fetchAttachments()
+    }
+  },
+  { immediate: true },
+)
 
 const onUpload = async (e) => {
   const file = head(e.target.files ?? [])
@@ -57,5 +70,6 @@ const onUpload = async (e) => {
 }
 
 const onLoadingChange = (value) => {
+  isLoading.value = value
 }
 </script>

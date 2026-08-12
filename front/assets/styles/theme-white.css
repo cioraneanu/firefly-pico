@@ -1038,6 +1038,193 @@ svg {
     line-height: 16px;
 }
 
+.transaction-split-view {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-bottom: 20px;
+}
+
+.transaction-split-summary,
+.transaction-split-card,
+.transaction-split-attachments {
+    overflow: hidden;
+    border: 1px solid var(--van-border-color);
+    border-radius: 10px;
+    box-shadow: rgba(149, 157, 165, 0.2) 0 8px 24px;
+}
+
+.transaction-split-summary-cell {
+    padding: 16px;
+}
+
+.transaction-split-summary-cell .van-cell__title,
+.transaction-split-card-header .van-cell__title {
+    min-width: 0;
+}
+
+.transaction-split-summary-cell .van-cell__value,
+.transaction-split-card-header .van-cell__value {
+    flex: 0 0 auto;
+    margin-left: 14px;
+}
+
+.transaction-split-summary-heading {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 7px;
+}
+
+.transaction-split-group-title {
+    flex: 1 1 190px;
+    color: var(--van-text-color);
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.transaction-split-summary-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 7px;
+    color: var(--van-text-color-3);
+    font-size: 11px;
+    line-height: 1.3;
+}
+
+.transaction-split-total {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+}
+
+.transaction-split-total-label {
+    color: var(--van-text-color-3);
+    font-size: 10px;
+    font-weight: 600;
+    line-height: 1.2;
+    text-transform: uppercase;
+}
+
+.transaction-split-total-value,
+.transaction-split-card-amount {
+    width: fit-content;
+    padding: 3px 10px;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.transaction-split-list {
+    display: grid;
+    gap: 12px;
+    margin: 0 16px;
+}
+
+.transaction-split-card {
+    height: fit-content;
+    margin: 0 !important;
+}
+
+.transaction-split-card-header {
+    background: var(--van-background-2);
+}
+
+.transaction-split-card-position {
+    color: var(--van-text-color-3);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.transaction-split-card-title {
+    margin-top: 3px;
+    color: var(--van-text-color);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.transaction-split-foreign-amount {
+    margin-top: 4px;
+    color: var(--van-text-color-3);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+}
+
+.transaction-split-fallback-badge {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+    gap: 4px;
+    padding: 2px 6px;
+    border: 1px dashed var(--van-border-color);
+    border-radius: 6px;
+    background: var(--van-background-2);
+    color: var(--van-text-color-2);
+    font-size: 12px;
+}
+
+.transaction-split-detail-row .van-cell__title {
+    flex: 0 0 112px;
+}
+
+.transaction-split-detail-row .van-cell__value {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    overflow: visible;
+}
+
+.transaction-split-detail-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--van-text-color-2);
+    font-size: 12px;
+}
+
+.transaction-split-detail-text {
+    color: var(--van-text-color);
+    font-size: 12px;
+    line-height: 1.35;
+    text-align: right;
+}
+
+.transaction-split-tags {
+    display: flex;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.transaction-split-notes-row .van-cell__title {
+    flex: 1;
+}
+
+.transaction-split-notes {
+    margin-top: 7px;
+    color: var(--van-text-color);
+    font-size: 12px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+}
+
+.transaction-split-attachments {
+    margin-top: 0;
+}
+
+.transaction-split-view-desktop .transaction-split-list {
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+}
+
 .day-frame {
     display: flex;
     flex-direction: column;

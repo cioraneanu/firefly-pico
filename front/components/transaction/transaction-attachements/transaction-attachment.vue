@@ -8,16 +8,22 @@
 <script setup>
 import { IconPhoto } from '@tabler/icons-vue'
 
-import { get, head } from 'lodash-es'
+import { get } from 'lodash-es'
 import { trimString } from '~/utils/StringUtils.js'
 import { downloadFileFromUrl, showImageFromUrl } from '~/utils/AttachmentUtils.js'
-import { onLongPress } from '@vueuse/core'
 import { useTap, useTapEvent } from '~/composables/useTap.js'
 import { useActionSheet } from '~/composables/useActionSheet.js'
 import AttachmentRepository from '~/repository/AttachmentRepository.js'
 
 const props = defineProps({
-  value: {},
+  value: {
+    type: Object,
+    default: () => ({}),
+  },
+  readOnly: {
+    type: Boolean,
+    default: false,
+  },
 })
 
 const emits = defineEmits(['result', 'isLoading'])
@@ -35,12 +41,21 @@ const tapBinding = useTap(async (event) => {
     case useTapEvent.single:
       emits('isLoading', true)
       try {
-        isImage.value ? await showImageFromUrl(downloadUrl.value) : await downloadFileFromUrl(downloadUrl.value, filename.value)
-      } catch {}
+        if (isImage.value) {
+          await showImageFromUrl(downloadUrl.value)
+        } else {
+          await downloadFileFromUrl(downloadUrl.value, filename.value)
+        }
+      } catch {
+        // Existing attachment downloads fail silently; always clear the loading state below.
+      }
       emits('isLoading', false)
       break
     case useTapEvent.double:
     case useTapEvent.long:
+      if (props.readOnly) {
+        return
+      }
       useActionSheet().show([
         {
           name: t('delete'),

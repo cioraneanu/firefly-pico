@@ -81,6 +81,10 @@
   "transaction": {
     "title_list": "Lista transakcji",
     "split_transaction": "Podziel transakcję",
+    "title_split_details": "Szczegóły podzielonej transakcji",
+    "split_count": "{count} części",
+    "total_amount": "Łączna kwota",
+    "subscription": "Subskrypcja",
     "assistant": "Asystent",
     "assistant_format": "Format = [wzór / tag?] [kwota?] [opis?]",
     "assistant_ramble_title": "Dictate transactions",

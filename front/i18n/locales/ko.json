@@ -81,6 +81,10 @@
   "transaction": {
     "title_list": "거래 목록",
     "split_transaction": "거래 분할",
+    "title_split_details": "분할 거래 세부 정보",
+    "split_count": "{count}개 분할",
+    "total_amount": "총액",
+    "subscription": "구독",
     "assistant": "어시스턴트",
     "assistant_format": "형식 = [템플릿 / 태그?] [금액?] [설명?] [±N일?]",
     "assistant_ramble_title": "거래 받아쓰기",
