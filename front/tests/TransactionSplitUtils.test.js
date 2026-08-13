@@ -38,7 +38,7 @@ test('uses transformed currency metadata when raw Firefly fields are unavailable
   assert.deepEqual(totals, [{ amount: '4.75', currencyId: '1', currencyCode: 'USD', currencySymbol: '$', decimalPlaces: 2 }])
 })
 
-test('keeps decimal strings exact across currency display formatting and aggregation', () => {
+test('does not coerce Firefly decimal strings before split aggregation', () => {
   const transformedAmounts = ['9999999999999999.990000000000', '0.010000000000'].map((amount) => formatAmountToCurrencyPrecision(amount, 2))
   const totals = getTransactionSplitTotals(transactionWith(transformedAmounts.map((amount) => ({ amount, currency_code: 'USD', currency_symbol: '$', currency_decimal_places: 2 }))))
 
