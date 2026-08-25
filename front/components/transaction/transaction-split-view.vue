@@ -152,7 +152,6 @@ import Transaction from '~/models/Transaction.js'
 import TransactionAttachmentsList from '~/components/transaction/transaction-attachements/transaction-attachments-list.vue'
 import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
 import { formatAmount } from '~/utils/AmountUtils.js'
-import { getTransactionSplitTotals } from '~/utils/TransactionSplitUtils.js'
 import { transactionExtraDateFieldList } from '~/constants/TransactionConstants.js'
 
 const props = defineProps({
@@ -169,7 +168,7 @@ const profileStore = useProfileStore()
 const { locale } = useI18n()
 
 const splits = computed(() => Transaction.getSplits(props.transaction))
-const totals = computed(() => getTransactionSplitTotals(props.transaction))
+const totals = computed(() => Transaction.getSplitTotals(props.transaction))
 const groupTitle = computed(() => Transaction.getDescription(props.transaction))
 const dateFormatted = computed(() => {
   const date = Transaction.getDate(props.transaction)

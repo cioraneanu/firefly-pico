@@ -112,6 +112,24 @@ export default class Transaction extends BaseModel {
     return this.getSplits(transaction)[0]
   }
 
+  static getSplitTotals(transaction) {
+    const totals = new Map()
+    this.getSplits(transaction).forEach((split) => {
+      const key = split.currency_id ?? split.currency_code ?? 'unknown'
+      const total = totals.get(key) ?? {
+        amount: 0,
+        currencyId: split.currency_id,
+        currencyCode: split.currency_code,
+        currencySymbol: split.currency_symbol,
+        decimalPlaces: Currency.getDecimalPlaces(split.currency) ?? 2,
+      }
+      total.amount += parseFloat(split.amount) || 0
+      totals.set(key, total)
+    })
+
+    return [...totals.values()].map((total) => ({ ...total, amount: total.amount.toFixed(total.decimalPlaces) }))
+  }
+
   static isSplitPayment(transaction) {
     return this.getSplits(transaction).length > 1
   }
