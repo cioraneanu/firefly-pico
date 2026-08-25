@@ -421,6 +421,12 @@
     background: #B71C1C;
 }
 
+.van-theme-dark .transaction-split-summary,
+.van-theme-dark .transaction-split-card,
+.van-theme-dark .transaction-split-attachments {
+    box-shadow: rgba(0, 0, 0, 0.35) 0 8px 24px;
+}
+
 .van-theme-dark .assistant-tag {
     box-shadow: 0 2px 6px 0px rgba(0, 0, 0, 0.65);
 }

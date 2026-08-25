@@ -133,6 +133,10 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
   })
 
   watch(description, (newValue) => {
+    if (isSplitTransaction.value) {
+      return
+    }
+
     newValue = newValue ?? ''
     if (profileStore.lowerCaseTransactionDescription) {
       newValue = newValue.toLowerCase()

@@ -74,6 +74,10 @@
   "transaction": {
     "title_list": "交易列表",
     "split_transaction": "拆分交易",
+    "title_split_details": "拆分交易详情",
+    "split_count": "{count} 个拆分",
+    "total_amount": "总金额",
+    "subscription": "订阅",
     "assistant": "助手",
     "assistant_format": "格式 = [模板 / 标签?] [金额?] [描述?]",
     "assistant_ramble_title": "Dictate transactions",

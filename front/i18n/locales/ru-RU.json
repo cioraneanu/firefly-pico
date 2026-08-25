@@ -81,6 +81,10 @@
   "transaction": {
     "title_list": "Список транзакций",
     "split_transaction": "Разделенная транзакция",
+    "title_split_details": "Детали разделённой транзакции",
+    "split_count": "{count} частей",
+    "total_amount": "Общая сумма",
+    "subscription": "Подписка",
     "assistant": "Ассистент",
     "assistant_format": "Формат = [шаблон / тег?] [сумма?] [описание?]",
     "assistant_ramble_title": "Dictate transactions",

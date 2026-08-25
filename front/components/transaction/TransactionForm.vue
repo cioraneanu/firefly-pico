@@ -1,12 +1,10 @@
 <template>
-  <transaction-type-tabs v-model="type" class="mx-3 mt-1 mb-1" />
+  <transaction-split-view v-if="isSplitTransaction" :transaction="item" />
 
-  <van-form ref="formRef" :disabled="isFormDisabled" :name="props.formName" class="transaction-form-group" @submit="emit('submit')" @failed="emit('failed', $event)">
+  <transaction-type-tabs v-if="!isSplitTransaction" v-model="type" class="mx-3 mt-1 mb-1" />
+
+  <van-form v-if="!isSplitTransaction" ref="formRef" :disabled="isFormDisabled" :name="props.formName" class="transaction-form-group" @submit="emit('submit')" @failed="emit('failed', $event)">
     <van-cell-group inset class="dynamic-masonry display-flex-column">
-      <div v-if="isSplitTransaction" class="display-flex ml-3 mt-3">
-        <transaction-split-badge />
-      </div>
-
       <transaction-amount-field
         v-model:amount="amount"
         v-model:amount-foreign="amountForeign"
@@ -98,9 +96,9 @@
 import RouteConstants from '~/constants/RouteConstants'
 import Transaction from '~/models/Transaction'
 import TablerIconConstants from '~/constants/TablerIconConstants'
-import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
 import TransactionAttachmentsList from '~/components/transaction/transaction-attachements/transaction-attachments-list.vue'
 import TransactionNoteField from '~/components/transaction/transaction-note-field.vue'
+import TransactionSplitView from '~/components/transaction/transaction-split-view.vue'
 import { transactionFormField, transactionExtraDateFieldList } from '~/constants/TransactionConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
 import { useTransactionForm } from '~/composables/useTransactionForm.js'

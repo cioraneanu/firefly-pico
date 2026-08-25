@@ -38,3 +38,16 @@ export const formatAmount = (value, locale) => {
   const formatted = integer.replace(/\B(?=(\d{3})+(?!\d))/g, group)
   return fraction === undefined ? formatted : `${formatted}${decimal}${fraction}`
 }
+
+export const formatAmountToCurrencyPrecision = (value, decimalPlaces) => {
+  const match = value?.toString().match(/^([+-]?)(\d+)(?:\.(\d+))?$/)
+  if (!match) {
+    return value?.toString() ?? null
+  }
+
+  const configuredDecimalPlaces = Number.parseInt(decimalPlaces, 10)
+  const fraction = (match[3] ?? '').replace(/0+$/, '')
+  const precision = Math.max(Number.isInteger(configuredDecimalPlaces) ? configuredDecimalPlaces : 0, fraction.length)
+  const formattedFraction = fraction.padEnd(precision, '0')
+  return `${match[1]}${match[2]}${precision ? `.${formattedFraction}` : ''}`
+}

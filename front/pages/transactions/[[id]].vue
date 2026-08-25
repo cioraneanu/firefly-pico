@@ -11,7 +11,7 @@
     <transaction-assistant v-if="!itemId && !isCloning" v-model="assistantText" @change="onAssistant" @keyup.enter="saveItem" />
 
     <transaction-form ref="transactionFormRef" v-model="item" :form-name="formName" @submit="saveItem" @failed="onValidationError">
-      <template #actions="{ isSplitTransaction }">
+      <template #actions>
         <div style="margin: 16px; position: relative">
           <app-button-form-delete v-if="itemId && !isSplitTransaction" class="mt-10" @click="onDelete" />
 
@@ -32,7 +32,7 @@
       </template>
     </transaction-form>
 
-    <app-card-info style="order: 99">
+    <app-card-info v-if="!isSplitTransaction" style="order: 99">
       <app-field-link :label="$t('transaction.configure_fields')" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FORM_FIELDS)" />
     </app-card-info>
   </div>
@@ -79,10 +79,17 @@ const onCreateClone = async () => {
 }
 
 const isCloning = computed(() => !!get(route.query, 'transaction_id'))
+const isSplitTransaction = computed(() => Transaction.isSplitPayment(item.value))
 
 const { t } = useI18n()
 const title = computed(() => {
-  return isCloning.value ? t('transaction.title_clone_transaction') : itemId.value ? t('transaction.title_edit_transaction') : t('transaction.title_add_transaction')
+  return isCloning.value
+    ? t('transaction.title_clone_transaction')
+    : isSplitTransaction.value
+      ? t('transaction.title_split_details')
+      : itemId.value
+        ? t('transaction.title_edit_transaction')
+        : t('transaction.title_add_transaction')
 })
 
 const toolbar = useToolbar()

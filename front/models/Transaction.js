@@ -6,6 +6,7 @@ import Account from '~/models/Account'
 import { get } from 'lodash-es'
 import Currency from '~/models/Currency.js'
 import { formatNumber } from '~/utils/NumberUtils.js'
+import { formatAmountToCurrencyPrecision } from '~/utils/AmountUtils.js'
 
 export default class Transaction extends BaseModel {
   getTransformer() {
@@ -159,7 +160,7 @@ export default class Transaction extends BaseModel {
       return null
     }
     let decimals = Currency.getDecimalPlaces(currency) ?? 2
-    return parseFloat(amount).toFixed(decimals)
+    return formatAmountToCurrencyPrecision(amount, decimals)
   }
 
   static getTransactionTypeForAccounts({ source, destination }) {
