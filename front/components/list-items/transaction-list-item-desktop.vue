@@ -18,7 +18,7 @@
 
       <div class="transaction-desktop-amount text-left line-height-normal">
         <div class="transaction-desktop-amount-value" :style="amountStyle">{{ transactionAmount }} {{ transactionCurrency }}</div>
-        <div v-if="isSplitPayment" class="transaction-desktop-split text-uppercase">{{ $t('split') }}</div>
+        <transaction-split-badge v-if="isSplitPayment" />
       </div>
 
       <div class="transaction-desktop-accounts overflow-hidden">
@@ -59,6 +59,7 @@
 import Budget from '~/models/Budget.js'
 import { useTransactionListItem } from '~/composables/useTransactionListItem.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import TransactionSplitBadge from '~/components/transaction/transaction-split-badge.vue'
 import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe.js'
 
 const props = defineProps({

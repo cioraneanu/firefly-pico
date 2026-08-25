@@ -81,6 +81,7 @@
   "transaction": {
     "title_list": "Lista de transacciones",
     "split_transaction": "Dividir transacción",
+    "split_short": "Dividida",
     "title_split_details": "Detalles de la transacción dividida",
     "split_count": "{count} partes",
     "total_amount": "Importe total",

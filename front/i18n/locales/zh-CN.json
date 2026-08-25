@@ -74,6 +74,7 @@
   "transaction": {
     "title_list": "交易列表",
     "split_transaction": "拆分交易",
+    "split_short": "拆分",
     "title_split_details": "拆分交易详情",
     "split_count": "{count} 个拆分",
     "total_amount": "总金额",

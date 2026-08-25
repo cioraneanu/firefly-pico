@@ -81,6 +81,7 @@
   "transaction": {
     "title_list": "Список транзакций",
     "split_transaction": "Разделенная транзакция",
+    "split_short": "Разделена",
     "title_split_details": "Детали разделённой транзакции",
     "split_count": "{count} частей",
     "total_amount": "Общая сумма",

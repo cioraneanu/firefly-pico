@@ -81,6 +81,7 @@
   "transaction": {
     "title_list": "Transactions",
     "split_transaction": "Transaction fractionnée",
+    "split_short": "Divisée",
     "title_split_details": "Détails de la transaction fractionnée",
     "split_count": "{count} fractions",
     "total_amount": "Montant total",

@@ -81,6 +81,7 @@
   "transaction": {
     "title_list": "Lista transakcji",
     "split_transaction": "Podziel transakcję",
+    "split_short": "Podzielona",
     "title_split_details": "Szczegóły podzielonej transakcji",
     "split_count": "{count} części",
     "total_amount": "Łączna kwota",

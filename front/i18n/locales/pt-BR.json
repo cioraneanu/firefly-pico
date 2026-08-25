@@ -81,6 +81,7 @@
   "transaction": {
     "title_list": "Lista de transações",
     "split_transaction": "Dividir transação",
+    "split_short": "Dividida",
     "title_split_details": "Detalhes da transação dividida",
     "split_count": "{count} divisões",
     "total_amount": "Valor total",

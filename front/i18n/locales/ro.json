@@ -81,6 +81,7 @@
   "transaction": {
     "title_list": "Lista tranzacțiilor",
     "split_transaction": "Împarte tranzacția",
+    "split_short": "Împărțită",
     "title_split_details": "Detalii tranzacție împărțită",
     "split_count": "{count} părți",
     "total_amount": "Sumă totală",

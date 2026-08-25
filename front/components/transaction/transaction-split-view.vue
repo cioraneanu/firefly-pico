@@ -4,8 +4,8 @@
       <van-cell class="transaction-split-summary-cell">
         <template #title>
           <div class="transaction-split-summary-heading">
+            <div class="font-600">{{ groupTitle }}</div>
             <transaction-split-badge />
-            <div class="transaction-split-group-title word-break-word">{{ groupTitle }}</div>
           </div>
           <div class="transaction-split-summary-meta">
             <span>{{ $t('transaction.split_count', { count: splits.length }) }}</span>
@@ -138,8 +138,8 @@
       </van-cell-group>
     </div>
 
-    <van-cell-group v-if="transaction.id" inset class="transaction-split-attachments">
-      <transaction-attachments-list :transaction="transaction" read-only />
+    <van-cell-group v-show="transaction.id && hasAttachments" inset class="transaction-split-attachments">
+      <transaction-attachments-list :transaction="transaction" read-only @count="hasAttachments = $event > 0" />
     </van-cell-group>
   </div>
 </template>
@@ -161,6 +161,8 @@ const props = defineProps({
     default: () => ({}),
   },
 })
+
+const hasAttachments = ref(false)
 
 const appStore = useAppStore()
 const profileStore = useProfileStore()

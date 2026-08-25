@@ -418,7 +418,8 @@
 
 
 .van-theme-dark .split-transaction-badge {
-    background: #B71C1C;
+    background: #424242;
+    color: #bdbdbd;
 }
 
 .van-theme-dark .transaction-split-summary,

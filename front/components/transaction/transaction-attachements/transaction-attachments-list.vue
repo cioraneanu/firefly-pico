@@ -27,6 +27,8 @@ import { ref } from 'vue'
 import AttachmentTransformer from '~/transformers/AttachmentTransformer.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 
+const emit = defineEmits(['count'])
+
 const isLoading = ref(false)
 const list = ref([])
 
@@ -48,6 +50,7 @@ const fetchAttachments = async () => {
   const response = await new AttachmentRepository().getForTransaction(transactionId.value)
   if (ResponseUtils.isSuccess(response)) {
     list.value = AttachmentTransformer.transformFromApiList(response.data?.data ?? [])
+    emit('count', list.value.length)
   }
   isLoading.value = false
 }

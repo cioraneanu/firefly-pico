@@ -1,7 +1,7 @@
 <template>
-  <div class="split-transaction-badge gap-1">
+  <div class="split-transaction-badge transaction-desktop-split gap-1">
     <app-icon :icon="TablerIconConstants.lock" :size="14" />
-    <div class="">{{ $t('transaction.split_transaction')}}</div>
+    <div class="">{{ $t('transaction.split_short') }}</div>
   </div>
 </template>
 

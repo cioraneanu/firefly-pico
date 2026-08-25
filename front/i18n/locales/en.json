@@ -81,6 +81,7 @@
   "transaction": {
     "title_list": "Transactions list",
     "split_transaction": "Split transaction",
+    "split_short": "Split",
     "title_split_details": "Split transaction details",
     "split_count": "{count} splits",
     "total_amount": "Total amount",
