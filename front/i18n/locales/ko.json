@@ -391,6 +391,7 @@
     "include_net_worth": "순자산에 포함",
     "visible_on_dashboard": "대시보드에 표시",
     "balance": "잔액",
+    "available": "사용 가능",
     "account_group": "그룹"
   },
   "transaction_template_page": {

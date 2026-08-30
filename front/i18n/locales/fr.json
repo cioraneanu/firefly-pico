@@ -390,6 +390,7 @@
     "include_net_worth": "Est inclus dans la valeur nette",
     "visible_on_dashboard": "Est visible sur le tableau de bord",
     "balance": "Solde",
+    "available": "Disponible",
     "account_group": "Groupe"
   },
   "transaction_template_page": {

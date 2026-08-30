@@ -372,6 +372,7 @@
     "include_net_worth": "是否计入净资产",
     "visible_on_dashboard": "是否在仪表板上显示",
     "balance": "平衡",
+    "available": "可用",
     "account_group": "组"
   },
   "transaction_template_page": {

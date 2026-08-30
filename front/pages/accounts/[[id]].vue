@@ -133,7 +133,7 @@ watch(name, (newValue) => {
   name.value = newValue
 })
 
-const accountBalance = computed(() => get(item.value, 'attributes.current_balance'))
+const accountBalance = computed(() => Account.getBalance(item.value))
 const accountCurrency = computed(() => get(item.value, 'attributes.currency_symbol') ?? '')
 const adjustBalanceText = computed(() => `${t('account_page.adjust_balance')} (${accountBalance.value} ${accountCurrency.value})`)
 const onAdjustBalance = () => {

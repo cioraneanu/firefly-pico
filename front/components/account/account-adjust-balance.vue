@@ -26,6 +26,7 @@ import AccountRepository from '~/repository/AccountRepository.js'
 import AccountTransformer from '~/transformers/AccountTransformer.js'
 import UIUtils from '~/utils/UIUtils.js'
 
+import Account from '~/models/Account.js'
 
 const showDropdown = defineModel('showDropdown', false)
 const popupRef = ref(null)
@@ -51,13 +52,13 @@ const style = computed(() => {
 const emits = defineEmits('result')
 
 watch(showDropdown, (newValue) => {
-  newAmount.value = get(props.value, 'attributes.current_balance')
+  newAmount.value = Account.getBalance(props.value)
 })
 
 const onSave = async () => {
   const accountId = get(props.value, 'id')
   let accountBody = cloneDeep(props.value)
-  const amountOffset = parseFloat(newAmount.value) - parseFloat(get(props.value, 'attributes.current_balance'))
+  const amountOffset = parseFloat(newAmount.value) - parseFloat(Account.getBalance(props.value))
   accountBody.attributes.opening_balance = parseFloat(accountBody.attributes.opening_balance) + amountOffset
   accountBody = AccountTransformer.transformToApi(accountBody)
   const response = await new AccountRepository().update(accountId, accountBody)

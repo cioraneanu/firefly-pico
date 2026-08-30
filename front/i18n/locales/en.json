@@ -391,6 +391,7 @@
     "include_net_worth": "Is included in net worth",
     "visible_on_dashboard": "Is visible on Dashboard",
     "balance": "Balance",
+    "available": "Available",
     "account_group": "Group"
   },
   "transaction_template_page": {

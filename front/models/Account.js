@@ -6,6 +6,7 @@ import { get } from 'lodash-es'
 import Transaction from '~/models/Transaction'
 import { NUMBER_FORMAT } from '~/utils/NumberUtils.js'
 import Currency from '~/models/Currency.js'
+import { getBalanceWithoutVirtual, hasVirtualBalance } from '~/utils/AccountBalanceUtils.js'
 
 export default class Account extends BaseModel {
   getTransformer() {
@@ -228,14 +229,25 @@ export default class Account extends BaseModel {
   }
 
   static getBalance(account) {
+    return getBalanceWithoutVirtual(this.getAvailableBalance(account), this.getVirtualBalance(account))
+  }
+
+  static getAvailableBalance(account) {
     return get(account, 'attributes.current_balance')
   }
 
-  static getBalanceWithCurrency(account) {
+  static getVirtualBalance(account) {
+    return get(account, 'attributes.virtual_balance')
+  }
+
+  static hasVirtualBalance(account) {
+    return hasVirtualBalance(this.getVirtualBalance(account))
+  }
+
+  static getAmountWithCurrency(account, amount) {
     const profileStore = useProfileStore()
     let digits = profileStore.dashboard.showDecimal ? 2 : 0
     let numberFormatCode = profileStore.numberFormat.code ?? NUMBER_FORMAT.eu.code
-    let amount = this.getBalance(account)
     amount = new Intl.NumberFormat(numberFormatCode, {
       minimumFractionDigits: digits,
       maximumFractionDigits: digits,
@@ -243,6 +255,14 @@ export default class Account extends BaseModel {
 
     let currency = this.getCurrencySymbol(account)
     return [amount, currency].filter((item) => !!item).join(' ')
+  }
+
+  static getBalanceWithCurrency(account) {
+    return this.getAmountWithCurrency(account, this.getBalance(account))
+  }
+
+  static getAvailableBalanceWithCurrency(account) {
+    return this.getAmountWithCurrency(account, this.getAvailableBalance(account))
   }
 
   static getIsActive(account) {

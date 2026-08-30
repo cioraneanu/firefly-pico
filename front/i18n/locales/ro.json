@@ -390,6 +390,7 @@
     "include_net_worth": "Include în averea netă",
     "visible_on_dashboard": "Este vizibil pe Dashboard",
     "balance": "Total",
+    "available": "Disponibil",
     "account_group": "Grup"
   },
   "transaction_template_page": {

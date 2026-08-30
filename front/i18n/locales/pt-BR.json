@@ -390,6 +390,7 @@
     "include_net_worth": "Está incluído no patrimônio líquido",
     "visible_on_dashboard": "Está visível no Painel",
     "balance": "Saldo",
+    "available": "Disponível",
     "account_group": "Grupo"
   },
   "transaction_template_page": {
