@@ -75,6 +75,7 @@ import {
   IconLanguage,
   IconX,
   IconArrowNarrowRight,
+  IconChartHistogram,
 } from '@tabler/icons-vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -154,6 +155,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconLanguage', IconLanguage)
   nuxtApp.vueApp.component('IconX', IconX)
   nuxtApp.vueApp.component('IconArrowNarrowRight', IconArrowNarrowRight)
+  nuxtApp.vueApp.component('IconChartHistogram', IconChartHistogram)
 
   // for (let iconName in tablerIcons) {
   //   nuxtApp.vueApp.component(iconName, tablerIcons[iconName])

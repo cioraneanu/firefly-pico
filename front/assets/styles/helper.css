@@ -887,6 +887,14 @@ label.display-block {
   font-weight: 400 !important;
 }
 
+.text-viz-income {
+  color: var(--viz-income) !important;
+}
+
+.text-viz-expense {
+  color: var(--viz-expense) !important;
+}
+
 .font-weight-500 {
   font-weight: 500 !important;
 }

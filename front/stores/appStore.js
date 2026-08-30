@@ -67,6 +67,7 @@ export const useAppStore = defineStore('app', () => {
         RouteConstants.ROUTE_ACCOUNT_ID,
         RouteConstants.ROUTE_TAG_LIST,
         RouteConstants.ROUTE_TAG_ID,
+        RouteConstants.ROUTE_ANALYTICS,
       ],
       [RouteConstants.ROUTE_SETTINGS]: [RouteConstants.ROUTE_SETTINGS, RouteConstants.ROUTE_SETTINGS_SETUP, RouteConstants.ROUTE_SETTINGS_ABOUT, RouteConstants.ROUTE_SETTINGS_UI],
     }

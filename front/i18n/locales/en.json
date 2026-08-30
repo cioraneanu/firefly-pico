@@ -492,6 +492,41 @@
     },
     "configure_cards": "Configure cards"
   },
+  "analytics": {
+    "title": "Analytics",
+    "tab": {
+      "headline": "Headline",
+      "cashflow": "Cashflow"
+    },
+    "range": {
+      "last_3_months": "Last 3 months",
+      "last_6_months": "Last 6 months",
+      "last_12_months": "Last 12 months",
+      "last_24_months": "Last 24 months",
+      "year_to_date": "Year to date",
+      "custom": "Custom"
+    },
+    "headline": {
+      "net_cashflow": "Net cashflow",
+      "avg_income": "Avg. income",
+      "avg_expense": "Avg. expense",
+      "avg_net": "Avg. net",
+      "savings_rate": "Savings rate",
+      "largest_month": "Largest month",
+      "transaction_count": "Transactions",
+      "vs_prior_period": "vs prior {count} mo",
+      "not_available": "N/A"
+    },
+    "cashflow": {
+      "title": "Cashflow",
+      "income": "Income",
+      "expense": "Expense",
+      "net": "Net",
+      "table_view": "Table view"
+    },
+    "failed_months": "{count} month(s) failed to load",
+    "retry": "Retry"
+  },
   "profile_page": {
     "title": "Profiles list",
     "title_add": "Add profile",

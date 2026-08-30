@@ -4,6 +4,7 @@
 
     <van-cell-group inset style="overflow: auto">
       <div class="van-cell-group-title">{{ $t('primary') }}:</div>
+      <app-field-link :label="$t('analytics.title')" :icon="TablerIconConstants.analytics" @click="navigateTo(RouteConstants.ROUTE_ANALYTICS)" />
       <app-field-link :label="$t('accounts')" :icon="TablerIconConstants.account" @click="onGoToAccountsList" />
       <app-field-link :label="$t('template')" :icon="TablerIconConstants.transactionTemplate" @click="onGoToTransactionTemplatesList" />
       <app-field-link v-if="profileStore.budgetsEnabled" :label="$t('budgets')" :icon="TablerIconConstants.budget" @click="onGoToBudgetsList" />
