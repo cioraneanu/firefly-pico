@@ -16,6 +16,14 @@ export const ANALYTICS_MAX_FANOUT_COMBOS = 12
 
 export const ANALYTICS_CATEGORICAL_COLOR_SLOTS = 8 // palette: categorical series cap at 8 + "Other"
 
+// Three similarly-shaped-but-distinct caps, each answering a different question — do not
+// collapse into one shared constant:
+//   ANALYTICS_CATEGORICAL_COLOR_SLOTS (above) — how many distinct HUES the palette has
+//   ANALYTICS_RANKED_TOP_N             — how many ROWS the single-hue ranked-bars list shows
+//   ANALYTICS_COMPOSITION_TOP_N        — how many STACK SEGMENTS the composition chart shows
+export const ANALYTICS_RANKED_TOP_N = 10
+export const ANALYTICS_COMPOSITION_TOP_N = 7 // matches ANALYTICS_PLAN.md Part 1/2's "top 7 + Other"
+
 export const analyticsTab = {
   headline: { t: 'analytics.tab.headline', code: 'headline', needs: ['monthlyFacts'] },
   cashflow: { t: 'analytics.tab.cashflow', code: 'cashflow', needs: ['monthlyFacts'] },

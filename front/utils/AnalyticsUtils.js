@@ -141,6 +141,17 @@ export function assignColorSlots(sortedIds, maxSlots = ANALYTICS_CATEGORICAL_COL
   }, {})
 }
 
+// totalsById: {[id]: amount}. Splits into the top N ids by amount (descending, tie-broken by id
+// string for deterministic output) and everything else, pre-summed into otherTotal.
+export function rankTopNWithOther(totalsById, n) {
+  const sorted = Object.entries(totalsById ?? {}).sort(([idA, a], [idB, b]) => b - a || idA.localeCompare(idB))
+  const topIds = sorted.slice(0, n).map(([id]) => id)
+  const otherEntries = sorted.slice(n)
+  const otherIds = otherEntries.map(([id]) => id)
+  const otherTotal = otherEntries.reduce((sum, [, amount]) => sum + amount, 0)
+  return { topIds, otherIds, otherTotal }
+}
+
 // xs = TRUE month index (not observed-position index — the exact bug the Streamlit build had:
 // treating a tag's observed months as consecutive overstates the slope across gap months).
 export function leastSquaresSlope(xs, ys) {

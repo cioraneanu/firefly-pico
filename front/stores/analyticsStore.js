@@ -12,7 +12,8 @@ import DateUtils from '~/utils/DateUtils'
 import { getExcludedTransactionFilters } from '~/utils/DashboardUtils'
 import { mapWithConcurrency } from '~/utils/ConcurrencyUtils'
 import { eachFinancialMonth, financialMonthKey, currentFinancialMonth } from '~/utils/DateRangeUtils'
-import { buildMonthlyFact, factFilterHash, assignColorSlots } from '~/utils/AnalyticsUtils'
+import { buildMonthlyFact, factFilterHash, assignColorSlots, rankTopNWithOther } from '~/utils/AnalyticsUtils'
+import { seriesColor } from '~/utils/ChartUtils'
 import { buildAnalyticsFilterPlan, expandFanOutCombos } from '~/utils/AnalyticsFilterUtils'
 import { useAnalyticsFilters } from '~/composables/useAnalyticsFilters'
 import {
@@ -23,6 +24,7 @@ import {
   ANALYTICS_BACKEND_CAP_MS,
   ANALYTICS_CURRENT_MONTH_CACHE_TTL_MS,
   ANALYTICS_SUBQUERY_CONCURRENCY,
+  ANALYTICS_COMPOSITION_TOP_N,
 } from '~/constants/AnalyticsConstants'
 
 export const useAnalyticsStore = defineStore('analytics', () => {
@@ -176,6 +178,55 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     return { ...current, largestMonth, transactionCount, prior }
   }
 
+  // ----- Where the money goes (Phase 3b) — range-scoped, unlike rankedIds() above which is
+  // deliberately whole-factCache-scoped for colour-map stability. "Who's in the top N for this
+  // view" (here) is allowed to shift with the range; "what colour they get" (categorySeriesColorMap
+  // etc.) is not — see ANALYTICS_PLAN.md Part 1 "colour follows the entity, never the rank."
+
+  function dimensionTotals(months, dimension) {
+    const keys = new Set(months.map((month) => month.key))
+    const totals = {}
+    for (const [key, fact] of Object.entries(factCache.value)) {
+      if (!keys.has(key)) continue
+      for (const [id, value] of Object.entries(fact[dimension] ?? {})) {
+        const amountMap = dimension === 'byMerchant' ? value.amount : value
+        totals[id] = (totals[id] ?? 0) + sumConverted(amountMap)
+      }
+    }
+    return totals
+  }
+
+  const dimensionColorMaps = { byCategory: categorySeriesColorMap, byTag: tagSeriesColorMap }
+
+  function compositionSeries(months, dimension) {
+    const totals = dimensionTotals(months, dimension)
+    const { topIds, otherTotal } = rankTopNWithOther(totals, ANALYTICS_COMPOSITION_TOP_N)
+    const colorMap = dimensionColorMaps[dimension].value
+    const series = topIds.map((id) => ({ id, colorVar: seriesColor(colorMap[id]) }))
+    if (otherTotal > 0) series.push({ id: 'other', colorVar: seriesColor('other') })
+
+    const rows = months.map(({ key }) => {
+      const fact = factCache.value[key]
+      const values = {}
+      for (const id of topIds) {
+        const amountMap = dimension === 'byMerchant' ? fact?.[dimension]?.[id]?.amount : fact?.[dimension]?.[id]
+        values[id] = amountMap ? sumConverted(amountMap) : 0
+      }
+      if (otherTotal > 0) {
+        let otherSum = 0
+        for (const [id, value] of Object.entries(fact?.[dimension] ?? {})) {
+          if (topIds.includes(id)) continue
+          const amountMap = dimension === 'byMerchant' ? value.amount : value
+          otherSum += sumConverted(amountMap)
+        }
+        values.other = otherSum
+      }
+      return { key, isLoaded: !!fact, values }
+    })
+
+    return { series, rows }
+  }
+
   // ----- Actions
 
   // One sub-request's worth of getAllPages, given a complete filtersParts array (base date/exclusion
@@ -295,6 +346,8 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     monthlyTotals,
     periodAverages,
     rangeSummary,
+    dimensionTotals,
+    compositionSeries,
     fetchMonth,
     refresh,
     retryMonth,

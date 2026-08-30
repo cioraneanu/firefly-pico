@@ -45,6 +45,7 @@
     "marked": "^16.1.2",
     "minisearch": "^7.1.2",
     "pinia": "^3.0.3",
+    "uplot": "^1.6.32",
     "vant": "^4.9.24",
     "vuedraggable": "^4.1.0"
   },

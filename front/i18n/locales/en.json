@@ -496,7 +496,8 @@
     "title": "Analytics",
     "tab": {
       "headline": "Headline",
-      "cashflow": "Cashflow"
+      "cashflow": "Cashflow",
+      "where_money_goes": "Where the money goes"
     },
     "range": {
       "last_3_months": "Last 3 months",
@@ -527,6 +528,20 @@
       "expense": "Expense",
       "net": "Net",
       "table_view": "Table view"
+    },
+    "money_goes": {
+      "ranked": {
+        "title": "Where the money goes",
+        "by_category": "Categories",
+        "by_tag": "Tags",
+        "other": "Other",
+        "table_view": "Table view"
+      },
+      "composition": {
+        "title": "Composition over time",
+        "other": "Other",
+        "table_view": "Table view"
+      }
     },
     "failed_months": "{count} month(s) failed to load",
     "retry": "Retry"

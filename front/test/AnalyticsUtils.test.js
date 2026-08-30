@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { sumAmountMap, mergeAmountMaps, factFilterHash, assignColorSlots, leastSquaresSlope, movingAverage, median } from '~/utils/AnalyticsUtils'
+import { sumAmountMap, mergeAmountMaps, factFilterHash, assignColorSlots, rankTopNWithOther, leastSquaresSlope, movingAverage, median } from '~/utils/AnalyticsUtils'
 
 describe('sumAmountMap', () => {
   it('sums entries by currency code', () => {
@@ -75,6 +75,34 @@ describe('assignColorSlots', () => {
     expect(result.h).toBe(7)
     expect(result.i).toBe('other')
     expect(result.j).toBe('other')
+  })
+})
+
+describe('rankTopNWithOther', () => {
+  it('splits into top N (descending) and an other bucket with the remainder summed', () => {
+    const totals = { a: 10, b: 50, c: 30, d: 5, e: 20 }
+    const result = rankTopNWithOther(totals, 3)
+    expect(result.topIds).toEqual(['b', 'c', 'e'])
+    expect(result.otherIds).toEqual(['a', 'd'])
+    expect(result.otherTotal).toBe(15)
+  })
+
+  it('breaks ties deterministically by id string', () => {
+    const result = rankTopNWithOther({ z: 10, a: 10 }, 1)
+    expect(result.topIds).toEqual(['a'])
+    expect(result.otherIds).toEqual(['z'])
+  })
+
+  it('returns an empty other bucket when n covers every id', () => {
+    const result = rankTopNWithOther({ a: 1, b: 2 }, 5)
+    expect(result.topIds).toEqual(['b', 'a'])
+    expect(result.otherIds).toEqual([])
+    expect(result.otherTotal).toBe(0)
+  })
+
+  it('tolerates an empty/undefined totals map', () => {
+    expect(rankTopNWithOther({}, 5)).toEqual({ topIds: [], otherIds: [], otherTotal: 0 })
+    expect(rankTopNWithOther(undefined, 5)).toEqual({ topIds: [], otherIds: [], otherTotal: 0 })
   })
 })
 
