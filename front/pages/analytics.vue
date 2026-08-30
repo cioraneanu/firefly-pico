@@ -47,6 +47,13 @@ const onRetryFailed = async () => {
 
 onMounted(onRefresh)
 
+// The store stays range/filter-agnostic by design (Phase 1) — it never re-fetches on its own, it
+// only knows how to fetch a given range. This page is what has to notice when the range OR the
+// analytics filter changes and re-trigger refresh(). Watching currentFilterHash (rather than the
+// raw filter refs) covers both the analytics dimensional filter and the persistent Settings
+// exclusion list uniformly, since both already feed into that one hash — see analyticsStore.js.
+watch([range, () => analyticsStore.currentFilterHash], onRefresh)
+
 const { t } = useI18n()
 useToolbar().init({ title: t('analytics.title') })
 </script>

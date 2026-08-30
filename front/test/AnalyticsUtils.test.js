@@ -44,6 +44,27 @@ describe('factFilterHash', () => {
     const b = factFilterHash({ firstDayOfMonth: 27, tagsWidgetModeOnlyRootTag: true })
     expect(a).not.toBe(b)
   })
+
+  it("is independent of the analytics dimensional filter's selected-id ordering", () => {
+    const category = (id) => ({ id, attributes: { name: `Cat ${id}` } })
+    const a = factFilterHash({ firstDayOfMonth: 1, analyticsFilters: { category: { selected: [category(2), category(1)], mode: 'include' } } })
+    const b = factFilterHash({ firstDayOfMonth: 1, analyticsFilters: { category: { selected: [category(1), category(2)], mode: 'include' } } })
+    expect(a).toBe(b)
+  })
+
+  it('changes when the analytics dimensional filter mode flips (include vs exclude), even with the same selection', () => {
+    const category = (id) => ({ id, attributes: { name: `Cat ${id}` } })
+    const a = factFilterHash({ firstDayOfMonth: 1, analyticsFilters: { category: { selected: [category(1)], mode: 'include' } } })
+    const b = factFilterHash({ firstDayOfMonth: 1, analyticsFilters: { category: { selected: [category(1)], mode: 'exclude' } } })
+    expect(a).not.toBe(b)
+  })
+
+  it('changes when the analytics dimensional filter selection changes', () => {
+    const category = (id) => ({ id, attributes: { name: `Cat ${id}` } })
+    const a = factFilterHash({ firstDayOfMonth: 1, analyticsFilters: { category: { selected: [], mode: 'include' } } })
+    const b = factFilterHash({ firstDayOfMonth: 1, analyticsFilters: { category: { selected: [category(1)], mode: 'include' } } })
+    expect(a).not.toBe(b)
+  })
 })
 
 describe('assignColorSlots', () => {

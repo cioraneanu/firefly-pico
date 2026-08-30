@@ -3,6 +3,7 @@ import { getActiveFilters, getFiltersFromURL, saveToUrl } from '~/utils/FilterUt
 import { animateOnNext, animateOnPrevious } from '~/utils/AnimationUtils.js'
 import DateUtils from '~/utils/DateUtils.js'
 import { rangePreset, rangePresetList, resolveRange, shiftRange, eachFinancialMonth, rangeLabel } from '~/utils/DateRangeUtils'
+import { useAnalyticsFilters } from '~/composables/useAnalyticsFilters'
 
 const rangeFilterDefinitions = [
   { bagKey: 'preset', filter: () => null, display: () => null, toUrl: (value) => `range=${value}`, fromUrl: () => useRoute().query?.range },
@@ -25,6 +26,12 @@ let hasHydratedFromUrl = false
 
 export const useAnalyticsRange = () => {
   const profileStore = useProfileStore()
+
+  // useAnalyticsRange.js is the single writer of this page's URL query string. FilterUtils.saveToUrl
+  // fully replaces the query object rather than merging (front/utils/FilterUtils.js:43-57), so a
+  // second, independent saveToUrl caller (e.g. inside useAnalyticsFilters itself) would race this
+  // watcher and strip whichever wrote last. See ANALYTICS_PLAN.md Part 3.
+  const { filterState, activeUrlFilters } = useAnalyticsFilters()
 
   if (!hasHydratedFromUrl) {
     hasHydratedFromUrl = true
@@ -72,14 +79,16 @@ export const useAnalyticsRange = () => {
     animateOnPrevious()
   }
 
-  watch([presetCode, customStart, customEnd], () => {
+  const filterWatchRefs = Object.values(filterState).flatMap((dimension) => [dimension.selected, dimension.mode])
+
+  watch([presetCode, customStart, customEnd, ...filterWatchRefs], () => {
     const isCustom = presetCode.value === rangePreset.custom.code
     const activeFilters = getActiveFilters(rangeFilterDefinitions, {
       preset: presetCode.value,
       customStart: isCustom ? customStart.value : null,
       customEnd: isCustom ? customEnd.value : null,
     })
-    saveToUrl(activeFilters)
+    saveToUrl([...activeFilters, ...activeUrlFilters()])
   })
 
   return {

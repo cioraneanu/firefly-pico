@@ -13,12 +13,23 @@ import { getExcludedTransactionFilters } from '~/utils/DashboardUtils'
 import { mapWithConcurrency } from '~/utils/ConcurrencyUtils'
 import { eachFinancialMonth, financialMonthKey, currentFinancialMonth } from '~/utils/DateRangeUtils'
 import { buildMonthlyFact, factFilterHash, assignColorSlots } from '~/utils/AnalyticsUtils'
-import { ANALYTICS_SCHEMA_VERSION, ANALYTICS_PAGE_SIZE, ANALYTICS_FETCH_CONCURRENCY, ANALYTICS_FETCH_TIMEOUT_MS, ANALYTICS_BACKEND_CAP_MS, ANALYTICS_CURRENT_MONTH_CACHE_TTL_MS } from '~/constants/AnalyticsConstants'
+import { buildAnalyticsFilterPlan, expandFanOutCombos } from '~/utils/AnalyticsFilterUtils'
+import { useAnalyticsFilters } from '~/composables/useAnalyticsFilters'
+import {
+  ANALYTICS_SCHEMA_VERSION,
+  ANALYTICS_PAGE_SIZE,
+  ANALYTICS_FETCH_CONCURRENCY,
+  ANALYTICS_FETCH_TIMEOUT_MS,
+  ANALYTICS_BACKEND_CAP_MS,
+  ANALYTICS_CURRENT_MONTH_CACHE_TTL_MS,
+  ANALYTICS_SUBQUERY_CONCURRENCY,
+} from '~/constants/AnalyticsConstants'
 
 export const useAnalyticsStore = defineStore('analytics', () => {
   const profileStore = useProfileStore()
   const dashboardStore = useDashboardStore()
   const currencyStore = useCurrencyStore()
+  const { snapshot: analyticsFilterSnapshot } = useAnalyticsFilters()
 
   // Persisted — the fact cache is the ONLY analytics state that survives reload. Raw
   // transactions are never persisted, only the compact reduced facts.
@@ -44,6 +55,9 @@ export const useAnalyticsStore = defineStore('analytics', () => {
       excludedCategoryIds: profileStore.dashboard.excludedCategoriesList.map((category) => category.id),
       excludedTagIds: profileStore.dashboard.excludedTagsList.map((tag) => tag.id),
       tagsWidgetModeOnlyRootTag: dashboardStore.tagsWidgetModeOnlyRootTag,
+      // The analytics-only dimensional filter (Part 3) — reading analyticsFilterSnapshot() here
+      // inside a computed correctly tracks the underlying refs it reads, same as any composable call.
+      analyticsFilters: analyticsFilterSnapshot(),
     }),
   )
 
@@ -164,22 +178,58 @@ export const useAnalyticsStore = defineStore('analytics', () => {
 
   // ----- Actions
 
+  // One sub-request's worth of getAllPages, given a complete filtersParts array (base date/exclusion
+  // fragments + this combo's fan-out values). Shared by both the simple (no fan-out) and fan-out paths.
+  async function fetchFilteredPages(filtersParts, monthConcurrency) {
+    const filters = [{ field: 'query', value: filtersParts.join(' ') }]
+    return new TransactionRepository().getAllPages({
+      filters,
+      getAll: new TransactionRepository().searchTransaction,
+      pageSize: ANALYTICS_PAGE_SIZE,
+      concurrency: monthConcurrency,
+      showLoading: false, // MUST be false — a 24-way fan-out would otherwise pin the global spinner
+      timeout: ANALYTICS_FETCH_TIMEOUT_MS,
+    })
+  }
+
   async function fetchMonth({ key, start, end }) {
     monthStatus.value[key] = { state: 'loading', error: null, failedPages: [], fetchedAt: null }
 
     try {
-      const filtersParts = [`date_after:${DateUtils.dateToString(start)}`, `date_before:${DateUtils.dateToString(end)}`, ...getExcludedTransactionFilters()]
-      const filters = [{ field: 'query', value: filtersParts.join(' ') }]
+      const baseFiltersParts = [`date_after:${DateUtils.dateToString(start)}`, `date_before:${DateUtils.dateToString(end)}`, ...getExcludedTransactionFilters()]
+
+      // Analytics-only dimensional filter (Part 3) — excludes/single-includes/account-includes
+      // fold straight into baseFiltersParts; 2+ included category/tag/budget values can't be
+      // expressed as one safe query fragment, so they fan out into one sub-request per combo.
+      const { simpleFragments, fanOutGroups } = buildAnalyticsFilterPlan(analyticsFilterSnapshot())
+      const filtersParts = [...baseFiltersParts, ...simpleFragments]
+      const combos = expandFanOutCombos(fanOutGroups) // [[]] when no fan-out needed — one combo, zero extra fragments
 
       const t0 = performance.now()
-      const { data, isComplete, failedPages } = await new TransactionRepository().getAllPages({
-        filters,
-        getAll: new TransactionRepository().searchTransaction,
-        pageSize: ANALYTICS_PAGE_SIZE,
-        concurrency: ANALYTICS_FETCH_CONCURRENCY,
-        showLoading: false, // MUST be false — a 24-way fan-out would otherwise pin the global spinner
-        timeout: ANALYTICS_FETCH_TIMEOUT_MS,
-      })
+      // Scale month-level page concurrency down as combos grow, so total in-flight requests stay
+      // roughly bounded regardless of how many values are selected — see ANALYTICS_PLAN.md Part 3.
+      const monthConcurrency = Math.max(1, Math.floor(ANALYTICS_FETCH_CONCURRENCY / combos.length))
+
+      const settled = await mapWithConcurrency(combos, (combo) => fetchFilteredPages([...filtersParts, ...combo], monthConcurrency), { concurrency: ANALYTICS_SUBQUERY_CONCURRENCY })
+
+      // Merge sub-requests: AND isComplete (any partial combo marks the whole month incomplete,
+      // same severity as today), tag failedPages with which combo produced them (page numbers
+      // aren't globally unique once a month has N sub-queries each with their own page 1..k), and
+      // dedupe raw groups by id (a group can appear in >1 combo if it matches multiple included values).
+      let isComplete = true
+      const failedPages = []
+      const rawById = new Map()
+      for (const { value, error, index } of settled) {
+        if (error || !value) {
+          isComplete = false
+          failedPages.push({ combo: index, page: null, error })
+          continue
+        }
+        isComplete = isComplete && value.isComplete
+        for (const page of value.failedPages ?? []) failedPages.push({ combo: index, page })
+        for (const item of value.data ?? []) rawById.set(item.id, item)
+      }
+      const data = [...rawById.values()]
       const wallMs = performance.now() - t0
 
       const transformed = TransactionTransformer.transformFromApiList(data)

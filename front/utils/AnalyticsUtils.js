@@ -108,7 +108,7 @@ export function buildMonthlyFact(transactions, { monthKey, rangeStart, rangeEnd,
 // at this cardinality, and this avoids a hashing dependency for zero benefit. Id arrays are
 // sorted so re-ordering an excluded list without changing membership doesn't spuriously
 // invalidate the cache.
-export function factFilterHash({ firstDayOfMonth, excludedAccountIds = [], excludedCategoryIds = [], excludedTagIds = [], tagsWidgetModeOnlyRootTag } = {}) {
+export function factFilterHash({ firstDayOfMonth, excludedAccountIds = [], excludedCategoryIds = [], excludedTagIds = [], tagsWidgetModeOnlyRootTag, analyticsFilters = {} } = {}) {
   return JSON.stringify({
     v: ANALYTICS_SCHEMA_VERSION,
     firstDayOfMonth,
@@ -116,7 +116,20 @@ export function factFilterHash({ firstDayOfMonth, excludedAccountIds = [], exclu
     excludedCategoryIds: [...excludedCategoryIds].sort(),
     excludedTagIds: [...excludedTagIds].sort(),
     tagsWidgetModeOnlyRootTag,
+    // The analytics-only dimensional filter (categories/tags/accounts/budgets, Part 3) — a
+    // change here must invalidate cached facts exactly like the persistent exclusion lists do.
+    analyticsFilters: analyticsFilterHashPart(analyticsFilters),
   })
+}
+
+function analyticsFilterHashPart(analyticsFilters) {
+  return Object.keys(analyticsFilters)
+    .sort()
+    .reduce((result, key) => {
+      const { selected = [], mode } = analyticsFilters[key] ?? {}
+      result[key] = { ids: selected.map((item) => item.id).sort(), mode }
+      return result
+    }, {})
 }
 
 // sortedIds: already descending by whatever ranking the caller computed (ranking with

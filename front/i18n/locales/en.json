@@ -506,6 +506,10 @@
       "year_to_date": "Year to date",
       "custom": "Custom"
     },
+    "filters": {
+      "title": "Analytics filters",
+      "exclude": "Exclude"
+    },
     "headline": {
       "net_cashflow": "Net cashflow",
       "avg_income": "Avg. income",
