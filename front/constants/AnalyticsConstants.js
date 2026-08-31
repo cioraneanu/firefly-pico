@@ -23,6 +23,7 @@ export const ANALYTICS_CATEGORICAL_COLOR_SLOTS = 8 // palette: categorical serie
 //   ANALYTICS_COMPOSITION_TOP_N        — how many STACK SEGMENTS the composition chart shows
 export const ANALYTICS_RANKED_TOP_N = 10
 export const ANALYTICS_COMPOSITION_TOP_N = 7 // matches ANALYTICS_PLAN.md Part 1/2's "top 7 + Other"
+export const ANALYTICS_HEATMAP_MAX_ROWS = 30 // matches ANALYTICS_PLAN.md Part 1/2's "top 30 rows"
 
 export const analyticsTab = {
   headline: { t: 'analytics.tab.headline', code: 'headline', needs: ['monthlyFacts'] },

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { sumAmountMap, mergeAmountMaps, factFilterHash, assignColorSlots, rankTopNWithOther, leastSquaresSlope, movingAverage, median } from '~/utils/AnalyticsUtils'
+import { sumAmountMap, mergeAmountMaps, factFilterHash, assignColorSlots, rankTopNWithOther, rankTopNByMagnitudeWithOther, leastSquaresSlope, movingAverage, median } from '~/utils/AnalyticsUtils'
 
 describe('sumAmountMap', () => {
   it('sums entries by currency code', () => {
@@ -103,6 +103,34 @@ describe('rankTopNWithOther', () => {
   it('tolerates an empty/undefined totals map', () => {
     expect(rankTopNWithOther({}, 5)).toEqual({ topIds: [], otherIds: [], otherTotal: 0 })
     expect(rankTopNWithOther(undefined, 5)).toEqual({ topIds: [], otherIds: [], otherTotal: 0 })
+  })
+})
+
+describe('rankTopNByMagnitudeWithOther', () => {
+  it('ranks by absolute magnitude, not raw value, so a big decrease outranks a small increase', () => {
+    const deltas = { a: -50, b: 10, c: 30, d: -5, e: 20 }
+    const result = rankTopNByMagnitudeWithOther(deltas, 3)
+    expect(result.topIds).toEqual(['a', 'c', 'e'])
+    expect(result.otherIds).toEqual(['b', 'd'])
+    expect(result.otherValue).toBe(5) // 10 + -5, signed sum not magnitude sum
+  })
+
+  it('breaks ties deterministically by id string', () => {
+    const result = rankTopNByMagnitudeWithOther({ z: -10, a: 10 }, 1)
+    expect(result.topIds).toEqual(['a'])
+    expect(result.otherIds).toEqual(['z'])
+  })
+
+  it('returns an empty other bucket when n covers every id', () => {
+    const result = rankTopNByMagnitudeWithOther({ a: -1, b: 2 }, 5)
+    expect(result.topIds).toEqual(['b', 'a'])
+    expect(result.otherIds).toEqual([])
+    expect(result.otherValue).toBe(0)
+  })
+
+  it('tolerates an empty/undefined values map', () => {
+    expect(rankTopNByMagnitudeWithOther({}, 5)).toEqual({ topIds: [], otherIds: [], otherValue: 0 })
+    expect(rankTopNByMagnitudeWithOther(undefined, 5)).toEqual({ topIds: [], otherIds: [], otherValue: 0 })
   })
 })
 

@@ -529,6 +529,13 @@
       "net": "Net",
       "table_view": "Table view"
     },
+    "savings_rate": {
+      "title": "Savings rate",
+      "series_label": "Savings rate",
+      "target_label": "Target",
+      "table_view": "Table view",
+      "no_data": "No income recorded yet for this range"
+    },
     "money_goes": {
       "ranked": {
         "title": "Where the money goes",
@@ -540,6 +547,28 @@
       "composition": {
         "title": "Composition over time",
         "other": "Other",
+        "table_view": "Table view"
+      },
+      "mom": {
+        "title": "Month-over-month change",
+        "other": "Other",
+        "previous": "Previous",
+        "current": "Current",
+        "change": "Change",
+        "table_view": "Table view",
+        "not_enough_data": "Need at least 2 months of data to compare"
+      },
+      "drift": {
+        "title": "Spending drift",
+        "other": "Other",
+        "slope_label": "/mo",
+        "table_view": "Table view",
+        "not_enough_data": "Need at least 3 complete months of data to compute a trend"
+      },
+      "heatmap": {
+        "title": "Category x month",
+        "raw": "Raw",
+        "normalize": "Normalized",
         "table_view": "Table view"
       }
     },

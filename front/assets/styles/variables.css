@@ -37,6 +37,17 @@
   --viz-categorical-8: #e34948;
   --viz-other: #9e9d94;
 
+  /* Sequential ramp (category x month heatmap) — one hue, light->dark. Not run through
+       scripts/validate_palette.js (absent from this checkout) — same caveat as --viz-other above. */
+  --viz-sequential-1: #cde2fb;
+  --viz-sequential-2: #b7d3f6;
+  --viz-sequential-3: #9ec5f4;
+  --viz-sequential-4: #86b6ef;
+  --viz-sequential-5: #5598e7;
+  --viz-sequential-6: #2a78d6;
+  --viz-sequential-7: #1c5cab;
+  --viz-sequential-8: #104281;
+
   --viz-grid: #e1e0d9;
   --viz-grid-baseline: #c3c2b7;
 
@@ -90,6 +101,17 @@
   --viz-categorical-7: #9085e9;
   --viz-categorical-8: #e66767;
   --viz-other: #57564f;
+
+  /* Inverted vs. :root — low intensity stays visible against the dark surface, floored at
+       #184f95 rather than continuing to the light ramp's near-black #104281. */
+  --viz-sequential-1: #184f95;
+  --viz-sequential-2: #1c5cab;
+  --viz-sequential-3: #2a78d6;
+  --viz-sequential-4: #3987e5;
+  --viz-sequential-5: #5598e7;
+  --viz-sequential-6: #86b6ef;
+  --viz-sequential-7: #9ec5f4;
+  --viz-sequential-8: #b7d3f6;
 
   --viz-grid: #2c2c2a;
   --viz-grid-baseline: #383835;

@@ -25,7 +25,7 @@
 
 <script setup>
 import uPlot from 'uplot'
-import { resolveCssVar, CHART_BAR_SIZE_FACTOR, CHART_BAR_RADIUS } from '~/utils/ChartUtils'
+import { CHART_BAR_SIZE_FACTOR, CHART_BAR_RADIUS, drawHorizontalRule } from '~/utils/ChartUtils'
 
 // Purpose-built for Part 1's "income vs expense split across a zero baseline" form, not a
 // generic bars component — with an optional net line sharing the same axis.
@@ -85,25 +85,12 @@ const uplotOptions = computed(() => {
     ],
     series,
     legend: { show: false },
-    hooks: { draw: [drawZeroBaseline] },
+    // A regular gridline at zero isn't visually distinct from the rest — Part 1 calls for one
+    // emphasized baseline hairline specifically because income/expense split across zero is the
+    // one chart form where that line carries real meaning (the sign boundary).
+    hooks: { draw: [(u) => drawHorizontalRule(u, { value: 0, colorVar: '--viz-grid-baseline' })] },
   }
 })
-
-// A regular gridline at zero isn't visually distinct from the rest — Part 1 calls for one
-// emphasized baseline hairline (--viz-grid-baseline) specifically because income/expense split
-// across zero is the one chart form where that line carries real meaning (the sign boundary).
-function drawZeroBaseline(u) {
-  const y = u.valToPos(0, 'y', true)
-  const { left, width } = u.bbox
-  u.ctx.save()
-  u.ctx.strokeStyle = resolveCssVar('--viz-grid-baseline')
-  u.ctx.lineWidth = 1
-  u.ctx.beginPath()
-  u.ctx.moveTo(left, y)
-  u.ctx.lineTo(left + width, y)
-  u.ctx.stroke()
-  u.ctx.restore()
-}
 
 function onPointSelect({ idx }) {
   const row = props.rows[idx]

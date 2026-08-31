@@ -1,11 +1,11 @@
 import { describe, expect, it } from 'vitest'
-import { seriesColor, stackSeries } from '~/utils/ChartUtils'
+import { seriesColor, stackSeries, withAlpha, sequentialBucket } from '~/utils/ChartUtils'
 
-// resolveCssVar() is not unit-tested here — it needs `document`/`getComputedStyle`, which this
-// project's vitest config deliberately runs without (`environment: 'node'`, no jsdom installed),
-// matching the rest of ChartUtils/AnalyticsUtils's "no DOM" testability convention. It's a
-// one-line passthrough to getComputedStyle(); verify it via the manual dark-mode toggle check
-// (ANALYTICS_PLAN.md Part 6) instead.
+// resolveCssVar() and drawHorizontalRule() are not unit-tested here — they need
+// `document`/`getComputedStyle` and a real uPlot/canvas instance respectively, neither of which
+// this project's vitest config supports (`environment: 'node'`, no jsdom installed), matching the
+// rest of ChartUtils/AnalyticsUtils's "no DOM" testability convention. Verify both via the manual
+// dark-mode toggle check (ANALYTICS_PLAN.md Part 6) instead.
 
 describe('seriesColor', () => {
   it('maps slot 0..7 to --viz-categorical-1..8', () => {
@@ -43,5 +43,30 @@ describe('stackSeries', () => {
     const result = stackSeries(rows, ['a'])
     expect(result[0].key).toBe('2026-01')
     expect(result[0].isLoaded).toBe(false)
+  })
+})
+
+describe('withAlpha', () => {
+  it('converts a resolved hex color to an rgba string at the given alpha', () => {
+    expect(withAlpha('#008300', 0.1)).toBe('rgba(0, 131, 0, 0.1)')
+    expect(withAlpha('#ffffff', 1)).toBe('rgba(255, 255, 255, 1)')
+  })
+})
+
+describe('sequentialBucket', () => {
+  it('maps a value to a 1-indexed bucket proportional to max', () => {
+    expect(sequentialBucket(0, 100)).toBe(1)
+    expect(sequentialBucket(100, 100)).toBe(8)
+    expect(sequentialBucket(50, 100)).toBe(4)
+  })
+
+  it('clamps out-of-range values into [1, steps]', () => {
+    expect(sequentialBucket(-10, 100)).toBe(1)
+    expect(sequentialBucket(1000, 100)).toBe(8)
+  })
+
+  it('falls back to bucket 1 when max is zero/undefined, avoiding a division by zero', () => {
+    expect(sequentialBucket(5, 0)).toBe(1)
+    expect(sequentialBucket(5, undefined)).toBe(1)
   })
 })

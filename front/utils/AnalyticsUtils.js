@@ -152,6 +152,18 @@ export function rankTopNWithOther(totalsById, n) {
   return { topIds, otherIds, otherTotal }
 }
 
+// valuesById: {[id]: signed number} (a delta or a slope, not a plain amount). Sibling to
+// rankTopNWithOther, but ranks by |value| (a big decrease matters as much as a big increase)
+// and sums (not just counts) the tail, since the tail's sign matters too.
+export function rankTopNByMagnitudeWithOther(valuesById, n) {
+  const sorted = Object.entries(valuesById ?? {}).sort(([idA, a], [idB, b]) => Math.abs(b) - Math.abs(a) || idA.localeCompare(idB))
+  const topIds = sorted.slice(0, n).map(([id]) => id)
+  const otherEntries = sorted.slice(n)
+  const otherIds = otherEntries.map(([id]) => id)
+  const otherValue = otherEntries.reduce((sum, [, value]) => sum + value, 0)
+  return { topIds, otherIds, otherValue }
+}
+
 // xs = TRUE month index (not observed-position index — the exact bug the Streamlit build had:
 // treating a tag's observed months as consecutive overstates the slope across gap months).
 export function leastSquaresSlope(xs, ys) {

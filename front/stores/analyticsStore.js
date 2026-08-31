@@ -12,7 +12,7 @@ import DateUtils from '~/utils/DateUtils'
 import { getExcludedTransactionFilters } from '~/utils/DashboardUtils'
 import { mapWithConcurrency } from '~/utils/ConcurrencyUtils'
 import { eachFinancialMonth, financialMonthKey, currentFinancialMonth } from '~/utils/DateRangeUtils'
-import { buildMonthlyFact, factFilterHash, assignColorSlots, rankTopNWithOther } from '~/utils/AnalyticsUtils'
+import { buildMonthlyFact, factFilterHash, assignColorSlots, rankTopNWithOther, rankTopNByMagnitudeWithOther, leastSquaresSlope } from '~/utils/AnalyticsUtils'
 import { seriesColor } from '~/utils/ChartUtils'
 import { buildAnalyticsFilterPlan, expandFanOutCombos } from '~/utils/AnalyticsFilterUtils'
 import { useAnalyticsFilters } from '~/composables/useAnalyticsFilters'
@@ -25,6 +25,8 @@ import {
   ANALYTICS_CURRENT_MONTH_CACHE_TTL_MS,
   ANALYTICS_SUBQUERY_CONCURRENCY,
   ANALYTICS_COMPOSITION_TOP_N,
+  ANALYTICS_RANKED_TOP_N,
+  ANALYTICS_HEATMAP_MAX_ROWS,
 } from '~/constants/AnalyticsConstants'
 
 export const useAnalyticsStore = defineStore('analytics', () => {
@@ -227,6 +229,106 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     return { series, rows }
   }
 
+  // ----- Phase 3c — savings-rate line, month-over-month, spending drift, category x month heatmap
+
+  function savingsRateSeries(months) {
+    return monthlyTotals(months).map(({ key, income, net, isLoaded }) => ({
+      key,
+      isLoaded,
+      // null, not 0, on a zero/negative-income month — mirrors periodAverages()' own rule
+      // (a zero-income month is unknown, not a 0% savings rate).
+      rate: isLoaded && income > 0 ? net / income : null,
+    }))
+  }
+
+  function dimensionAmount(fact, dimension, id) {
+    if (!fact) return 0
+    const entry = fact[dimension]?.[id]
+    return sumConverted(dimension === 'byMerchant' ? entry?.amount : entry)
+  }
+
+  // Compares the last two months in the given range. Deliberately does not fall back to nearby
+  // loaded months if either is missing — a "change" number silently computed against the wrong
+  // pair of months would be worse than an explicit not-enough-data state.
+  function monthOverMonthChange(months, dimension) {
+    if (months.length < 2) return { current: null, previous: null, isLoaded: false, rows: [] }
+    const current = months[months.length - 1]
+    const previous = months[months.length - 2]
+    const currentFact = factCache.value[current.key]
+    const previousFact = factCache.value[previous.key]
+    if (!currentFact || !previousFact) return { current, previous, isLoaded: false, rows: [] }
+
+    const ids = new Set([...Object.keys(currentFact[dimension] ?? {}), ...Object.keys(previousFact[dimension] ?? {})])
+    const deltas = {}
+    const values = {}
+    for (const id of ids) {
+      const currentValue = dimensionAmount(currentFact, dimension, id)
+      const previousValue = dimensionAmount(previousFact, dimension, id)
+      deltas[id] = currentValue - previousValue
+      values[id] = { current: currentValue, previous: previousValue }
+    }
+
+    const { topIds, otherValue } = rankTopNByMagnitudeWithOther(deltas, ANALYTICS_RANKED_TOP_N)
+    const rows = topIds.map((id) => ({ id, delta: deltas[id], ...values[id] }))
+    if (otherValue !== 0) rows.push({ id: 'other', delta: otherValue, current: null, previous: null })
+    return { current, previous, isLoaded: true, rows }
+  }
+
+  // Excludes the in-progress financial month and requires every remaining month in range to
+  // already be a loaded fact before computing anything. A partially-loaded window can't tell "no
+  // spending that month" (a true zero, correctly included in the regression) apart from "not
+  // fetched yet" (unknown) — silently treating the latter as zero would reproduce the exact
+  // compressed-x-axis bug ANALYTICS_PLAN.md's Context section calls out in the Streamlit build.
+  // So, unlike every other section on this page, this one waits for full range load rather than
+  // progressively rendering.
+  function spendingDrift(months, dimension) {
+    const firstDayOfMonth = profileStore.dashboard.firstDayOfMonth
+    const currentKey = financialMonthKey(currentFinancialMonth(new Date(), firstDayOfMonth).start)
+    const completeMonths = months.filter((month) => month.key !== currentKey)
+    if (completeMonths.length < 3) return { rows: [], isEligible: false }
+
+    const facts = completeMonths.map((month) => factCache.value[month.key])
+    if (facts.some((fact) => !fact)) return { rows: [], isEligible: false }
+
+    const ids = new Set()
+    for (const fact of facts) for (const id of Object.keys(fact[dimension] ?? {})) ids.add(id)
+
+    const slopes = {}
+    for (const id of ids) {
+      const ys = facts.map((fact) => dimensionAmount(fact, dimension, id))
+      // xs = true index over every complete month in range — gap months are a real 0, never
+      // compressed out, which is the whole point (see the function comment above).
+      const fit = leastSquaresSlope(
+        ys.map((_, index) => index),
+        ys,
+      )
+      if (fit) slopes[id] = fit.slope
+    }
+
+    const { topIds, otherValue } = rankTopNByMagnitudeWithOther(slopes, ANALYTICS_RANKED_TOP_N)
+    const rows = topIds.map((id) => ({ id, slope: slopes[id] }))
+    if (topIds.length < Object.keys(slopes).length) rows.push({ id: 'other', slope: otherValue })
+    // start/end of the window actually regressed over (excludes the in-progress month) — handed
+    // back so a drill-through can scope to exactly what produced the slope, without the caller
+    // re-deriving the same "exclude current month" filter itself.
+    return { rows, isEligible: true, start: completeMonths[0].start, end: completeMonths.at(-1).end }
+  }
+
+  function categoryMonthMatrix(months, maxRows = ANALYTICS_HEATMAP_MAX_ROWS) {
+    // No Other row here — "top 30 rows" (Part 1/2) means the tail simply isn't shown, unlike the
+    // composition chart where folding the tail into a visible bucket is the point.
+    const { topIds } = rankTopNWithOther(dimensionTotals(months, 'byCategory'), maxRows)
+    const rows = topIds.map((id) => ({
+      id,
+      values: months.map(({ key }) => {
+        const fact = factCache.value[key]
+        return { key, value: fact ? sumConverted(fact.byCategory?.[id]) : 0, isLoaded: !!fact }
+      }),
+    }))
+    const maxValue = Math.max(0, ...rows.flatMap((row) => row.values.map((v) => v.value)))
+    return { rows, maxValue }
+  }
+
   // ----- Actions
 
   // One sub-request's worth of getAllPages, given a complete filtersParts array (base date/exclusion
@@ -348,6 +450,10 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     rangeSummary,
     dimensionTotals,
     compositionSeries,
+    savingsRateSeries,
+    monthOverMonthChange,
+    spendingDrift,
+    categoryMonthMatrix,
     fetchMonth,
     refresh,
     retryMonth,

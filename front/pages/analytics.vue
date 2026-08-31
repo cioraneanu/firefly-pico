@@ -12,8 +12,12 @@
       <div class="dynamic-masonry">
         <analytics-headline />
         <analytics-cashflow />
+        <analytics-savings-rate />
         <analytics-money-goes-ranked />
         <analytics-money-goes-composition />
+        <analytics-money-goes-mom />
+        <analytics-money-goes-drift />
+        <analytics-money-goes-heatmap />
       </div>
 
       <app-card-info v-if="analyticsStore.failedMonthKeys.length > 0">
