@@ -1,5 +1,16 @@
 import { describe, expect, it } from 'vitest'
-import { sumAmountMap, mergeAmountMaps, factFilterHash, assignColorSlots, rankTopNWithOther, rankTopNByMagnitudeWithOther, leastSquaresSlope, movingAverage, median } from '~/utils/AnalyticsUtils'
+import {
+  sumAmountMap,
+  mergeAmountMaps,
+  factFilterHash,
+  assignColorSlots,
+  rankTopNWithOther,
+  rankTopNByMagnitudeWithOther,
+  leastSquaresSlope,
+  movingAverage,
+  median,
+  budgetSeverity,
+} from '~/utils/AnalyticsUtils'
 
 describe('sumAmountMap', () => {
   it('sums entries by currency code', () => {
@@ -170,5 +181,23 @@ describe('median', () => {
 
   it('returns null for an empty array', () => {
     expect(median([])).toBeNull()
+  })
+})
+
+describe('budgetSeverity', () => {
+  it('buckets at the 50/70/90 boundaries', () => {
+    expect(budgetSeverity(0)).toBe('good')
+    expect(budgetSeverity(49)).toBe('good')
+    expect(budgetSeverity(50)).toBe('warning')
+    expect(budgetSeverity(69)).toBe('warning')
+    expect(budgetSeverity(70)).toBe('serious')
+    expect(budgetSeverity(89)).toBe('serious')
+    expect(budgetSeverity(90)).toBe('critical')
+    expect(budgetSeverity(150)).toBe('critical')
+  })
+
+  it('passes through null/undefined as null (no limit defined yet)', () => {
+    expect(budgetSeverity(null)).toBeNull()
+    expect(budgetSeverity(undefined)).toBeNull()
   })
 })

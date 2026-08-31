@@ -191,6 +191,17 @@ export function movingAverage(values, windowSize) {
   })
 }
 
+// Mirrors budget-icon.vue's existing (untouched) 4-bucket ramp — same thresholds, new home,
+// since that component is explicitly off-limits to extend for analytics use (ANALYTICS_PLAN.md
+// Part 1, line 111: "leave that component alone").
+export function budgetSeverity(percent) {
+  if (percent == null) return null
+  if (percent < 50) return 'good'
+  if (percent < 70) return 'warning'
+  if (percent < 90) return 'serious'
+  return 'critical'
+}
+
 export function median(values) {
   if (!values || values.length === 0) return null
   const sorted = [...values].sort((a, b) => a - b)

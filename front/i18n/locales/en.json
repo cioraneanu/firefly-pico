@@ -572,6 +572,30 @@
         "table_view": "Table view"
       }
     },
+    "budgets": {
+      "overview": {
+        "title": "Budgets",
+        "no_budgets": "No active budgets",
+        "actual": "Spent",
+        "limit": "Budgeted"
+      },
+      "burn_rate": {
+        "title": "Burn-rate pacing",
+        "not_enough_data": "No budget has a limit set for the current period",
+        "ideal": "Ideal pace",
+        "other": "Other",
+        "table_view": "Table view",
+        "budget": "Budget",
+        "pace_today": "Pace today"
+      },
+      "overspend": {
+        "title": "Overspend",
+        "none": "No overspend in this range",
+        "budget": "Budget",
+        "period": "Period",
+        "overspend": "Overspend"
+      }
+    },
     "failed_months": "{count} month(s) failed to load",
     "retry": "Retry"
   },

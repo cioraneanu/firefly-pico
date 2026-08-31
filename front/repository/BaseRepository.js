@@ -18,9 +18,9 @@ export default class BaseRepository {
     return get(result, 'data', {})
   }
 
-  async getAll({ filters = [], page = 1, pageSize = 50, showLoading = true } = {}) {
+  async getAll({ filters = [], page = 1, pageSize = 50, showLoading = true, timeout = undefined } = {}) {
     let url = this.getUrlForRequest({ filters, page, pageSize })
-    let response = await axios.get(url, { showLoading })
+    let response = await axios.get(url, { showLoading, timeout })
     return get(response, 'data', {})
   }
 
@@ -32,7 +32,7 @@ export default class BaseRepository {
 
   async getAllWithMerge({ filters = [], getAll = null } = {}) {
     let list = []
-    let getMethod = (getAll ?? this.getAll)
+    let getMethod = getAll ?? this.getAll
     const firstPageResponseBody = await getMethod({ filters, page: 1 })
     let responseList = get(firstPageResponseBody, 'data', [])
     list = [...list, ...responseList]
@@ -46,16 +46,7 @@ export default class BaseRepository {
     return list
   }
 
-  async getAllPages({
-    filters = [],
-    getAll = null,
-    pageSize = 50,
-    concurrency = 4,
-    showLoading = true,
-    timeout = undefined,
-    maxPages = 500,
-    onSettled = null,
-  } = {}) {
+  async getAllPages({ filters = [], getAll = null, pageSize = 50, concurrency = 4, showLoading = true, timeout = undefined, maxPages = 500, onSettled = null } = {}) {
     const getMethod = getAll ?? this.getAll
 
     // Page 1 is fetched alone — it's the only page whose meta we can trust to LEARN
@@ -93,7 +84,7 @@ export default class BaseRepository {
         },
       )
       for (const { item: page, value, error } of settled) {
-        pageResults.set(page, { data: error ? [] : value ?? [], error: error ?? null })
+        pageResults.set(page, { data: error ? [] : (value ?? []), error: error ?? null })
       }
     }
 

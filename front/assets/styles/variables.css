@@ -51,6 +51,14 @@
   --viz-grid: #e1e0d9;
   --viz-grid-baseline: #c3c2b7;
 
+  /* Status ramp (budget severity only, ANALYTICS_PLAN.md Part 1) — never reused as a series
+       colour, always shipped with icon + label. Track = same colour at reduced opacity at the
+       render site (app-chart-meter.vue), not a second set of tokens. */
+  --viz-status-good: #0ca30c;
+  --viz-status-warning: #fab219;
+  --viz-status-serious: #ec835a;
+  --viz-status-critical: #d03b3b;
+
   --van-background-2-5: #f7f8fa;
   /*--primary-action: #000;*/
   --primary-action: #00a261;
@@ -115,6 +123,14 @@
 
   --viz-grid: #2c2c2a;
   --viz-grid-baseline: #383835;
+
+  /* Lifted lightness vs. :root, same direction as --viz-expense/--viz-transfer's light->dark
+       shift above — not run through scripts/validate_palette.js (absent from this checkout),
+       same caveat already recorded for --viz-other/--viz-sequential-*. */
+  --viz-status-good: #14c414;
+  --viz-status-warning: #ffc94d;
+  --viz-status-serious: #f0996f;
+  --viz-status-critical: #e35c5c;
 
   --van-border-color: #666;
 

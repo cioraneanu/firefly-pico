@@ -1,20 +1,28 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
+import { get } from 'lodash-es'
+import { differenceInCalendarDays } from 'date-fns'
 import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import { useProfileStore } from '~/stores/profileStore'
 import { useDashboardStore } from '~/stores/dashboardStore'
 import { useCurrencyStore } from '~/stores/currencyStore'
 import TransactionRepository from '~/repository/TransactionRepository'
 import TransactionTransformer from '~/transformers/TransactionTransformer'
+import BudgetRepository from '~/repository/BudgetRepository.js'
+import BudgetLimitRepository from '~/repository/BudgetLimitRepository.js'
+import BudgetTransformer from '~/transformers/BudgetTransformer.js'
+import BudgetLimitTransformer from '~/transformers/BudgetLimitTransformer.js'
+import Budget from '~/models/Budget.js'
+import BudgetLimit from '~/models/BudgetLimit.js'
 import Currency from '~/models/Currency.js'
 import { convertCurrency } from '~/utils/CurrencyUtils'
 import DateUtils from '~/utils/DateUtils'
 import { getExcludedTransactionFilters } from '~/utils/DashboardUtils'
 import { mapWithConcurrency } from '~/utils/ConcurrencyUtils'
 import { eachFinancialMonth, financialMonthKey, currentFinancialMonth } from '~/utils/DateRangeUtils'
-import { buildMonthlyFact, factFilterHash, assignColorSlots, rankTopNWithOther, rankTopNByMagnitudeWithOther, leastSquaresSlope } from '~/utils/AnalyticsUtils'
+import { buildMonthlyFact, factFilterHash, assignColorSlots, rankTopNWithOther, rankTopNByMagnitudeWithOther, leastSquaresSlope, budgetSeverity } from '~/utils/AnalyticsUtils'
 import { seriesColor } from '~/utils/ChartUtils'
-import { buildAnalyticsFilterPlan, expandFanOutCombos } from '~/utils/AnalyticsFilterUtils'
+import { buildAnalyticsFilterPlan, buildDimensionQuery, expandFanOutCombos, analyticsFilterModes } from '~/utils/AnalyticsFilterUtils'
 import { useAnalyticsFilters } from '~/composables/useAnalyticsFilters'
 import {
   ANALYTICS_SCHEMA_VERSION,
@@ -45,6 +53,21 @@ export const useAnalyticsStore = defineStore('analytics', () => {
   // not a size optimization.
   const monthStatus = ref({})
   const isRefreshing = ref(false)
+
+  // ----- Phase 4a — Budgets. Session-only, unlike factCache — budget definitions and limits are
+  // one cheap request for the whole range (not a per-month fan-out), so there's no payoff to
+  // persisting them across reloads the way the transaction fan-out has.
+  const budgetList = ref([])
+  const budgetLimitList = ref([])
+  const isLoadingBudgetLimits = ref(false)
+  // Dedupes concurrent fetchBudgetList() calls (e.g. the page's own onRefresh and the burn-rate
+  // section's self-sufficient fetch both wanting it at once) into a single in-flight request.
+  let budgetListFetchPromise = null
+  // Derived from a scoped, NOT-persisted raw-transaction fetch (see fetchCurrentPeriodBudgetPacing)
+  // — day-granularity data MonthlyFact doesn't carry. Computed and discarded, same "never persist
+  // raw transactions" rule Phase 1 established, just held in a plain ref instead of factCache.
+  const currentPeriodBudgetPacing = ref({ totalDays: 0, series: [], isEligible: false, periodStart: null })
+  const isLoadingBudgetPacing = ref(false)
 
   // ----- Getters
 
@@ -92,6 +115,7 @@ export const useAnalyticsStore = defineStore('analytics', () => {
   const categorySeriesColorMap = computed(() => assignColorSlots(rankedIds('byCategory')))
   const tagSeriesColorMap = computed(() => assignColorSlots(rankedIds('byTag')))
   const merchantSeriesColorMap = computed(() => assignColorSlots(rankedIds('byMerchant')))
+  const budgetSeriesColorMap = computed(() => assignColorSlots(rankedIds('byBudget')))
 
   // ----- Cache validity — TTL applies only to the CURRENT financial month. Closed months
   // don't change under normal use; time-expiring all of them would defeat the design's
@@ -329,6 +353,176 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     return { rows, maxValue }
   }
 
+  // ----- Phase 4a — Budgets. Deliberately built on Firefly's own per-limit `spent`/`amount`
+  // (BudgetLimitTransformer, already server-computed per limit period) rather than re-deriving
+  // "actual spend" from MonthlyFact.byBudget — this correctly handles non-monthly limit periods
+  // and budget types (reset/rollover/adjusted) for free, exactly like the existing Dashboard
+  // budget widget already relies on (dashboard-budget-item.vue reads budgetLimit.attributes.spent
+  // directly, never recomputes from transactions). The one place this can't substitute is the
+  // burn-rate pacing chart below, which needs DAY granularity no Firefly limit-period aggregate
+  // carries — that one function fetches raw transactions instead.
+
+  function limitsOverlapping(budgetId, start, end, limits = budgetLimitList.value) {
+    return limits.filter((limit) => {
+      if (String(get(limit, 'attributes.budget_id')) !== String(budgetId)) return false
+      const limitStart = get(limit, 'attributes.start')
+      const limitEnd = get(limit, 'attributes.end')
+      return limitStart <= end && limitEnd >= start
+    })
+  }
+
+  // Best-effort currency conversion — a budget limit's currency isn't on the limit itself, only
+  // reachable via the parent budget (same attribute path Budget.getCurrencySymbol already reads).
+  // Falls back to the raw, unconverted amount if that path is missing, matching the Dashboard
+  // budget widget's existing behaviour (which does no conversion at all) — so this can only be a
+  // strict improvement over today, never a regression.
+  function convertBudgetAmount(amount, budgetId) {
+    const budget = budgetList.value.find((b) => String(b.id) === String(budgetId))
+    const code = get(budget, 'attributes.currency.attributes.code')
+    return code ? convertCurrency(amount, code, currencyCode.value) : amount
+  }
+
+  // The limit period covering TODAY — what the per-budget meter and burn-rate eligibility ranking
+  // both mean by "current."
+  function budgetSeverityStatus(budgetId, limitsSource = budgetLimitList.value) {
+    const today = new Date()
+    const limits = limitsOverlapping(budgetId, today, today, limitsSource)
+    if (limits.length === 0) return { percent: null, severity: null, limit: null, spent: null, intervalLabel: null }
+    const limit = limits.find((l) => get(l, 'attributes.start') <= today && get(l, 'attributes.end') >= today) ?? limits[0]
+    const limitAmount = convertBudgetAmount(get(limit, 'attributes.amount') ?? 0, budgetId)
+    const spent = convertBudgetAmount(Math.abs(get(limit, 'attributes.spent') ?? 0), budgetId)
+    const percent = limitAmount > 0 ? Math.round((spent * 100) / limitAmount) : 0
+    return { percent, severity: budgetSeverity(percent), limit: limitAmount, spent, intervalLabel: BudgetLimit.getLimitInterval(limit) }
+  }
+
+  // One row per month in range — actual/limit null when no limit period overlaps that month
+  // (uPlot renders a null data point as a gap, same convention as every other Phase 3c chart).
+  function budgetVsLimitSeries(budgetId, months) {
+    return months.map((month) => {
+      const limits = limitsOverlapping(budgetId, month.start, month.end)
+      if (limits.length === 0) return { key: month.key, start: month.start, end: month.end, actual: null, limit: null, intervalLabel: null }
+      const actual = convertBudgetAmount(
+        limits.reduce((sum, l) => sum + Math.abs(get(l, 'attributes.spent') ?? 0), 0),
+        budgetId,
+      )
+      const limitAmount = convertBudgetAmount(
+        limits.reduce((sum, l) => sum + (get(l, 'attributes.amount') ?? 0), 0),
+        budgetId,
+      )
+      return { key: month.key, start: month.start, end: month.end, actual, limit: limitAmount, intervalLabel: BudgetLimit.getLimitInterval(limits[0]) }
+    })
+  }
+
+  function budgetOverspendRows(months) {
+    const rows = []
+    for (const budget of budgetList.value) {
+      if (!Budget.isActive(budget)) continue
+      for (const point of budgetVsLimitSeries(budget.id, months)) {
+        if (point.limit == null) continue
+        const overspend = point.actual - point.limit
+        if (overspend <= 0) continue
+        rows.push({
+          budgetId: budget.id,
+          monthKey: point.key,
+          start: point.start,
+          end: point.end,
+          intervalLabel: point.intervalLabel,
+          actual: point.actual,
+          limit: point.limit,
+          overspend,
+        })
+      }
+    }
+    return rows.sort((a, b) => b.overspend - a.overspend)
+  }
+
+  // Burn-rate pacing — the one Phase 4a feature needing day granularity, so it's the one place
+  // that fetches raw transactions rather than reading limitsOverlapping()/factCache. Scoped to
+  // [current financial month start, today] only, never persisted (see currentPeriodBudgetPacing's
+  // own comment above) — mirrors fetchMonth's fan-out-per-value pattern for the same proven reason
+  // (budget_is has no comma-list OR, unlike account_id — see AnalyticsFilterUtils.js).
+  async function fetchCurrentPeriodBudgetPacing() {
+    isLoadingBudgetPacing.value = true
+    try {
+      const firstDayOfMonth = profileStore.dashboard.firstDayOfMonth
+      const { start } = currentFinancialMonth(new Date(), firstDayOfMonth)
+      const today = new Date()
+
+      // Deliberately self-sufficient — awaits its OWN prerequisites rather than reading the
+      // page-range-scoped budgetList/budgetLimitList populated by analytics.vue's onRefresh. Vue
+      // mounts children before a parent's onMounted runs, so this section's onMounted (a child of
+      // analytics.vue) would otherwise reliably fire BEFORE that fetch even starts, always seeing
+      // an empty budgetList/budgetLimitList on first load — not a rare race, a guaranteed one. It
+      // also sidesteps a real correctness gap that shared list would have: if the page's selected
+      // range is a custom range that doesn't include today, budgetLimitList would never contain
+      // today's limit at all, even though burn-rate pacing is always about "right now."
+      await fetchBudgetList()
+      const currentLimits = await fetchBudgetLimitsRaw(start, today)
+
+      const eligibleBudgets = budgetList.value.filter((budget) => Budget.isActive(budget) && budgetSeverityStatus(budget.id, currentLimits).limit > 0)
+      if (eligibleBudgets.length === 0) {
+        currentPeriodBudgetPacing.value = { totalDays: 0, series: [], isEligible: false, periodStart: start }
+        return
+      }
+
+      const limitById = Object.fromEntries(eligibleBudgets.map((b) => [b.id, budgetSeverityStatus(b.id, currentLimits).limit]))
+      const { topIds, otherIds } = rankTopNWithOther(limitById, ANALYTICS_RANKED_TOP_N)
+      const topBudgets = topIds.map((id) => eligibleBudgets.find((b) => String(b.id) === String(id)))
+      const otherBudgets = otherIds.map((id) => eligibleBudgets.find((b) => String(b.id) === String(id)))
+
+      const baseFiltersParts = [`date_after:${DateUtils.dateToString(start)}`, `date_before:${DateUtils.dateToString(today)}`, ...getExcludedTransactionFilters()]
+      // buildDimensionQuery only returns fanOutValues for 2+ included values — a single eligible
+      // budget takes the "fragments" branch instead (one safe query_is:"Name" fragment, no fan-out
+      // needed), so both branches have to be handled here, not just the fan-out one.
+      const { fragments, fanOutValues } = buildDimensionQuery('budget', [...topBudgets, ...otherBudgets], analyticsFilterModes.include)
+      const combos = fanOutValues ? fanOutValues.map((value) => [value]) : [fragments]
+
+      const settled = await mapWithConcurrency(combos, (combo) => fetchFilteredPages([...baseFiltersParts, ...combo], ANALYTICS_SUBQUERY_CONCURRENCY), { concurrency: ANALYTICS_SUBQUERY_CONCURRENCY })
+      const rawById = new Map()
+      for (const { value } of settled) {
+        for (const item of value?.data ?? []) rawById.set(item.id, item)
+      }
+      const transformed = TransactionTransformer.transformFromApiList([...rawById.values()])
+
+      const totalDays = Math.max(1, differenceInCalendarDays(today, start) + 1)
+      const dayTotals = {} // budgetId -> [day0Amount, day1Amount, ...], in that budget's own currency
+      for (const budget of [...topBudgets, ...otherBudgets]) dayTotals[budget.id] = new Array(totalDays).fill(0)
+
+      for (const transaction of transformed) {
+        for (const split of get(transaction, 'attributes.transactions', [])) {
+          const budgetId = split.budget_id
+          if (budgetId == null || !(budgetId in dayTotals)) continue
+          const dayIndex = Math.min(totalDays - 1, Math.max(0, differenceInCalendarDays(split.date, start)))
+          dayTotals[budgetId][dayIndex] += convertBudgetAmount(parseFloat(split.amount) || 0, budgetId)
+        }
+      }
+
+      const series = topBudgets.map((budget) => {
+        const limit = limitById[budget.id]
+        let cumulative = 0
+        const values = dayTotals[budget.id].map((dayAmount) => {
+          cumulative += dayAmount
+          return limit > 0 ? (cumulative / limit) * 100 : null
+        })
+        return { id: budget.id, colorVar: seriesColor(budgetSeriesColorMap.value[budget.id]), values }
+      })
+
+      if (otherBudgets.length > 0) {
+        const otherLimit = otherBudgets.reduce((sum, b) => sum + (limitById[b.id] ?? 0), 0)
+        let cumulative = 0
+        const values = new Array(totalDays).fill(0).map((_, day) => {
+          cumulative += otherBudgets.reduce((sum, b) => sum + (dayTotals[b.id]?.[day] ?? 0), 0)
+          return otherLimit > 0 ? (cumulative / otherLimit) * 100 : null
+        })
+        series.push({ id: 'other', colorVar: seriesColor('other'), values })
+      }
+
+      currentPeriodBudgetPacing.value = { totalDays, series, isEligible: true, periodStart: start }
+    } finally {
+      isLoadingBudgetPacing.value = false
+    }
+  }
+
   // ----- Actions
 
   // One sub-request's worth of getAllPages, given a complete filtersParts array (base date/exclusion
@@ -431,6 +625,52 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     await fetchMonth({ key, start, end }) // always forces — explicit user action
   }
 
+  // Both budget endpoints go through getAllPages (not the simpler getAllWithMerge every other
+  // budgetStore.js caller uses) specifically for the { showLoading: false, timeout } override —
+  // getAllWithMerge's underlying getAll() has no way to raise the timeout above the app's generic
+  // 8s default (nuxt.config.ts queryTimeout), which is fine for the Dashboard's single-month
+  // fetch but genuinely too tight for a wide analytics range or a budget with many limit periods
+  // (the exact bug: a 6-month range timing out at 8000ms). Every other analytics fetch already
+  // makes this same override for this same reason (see ANALYTICS_FETCH_TIMEOUT_MS's own comment).
+  async function fetchBudgetLimitsRaw(start, end) {
+    if (!profileStore.budgetsEnabled) return []
+    const filters = [
+      { field: 'start', value: DateUtils.dateToString(start) },
+      { field: 'end', value: DateUtils.dateToString(end) },
+    ]
+    const result = await new BudgetLimitRepository().getAllPages({ filters, showLoading: false, timeout: ANALYTICS_FETCH_TIMEOUT_MS })
+    return BudgetLimitTransformer.transformFromApiList(result.data)
+  }
+
+  async function fetchBudgetList() {
+    if (!profileStore.budgetsEnabled) {
+      budgetList.value = []
+      return
+    }
+    if (budgetList.value.length > 0) return // budgets aren't range-scoped — fetch once per session
+    if (!budgetListFetchPromise) {
+      budgetListFetchPromise = new BudgetRepository()
+        .getAllPages({ showLoading: false, timeout: ANALYTICS_FETCH_TIMEOUT_MS })
+        .then((result) => {
+          budgetList.value = BudgetTransformer.transformFromApiList(result.data)
+        })
+        .finally(() => {
+          budgetListFetchPromise = null
+        })
+    }
+    await budgetListFetchPromise
+  }
+
+  async function fetchBudgetLimitsForRange(start, end) {
+    if (!profileStore.budgetsEnabled) {
+      budgetLimitList.value = []
+      return
+    }
+    isLoadingBudgetLimits.value = true
+    budgetLimitList.value = await fetchBudgetLimitsRaw(start, end)
+    isLoadingBudgetLimits.value = false
+  }
+
   return {
     factCache,
     analyticsCurrency,
@@ -443,6 +683,7 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     categorySeriesColorMap,
     tagSeriesColorMap,
     merchantSeriesColorMap,
+    budgetSeriesColorMap,
     isFactValid,
     sumConverted,
     monthlyTotals,
@@ -457,5 +698,16 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     fetchMonth,
     refresh,
     retryMonth,
+    budgetList,
+    budgetLimitList,
+    isLoadingBudgetLimits,
+    currentPeriodBudgetPacing,
+    isLoadingBudgetPacing,
+    budgetSeverityStatus,
+    budgetVsLimitSeries,
+    budgetOverspendRows,
+    fetchBudgetList,
+    fetchBudgetLimitsForRange,
+    fetchCurrentPeriodBudgetPacing,
   }
 })

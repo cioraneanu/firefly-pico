@@ -18,6 +18,9 @@
         <analytics-money-goes-mom />
         <analytics-money-goes-drift />
         <analytics-money-goes-heatmap />
+        <analytics-budgets-overview />
+        <analytics-budgets-burn-rate />
+        <analytics-budgets-overspend />
       </div>
 
       <app-card-info v-if="analyticsStore.failedMonthKeys.length > 0">
@@ -40,7 +43,11 @@ const analyticsStore = useAnalyticsStore()
 const { range, months, priorMonths } = useAnalyticsRange()
 
 const onRefresh = async () => {
-  await analyticsStore.refresh({ start: priorMonths.value[0]?.start ?? range.value.start, end: range.value.end })
+  await Promise.all([
+    analyticsStore.refresh({ start: priorMonths.value[0]?.start ?? range.value.start, end: range.value.end }),
+    analyticsStore.fetchBudgetList(),
+    analyticsStore.fetchBudgetLimitsForRange(range.value.start, range.value.end),
+  ])
 }
 
 const onRetryFailed = async () => {

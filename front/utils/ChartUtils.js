@@ -78,3 +78,24 @@ export function drawHorizontalRule(u, { value, colorVar, scaleKey = 'y' }) {
   u.ctx.stroke()
   u.ctx.restore()
 }
+
+// Draws a dashed reference line between two data points — the burn-rate chart's "ideal linear
+// pace" line (day 0 -> 0%, last day -> 100%). Dashed (not solid, unlike drawHorizontalRule's
+// baseline/target rules) so it reads as a REFERENCE against the N solid actual-pace lines it
+// shares the plot with, rather than as another data series.
+export function drawDiagonalRule(u, { from, to, colorVar, scaleKey = 'y' }) {
+  if (from == null || to == null) return
+  const x0 = u.valToPos(from.x, 'x', true)
+  const y0 = u.valToPos(from.y, scaleKey, true)
+  const x1 = u.valToPos(to.x, 'x', true)
+  const y1 = u.valToPos(to.y, scaleKey, true)
+  u.ctx.save()
+  u.ctx.strokeStyle = resolveCssVar(colorVar)
+  u.ctx.lineWidth = 1
+  u.ctx.setLineDash([4, 4])
+  u.ctx.beginPath()
+  u.ctx.moveTo(x0, y0)
+  u.ctx.lineTo(x1, y1)
+  u.ctx.stroke()
+  u.ctx.restore()
+}
