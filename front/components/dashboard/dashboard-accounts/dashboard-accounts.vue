@@ -14,10 +14,10 @@
           <div class="display-flex flex-column align-items-center">
             <div class="font-400 text-size-12 text-center text-muted">{{ Account.getDisplayName(account) }}</div>
             <div class="font-700 text-size-12 text-center">{{ getAccountAmount(account) }}</div>
-            <div class="font-400 text-size-11 text-center text-muted">{{ $t('account_page.balance') }}</div>
-            <div v-if="Account.hasVirtualBalance(account)" class="tag-gray app-card-info mt-1 text-size-11 text-center">
-              {{ $t('account_page.available') }}: {{ getAccountAvailableAmount(account) }}
-            </div>
+            <template v-if="Account.hasVirtualBalance(account)">
+              <div class="font-400 text-size-11 text-center text-muted">{{ $t('account_page.balance') }}</div>
+              <div class="tag-gray app-card-info mt-1 text-size-11 text-center">{{ $t('account_page.available') }}: {{ getAccountAvailableAmount(account) }}</div>
+            </template>
             <div v-if="!Account.getIsIncludedInNetWorth(account)" class="mt-1 font-400 text-size-11 text-center badge-excluded-net-worth">Not in net worth</div>
           </div>
         </template>

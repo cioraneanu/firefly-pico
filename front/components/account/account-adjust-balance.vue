@@ -25,7 +25,6 @@ import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import AccountRepository from '~/repository/AccountRepository.js'
 import AccountTransformer from '~/transformers/AccountTransformer.js'
 import UIUtils from '~/utils/UIUtils.js'
-
 import Account from '~/models/Account.js'
 
 const showDropdown = defineModel('showDropdown', false)

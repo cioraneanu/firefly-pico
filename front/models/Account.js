@@ -6,7 +6,12 @@ import { get } from 'lodash-es'
 import Transaction from '~/models/Transaction'
 import { NUMBER_FORMAT } from '~/utils/NumberUtils.js'
 import Currency from '~/models/Currency.js'
-import { getBalanceWithoutVirtual, hasVirtualBalance } from '~/utils/AccountBalanceUtils.js'
+
+const toAmount = (value) => {
+  if (value === null || value === undefined || value === '') return null
+  const amount = Number(value)
+  return Number.isFinite(amount) ? amount : null
+}
 
 export default class Account extends BaseModel {
   getTransformer() {
@@ -228,8 +233,15 @@ export default class Account extends BaseModel {
     return Currency.getDecimalPlaces(this.getCurrency(account))
   }
 
+  // Firefly's current_balance already has virtual_balance added in, so it is the amount available to spend.
+  // The booked balance is what remains once the virtual balance (reserved funds or credit limit) is taken back out.
   static getBalance(account) {
-    return getBalanceWithoutVirtual(this.getAvailableBalance(account), this.getVirtualBalance(account))
+    const available = toAmount(this.getAvailableBalance(account))
+    if (available === null) return this.getAvailableBalance(account)
+
+    const virtual = toAmount(this.getVirtualBalance(account)) ?? 0
+    // Rounded to shake off float noise: 290.99 - 500 would otherwise be -209.01000000000002
+    return Number((available - virtual).toFixed(12))
   }
 
   static getAvailableBalance(account) {
@@ -241,20 +253,20 @@ export default class Account extends BaseModel {
   }
 
   static hasVirtualBalance(account) {
-    return hasVirtualBalance(this.getVirtualBalance(account))
+    return (toAmount(this.getVirtualBalance(account)) ?? 0) !== 0
   }
 
   static getAmountWithCurrency(account, amount) {
     const profileStore = useProfileStore()
     let digits = profileStore.dashboard.showDecimal ? 2 : 0
     let numberFormatCode = profileStore.numberFormat.code ?? NUMBER_FORMAT.eu.code
-    amount = new Intl.NumberFormat(numberFormatCode, {
+    let formattedAmount = new Intl.NumberFormat(numberFormatCode, {
       minimumFractionDigits: digits,
       maximumFractionDigits: digits,
     }).format(amount)
 
     let currency = this.getCurrencySymbol(account)
-    return [amount, currency].filter((item) => !!item).join(' ')
+    return [formattedAmount, currency].filter((item) => !!item).join(' ')
   }
 
   static getBalanceWithCurrency(account) {
