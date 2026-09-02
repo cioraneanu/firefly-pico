@@ -179,7 +179,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const dashboardAccountsTotalByCurrency = computed(() => {
     return dashboardAccountsInNetWorth.value.reduce((result, account) => {
       let accountCurrency = account?.attributes?.currency_code
-      const accountBalance = parseFloat(account?.attributes?.current_balance ?? 0)
+      const accountBalance = parseFloat(Account.getBalance(account) ?? 0)
       let oldValue = result[accountCurrency] ?? 0
       result[accountCurrency] = oldValue + accountBalance
       return result
@@ -201,7 +201,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
     return dashboardAccountsInNetWorth.value.reduce((result, account) => {
       let group = account?.attributes?.group
       if (!group) return result
-      let accountBalance = parseFloat(account?.attributes?.current_balance ?? 0)
+      let accountBalance = parseFloat(Account.getBalance(account) ?? 0)
       accountBalance = convertCurrency(accountBalance, Account.getCurrencyCode(account), Currency.getCode(dashboardCurrency.value))
 
       let oldValue = result[group] ?? 0

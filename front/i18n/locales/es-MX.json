@@ -390,6 +390,7 @@
     "include_net_worth": "Incluir en el patrimonio neto",
     "visible_on_dashboard": "Visible en el panel principal",
     "balance": "Saldo",
+    "available": "Disponible",
     "account_group": "Grupo"
   },
   "transaction_template_page": {

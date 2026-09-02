@@ -390,6 +390,7 @@
     "include_net_worth": "Jest uwzględnione w wartości netto",
     "visible_on_dashboard": "Jest widoczne na pulpicie nawigacyjnym",
     "balance": "Saldo",
+    "available": "Dostępne",
     "account_group": "Grupa"
   },
   "transaction_template_page": {

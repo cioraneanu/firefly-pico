@@ -21,8 +21,9 @@
               <span v-if="accountGroup" class="tag-gray list-item-subtitle">{{ $t('account_page.account_group') }}: {{ accountGroup }}</span>
             </div>
 
-            <div class="display-flex">
+            <div class="display-flex flex-wrap gap-1">
               <span class="tag-gray list-item-subtitle mt-5">{{ $t('account_page.balance') }}: {{ accountBalance }}</span>
+              <span v-if="hasVirtualBalance" class="tag-gray app-card-info list-item-subtitle mt-5">{{ $t('account_page.available') }}: {{ accountAvailableBalance }}</span>
             </div>
           </div>
         </div>
@@ -59,6 +60,8 @@ const accountRole = computed(() => {
 })
 const currencySymbol = computed(() => get(props.value, 'attributes.currency_code'))
 const accountBalance = computed(() => Account.getBalanceWithCurrency(props.value))
+const accountAvailableBalance = computed(() => Account.getAvailableBalanceWithCurrency(props.value))
+const hasVirtualBalance = computed(() => Account.hasVirtualBalance(props.value))
 const icon = computed(() => Account.getIcon(props.value))
 
 const onEdit = async (e) => {

@@ -391,6 +391,7 @@
     "include_net_worth": "Im Nettovermögen enthalten",
     "visible_on_dashboard": "Im Dashboard ersichtlich",
     "balance": "Kontostand",
+    "available": "Verfügbar",
     "account_group": "Gruppe"
   },
   "transaction_template_page": {
