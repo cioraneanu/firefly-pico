@@ -13,7 +13,17 @@
         <dashboard-budget-item v-for="budget in budgetList" :value="budget" />
       </van-grid>
 
-      <div class="van-cell-group-title">{{ $t('dashboard.budget_pace.title') }}:</div>
+      <div class="van-cell-group-title flex-center-vertical">
+        <div class="flex-1">{{ $t('dashboard.budget_pace.title') }}:</div>
+        <van-popover v-model:show="showDescriptionPopover" placement="bottom-end">
+          <div class="text-size-12 p-10" style="max-width: 280px">{{ $t('dashboard.budget_pace.description') }}</div>
+          <template #reference>
+            <button type="button" class="app-button-icon">
+              <app-icon :icon="TablerIconConstants.settingsAbout" :size="18" />
+            </button>
+          </template>
+        </van-popover>
+      </div>
 
       <div v-if="!pacing.isEligible" class="text-size-12 dashboard-budget-pace-empty ml-15 mr-15 mb-2">{{ $t('dashboard.budget_pace.not_enough_data') }}</div>
 
@@ -23,6 +33,7 @@
             <span class="dashboard-budget-pace-dot" :style="{ background: `var(${line.colorVar})` }" />{{ line.label }}
           </span>
         </div>
+        <div class="text-size-12 dashboard-budget-pace-axis-caption">{{ $t('dashboard.budget_pace.y_axis') }}</div>
         <app-chart-multiline
           :series="displaySeries"
           :total-days="pacing.totalDays"
@@ -66,6 +77,7 @@ const budgetLimitRemainingFormatted = computed(() => `${formatNumberForDashboard
 // ----- Budget pace (cumulative day-by-day spend vs. each budget's limit)
 
 const pacing = computed(() => dashboardStore.budgetPace)
+const showDescriptionPopover = ref(false)
 
 function resolveLabel(budgetId) {
   if (budgetId === 'other') return t('dashboard.budget_pace.other')
@@ -105,5 +117,10 @@ const onDaySelect = async ({ dayIndex }) => {
   width: 8px;
   height: 8px;
   border-radius: 50%;
+}
+
+.dashboard-budget-pace-axis-caption {
+  color: var(--semi-black);
+  margin-bottom: 4px;
 }
 </style>

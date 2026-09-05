@@ -900,18 +900,6 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     })
   }
 
-  function netWorthCurrencyCodesInRange(months) {
-    const codes = new Set()
-    for (const { key } of months) {
-      const entry = netWorthCache.value[key]
-      if (!entry) continue
-      Object.keys(entry.netWorthByCurrency).forEach((c) => codes.add(c))
-      Object.keys(entry.assetsByCurrency).forEach((c) => codes.add(c))
-      Object.keys(entry.liabilitiesByCurrency).forEach((c) => codes.add(c))
-    }
-    return [...codes]
-  }
-
   return {
     factCache,
     analyticsCurrency,
@@ -955,6 +943,5 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     fetchRecurringTransactionTotals,
     fetchNetWorthRange,
     assetsLiabilitiesTotals,
-    netWorthCurrencyCodesInRange,
   }
 })

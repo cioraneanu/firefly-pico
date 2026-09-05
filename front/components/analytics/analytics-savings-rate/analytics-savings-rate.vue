@@ -1,6 +1,16 @@
 <template>
   <van-cell-group inset>
-    <div class="van-cell-group-title">{{ $t('analytics.savings_rate.title') }}:</div>
+    <div class="van-cell-group-title flex-center-vertical">
+      <div class="flex-1">{{ $t('analytics.savings_rate.title') }}:</div>
+      <van-popover v-model:show="showDescriptionPopover" placement="bottom-end">
+        <div class="text-size-12 p-10" style="max-width: 280px">{{ $t('analytics.savings_rate.description') }}</div>
+        <template #reference>
+          <button type="button" class="app-button-icon">
+            <app-icon :icon="TablerIconConstants.settingsAbout" :size="18" />
+          </button>
+        </template>
+      </van-popover>
+    </div>
 
     <div v-if="hasNoData" class="text-size-12 analytics-savings-rate-empty ml-15 mr-15 mb-2">{{ $t('analytics.savings_rate.no_data') }}</div>
 
@@ -23,6 +33,7 @@
 import RouteConstants from '~/constants/RouteConstants.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { useAnalyticsStore } from '~/stores/analyticsStore'
 import { useAnalyticsRange } from '~/composables/useAnalyticsRange'
 
@@ -32,6 +43,8 @@ const SAVINGS_RATE_TARGET = 0.2
 
 const analyticsStore = useAnalyticsStore()
 const { months } = useAnalyticsRange()
+
+const showDescriptionPopover = ref(false)
 
 const rows = computed(() => analyticsStore.savingsRateSeries(months.value))
 const hasNoData = computed(() => rows.value.every((row) => row.rate == null))

@@ -2,8 +2,20 @@
   <van-cell-group inset>
     <div class="van-cell-group-title flex-center-vertical">
       <div class="flex-1">{{ $t('analytics.money_goes.heatmap.title') }}:</div>
-      <app-tabs v-model="normalizeTab" :items="normalizeTabs" />
+      <div class="display-flex gap-1">
+        <van-popover v-model:show="showDescriptionPopover" placement="bottom-end">
+          <div class="text-size-12 p-10" style="max-width: 280px">{{ $t('analytics.money_goes.heatmap.description') }}</div>
+          <template #reference>
+            <button type="button" class="app-button-icon">
+              <app-icon :icon="TablerIconConstants.settingsAbout" :size="18" />
+            </button>
+          </template>
+        </van-popover>
+        <app-tabs v-model="normalizeTab" :items="normalizeTabs" />
+      </div>
     </div>
+
+    <div v-if="normalizeTab === 'raw'" class="text-size-12 analytics-axis-caption ml-15 mr-15 mb-2">{{ `${$t('analytics.axis.amount')} (${analyticsStore.currencyCode})` }}</div>
 
     <div class="ml-15 mr-15 mb-2">
       <app-chart-heatmap
@@ -21,6 +33,7 @@
 
 <script setup>
 import Category from '~/models/Category.js'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { useAnalyticsStore } from '~/stores/analyticsStore'
 import { useAnalyticsRange } from '~/composables/useAnalyticsRange'
 import { useChartDrillThrough } from '~/composables/useChartDrillThrough'
@@ -40,6 +53,8 @@ const normalizeTabs = computed(() => [
   { label: t('analytics.money_goes.heatmap.normalize'), value: 'normalized' },
 ])
 
+const showDescriptionPopover = ref(false)
+
 const matrix = computed(() => analyticsStore.categoryMonthMatrix(months.value))
 
 function resolveLabel(id) {
@@ -56,3 +71,9 @@ const onCellSelect = async ({ monthKey, id }) => {
   await drillThrough.navigate({ start: month.start, end: month.end, dimension: 'byCategory', id })
 }
 </script>
+
+<style scoped>
+.analytics-axis-caption {
+  color: var(--semi-black);
+}
+</style>

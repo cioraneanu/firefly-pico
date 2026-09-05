@@ -1,8 +1,18 @@
 <template>
   <van-cell-group inset>
-    <div class="van-cell-group-title">{{ $t('analytics.headline.net_cashflow') }}:</div>
+    <div class="van-cell-group-title flex-center-vertical">
+      <div class="flex-1">{{ $t('analytics.headline.net_cashflow') }}:</div>
+      <van-popover v-model:show="showDescriptionPopover" placement="bottom-end">
+        <div class="text-size-12 p-10" style="max-width: 280px">{{ $t('analytics.headline.description') }}</div>
+        <template #reference>
+          <button type="button" class="app-button-icon">
+            <app-icon :icon="TablerIconConstants.settingsAbout" :size="18" />
+          </button>
+        </template>
+      </van-popover>
+    </div>
     <div class="analytics-hero" :class="summary.totalNet >= 0 ? 'text-viz-income' : 'text-viz-expense'">
-      {{ formatNumberForDashboard(summary.totalNet) }}
+      {{ formatNumberForDashboard(summary.totalNet) }} <span class="analytics-hero-currency">{{ analyticsStore.currencyCode }}</span>
     </div>
 
     <div class="analytics-kpi-grid">
@@ -18,12 +28,15 @@
 </template>
 
 <script setup>
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { useAnalyticsStore } from '~/stores/analyticsStore'
 import { useAnalyticsRange } from '~/composables/useAnalyticsRange'
 
 const analyticsStore = useAnalyticsStore()
 const { months, priorMonths } = useAnalyticsRange()
 const { t } = useI18n()
+
+const showDescriptionPopover = ref(false)
 
 const summary = computed(() => analyticsStore.rangeSummary(months.value, priorMonths.value))
 
@@ -56,6 +69,12 @@ const kpiList = computed(() => {
   font-weight: 600;
   font-variant-numeric: proportional-nums;
   padding: 8px 16px 16px;
+}
+
+.analytics-hero-currency {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--semi-black);
 }
 
 .analytics-kpi-grid {

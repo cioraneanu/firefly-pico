@@ -2,8 +2,20 @@
   <van-cell-group inset>
     <div class="van-cell-group-title flex-center-vertical">
       <div class="flex-1">{{ $t('analytics.money_goes.composition.title') }}:</div>
-      <app-tabs v-model="dimensionTab" :items="dimensionTabs" />
+      <div class="display-flex gap-1">
+        <van-popover v-model:show="showDescriptionPopover" placement="bottom-end">
+          <div class="text-size-12 p-10" style="max-width: 280px">{{ $t('analytics.money_goes.composition.description') }}</div>
+          <template #reference>
+            <button type="button" class="app-button-icon">
+              <app-icon :icon="TablerIconConstants.settingsAbout" :size="18" />
+            </button>
+          </template>
+        </van-popover>
+        <app-tabs v-model="dimensionTab" :items="dimensionTabs" />
+      </div>
     </div>
+
+    <div class="text-size-12 analytics-axis-caption ml-15 mr-15 mb-2">{{ `${$t('analytics.axis.amount')} (${analyticsStore.currencyCode})` }}</div>
 
     <div class="ml-15 mr-15 mb-2">
       <app-chart-stacked
@@ -18,6 +30,7 @@
 </template>
 
 <script setup>
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { useAnalyticsStore } from '~/stores/analyticsStore'
 import { useAnalyticsRange } from '~/composables/useAnalyticsRange'
 import { useChartDrillThrough } from '~/composables/useChartDrillThrough'
@@ -38,6 +51,8 @@ const dimensionTabs = computed(() => [
   { label: t('analytics.money_goes.ranked.by_category'), value: 'byCategory' },
   { label: t('analytics.money_goes.ranked.by_tag'), value: 'byTag' },
 ])
+
+const showDescriptionPopover = ref(false)
 
 const composition = computed(() => analyticsStore.compositionSeries(months.value, dimensionTab.value))
 
@@ -64,3 +79,9 @@ const onSegmentSelect = async ({ monthKey, seriesId }) => {
   await drillThrough.navigate({ start: month.start, end: month.end, dimension: dimensionTab.value, id: seriesId })
 }
 </script>
+
+<style scoped>
+.analytics-axis-caption {
+  color: var(--semi-black);
+}
+</style>

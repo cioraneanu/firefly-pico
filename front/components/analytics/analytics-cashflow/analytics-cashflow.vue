@@ -2,13 +2,25 @@
   <van-cell-group inset>
     <div class="van-cell-group-title flex-center-vertical">
       <div class="flex-1">{{ $t('analytics.cashflow.title') }}:</div>
-      <div class="analytics-cashflow-legend text-size-12">
-        <span class="analytics-cashflow-legend-dot viz-income-dot" />{{ $t('analytics.cashflow.income') }} <span class="analytics-cashflow-legend-dot viz-expense-dot" />{{
-          $t('analytics.cashflow.expense')
-        }}
-        <span class="analytics-cashflow-legend-dot viz-net-dot" />{{ $t('analytics.cashflow.net') }}
+      <div class="display-flex gap-1">
+        <van-popover v-model:show="showDescriptionPopover" placement="bottom-end">
+          <div class="text-size-12 p-10" style="max-width: 280px">{{ $t('analytics.cashflow.description') }}</div>
+          <template #reference>
+            <button type="button" class="app-button-icon">
+              <app-icon :icon="TablerIconConstants.settingsAbout" :size="18" />
+            </button>
+          </template>
+        </van-popover>
+        <div class="analytics-cashflow-legend text-size-12">
+          <span class="analytics-cashflow-legend-dot viz-income-dot" />{{ $t('analytics.cashflow.income') }} <span class="analytics-cashflow-legend-dot viz-expense-dot" />{{
+            $t('analytics.cashflow.expense')
+          }}
+          <span class="analytics-cashflow-legend-dot viz-net-dot" />{{ $t('analytics.cashflow.net') }}
+        </div>
       </div>
     </div>
+
+    <div class="text-size-12 analytics-axis-caption ml-15 mr-15 mb-2">{{ `${$t('analytics.axis.amount')} (${analyticsStore.currencyCode})` }}</div>
 
     <div class="ml-15 mr-15 mb-2">
       <app-chart-bars
@@ -28,11 +40,14 @@
 import RouteConstants from '~/constants/RouteConstants.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { useAnalyticsStore } from '~/stores/analyticsStore'
 import { useAnalyticsRange } from '~/composables/useAnalyticsRange'
 
 const analyticsStore = useAnalyticsStore()
 const { months } = useAnalyticsRange()
+
+const showDescriptionPopover = ref(false)
 
 const totals = computed(() => analyticsStore.monthlyTotals(months.value))
 
@@ -75,5 +90,9 @@ const onMonthSelect = async ({ monthKey }) => {
 
 .viz-net-dot {
   background: var(--semi-black);
+}
+
+.analytics-axis-caption {
+  color: var(--semi-black);
 }
 </style>

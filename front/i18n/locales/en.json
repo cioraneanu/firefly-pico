@@ -477,9 +477,11 @@
     },
     "budget_pace": {
       "title": "Budget pace",
+      "description": "Cumulative spend against each budget's limit, day by day this month.",
       "not_enough_data": "No budget has a limit set for this period",
       "ideal": "Ideal pace",
-      "other": "Other"
+      "other": "Other",
+      "y_axis": "% of budget limit"
     },
     "month_projection": {
       "title": "This month so far",
@@ -529,7 +531,11 @@
       "title": "Analytics filters",
       "exclude": "Exclude"
     },
+    "axis": {
+      "amount": "Amount"
+    },
     "headline": {
+      "description": "Income, expenses, and savings totals for the selected range.",
       "net_cashflow": "Net cashflow",
       "avg_income": "Avg. income",
       "avg_expense": "Avg. expense",
@@ -542,12 +548,14 @@
     },
     "cashflow": {
       "title": "Cashflow",
+      "description": "Income and expenses per month, with the net difference overlaid.",
       "income": "Income",
       "expense": "Expense",
       "net": "Net"
     },
     "savings_rate": {
       "title": "Savings rate",
+      "description": "The share of income kept as savings each month, against a 20% target.",
       "series_label": "Savings rate",
       "target_label": "Target",
       "no_data": "No income recorded yet for this range"
@@ -555,12 +563,14 @@
     "money_goes": {
       "ranked": {
         "title": "Where the money goes",
+        "description": "Categories or tags ranked by total spend in the selected range.",
         "by_category": "Categories",
         "by_tag": "Tags",
         "other": "Other"
       },
       "composition": {
         "title": "Composition over time",
+        "description": "How spend is split across categories or tags, month by month.",
         "other": "Other"
       },
       "mom": {
@@ -581,6 +591,7 @@
       },
       "heatmap": {
         "title": "Category x month",
+        "description": "Spend per category, month by month — darker means more.",
         "raw": "Raw",
         "normalize": "Normalized"
       }
@@ -588,6 +599,7 @@
     "budgets": {
       "overview": {
         "title": "Budgets",
+        "description": "Actual spend against each budget's limit, month by month.",
         "no_budgets": "No active budgets",
         "actual": "Spent",
         "limit": "Budgeted"
@@ -596,18 +608,20 @@
     "net_worth": {
       "assets_liabilities": {
         "title": "Assets vs liabilities",
+        "description": "Assets and liabilities per month, with net worth overlaid.",
         "assets": "Assets",
         "liabilities": "Liabilities",
         "net": "Net worth"
-      },
-      "fx_note": "Balances in other currencies are converted at today's exchange rate, not the rate on the date shown."
+      }
     },
     "behavior": {
       "weekday": {
-        "title": "Day-of-week pattern"
+        "title": "Day-of-week pattern",
+        "description": "Average spend by day of week across the selected range."
       },
       "recurring": {
         "title": "Recurring charges",
+        "description": "Recurring charges detected from your transaction history.",
         "empty": "No recurring charges in this range"
       }
     },

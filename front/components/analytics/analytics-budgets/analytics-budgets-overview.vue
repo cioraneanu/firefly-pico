@@ -1,6 +1,18 @@
 <template>
   <van-cell-group inset>
-    <div class="van-cell-group-title">{{ $t('analytics.budgets.overview.title') }}:</div>
+    <div class="van-cell-group-title flex-center-vertical">
+      <div class="flex-1">{{ $t('analytics.budgets.overview.title') }}:</div>
+      <van-popover v-model:show="showDescriptionPopover" placement="bottom-end">
+        <div class="text-size-12 p-10" style="max-width: 280px">{{ $t('analytics.budgets.overview.description') }}</div>
+        <template #reference>
+          <button type="button" class="app-button-icon">
+            <app-icon :icon="TablerIconConstants.settingsAbout" :size="18" />
+          </button>
+        </template>
+      </van-popover>
+    </div>
+
+    <div v-if="budgets.length > 0" class="text-size-12 analytics-budgets-axis-caption ml-15 mr-15 mb-2">{{ `${$t('analytics.axis.amount')} (${analyticsStore.currencyCode})` }}</div>
 
     <div v-if="budgets.length === 0" class="text-size-12 analytics-budgets-empty ml-15 mr-15 mb-2">{{ $t('analytics.budgets.overview.no_budgets') }}</div>
 
@@ -35,11 +47,14 @@ import RouteConstants from '~/constants/RouteConstants.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
 import { getExcludedTransactionUrl } from '~/utils/DashboardUtils'
 import Budget from '~/models/Budget.js'
+import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { useAnalyticsStore } from '~/stores/analyticsStore'
 import { useAnalyticsRange } from '~/composables/useAnalyticsRange'
 
 const analyticsStore = useAnalyticsStore()
 const { months, range } = useAnalyticsRange()
+
+const showDescriptionPopover = ref(false)
 
 // Which panels are open — drives BOTH the van-collapse visual state and, via the v-if inside each
 // panel below, whether that budget's app-chart-bars-target (and its uPlot instance) is mounted at
@@ -56,11 +71,7 @@ const expanded = ref([])
 watch(expanded, async (ids) => {
   if (ids.length === 0) return
   const { mapWithConcurrency } = await import('~/utils/ConcurrencyUtils.js')
-  await mapWithConcurrency(
-    ids,
-    (id) => analyticsStore.fetchBudgetLimitsForBudget(id, range.value.start, range.value.end),
-    { concurrency: 2 }
-  )
+  await mapWithConcurrency(ids, (id) => analyticsStore.fetchBudgetLimitsForBudget(id, range.value.start, range.value.end), { concurrency: 2 })
 })
 
 // budgetList/currentBudgetLimits are fetched centrally by analytics.vue's own range watcher
@@ -103,6 +114,10 @@ const onMonthSelect = async (budgetId, { monthKey }) => {
 }
 
 .analytics-budgets-interval {
+  color: var(--semi-black);
+}
+
+.analytics-budgets-axis-caption {
   color: var(--semi-black);
 }
 </style>

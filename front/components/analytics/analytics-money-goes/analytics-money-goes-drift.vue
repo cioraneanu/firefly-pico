@@ -21,6 +21,7 @@
     <div v-else-if="analyticsStore.isAmountsHidden" class="analytics-money-goes-drift-redacted ml-15 mr-15 mb-2" />
 
     <div v-else class="display-flex flex-column ml-15 mr-15">
+      <div class="text-size-12 analytics-axis-caption mb-2">{{ `${$t('analytics.axis.amount')} (${analyticsStore.currencyCode}) / mo` }}</div>
       <table>
         <tr v-for="row in displayRows" :key="row.id" class="analytics-money-goes-row" :class="{ 'cursor-pointer': row.id !== 'other' }" @click="onRowClick(row)">
           <td style="width: 1%">
@@ -111,5 +112,9 @@ const onRowClick = async (row) => {
   height: 80px;
   border-radius: 8px;
   background: repeating-linear-gradient(45deg, var(--viz-grid), var(--viz-grid) 6px, transparent 6px, transparent 12px);
+}
+
+.analytics-axis-caption {
+  color: var(--semi-black);
 }
 </style>
