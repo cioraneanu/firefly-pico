@@ -97,6 +97,46 @@ export function buildAnalyticsFilterPlan(filterState) {
   return { simpleFragments, fanOutGroups }
 }
 
+// Firefly's `{field}_is`/`-{field}_is` query operators match at the TRANSACTION-GROUP level
+// (confirmed against OperatorQuerySearch.php's GroupCollector::setBudget()/setCategory() calls) —
+// once ANY split/journal in a group matches, the API returns the WHOLE group, every split,
+// including siblings that don't themselves satisfy the filter (e.g. a multi-line purchase split
+// across two different budgets, only one of which was selected). buildMonthlyFact must re-check
+// each split against the SAME active filter before attributing it to a by* breakdown map, or a
+// sibling split leaks in under the wrong (or no) budget/category/tag/account. Deliberately
+// id-based, not name-based like the query-fragment builders above — a split's own category_id/
+// budget_id/tags/source_id/destination_id are already raw ids, no display-name matching needed.
+function splitFieldIds(split, dimensionKey) {
+  switch (dimensionKey) {
+    case 'category':
+      return split.category_id != null ? [String(split.category_id)] : []
+    case 'budget':
+      return split.budget_id != null ? [String(split.budget_id)] : []
+    case 'tag':
+      return (split.tags ?? []).filter(Boolean).map((tag) => String(tag.id))
+    case 'account':
+      return [split.source_id, split.destination_id].filter((id) => id != null).map(String)
+    default:
+      return []
+  }
+}
+
+// filterState: same shape as buildAnalyticsFilterPlan's param. AND across dimensions (matching
+// Firefly's query-string AND-combination); within one dimension, include mode is OR across
+// selected values, exclude mode is AND-NOT across them — same semantics buildDimensionQuery's
+// fragments already express server-side, just re-applied per split rather than per group.
+export function splitMatchesAnalyticsFilters(split, filterState) {
+  for (const dimensionKey of analyticsFilterDimensionKeys) {
+    const { selected, mode } = filterState?.[dimensionKey] ?? {}
+    if (!selected || selected.length === 0) continue
+    const selectedIds = new Set(selected.map((item) => String(item.id)))
+    const splitIds = splitFieldIds(split, dimensionKey)
+    const intersects = splitIds.some((id) => selectedIds.has(id))
+    if (mode === analyticsFilterModes.exclude ? intersects : !intersects) return false
+  }
+  return true
+}
+
 // Cartesian product across fan-out dimensions — each combo is an array of query fragments (one per
 // fan-out dimension) to AND together alongside simpleFragments for one sub-request.
 export function expandFanOutCombos(fanOutGroups) {

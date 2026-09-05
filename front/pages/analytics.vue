@@ -21,6 +21,10 @@
         <analytics-budgets-overview />
         <analytics-budgets-burn-rate />
         <analytics-budgets-overspend />
+        <analytics-behavior-merchants />
+        <analytics-behavior-weekday />
+        <analytics-behavior-recurring />
+        <analytics-behavior-projection />
       </div>
 
       <app-card-info v-if="analyticsStore.failedMonthKeys.length > 0">
@@ -45,8 +49,14 @@ const { range, months, priorMonths } = useAnalyticsRange()
 const onRefresh = async () => {
   await Promise.all([
     analyticsStore.refresh({ start: priorMonths.value[0]?.start ?? range.value.start, end: range.value.end }),
+    // Both cheap and range-independent (budgets aren't range-scoped; "today" is always a single-
+    // day window) — safe to kick off centrally so every budgets section has them ready sooner.
+    // The WIDE all-budgets/whole-range budget-limit fetch is deliberately NOT triggered here — it
+    // was the actual source of reported timeouts on wider ranges (Firefly computes `spent` per
+    // limit it returns, so cost scales with months x budgets), and only the overspend table
+    // genuinely needs that shape; it fetches it for itself now (analytics-budgets-overspend.vue).
     analyticsStore.fetchBudgetList(),
-    analyticsStore.fetchBudgetLimitsForRange(range.value.start, range.value.end),
+    analyticsStore.fetchCurrentBudgetLimits(),
   ])
 }
 

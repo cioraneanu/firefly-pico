@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { buildDimensionQuery, buildAnalyticsFilterPlan, expandFanOutCombos, fanOutComboCount, exceedsFanOutCap, analyticsFilterModes } from '~/utils/AnalyticsFilterUtils'
+import { buildDimensionQuery, buildAnalyticsFilterPlan, expandFanOutCombos, fanOutComboCount, exceedsFanOutCap, splitMatchesAnalyticsFilters, analyticsFilterModes } from '~/utils/AnalyticsFilterUtils'
 
 const category = (id, name) => ({ id, attributes: { name } })
 const budget = (id, name) => ({ id, attributes: { name } })
@@ -86,5 +86,60 @@ describe('exceedsFanOutCap', () => {
     ]
     expect(exceedsFanOutCap(groups, 12)).toBe(true) // 16 combos > 12
     expect(exceedsFanOutCap(groups, 20)).toBe(false)
+  })
+})
+
+describe('splitMatchesAnalyticsFilters', () => {
+  // Firefly's {field}_is query operators match at the GROUP level — once any one split in a
+  // group matches, the whole group (every split) comes back over the wire. These tests cover the
+  // client-side re-check that keeps a non-matching sibling split from leaking into a by* map.
+  const split = ({ categoryId = null, budgetId = null, tags = [], sourceId = null, destinationId = null } = {}) => ({
+    category_id: categoryId,
+    budget_id: budgetId,
+    tags,
+    source_id: sourceId,
+    destination_id: destinationId,
+  })
+
+  it('passes every split when no filter is active', () => {
+    expect(splitMatchesAnalyticsFilters(split(), {})).toBe(true)
+    expect(splitMatchesAnalyticsFilters(split({ budgetId: 'b-1' }), null)).toBe(true)
+  })
+
+  it('include mode: rejects a sibling split under a DIFFERENT budget than the one selected', () => {
+    const filterState = { budget: { selected: [budget('b-1', 'Groceries')], mode: analyticsFilterModes.include } }
+    expect(splitMatchesAnalyticsFilters(split({ budgetId: 'b-1' }), filterState)).toBe(true)
+    expect(splitMatchesAnalyticsFilters(split({ budgetId: 'b-2' }), filterState)).toBe(false)
+    expect(splitMatchesAnalyticsFilters(split({ budgetId: null }), filterState)).toBe(false)
+  })
+
+  it('include mode with 2+ selected values is an OR across them (matches the fan-out combos)', () => {
+    const filterState = { category: { selected: [category('c-1', 'A'), category('c-2', 'B')], mode: analyticsFilterModes.include } }
+    expect(splitMatchesAnalyticsFilters(split({ categoryId: 'c-1' }), filterState)).toBe(true)
+    expect(splitMatchesAnalyticsFilters(split({ categoryId: 'c-2' }), filterState)).toBe(true)
+    expect(splitMatchesAnalyticsFilters(split({ categoryId: 'c-3' }), filterState)).toBe(false)
+  })
+
+  it('exclude mode rejects a split matching an excluded value, passes everything else', () => {
+    const filterState = { tag: { selected: [tag('t-1', 'Vacation')], mode: analyticsFilterModes.exclude } }
+    expect(splitMatchesAnalyticsFilters(split({ tags: [{ id: 't-1' }] }), filterState)).toBe(false)
+    expect(splitMatchesAnalyticsFilters(split({ tags: [{ id: 't-2' }] }), filterState)).toBe(true)
+    expect(splitMatchesAnalyticsFilters(split({ tags: [] }), filterState)).toBe(true)
+  })
+
+  it('account matches on either source or destination', () => {
+    const filterState = { account: { selected: [account('a-1', 'Checking')], mode: analyticsFilterModes.include } }
+    expect(splitMatchesAnalyticsFilters(split({ sourceId: 'a-1', destinationId: 'a-9' }), filterState)).toBe(true)
+    expect(splitMatchesAnalyticsFilters(split({ sourceId: 'a-9', destinationId: 'a-1' }), filterState)).toBe(true)
+    expect(splitMatchesAnalyticsFilters(split({ sourceId: 'a-8', destinationId: 'a-9' }), filterState)).toBe(false)
+  })
+
+  it('ANDs across multiple active dimensions', () => {
+    const filterState = {
+      budget: { selected: [budget('b-1', 'Groceries')], mode: analyticsFilterModes.include },
+      category: { selected: [category('c-1', 'Food')], mode: analyticsFilterModes.include },
+    }
+    expect(splitMatchesAnalyticsFilters(split({ budgetId: 'b-1', categoryId: 'c-1' }), filterState)).toBe(true)
+    expect(splitMatchesAnalyticsFilters(split({ budgetId: 'b-1', categoryId: 'c-2' }), filterState)).toBe(false)
   })
 })

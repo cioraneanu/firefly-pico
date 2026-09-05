@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { get } from 'lodash-es'
-import { differenceInCalendarDays } from 'date-fns'
+import { differenceInCalendarDays, addDays } from 'date-fns'
 import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import { useProfileStore } from '~/stores/profileStore'
 import { useDashboardStore } from '~/stores/dashboardStore'
 import { useCurrencyStore } from '~/stores/currencyStore'
+import { useRecurringTransactionStore } from '~/stores/recurringTransactionStore'
 import TransactionRepository from '~/repository/TransactionRepository'
 import TransactionTransformer from '~/transformers/TransactionTransformer'
 import BudgetRepository from '~/repository/BudgetRepository.js'
@@ -14,15 +15,26 @@ import BudgetTransformer from '~/transformers/BudgetTransformer.js'
 import BudgetLimitTransformer from '~/transformers/BudgetLimitTransformer.js'
 import Budget from '~/models/Budget.js'
 import BudgetLimit from '~/models/BudgetLimit.js'
+import RecurringTransaction from '~/models/RecurringTransaction.js'
 import Currency from '~/models/Currency.js'
 import { convertCurrency } from '~/utils/CurrencyUtils'
 import DateUtils from '~/utils/DateUtils'
 import { getExcludedTransactionFilters } from '~/utils/DashboardUtils'
 import { mapWithConcurrency } from '~/utils/ConcurrencyUtils'
-import { eachFinancialMonth, financialMonthKey, currentFinancialMonth } from '~/utils/DateRangeUtils'
-import { buildMonthlyFact, factFilterHash, assignColorSlots, rankTopNWithOther, rankTopNByMagnitudeWithOther, leastSquaresSlope, budgetSeverity } from '~/utils/AnalyticsUtils'
+import { eachFinancialMonth, financialMonthEnd, financialMonthKey, currentFinancialMonth } from '~/utils/DateRangeUtils'
+import {
+  buildMonthlyFact,
+  factFilterHash,
+  assignColorSlots,
+  rankTopNWithOther,
+  rankTopNByMagnitudeWithOther,
+  leastSquaresSlope,
+  budgetSeverity,
+  quartiles,
+  detectRecurringCandidates,
+} from '~/utils/AnalyticsUtils'
 import { seriesColor } from '~/utils/ChartUtils'
-import { buildAnalyticsFilterPlan, buildDimensionQuery, expandFanOutCombos, analyticsFilterModes } from '~/utils/AnalyticsFilterUtils'
+import { buildAnalyticsFilterPlan, expandFanOutCombos, splitMatchesAnalyticsFilters } from '~/utils/AnalyticsFilterUtils'
 import { useAnalyticsFilters } from '~/composables/useAnalyticsFilters'
 import {
   ANALYTICS_SCHEMA_VERSION,
@@ -58,16 +70,50 @@ export const useAnalyticsStore = defineStore('analytics', () => {
   // one cheap request for the whole range (not a per-month fan-out), so there's no payoff to
   // persisting them across reloads the way the transaction fan-out has.
   const budgetList = ref([])
+  // The FULL range x ALL budgets fetch — expensive on Firefly's own side (it computes `spent` per
+  // limit it returns, so this scales with months x budgets x limit-cadence) and only the overspend
+  // table actually needs the whole thing; kept as its own state, fetched only by that section.
   const budgetLimitList = ref([])
   const isLoadingBudgetLimits = ref(false)
   // Dedupes concurrent fetchBudgetList() calls (e.g. the page's own onRefresh and the burn-rate
   // section's self-sufficient fetch both wanting it at once) into a single in-flight request.
   let budgetListFetchPromise = null
+  // TODAY only, all budgets — what the accordion's meters and the burn-rate eligibility ranking
+  // both actually need ("current status"), independent of however wide the page's selected range
+  // is. Kept separate from budgetLimitList so those two sections never have to wait on (or pay
+  // the cost of) the full-range fetch just to show "today."
+  const currentBudgetLimits = ref([])
+  const isLoadingCurrentBudgetLimits = ref(false)
+  let currentBudgetLimitsPromise = null
+  // Per-budget, scoped to exactly one budget's limits over the page's range — what the accordion's
+  // per-budget vs-limit chart needs, fetched lazily only when that budget's panel is expanded.
+  // Keyed by `${budgetId}_${startStr}_${endStr}` so a range change naturally invalidates it rather
+  // than serving stale data for the old range. This (plus currentBudgetLimits above) is what
+  // replaced the original design's single eager ALL-budgets/WHOLE-range fetch — that fetch was the
+  // actual source of the reported timeouts on a wide range: Firefly has to compute `spent` for
+  // every limit record it returns, so "all budgets x 6 months" was doing far more server-side work
+  // than any one screen actually needed at once.
+  const budgetLimitsByBudget = ref({})
   // Derived from a scoped, NOT-persisted raw-transaction fetch (see fetchCurrentPeriodBudgetPacing)
   // — day-granularity data MonthlyFact doesn't carry. Computed and discarded, same "never persist
   // raw transactions" rule Phase 1 established, just held in a plain ref instead of factCache.
   const currentPeriodBudgetPacing = ref({ totalDays: 0, series: [], isEligible: false, periodStart: null })
   const isLoadingBudgetPacing = ref(false)
+
+  // ----- Phase 4b — Behaviour. Month-in-progress projection needs day-granularity data no
+  // MonthlyFact carries — same "scoped, NOT-persisted raw fetch, computed and discarded" pattern
+  // as currentPeriodBudgetPacing above, just its own plain ref instead of factCache.
+  const monthProjection = ref({
+    isLoaded: false,
+    periodStart: null,
+    daysElapsed: 0,
+    daysInMonth: 0,
+    spentSoFar: 0,
+    regularDailyRate: 0,
+    oneOffTotal: 0,
+    projectedTotal: 0,
+  })
+  const isLoadingMonthProjection = ref(false)
 
   // ----- Getters
 
@@ -383,8 +429,11 @@ export const useAnalyticsStore = defineStore('analytics', () => {
   }
 
   // The limit period covering TODAY — what the per-budget meter and burn-rate eligibility ranking
-  // both mean by "current."
-  function budgetSeverityStatus(budgetId, limitsSource = budgetLimitList.value) {
+  // both mean by "current." Defaults to the small currentBudgetLimits fetch (today only, all
+  // budgets), NOT budgetLimitList (the expensive whole-range fetch) — callers that already have a
+  // wider limits list on hand (e.g. the overspend table iterating budgetVsLimitSeries) can still
+  // pass it explicitly, but the common case (an accordion meter) never needs more than today.
+  function budgetSeverityStatus(budgetId, limitsSource = currentBudgetLimits.value) {
     const today = new Date()
     const limits = limitsOverlapping(budgetId, today, today, limitsSource)
     if (limits.length === 0) return { percent: null, severity: null, limit: null, spent: null, intervalLabel: null }
@@ -397,9 +446,12 @@ export const useAnalyticsStore = defineStore('analytics', () => {
 
   // One row per month in range — actual/limit null when no limit period overlaps that month
   // (uPlot renders a null data point as a gap, same convention as every other Phase 3c chart).
-  function budgetVsLimitSeries(budgetId, months) {
+  // limitsSource defaults to budgetLimitList (the overspend table's use case — it needs every
+  // budget over the whole range anyway); the accordion's per-budget chart instead passes its own
+  // lazily-fetched, single-budget-scoped list (see budgetLimitsByBudget above).
+  function budgetVsLimitSeries(budgetId, months, limitsSource = budgetLimitList.value) {
     return months.map((month) => {
-      const limits = limitsOverlapping(budgetId, month.start, month.end)
+      const limits = limitsOverlapping(budgetId, month.start, month.end, limitsSource)
       if (limits.length === 0) return { key: month.key, start: month.start, end: month.end, actual: null, limit: null, intervalLabel: null }
       const actual = convertBudgetAmount(
         limits.reduce((sum, l) => sum + Math.abs(get(l, 'attributes.spent') ?? 0), 0),
@@ -449,40 +501,39 @@ export const useAnalyticsStore = defineStore('analytics', () => {
       const today = new Date()
 
       // Deliberately self-sufficient — awaits its OWN prerequisites rather than reading the
-      // page-range-scoped budgetList/budgetLimitList populated by analytics.vue's onRefresh. Vue
-      // mounts children before a parent's onMounted runs, so this section's onMounted (a child of
-      // analytics.vue) would otherwise reliably fire BEFORE that fetch even starts, always seeing
-      // an empty budgetList/budgetLimitList on first load — not a rare race, a guaranteed one. It
-      // also sidesteps a real correctness gap that shared list would have: if the page's selected
-      // range is a custom range that doesn't include today, budgetLimitList would never contain
-      // today's limit at all, even though burn-rate pacing is always about "right now."
+      // page-range-scoped budgetList populated by analytics.vue's onRefresh. Vue mounts children
+      // before a parent's onMounted runs, so this section's onMounted (a child of analytics.vue)
+      // would otherwise reliably fire BEFORE that fetch even starts, always seeing an empty
+      // budgetList on first load — not a rare race, a guaranteed one. fetchCurrentBudgetLimits is
+      // the same small "today, all budgets" fetch the accordion's meters use — shared and
+      // promise-deduped, so both sections mounting together only cost one request, not two.
       await fetchBudgetList()
-      const currentLimits = await fetchBudgetLimitsRaw(start, today)
+      await fetchCurrentBudgetLimits()
 
-      const eligibleBudgets = budgetList.value.filter((budget) => Budget.isActive(budget) && budgetSeverityStatus(budget.id, currentLimits).limit > 0)
+      const eligibleBudgets = budgetList.value.filter((budget) => Budget.isActive(budget) && budgetSeverityStatus(budget.id).limit > 0)
       if (eligibleBudgets.length === 0) {
         currentPeriodBudgetPacing.value = { totalDays: 0, series: [], isEligible: false, periodStart: start }
         return
       }
 
-      const limitById = Object.fromEntries(eligibleBudgets.map((b) => [b.id, budgetSeverityStatus(b.id, currentLimits).limit]))
+      const limitById = Object.fromEntries(eligibleBudgets.map((b) => [b.id, budgetSeverityStatus(b.id).limit]))
       const { topIds, otherIds } = rankTopNWithOther(limitById, ANALYTICS_RANKED_TOP_N)
       const topBudgets = topIds.map((id) => eligibleBudgets.find((b) => String(b.id) === String(id)))
       const otherBudgets = otherIds.map((id) => eligibleBudgets.find((b) => String(b.id) === String(id)))
 
-      const baseFiltersParts = [`date_after:${DateUtils.dateToString(start)}`, `date_before:${DateUtils.dateToString(today)}`, ...getExcludedTransactionFilters()]
-      // buildDimensionQuery only returns fanOutValues for 2+ included values — a single eligible
-      // budget takes the "fragments" branch instead (one safe query_is:"Name" fragment, no fan-out
-      // needed), so both branches have to be handled here, not just the fan-out one.
-      const { fragments, fanOutValues } = buildDimensionQuery('budget', [...topBudgets, ...otherBudgets], analyticsFilterModes.include)
-      const combos = fanOutValues ? fanOutValues.map((value) => [value]) : [fragments]
-
-      const settled = await mapWithConcurrency(combos, (combo) => fetchFilteredPages([...baseFiltersParts, ...combo], ANALYTICS_SUBQUERY_CONCURRENCY), { concurrency: ANALYTICS_SUBQUERY_CONCURRENCY })
-      const rawById = new Map()
-      for (const { value } of settled) {
-        for (const item of value?.data ?? []) rawById.set(item.id, item)
-      }
-      const transformed = TransactionTransformer.transformFromApiList([...rawById.values()])
+      // One request (per analytics-filter combo, if any fan-out is active) for the whole (small,
+      // <=~31 day) date window — no PER-BUDGET fan-out beyond that. Every split gets bucketed by
+      // split.budget_id client-side below regardless, so a per-eligible-budget query would only
+      // have narrowed what came back over the wire, at the cost of N separate round-trips to
+      // Firefly (one per eligible budget, at ANALYTICS_SUBQUERY_CONCURRENCY=2 — this was the
+      // actual source of the reported 10s timeouts: 10+ budgets meant 10+ sequential-ish
+      // sub-requests for a chart that only ever needed one). This DOES still apply the page's own
+      // analytics dimensional filter (category/tag/budget/account, Part 3) via
+      // fetchFilteredTransactionsForRange — a prior version of this function skipped that
+      // entirely, so burn-rate pacing silently ignored the filter the rest of the page respects.
+      const { data } = await fetchFilteredTransactionsForRange(start, today)
+      const transformed = TransactionTransformer.transformFromApiList(data)
+      const filterSnapshot = analyticsFilterSnapshot()
 
       const totalDays = Math.max(1, differenceInCalendarDays(today, start) + 1)
       const dayTotals = {} // budgetId -> [day0Amount, day1Amount, ...], in that budget's own currency
@@ -492,6 +543,10 @@ export const useAnalyticsStore = defineStore('analytics', () => {
         for (const split of get(transaction, 'attributes.transactions', [])) {
           const budgetId = split.budget_id
           if (budgetId == null || !(budgetId in dayTotals)) continue
+          // Firefly's *_is operators match at the GROUP level — a sibling split in the same
+          // returned group can still fail to match the active filter (e.g. a different category
+          // on the same multi-line purchase). Re-checked per split, same as buildMonthlyFact.
+          if (!splitMatchesAnalyticsFilters(split, filterSnapshot)) continue
           const dayIndex = Math.min(totalDays - 1, Math.max(0, differenceInCalendarDays(split.date, start)))
           dayTotals[budgetId][dayIndex] += convertBudgetAmount(parseFloat(split.amount) || 0, budgetId)
         }
@@ -523,6 +578,143 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     }
   }
 
+  // ----- Phase 4b — Behaviour (top merchants, day-of-week, detected recurring, month-in-progress
+  // projection). Merchants/weekday/recurring all reduce over the already-cached factCache, same as
+  // Where-the-money-goes above — no new fetching. The projection needs its own scoped raw fetch
+  // (fetchMonthProjection, below).
+
+  function merchantTotals(months) {
+    const keys = new Set(months.map((month) => month.key))
+    const totals = {} // {[merchantId]: {amount, count}}
+    for (const [key, fact] of Object.entries(factCache.value)) {
+      if (!keys.has(key)) continue
+      for (const [id, entry] of Object.entries(fact.byMerchant ?? {})) {
+        totals[id] ??= { amount: 0, count: 0 }
+        totals[id].amount += sumConverted(entry.amount)
+        totals[id].count += entry.count
+      }
+    }
+    return totals
+  }
+
+  function weekdayTotals(months) {
+    const keys = new Set(months.map((month) => month.key))
+    const totals = new Array(7).fill(0)
+    for (const [key, fact] of Object.entries(factCache.value)) {
+      if (!keys.has(key)) continue
+      for (let day = 0; day < 7; day++) totals[day] += sumConverted(fact.byWeekday?.[day])
+    }
+    return totals
+  }
+
+  // {[merchantId]: [{monthKey, amount}]} — only months where that merchant had EXACTLY ONE split
+  // that month. A month with count !== 1 can't tell "one $12 charge" apart from "two $6 charges"
+  // from the monthly aggregate alone, so it's omitted here rather than guessed at — the caller
+  // (detectRecurringCandidates) only ever sees unambiguous months.
+  function recurringMerchantOccurrences(months) {
+    const keys = new Set(months.map((month) => month.key))
+    const byMerchant = {}
+    for (const [key, fact] of Object.entries(factCache.value)) {
+      if (!keys.has(key)) continue
+      for (const [id, entry] of Object.entries(fact.byMerchant ?? {})) {
+        if (id === 'none' || entry.count !== 1) continue
+        byMerchant[id] ??= []
+        byMerchant[id].push({ monthKey: key, amount: sumConverted(entry.amount) })
+      }
+    }
+    return byMerchant
+  }
+
+  // Every ACTIVE Firefly recurrence whose destination account had spend within the selected range
+  // — "marked, not re-detected" (ANALYTICS_PLAN.md Part 2 §6). In-range-only, matching every other
+  // range-scoped section on the page, rather than every active recurrence regardless of the range.
+  function knownRecurringRows(months) {
+    const recurringStore = useRecurringTransactionStore()
+    const merchantTotalsInRange = dimensionTotals(months, 'byMerchant')
+    return Object.values(recurringStore.recurringTransactionDictionary)
+      .filter((entry) => RecurringTransaction.isActive(entry))
+      .map((entry) => ({ merchantId: get(entry, 'attributes.accountDestination.id'), recurrence: entry }))
+      .filter((row) => row.merchantId != null && row.merchantId in merchantTotalsInRange)
+  }
+
+  // Heuristic candidates minus anything Firefly already tracks as a real recurrence, so a known
+  // subscription is never double-listed under both "known" and "detected".
+  function detectedRecurringRows(months) {
+    const knownIds = new Set(knownRecurringRows(months).map((row) => String(row.merchantId)))
+    const occurrences = recurringMerchantOccurrences(months)
+    return detectRecurringCandidates(occurrences).filter((candidate) => !knownIds.has(String(candidate.merchantId)))
+  }
+
+  // Average expense over every COMPLETE (non-current) month in the given range — reuses
+  // periodAverages()' own isLoaded filtering, additionally excluding the in-progress month so the
+  // month-in-progress projection is never compared against itself.
+  function historicalMonthlyAverage(months) {
+    const firstDayOfMonth = profileStore.dashboard.firstDayOfMonth
+    const currentKey = financialMonthKey(currentFinancialMonth(new Date(), firstDayOfMonth).start)
+    const completeMonths = months.filter((month) => month.key !== currentKey)
+    const { avgExpense, monthsLoaded } = periodAverages(completeMonths)
+    return { avgExpense, monthsLoaded }
+  }
+
+  // Scoped to [current financial month start, today], never persisted — mirrors
+  // fetchCurrentPeriodBudgetPacing's exact pattern above. Splits are bucketed via Tukey's method
+  // (quartiles(), AnalyticsUtils.js): anything above Q3 + 1.5*IQR is a one-off (e.g. rent on day 1),
+  // added flat to the total rather than folded into the daily rate — the Streamlit build's fix,
+  // ported here (ANALYTICS_PLAN.md Part 2 §6/Context). regularDailyRate explicitly excludes
+  // one-offs, so callers must label it as such (rate * days !== spent so far is expected, not a bug).
+  async function fetchMonthProjection() {
+    isLoadingMonthProjection.value = true
+    try {
+      const firstDayOfMonth = profileStore.dashboard.firstDayOfMonth
+      const { start } = currentFinancialMonth(new Date(), firstDayOfMonth)
+      const today = new Date()
+      const daysElapsed = Math.max(1, differenceInCalendarDays(today, start) + 1)
+      const daysInMonth = differenceInCalendarDays(financialMonthEnd(start), start) + 1
+
+      // Applies the page's own analytics dimensional filter (category/tag/budget/account, Part 3)
+      // via fetchFilteredTransactionsForRange — a prior version of this function fetched
+      // unfiltered, so "this month so far" silently ignored whatever filter the rest of the page
+      // respects.
+      const { data } = await fetchFilteredTransactionsForRange(start, today)
+      const transformed = TransactionTransformer.transformFromApiList(data)
+      const filterSnapshot = analyticsFilterSnapshot()
+
+      // Per-split, not per-group — matches the codebase's established rule (dashboardStore's
+      // dashboardExpensesByCategory precedent, ANALYTICS_PLAN.md Part 3) that attributing a whole
+      // split-group's amount to a single line item overstates it.
+      const amounts = []
+      for (const transaction of transformed) {
+        if (get(transaction, 'attributes.transactions.0.type.code') !== 'expense') continue
+        for (const split of get(transaction, 'attributes.transactions', [])) {
+          // Firefly's *_is operators match at the GROUP level — a sibling split in the same
+          // returned group can still fail to match the active filter. Re-checked per split, same
+          // as buildMonthlyFact/fetchCurrentPeriodBudgetPacing.
+          if (!splitMatchesAnalyticsFilters(split, filterSnapshot)) continue
+          amounts.push(convertCurrency(parseFloat(split.amount) || 0, split.currency_code, currencyCode.value))
+        }
+      }
+
+      const q = quartiles(amounts)
+      const threshold = q ? q.q3 + 1.5 * q.iqr : Infinity
+      const oneOffTotal = amounts.filter((amount) => amount > threshold).reduce((sum, amount) => sum + amount, 0)
+      const regularTotal = amounts.filter((amount) => amount <= threshold).reduce((sum, amount) => sum + amount, 0)
+      const regularDailyRate = regularTotal / daysElapsed
+
+      monthProjection.value = {
+        isLoaded: true,
+        periodStart: start,
+        daysElapsed,
+        daysInMonth,
+        spentSoFar: regularTotal + oneOffTotal,
+        regularDailyRate,
+        oneOffTotal,
+        projectedTotal: regularDailyRate * daysInMonth + oneOffTotal,
+      }
+    } finally {
+      isLoadingMonthProjection.value = false
+    }
+  }
+
   // ----- Actions
 
   // One sub-request's worth of getAllPages, given a complete filtersParts array (base date/exclusion
@@ -539,44 +731,56 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     })
   }
 
+  // Shared by fetchMonth AND every other scoped raw-transaction fetch that needs the CURRENT
+  // analytics dimensional filter applied (burn-rate pacing, month-in-progress projection) — folds
+  // in date range + persistent exclusions + the analytics filter's simple fragments, fans out one
+  // sub-request per combo when a 2+-selected name-based dimension needs it (Part 3), and merges +
+  // dedupes the raw JSON:API groups by id. Previously this fan-out/merge logic lived only inside
+  // fetchMonth, which is why burn-rate/projection's own ad-hoc single fetchFilteredPages() calls
+  // silently ignored the analytics filter entirely — extracted here so there is exactly one place
+  // that knows how to apply it, and every scoped fetch gets it for free.
+  //
+  // Returns RAW (untransformed) groups — Firefly's *_is operators match at the group level, so a
+  // returned group's OTHER splits can still fail to match the filter (splitMatchesAnalyticsFilters
+  // must be applied per split by the caller; buildMonthlyFact already does this for fetchMonth).
+  async function fetchFilteredTransactionsForRange(start, end, { concurrency = ANALYTICS_FETCH_CONCURRENCY } = {}) {
+    const baseFiltersParts = [`date_after:${DateUtils.dateToString(start)}`, `date_before:${DateUtils.dateToString(end)}`, ...getExcludedTransactionFilters()]
+
+    const { simpleFragments, fanOutGroups } = buildAnalyticsFilterPlan(analyticsFilterSnapshot())
+    const filtersParts = [...baseFiltersParts, ...simpleFragments]
+    const combos = expandFanOutCombos(fanOutGroups) // [[]] when no fan-out needed — one combo, zero extra fragments
+
+    // Scale page concurrency down as combos grow, so total in-flight requests stay roughly
+    // bounded regardless of how many values are selected — see ANALYTICS_PLAN.md Part 3.
+    const subConcurrency = Math.max(1, Math.floor(concurrency / combos.length))
+    const settled = await mapWithConcurrency(combos, (combo) => fetchFilteredPages([...filtersParts, ...combo], subConcurrency), { concurrency: ANALYTICS_SUBQUERY_CONCURRENCY })
+
+    // Merge sub-requests: AND isComplete (any partial combo marks the whole range incomplete),
+    // tag failedPages with which combo produced them (page numbers aren't globally unique once a
+    // range has N sub-queries each with their own page 1..k), and dedupe raw groups by id (a
+    // group can appear in >1 combo if it matches multiple included values).
+    let isComplete = true
+    const failedPages = []
+    const rawById = new Map()
+    for (const { value, error, index } of settled) {
+      if (error || !value) {
+        isComplete = false
+        failedPages.push({ combo: index, page: null, error })
+        continue
+      }
+      isComplete = isComplete && value.isComplete
+      for (const page of value.failedPages ?? []) failedPages.push({ combo: index, page })
+      for (const item of value.data ?? []) rawById.set(item.id, item)
+    }
+    return { data: [...rawById.values()], isComplete, failedPages }
+  }
+
   async function fetchMonth({ key, start, end }) {
     monthStatus.value[key] = { state: 'loading', error: null, failedPages: [], fetchedAt: null }
 
     try {
-      const baseFiltersParts = [`date_after:${DateUtils.dateToString(start)}`, `date_before:${DateUtils.dateToString(end)}`, ...getExcludedTransactionFilters()]
-
-      // Analytics-only dimensional filter (Part 3) — excludes/single-includes/account-includes
-      // fold straight into baseFiltersParts; 2+ included category/tag/budget values can't be
-      // expressed as one safe query fragment, so they fan out into one sub-request per combo.
-      const { simpleFragments, fanOutGroups } = buildAnalyticsFilterPlan(analyticsFilterSnapshot())
-      const filtersParts = [...baseFiltersParts, ...simpleFragments]
-      const combos = expandFanOutCombos(fanOutGroups) // [[]] when no fan-out needed — one combo, zero extra fragments
-
       const t0 = performance.now()
-      // Scale month-level page concurrency down as combos grow, so total in-flight requests stay
-      // roughly bounded regardless of how many values are selected — see ANALYTICS_PLAN.md Part 3.
-      const monthConcurrency = Math.max(1, Math.floor(ANALYTICS_FETCH_CONCURRENCY / combos.length))
-
-      const settled = await mapWithConcurrency(combos, (combo) => fetchFilteredPages([...filtersParts, ...combo], monthConcurrency), { concurrency: ANALYTICS_SUBQUERY_CONCURRENCY })
-
-      // Merge sub-requests: AND isComplete (any partial combo marks the whole month incomplete,
-      // same severity as today), tag failedPages with which combo produced them (page numbers
-      // aren't globally unique once a month has N sub-queries each with their own page 1..k), and
-      // dedupe raw groups by id (a group can appear in >1 combo if it matches multiple included values).
-      let isComplete = true
-      const failedPages = []
-      const rawById = new Map()
-      for (const { value, error, index } of settled) {
-        if (error || !value) {
-          isComplete = false
-          failedPages.push({ combo: index, page: null, error })
-          continue
-        }
-        isComplete = isComplete && value.isComplete
-        for (const page of value.failedPages ?? []) failedPages.push({ combo: index, page })
-        for (const item of value.data ?? []) rawById.set(item.id, item)
-      }
-      const data = [...rawById.values()]
+      const { data, isComplete, failedPages } = await fetchFilteredTransactionsForRange(start, end)
       const wallMs = performance.now() - t0
 
       const transformed = TransactionTransformer.transformFromApiList(data)
@@ -587,6 +791,11 @@ export const useAnalyticsStore = defineStore('analytics', () => {
         tagsWidgetModeOnlyRootTag: dashboardStore.tagsWidgetModeOnlyRootTag,
         isComplete,
         failedPages,
+        // Firefly's *_is query operators match at the group level and return every split in a
+        // matching group — re-checked here per split so a sibling split under a different
+        // budget/category/tag/account never leaks into a by* breakdown map. See
+        // AnalyticsFilterUtils.js's splitMatchesAnalyticsFilters for why.
+        analyticsFilters: analyticsFilterSnapshot(),
       })
       fact.fetchedAt = Date.now()
       fact.filterHash = currentFilterHash.value
@@ -632,12 +841,21 @@ export const useAnalyticsStore = defineStore('analytics', () => {
   // fetch but genuinely too tight for a wide analytics range or a budget with many limit periods
   // (the exact bug: a 6-month range timing out at 8000ms). Every other analytics fetch already
   // makes this same override for this same reason (see ANALYTICS_FETCH_TIMEOUT_MS's own comment).
-  async function fetchBudgetLimitsRaw(start, end) {
+  // budgetId narrows the query to one budget (Firefly's own /budget-limits endpoint supports a
+  // budget_id filter) — used by fetchBudgetLimitsForBudget below to keep the per-budget chart's
+  // fetch cheap regardless of how many OTHER budgets exist.
+  async function fetchBudgetLimitsRaw(start, end, budgetId = null) {
     if (!profileStore.budgetsEnabled) return []
+    // Firefly rejects start === end on this endpoint ("start date must be before end date") — a
+    // single-day query has to be expressed as [day, day+1), not [day, day]. Guarded centrally
+    // here, not just at fetchCurrentBudgetLimits's one call site, so no future caller can
+    // reintroduce the same failure.
+    const safeEnd = end <= start ? addDays(start, 1) : end
     const filters = [
       { field: 'start', value: DateUtils.dateToString(start) },
-      { field: 'end', value: DateUtils.dateToString(end) },
+      { field: 'end', value: DateUtils.dateToString(safeEnd) },
     ]
+    if (budgetId != null) filters.push({ field: 'budget_id', value: budgetId })
     const result = await new BudgetLimitRepository().getAllPages({ filters, showLoading: false, timeout: ANALYTICS_FETCH_TIMEOUT_MS })
     return BudgetLimitTransformer.transformFromApiList(result.data)
   }
@@ -661,6 +879,54 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     await budgetListFetchPromise
   }
 
+  // "Today, all budgets" — cheap regardless of the page's selected range, since it's always a
+  // single-day window. Backs the accordion's meters and burn-rate's eligibility ranking; see
+  // budgetSeverityStatus's own comment for why this replaced depending on budgetLimitList.
+  async function fetchCurrentBudgetLimits() {
+    if (!profileStore.budgetsEnabled) {
+      currentBudgetLimits.value = []
+      return
+    }
+    if (!currentBudgetLimitsPromise) {
+      isLoadingCurrentBudgetLimits.value = true
+      const today = new Date()
+      // "Today" is a single calendar day (start === end) — fetchBudgetLimitsRaw widens that to a
+      // real [today, tomorrow) window itself (Firefly rejects start === end). The extra day is
+      // harmless slack here: limitsOverlapping()/budgetSeverityStatus() still only accept a limit
+      // whose OWN interval actually covers today.
+      currentBudgetLimitsPromise = fetchBudgetLimitsRaw(today, today)
+        .then((limits) => {
+          currentBudgetLimits.value = limits
+        })
+        .finally(() => {
+          isLoadingCurrentBudgetLimits.value = false
+          currentBudgetLimitsPromise = null
+        })
+    }
+    await currentBudgetLimitsPromise
+  }
+
+  // One budget, over the given range — what the accordion's per-budget vs-limit chart fetches
+  // lazily on expand, instead of depending on the ALL-budgets/WHOLE-range budgetLimitList. Cached
+  // by (budgetId, range) so re-collapsing/re-expanding the same panel doesn't refetch, but a range
+  // change (a new key) does.
+  async function fetchBudgetLimitsForBudget(budgetId, start, end) {
+    if (!profileStore.budgetsEnabled) return
+    const key = `${budgetId}_${DateUtils.dateToString(start)}_${DateUtils.dateToString(end)}`
+    if (budgetLimitsByBudget.value[key]) return
+    const limits = await fetchBudgetLimitsRaw(start, end, budgetId)
+    budgetLimitsByBudget.value = { ...budgetLimitsByBudget.value, [key]: limits }
+  }
+
+  function budgetLimitsFor(budgetId, start, end) {
+    const key = `${budgetId}_${DateUtils.dateToString(start)}_${DateUtils.dateToString(end)}`
+    return budgetLimitsByBudget.value[key] ?? []
+  }
+
+  // The FULL range x ALL budgets fetch — only the overspend table needs this shape (every budget,
+  // whole range, in one pass) since it can't know in advance which (budget, month) pairs overspent
+  // without checking all of them. Every other Phase 4a consumer was moved off this on purpose (see
+  // budgetLimitList's own comment above) precisely because it's the expensive one.
   async function fetchBudgetLimitsForRange(start, end) {
     if (!profileStore.budgetsEnabled) {
       budgetLimitList.value = []
@@ -701,13 +967,27 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     budgetList,
     budgetLimitList,
     isLoadingBudgetLimits,
+    currentBudgetLimits,
+    isLoadingCurrentBudgetLimits,
+    budgetLimitsByBudget,
     currentPeriodBudgetPacing,
     isLoadingBudgetPacing,
     budgetSeverityStatus,
     budgetVsLimitSeries,
+    budgetLimitsFor,
     budgetOverspendRows,
     fetchBudgetList,
     fetchBudgetLimitsForRange,
+    fetchCurrentBudgetLimits,
+    fetchBudgetLimitsForBudget,
     fetchCurrentPeriodBudgetPacing,
+    monthProjection,
+    isLoadingMonthProjection,
+    merchantTotals,
+    weekdayTotals,
+    knownRecurringRows,
+    detectedRecurringRows,
+    historicalMonthlyAverage,
+    fetchMonthProjection,
   }
 })

@@ -1,4 +1,8 @@
-export const ANALYTICS_SCHEMA_VERSION = 1
+// Bump whenever a change alters what a cached fact MEANS (not just adds a new field read from
+// existing data) — isFactValid() treats a version mismatch as "stale, refetch". v2: buildMonthlyFact
+// now re-checks each split against the active analytics filter before attributing it to a by*
+// breakdown map (a sibling split in a matching group was previously leaking through unfiltered).
+export const ANALYTICS_SCHEMA_VERSION = 2
 
 export const ANALYTICS_PAGE_SIZE = 250
 export const ANALYTICS_FETCH_CONCURRENCY = 4
@@ -24,6 +28,11 @@ export const ANALYTICS_CATEGORICAL_COLOR_SLOTS = 8 // palette: categorical serie
 export const ANALYTICS_RANKED_TOP_N = 10
 export const ANALYTICS_COMPOSITION_TOP_N = 7 // matches ANALYTICS_PLAN.md Part 1/2's "top 7 + Other"
 export const ANALYTICS_HEATMAP_MAX_ROWS = 30 // matches ANALYTICS_PLAN.md Part 1/2's "top 30 rows"
+
+// Phase 4b (Behaviour):
+export const ANALYTICS_IQR_MIN_SAMPLE = 4 // below this, quartiles() returns null — too few points to isolate outliers
+export const ANALYTICS_RECURRING_MIN_MONTHS = 3 // matches spendingDrift()'s existing "≥3 complete months" floor
+export const ANALYTICS_RECURRING_AMOUNT_TOLERANCE = 0.1 // +/-10% around the average counts as "same amount"
 
 export const analyticsTab = {
   headline: { t: 'analytics.tab.headline', code: 'headline', needs: ['monthlyFacts'] },

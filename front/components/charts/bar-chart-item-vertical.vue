@@ -13,14 +13,18 @@ const props = defineProps({
   label: {},
   value: {},
   percent: {},
+  getBackground: {},
 })
 
 const appStore = useAppStore()
 
 const barStyle = computed(() => {
-  return `height: ${props.percent}%`
+  const background = props.getBackground ? props.getBackground() : null
+  return {
+    height: `${props.percent}%`,
+    ...(background ? { background: background } : {}),
+  }
 })
-
 
 const computedClass = computed(() => ({
   'bar-container-vertical display-flex flex-column align-items-center gap-1': true,

@@ -10,6 +10,9 @@ import {
   movingAverage,
   median,
   budgetSeverity,
+  countWeekdayOccurrences,
+  quartiles,
+  detectRecurringCandidates,
 } from '~/utils/AnalyticsUtils'
 
 describe('sumAmountMap', () => {
@@ -199,5 +202,99 @@ describe('budgetSeverity', () => {
   it('passes through null/undefined as null (no limit defined yet)', () => {
     expect(budgetSeverity(null)).toBeNull()
     expect(budgetSeverity(undefined)).toBeNull()
+  })
+})
+
+describe('countWeekdayOccurrences', () => {
+  it('counts each weekday once across a single full week', () => {
+    // 2026-08-31 is a Monday
+    const counts = countWeekdayOccurrences(new Date(2026, 7, 31), new Date(2026, 8, 6))
+    expect(counts).toEqual([1, 1, 1, 1, 1, 1, 1])
+    expect(counts.reduce((a, b) => a + b, 0)).toBe(7)
+  })
+
+  it('gives a partial week more occurrences of its included weekdays', () => {
+    // August 2026: starts Saturday (Aug 1), ends Monday (Aug 31) — 4 full weeks plus a
+    // Sat/Sun/Mon tail, so those three weekdays occur 5 times, the rest occur 4 times.
+    const counts = countWeekdayOccurrences(new Date(2026, 7, 1), new Date(2026, 7, 31))
+    expect(counts.reduce((a, b) => a + b, 0)).toBe(31)
+    expect(counts).toEqual([5, 5, 4, 4, 4, 4, 5]) // Sun, Mon, Tue, Wed, Thu, Fri, Sat
+  })
+
+  it('returns all-zero counts for an invalid/empty range', () => {
+    expect(countWeekdayOccurrences(null, null)).toEqual([0, 0, 0, 0, 0, 0, 0])
+    expect(countWeekdayOccurrences(new Date(2026, 0, 5), new Date(2026, 0, 1))).toEqual([0, 0, 0, 0, 0, 0, 0])
+  })
+})
+
+describe('quartiles', () => {
+  it('computes q1/q3/iqr for an even-length array', () => {
+    const result = quartiles([1, 2, 3, 4, 5, 6, 7, 8])
+    expect(result).toEqual({ q1: 2.5, q3: 6.5, iqr: 4 })
+  })
+
+  it('excludes the median itself from either half for an odd-length array', () => {
+    const result = quartiles([1, 2, 3, 4, 5, 6, 7])
+    expect(result).toEqual({ q1: 2, q3: 6, iqr: 4 })
+  })
+
+  it('returns null below minSampleSize', () => {
+    expect(quartiles([1, 2, 3], 4)).toBeNull()
+    expect(quartiles([], 4)).toBeNull()
+  })
+})
+
+describe('detectRecurringCandidates', () => {
+  it('flags a merchant with a stable amount across enough months', () => {
+    const occurrences = {
+      m1: [
+        { monthKey: 'a', amount: 10 },
+        { monthKey: 'b', amount: 10 },
+        { monthKey: 'c', amount: 10.2 },
+      ],
+    }
+    const result = detectRecurringCandidates(occurrences, { minMonths: 3, toleranceRatio: 0.1 })
+    expect(result).toHaveLength(1)
+    expect(result[0]).toMatchObject({ merchantId: 'm1', occurrenceCount: 3 })
+  })
+
+  it('excludes a merchant with fewer than minMonths occurrences', () => {
+    const occurrences = {
+      m1: [
+        { monthKey: 'a', amount: 10 },
+        { monthKey: 'b', amount: 10 },
+      ],
+    }
+    expect(detectRecurringCandidates(occurrences, { minMonths: 3 })).toEqual([])
+  })
+
+  it('excludes a merchant whose amount varies beyond the tolerance', () => {
+    const occurrences = {
+      m1: [
+        { monthKey: 'a', amount: 10 },
+        { monthKey: 'b', amount: 10 },
+        { monthKey: 'c', amount: 20 },
+      ],
+    }
+    expect(detectRecurringCandidates(occurrences, { minMonths: 3, toleranceRatio: 0.1 })).toEqual([])
+  })
+
+  it('buckets distinct amounts separately rather than averaging across them', () => {
+    const occurrences = {
+      m1: [
+        { monthKey: 'a', amount: 10 },
+        { monthKey: 'b', amount: 10 },
+        { monthKey: 'c', amount: 10 },
+        { monthKey: 'd', amount: 50 },
+      ],
+    }
+    const result = detectRecurringCandidates(occurrences, { minMonths: 3, toleranceRatio: 0.1 })
+    expect(result).toHaveLength(1)
+    expect(result[0].averageAmount).toBe(10)
+  })
+
+  it('tolerates an empty/undefined map', () => {
+    expect(detectRecurringCandidates({})).toEqual([])
+    expect(detectRecurringCandidates(undefined)).toEqual([])
   })
 })

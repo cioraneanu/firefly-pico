@@ -46,7 +46,7 @@ import { useAnalyticsStore } from '~/stores/analyticsStore'
 import { useAnalyticsRange } from '~/composables/useAnalyticsRange'
 
 const analyticsStore = useAnalyticsStore()
-const { months } = useAnalyticsRange()
+const { months, range } = useAnalyticsRange()
 
 // Which panels are open — drives BOTH the van-collapse visual state and, via the v-if inside each
 // panel below, whether that budget's app-chart-bars-target (and its uPlot instance) is mounted at
@@ -56,7 +56,17 @@ const { months } = useAnalyticsRange()
 // documented app-chart-frame.vue cost), multiplied by however many budgets exist.
 const expanded = ref([])
 
-// budgetList/budgetLimitList are fetched centrally by analytics.vue's own range watcher
+// Lazily fetches THIS budget's limits over the page's range the moment its panel opens — the
+// chart below reads analyticsStore.budgetLimitsFor(), which is empty (renders bar-only, no limit
+// line) until this resolves. Deliberately per-budget, not the old all-budgets/whole-range fetch:
+// that one scaled with months x every budget on the page and was the actual source of reported
+// timeouts once a panel this size was expanded across a wide range — Firefly computes `spent` for
+// every limit record it returns, so narrowing to one budget is a real, not just cosmetic, saving.
+watch(expanded, (ids) => {
+  for (const id of ids) analyticsStore.fetchBudgetLimitsForBudget(id, range.value.start, range.value.end)
+})
+
+// budgetList/currentBudgetLimits are fetched centrally by analytics.vue's own range watcher
 // (mirrors how analyticsStore.refresh() is triggered once, not per-section, to avoid every
 // section that touches budget data racing its own duplicate fetch).
 const budgets = computed(() =>
@@ -73,7 +83,8 @@ const budgets = computed(() =>
 )
 
 function budgetSeries(budgetId) {
-  return analyticsStore.budgetVsLimitSeries(budgetId, months.value)
+  const limits = analyticsStore.budgetLimitsFor(budgetId, range.value.start, range.value.end)
+  return analyticsStore.budgetVsLimitSeries(budgetId, months.value, limits)
 }
 
 const onMonthSelect = async (budgetId, { monthKey }) => {

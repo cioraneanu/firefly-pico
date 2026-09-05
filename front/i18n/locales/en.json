@@ -497,7 +497,8 @@
     "tab": {
       "headline": "Headline",
       "cashflow": "Cashflow",
-      "where_money_goes": "Where the money goes"
+      "where_money_goes": "Where the money goes",
+      "behavior": "Behaviour"
     },
     "range": {
       "last_3_months": "Last 3 months",
@@ -594,6 +595,46 @@
         "budget": "Budget",
         "period": "Period",
         "overspend": "Overspend"
+      }
+    },
+    "behavior": {
+      "merchants": {
+        "title": "Top merchants",
+        "empty": "No merchant spending in this range",
+        "table_view": "Table view",
+        "merchant": "Merchant",
+        "total": "Total",
+        "count": "Count",
+        "average": "Average",
+        "other": "Other"
+      },
+      "weekday": {
+        "title": "Day-of-week pattern",
+        "table_view": "Table view",
+        "weekday": "Weekday",
+        "average": "Average per occurrence",
+        "occurrences": "Occurrences"
+      },
+      "recurring": {
+        "title": "Detected recurring charges",
+        "empty": "No recurring charges detected in this range",
+        "known": "Known subscriptions",
+        "detected": "Detected charges",
+        "table_view": "Table view",
+        "merchant": "Merchant",
+        "amount": "Amount",
+        "cadence": "Cadence",
+        "occurrences_count": "{count} months"
+      },
+      "projection": {
+        "title": "This month so far",
+        "not_enough_data": "Not enough data yet this month",
+        "spent_so_far": "Spent so far",
+        "daily_rate": "Daily rate",
+        "daily_rate_note": "excluding one-off charges",
+        "projected": "Projected month end",
+        "vs_historical": "vs. historical average",
+        "day_progress": "Day {day} of {total}"
       }
     },
     "failed_months": "{count} month(s) failed to load",

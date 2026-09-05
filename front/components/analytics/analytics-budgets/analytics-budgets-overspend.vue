@@ -34,7 +34,14 @@ import { useAnalyticsStore } from '~/stores/analyticsStore'
 import { useAnalyticsRange } from '~/composables/useAnalyticsRange'
 
 const analyticsStore = useAnalyticsStore()
-const { months } = useAnalyticsRange()
+const { months, range } = useAnalyticsRange()
+
+// This is the one Phase 4a section that genuinely needs every budget's limits over the WHOLE
+// range at once (it can't know which (budget, month) pairs overspent without checking all of
+// them) — self-fetched here, on mount and on range change, rather than centrally in analytics.vue,
+// since it's the expensive shape (Firefly computes `spent` per limit record it returns, so cost
+// scales with months x budgets) and no other section needs it anymore.
+watch(range, () => analyticsStore.fetchBudgetLimitsForRange(range.value.start, range.value.end), { immediate: true })
 
 function resolveLabel(budgetId) {
   const budget = analyticsStore.budgetList.find((b) => String(b.id) === String(budgetId))

@@ -11,6 +11,15 @@ import { getExcludedTransactionUrl } from '~/utils/DashboardUtils'
 const dimensionFilters = {
   byCategory: { forId: TransactionFilterUtils.filters.category, forNone: TransactionFilterUtils.filters.noCategory },
   byTag: { forId: TransactionFilterUtils.filters.tag, forNone: TransactionFilterUtils.filters.noTag },
+  byMerchant: {
+    // TransactionFilterUtils.filters.account.toUrl expects an ARRAY (it does item.map(...)
+    // internally), unlike category/tag's single-object shape — wrap the id in a 1-element array
+    // to reuse it as-is rather than duplicating its query-string logic here.
+    forId: { toUrl: ({ id }) => TransactionFilterUtils.filters.account.toUrl([{ id }]) },
+    // No safe "no destination account" query fragment exists (unlike noCategory/noTag) — an
+    // id === 'none' merchant row stays non-clickable, see the guard in urlFor() below.
+    forNone: null,
+  },
 }
 
 export const useChartDrillThrough = () => {
@@ -22,6 +31,10 @@ export const useChartDrillThrough = () => {
     if (id === null || id === undefined) return null
     const dim = dimensionFilters[dimension]
     if (!dim) return null
+
+    // id === 'none' with no forNone fragment (e.g. byMerchant) — same "no safe query exists"
+    // case as a nullish id above, just discovered one level later (per-dimension, not global).
+    if (id === 'none' && !dim.forNone) return null
 
     const filters = [TransactionFilterUtils.filters.dateAfter.toUrl(start), TransactionFilterUtils.filters.dateBefore.toUrl(end)]
     filters.push(id === 'none' ? dim.forNone.toUrl() : dim.forId.toUrl({ id }))

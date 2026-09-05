@@ -84,9 +84,65 @@ describe('buildMonthlyFact — demo fixture cross-check', () => {
   })
 
   it('carries schema version and range metadata', () => {
-    expect(fact.schemaVersion).toBe(1)
+    expect(fact.schemaVersion).toBe(2)
     expect(fact.monthKey).toBe('2026-08')
     expect(fact.rangeStart).toBe('2026-08-01')
     expect(fact.rangeEnd).toBe('2026-08-31')
+  })
+})
+
+describe('buildMonthlyFact — analyticsFilters re-checks each split, not just the group', () => {
+  // Firefly's budget_is/category_is/etc. match at the GROUP level: once any one split in a group
+  // matches, the API returns the WHOLE group, every split — including one under a totally
+  // different budget/merchant on the same multi-line purchase. Without the analyticsFilters
+  // re-check, that sibling split leaks into byMerchant/byBudget/etc. even though the user only
+  // asked to see one budget's data.
+  const groupBothMatching = expenseTransaction({ amount: 20, budgetId: GOING_OUT_BUDGET_ID, destinationId: CAFE_CENTRAL_ID })
+
+  // A single Firefly-returned GROUP whose two splits carry DIFFERENT budgets/merchants — the
+  // real shape Firefly sends back when only one split matched the server-side query.
+  const mixedGroup = {
+    attributes: {
+      transactions: [
+        {
+          type: { code: 'expense' },
+          amount: '20.00',
+          currency_code: 'EUR',
+          category_id: 'cat-dining',
+          budget_id: GOING_OUT_BUDGET_ID,
+          tags: [],
+          destination_id: CAFE_CENTRAL_ID,
+          date: new Date(2026, 7, 10),
+        },
+        { type: { code: 'expense' }, amount: '15.00', currency_code: 'EUR', category_id: 'cat-housing', budget_id: 'b-rent', tags: [], destination_id: 'm-landlord', date: new Date(2026, 7, 10) },
+      ],
+    },
+  }
+
+  const filterState = { budget: { selected: [{ id: GOING_OUT_BUDGET_ID }], mode: 'include' } }
+
+  it("without a filter, both splits are attributed (today's baseline behaviour)", () => {
+    const fact = buildMonthlyFact([mixedGroup], { monthKey: '2026-08', rangeStart: AUGUST_START, rangeEnd: AUGUST_END })
+    expect(fact.byBudget[GOING_OUT_BUDGET_ID].EUR).toBeCloseTo(20, 2)
+    expect(fact.byBudget['b-rent'].EUR).toBeCloseTo(15, 2)
+    expect(fact.byMerchant['m-landlord']).toBeDefined()
+  })
+
+  it('with the budget filter active, only the matching split is attributed — the sibling does not leak in', () => {
+    const fact = buildMonthlyFact([mixedGroup], { monthKey: '2026-08', rangeStart: AUGUST_START, rangeEnd: AUGUST_END, analyticsFilters: filterState })
+    expect(fact.byBudget[GOING_OUT_BUDGET_ID].EUR).toBeCloseTo(20, 2)
+    expect(fact.byBudget['b-rent']).toBeUndefined()
+    expect(fact.byMerchant['m-landlord']).toBeUndefined()
+    expect(fact.byMerchant[CAFE_CENTRAL_ID].amount.EUR).toBeCloseTo(20, 2)
+  })
+
+  it('totals.expense still counts the WHOLE group, unattributed, matching the accepted totals design', () => {
+    const fact = buildMonthlyFact([mixedGroup], { monthKey: '2026-08', rangeStart: AUGUST_START, rangeEnd: AUGUST_END, analyticsFilters: filterState })
+    expect(fact.totals.expense.EUR).toBeCloseTo(35, 2) // 20 + 15, both splits — not just the matching one
+  })
+
+  it('a fully-matching group is unaffected by the filter', () => {
+    const fact = buildMonthlyFact([groupBothMatching], { monthKey: '2026-08', rangeStart: AUGUST_START, rangeEnd: AUGUST_END, analyticsFilters: filterState })
+    expect(fact.byBudget[GOING_OUT_BUDGET_ID].EUR).toBeCloseTo(20, 2)
   })
 })
