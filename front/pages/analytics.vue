@@ -19,12 +19,10 @@
         <analytics-money-goes-drift />
         <analytics-money-goes-heatmap />
         <analytics-budgets-overview />
-        <analytics-budgets-burn-rate />
         <analytics-budgets-overspend />
         <analytics-behavior-merchants />
         <analytics-behavior-weekday />
         <analytics-behavior-recurring />
-        <analytics-behavior-projection />
       </div>
 
       <app-card-info v-if="analyticsStore.failedMonthKeys.length > 0">

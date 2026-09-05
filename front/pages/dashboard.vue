@@ -38,6 +38,7 @@ import DashboardAccounts from '~/components/dashboard/dashboard-accounts/dashboa
 import DashboardWeekBars from '~/components/dashboard/dashboard-week-bars/dashboard-week-bars.vue'
 import DashboardSummary from '~/components/dashboard/dashboard-summary/dashboard-summary.vue'
 import DashboardBudgets from '~/components/dashboard/dashboard-budgets/dashboard-budgets.vue'
+import DashboardMonthProjection from '~/components/dashboard/dashboard-month-projection/dashboard-month-projection.vue'
 import DashboardTagTotalsExpense from '~/components/dashboard/dashboard-tag-totals-expense/dashboard-tag-totals-expense.vue'
 import DashboardCategoryTotalsExpense from '~/components/dashboard/dashboard-category-totals-expense/dashboard-category-totals-expense.vue'
 import DashboardTagTotalsTransfer from '~/components/dashboard/dashboard-tag-totals-transfer/dashboard-tag-totals-transfer.vue'
@@ -58,6 +59,7 @@ const cardComponents = {
   [dashboardCard.expensesLastWeek.code]: DashboardWeekBars,
   [dashboardCard.transactionsSummary.code]: DashboardSummary,
   [dashboardCard.budgets.code]: DashboardBudgets,
+  [dashboardCard.monthProjection.code]: DashboardMonthProjection,
   [dashboardCard.expensesByTag.code]: DashboardTagTotalsExpense,
   [dashboardCard.expensesByCategory.code]: DashboardCategoryTotalsExpense,
   [dashboardCard.transfersByTag.code]: DashboardTagTotalsTransfer,

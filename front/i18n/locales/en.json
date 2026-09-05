@@ -288,6 +288,7 @@
         "accounts_summary": "Accounts summary",
         "expenses_this_week": "Expenses this week",
         "transactions_summary": "Transactions summary",
+        "month_projection": "Month projection",
         "expenses_by_tag": "Expenses by tags",
         "expenses_by_category": "Expenses by categories",
         "transfers_by_tag": "Transfers by tags",
@@ -474,6 +475,25 @@
       "budgeted": "Budgeted",
       "remaining": "Remaining"
     },
+    "budget_pace": {
+      "title": "Budget pace",
+      "not_enough_data": "No budget has a limit set for this period",
+      "ideal": "Ideal pace",
+      "other": "Other",
+      "table_view": "Table view",
+      "budget": "Budget",
+      "pace_today": "Pace today"
+    },
+    "month_projection": {
+      "title": "This month so far",
+      "not_enough_data": "Not enough data yet this month",
+      "spent_so_far": "Spent so far",
+      "daily_rate": "Daily rate",
+      "daily_rate_note": "excludes unusually large purchases",
+      "projected": "Projected month end",
+      "vs_historical": "vs. historical average",
+      "day_progress": "Day {day} of {total}"
+    },
     "expenses_by_tags": {
       "title": "Expenses by tags",
       "all_tags": "All tags",
@@ -580,15 +600,6 @@
         "actual": "Spent",
         "limit": "Budgeted"
       },
-      "burn_rate": {
-        "title": "Burn-rate pacing",
-        "not_enough_data": "No budget has a limit set for the current period",
-        "ideal": "Ideal pace",
-        "other": "Other",
-        "table_view": "Table view",
-        "budget": "Budget",
-        "pace_today": "Pace today"
-      },
       "overspend": {
         "title": "Overspend",
         "none": "No overspend in this range",
@@ -625,16 +636,6 @@
         "amount": "Amount",
         "cadence": "Cadence",
         "occurrences_count": "{count} months"
-      },
-      "projection": {
-        "title": "This month so far",
-        "not_enough_data": "Not enough data yet this month",
-        "spent_so_far": "Spent so far",
-        "daily_rate": "Daily rate",
-        "daily_rate_note": "excluding one-off charges",
-        "projected": "Projected month end",
-        "vs_historical": "vs. historical average",
-        "day_progress": "Day {day} of {total}"
       }
     },
     "failed_months": "{count} month(s) failed to load",

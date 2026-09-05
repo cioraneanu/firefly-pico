@@ -9,14 +9,7 @@
         <template #title>
           <div class="flex-center-vertical gap-2 flex-1">
             <app-icon :icon="budget.icon" :size="20" />
-            <div class="flex-1 display-flex flex-column gap-1">
-              <div class="text-size-13 font-weight-600">{{ budget.label }}</div>
-              <!-- The meter is percent-only (spent/limit ratio, like savings rate) — exempt from
-                   structural privacy masking per ANALYTICS_PLAN.md Part 1's "percent-mode views
-                   may stay visible since ratios leak no absolute values." -->
-              <app-chart-meter :percent="budget.status.percent ?? 0" :severity="budget.status.severity" />
-            </div>
-            <div v-if="budget.status.percent != null" class="text-size-12 font-weight-600">{{ budget.status.percent }}%</div>
+            <div class="text-size-13 font-weight-600 flex-1">{{ budget.label }}</div>
           </div>
         </template>
 
@@ -78,8 +71,9 @@ const budgets = computed(() =>
       icon: Budget.getIcon(budget),
       status: analyticsStore.budgetSeverityStatus(budget.id),
     }))
-    // Most at-risk first — a budget with no current limit period (percent: null) sorts last.
-    .sort((a, b) => (b.status.percent ?? -1) - (a.status.percent ?? -1)),
+    // Alphabetical — this accordion no longer surfaces a "current status" ranking (that lives on
+    // Home's Budgets card now), so there's no number left to sort by.
+    .sort((a, b) => a.label.localeCompare(b.label)),
 )
 
 function budgetSeries(budgetId) {

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { get } from 'lodash-es'
-import { differenceInCalendarDays, addDays } from 'date-fns'
+import { addDays } from 'date-fns'
 import { StorageSerializers, useLocalStorage } from '@vueuse/core'
 import { useProfileStore } from '~/stores/profileStore'
 import { useDashboardStore } from '~/stores/dashboardStore'
@@ -21,7 +21,7 @@ import { convertCurrency } from '~/utils/CurrencyUtils'
 import DateUtils from '~/utils/DateUtils'
 import { getExcludedTransactionFilters } from '~/utils/DashboardUtils'
 import { mapWithConcurrency } from '~/utils/ConcurrencyUtils'
-import { eachFinancialMonth, financialMonthEnd, financialMonthKey, currentFinancialMonth } from '~/utils/DateRangeUtils'
+import { eachFinancialMonth, financialMonthKey, currentFinancialMonth } from '~/utils/DateRangeUtils'
 import {
   buildMonthlyFact,
   factFilterHash,
@@ -30,11 +30,10 @@ import {
   rankTopNByMagnitudeWithOther,
   leastSquaresSlope,
   budgetSeverity,
-  quartiles,
   detectRecurringCandidates,
 } from '~/utils/AnalyticsUtils'
 import { seriesColor } from '~/utils/ChartUtils'
-import { buildAnalyticsFilterPlan, expandFanOutCombos, splitMatchesAnalyticsFilters } from '~/utils/AnalyticsFilterUtils'
+import { buildAnalyticsFilterPlan, expandFanOutCombos } from '~/utils/AnalyticsFilterUtils'
 import { useAnalyticsFilters } from '~/composables/useAnalyticsFilters'
 import {
   ANALYTICS_SCHEMA_VERSION,
@@ -94,26 +93,6 @@ export const useAnalyticsStore = defineStore('analytics', () => {
   // every limit record it returns, so "all budgets x 6 months" was doing far more server-side work
   // than any one screen actually needed at once.
   const budgetLimitsByBudget = ref({})
-  // Derived from a scoped, NOT-persisted raw-transaction fetch (see fetchCurrentPeriodBudgetPacing)
-  // — day-granularity data MonthlyFact doesn't carry. Computed and discarded, same "never persist
-  // raw transactions" rule Phase 1 established, just held in a plain ref instead of factCache.
-  const currentPeriodBudgetPacing = ref({ totalDays: 0, series: [], isEligible: false, periodStart: null })
-  const isLoadingBudgetPacing = ref(false)
-
-  // ----- Phase 4b — Behaviour. Month-in-progress projection needs day-granularity data no
-  // MonthlyFact carries — same "scoped, NOT-persisted raw fetch, computed and discarded" pattern
-  // as currentPeriodBudgetPacing above, just its own plain ref instead of factCache.
-  const monthProjection = ref({
-    isLoaded: false,
-    periodStart: null,
-    daysElapsed: 0,
-    daysInMonth: 0,
-    spentSoFar: 0,
-    regularDailyRate: 0,
-    oneOffTotal: 0,
-    projectedTotal: 0,
-  })
-  const isLoadingMonthProjection = ref(false)
 
   // ----- Getters
 
@@ -488,100 +467,12 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     return rows.sort((a, b) => b.overspend - a.overspend)
   }
 
-  // Burn-rate pacing — the one Phase 4a feature needing day granularity, so it's the one place
-  // that fetches raw transactions rather than reading limitsOverlapping()/factCache. Scoped to
-  // [current financial month start, today] only, never persisted (see currentPeriodBudgetPacing's
-  // own comment above) — mirrors fetchMonth's fan-out-per-value pattern for the same proven reason
-  // (budget_is has no comma-list OR, unlike account_id — see AnalyticsFilterUtils.js).
-  async function fetchCurrentPeriodBudgetPacing() {
-    isLoadingBudgetPacing.value = true
-    try {
-      const firstDayOfMonth = profileStore.dashboard.firstDayOfMonth
-      const { start } = currentFinancialMonth(new Date(), firstDayOfMonth)
-      const today = new Date()
+  // Burn-rate pacing moved to dashboardStore.budgetPace (Home widget dashboard-budget-pace.vue) —
+  // it was always "current financial month only," never the page's selected range, so it belongs
+  // on Home, not Analytics.
 
-      // Deliberately self-sufficient — awaits its OWN prerequisites rather than reading the
-      // page-range-scoped budgetList populated by analytics.vue's onRefresh. Vue mounts children
-      // before a parent's onMounted runs, so this section's onMounted (a child of analytics.vue)
-      // would otherwise reliably fire BEFORE that fetch even starts, always seeing an empty
-      // budgetList on first load — not a rare race, a guaranteed one. fetchCurrentBudgetLimits is
-      // the same small "today, all budgets" fetch the accordion's meters use — shared and
-      // promise-deduped, so both sections mounting together only cost one request, not two.
-      await fetchBudgetList()
-      await fetchCurrentBudgetLimits()
-
-      const eligibleBudgets = budgetList.value.filter((budget) => Budget.isActive(budget) && budgetSeverityStatus(budget.id).limit > 0)
-      if (eligibleBudgets.length === 0) {
-        currentPeriodBudgetPacing.value = { totalDays: 0, series: [], isEligible: false, periodStart: start }
-        return
-      }
-
-      const limitById = Object.fromEntries(eligibleBudgets.map((b) => [b.id, budgetSeverityStatus(b.id).limit]))
-      const { topIds, otherIds } = rankTopNWithOther(limitById, ANALYTICS_RANKED_TOP_N)
-      const topBudgets = topIds.map((id) => eligibleBudgets.find((b) => String(b.id) === String(id)))
-      const otherBudgets = otherIds.map((id) => eligibleBudgets.find((b) => String(b.id) === String(id)))
-
-      // One request (per analytics-filter combo, if any fan-out is active) for the whole (small,
-      // <=~31 day) date window — no PER-BUDGET fan-out beyond that. Every split gets bucketed by
-      // split.budget_id client-side below regardless, so a per-eligible-budget query would only
-      // have narrowed what came back over the wire, at the cost of N separate round-trips to
-      // Firefly (one per eligible budget, at ANALYTICS_SUBQUERY_CONCURRENCY=2 — this was the
-      // actual source of the reported 10s timeouts: 10+ budgets meant 10+ sequential-ish
-      // sub-requests for a chart that only ever needed one). This DOES still apply the page's own
-      // analytics dimensional filter (category/tag/budget/account, Part 3) via
-      // fetchFilteredTransactionsForRange — a prior version of this function skipped that
-      // entirely, so burn-rate pacing silently ignored the filter the rest of the page respects.
-      const { data } = await fetchFilteredTransactionsForRange(start, today)
-      const transformed = TransactionTransformer.transformFromApiList(data)
-      const filterSnapshot = analyticsFilterSnapshot()
-
-      const totalDays = Math.max(1, differenceInCalendarDays(today, start) + 1)
-      const dayTotals = {} // budgetId -> [day0Amount, day1Amount, ...], in that budget's own currency
-      for (const budget of [...topBudgets, ...otherBudgets]) dayTotals[budget.id] = new Array(totalDays).fill(0)
-
-      for (const transaction of transformed) {
-        for (const split of get(transaction, 'attributes.transactions', [])) {
-          const budgetId = split.budget_id
-          if (budgetId == null || !(budgetId in dayTotals)) continue
-          // Firefly's *_is operators match at the GROUP level — a sibling split in the same
-          // returned group can still fail to match the active filter (e.g. a different category
-          // on the same multi-line purchase). Re-checked per split, same as buildMonthlyFact.
-          if (!splitMatchesAnalyticsFilters(split, filterSnapshot)) continue
-          const dayIndex = Math.min(totalDays - 1, Math.max(0, differenceInCalendarDays(split.date, start)))
-          dayTotals[budgetId][dayIndex] += convertBudgetAmount(parseFloat(split.amount) || 0, budgetId)
-        }
-      }
-
-      const series = topBudgets.map((budget) => {
-        const limit = limitById[budget.id]
-        let cumulative = 0
-        const values = dayTotals[budget.id].map((dayAmount) => {
-          cumulative += dayAmount
-          return limit > 0 ? (cumulative / limit) * 100 : null
-        })
-        return { id: budget.id, colorVar: seriesColor(budgetSeriesColorMap.value[budget.id]), values }
-      })
-
-      if (otherBudgets.length > 0) {
-        const otherLimit = otherBudgets.reduce((sum, b) => sum + (limitById[b.id] ?? 0), 0)
-        let cumulative = 0
-        const values = new Array(totalDays).fill(0).map((_, day) => {
-          cumulative += otherBudgets.reduce((sum, b) => sum + (dayTotals[b.id]?.[day] ?? 0), 0)
-          return otherLimit > 0 ? (cumulative / otherLimit) * 100 : null
-        })
-        series.push({ id: 'other', colorVar: seriesColor('other'), values })
-      }
-
-      currentPeriodBudgetPacing.value = { totalDays, series, isEligible: true, periodStart: start }
-    } finally {
-      isLoadingBudgetPacing.value = false
-    }
-  }
-
-  // ----- Phase 4b — Behaviour (top merchants, day-of-week, detected recurring, month-in-progress
-  // projection). Merchants/weekday/recurring all reduce over the already-cached factCache, same as
-  // Where-the-money-goes above — no new fetching. The projection needs its own scoped raw fetch
-  // (fetchMonthProjection, below).
+  // ----- Phase 4b — Behaviour (top merchants, day-of-week, detected recurring). All three reduce
+  // over the already-cached factCache, same as Where-the-money-goes above — no new fetching.
 
   function merchantTotals(months) {
     const keys = new Set(months.map((month) => month.key))
@@ -645,75 +536,9 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     return detectRecurringCandidates(occurrences).filter((candidate) => !knownIds.has(String(candidate.merchantId)))
   }
 
-  // Average expense over every COMPLETE (non-current) month in the given range — reuses
-  // periodAverages()' own isLoaded filtering, additionally excluding the in-progress month so the
-  // month-in-progress projection is never compared against itself.
-  function historicalMonthlyAverage(months) {
-    const firstDayOfMonth = profileStore.dashboard.firstDayOfMonth
-    const currentKey = financialMonthKey(currentFinancialMonth(new Date(), firstDayOfMonth).start)
-    const completeMonths = months.filter((month) => month.key !== currentKey)
-    const { avgExpense, monthsLoaded } = periodAverages(completeMonths)
-    return { avgExpense, monthsLoaded }
-  }
-
-  // Scoped to [current financial month start, today], never persisted — mirrors
-  // fetchCurrentPeriodBudgetPacing's exact pattern above. Splits are bucketed via Tukey's method
-  // (quartiles(), AnalyticsUtils.js): anything above Q3 + 1.5*IQR is a one-off (e.g. rent on day 1),
-  // added flat to the total rather than folded into the daily rate — the Streamlit build's fix,
-  // ported here (ANALYTICS_PLAN.md Part 2 §6/Context). regularDailyRate explicitly excludes
-  // one-offs, so callers must label it as such (rate * days !== spent so far is expected, not a bug).
-  async function fetchMonthProjection() {
-    isLoadingMonthProjection.value = true
-    try {
-      const firstDayOfMonth = profileStore.dashboard.firstDayOfMonth
-      const { start } = currentFinancialMonth(new Date(), firstDayOfMonth)
-      const today = new Date()
-      const daysElapsed = Math.max(1, differenceInCalendarDays(today, start) + 1)
-      const daysInMonth = differenceInCalendarDays(financialMonthEnd(start), start) + 1
-
-      // Applies the page's own analytics dimensional filter (category/tag/budget/account, Part 3)
-      // via fetchFilteredTransactionsForRange — a prior version of this function fetched
-      // unfiltered, so "this month so far" silently ignored whatever filter the rest of the page
-      // respects.
-      const { data } = await fetchFilteredTransactionsForRange(start, today)
-      const transformed = TransactionTransformer.transformFromApiList(data)
-      const filterSnapshot = analyticsFilterSnapshot()
-
-      // Per-split, not per-group — matches the codebase's established rule (dashboardStore's
-      // dashboardExpensesByCategory precedent, ANALYTICS_PLAN.md Part 3) that attributing a whole
-      // split-group's amount to a single line item overstates it.
-      const amounts = []
-      for (const transaction of transformed) {
-        if (get(transaction, 'attributes.transactions.0.type.code') !== 'expense') continue
-        for (const split of get(transaction, 'attributes.transactions', [])) {
-          // Firefly's *_is operators match at the GROUP level — a sibling split in the same
-          // returned group can still fail to match the active filter. Re-checked per split, same
-          // as buildMonthlyFact/fetchCurrentPeriodBudgetPacing.
-          if (!splitMatchesAnalyticsFilters(split, filterSnapshot)) continue
-          amounts.push(convertCurrency(parseFloat(split.amount) || 0, split.currency_code, currencyCode.value))
-        }
-      }
-
-      const q = quartiles(amounts)
-      const threshold = q ? q.q3 + 1.5 * q.iqr : Infinity
-      const oneOffTotal = amounts.filter((amount) => amount > threshold).reduce((sum, amount) => sum + amount, 0)
-      const regularTotal = amounts.filter((amount) => amount <= threshold).reduce((sum, amount) => sum + amount, 0)
-      const regularDailyRate = regularTotal / daysElapsed
-
-      monthProjection.value = {
-        isLoaded: true,
-        periodStart: start,
-        daysElapsed,
-        daysInMonth,
-        spentSoFar: regularTotal + oneOffTotal,
-        regularDailyRate,
-        oneOffTotal,
-        projectedTotal: regularDailyRate * daysInMonth + oneOffTotal,
-      }
-    } finally {
-      isLoadingMonthProjection.value = false
-    }
-  }
+  // Month-in-progress projection moved to dashboardStore.monthProjection (Home widget
+  // dashboard-month-projection.vue) — it was always "the current financial month so far," never
+  // the page's selected range, so it belongs on Home, not Analytics.
 
   // ----- Actions
 
@@ -970,8 +795,6 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     currentBudgetLimits,
     isLoadingCurrentBudgetLimits,
     budgetLimitsByBudget,
-    currentPeriodBudgetPacing,
-    isLoadingBudgetPacing,
     budgetSeverityStatus,
     budgetVsLimitSeries,
     budgetLimitsFor,
@@ -980,14 +803,9 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     fetchBudgetLimitsForRange,
     fetchCurrentBudgetLimits,
     fetchBudgetLimitsForBudget,
-    fetchCurrentPeriodBudgetPacing,
-    monthProjection,
-    isLoadingMonthProjection,
     merchantTotals,
     weekdayTotals,
     knownRecurringRows,
     detectedRecurringRows,
-    historicalMonthlyAverage,
-    fetchMonthProjection,
   }
 })

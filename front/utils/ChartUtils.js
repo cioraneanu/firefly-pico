@@ -91,8 +91,8 @@ export function drawDiagonalRule(u, { from, to, colorVar, scaleKey = 'y' }) {
   const y1 = u.valToPos(to.y, scaleKey, true)
   u.ctx.save()
   u.ctx.strokeStyle = resolveCssVar(colorVar)
-  u.ctx.lineWidth = 1
-  u.ctx.setLineDash([4, 4])
+  u.ctx.lineWidth = 2
+  u.ctx.setLineDash([8, 5])
   u.ctx.beginPath()
   u.ctx.moveTo(x0, y0)
   u.ctx.lineTo(x1, y1)

@@ -28,7 +28,12 @@ import { drawDiagonalRule } from '~/utils/ChartUtils'
 // are for "the series that matters," not every series at once).
 const props = defineProps({
   series: { type: Array, required: true }, // [{id, label, colorVar, values: (number|null)[]}]
-  totalDays: { type: Number, required: true },
+  totalDays: { type: Number, required: true }, // days actually plotted (may be fewer than a full period, e.g. a month in progress)
+  // Days in the full period the 100% ideal-pace mark refers to (e.g. days in the month), which can
+  // exceed totalDays when the chart is showing a still-in-progress period — a mid-month chart
+  // (totalDays = days elapsed) must NOT reach 100% at its right edge, only at the true period end.
+  // Defaults to totalDays for a period rendered in full.
+  idealTotalDays: { type: Number, default: null },
   formatValue: { type: Function, default: (n) => `${Math.round(n)}%` },
   formatDay: { type: Function, default: (dayIndex) => `${dayIndex + 1}` },
   ariaLabel: { type: String, required: true },
@@ -37,8 +42,10 @@ const props = defineProps({
 
 const emit = defineEmits(['day-select'])
 
+const idealDenominatorDays = computed(() => props.idealTotalDays ?? props.totalDays)
+
 function idealValueAt(dayIndex) {
-  return props.totalDays > 1 ? (dayIndex / (props.totalDays - 1)) * 100 : 100
+  return idealDenominatorDays.value > 1 ? (dayIndex / (idealDenominatorDays.value - 1)) * 100 : 100
 }
 
 function dayLabel(dayIndex) {
@@ -49,6 +56,9 @@ const chartData = computed(() => [Array.from({ length: props.totalDays }, (_, i)
 
 const uplotOptions = computed(() => {
   const allValues = props.series.flatMap((line) => line.values.filter((v) => v != null))
+  // The 100 floor (rather than just the real data's own max) is what keeps the axis scaled to fit
+  // the dashed ideal-pace line too — that line never exceeds 100% (idealValueAt() tops out there),
+  // so this alone already satisfies "scale to the higher of real spend or the ideal line."
   const yMax = Math.max(100, ...allValues, 1) * 1.05
 
   return {
@@ -68,7 +78,7 @@ const uplotOptions = computed(() => {
     ],
     legend: { show: false },
     hooks: {
-      draw: [(u) => drawDiagonalRule(u, { from: { x: 0, y: 0 }, to: { x: props.totalDays - 1, y: 100 }, colorVar: '--viz-grid-baseline' })],
+      draw: [(u) => drawDiagonalRule(u, { from: { x: 0, y: 0 }, to: { x: props.totalDays - 1, y: idealValueAt(props.totalDays - 1) }, colorVar: '--viz-grid-baseline' })],
     },
   }
 })
