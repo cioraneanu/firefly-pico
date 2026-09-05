@@ -16,23 +16,6 @@
         @month-select="onMonthSelect"
       />
     </div>
-
-    <app-chart-table-view :title="$t('analytics.savings_rate.table_view')">
-      <table>
-        <thead>
-          <tr>
-            <th>{{ $t('calendar') }}</th>
-            <th>{{ $t('analytics.savings_rate.series_label') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="row in rows" :key="row.key">
-            <td>{{ row.key }}</td>
-            <td>{{ row.rate == null ? $t('analytics.headline.not_available') : formatPercent(row.rate) }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </app-chart-table-view>
   </van-cell-group>
 </template>
 

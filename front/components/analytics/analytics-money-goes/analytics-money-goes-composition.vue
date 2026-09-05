@@ -14,23 +14,6 @@
         @segment-select="onSegmentSelect"
       />
     </div>
-
-    <app-chart-table-view :title="$t('analytics.money_goes.composition.table_view')">
-      <table>
-        <thead>
-          <tr>
-            <th>{{ $t('calendar') }}</th>
-            <th v-for="s in displaySeries" :key="s.id">{{ s.label }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="row in composition.rows" :key="row.key">
-            <td>{{ row.key }}</td>
-            <td v-for="s in displaySeries" :key="s.id">{{ formatNumberForDashboard(row.values[s.id] ?? 0) }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </app-chart-table-view>
   </van-cell-group>
 </template>
 

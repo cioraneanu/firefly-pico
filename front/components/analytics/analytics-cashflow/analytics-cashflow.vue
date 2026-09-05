@@ -21,27 +21,6 @@
         @month-select="onMonthSelect"
       />
     </div>
-
-    <app-chart-table-view :title="$t('analytics.cashflow.table_view')">
-      <table class="analytics-cashflow-table">
-        <thead>
-          <tr>
-            <th>{{ $t('calendar') }}</th>
-            <th>{{ $t('analytics.cashflow.income') }}</th>
-            <th>{{ $t('analytics.cashflow.expense') }}</th>
-            <th>{{ $t('analytics.cashflow.net') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="month in totals" :key="month.key">
-            <td>{{ month.key }}</td>
-            <td>{{ formatNumberForDashboard(month.income) }}</td>
-            <td>{{ formatNumberForDashboard(month.expense) }}</td>
-            <td>{{ formatNumberForDashboard(month.net) }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </app-chart-table-view>
   </van-cell-group>
 </template>
 
@@ -96,23 +75,5 @@ const onMonthSelect = async ({ monthKey }) => {
 
 .viz-net-dot {
   background: var(--semi-black);
-}
-
-.analytics-cashflow-table {
-  width: 100%;
-  font-variant-numeric: tabular-nums;
-  font-size: 13px;
-}
-
-.analytics-cashflow-table th,
-.analytics-cashflow-table td {
-  padding: 4px 8px;
-  text-align: right;
-  white-space: nowrap;
-}
-
-.analytics-cashflow-table th:first-child,
-.analytics-cashflow-table td:first-child {
-  text-align: left;
 }
 </style>

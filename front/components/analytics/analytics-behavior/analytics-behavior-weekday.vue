@@ -9,25 +9,6 @@
       <bar-chart-item-vertical v-for="bar in bars" :key="bar.day" v-bind="bar" />
       <div class="flex-1" />
     </div>
-
-    <app-chart-table-view :title="$t('analytics.behavior.weekday.table_view')">
-      <table>
-        <thead>
-          <tr>
-            <th>{{ $t('analytics.behavior.weekday.weekday') }}</th>
-            <th>{{ $t('analytics.behavior.weekday.average') }}</th>
-            <th>{{ $t('analytics.behavior.weekday.occurrences') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="bar in bars" :key="bar.day">
-            <td>{{ bar.label }}</td>
-            <td>{{ bar.value }}</td>
-            <td>{{ bar.occurrences }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </app-chart-table-view>
   </van-cell-group>
 </template>
 

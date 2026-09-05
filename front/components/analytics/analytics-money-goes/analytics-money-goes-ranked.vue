@@ -29,23 +29,6 @@
         </tr>
       </table>
     </div>
-
-    <app-chart-table-view :title="$t('analytics.money_goes.ranked.table_view')">
-      <table>
-        <thead>
-          <tr>
-            <th>{{ $t('analytics.money_goes.ranked.by_' + (dimensionTab === 'byCategory' ? 'category' : 'tag')) }}</th>
-            <th>{{ $t('amount') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="bar in bars" :key="bar.id ?? 'other'">
-            <td>{{ bar.label }}</td>
-            <td>{{ bar.value }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </app-chart-table-view>
   </van-cell-group>
 </template>
 

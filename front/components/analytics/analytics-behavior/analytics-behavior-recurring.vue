@@ -23,25 +23,6 @@
         </table>
       </div>
     </template>
-
-    <app-chart-table-view v-if="knownRows.length > 0" :title="$t('analytics.behavior.recurring.table_view')">
-      <table>
-        <thead>
-          <tr>
-            <th>{{ $t('analytics.behavior.recurring.description') }}</th>
-            <th>{{ $t('analytics.behavior.recurring.total_in_range') }}</th>
-            <th>{{ $t('analytics.behavior.recurring.cadence') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="row in knownRows" :key="row.id">
-            <td>{{ row.description }}</td>
-            <td>{{ row.value }}</td>
-            <td>{{ row.cadence }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </app-chart-table-view>
   </van-cell-group>
 </template>
 

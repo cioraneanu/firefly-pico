@@ -16,21 +16,17 @@ import BudgetLimitTransformer from '~/transformers/BudgetLimitTransformer.js'
 import Budget from '~/models/Budget.js'
 import BudgetLimit from '~/models/BudgetLimit.js'
 import RecurringTransaction from '~/models/RecurringTransaction.js'
+import SummaryRepository from '~/repository/SummaryRepository.js'
+import AccountRepository from '~/repository/AccountRepository.js'
+import AccountTransformer from '~/transformers/AccountTransformer.js'
+import Account from '~/models/Account.js'
 import Currency from '~/models/Currency.js'
 import { convertCurrency } from '~/utils/CurrencyUtils'
 import DateUtils from '~/utils/DateUtils'
 import { getExcludedTransactionFilters } from '~/utils/DashboardUtils'
 import { mapWithConcurrency } from '~/utils/ConcurrencyUtils'
 import { eachFinancialMonth, financialMonthKey, currentFinancialMonth } from '~/utils/DateRangeUtils'
-import {
-  buildMonthlyFact,
-  factFilterHash,
-  assignColorSlots,
-  rankTopNWithOther,
-  rankTopNByMagnitudeWithOther,
-  leastSquaresSlope,
-  budgetSeverity,
-} from '~/utils/AnalyticsUtils'
+import { buildMonthlyFact, factFilterHash, assignColorSlots, rankTopNWithOther, rankTopNByMagnitudeWithOther, leastSquaresSlope, budgetSeverity } from '~/utils/AnalyticsUtils'
 import { seriesColor } from '~/utils/ChartUtils'
 import { buildAnalyticsFilterPlan, expandFanOutCombos } from '~/utils/AnalyticsFilterUtils'
 import { useAnalyticsFilters } from '~/composables/useAnalyticsFilters'
@@ -45,6 +41,7 @@ import {
   ANALYTICS_COMPOSITION_TOP_N,
   ANALYTICS_RANKED_TOP_N,
   ANALYTICS_HEATMAP_MAX_ROWS,
+  NET_WORTH_SCHEMA_VERSION,
 } from '~/constants/AnalyticsConstants'
 
 export const useAnalyticsStore = defineStore('analytics', () => {
@@ -89,6 +86,13 @@ export const useAnalyticsStore = defineStore('analytics', () => {
   // than serving stale data for the old range. Uses the per-budget `/budgets/{id}/limits` endpoint
   // directly for better performance than filtering the wide `/budget-limits` endpoint.
   const budgetLimitsByBudget = ref({})
+
+  // ----- Net worth. Persisted (like factCache) — a past month's balance snapshot is immutable
+  // once recorded, and each month costs two real HTTP requests, so surviving reload has a real
+  // payoff. Its own store slice, not an extension of factCache/MonthlyFact — net worth is a
+  // balance SNAPSHOT per month-end (stock), not a transaction aggregate (flow), same reasoning
+  // that made Budgets its own slice above. Keyed by financial-month key like factCache/monthStatus.
+  const netWorthCache = useLocalStorage('analyticsNetWorthCache', {})
 
   // ----- Getters
 
@@ -292,7 +296,7 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     return sumConverted(dimension === 'byMerchant' ? entry?.amount : entry)
   }
 
-// Excludes the in-progress financial month and requires every remaining month in range to
+  // Excludes the in-progress financial month and requires every remaining month in range to
   // already be a loaded fact before computing anything. A partially-loaded window can't tell "no
   // spending that month" (a true zero, correctly included in the regression) apart from "not
   // fetched yet" (unknown) — silently treating the latter as zero would reproduce the exact
@@ -420,7 +424,7 @@ export const useAnalyticsStore = defineStore('analytics', () => {
   // ----- Phase 4b — Behaviour (day-of-week, detected recurring). Both reduce over the
   // already-cached factCache, same as Where-the-money-goes above — no new fetching.
 
-function weekdayTotals(months) {
+  function weekdayTotals(months) {
     const keys = new Set(months.map((month) => month.key))
     const totals = new Array(7).fill(0)
     for (const [key, fact] of Object.entries(factCache.value)) {
@@ -486,7 +490,7 @@ function weekdayTotals(months) {
           return { id, total: 0 }
         }
       },
-      { concurrency: 2 }
+      { concurrency: 2 },
     )
 
     for (const { value, error } of settled) {
@@ -507,7 +511,7 @@ function weekdayTotals(months) {
 
     // Use the cache key from the last fetch (refresh), since refresh uses a wider range that includes prior months
     const cacheKey = lastRecurringFetchCacheKey
-    const totalsCache = cacheKey ? recurringTransactionTotals.value[cacheKey] ?? {} : {}
+    const totalsCache = cacheKey ? (recurringTransactionTotals.value[cacheKey] ?? {}) : {}
 
     return Object.values(recurringStore.recurringTransactionDictionary)
       .filter((entry) => {
@@ -722,7 +726,7 @@ function weekdayTotals(months) {
           return { budget: budget.id, limits: [] }
         }
       },
-      { concurrency: 2 }
+      { concurrency: 2 },
     )
 
     const allLimits = []
@@ -797,6 +801,117 @@ function weekdayTotals(months) {
     return budgetLimitsByBudget.value[key] ?? []
   }
 
+  // ----- Net worth (hybrid fetch — see analyticsStore's netWorthCache comment above and
+  // ANALYTICS_PLAN.md's Net Worth plan for the full reasoning). Deliberately does NOT check
+  // currentFilterHash — net worth comes from account balances (via Firefly's own summary
+  // endpoint and the accounts endpoint), never from filtered transactions, so the analytics
+  // dimensional filter and persistent exclusion lists don't apply. Same scope boundary Budgets'
+  // functions already draw above.
+  function isNetWorthValid(monthKey, currentMonthKey) {
+    const entry = netWorthCache.value[monthKey]
+    if (!entry) return false
+    if (entry.schemaVersion !== NET_WORTH_SCHEMA_VERSION) return false
+    if (!entry.isComplete) return false
+    if (monthKey === currentMonthKey) return Date.now() - entry.fetchedAt < ANALYTICS_CURRENT_MONTH_CACHE_TTL_MS
+    return true
+  }
+
+  // Ports dashboardStore.dashboardAccountsInNetWorth's exact filter (asset/liability type, active,
+  // include_net_worth).
+  function accountsIncludedInNetWorth(list) {
+    const netWorthTypes = [Account.types.asset.fireflyCode, Account.types.liability.fireflyCode]
+    return list.filter((account) => account && netWorthTypes.includes(Account.getType(account)?.fireflyCode) && Account.getIsActive(account) && Account.getIsIncludedInNetWorth(account))
+  }
+
+  async function fetchNetWorthMonth({ key, start, end, isCurrent }) {
+    const asOfEnd = isCurrent ? (new Date() < end ? new Date() : end) : end
+    const startStr = DateUtils.dateToString(start)
+    const endStr = DateUtils.dateToString(asOfEnd)
+
+    try {
+      const [summaryData, accountsResult] = await Promise.all([
+        new SummaryRepository().getBasic({ start: startStr, end: endStr, timeout: ANALYTICS_FETCH_TIMEOUT_MS }),
+        new AccountRepository().getAllPages({
+          filters: [{ field: 'date', value: endStr }],
+          pageSize: ANALYTICS_PAGE_SIZE,
+          concurrency: ANALYTICS_SUBQUERY_CONCURRENCY,
+          showLoading: false,
+          timeout: ANALYTICS_FETCH_TIMEOUT_MS,
+        }),
+      ])
+
+      // Matched by key PREFIX, currency read from the entry's own currency_code — never
+      // hardcoded or parsed from the key's suffix. balance-in-*/spent-in-*/etc. are ignored:
+      // confirmed against a real instance to be period-flow figures (they grow with the
+      // start/end range), not stock snapshots — only net-worth-in-* is a true as-of-`end` value.
+      const netWorthByCurrency = {}
+      for (const entry of Object.values(summaryData ?? {})) {
+        if (entry?.key?.startsWith('net-worth-in-') && entry?.currency_code) {
+          netWorthByCurrency[entry.currency_code] = parseFloat(entry.monetary_value)
+        }
+      }
+
+      const accounts = accountsIncludedInNetWorth(AccountTransformer.transformFromApiList(accountsResult.data))
+      const assetsByCurrency = {}
+      const liabilitiesByCurrency = {}
+      for (const account of accounts) {
+        const code = Account.getCurrencyCode(account)
+        const balance = parseFloat(Account.getBalance(account) ?? 0)
+        const bucket = Account.getType(account)?.fireflyCode === Account.types.liability.fireflyCode ? liabilitiesByCurrency : assetsByCurrency
+        bucket[code] = (bucket[code] ?? 0) + balance
+      }
+
+      netWorthCache.value[key] = {
+        schemaVersion: NET_WORTH_SCHEMA_VERSION,
+        monthKey: key,
+        fetchedAt: Date.now(),
+        netWorthByCurrency,
+        assetsByCurrency,
+        liabilitiesByCurrency,
+        isComplete: accountsResult.isComplete,
+      }
+    } catch (e) {
+      console.error(`[Analytics] Failed to fetch net worth for ${key}:`, e)
+      netWorthCache.value[key] = { ...(netWorthCache.value[key] ?? {}), schemaVersion: NET_WORTH_SCHEMA_VERSION, monthKey: key, isComplete: false, fetchedAt: Date.now() }
+    }
+  }
+
+  async function fetchNetWorthRange({ start, end, force = false } = {}) {
+    const firstDayOfMonth = profileStore.dashboard.firstDayOfMonth
+    const months = eachFinancialMonth(start, end, firstDayOfMonth).slice().reverse()
+    const currentKey = financialMonthKey(currentFinancialMonth(new Date(), firstDayOfMonth).start)
+    const toFetch = months.filter((m) => force || !isNetWorthValid(m.key, currentKey))
+    await mapWithConcurrency(toFetch, (m) => fetchNetWorthMonth({ ...m, isCurrent: m.key === currentKey }), { concurrency: ANALYTICS_SUBQUERY_CONCURRENCY })
+  }
+
+  // Bars chart — app-chart-bars.vue's {key,isLoaded,income,expense,net} contract directly: assets
+  // as income, liabilities magnitude as expense, and the AUTHORITATIVE net-worth-in-X (not a
+  // recomputation from assets/liabilities) as the net line — this net line IS the net worth
+  // figure (Firefly's own /summary/basic value, not derived from assets/liabilities), so it's
+  // the only place net worth is shown; no separate line chart (would just duplicate this).
+  function assetsLiabilitiesTotals(months) {
+    return months.map(({ key }) => {
+      const entry = netWorthCache.value[key]
+      if (!entry) return { key, isLoaded: false, income: 0, expense: 0, net: 0 }
+      const assets = sumConverted(entry.assetsByCurrency)
+      const liabilities = Math.abs(sumConverted(entry.liabilitiesByCurrency))
+      const netWorth = sumConverted(entry.netWorthByCurrency)
+      return { key, isLoaded: true, income: assets, expense: liabilities, net: netWorth }
+    })
+  }
+
+  function netWorthCurrencyCodesInRange(months) {
+    const codes = new Set()
+    for (const { key } of months) {
+      const entry = netWorthCache.value[key]
+      if (!entry) continue
+      Object.keys(entry.netWorthByCurrency).forEach((c) => codes.add(c))
+      Object.keys(entry.assetsByCurrency).forEach((c) => codes.add(c))
+      Object.keys(entry.liabilitiesByCurrency).forEach((c) => codes.add(c))
+    }
+    return [...codes]
+  }
+
   return {
     factCache,
     analyticsCurrency,
@@ -838,5 +953,8 @@ function weekdayTotals(months) {
     weekdayTotals,
     knownRecurringRows,
     fetchRecurringTransactionTotals,
+    fetchNetWorthRange,
+    assetsLiabilitiesTotals,
+    netWorthCurrencyCodesInRange,
   }
 })

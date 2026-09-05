@@ -12,6 +12,7 @@
       <div class="dynamic-masonry">
         <analytics-headline />
         <analytics-cashflow />
+        <analytics-networth-assets-liabilities />
         <analytics-savings-rate />
         <analytics-money-goes-ranked />
         <analytics-money-goes-composition />
@@ -52,6 +53,10 @@ const onRefresh = async () => {
     // triggered on-demand when budget panels open (see analytics-budgets-overview.vue).
     analyticsStore.fetchBudgetList(),
     analyticsStore.fetchCurrentBudgetLimits(),
+    // Net worth is account-balance-based, not filtered-transaction-based (see analyticsStore's
+    // isNetWorthValid) — filter-independent like the two budget fetches above, and cheap to
+    // re-run on a pure filter change since every already-cached month stays valid.
+    analyticsStore.fetchNetWorthRange({ start: range.value.start, end: range.value.end }),
   ])
 }
 

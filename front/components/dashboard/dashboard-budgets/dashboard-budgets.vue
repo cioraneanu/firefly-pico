@@ -33,23 +33,6 @@
           @day-select="onDaySelect"
         />
       </div>
-
-      <app-chart-table-view v-if="pacing.isEligible" :title="$t('dashboard.budget_pace.table_view')">
-        <table>
-          <thead>
-            <tr>
-              <th>{{ $t('dashboard.budget_pace.budget') }}</th>
-              <th>{{ $t('dashboard.budget_pace.pace_today') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="line in displaySeries" :key="line.id">
-              <td>{{ line.label }}</td>
-              <td>{{ formatPercent(line.values.at(-1)) }}</td>
-            </tr>
-          </tbody>
-        </table>
-      </app-chart-table-view>
     </template>
 
     <div v-else class="text-muted text-size-12 px-3 mb-15" style="margin-top: -10px">No budgets ^_^</div>
@@ -73,12 +56,12 @@ const currencyStore = useCurrencyStore()
 const dashboardStore = useDashboardStore()
 const { t } = useI18n()
 
-const budgetList = budgetStore.budgetList.filter(item => Budget.isActive(item))
+const budgetList = budgetStore.budgetList.filter((item) => Budget.isActive(item))
 const hasBudgets = computed(() => budgetList.length > 0)
 
 const budgetLimitTotalFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitTotal)} ${dashboardStore.dashboardCurrencyCode}`)
 const budgetLimitSpentFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitSpent)} ${dashboardStore.dashboardCurrencyCode}`)
-const budgetLimitRemainingFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitRemaining) } ${dashboardStore.dashboardCurrencyCode}`)
+const budgetLimitRemainingFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitRemaining)} ${dashboardStore.dashboardCurrencyCode}`)
 
 // ----- Budget pace (cumulative day-by-day spend vs. each budget's limit)
 

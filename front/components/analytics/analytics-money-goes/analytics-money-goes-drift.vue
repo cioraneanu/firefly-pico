@@ -36,23 +36,6 @@
         </tr>
       </table>
     </div>
-
-    <app-chart-table-view v-if="drift.isEligible" :title="$t('analytics.money_goes.drift.table_view')">
-      <table>
-        <thead>
-          <tr>
-            <th>{{ $t('analytics.money_goes.ranked.by_' + (dimensionTab === 'byCategory' ? 'category' : 'tag')) }}</th>
-            <th>{{ $t('analytics.money_goes.drift.slope_label') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="row in displayRows" :key="row.id">
-            <td>{{ row.label }}</td>
-            <td>{{ formatSlope(row.slope) }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </app-chart-table-view>
   </van-cell-group>
 </template>
 

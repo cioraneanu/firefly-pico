@@ -479,10 +479,7 @@
       "title": "Budget pace",
       "not_enough_data": "No budget has a limit set for this period",
       "ideal": "Ideal pace",
-      "other": "Other",
-      "table_view": "Table view",
-      "budget": "Budget",
-      "pace_today": "Pace today"
+      "other": "Other"
     },
     "month_projection": {
       "title": "This month so far",
@@ -547,14 +544,12 @@
       "title": "Cashflow",
       "income": "Income",
       "expense": "Expense",
-      "net": "Net",
-      "table_view": "Table view"
+      "net": "Net"
     },
     "savings_rate": {
       "title": "Savings rate",
       "series_label": "Savings rate",
       "target_label": "Target",
-      "table_view": "Table view",
       "no_data": "No income recorded yet for this range"
     },
     "money_goes": {
@@ -562,13 +557,11 @@
         "title": "Where the money goes",
         "by_category": "Categories",
         "by_tag": "Tags",
-        "other": "Other",
-        "table_view": "Table view"
+        "other": "Other"
       },
       "composition": {
         "title": "Composition over time",
-        "other": "Other",
-        "table_view": "Table view"
+        "other": "Other"
       },
       "mom": {
         "title": "Month-over-month change",
@@ -584,14 +577,12 @@
         "description": "Linear trend showing how spending per category/tag is changing month-to-month. Positive = increasing, negative = decreasing. Excludes the current in-progress month.",
         "other": "Other",
         "slope_label": "/mo",
-        "table_view": "Table view",
         "not_enough_data": "Need at least 3 complete months of data to compute a trend"
       },
       "heatmap": {
         "title": "Category x month",
         "raw": "Raw",
-        "normalize": "Normalized",
-        "table_view": "Table view"
+        "normalize": "Normalized"
       }
     },
     "budgets": {
@@ -602,23 +593,22 @@
         "limit": "Budgeted"
       }
     },
+    "net_worth": {
+      "assets_liabilities": {
+        "title": "Assets vs liabilities",
+        "assets": "Assets",
+        "liabilities": "Liabilities",
+        "net": "Net worth"
+      },
+      "fx_note": "Balances in other currencies are converted at today's exchange rate, not the rate on the date shown."
+    },
     "behavior": {
       "weekday": {
-        "title": "Day-of-week pattern",
-        "table_view": "Table view",
-        "weekday": "Weekday",
-        "average": "Average per occurrence",
-        "occurrences": "Occurrences"
+        "title": "Day-of-week pattern"
       },
       "recurring": {
         "title": "Recurring charges",
-        "empty": "No recurring charges in this range",
-        "table_view": "Table view",
-        "description": "Description",
-        "merchant": "Merchant",
-        "amount": "Amount",
-        "total_in_range": "Total in range",
-        "cadence": "Cadence"
+        "empty": "No recurring charges in this range"
       }
     },
     "failed_months": "{count} month(s) failed to load",

@@ -16,23 +16,6 @@
         @cell-select="onCellSelect"
       />
     </div>
-
-    <app-chart-table-view :title="$t('analytics.money_goes.heatmap.table_view')">
-      <table>
-        <thead>
-          <tr>
-            <th>{{ $t('analytics.money_goes.ranked.by_category') }}</th>
-            <th v-for="month in months" :key="month.key">{{ month.key.slice(5) }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="row in displayRows" :key="row.id">
-            <td>{{ row.label }}</td>
-            <td v-for="cell in row.values" :key="cell.key">{{ cell.isLoaded ? formatNumberForDashboard(cell.value) : '—' }}</td>
-          </tr>
-        </tbody>
-      </table>
-    </app-chart-table-view>
   </van-cell-group>
 </template>
 

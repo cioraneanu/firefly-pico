@@ -32,6 +32,12 @@ export const ANALYTICS_HEATMAP_MAX_ROWS = 30 // matches ANALYTICS_PLAN.md Part 1
 // Phase 4b (Behaviour):
 export const ANALYTICS_IQR_MIN_SAMPLE = 4 // below this, quartiles() returns null — too few points to isolate outliers
 
+// Bump whenever a change alters what a cached net-worth-per-month entry MEANS. Separate from
+// ANALYTICS_SCHEMA_VERSION — different cache shape (netWorthByCurrency/assetsByCurrency/
+// liabilitiesByCurrency, not a MonthlyFact) and different invalidation rule (no filterHash —
+// see analyticsStore's isNetWorthValid).
+export const NET_WORTH_SCHEMA_VERSION = 1
+
 export const analyticsTab = {
   headline: { t: 'analytics.tab.headline', code: 'headline', needs: ['monthlyFacts'] },
   cashflow: { t: 'analytics.tab.cashflow', code: 'cashflow', needs: ['monthlyFacts'] },
