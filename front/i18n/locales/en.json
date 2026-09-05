@@ -288,6 +288,7 @@
         "accounts_summary": "Accounts summary",
         "expenses_this_week": "Expenses this week",
         "transactions_summary": "Transactions summary",
+        "month_projection": "Month projection",
         "expenses_by_tag": "Expenses by tags",
         "expenses_by_category": "Expenses by categories",
         "transfers_by_tag": "Transfers by tags",
@@ -474,6 +475,24 @@
       "budgeted": "Budgeted",
       "remaining": "Remaining"
     },
+    "budget_pace": {
+      "title": "Budget pace",
+      "description": "Cumulative spend against each budget's limit, day by day this month.",
+      "not_enough_data": "No budget has a limit set for this period",
+      "ideal": "Ideal pace",
+      "other": "Other",
+      "y_axis": "% of budget limit"
+    },
+    "month_projection": {
+      "title": "This month so far",
+      "not_enough_data": "Not enough data yet this month",
+      "spent_so_far": "Spent so far",
+      "daily_rate": "Daily rate",
+      "daily_rate_note": "excludes unusually large purchases",
+      "projected": "Projected month end",
+      "vs_historical": "vs. historical average",
+      "day_progress": "Day {day} of {total}"
+    },
     "expenses_by_tags": {
       "title": "Expenses by tags",
       "all_tags": "All tags",
@@ -491,6 +510,123 @@
       "net_amount": "Net amount"
     },
     "configure_cards": "Configure cards"
+  },
+  "analytics": {
+    "title": "Analytics",
+    "tab": {
+      "headline": "Headline",
+      "cashflow": "Cashflow",
+      "where_money_goes": "Where the money goes",
+      "behavior": "Behaviour"
+    },
+    "range": {
+      "last_3_months": "Last 3 months",
+      "last_6_months": "Last 6 months",
+      "last_12_months": "Last 12 months",
+      "last_24_months": "Last 24 months",
+      "year_to_date": "Year to date",
+      "custom": "Custom"
+    },
+    "filters": {
+      "title": "Analytics filters",
+      "exclude": "Exclude"
+    },
+    "axis": {
+      "amount": "Amount"
+    },
+    "headline": {
+      "description": "Income, expenses, and savings totals for the selected range.",
+      "net_cashflow": "Net cashflow",
+      "avg_income": "Avg. income",
+      "avg_expense": "Avg. expense",
+      "avg_net": "Avg. net",
+      "savings_rate": "Savings rate",
+      "largest_month": "Largest month",
+      "transaction_count": "Transactions",
+      "vs_prior_period": "vs prior {count} mo",
+      "not_available": "N/A"
+    },
+    "cashflow": {
+      "title": "Cashflow",
+      "description": "Income and expenses per month, with the net difference overlaid.",
+      "income": "Income",
+      "expense": "Expense",
+      "net": "Net"
+    },
+    "savings_rate": {
+      "title": "Savings rate",
+      "description": "The share of income kept as savings each month, against a 20% target.",
+      "series_label": "Savings rate",
+      "target_label": "Target",
+      "no_data": "No income recorded yet for this range"
+    },
+    "money_goes": {
+      "ranked": {
+        "title": "Where the money goes",
+        "description": "Categories or tags ranked by total spend in the selected range.",
+        "by_category": "Categories",
+        "by_tag": "Tags",
+        "other": "Other"
+      },
+      "composition": {
+        "title": "Composition over time",
+        "description": "How spend is split across categories or tags, month by month.",
+        "other": "Other"
+      },
+      "mom": {
+        "title": "Month-over-month change",
+        "other": "Other",
+        "previous": "Previous",
+        "current": "Current",
+        "change": "Change",
+        "table_view": "Table view",
+        "not_enough_data": "Need at least 2 months of data to compare"
+      },
+      "drift": {
+        "title": "Spending drift",
+        "description": "Linear trend showing how spending per category/tag is changing month-to-month. Positive = increasing, negative = decreasing. Excludes the current in-progress month.",
+        "other": "Other",
+        "slope_label": "/mo",
+        "not_enough_data": "Need at least 3 complete months of data to compute a trend"
+      },
+      "heatmap": {
+        "title": "Category x month",
+        "description": "Spend per category, month by month — darker means more.",
+        "raw": "Raw",
+        "normalize": "Normalized"
+      }
+    },
+    "budgets": {
+      "overview": {
+        "title": "Budgets",
+        "description": "Actual spend against each budget's limit, month by month.",
+        "no_budgets": "No active budgets",
+        "actual": "Spent",
+        "limit": "Budgeted"
+      }
+    },
+    "net_worth": {
+      "assets_liabilities": {
+        "title": "Assets vs liabilities",
+        "description": "Assets and liabilities per month, with net worth overlaid.",
+        "assets": "Assets",
+        "liabilities": "Liabilities",
+        "net": "Net worth"
+      }
+    },
+    "behavior": {
+      "weekday": {
+        "title": "Day-of-week pattern",
+        "description": "Average spend by day of week across the selected range."
+      },
+      "recurring": {
+        "title": "Recurring charges",
+        "description": "Recurring charges detected from your transaction history.",
+        "empty": "No recurring charges in this range"
+      }
+    },
+    "failed_months": "{count} month(s) failed to load",
+    "retry": "Retry"
   },
   "profile_page": {
     "title": "Profiles list",

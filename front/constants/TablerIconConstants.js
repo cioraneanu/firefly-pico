@@ -15,6 +15,7 @@ export const icons = {
   transaction: 'IconCoins',
   transactionTemplate: 'IconTemplate',
   dashboard: 'IconDeviceDesktopAnalytics',
+  analytics: 'IconChartHistogram',
   exchangeRates: 'IconReplace',
   assistant: 'IconMessageChatbot',
 

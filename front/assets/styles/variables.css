@@ -1,76 +1,154 @@
 :root {
-    --white: #fff;
-    --black: #000;
-    --semi-black: #888;
-    --max-device-width: 800px;
-    --van-tabbar-z-index: 10 !important;
+  --white: #fff;
+  --black: #000;
+  --semi-black: #888;
+  --max-device-width: 800px;
+  --van-tabbar-z-index: 10 !important;
 
-    --expense1: rgba(236, 64, 122, 1);
-    --expense2: rgba(236, 64, 122, 1);
-    --expense3: #fce4ec;
+  --expense1: rgba(236, 64, 122, 1);
+  --expense2: rgba(236, 64, 122, 1);
+  --expense3: #fce4ec;
 
-    --income1: rgba(102, 187, 106, 1);
-    --income2: rgba(129, 199, 132, 1);
-    --income3: #e8f5e9;
+  --income1: rgba(102, 187, 106, 1);
+  --income2: rgba(129, 199, 132, 1);
+  --income3: #e8f5e9;
 
-    --transfer1: rgba(79, 195, 247, 1);
-    --transfer2: rgba(41, 182, 246, 1);
-    --transfer3: #e3f2fd;
+  --transfer1: rgba(79, 195, 247, 1);
+  --transfer2: rgba(41, 182, 246, 1);
+  --transfer3: #e3f2fd;
 
-    --van-background-2-5: #f7f8fa;
-    /*--primary-action: #000;*/
-    --primary-action: #00a261;
+  /* Analytics-only palette layer — validated against ANALYTICS_PLAN.md Part 1. Kept
+       separate from --expense2/--income1/--transfer1 above (load-bearing elsewhere, and
+       not safe as standalone chart fills at their current lightness/CVD contrast). */
+  --viz-expense: #e34948;
+  --viz-income: #008300;
+  --viz-transfer: #2a78d6;
 
-    --chart-bar-background: #c4c7d4;
+  /* Categorical palette (max 8 slots) for multi-series analytics charts (category/tag
+       composition). Slot 6 substitutes brown for the raw palette's #008300 — that value is
+       byte-identical to --viz-income, and would misread as "income" on pages showing both. */
+  --viz-categorical-1: #2a78d6;
+  --viz-categorical-2: #eb6834;
+  --viz-categorical-3: #1baf7a;
+  --viz-categorical-4: #eda100;
+  --viz-categorical-5: #e87ba4;
+  --viz-categorical-6: #8d6e63;
+  --viz-categorical-7: #4a3aa7;
+  --viz-categorical-8: #e34948;
+  --viz-other: #9e9d94;
 
-    --van-search-content-background: var(--van-background-2-5) !important;
+  /* Sequential ramp (category x month heatmap) — one hue, light->dark. Not run through
+       scripts/validate_palette.js (absent from this checkout) — same caveat as --viz-other above. */
+  --viz-sequential-1: #cde2fb;
+  --viz-sequential-2: #b7d3f6;
+  --viz-sequential-3: #9ec5f4;
+  --viz-sequential-4: #86b6ef;
+  --viz-sequential-5: #5598e7;
+  --viz-sequential-6: #2a78d6;
+  --viz-sequential-7: #1c5cab;
+  --viz-sequential-8: #104281;
 
-    --van-field-label-width: 10.5em !important;
-    --van-collapse-item-content-background: transparent !important;
-    --van-collapse-item-content-padding: 5px 5px !important;
-    --van-floating-bubble-size: 40px !important;
+  --viz-grid: #e1e0d9;
+  --viz-grid-baseline: #c3c2b7;
+
+  /* Status ramp (budget severity only, ANALYTICS_PLAN.md Part 1) — never reused as a series
+       colour, always shipped with icon + label. Track = same colour at reduced opacity at the
+       render site (app-chart-meter.vue), not a second set of tokens. */
+  --viz-status-good: #0ca30c;
+  --viz-status-warning: #fab219;
+  --viz-status-serious: #ec835a;
+  --viz-status-critical: #d03b3b;
+
+  --van-background-2-5: #f7f8fa;
+  /*--primary-action: #000;*/
+  --primary-action: #00a261;
+
+  --chart-bar-background: #c4c7d4;
+
+  --van-search-content-background: var(--van-background-2-5) !important;
+
+  --van-field-label-width: 10.5em !important;
+  --van-collapse-item-content-background: transparent !important;
+  --van-collapse-item-content-padding: 5px 5px !important;
+  --van-floating-bubble-size: 40px !important;
 }
 
 .van-theme-dark {
-    --white: #000;
-    --black: #fff;
-    --semi-black: #aaa;
+  --white: #000;
+  --black: #fff;
+  --semi-black: #aaa;
 
-    --van-background-2-5: #2f2f2f;
-    /*--primary-action: #2f2f2f;*/
-    --primary-action: #00a261dd;
+  --van-background-2-5: #2f2f2f;
+  /*--primary-action: #2f2f2f;*/
+  --primary-action: #00a261dd;
 
-    --chart-bar-background: #707070;
+  --chart-bar-background: #707070;
 
-    --expense1: rgba(236, 64, 122, 1);
-    --expense2: rgba(236, 64, 122, 1);
-    --expense3: #fce4ec;
+  --expense1: rgba(236, 64, 122, 1);
+  --expense2: rgba(236, 64, 122, 1);
+  --expense3: #fce4ec;
 
-    --income1: rgba(102, 187, 106, 1);
-    --income2: rgba(129, 199, 132, 1);
-    --income3: #e8f5e9;
+  --income1: rgba(102, 187, 106, 1);
+  --income2: rgba(129, 199, 132, 1);
+  --income3: #e8f5e9;
 
-    --transfer1: rgba(79, 195, 247, 1);
-    --transfer2: rgba(41, 182, 246, 1);
-    --transfer3: #e3f2fd;
+  --transfer1: rgba(79, 195, 247, 1);
+  --transfer2: rgba(41, 182, 246, 1);
+  --transfer3: #e3f2fd;
 
-    --van-border-color: #666;
+  --viz-expense: #e66767;
+  --viz-income: #008300;
+  --viz-transfer: #3987e5;
 
-    --theme-black: #fff;
-    --theme-background-grey: #777;
-    --theme-border-color-grey: #444;
-    --theme-shadow-color: #fff;
-    --theme-shadow-r: 200;
-    --theme-shadow-g: 200;
-    --theme-shadow-b: 200;
-    --theme-highlight-r: 0;
-    --theme-highlight-g: 0;
-    --theme-highlight-b: 0;
-    --theme-text-white: #000;
-    --theme-link-color: #03a9f4;
-    --theme-link-hover-color: #0288d1;
-    --van-text-color-3: var(--van-text-color-2);
-    --van-text-color-4: #ccc;
-    --svg-color: #ffffff;
-    --van-field-placeholder-text-color: var(--van-text-color);
+  --viz-categorical-1: #3987e5;
+  --viz-categorical-2: #d95926;
+  --viz-categorical-3: #199e70;
+  --viz-categorical-4: #c98500;
+  --viz-categorical-5: #d55181;
+  --viz-categorical-6: #a1887f;
+  --viz-categorical-7: #9085e9;
+  --viz-categorical-8: #e66767;
+  --viz-other: #57564f;
+
+  /* Inverted vs. :root — low intensity stays visible against the dark surface, floored at
+       #184f95 rather than continuing to the light ramp's near-black #104281. */
+  --viz-sequential-1: #184f95;
+  --viz-sequential-2: #1c5cab;
+  --viz-sequential-3: #2a78d6;
+  --viz-sequential-4: #3987e5;
+  --viz-sequential-5: #5598e7;
+  --viz-sequential-6: #86b6ef;
+  --viz-sequential-7: #9ec5f4;
+  --viz-sequential-8: #b7d3f6;
+
+  --viz-grid: #2c2c2a;
+  --viz-grid-baseline: #383835;
+
+  /* Lifted lightness vs. :root, same direction as --viz-expense/--viz-transfer's light->dark
+       shift above — not run through scripts/validate_palette.js (absent from this checkout),
+       same caveat already recorded for --viz-other/--viz-sequential-*. */
+  --viz-status-good: #14c414;
+  --viz-status-warning: #ffc94d;
+  --viz-status-serious: #f0996f;
+  --viz-status-critical: #e35c5c;
+
+  --van-border-color: #666;
+
+  --theme-black: #fff;
+  --theme-background-grey: #777;
+  --theme-border-color-grey: #444;
+  --theme-shadow-color: #fff;
+  --theme-shadow-r: 200;
+  --theme-shadow-g: 200;
+  --theme-shadow-b: 200;
+  --theme-highlight-r: 0;
+  --theme-highlight-g: 0;
+  --theme-highlight-b: 0;
+  --theme-text-white: #000;
+  --theme-link-color: #03a9f4;
+  --theme-link-hover-color: #0288d1;
+  --van-text-color-3: var(--van-text-color-2);
+  --van-text-color-4: #ccc;
+  --svg-color: #ffffff;
+  --van-field-placeholder-text-color: var(--van-text-color);
 }

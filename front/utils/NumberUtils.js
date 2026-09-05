@@ -21,3 +21,16 @@ export const formatNumberForDashboard = (value) => {
   let digits = profileStore.dashboard.showDecimal ? 2 : 0
   return formatNumber(value, digits)
 }
+
+export const formatPercent = (value, digits = 1) => {
+  return `${(value * 100).toFixed(digits)}%`
+}
+
+export const formatCompactNumberForDashboard = (value) => {
+  const profileStore = useProfileStore()
+  if (!profileStore.dashboard.showAccountAmounts) {
+    return '******'
+  }
+  let numberFormatCode = profileStore.numberFormat.code ?? NUMBER_FORMAT.eu.code
+  return new Intl.NumberFormat(numberFormatCode, { notation: 'compact', maximumFractionDigits: 1 }).format(value)
+}

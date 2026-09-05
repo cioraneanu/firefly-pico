@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { StorageSerializers, useLocalStorage } from '@vueuse/core'
-import { startOfMonth, subMonths, getDate, differenceInDays, setDate, addMonths, subDays, startOfDay } from 'date-fns'
+import { startOfMonth, subMonths, getDate, differenceInDays, differenceInCalendarDays, setDate, addMonths, subDays, startOfDay } from 'date-fns'
 import { useProfileStore } from '~/stores/profileStore'
 import { useAppStore } from '~/stores/appStore'
 import { useAccountStore } from '~/stores/accountStore'
@@ -17,6 +17,7 @@ import AccountRepository from '~/repository/AccountRepository'
 import AccountTransformer from '~/transformers/AccountTransformer'
 import Account from '~/models/Account'
 import Transaction from '~/models/Transaction'
+import Budget from '~/models/Budget.js'
 import Currency from '~/models/Currency.js'
 import { convertCurrency, convertTransactionAmountToCurrency, convertTransactionsTotalAmountToCurrency } from '~/utils/CurrencyUtils'
 import TransactionRepository from '~/repository/TransactionRepository'
@@ -26,6 +27,11 @@ import DateUtils from '~/utils/DateUtils.js'
 import { getExcludedTransactionFilters } from '~/utils/DashboardUtils.js'
 import TransactionFilterUtils from '~/utils/TransactionFilterUtils.js'
 import { useListFilters } from '~/composables/useListFilters.js'
+import { DASHBOARD_BUDGET_PACE_TOP_N, DASHBOARD_PROJECTION_HISTORY_MONTHS } from '~/constants/DashboardConstants.js'
+// Pure, store-free math with no coupling to analyticsStore or the analytics page — reused here
+// rather than re-implemented, same as any other shared util.
+import { quartiles, rankTopNWithOther } from '~/utils/AnalyticsUtils.js'
+import { seriesColor } from '~/utils/ChartUtils.js'
 
 export const useDashboardStore = defineStore('dashboard', () => {
   const accountStore = useAccountStore()
@@ -46,6 +52,11 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const isLoadingTransactions = ref(false)
   const isLoadingTransactionsLastWeek = ref(false)
   const dashboardCurrency = useLocalStorage('dashboardCurrency', null, { serializer: StorageSerializers.object })
+  // Trailing complete months' total expense, in dashboardCurrency — backs Month projection's
+  // "vs. historical average" comparison. Not part of transactionsList (that's this month only),
+  // so it's the one new fetch this widget pair needs; see fetchHistoricalMonthlyExpenseTotals.
+  const historicalMonthlyExpenseTotals = ref([])
+  const isLoadingHistoricalMonthlyExpenseTotals = ref(false)
 
   // ----- Getters
   const dashboardAccountDictionary = computed(() => {
@@ -103,6 +114,47 @@ export const useDashboardStore = defineStore('dashboard', () => {
 
     isLoadingTransactionsLastWeek.value = false
     transactionsListLastWeek.value = TransactionTransformer.transformFromApiList(list)
+  }
+
+  // Trailing DASHBOARD_PROJECTION_HISTORY_MONTHS complete months' total expense, one request per
+  // month (same query shape as fetchTransactionsForInterval, incl. exclusions and the manual
+  // filter popup) — a full MonthlyFact per month would be overkill for a single number, so this
+  // reuses convertTransactionsTotalAmountToCurrency (the same helper totalExpenseThisMonth already
+  // uses) instead of a per-split reduction.
+  //
+  // showLoading: false is load-bearing, not cosmetic — front/plugins/axios.js defaults every
+  // request's showLoading to true, which pins app-loading.vue's full-screen blocking overlay
+  // (loadingStore.isLoadingDelayed) for as long as the request is in flight. getAllWithMerge has
+  // no way to override that default; getAllPages does (same fix analyticsStore.js's own
+  // fetchFilteredPages already applies, for the same reason: this fetch must run silently in the
+  // background so it never delays the rest of Home, which has already rendered from
+  // fetchDashboard() by the time this resolves.
+  async function fetchHistoricalMonthlyExpenseTotals() {
+    if (!dashboardDateStart.value) return
+    isLoadingHistoricalMonthlyExpenseTotals.value = true
+    try {
+      const totals = await Promise.all(
+        Array.from({ length: DASHBOARD_PROJECTION_HISTORY_MONTHS }, (_, i) => i + 1).map(async (monthsBack) => {
+          const monthStart = subMonths(dashboardDateStart.value, monthsBack)
+          const monthEnd = subDays(addMonths(monthStart, 1), 1)
+          const filtersParts = [
+            `date_after:${DateUtils.dateToString(monthStart)}`,
+            `date_before:${DateUtils.dateToString(monthEnd)}`,
+            'type:withdrawal',
+            ...getExcludedTransactionFilters(),
+            ...backendFilters.value,
+          ]
+          const filters = [{ field: 'query', value: filtersParts.join(' ') }]
+          const searchMethod = new TransactionRepository().searchTransaction
+          const { data } = await new TransactionRepository().getAllPages({ filters, getAll: searchMethod, showLoading: false })
+          const transactions = TransactionTransformer.transformFromApiList(data)
+          return convertTransactionsTotalAmountToCurrency(transactions, Currency.getCode(dashboardCurrency.value))
+        }),
+      )
+      historicalMonthlyExpenseTotals.value = totals
+    } finally {
+      isLoadingHistoricalMonthlyExpenseTotals.value = false
+    }
   }
 
   async function fetchTransactionsWithTodos() {
@@ -380,6 +432,128 @@ export const useDashboardStore = defineStore('dashboard', () => {
 
   const budgetLimitRemaining = computed(() => budgetLimitTotal.value - budgetLimitSpent.value)
 
+  // "Today", clipped to the shown month's own end — lets both budgetPace and monthProjection
+  // degrade correctly when the user has swiped to a past month (today > dashboardDateEnd), rather
+  // than assuming "today" always falls inside the period like the Analytics-page originals did
+  // (Analytics has no month navigation, so that assumption held there but doesn't here).
+  const dashboardPeriodCursor = computed(() => {
+    if (!dashboardDateEnd.value) return null
+    const today = new Date()
+    return today < dashboardDateEnd.value ? today : dashboardDateEnd.value
+  })
+
+  // Cumulative day-by-day spend against each budget's limit, one line per top-N active budget +
+  // "Other" — the Home-native replacement for analytics-budgets-burn-rate.vue. Reads straight from
+  // transactionsList/budgetStore.budgetList, both already fetched by fetchDashboard() for whatever
+  // month/filter Home is currently showing, so this needs no fetch of its own. "Spent" is computed
+  // per-split from transactionsList (respects the manual filter popup) rather than trusting
+  // Budget.getLimit()'s own attributes.spent (Firefly's server-side figure, which dashboard-budgets.vue
+  // uses and which does NOT pass through the manual filter) — the two budget widgets can therefore
+  // disagree while a manual filter is active; that's expected, not a bug.
+  const budgetPace = computed(() => {
+    const start = dashboardDateStart.value
+    const cursor = dashboardPeriodCursor.value
+    if (!start || !cursor || !dashboardDateEnd.value) return { totalDays: 0, daysInMonth: 0, series: [], isEligible: false, periodStart: start }
+    // The full month length, NOT the number of days plotted (cursor may fall short of month end
+    // for a still-in-progress month) — the ideal-pace diagonal must reach 100% at month end, not
+    // at "today", so this is exposed separately from totalDays for app-chart-multiline to draw the
+    // line against the true period length rather than the plotted window.
+    const daysInMonth = differenceInCalendarDays(dashboardDateEnd.value, start) + 1
+
+    const eligibleBudgets = budgetStore.budgetList.filter((budget) => Budget.isActive(budget) && (Budget.getLimit(budget)?.attributes?.amount ?? 0) > 0)
+    if (eligibleBudgets.length === 0) return { totalDays: 0, daysInMonth, series: [], isEligible: false, periodStart: start }
+
+    const limitById = Object.fromEntries(
+      eligibleBudgets.map((budget) => {
+        const limit = Budget.getLimit(budget)
+        return [budget.id, convertCurrency(limit?.attributes?.amount ?? 0, limit?.attributes?.currency_code, Currency.getCode(dashboardCurrency.value))]
+      }),
+    )
+    const { topIds, otherIds } = rankTopNWithOther(limitById, DASHBOARD_BUDGET_PACE_TOP_N)
+    const topBudgets = topIds.map((id) => eligibleBudgets.find((b) => String(b.id) === String(id)))
+    const otherBudgets = otherIds.map((id) => eligibleBudgets.find((b) => String(b.id) === String(id)))
+
+    const totalDays = Math.max(1, differenceInCalendarDays(cursor, start) + 1)
+    const dayTotals = {} // budgetId -> [day0Amount, day1Amount, ...], in that budget's own currency
+    for (const budget of [...topBudgets, ...otherBudgets]) dayTotals[budget.id] = new Array(totalDays).fill(0)
+
+    for (const transaction of transactionsListExpense.value) {
+      for (const split of Transaction.getSplits(transaction)) {
+        const budgetId = split.budget_id
+        if (budgetId == null || !(budgetId in dayTotals)) continue
+        const dayIndex = Math.min(totalDays - 1, Math.max(0, differenceInCalendarDays(split.date, start)))
+        dayTotals[budgetId][dayIndex] += convertCurrency(parseFloat(split.amount) || 0, split.currency_code, Currency.getCode(dashboardCurrency.value))
+      }
+    }
+
+    const series = topBudgets.map((budget, index) => {
+      const limit = limitById[budget.id]
+      let cumulative = 0
+      const values = dayTotals[budget.id].map((dayAmount) => {
+        cumulative += dayAmount
+        return limit > 0 ? (cumulative / limit) * 100 : null
+      })
+      return { id: budget.id, colorVar: seriesColor(index), values }
+    })
+
+    if (otherBudgets.length > 0) {
+      const otherLimit = otherBudgets.reduce((sum, b) => sum + (limitById[b.id] ?? 0), 0)
+      let cumulative = 0
+      const values = new Array(totalDays).fill(0).map((_, day) => {
+        cumulative += otherBudgets.reduce((sum, b) => sum + (dayTotals[b.id]?.[day] ?? 0), 0)
+        return otherLimit > 0 ? (cumulative / otherLimit) * 100 : null
+      })
+      series.push({ id: 'other', colorVar: seriesColor('other'), values })
+    }
+
+    return { totalDays, daysInMonth, series, isEligible: true, periodStart: start }
+  })
+
+  // Month-in-progress projection — the Home-native replacement for analytics-behavior-projection.vue.
+  // Reads transactionsListExpense (already fetched/filtered by fetchDashboard()), so this too needs
+  // no fetch of its own. Tukey/IQR outlier isolation matches the ported original: anything above
+  // Q3 + 1.5*IQR is a one-off (e.g. rent on day 1), added flat rather than rate-multiplied into the
+  // projection. regularDailyRate explicitly excludes one-offs — rate * days !== spent so far is
+  // expected, not a bug (label it as such in the UI).
+  const monthProjection = computed(() => {
+    const start = dashboardDateStart.value
+    const cursor = dashboardPeriodCursor.value
+    if (!start || !cursor || !dashboardDateEnd.value) return { isLoaded: false, periodStart: null, daysElapsed: 0, daysInMonth: 0, spentSoFar: 0, regularDailyRate: 0, oneOffTotal: 0, projectedTotal: 0 }
+
+    const daysElapsed = Math.max(1, differenceInCalendarDays(cursor, start) + 1)
+    const daysInMonth = differenceInCalendarDays(dashboardDateEnd.value, start) + 1
+
+    const amounts = []
+    for (const transaction of transactionsListExpense.value) {
+      for (const split of Transaction.getSplits(transaction)) {
+        amounts.push(convertCurrency(parseFloat(split.amount) || 0, split.currency_code, Currency.getCode(dashboardCurrency.value)))
+      }
+    }
+
+    const q = quartiles(amounts)
+    const threshold = q ? q.q3 + 1.5 * q.iqr : Infinity
+    const oneOffTotal = amounts.filter((amount) => amount > threshold).reduce((sum, amount) => sum + amount, 0)
+    const regularTotal = amounts.filter((amount) => amount <= threshold).reduce((sum, amount) => sum + amount, 0)
+    const regularDailyRate = regularTotal / daysElapsed
+
+    return {
+      isLoaded: true,
+      periodStart: start,
+      daysElapsed,
+      daysInMonth,
+      spentSoFar: regularTotal + oneOffTotal,
+      regularDailyRate,
+      oneOffTotal,
+      projectedTotal: regularDailyRate * daysInMonth + oneOffTotal,
+    }
+  })
+
+  const historicalMonthlyAverageExpense = computed(() => {
+    const validTotals = historicalMonthlyExpenseTotals.value.filter((total) => total != null)
+    if (validTotals.length === 0) return null
+    return validTotals.reduce((sum, total) => sum + total, 0) / validTotals.length
+  })
+
   return {
     isLoading,
     backendFilters,
@@ -437,5 +611,11 @@ export const useDashboardStore = defineStore('dashboard', () => {
     budgetLimitRemaining,
     dashboardCurrency,
     dashboardCurrencyCode,
+    budgetPace,
+    monthProjection,
+    historicalMonthlyExpenseTotals,
+    historicalMonthlyAverageExpense,
+    isLoadingHistoricalMonthlyExpenseTotals,
+    fetchHistoricalMonthlyExpenseTotals,
   }
 })

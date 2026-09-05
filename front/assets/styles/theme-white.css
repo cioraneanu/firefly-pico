@@ -719,6 +719,15 @@ body {
     padding: 5px;
 }
 
+/* Analytics cashflow bars — money-polarity fills, theme-aware via --viz-* (variables.css) */
+.bar-container-vertical.viz-income-bar .bar-filled {
+    background: var(--viz-income);
+}
+
+.bar-container-vertical.viz-expense-bar .bar-filled {
+    background: var(--viz-expense);
+}
+
 /*---*/
 .bar-container-horizontal .bar-container {
     height: 12px;
