@@ -51,12 +51,16 @@ const expanded = ref([])
 
 // Lazily fetches THIS budget's limits over the page's range the moment its panel opens — the
 // chart below reads analyticsStore.budgetLimitsFor(), which is empty (renders bar-only, no limit
-// line) until this resolves. Deliberately per-budget, not the old all-budgets/whole-range fetch:
-// that one scaled with months x every budget on the page and was the actual source of reported
-// timeouts once a panel this size was expanded across a wide range — Firefly computes `spent` for
-// every limit record it returns, so narrowing to one budget is a real, not just cosmetic, saving.
-watch(expanded, (ids) => {
-  for (const id of ids) analyticsStore.fetchBudgetLimitsForBudget(id, range.value.start, range.value.end)
+// line) until this resolves. Uses per-budget endpoint with concurrency control to prevent
+// overwhelming the API if many panels are opened at once.
+watch(expanded, async (ids) => {
+  if (ids.length === 0) return
+  const { mapWithConcurrency } = await import('~/utils/ConcurrencyUtils.js')
+  await mapWithConcurrency(
+    ids,
+    (id) => analyticsStore.fetchBudgetLimitsForBudget(id, range.value.start, range.value.end),
+    { concurrency: 2 }
+  )
 })
 
 // budgetList/currentBudgetLimits are fetched centrally by analytics.vue's own range watcher

@@ -86,11 +86,8 @@ export const useAnalyticsStore = defineStore('analytics', () => {
   // Per-budget, scoped to exactly one budget's limits over the page's range — what the accordion's
   // per-budget vs-limit chart needs, fetched lazily only when that budget's panel is expanded.
   // Keyed by `${budgetId}_${startStr}_${endStr}` so a range change naturally invalidates it rather
-  // than serving stale data for the old range. This (plus currentBudgetLimits above) is what
-  // replaced the original design's single eager ALL-budgets/WHOLE-range fetch — that fetch was the
-  // actual source of the reported timeouts on a wide range: Firefly has to compute `spent` for
-  // every limit record it returns, so "all budgets x 6 months" was doing far more server-side work
-  // than any one screen actually needed at once.
+  // than serving stale data for the old range. Uses the per-budget `/budgets/{id}/limits` endpoint
+  // directly for better performance than filtering the wide `/budget-limits` endpoint.
   const budgetLimitsByBudget = ref({})
 
   // ----- Getters
@@ -416,29 +413,6 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     })
   }
 
-  function budgetOverspendRows(months) {
-    const rows = []
-    for (const budget of budgetList.value) {
-      if (!Budget.isActive(budget)) continue
-      for (const point of budgetVsLimitSeries(budget.id, months)) {
-        if (point.limit == null) continue
-        const overspend = point.actual - point.limit
-        if (overspend <= 0) continue
-        rows.push({
-          budgetId: budget.id,
-          monthKey: point.key,
-          start: point.start,
-          end: point.end,
-          intervalLabel: point.intervalLabel,
-          actual: point.actual,
-          limit: point.limit,
-          overspend,
-        })
-      }
-    }
-    return rows.sort((a, b) => b.overspend - a.overspend)
-  }
-
   // Burn-rate pacing moved to dashboardStore.budgetPace (Home widget dashboard-budget-pace.vue) —
   // it was always "current financial month only," never the page's selected range, so it belongs
   // on Home, not Analytics.
@@ -512,7 +486,7 @@ function weekdayTotals(months) {
           return { id, total: 0 }
         }
       },
-      { concurrency: 4 }
+      { concurrency: 2 }
     )
 
     for (const { value, error } of settled) {
@@ -723,6 +697,43 @@ function weekdayTotals(months) {
     await budgetListFetchPromise
   }
 
+  // Fetch limits for all budgets in parallel using per-budget endpoint (faster than fetching all at once).
+  // Uses concurrency control to avoid overwhelming Firefly API.
+  async function fetchAllBudgetLimitsInRange(start, end) {
+    if (!profileStore.budgetsEnabled || budgetList.value.length === 0) return []
+    const safeEnd = end <= start ? addDays(start, 1) : end
+    const startStr = DateUtils.dateToString(start)
+    const endStr = DateUtils.dateToString(safeEnd)
+    const budgetRepository = new BudgetRepository()
+
+    const settled = await mapWithConcurrency(
+      budgetList.value,
+      async (budget) => {
+        try {
+          const response = await budgetRepository.getLimitsForBudget(budget.id, {
+            start: startStr,
+            end: endStr,
+            showLoading: false,
+            timeout: ANALYTICS_FETCH_TIMEOUT_MS,
+          })
+          return { budget: budget.id, limits: get(response, 'data', []) }
+        } catch (e) {
+          console.error(`[Analytics] Failed to fetch limits for budget ${budget.id}:`, e)
+          return { budget: budget.id, limits: [] }
+        }
+      },
+      { concurrency: 2 }
+    )
+
+    const allLimits = []
+    for (const { value } of settled) {
+      if (value?.limits) {
+        allLimits.push(...value.limits)
+      }
+    }
+    return BudgetLimitTransformer.transformFromApiList(allLimits)
+  }
+
   // "Today, all budgets" — cheap regardless of the page's selected range, since it's always a
   // single-day window. Backs the accordion's meters and burn-rate's eligibility ranking; see
   // budgetSeverityStatus's own comment for why this replaced depending on budgetLimitList.
@@ -753,32 +764,37 @@ function weekdayTotals(months) {
   // One budget, over the given range — what the accordion's per-budget vs-limit chart fetches
   // lazily on expand, instead of depending on the ALL-budgets/WHOLE-range budgetLimitList. Cached
   // by (budgetId, range) so re-collapsing/re-expanding the same panel doesn't refetch, but a range
-  // change (a new key) does.
+  // change (a new key) does. Uses per-budget endpoint directly for better performance.
+  // Note: Firefly times out on date-filtered queries, so we fetch all limits and filter client-side.
   async function fetchBudgetLimitsForBudget(budgetId, start, end) {
     if (!profileStore.budgetsEnabled) return
     const key = `${budgetId}_${DateUtils.dateToString(start)}_${DateUtils.dateToString(end)}`
     if (budgetLimitsByBudget.value[key]) return
-    const limits = await fetchBudgetLimitsRaw(start, end, budgetId)
-    budgetLimitsByBudget.value = { ...budgetLimitsByBudget.value, [key]: limits }
+    try {
+      // Fetch all limits without date filters (Firefly times out on wide date ranges even for single budgets)
+      const response = await new BudgetRepository().getLimitsForBudget(budgetId, {
+        showLoading: false,
+        timeout: ANALYTICS_FETCH_TIMEOUT_MS,
+      })
+      const allLimits = BudgetLimitTransformer.transformFromApiList(get(response, 'data', []))
+
+      // Filter to only limits that overlap with the requested range
+      const filteredLimits = allLimits.filter((limit) => {
+        const limitStart = new Date(limit.attributes.start)
+        const limitEnd = new Date(limit.attributes.end)
+        return limitStart <= end && limitEnd >= start
+      })
+
+      budgetLimitsByBudget.value = { ...budgetLimitsByBudget.value, [key]: filteredLimits }
+    } catch (e) {
+      console.error(`[Analytics] Failed to fetch limits for budget ${budgetId}:`, e)
+      budgetLimitsByBudget.value = { ...budgetLimitsByBudget.value, [key]: [] }
+    }
   }
 
   function budgetLimitsFor(budgetId, start, end) {
     const key = `${budgetId}_${DateUtils.dateToString(start)}_${DateUtils.dateToString(end)}`
     return budgetLimitsByBudget.value[key] ?? []
-  }
-
-  // The FULL range x ALL budgets fetch — only the overspend table needs this shape (every budget,
-  // whole range, in one pass) since it can't know in advance which (budget, month) pairs overspent
-  // without checking all of them. Every other Phase 4a consumer was moved off this on purpose (see
-  // budgetLimitList's own comment above) precisely because it's the expensive one.
-  async function fetchBudgetLimitsForRange(start, end) {
-    if (!profileStore.budgetsEnabled) {
-      budgetLimitList.value = []
-      return
-    }
-    isLoadingBudgetLimits.value = true
-    budgetLimitList.value = await fetchBudgetLimitsRaw(start, end)
-    isLoadingBudgetLimits.value = false
   }
 
   return {
@@ -816,9 +832,7 @@ function weekdayTotals(months) {
     budgetSeverityStatus,
     budgetVsLimitSeries,
     budgetLimitsFor,
-    budgetOverspendRows,
     fetchBudgetList,
-    fetchBudgetLimitsForRange,
     fetchCurrentBudgetLimits,
     fetchBudgetLimitsForBudget,
     weekdayTotals,

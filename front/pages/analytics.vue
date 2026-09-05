@@ -18,7 +18,6 @@
         <analytics-money-goes-drift />
         <analytics-money-goes-heatmap />
         <analytics-budgets-overview />
-        <analytics-budgets-overspend />
         <analytics-behavior-weekday />
         <analytics-behavior-recurring />
       </div>
@@ -47,10 +46,10 @@ const onRefresh = async () => {
     analyticsStore.refresh({ start: priorMonths.value[0]?.start ?? range.value.start, end: range.value.end }),
     // Both cheap and range-independent (budgets aren't range-scoped; "today" is always a single-
     // day window) — safe to kick off centrally so every budgets section has them ready sooner.
-    // The WIDE all-budgets/whole-range budget-limit fetch is deliberately NOT triggered here — it
-    // was the actual source of reported timeouts on wider ranges (Firefly computes `spent` per
-    // limit it returns, so cost scales with months x budgets), and only the overspend table
-    // genuinely needs that shape; it fetches it for itself now (analytics-budgets-overspend.vue).
+    // The expensive WIDE all-budgets/whole-range budget-limit fetch is deliberately NOT triggered
+    // here — it was the source of reported timeouts on wider ranges (Firefly computes `spent` per
+    // limit record it returns, so cost scales with months x budgets). The per-budget fetch is
+    // triggered on-demand when budget panels open (see analytics-budgets-overview.vue).
     analyticsStore.fetchBudgetList(),
     analyticsStore.fetchCurrentBudgetLimits(),
   ])

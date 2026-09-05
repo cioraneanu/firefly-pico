@@ -600,13 +600,6 @@
         "no_budgets": "No active budgets",
         "actual": "Spent",
         "limit": "Budgeted"
-      },
-      "overspend": {
-        "title": "Overspend",
-        "none": "No overspend in this range",
-        "budget": "Budget",
-        "period": "Period",
-        "overspend": "Overspend"
       }
     },
     "behavior": {
