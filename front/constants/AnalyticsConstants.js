@@ -31,8 +31,6 @@ export const ANALYTICS_HEATMAP_MAX_ROWS = 30 // matches ANALYTICS_PLAN.md Part 1
 
 // Phase 4b (Behaviour):
 export const ANALYTICS_IQR_MIN_SAMPLE = 4 // below this, quartiles() returns null — too few points to isolate outliers
-export const ANALYTICS_RECURRING_MIN_MONTHS = 3 // matches spendingDrift()'s existing "≥3 complete months" floor
-export const ANALYTICS_RECURRING_AMOUNT_TOLERANCE = 0.1 // +/-10% around the average counts as "same amount"
 
 export const analyticsTab = {
   headline: { t: 'analytics.tab.headline', code: 'headline', needs: ['monthlyFacts'] },

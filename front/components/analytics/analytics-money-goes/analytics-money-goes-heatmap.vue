@@ -51,7 +51,7 @@ const { t } = useI18n()
 
 // Category-only per ANALYTICS_PLAN.md Part 1/2's unambiguous "Category x month heatmap" wording
 // — no byCategory/byTag toggle here, unlike Ranked/Composition/MoM/Drift.
-const normalizeTab = ref('raw')
+const normalizeTab = ref('normalized')
 const normalizeTabs = computed(() => [
   { label: t('analytics.money_goes.heatmap.raw'), value: 'raw' },
   { label: t('analytics.money_goes.heatmap.normalize'), value: 'normalized' },

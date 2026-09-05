@@ -121,6 +121,14 @@ export const useDashboardStore = defineStore('dashboard', () => {
   // filter popup) — a full MonthlyFact per month would be overkill for a single number, so this
   // reuses convertTransactionsTotalAmountToCurrency (the same helper totalExpenseThisMonth already
   // uses) instead of a per-split reduction.
+  //
+  // showLoading: false is load-bearing, not cosmetic — front/plugins/axios.js defaults every
+  // request's showLoading to true, which pins app-loading.vue's full-screen blocking overlay
+  // (loadingStore.isLoadingDelayed) for as long as the request is in flight. getAllWithMerge has
+  // no way to override that default; getAllPages does (same fix analyticsStore.js's own
+  // fetchFilteredPages already applies, for the same reason: this fetch must run silently in the
+  // background so it never delays the rest of Home, which has already rendered from
+  // fetchDashboard() by the time this resolves.
   async function fetchHistoricalMonthlyExpenseTotals() {
     if (!dashboardDateStart.value) return
     isLoadingHistoricalMonthlyExpenseTotals.value = true
@@ -138,8 +146,8 @@ export const useDashboardStore = defineStore('dashboard', () => {
           ]
           const filters = [{ field: 'query', value: filtersParts.join(' ') }]
           const searchMethod = new TransactionRepository().searchTransaction
-          const list = await new TransactionRepository().getAllWithMerge({ filters, getAll: searchMethod })
-          const transactions = TransactionTransformer.transformFromApiList(list)
+          const { data } = await new TransactionRepository().getAllPages({ filters, getAll: searchMethod, showLoading: false })
+          const transactions = TransactionTransformer.transformFromApiList(data)
           return convertTransactionsTotalAmountToCurrency(transactions, Currency.getCode(dashboardCurrency.value))
         }),
       )

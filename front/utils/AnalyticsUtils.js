@@ -6,8 +6,6 @@ import {
   ANALYTICS_SCHEMA_VERSION,
   ANALYTICS_CATEGORICAL_COLOR_SLOTS,
   ANALYTICS_IQR_MIN_SAMPLE,
-  ANALYTICS_RECURRING_MIN_MONTHS,
-  ANALYTICS_RECURRING_AMOUNT_TOLERANCE,
 } from '~/constants/AnalyticsConstants'
 
 // Deliberately Vue/Pinia-free — no Transaction model import (it transitively pulls in
@@ -251,37 +249,3 @@ export function quartiles(values, minSampleSize = ANALYTICS_IQR_MIN_SAMPLE) {
   return { q1, q3, iqr: q3 - q1 }
 }
 
-// occurrencesByMerchant: {[merchantId]: [{monthKey, amount}, ...]} — the caller (analyticsStore)
-// only includes months where that merchant had EXACTLY ONE split that month; a month where the
-// same merchant billed more than once is ambiguous from a monthly aggregate alone and is omitted
-// by the caller rather than guessed at here. Buckets each merchant's occurrences by rounded
-// amount and flags a bucket as a recurring candidate once it has >= minMonths stable-amount hits.
-export function detectRecurringCandidates(occurrencesByMerchant, { minMonths = ANALYTICS_RECURRING_MIN_MONTHS, toleranceRatio = ANALYTICS_RECURRING_AMOUNT_TOLERANCE } = {}) {
-  const candidates = []
-  for (const [merchantId, occurrences] of Object.entries(occurrencesByMerchant ?? {})) {
-    if (!occurrences || occurrences.length < minMonths) continue
-
-    const buckets = new Map() // roundedAmount -> occurrences
-    for (const occurrence of occurrences) {
-      const key = Math.round(occurrence.amount)
-      if (!buckets.has(key)) buckets.set(key, [])
-      buckets.get(key).push(occurrence)
-    }
-
-    for (const bucketOccurrences of buckets.values()) {
-      if (bucketOccurrences.length < minMonths) continue
-      const amounts = bucketOccurrences.map((occurrence) => occurrence.amount)
-      const averageAmount = amounts.reduce((sum, amount) => sum + amount, 0) / amounts.length
-      if (averageAmount === 0) continue
-      const maxDeviation = Math.max(...amounts.map((amount) => Math.abs(amount - averageAmount) / averageAmount))
-      if (maxDeviation > toleranceRatio) continue
-      candidates.push({
-        merchantId,
-        occurrenceCount: bucketOccurrences.length,
-        averageAmount,
-        monthKeys: bucketOccurrences.map((occurrence) => occurrence.monthKey),
-      })
-    }
-  }
-  return candidates
-}

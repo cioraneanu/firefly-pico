@@ -2,7 +2,18 @@
   <van-cell-group inset>
     <div class="van-cell-group-title flex-center-vertical">
       <div class="flex-1">{{ $t('analytics.money_goes.drift.title') }}:</div>
-      <app-tabs v-model="dimensionTab" :items="dimensionTabs" />
+      <div class="display-flex gap-1">
+        <van-popover v-model:show="showDescriptionPopover" placement="bottom-end">
+          <div class="text-size-12 p-10" style="max-width: 280px">{{ $t('analytics.money_goes.drift.description') }}</div>
+
+          <template #reference>
+            <button type="button" class="app-button-icon">
+              <app-icon :icon="TablerIconConstants.settingsAbout" :size="18" />
+            </button>
+          </template>
+        </van-popover>
+        <app-tabs v-model="dimensionTab" :items="dimensionTabs" />
+      </div>
     </div>
 
     <div v-if="!drift.isEligible" class="text-size-12 analytics-money-goes-empty ml-15 mr-15 mb-2">{{ $t('analytics.money_goes.drift.not_enough_data') }}</div>
@@ -67,6 +78,8 @@ const dimensionTabs = computed(() => [
   { label: t('analytics.money_goes.ranked.by_category'), value: 'byCategory' },
   { label: t('analytics.money_goes.ranked.by_tag'), value: 'byTag' },
 ])
+
+const showDescriptionPopover = ref(false)
 
 const drift = computed(() => analyticsStore.spendingDrift(months.value, dimensionTab.value))
 

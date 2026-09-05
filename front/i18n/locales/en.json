@@ -581,6 +581,7 @@
       },
       "drift": {
         "title": "Spending drift",
+        "description": "Linear trend showing how spending per category/tag is changing month-to-month. Positive = increasing, negative = decreasing. Excludes the current in-progress month.",
         "other": "Other",
         "slope_label": "/mo",
         "table_view": "Table view",
@@ -609,16 +610,6 @@
       }
     },
     "behavior": {
-      "merchants": {
-        "title": "Top merchants",
-        "empty": "No merchant spending in this range",
-        "table_view": "Table view",
-        "merchant": "Merchant",
-        "total": "Total",
-        "count": "Count",
-        "average": "Average",
-        "other": "Other"
-      },
       "weekday": {
         "title": "Day-of-week pattern",
         "table_view": "Table view",
@@ -627,15 +618,14 @@
         "occurrences": "Occurrences"
       },
       "recurring": {
-        "title": "Detected recurring charges",
-        "empty": "No recurring charges detected in this range",
-        "known": "Known subscriptions",
-        "detected": "Detected charges",
+        "title": "Recurring charges",
+        "empty": "No recurring charges in this range",
         "table_view": "Table view",
+        "description": "Description",
         "merchant": "Merchant",
         "amount": "Amount",
-        "cadence": "Cadence",
-        "occurrences_count": "{count} months"
+        "total_in_range": "Total in range",
+        "cadence": "Cadence"
       }
     },
     "failed_months": "{count} month(s) failed to load",

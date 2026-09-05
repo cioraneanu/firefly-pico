@@ -15,12 +15,10 @@
         <analytics-savings-rate />
         <analytics-money-goes-ranked />
         <analytics-money-goes-composition />
-        <analytics-money-goes-mom />
         <analytics-money-goes-drift />
         <analytics-money-goes-heatmap />
         <analytics-budgets-overview />
         <analytics-budgets-overspend />
-        <analytics-behavior-merchants />
         <analytics-behavior-weekday />
         <analytics-behavior-recurring />
       </div>

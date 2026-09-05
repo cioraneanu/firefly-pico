@@ -30,7 +30,6 @@ import {
   rankTopNByMagnitudeWithOther,
   leastSquaresSlope,
   budgetSeverity,
-  detectRecurringCandidates,
 } from '~/utils/AnalyticsUtils'
 import { seriesColor } from '~/utils/ChartUtils'
 import { buildAnalyticsFilterPlan, expandFanOutCombos } from '~/utils/AnalyticsFilterUtils'
@@ -296,34 +295,7 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     return sumConverted(dimension === 'byMerchant' ? entry?.amount : entry)
   }
 
-  // Compares the last two months in the given range. Deliberately does not fall back to nearby
-  // loaded months if either is missing — a "change" number silently computed against the wrong
-  // pair of months would be worse than an explicit not-enough-data state.
-  function monthOverMonthChange(months, dimension) {
-    if (months.length < 2) return { current: null, previous: null, isLoaded: false, rows: [] }
-    const current = months[months.length - 1]
-    const previous = months[months.length - 2]
-    const currentFact = factCache.value[current.key]
-    const previousFact = factCache.value[previous.key]
-    if (!currentFact || !previousFact) return { current, previous, isLoaded: false, rows: [] }
-
-    const ids = new Set([...Object.keys(currentFact[dimension] ?? {}), ...Object.keys(previousFact[dimension] ?? {})])
-    const deltas = {}
-    const values = {}
-    for (const id of ids) {
-      const currentValue = dimensionAmount(currentFact, dimension, id)
-      const previousValue = dimensionAmount(previousFact, dimension, id)
-      deltas[id] = currentValue - previousValue
-      values[id] = { current: currentValue, previous: previousValue }
-    }
-
-    const { topIds, otherValue } = rankTopNByMagnitudeWithOther(deltas, ANALYTICS_RANKED_TOP_N)
-    const rows = topIds.map((id) => ({ id, delta: deltas[id], ...values[id] }))
-    if (otherValue !== 0) rows.push({ id: 'other', delta: otherValue, current: null, previous: null })
-    return { current, previous, isLoaded: true, rows }
-  }
-
-  // Excludes the in-progress financial month and requires every remaining month in range to
+// Excludes the in-progress financial month and requires every remaining month in range to
   // already be a loaded fact before computing anything. A partially-loaded window can't tell "no
   // spending that month" (a true zero, correctly included in the regression) apart from "not
   // fetched yet" (unknown) — silently treating the latter as zero would reproduce the exact
@@ -471,24 +443,10 @@ export const useAnalyticsStore = defineStore('analytics', () => {
   // it was always "current financial month only," never the page's selected range, so it belongs
   // on Home, not Analytics.
 
-  // ----- Phase 4b — Behaviour (top merchants, day-of-week, detected recurring). All three reduce
-  // over the already-cached factCache, same as Where-the-money-goes above — no new fetching.
+  // ----- Phase 4b — Behaviour (day-of-week, detected recurring). Both reduce over the
+  // already-cached factCache, same as Where-the-money-goes above — no new fetching.
 
-  function merchantTotals(months) {
-    const keys = new Set(months.map((month) => month.key))
-    const totals = {} // {[merchantId]: {amount, count}}
-    for (const [key, fact] of Object.entries(factCache.value)) {
-      if (!keys.has(key)) continue
-      for (const [id, entry] of Object.entries(fact.byMerchant ?? {})) {
-        totals[id] ??= { amount: 0, count: 0 }
-        totals[id].amount += sumConverted(entry.amount)
-        totals[id].count += entry.count
-      }
-    }
-    return totals
-  }
-
-  function weekdayTotals(months) {
+function weekdayTotals(months) {
     const keys = new Set(months.map((month) => month.key))
     const totals = new Array(7).fill(0)
     for (const [key, fact] of Object.entries(factCache.value)) {
@@ -498,42 +456,100 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     return totals
   }
 
-  // {[merchantId]: [{monthKey, amount}]} — only months where that merchant had EXACTLY ONE split
-  // that month. A month with count !== 1 can't tell "one $12 charge" apart from "two $6 charges"
-  // from the monthly aggregate alone, so it's omitted here rather than guessed at — the caller
-  // (detectRecurringCandidates) only ever sees unambiguous months.
-  function recurringMerchantOccurrences(months) {
-    const keys = new Set(months.map((month) => month.key))
-    const byMerchant = {}
-    for (const [key, fact] of Object.entries(factCache.value)) {
-      if (!keys.has(key)) continue
-      for (const [id, entry] of Object.entries(fact.byMerchant ?? {})) {
-        if (id === 'none' || entry.count !== 1) continue
-        byMerchant[id] ??= []
-        byMerchant[id].push({ monthKey: key, amount: sumConverted(entry.amount) })
+  // Cached recurring transaction totals keyed by `recurringId_startDate_endDate`
+  const recurringTransactionTotals = ref({})
+  let lastRecurringFetchCacheKey = null
+  const recurringFetchInitialized = ref(false)
+
+  // Fetch actual transactions for each recurring transaction and cache the totals
+  async function fetchRecurringTransactionTotals(start, end) {
+    if (!start || !end) return
+
+    const recurringStore = useRecurringTransactionStore()
+    const recurringRepository = new (await import('~/repository/RecurringTransactionRepository.js')).default()
+    const cacheKey = `${start.getTime()}_${end.getTime()}`
+    const dateFilters = [`date_after:${DateUtils.dateToString(start)}`, `date_before:${DateUtils.dateToString(end)}`]
+
+    const allRecurring = Object.values(recurringStore.recurringTransactionDictionary)
+
+    const activeRecurring = allRecurring.filter((entry) => {
+      if (!RecurringTransaction.isActive(entry)) return false
+      const typeValue = get(entry, 'attributes.type')
+      const type = typeof typeValue === 'string' ? typeValue : get(typeValue, 'code')
+      return type === 'expense' || type === 'withdrawal'
+    })
+
+    const results = {}
+    const settled = await mapWithConcurrency(
+      activeRecurring,
+      async (entry) => {
+        const id = entry.id
+        const description = get(entry, 'attributes.description', 'Unknown')
+        try {
+          const response = await recurringRepository.getTransactionsByRecurringId(id, {
+            filters: dateFilters,
+            pageSize: 250,
+            showLoading: false,
+            timeout: ANALYTICS_FETCH_TIMEOUT_MS,
+          })
+          // API returns recurrence objects with transactions nested in attributes.transactions
+          const recurrences = get(response, 'data', [])
+          let totalTransactions = 0
+          let total = 0
+
+          for (const recurrence of recurrences) {
+            const transactions = get(recurrence, 'attributes.transactions', [])
+            totalTransactions += transactions.length
+            for (const transaction of transactions) {
+              // transaction has amount (string) and currency_code
+              const amount = convertCurrency(parseFloat(transaction.amount), transaction.currency_code, currencyCode.value)
+              total += amount
+            }
+          }
+          return { id, total }
+        } catch (e) {
+          console.error(`[Analytics] Failed to fetch transactions for recurring ${id} (${description}):`, e)
+          return { id, total: 0 }
+        }
+      },
+      { concurrency: 4 }
+    )
+
+    for (const { value, error } of settled) {
+      if (value) {
+        results[value.id] = value.total
       }
     }
-    return byMerchant
+
+    recurringTransactionTotals.value[cacheKey] = results
+    lastRecurringFetchCacheKey = cacheKey
+    recurringFetchInitialized.value = true
   }
 
-  // Every ACTIVE Firefly recurrence whose destination account had spend within the selected range
-  // — "marked, not re-detected" (ANALYTICS_PLAN.md Part 2 §6). In-range-only, matching every other
-  // range-scoped section on the page, rather than every active recurrence regardless of the range.
+  // Every ACTIVE Firefly recurrence with the total amount of its transactions in the selected range.
   function knownRecurringRows(months) {
     const recurringStore = useRecurringTransactionStore()
-    const merchantTotalsInRange = dimensionTotals(months, 'byMerchant')
-    return Object.values(recurringStore.recurringTransactionDictionary)
-      .filter((entry) => RecurringTransaction.isActive(entry))
-      .map((entry) => ({ merchantId: get(entry, 'attributes.accountDestination.id'), recurrence: entry }))
-      .filter((row) => row.merchantId != null && row.merchantId in merchantTotalsInRange)
-  }
+    if (months.length === 0 || !recurringFetchInitialized.value) return []
 
-  // Heuristic candidates minus anything Firefly already tracks as a real recurrence, so a known
-  // subscription is never double-listed under both "known" and "detected".
-  function detectedRecurringRows(months) {
-    const knownIds = new Set(knownRecurringRows(months).map((row) => String(row.merchantId)))
-    const occurrences = recurringMerchantOccurrences(months)
-    return detectRecurringCandidates(occurrences).filter((candidate) => !knownIds.has(String(candidate.merchantId)))
+    // Use the cache key from the last fetch (refresh), since refresh uses a wider range that includes prior months
+    const cacheKey = lastRecurringFetchCacheKey
+    const totalsCache = cacheKey ? recurringTransactionTotals.value[cacheKey] ?? {} : {}
+
+    return Object.values(recurringStore.recurringTransactionDictionary)
+      .filter((entry) => {
+        if (!RecurringTransaction.isActive(entry)) return false
+        // Only include expenses (same filter as fetchRecurringTransactionTotals)
+        const typeValue = get(entry, 'attributes.type')
+        const type = typeof typeValue === 'string' ? typeValue : get(typeValue, 'code')
+        return type === 'expense' || type === 'withdrawal'
+      })
+      .map((entry) => ({
+        merchantId: get(entry, 'attributes.accountDestination.id'),
+        recurrence: entry,
+        totalInRange: totalsCache[entry.id] ?? 0,
+      }))
+      .filter((row) => row.merchantId != null && row.totalInRange > 0)
+      .sort((a, b) => (b.totalInRange ?? 0) - (a.totalInRange ?? 0))
   }
 
   // Month-in-progress projection moved to dashboardStore.monthProjection (Home widget
@@ -650,6 +666,9 @@ export const useAnalyticsStore = defineStore('analytics', () => {
 
     const toFetch = months.filter((month) => force || !isFactValid(month.key, currentKey))
     await mapWithConcurrency(toFetch, fetchMonth, { concurrency: ANALYTICS_FETCH_CONCURRENCY })
+
+    // Fetch actual transactions for each recurring transaction to get accurate totals
+    await fetchRecurringTransactionTotals(start, end)
 
     logRefreshSummary({ wallMs: performance.now() - t0, monthCount: months.length, fetchedCount: toFetch.length })
     isRefreshing.value = false
@@ -783,7 +802,6 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     dimensionTotals,
     compositionSeries,
     savingsRateSeries,
-    monthOverMonthChange,
     spendingDrift,
     categoryMonthMatrix,
     fetchMonth,
@@ -803,9 +821,8 @@ export const useAnalyticsStore = defineStore('analytics', () => {
     fetchBudgetLimitsForRange,
     fetchCurrentBudgetLimits,
     fetchBudgetLimitsForBudget,
-    merchantTotals,
     weekdayTotals,
     knownRecurringRows,
-    detectedRecurringRows,
+    fetchRecurringTransactionTotals,
   }
 })
