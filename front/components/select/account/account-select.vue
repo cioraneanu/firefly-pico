@@ -120,13 +120,12 @@ const modelValue = defineModel()
 const showDropdown = ref(false)
 const search = ref('')
 
-const list = ref([])
-
 const accountList = computed(() => {
+  const list = accountStore.accountList
   if (search.value.length === 0) {
-    return list.value
+    return list
   }
-  return list.value.filter((item) => {
+  return list.filter((item) => {
     return Account.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
   })
 })
@@ -141,12 +140,6 @@ const showAssets = computed(() => props.allowedTypes.some((item) => isEqual(item
 const showExpense = computed(() => props.allowedTypes.some((item) => isEqual(item, Account.types.expense)) && expenseAccountList.value.length > 0)
 const showIncome = computed(() => props.allowedTypes.some((item) => isEqual(item, Account.types.revenue)) && incomeAccountList.value.length > 0)
 const showLiabilities = computed(() => props.allowedTypes.some((item) => isEqual(item, Account.types.liability)) && liabilityAccountList.value.length > 0)
-
-// ------ Methods ------
-
-onMounted(async () => {
-  list.value = accountStore.accountList
-})
 
 // const onSelectCell = (account) => {
 //   modelValue.value = account
@@ -180,4 +173,3 @@ const onRefresh = async () => {
   isLoading.value = false
 }
 </script>
-
