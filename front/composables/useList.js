@@ -76,14 +76,16 @@ export function useList(prop) {
 
     // list.value.push(...newList)
 
-    pageSize.value = _.get(result, 'meta.pagination.per_page', 0)
+    pageSize.value = _.get(result, 'meta.pagination.per_page') || pageSize.value
     page.value = _.get(result, 'meta.pagination.current_page', 0)
     totalPages.value = _.get(result, 'meta.pagination.total_pages', 0)
     listTotalCount.value = _.get(result, 'meta.pagination.total', 0)
 
-    // A page with fewer items than the page size is the last one. Don't rely on the pagination
-    // meta alone => Firefly's search endpoint reports totals for all transactions, not just the matches.
-    isFinished.value = page.value >= totalPages.value || newList.length < pageSize.value
+    // Only an empty page ends the list. Don't rely on the pagination meta alone => Firefly's search
+    // endpoint reports totals for all transactions, not just the matches. And don't treat a short page
+    // as the last one either => Firefly paginates by journal but returns groups, so a page containing
+    // a split transaction has fewer groups than the page size while more pages still follow.
+    isFinished.value = page.value >= totalPages.value || newList.length === 0
     if (isFinished.value) {
       listTotalCount.value = list.value.length
     }

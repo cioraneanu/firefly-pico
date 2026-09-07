@@ -36,8 +36,10 @@ class TransactionService
     /**
      * Page through a Firefly transactions endpoint and sum the splits accepted by $splitFilter.
      * Returns [$totals, $transactionsCount] where $totals is keyed by currency id.
-     * The search endpoint's pagination meta counts are unreliable, so paging stops on a short
-     * or empty page and $transactionsCount is counted from the actual fetched data.
+     * The search endpoint's pagination meta counts are unreliable, so paging stops on an empty
+     * page and $transactionsCount is counted from the actual fetched data. A short page is not the
+     * last one: Firefly paginates by journal but returns groups, so a page holding a split
+     * transaction has fewer groups than the page size while more pages still follow.
      */
     public function sumTransactions($transactionsUrl, $extraQuery = [], ?callable $splitFilter = null, $maxTransactions = null)
     {
@@ -62,10 +64,9 @@ class TransactionService
                 }
             }
 
-            $perPage = fget($body, 'meta.pagination.per_page') ?? self::COMPUTE_TOTAL_PAGE_SIZE;
             $totalPages = fget($body, 'meta.pagination.total_pages') ?? 1;
             $page++;
-        } while ($page <= $totalPages && count($data) >= $perPage);
+        } while ($page <= $totalPages && count($data) > 0);
 
         return [$totals, $transactionsCount];
     }

@@ -95,13 +95,17 @@ class TransactionSearchTotalTest extends TestCase
         $this->assertEquals(2, $response->json('data.transactions_count'));
     }
 
-    public function test_compute_search_total_stops_on_short_page_despite_wrong_pagination_meta()
+    public function test_compute_search_total_stops_on_empty_page_despite_wrong_pagination_meta()
     {
+        // Page 2 is short because Firefly paginates by journal but returns groups, so a page holding
+        // a split transaction yields fewer groups than the page size. It is not the last page.
         $this->searchPage = fn($page) => [
             'data' => match ($page) {
                 1 => $this->makeGroups(50),
-                2 => $this->makeGroups(10),
-                default => $this->fail("Page $page should not be requested after a short page"),
+                2 => $this->makeGroups(49),
+                3 => $this->makeGroups(10),
+                4 => [],
+                default => $this->fail("Page $page should not be requested after an empty page"),
             },
             'meta' => ['pagination' => ['total' => 4876, 'total_pages' => 98, 'per_page' => 50]],
         ];
@@ -109,8 +113,8 @@ class TransactionSearchTotalTest extends TestCase
         $response = $this->getJson('api/search/transactions/total?query=test', $this->headers());
 
         $response->assertOk();
-        $this->assertEquals(60.0, $response->json('data.totals.0.amount'));
-        $this->assertEquals(60, $response->json('data.transactions_count'));
+        $this->assertEquals(109.0, $response->json('data.totals.0.amount'));
+        $this->assertEquals(109, $response->json('data.transactions_count'));
     }
 
     public function test_compute_search_total_with_too_many_transactions_fails()
