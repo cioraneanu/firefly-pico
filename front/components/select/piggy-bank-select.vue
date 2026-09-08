@@ -57,23 +57,18 @@ const modelValue = defineModel()
 const showDropdown = ref(false)
 const search = ref('')
 
-const list = ref([])
-
 const filteredList = computed(() => {
+  const list = piggyBankStore.piggyBankList
   if (search.value.length === 0) {
-    return list.value
+    return list
   }
-  return list.value.filter((item) => {
+  return list.filter((item) => {
     return PiggyBank.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
   })
 })
 
 
 // ------ Methods ------
-
-onMounted(async () => {
-  list.value = piggyBankStore.piggyBankList
-})
 
 const getDisplayValue = (value) => {
   return PiggyBank.getDisplayName(value)
@@ -83,7 +78,6 @@ const isLoading = ref(false)
 const onRefresh = async () => {
   isLoading.value = true
   await piggyBankStore.fetchPiggyBanks()
-  list.value = piggyBankStore.piggyBankList
   isLoading.value = false
 }
 </script>

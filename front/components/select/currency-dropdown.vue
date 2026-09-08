@@ -32,15 +32,11 @@ const props = defineProps({
     default: false,
   }
 })
-const list = ref([])
+const list = computed(() => currencyStore.currenciesList.filter((item) => get(item, 'attributes.enabled')))
 
 const currencyCode = computed(() => Currency.getCode(modelValue.value))
 
 // ------ Methods ------
-
-onMounted(async () => {
-  list.value = currencyStore.currenciesList.filter((item) => get(item, 'attributes.enabled'))
-})
 
 const onSelect = (item) => {
   modelValue.value = item

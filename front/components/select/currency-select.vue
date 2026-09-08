@@ -63,22 +63,17 @@ const showDropdown = ref(false)
 const search = ref('')
 
 
-const list = ref([])
-
 const filteredList = computed(() => {
+  const list = currencyStore.currenciesList.filter((item) => get(item, 'attributes.enabled'))
   if (search.value.length === 0) {
-    return list.value
+    return list
   }
-  return list.value.filter((item) => {
+  return list.filter((item) => {
     return Currency.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
   })
 })
 
 // ------ Methods ------
-
-onMounted(async () => {
-  list.value = currencyStore.currenciesList.filter((item) => get(item, 'attributes.enabled'))
-})
 
 const getDisplayValue = (value) => {
   return Currency.getDisplayName(value)

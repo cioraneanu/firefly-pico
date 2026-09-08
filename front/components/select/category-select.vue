@@ -61,31 +61,17 @@ const modelValue = defineModel()
 const showDropdown = ref(false)
 const search = ref('')
 
-const list = ref([])
-
 const filteredList = computed(() => {
+  const list = categoryStore.categoryList
   if (search.value.length === 0) {
-    return list.value
+    return list
   }
-  return list.value.filter((item) => {
-    return Category.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
-  })
-})
-
-const categoryList = computed(() => {
-  if (search.value.length === 0) {
-    return categoryStore.categoryList
-  }
-  return categoryStore.categoryList.filter((item) => {
+  return list.filter((item) => {
     return Category.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
   })
 })
 
 // ------ Methods ------
-
-onMounted(async () => {
-  list.value = categoryStore.categoryList
-})
 
 const onSelectCell = (value) => {
   modelValue.value = value
