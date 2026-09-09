@@ -1,0 +1,21 @@
+name: PR base branch
+
+# `main` is advanced by a fast-forward merge from `dev`, not by pull requests.
+# This check is advisory: it puts a red X on any PR that targets `main` so the
+# author retargets it at `dev`. It is not a required check, so it blocks nothing.
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  wrong-base-branch:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: PRs must target dev
+        run: |
+          echo "::error::Pull requests should target 'dev', not 'main'."
+          echo "'main' is fast-forwarded from 'dev' by the maintainer; it takes no PRs."
+          echo "This PR comes from '${{ github.event.pull_request.head.label }}'."
+          echo "Re-target it at 'dev' (Edit -> change base branch). See CONTRIBUTING.md."
+          exit 1
