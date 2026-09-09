@@ -122,11 +122,10 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
     }
   })
 
-  watch(type, (newValue, oldValue) => {
-    // Only react to real user-driven tab switches on the new-transaction form.
-    // On initial form population, oldValue is undefined and the saved defaults
-    // are still being settled — running the repair there silently dropped them.
-    if (itemId.value || !oldValue || isEqual(newValue, oldValue)) {
+  watch([item, type], ([currentItem, newValue], [previousItem, oldValue]) => {
+    // Ignore form hydration, but repair account directions after a user changes
+    // the type of a non-split transaction, including an existing one.
+    if (currentItem !== previousItem || isSplitTransaction.value || !oldValue || isEqual(newValue, oldValue)) {
       return
     }
     attemptAccountsFix()
