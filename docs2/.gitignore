@@ -1,0 +1,7 @@
+node_modules/
+.nuxt/
+.docus-build/
+.output/
+.data/
+.env
+build-check.log

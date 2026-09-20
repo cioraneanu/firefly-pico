@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 340" role="img" aria-labelledby="title desc">
+  <title id="title">How a Pico page fits together</title>
+  <desc id="desc">A page combines UI-kit fields with shared useForm or useList behavior. A model connects that behavior to a transformer and repository. The repository sends requests to Pico's API. Saved results update the shared store.</desc>
+  <defs><marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0 8 4 0 8" fill="#64748b"/></marker></defs>
+  <rect width="860" height="340" rx="16" fill="#f8fafc"/>
+  <g font-family="system-ui, sans-serif">
+    <text x="28" y="38" fill="#475569" font-size="13" font-weight="700">A PAGE ASSEMBLES EXISTING PIECES</text>
+    <g fill="none" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)"><path d="M230 150H278"/><path d="M498 150H546"/><path d="M742 150H790"/></g>
+    <rect x="28" y="80" width="202" height="145" rx="12" fill="#e0f2fe" stroke="#0284c7"/>
+    <text x="48" y="115" fill="#0c4a6e" font-size="19" font-weight="700">Page</text>
+    <text x="48" y="147" fill="#0c4a6e" font-size="14">Fields and toolbar</text>
+    <text x="48" y="173" fill="#0c4a6e" font-size="14">useForm / useList</text>
+    <text x="48" y="199" fill="#0c4a6e" font-size="14">Feature behavior</text>
+    <rect x="278" y="80" width="220" height="145" rx="12" fill="#e0e7ff" stroke="#6366f1"/>
+    <text x="298" y="115" fill="#312e81" font-size="19" font-weight="700">Model</text>
+    <text x="298" y="147" fill="#312e81" font-size="14">Empty item</text>
+    <text x="298" y="173" fill="#312e81" font-size="14">Chooses transformer</text>
+    <text x="298" y="199" fill="#312e81" font-size="14">Chooses repository</text>
+    <rect x="546" y="80" width="196" height="145" rx="12" fill="#dcfce7" stroke="#16a34a"/>
+    <text x="566" y="115" fill="#14532d" font-size="18" font-weight="700">API boundary</text>
+    <text x="566" y="150" fill="#14532d" font-size="14">Transform values</text>
+    <text x="566" y="180" fill="#14532d" font-size="14">Send the request</text>
+    <text x="788" y="133" fill="#334155" font-size="14" font-weight="700">Pico</text>
+    <text x="788" y="181" fill="#334155" font-size="14" font-weight="700">API</text>
+    <rect x="28" y="253" width="804" height="58" rx="10" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="48" y="288" fill="#334155" font-size="14">After a successful save, the page updates shared state so other screens see the result.</text>
+  </g>
+</svg>
