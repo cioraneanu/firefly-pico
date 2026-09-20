@@ -59,6 +59,12 @@ return [
     'firefly_url' => env('FIREFLY_URL', ''),
     'asset_url' => env('ASSET_URL'),
 
+    // Stops Pico from reaching anything outside your own network: the update check on GitHub
+    // and the exchange rate providers. Meant for airgapped installs, where those requests
+    // only ever hang until they time out. Firefly III and the assistant endpoints are not
+    // affected - those are addresses you configured yourself.
+    'disable_external_calls' => (bool) env('PICO_DISABLE_EXTERNAL_CALLS', false),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone

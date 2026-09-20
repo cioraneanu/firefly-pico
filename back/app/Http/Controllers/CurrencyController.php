@@ -29,6 +29,16 @@ class CurrencyController extends BaseControllerFirefly
             throw new GeneralException("Unauthorized", BaseController::HTTP_CODE_UNAUTHORIZED);
         }
 
+        // Nothing to fetch on an install that is not allowed to reach the internet. Currency
+        // metadata is bundled, so the only thing lost is conversion between currencies.
+        if (config('app.disable_external_calls')) {
+            return [
+                'date' => null,
+                'rates' => collect(),
+                'currencies' => CurrencyUtils::CURRENCIES,
+            ];
+        }
+
         $date = Carbon::now()->startOfDay()->format("Y-m-d");
         $cacheKey = "exchange_$date";
         return Cache::remember($cacheKey, 60 * 60 * 24 * 5, function () {
