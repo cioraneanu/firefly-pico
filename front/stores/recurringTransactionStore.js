@@ -1,18 +1,22 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { keyBy } from 'lodash-es'
-import { useLocalStorage } from '@vueuse/core'
+import { useIdbStorage } from '~/utils/IdbStorage.js'
 import RecurringTransactionRepository from '~/repository/RecurringTransactionRepository.js'
 import RecurringTransactionTransformer from '~/transformers/RecurringTransactionTransformer.js'
 import { useProfileStore } from '~/stores/profileStore'
 
 export const useRecurringTransactionStore = defineStore('recurringTransaction', () => {
-  const recurringTransactionList = useLocalStorage('recurringTransactionList', [])
+  const recurringTransactionList = useIdbStorage('recurringTransactionList', [])
   const isLoadingRecurringTransactions = ref(false)
 
   const recurringTransactionDictionary = computed(() => {
     return keyBy(recurringTransactionList.value, 'id')
   })
+
+  function applyRecurringTransactionList(list) {
+    recurringTransactionList.value = RecurringTransactionTransformer.transformFromApiList(list)
+  }
 
   async function fetchRecurringTransactions() {
     const profileStore = useProfileStore()
@@ -23,7 +27,7 @@ export const useRecurringTransactionStore = defineStore('recurringTransaction', 
     isLoadingRecurringTransactions.value = true
 
     const list = await new RecurringTransactionRepository().getAllWithMerge()
-    recurringTransactionList.value = RecurringTransactionTransformer.transformFromApiList(list)
+    applyRecurringTransactionList(list)
 
     isLoadingRecurringTransactions.value = false
   }
@@ -32,6 +36,7 @@ export const useRecurringTransactionStore = defineStore('recurringTransaction', 
     recurringTransactionList,
     isLoadingRecurringTransactions,
     recurringTransactionDictionary,
+    applyRecurringTransactionList,
     fetchRecurringTransactions,
   }
 })

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { keyBy, cloneDeep } from 'lodash-es'
-import { useLocalStorage } from '@vueuse/core'
+import { useIdbStorage } from '~/utils/IdbStorage.js'
 import TagRepository from '~/repository/TagRepository'
 import TagTransformer from '~/transformers/TagTransformer'
 import { listToTree, setLevel, sortByPath, treeToList } from '~/utils/DataUtils'
@@ -9,7 +9,7 @@ import LanguageUtils from '~/utils/LanguageUtils.js'
 import { useProfileStore } from '~/stores/profileStore'
 
 export const useTagStore = defineStore('tag', () => {
-  const tagList = useLocalStorage('tagList', [])
+  const tagList = useIdbStorage('tagList', [])
   const isLoadingTags = ref(false)
 
   const tagTodo = computed(() => {
@@ -30,6 +30,10 @@ export const useTagStore = defineStore('tag', () => {
     return treeToList(tree)
   })
 
+  function applyTagList(list) {
+    tagList.value = TagTransformer.transformFromApiList(list)
+  }
+
   async function fetchTags() {
     const profileStore = useProfileStore()
     if (!profileStore.tagsEnabled) {
@@ -38,7 +42,7 @@ export const useTagStore = defineStore('tag', () => {
     }
     isLoadingTags.value = true
     const list = await new TagRepository().getAllWithMerge()
-    tagList.value = TagTransformer.transformFromApiList(list)
+    applyTagList(list)
 
     let newTags = cloneDeep(tagList.value)
     setLevel(newTags)
@@ -52,6 +56,7 @@ export const useTagStore = defineStore('tag', () => {
     tagDictionaryByName,
     tagDictionaryById,
     tagListHierarchy,
+    applyTagList,
     fetchTags,
   }
 })

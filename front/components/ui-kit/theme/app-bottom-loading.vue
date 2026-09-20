@@ -15,8 +15,9 @@ import { IconRotateClockwise } from '@tabler/icons-vue'
 const appStore = useAppStore()
 
 const onResync = async () => {
-  await appStore.syncEverything()
+  // The local stores are known to be missing entities, so rebuild them even if our hash
+  // still matches what the backend has.
+  await appStore.syncEverything({ force: true })
   reloadNuxtApp()
 }
 </script>
-

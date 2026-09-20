@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { StorageSerializers, useLocalStorage } from '@vueuse/core'
+import { useIdbStorage } from '~/utils/IdbStorage.js'
 import { startOfMonth, subMonths, getDate, differenceInDays, setDate, addMonths, subDays, startOfDay } from 'date-fns'
 import { useProfileStore } from '~/stores/profileStore'
 import { useAppStore } from '~/stores/appStore'
@@ -36,7 +37,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const isLoading = ref(false)
   const backendFilters = ref([])
   const month = ref(null)
-  const dashboardAccountList = useLocalStorage('dashboardAccountList', [])
+  const dashboardAccountList = useIdbStorage('dashboardAccountList', [])
   const isLoadingDashboardAccounts = ref(false)
   const transactionsList = ref([])
   const transactionsListLastWeek = ref([])

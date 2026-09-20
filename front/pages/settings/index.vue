@@ -12,23 +12,20 @@
       <app-field-link :label="$t('settings.about_entry')" :icon="TablerIconConstants.settingsAbout" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_ABOUT)" />
     </van-cell-group>
 
-
     <van-cell-group inset style="overflow: auto">
       <app-field-link label="Sync everything" :icon="TablerIconConstants.lastSync" :is-link="false" @click="onSyncEverything" />
     </van-cell-group>
 
-
-
     <div class="text-muted subtitle flex-center mt-20 flex-column">
       <div>
-        <a :href="REPO_URL">{{$t('settings.version')}}: {{ appStore.currentAppVersion }}</a>
+        <a :href="REPO_URL">{{ $t('settings.version') }}: {{ appStore.currentAppVersion }}</a>
       </div>
 
       <div v-if="appStore.isNewVersionAvailable" class="latest-version-badge">
-        <a :href="REPO_URL">{{$t('settings.new_version_available')}}: {{ appStore.latestAppVersion }} 🎉</a>
+        <a :href="REPO_URL">{{ $t('settings.new_version_available') }}: {{ appStore.latestAppVersion }} 🎉</a>
       </div>
     </div>
-    <div/>
+    <div />
   </div>
 </template>
 
@@ -48,9 +45,8 @@ const toolbar = useToolbar()
 const { t } = useI18n()
 toolbar.init({ title: t('settings.settings_title') })
 
-
 const onSyncEverything = async () => {
-  await appStore.syncEverything()
+  await appStore.syncEverything({ force: true })
 }
 
 onMounted(() => {

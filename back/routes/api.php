@@ -9,11 +9,13 @@ use App\Http\Controllers\FireflyProxyController;
 use App\Http\Controllers\PiggyBankController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecurrenceController;
+use App\Http\Controllers\SyncController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TransactionTemplateController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VersionController;
+use App\Http\Controllers\WebhookController;
 use App\Utils\RouteUtils;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +35,12 @@ use Illuminate\Support\Facades\Route;
 // Own resources
 Route::get('info', [VersionController::class, 'getInfo']);
 Route::get('user', [UserController::class, 'getUser']);
+
+// One round trip for everything the app keeps in its local stores
+Route::get('sync', [SyncController::class, 'getSync']);
+
+// Firefly III tells us when something changed behind our back
+Route::post('webhooks/firefly', [WebhookController::class, 'receive']);
 
 RouteUtils::makeCRUD("transaction-templates", TransactionTemplateController::class);
 

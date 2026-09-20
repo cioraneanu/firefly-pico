@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Base;
 
 
 use App\Exceptions\FireflyException;
+use App\Services\SyncService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -127,29 +128,9 @@ class BaseControllerFirefly extends BaseController
         }
 
         $isList = !isAssociative($list['data']);
-        $collection = fcollect($list['data']);
-        $idList = $collection->pluck("id");
-        $dictionary = $this->model::whereIn('id', $idList)->get()->keyBy('id');
-
-
-        for ($i = 0; $i < $collection->count(); $i++) {
-            $modelItemId = fget($collection, "$i.id");
-            $modelItem = fget($dictionary, $modelItemId);
-            // If the Firefly resource is not present in our DB, we cannot add anything.. Just skip it :)
-            if (!$modelItem) {
-                continue;
-            }
-
-            $newData = fcollect($this->model::$extraFields)->reduce(function ($carry, $item) use ($modelItem) {
-                $carry[$item] = fget($modelItem, $item);
-                return $carry;
-            }, []);
-
-            $path = $isList ? "data.$i.attributes" : "data.attributes";
-            foreach ($newData as $key => $value) {
-                fset($list, "$path.$key", $value);
-            }
-        }
+        $items = $isList ? $list['data'] : [$list['data']];
+        $items = SyncService::mergeExtras($items, $this->model);
+        $list['data'] = $isList ? $items : fget($items, '0');
 
         return $list;
     }

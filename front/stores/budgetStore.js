@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { keyBy } from 'lodash-es'
-import { useLocalStorage } from '@vueuse/core'
+import { useIdbStorage } from '~/utils/IdbStorage.js'
 import BudgetRepository from '~/repository/BudgetRepository.js'
 import BudgetLimitRepository from '~/repository/BudgetLimitRepository.js'
 import BudgetTransformer from '~/transformers/BudgetTransformer.js'
@@ -12,8 +12,8 @@ import { startOfMonth, endOfMonth } from 'date-fns'
 import { useProfileStore } from '~/stores/profileStore'
 
 export const useBudgetStore = defineStore('budget', () => {
-  const budgetList = useLocalStorage('budgetList', [])
-  const budgetLimitList = useLocalStorage('budgetLimitList', [])
+  const budgetList = useIdbStorage('budgetList', [])
+  const budgetLimitList = useIdbStorage('budgetLimitList', [])
   const isLoadingBudgets = ref(false)
 
   const budgetDictionary = computed(() => {
@@ -24,7 +24,13 @@ export const useBudgetStore = defineStore('budget', () => {
     return keyBy(budgetLimitList.value, 'attributes.budget_id')
   })
 
+  function applyBudgetList(list) {
+    budgetList.value = BudgetTransformer.transformFromApiList(list)
+  }
 
+  function applyBudgetLimitList(list) {
+    budgetLimitList.value = BudgetLimitTransformer.transformFromApiList(list)
+  }
 
   async function fetchBudgets() {
     const profileStore = useProfileStore()
@@ -37,7 +43,7 @@ export const useBudgetStore = defineStore('budget', () => {
     isLoadingBudgets.value = true
 
     const dashboardStore = useDashboardStore()
-    
+
     // Fallback to current month if dashboard store is not initialized
     let start = dashboardStore.dashboardDateStart ?? startOfMonth(new Date())
     let end = dashboardStore.dashboardDateEnd ?? endOfMonth(new Date())
@@ -52,8 +58,8 @@ export const useBudgetStore = defineStore('budget', () => {
 
     const [fetchedBudgetList, fetchedBudgetLimitList] = await Promise.all([asyncBudget, asyncBudgetLimit])
 
-    budgetList.value = BudgetTransformer.transformFromApiList(fetchedBudgetList)
-    budgetLimitList.value = BudgetLimitTransformer.transformFromApiList(fetchedBudgetLimitList)
+    applyBudgetList(fetchedBudgetList)
+    applyBudgetLimitList(fetchedBudgetLimitList)
 
     isLoadingBudgets.value = false
   }
@@ -79,7 +85,7 @@ export const useBudgetStore = defineStore('budget', () => {
     ]
 
     const fetchedBudgetLimitList = await new BudgetLimitRepository().getAllWithMerge({ filters })
-    budgetLimitList.value = BudgetLimitTransformer.transformFromApiList(fetchedBudgetLimitList)
+    applyBudgetLimitList(fetchedBudgetLimitList)
 
     isLoadingBudgets.value = false
   }
@@ -90,6 +96,8 @@ export const useBudgetStore = defineStore('budget', () => {
     isLoadingBudgets,
     budgetDictionary,
     budgetLimitDictionary,
+    applyBudgetList,
+    applyBudgetLimitList,
     fetchBudgets,
     fetchBudgetLimits,
   }

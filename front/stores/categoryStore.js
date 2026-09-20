@@ -1,18 +1,22 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { keyBy } from 'lodash-es'
-import { useLocalStorage } from '@vueuse/core'
+import { useIdbStorage } from '~/utils/IdbStorage.js'
 import CategoryRepository from '~/repository/CategoryRepository'
 import CategoryTransformer from '~/transformers/CategoryTransformer'
 import { useProfileStore } from '~/stores/profileStore'
 
 export const useCategoryStore = defineStore('category', () => {
-  const categoryList = useLocalStorage('categoryList', [])
+  const categoryList = useIdbStorage('categoryList', [])
   const isLoadingCategories = ref(false)
 
   const categoryDictionary = computed(() => {
     return keyBy(categoryList.value, 'id')
   })
+
+  function applyCategoryList(list) {
+    categoryList.value = CategoryTransformer.transformFromApiList(list)
+  }
 
   async function fetchCategories() {
     const profileStore = useProfileStore()
@@ -22,7 +26,7 @@ export const useCategoryStore = defineStore('category', () => {
     }
     isLoadingCategories.value = true
     const list = await new CategoryRepository().getAllWithMerge()
-    categoryList.value = CategoryTransformer.transformFromApiList(list)
+    applyCategoryList(list)
     isLoadingCategories.value = false
   }
 
@@ -30,6 +34,7 @@ export const useCategoryStore = defineStore('category', () => {
     categoryList,
     isLoadingCategories,
     categoryDictionary,
+    applyCategoryList,
     fetchCategories,
   }
 })

@@ -1,5 +1,14 @@
 import axios from 'axios'
-import { get } from 'lodash-es'
+import { get, range } from 'lodash-es'
+
+// Used when we want a whole collection rather than a screenful of it.
+export const FULL_FETCH_PAGE_SIZE = 1000
+
+// Guard against a bogus total_pages fanning out into hundreds of requests.
+const MAX_PAGES = 50
+
+// How many leftover pages to fetch at once when one page was not enough.
+const PARALLEL_PAGES = 5
 
 export default class BaseRepository {
   constructor(endpoint) {
@@ -29,19 +38,33 @@ export default class BaseRepository {
     return get(response, 'data', {})
   }
 
-  async getAllWithMerge({ filters = [], getAll = null } = {}) {
-    let list = []
-    let getMethod = (getAll ?? this.getAll)
-    const firstPageResponseBody = await getMethod({ filters, page: 1 })
-    let responseList = get(firstPageResponseBody, 'data', [])
-    list = [...list, ...responseList]
+  async getAllWithMerge({ filters = [], pageSize = FULL_FETCH_PAGE_SIZE, getAll = null } = {}) {
+    let getMethod = getAll ?? this.getAll
+    const firstPageResponseBody = await getMethod({ filters, page: 1, pageSize })
+    let list = get(firstPageResponseBody, 'data', [])
 
-    let totalPages = get(firstPageResponseBody, 'meta.pagination.total_pages')
-    for (let page = 2; page <= totalPages; page++) {
-      const pageResponse = await getMethod({ filters, page })
-      let responseList = get(pageResponse, 'data', [])
-      list = [...list, ...responseList]
+    // Firefly III clamps "limit" to 65536, so one page covers the whole collection in practice.
+    // A short page is what tells us we are done: the advertised page count cannot be trusted
+    // (the search endpoint reports totals for the unfiltered set).
+    if (list.length < pageSize) {
+      return list
     }
+
+    // A few pages at a time rather than all at once: total_pages may be wildly overstated, and
+    // firing dozens of parallel requests at the backend would be worse than the serial loop
+    // this replaces.
+    let totalPages = Math.min(get(firstPageResponseBody, 'meta.pagination.total_pages') ?? 1, MAX_PAGES)
+    for (let page = 2; page <= totalPages; page += PARALLEL_PAGES) {
+      const batch = range(page, Math.min(page + PARALLEL_PAGES, totalPages + 1))
+      const responses = await Promise.all(batch.map((batchPage) => getMethod({ filters, page: batchPage, pageSize })))
+      const batchLists = responses.map((response) => get(response, 'data', []))
+
+      list = batchLists.reduce((carry, batchList) => [...carry, ...batchList], list)
+      if (batchLists.some((batchList) => batchList.length < pageSize)) {
+        break
+      }
+    }
+
     return list
   }
 

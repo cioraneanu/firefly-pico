@@ -1,17 +1,16 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { keyBy } from 'lodash-es'
-import { StorageSerializers, useLocalStorage } from '@vueuse/core'
+import { useLocalStorage } from '@vueuse/core'
+import { useIdbStorage } from '~/utils/IdbStorage.js'
 import CurrencyRepository from '~/repository/CurrencyRepository'
 import Currency from '~/models/Currency.js'
 
 export const useCurrencyStore = defineStore('currency', () => {
   const exchangeRates = useLocalStorage('exchangeRates', {})
-  const currenciesList = useLocalStorage('currenciesList', [])
+  const currenciesList = useIdbStorage('currenciesList', [])
   const isLoadingCurrencies = ref(false)
   const isLoadingExchangeRates = ref(false)
-
-
 
   const currencyDictionary = computed(() => {
     return keyBy(currenciesList.value, 'id')
@@ -34,6 +33,14 @@ export const useCurrencyStore = defineStore('currency', () => {
     }))
   })
 
+  function applyExchangeRates(rates) {
+    exchangeRates.value = rates
+  }
+
+  function applyCurrenciesList(list) {
+    currenciesList.value = list
+  }
+
   async function fetchExchangeRate() {
     isLoadingExchangeRates.value = true
     exchangeRates.value = await new CurrencyRepository().getCurrencyExchange()
@@ -54,6 +61,8 @@ export const useCurrencyStore = defineStore('currency', () => {
     currencyDictionary,
     defaultCurrency,
     exchangeRatesList,
+    applyExchangeRates,
+    applyCurrenciesList,
     fetchExchangeRate,
     fetchCurrencies,
   }
