@@ -38,6 +38,7 @@ const termToSuffixes = (term) => {
 const searchOptions = {
   prefix: true, // a query word may match only the start of an indexed term
   fuzzy: 0.2, // allow fuzzy matching (edit distance 1–2)
+  weights: { fuzzy: 0.1, prefix: 0.375 }, // rank typos below prefix matches (MiniSearch default favors fuzzy: 0.45)
   combineWith: 'AND', // require all words to match
   processTerm: normalizeTerm,
 }
