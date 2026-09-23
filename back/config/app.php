@@ -59,12 +59,8 @@ return [
     'firefly_url' => env('FIREFLY_URL', ''),
     'asset_url' => env('ASSET_URL'),
 
-    // How long a computed /api/sync payload is reused. Keeps repeated syncs (several tabs,
-    // several devices, app regaining focus) from each hitting Firefly III.
     'sync_cache_seconds' => env('SYNC_CACHE_SECONDS', 60),
 
-    // Secret of the Firefly III webhook pointing at /api/webhooks/firefly. Leave empty to
-    // disable the endpoint.
     'firefly_webhook_secret' => env('FIREFLY_WEBHOOK_SECRET', ''),
 
     /*

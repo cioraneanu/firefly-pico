@@ -14,13 +14,6 @@ class SyncController extends BaseController
 
     // ---------------------------
 
-    /**
-     * One request that replaces the fan-out the app used to do from the browser.
-     *
-     * The client sends the hash it already holds; when nothing changed we answer with that
-     * hash and nothing else, so an unchanged sync costs a few bytes instead of the whole
-     * payload — and the client can skip rewriting its local stores entirely.
-     */
     public function getSync(Request $request)
     {
         BaseAuthorization::checkUser();

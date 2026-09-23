@@ -30,10 +30,8 @@ useResize()
 
 const documentVisibility = useDocumentVisibility()
 
-// Changes made in Firefly III, the importer or a rule cannot reach us any other way, and
-// asking costs almost nothing when nothing changed.
 watch(documentVisibility, (visibility) => {
-  if (visibility === 'visible' && appStore.authToken) {
+  if (visibility === 'visible') {
     appStore.syncEverythingIfStale()
   }
 })

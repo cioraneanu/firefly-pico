@@ -20,7 +20,6 @@ import { usePiggyBankStore } from '~/stores/piggyBankStore.js'
 import { useRecurringTransactionStore } from '~/stores/recurringTransactionStore.js'
 import DateUtils from '~/utils/DateUtils.js'
 
-// How often the app is allowed to ask the backend whether anything changed.
 const SECONDS_BETWEEN_SYNC_CHECKS = 60
 
 export const useAppStore = defineStore('app', () => {
@@ -44,10 +43,9 @@ export const useAppStore = defineStore('app', () => {
   const windowWidth = ref(null)
 
   const lastSync = useLocalStorage('lastSync', null, DateUtils.storageSerializer)
-  const lastSyncCheck = useLocalStorage('lastSyncCheck', null, DateUtils.storageSerializer)
-  // Hash of the payload our local stores were built from. Sent back on every sync so the
-  // backend can answer "nothing changed" instead of resending everything.
-  const syncHash = useLocalStorage('syncHash', null)
+  const lastSyncCheck = ref(null)
+  // Kept in memory only, so it can never claim stores are current when their persisted copy was lost
+  const syncHash = ref(null)
   const isSyncing = ref(false)
   const isSyncRequiredByMissingExtras = ref(false)
 
@@ -125,37 +123,18 @@ export const useAppStore = defineStore('app', () => {
       return
     }
 
-    // The profile has just been loaded on app start, so there is nothing to re-read.
     await syncEverything({ syncProfiles: false })
   }
 
-  /**
-   * Firefly III offers nothing to sync incrementally with - no "changed since" filter, no
-   * sort on updated_at and no ETags - so the only way to notice an edit made in Firefly, the
-   * importer or a rule is to ask again. The backend answers an unchanged sync with just a
-   * hash, which makes asking cheap enough to do whenever the app comes back to the front.
-   */
   async function syncEverythingIfStale() {
     const appStore = useAppStore()
     if (!appStore.hasAuthToken || isSyncing.value) return
+    if (lastSyncCheck.value && differenceInSeconds(new Date(), lastSyncCheck.value) < SECONDS_BETWEEN_SYNC_CHECKS) return
 
-    let lastCheck = lastSyncCheck.value
-    if (lastCheck && differenceInSeconds(new Date(), lastCheck) < SECONDS_BETWEEN_SYNC_CHECKS) {
-      return
-    }
-
-    // Never re-read the profile here: this runs whenever the app is brought back to the
-    // front, and reloading it would throw away settings the user is in the middle of editing.
+    lastSyncCheck.value = new Date()
     await syncEverything({ showLoading: false, syncProfiles: false })
   }
 
-  /**
-   * @param force          Ask for a freshly fetched full payload, bypassing both our hash and the
-   *                       backend cache. Used by the manual sync buttons, where the point is to
-   *                       rebuild the stores.
-   * @param syncProfiles   Re-read the profile first. Which resources are enabled lives there,
-   *                       so it has to be known before we can say what to sync.
-   */
   async function syncEverything({ force = false, showLoading = true, syncProfiles = true } = {}) {
     const appStore = useAppStore()
     if (!appStore.hasAuthToken) return
@@ -165,36 +144,25 @@ export const useAppStore = defineStore('app', () => {
     }
 
     isSyncing.value = true
+    const response = await new SyncRepository().sync({
+      entities: getSyncEntities(),
+      params: getSyncParams(),
+      hash: force ? null : syncHash.value,
+      force,
+      showLoading,
+    })
+    isSyncing.value = false
 
-    try {
-      const response = await new SyncRepository().sync({
-        entities: getSyncEntities(),
-        params: getSyncParams(),
-        hash: force ? null : syncHash.value,
-        force,
-        showLoading,
-      })
+    if (!get(response, 'hash')) {
+      return
+    }
 
-      // Failed: leave the stores alone, and let the next focus try again.
-      if (!get(response, 'hash')) {
-        return
-      }
-      lastSyncCheck.value = new Date()
-
-      // Nothing changed. Rewriting the stores would only churn storage and re-trigger every
-      // computed that reads them, in every open tab.
-      if (get(response, 'unchanged')) {
-        lastSync.value = new Date()
-        return
-      }
-
+    if (!get(response, 'unchanged')) {
       applySync(get(response, 'data', {}))
       syncHash.value = get(response, 'hash')
-      lastSync.value = new Date()
       isSyncRequiredByMissingExtras.value = false
-    } finally {
-      isSyncing.value = false
     }
+    lastSync.value = new Date()
   }
 
   function getSyncEntities() {
@@ -225,8 +193,7 @@ export const useAppStore = defineStore('app', () => {
   }
 
   function applySync(data) {
-    // Currencies go first: the account and budget transformers resolve a currency from the
-    // currency store while they run.
+    // Currencies first: other transformers read the currency store
     useCurrencyStore().applyCurrenciesList(get(data, 'currencies', []))
     useCurrencyStore().applyExchangeRates(get(data, 'exchange-rates', {}))
 
@@ -271,9 +238,6 @@ export const useAppStore = defineStore('app', () => {
     isNewVersionAvailable,
     fetchInfo,
     lastSync,
-    lastSyncCheck,
-    syncHash,
-    isSyncing,
     isSyncRequiredByMissingExtras,
     syncEverythingIfOld,
     syncEverythingIfStale,

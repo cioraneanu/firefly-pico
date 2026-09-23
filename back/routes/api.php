@@ -36,10 +36,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('info', [VersionController::class, 'getInfo']);
 Route::get('user', [UserController::class, 'getUser']);
 
-// One round trip for everything the app keeps in its local stores
 Route::get('sync', [SyncController::class, 'getSync']);
 
-// Firefly III tells us when something changed behind our back
 Route::post('webhooks/firefly', [WebhookController::class, 'receive']);
 
 RouteUtils::makeCRUD("transaction-templates", TransactionTemplateController::class);
