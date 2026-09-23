@@ -31,6 +31,7 @@ class BaseController extends Controller
     const HTTP_CODE_CONFLICT = 409;
     const HTTP_CODE_UNPROCESSABLE_ENTITY = 422;
     const HTTP_CODE_INTERNAL_SERVER_ERROR = 500;
+    const HTTP_CODE_BAD_GATEWAY = 502;
 
     //  ================================================================================
     //  ==============================   FIELDS   ======================================

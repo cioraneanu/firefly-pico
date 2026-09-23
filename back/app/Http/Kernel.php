@@ -42,6 +42,7 @@ class Kernel extends HttpKernel
 //             \Illuminate\Routing\Middleware\ThrottleRequests::class.':api',
             \Illuminate\Routing\Middleware\ThrottleRequests::class.':300,1', // 300 per minute
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\InvalidateSyncCache::class,
         ],
     ];
 

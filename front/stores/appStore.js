@@ -150,8 +150,9 @@ export const useAppStore = defineStore('app', () => {
   }
 
   /**
-   * @param force          Ask for the full payload even when our hash still matches. Used by
-   *                       the manual sync buttons, where the point is to rebuild the stores.
+   * @param force          Ask for a freshly fetched full payload, bypassing both our hash and the
+   *                       backend cache. Used by the manual sync buttons, where the point is to
+   *                       rebuild the stores.
    * @param syncProfiles   Re-read the profile first. Which resources are enabled lives there,
    *                       so it has to be known before we can say what to sync.
    */
@@ -164,19 +165,21 @@ export const useAppStore = defineStore('app', () => {
     }
 
     isSyncing.value = true
-    lastSyncCheck.value = new Date()
 
     try {
       const response = await new SyncRepository().sync({
         entities: getSyncEntities(),
         params: getSyncParams(),
         hash: force ? null : syncHash.value,
+        force,
         showLoading,
       })
 
+      // Failed: leave the stores alone, and let the next focus try again.
       if (!get(response, 'hash')) {
         return
       }
+      lastSyncCheck.value = new Date()
 
       // Nothing changed. Rewriting the stores would only churn storage and re-trigger every
       // computed that reads them, in every open tab.

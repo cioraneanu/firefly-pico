@@ -12,9 +12,9 @@ export default class SyncRepository {
    * Passing the hash we already hold lets the backend answer "nothing changed" without
    * sending the payload again, which is what makes syncing on every app focus affordable.
    */
-  async sync({ entities = [], params = {}, hash = null, showLoading = true } = {}) {
+  async sync({ entities = [], params = {}, hash = null, force = false, showLoading = true } = {}) {
     const response = await axios.get(this.getUrl(), {
-      params: { entities: entities.join(','), ...params, ...(hash ? { hash } : {}) },
+      params: { entities: entities.join(','), ...params, ...(hash ? { hash } : {}), ...(force ? { force: 1 } : {}) },
       showLoading,
     })
 

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\GeneralException;
 use App\Http\Controllers\Base\BaseController;
 use App\Models\Account;
 use App\Models\Budget;
@@ -87,10 +88,14 @@ class SyncService
      * @param  array  $entities  Which resources to include, so profiles with disabled
      *                           resources do not pay for what they never display.
      * @param  array  $params    Date filters: "date" for accounts, "start"/"end" for budget limits.
+     * @param  bool   $force     Skip the cached payload, for when the user explicitly asks to resync.
      */
-    public function sync(array $entities, array $params)
+    public function sync(array $entities, array $params, $force = false)
     {
         $cacheKey = $this->getCacheKey($entities, $params);
+        if ($force) {
+            Cache::forget($cacheKey);
+        }
 
         return Cache::remember($cacheKey, config('app.sync_cache_seconds'), function () use ($entities, $params) {
             $data = $this->fetchAll($entities, $params);
@@ -103,33 +108,35 @@ class SyncService
     }
 
     /**
-     * Bumped whenever Firefly III tells us something changed, which drops every cached
-     * sync payload for that user without having to enumerate cache keys.
+     * Bumped whenever something changed, which drops every cached sync payload for that owner
+     * without having to enumerate cache keys. The owner is the Firefly user id when Firefly III
+     * tells us (webhook), or the auth token hash when the change went through Pico itself.
      */
-    public static function getVersion($userId)
+    public static function getVersion($owner)
     {
-        return Cache::get(self::getVersionKey($userId), 0);
+        return Cache::get(self::getVersionKey($owner), 0);
     }
 
-    public static function bumpVersion($userId)
+    public static function bumpVersion($owner)
     {
-        $key = self::getVersionKey($userId);
-        Cache::put($key, self::getVersion($userId) + 1, 60 * 60 * 24 * 30);
+        $key = self::getVersionKey($owner);
+        Cache::put($key, self::getVersion($owner) + 1, 60 * 60 * 24 * 30);
     }
 
     // ---------------------------- PRIVATE --------------------------
 
-    private static function getVersionKey($userId)
+    private static function getVersionKey($owner)
     {
-        return "sync_version_" . ($userId ?? 'unknown');
+        return "sync_version_" . ($owner ?? 'unknown');
     }
 
     private function getCacheKey(array $entities, array $params)
     {
         $userId = getUserId();
-        $signature = md5(json_encode([$entities, $params, getAuthTokenHash()]));
+        $tokenHash = getAuthTokenHash();
+        $signature = md5(json_encode([$entities, $params, $tokenHash]));
 
-        return sprintf('sync_%s_%s_%s', $userId, self::getVersion($userId), $signature);
+        return sprintf('sync_%s_%s_%s_%s', $userId, self::getVersion($userId), self::getVersion($tokenHash), $signature);
     }
 
     private function fetchAll(array $entities, array $params)
@@ -257,8 +264,10 @@ class SyncService
 
     private function decode($response)
     {
+        // An empty list would wipe the client's store, and get cached on top of that. Failing
+        // keeps both the cache and the client's stores as they were.
         if (!is_object($response) || !method_exists($response, 'status') || $response->status() !== BaseController::HTTP_CODE_OK) {
-            return [];
+            throw new GeneralException("Firefly III request failed", BaseController::HTTP_CODE_BAD_GATEWAY);
         }
 
         return $response->json() ?? [];

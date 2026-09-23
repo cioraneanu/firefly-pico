@@ -10,7 +10,7 @@
 // is pulled into memory once, before the app mounts (see plugins/00.idb-storage.js), and
 // reads are served from there. Writes go to IndexedDB in the background.
 
-import { ref, watch } from 'vue'
+import { ref, toRaw, watch } from 'vue'
 
 const DB_NAME = 'firefly-pico'
 const STORE_NAME = 'keyval'
@@ -20,6 +20,26 @@ const DB_VERSION = 1
 const cache = new Map()
 let hasIndexedDb = false
 let databasePromise = null
+
+// Every open tab holds these lists in memory, so tell the others when ours change or they would
+// keep showing (and later write back) stale lists. useLocalStorage got this from storage events.
+const channel = typeof BroadcastChannel === 'undefined' ? null : new BroadcastChannel('firefly-pico-storage')
+const refs = new Map()
+// Values that arrived from another tab, so our watcher does not write and broadcast them again.
+const receivedValues = new WeakSet()
+
+channel?.addEventListener('message', ({ data: { key, rawValue } }) => {
+  if (hasIndexedDb) {
+    cache.set(key, rawValue)
+  }
+  const data = refs.get(key)
+  if (!data) {
+    return
+  }
+  const value = JSON.parse(rawValue)
+  receivedValues.add(value)
+  data.value = value
+})
 
 function openDatabase() {
   if (databasePromise) {
@@ -159,7 +179,15 @@ export function useIdbStorage(key, initialValue) {
   }
 
   const data = ref(storedValue ?? initialValue)
-  watch(data, (value) => write(key, JSON.stringify(value)))
+  refs.set(key, data)
+  watch(data, (value) => {
+    if (receivedValues.has(toRaw(value))) {
+      return
+    }
+    const rawValue = JSON.stringify(value)
+    write(key, rawValue)
+    channel?.postMessage({ key, rawValue })
+  })
 
   return data
 }

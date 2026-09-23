@@ -19,6 +19,8 @@ class SyncTest extends TestCase
     /** @var array url fragment => number of times it was requested */
     private $requestCount = [];
 
+    private $fireflyIsDown = false;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -34,6 +36,14 @@ class SyncTest extends TestCase
 
             if (str_contains($url, 'about/user')) {
                 return Http::response(['data' => ['id' => '1']]);
+            }
+
+            if (str_contains($url, 'rules')) {
+                return Http::response(['data' => []]);
+            }
+
+            if ($this->fireflyIsDown) {
+                return Http::response(['message' => 'down'], 500);
             }
 
             foreach (['autocomplete/categories', 'accounts', 'tags', 'currencies'] as $fragment) {
@@ -160,6 +170,39 @@ class SyncTest extends TestCase
         $this->sync(['entities' => 'accounts'])->assertOk();
 
         $this->assertGreaterThan($countAfterFirst, $this->requestCount['accounts']);
+    }
+
+    public function test_forcing_a_sync_skips_the_cached_payload()
+    {
+        $this->sync(['entities' => 'accounts'])->assertOk();
+        $countAfterFirst = $this->requestCount['accounts'];
+
+        $this->sync(['entities' => 'accounts', 'force' => 1])->assertOk();
+
+        $this->assertGreaterThan($countAfterFirst, $this->requestCount['accounts']);
+    }
+
+    public function test_a_write_through_pico_drops_the_cached_payload()
+    {
+        $this->sync(['entities' => 'accounts'])->assertOk();
+        $countAfterFirst = $this->requestCount['accounts'];
+
+        $this->withHeaders(['Authorization' => "Bearer {$this->token}"])->postJson('/api/rules', [])->assertOk();
+        $this->sync(['entities' => 'accounts'])->assertOk();
+
+        $this->assertGreaterThan($countAfterFirst, $this->requestCount['accounts']);
+    }
+
+    public function test_a_failing_firefly_request_fails_the_sync_without_caching_it()
+    {
+        $this->fireflyIsDown = true;
+        $this->sync(['entities' => 'accounts,tags'])->assertStatus(502);
+
+        $this->fireflyIsDown = false;
+        $response = $this->sync(['entities' => 'accounts,tags']);
+
+        $response->assertOk();
+        $this->assertCount(2, $response->json('data.accounts'));
     }
 
     public function test_sync_without_a_valid_token_fails()

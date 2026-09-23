@@ -28,7 +28,7 @@ class SyncController extends BaseController
         $entities = array_values(array_filter(explode(',', (string) $request->entities)));
         $params = $request->only(['date', 'start', 'end']);
 
-        $result = $this->syncService->sync($entities, $params);
+        $result = $this->syncService->sync($entities, $params, $request->boolean('force'));
 
         if ($request->hash && $request->hash === fget($result, 'hash')) {
             return $this->respond([
