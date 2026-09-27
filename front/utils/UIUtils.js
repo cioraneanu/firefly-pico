@@ -30,12 +30,16 @@ export default class UIUtils {
     return instance
   }
 
-  static async showDeleteConfirmation(title, message) {
+  static async showConfirmation(title, message) {
     return showConfirmDialog({
       title,
       message,
     })
       .then(() => true)
       .catch(() => false)
+  }
+
+  static async showDeleteConfirmation(title, message) {
+    return await UIUtils.showConfirmation(title, message)
   }
 }

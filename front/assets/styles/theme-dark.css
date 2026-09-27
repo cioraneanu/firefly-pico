@@ -509,3 +509,34 @@
         color: #64b5f6; /* Lighter blue for dark theme */
     }
 }
+
+.van-theme-dark .todo-inbox-item {
+    box-shadow: rgba(0, 0, 0, 0.35) 0 8px 24px;
+}
+
+.van-theme-dark .todo-inbox-review-row .transaction-list-item-todo {
+    background: var(--van-cell-background);
+}
+
+.van-theme-dark .todo-inbox-page {
+    --todo-divider: #48484b;
+}
+
+.van-theme-dark .todo-inbox-item-actions {
+    border-top-color: #333;
+}
+
+.van-theme-dark .todo-inbox-receipt {
+    background: #262626;
+    color: #a1a1aa;
+}
+
+.van-theme-dark .todo-inbox-item-error,
+.van-theme-dark .todo-inbox-load-error {
+    background: #3f1d24;
+    color: #fda4af;
+}
+
+.van-theme-dark .todo-inbox-status {
+    border-color: #666;
+}
