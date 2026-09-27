@@ -1,6 +1,6 @@
 <template>
   <van-swipe-cell ref="swipeCell" v-bind="clickWithoutSwipe">
-    <div class="transaction-desktop-row cursor-pointer" :class="cellClass">
+    <div class="transaction-desktop-row cursor-pointer" :class="[cellClass, { 'transaction-review-display': props.reviewDisplay }]">
       <div class="transaction-desktop-type-dot" :class="typeClass" />
 
       <div class="transaction-desktop-date line-height-normal">
@@ -35,7 +35,7 @@
           </template>
 
           <template v-if="profileStore.tagsEnabled">
-            <tag-badge v-for="tag in visibleTags" :key="`tag-${tag.id}`" :value="tag" />
+            <tag-badge v-for="tag in visibleTags" :key="`tag-${tag.id}`" :value="tag" :max-length="props.reviewDisplay ? Infinity : 10" />
             <div v-if="tags.length > visibleTags.length" class="transaction-desktop-more">+{{ tags.length - visibleTags.length }}</div>
           </template>
         </div>
@@ -49,7 +49,7 @@
       </div>
     </div>
 
-    <template #right>
+    <template v-if="props.canDelete" #right>
       <van-button class="delete-button" square type="danger" text="Delete" @click="onDelete" />
     </template>
   </van-swipe-cell>
@@ -64,6 +64,9 @@ import { useClickWithoutSwipe } from '~/composables/useClickWithoutSwipe.js'
 
 const props = defineProps({
   value: Object,
+  reviewDisplay: Boolean,
+  safeNotes: Boolean,
+  canDelete: { type: Boolean, default: true },
 })
 
 const emit = defineEmits(['onEdit', 'onDelete'])

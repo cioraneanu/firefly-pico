@@ -2,6 +2,8 @@ back/vendor
 front/node_modules
 front/.nuxt
 front/.output
+front/tests
+**/*.log
 .git
 .github
 .idea

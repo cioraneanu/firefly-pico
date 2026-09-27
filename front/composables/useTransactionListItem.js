@@ -8,6 +8,7 @@ import { useAccountStore } from '~/stores/accountStore'
 import { useProfileStore } from '~/stores/profileStore'
 import Account from '~/models/Account.js'
 import Currency from '~/models/Currency.js'
+import { renderTodoNotes } from '~/utils/TodoReviewUtils.js'
 
 export function useTransactionListItem(props) {
   const accountStore = useAccountStore()
@@ -40,7 +41,7 @@ export function useTransactionListItem(props) {
 
   const notes = computed(() => {
     const result = Transaction.getNotes(props.value)
-    return result ? marked(result) : null
+    return result ? (props.safeNotes ? renderTodoNotes(result) : marked(result)) : null
   })
 
   const isTodo = computed(() => tags.value.some((tag) => get(tag, 'attributes.is_todo')))
@@ -53,7 +54,7 @@ export function useTransactionListItem(props) {
     'color-transfer': isTypeTransfer.value,
   }))
 
-  const visibleTags = computed(() => tags.value.slice(0, 4))
+  const visibleTags = computed(() => (props.reviewDisplay ? tags.value : tags.value.slice(0, 4)))
   const amountSign = computed(() => (isTypeExpense.value ? '-' : isTypeIncome.value ? '+' : ''))
   const transactionAmount = computed(() => `${amountSign.value}${Transaction.getAmountFormatted(props.value)}`)
   const transactionCurrency = computed(() => {

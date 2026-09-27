@@ -2,6 +2,7 @@ export default {
   ROUTE_HOME: '/',
   ROUTE_TRANSACTION_LIST: '/transactions/list',
   ROUTE_TRANSACTION_ID: '/transactions',
+  ROUTE_TODO_INBOX: '/todo-inbox',
   ROUTE_CALENDAR: '/calendar',
   ROUTE_EXTRAS: '/extras',
   ROUTE_DASHBOARD: '/dashboard',
