@@ -99,12 +99,12 @@ export default defineNuxtConfig({
       background_color: '#ffffff',
       icons: [
         {
-          src: '/android-chrome-192x192.png',
+          src: '/android-chrome-192x192.png?v=pocket-sprite',
           sizes: '192x192',
           type: 'image/png',
         },
         {
-          src: '/android-chrome-512x512.png',
+          src: '/android-chrome-512x512.png?v=pocket-sprite',
           sizes: '512x512',
           type: 'image/png',
         },

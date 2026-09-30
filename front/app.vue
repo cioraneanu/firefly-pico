@@ -23,6 +23,13 @@ const theme = computed(() => (profileStore.darkTheme ? 'dark' : 'white'))
 const pwaColor = computed(() => (profileStore.darkTheme ? '#1c1c1e' : '#ffffff'))
 useHead({
   meta: [{ name: 'theme-color', content: pwaColor }],
+  link: [
+    { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico?v=pocket-sprite' },
+    { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png?v=pocket-sprite' },
+    { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png?v=pocket-sprite' },
+    { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png?v=pocket-sprite' },
+    { rel: 'mask-icon', href: '/safari-pinned-tab.svg?v=pocket-sprite', color: '#00a261' },
+  ],
 })
 
 useResize()
