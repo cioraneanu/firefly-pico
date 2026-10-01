@@ -135,7 +135,7 @@ export default class Transaction extends BaseModel {
   }
 
   static getDescription(transaction) {
-    return get(transaction, 'attributes.group_title') ?? get(this.getFirstSplit(transaction), 'description') ?? ' - '
+    return get(transaction, 'attributes.group_title') || get(this.getFirstSplit(transaction), 'description') || ' - '
   }
 
   static hasAttachments(transaction) {
