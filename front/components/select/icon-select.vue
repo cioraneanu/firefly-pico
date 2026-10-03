@@ -5,8 +5,6 @@
     v-model:search="search"
     :label="label ?? $t('icon')"
     :popup-title="$t('icon_select')"
-    :list="filteredList"
-    :columns="6"
     :get-display-value="getDisplayValue"
     v-bind="dynamicAttrs"
   >
@@ -15,92 +13,85 @@
     </template>
 
     <template #input>
-      <div v-if="!modelValue" class="text-muted"> {{ $t('icon_empty') }} </div>
-      <app-icon v-else :icon="modelValue.icon" style="width: 25px"/>
+      <div v-if="!modelValue" class="text-muted">{{ $t('icon_empty') }}</div>
+      <app-icon v-else :icon="modelValue.icon" style="width: 25px" />
     </template>
 
-    <template #item="{ item }">
-      <div class="flex-center flex-column mt-5 text-size-12">
-        <app-icon :icon="item.icon" style="width: 30px"/>
-        <div class="app-icon-item"/>
-      </div>
+    <template #popup="{ onSelectCell }">
+      <app-tabs v-model="activeTab" :items="tabs" class="mx-3 mb-2" />
+
+      <van-grid :column-num="6">
+        <van-grid-item v-for="item in filteredList" :key="item.icon" class="cursor-pointer" :class="{ active: item.icon === modelValue?.icon }" @click="onSelectCell(item)">
+          <div class="flex-center flex-column mt-5 text-size-12">
+            <app-icon :icon="item.icon" style="width: 30px" />
+            <div class="app-icon-item" />
+          </div>
+        </van-grid-item>
+      </van-grid>
     </template>
   </app-select>
 </template>
 
 <script setup>
-import { useCategoryStore } from '~/stores/categoryStore'
 import { useFormAttributes } from '~/composables/useFormAttributes'
-import Category from '~/models/Category.js'
 import { avatarListIcons, duoToneListIcons, fluentListIcons } from '~/constants/SvgConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
+import Icon from '~/models/Icon.js'
+import { useIconStore } from '~/stores/iconStore.js'
 
-const categoryStore = useCategoryStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
+const { t } = useI18n()
+const iconStore = useIconStore()
 
 const props = defineProps({
   label: {
     type: String,
   },
-  list: {},
+  defaultTab: {
+    type: String,
+    default: 'classic',
+  },
 })
 
 const modelValue = defineModel()
 const showDropdown = ref(false)
 const search = ref('')
+const activeTab = ref(props.defaultTab)
 
-const list = computed(() => {
-  if (props.list) {
-    return props.list
-  }
+const tabs = computed(() => [
+  { value: 'classic', label: t('icon_select_classic'), list: [...duoToneListIcons, ...fluentListIcons] },
+  { value: 'avatars', label: t('icon_select_avatars'), list: avatarListIcons },
+  ...(iconStore.customIconList.length > 0 ? [{ value: 'custom', label: t('icon_select_custom'), list: iconStore.customIconList }] : []),
+])
 
-  return [
-    ...duoToneListIcons,
-    ...fluentListIcons,
-    ...avatarListIcons,
-    // ...flatColorListIcons,
-  ]
-})
-
-// let list = ref(
-//     props.list ??
-//     [
-//       ...duoToneListIcons,
-//       ...fluentListIcons,
-//       ...avatarListIcons,
-//       // ...flatColorListIcons,c
-//     ])
+const list = computed(() => tabs.value.find((tab) => tab.value === activeTab.value)?.list ?? [])
 
 const filteredList = computed(() => {
   if (search.value.length === 0) {
     return list.value
   }
-  return list.value.filter((icon) => {
-    return icon.name.toLowerCase().indexOf(search.value.toLowerCase()) !== -1
-  })
+  return list.value.filter((icon) => icon.name.toLowerCase().includes(search.value.toLowerCase()))
 })
 
 // ------ Methods ------
 
-// onMounted(async () => {
-//   list.value = appSelectIcons
-// })
-
-const onSelectCell = (value) => {
-  modelValue.value = value
-  showDropdown.value = false
+const getTabForIcon = (icon) => {
+  if (Icon.isTypeCustom(icon)) {
+    return 'custom'
+  }
+  if (Icon.isTypeAvatar(icon)) {
+    return 'avatars'
+  }
+  return icon ? 'classic' : props.defaultTab
 }
 
-const getDisplayValue = (value) => {
-  return Category.getDisplayName(value)
-}
+const getDisplayValue = (value) => value?.name
 
-const isLoading = ref(false)
-const onRefresh = async () => {
-  isLoading.value = true
-  await categoryStore.fetchCategories()
-  isLoading.value = false
-}
+watch(showDropdown, (isShown) => {
+  if (isShown) {
+    activeTab.value = getTabForIcon(modelValue.value?.icon)
+    iconStore.fetchCustomIcons()
+  }
+})
 </script>
-
