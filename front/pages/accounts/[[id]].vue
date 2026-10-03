@@ -15,7 +15,7 @@
       <van-cell-group inset>
         <app-field v-model="name" name="Description" :label="$t('description')" type="textarea" rows="1" autosize :icon="TablerIconConstants.fieldText2" :rules="[rule.required()]" required/>
 
-        <icon-select v-model="icon" :list="avatarListIcons" />
+        <icon-select v-model="icon" default-tab="avatars" />
 
         <currency-select v-model="currency" name="curerency" :rules="[rule.required()]" required />
 
@@ -57,7 +57,6 @@ import { generateChildren } from '~/utils/VueUtils'
 import AccountTypeSelect from '~/components/select/account/account-type-select.vue'
 import AccountTransformer from '~/transformers/AccountTransformer'
 import { useToolbar } from '~/composables/useToolbar'
-import { avatarListIcons } from '~/constants/SvgConstants.js'
 import TablerIconConstants from '~/constants/TablerIconConstants.js'
 import { rule } from '~/utils/ValidationUtils.js'
 import AppFieldDropdown from '~/components/ui-kit/app-field-dropdown.vue'

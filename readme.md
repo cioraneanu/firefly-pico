@@ -69,5 +69,20 @@ Check out the **[full documentation](https://cioraneanu.github.io/firefly-pico-d
 - ✅ Free and open-source
 
 
+## :art: Custom icons
+Admins can add their own icons by mounting a folder into the container (see the commented `volumes` example in the `docker-compose*.yml` files):
+
+```yaml
+volumes:
+  - /<your_path>/firefly-pico-icons:/var/www/html/storage/app/custom-icons:ro
+```
+
+- Supported formats: `.svg`, `.png`, `.webp`, `.jpg`/`.jpeg`. Only files directly in the folder are used (no subfolders).
+- The icons appear in a **Custom** tab of the icon picker. New files are picked up when the picker is opened or on the next sync.
+- The file name (without extension) is the name used for search, so name files descriptively (e.g. `coffee.svg`).
+- Custom icons are shown as-is: they are not recolored in dark mode, so prefer icons that look good on both light and dark backgrounds.
+- Outside Docker, the folder can be changed with the `CUSTOM_ICONS_PATH` env variable.
+
+
 ## :coffee: Support
 If you enjoy Firefly-Pico please give this repository a star ⭐️.

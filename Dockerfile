@@ -130,6 +130,8 @@ RUN adduser \
     www-data
 
 RUN mkdir -p -m 772 /tmp/nginx/ && chown -R www-data:www-data /tmp/nginx
+#Admin custom icons. Mount a volume here (see readme)
+RUN mkdir -p /var/www/html/storage/app/custom-icons
 RUN chmod -R 772 /var/www/html/storage && chown -R www-data:www-data /var/www/html/storage
 RUN mkdir -p /var/www/html/database/data && chown -R www-data:www-data /var/www/html/database/data && chmod -R 775 /var/www/html/database/data
 RUN chown -R www-data:www-data /var/www/html/bootstrap/cache

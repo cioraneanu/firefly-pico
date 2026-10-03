@@ -31,6 +31,9 @@ services:
       # - ASSISTANT_TRANSCRIPTION_MODEL=gpt-4o-mini-transcribe
       # - ASSISTANT_TRANSCRIPTION_API_KEY=your-api-key
       # - ASSISTANT_TRANSCRIPTION_LANGUAGE=en
+    # Optional: custom icons. Put .svg/.png/.webp/.jpg files in this folder and they show up in the icon picker
+    # volumes:
+    #   - /<your_path>/firefly-pico-icons:/var/www/html/storage/app/custom-icons:ro
     networks:
       firefly:
 

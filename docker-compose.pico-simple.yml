@@ -21,4 +21,6 @@ services:
       # - ASSISTANT_TRANSCRIPTION_LANGUAGE=en
     volumes:
       - ./firefly-pico-data:/var/www/html/database/data
+      # Optional: custom icons (.svg/.png/.webp/.jpg) for the icon picker
+      # - ./firefly-pico-icons:/var/www/html/storage/app/custom-icons:ro
     restart: unless-stopped
