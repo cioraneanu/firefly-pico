@@ -49,7 +49,7 @@ const filteredList = computed(() => {
     return sortedList.value
   }
   return sortedList.value.filter((item) => {
-    return Budget.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
+    return LanguageUtils.includesSearch(Budget.getDisplayName(item), search.value)
   })
 })
 

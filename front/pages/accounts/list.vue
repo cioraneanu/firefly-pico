@@ -86,7 +86,7 @@ const filteredList = computed(() => {
     result = result.filter((item) => get(Account.getType(item), 'fireflyCode') === filterAccountType.value)
   }
   if (search.value.length > 0) {
-    result = result.filter((item) => Account.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1)
+    result = result.filter((item) => LanguageUtils.includesSearch(Account.getDisplayName(item), search.value))
   }
   return [...result].sort((a, b) => getTypeSortIndex(a) - getTypeSortIndex(b))
 })

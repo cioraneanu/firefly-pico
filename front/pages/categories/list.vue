@@ -45,7 +45,7 @@ const filteredList = computed(() => {
     return list.value
   }
   return list.value.filter((item) => {
-    return Category.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
+    return LanguageUtils.includesSearch(Category.getDisplayName(item), search.value)
   })
 })
 

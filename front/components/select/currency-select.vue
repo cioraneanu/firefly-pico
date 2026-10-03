@@ -69,7 +69,7 @@ const filteredList = computed(() => {
     return list
   }
   return list.filter((item) => {
-    return Currency.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
+    return LanguageUtils.includesSearch(Currency.getDisplayName(item), search.value)
   })
 })
 

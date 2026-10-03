@@ -35,7 +35,7 @@ front/
 ├── transformers/       # API ↔ form data conversion (extend ApiTransformer)
 ├── stores/             # Pinia state (useLocalStorage for persistence)
 ├── constants/          # RouteConstants, TablerIconConstants, enums
-├── i18n/locales/       # 10 files: en, ro, zh-CN, it, pt-BR, de-DE, fr, pl, ru-RU, es-MX
+├── i18n/locales/       # 12 files: en, ro, zh-CN, it, pt-BR, de-DE, fr, pl, ru-RU, es-MX, ko, el
 ├── assets/styles/      # CSS variables, themes, helper classes
 │   ├── variables.css   # :root and .van-theme-dark custom properties
 │   ├── theme-white.css # Main theme + Vant overrides
@@ -121,7 +121,7 @@ Every entity screen follows the same two-page shape. Copy an existing entity (e.
 **Adding a whole new entity** (front to back):
 
 1. `back/`: model in `app/Models`, controller extending `BaseControllerFirefly` (constructor calls `parent::__construct('/api/v1/{firefly-endpoint}', Model::class)` — often the whole class), `RouteUtils::makeCRUD('{entities}', Controller::class)` in `routes/api.php`, migration if Pico stores extra fields.
-2. `front/`: model extending `BaseModel` (with `getTransformer()`, `getRepository()`, `getEmpty()`, static display helpers), repository extending `BaseRepository`, transformer extending `ApiTransformer` (`transformFromApi` / `transformToApi`), store following the store pattern below, the two pages above, routes in `RouteConstants.js`, i18n keys in all 10 locale files, an entry point (menu/extras page) for navigation.
+2. `front/`: model extending `BaseModel` (with `getTransformer()`, `getRepository()`, `getEmpty()`, static display helpers), repository extending `BaseRepository`, transformer extending `ApiTransformer` (`transformFromApi` / `transformToApi`), store following the store pattern below, the two pages above, routes in `RouteConstants.js`, i18n keys in all 12 locale files, an entry point (menu/extras page) for navigation.
 
 ## Common Commands
 
@@ -176,7 +176,7 @@ Use the command that matches the scope of the change. Do not run expensive Docke
 - Domain shape lives in `front/models`, transformation in `front/transformers`, app-wide state in `front/stores`, and reusable behavior in `front/composables`.
 - Keep the app mobile-first while preserving desktop layout paths such as `appStore.isDesktopLayout`.
 - Use CSS variables and existing theme files in `front/assets/styles` for colors and spacing. Check both light and dark theme impact.
-- Never hard code labels in HTML. Use i18n from `front/i18n/locales`. When adding a key, update ALL 10 locale files: `en.json`, `ro.json`, `zh-CN.json`, `it.json`, `pt-BR.json`, `de-DE.json`, `fr.json`, `pl.json`, `ru-RU.json`, `es-MX.json`. Keys use **underscores** for word separation and **dots** for nesting (e.g., `category_page.title_edit`).
+- Never hard code labels in HTML. Use i18n from `front/i18n/locales`. When adding a key, update ALL 12 locale files: `en.json`, `ro.json`, `zh-CN.json`, `it.json`, `pt-BR.json`, `de-DE.json`, `fr.json`, `pl.json`, `ru-RU.json`, `es-MX.json`, `ko.json`, `el.json`. Keys use **underscores** for word separation and **dots** for nesting (e.g., `category_page.title_edit`).
 - Icons come from Tabler constants (`TablerIconConstants.js`), SVG components (via nuxt-svgo from `assets/icons/`), or Vant built-in icons. Use `TablerIconConstants` for new icons. Avoid adding a new icon system.
 - Routes should be mirrored through `front/constants/RouteConstants.js` where app navigation depends on constants.
 

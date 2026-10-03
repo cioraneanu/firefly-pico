@@ -13,6 +13,7 @@ export const languageCode = {
   russian: 'ru-RU',
   spanish: 'es-MX',
   korean: 'ko',
+  greek: 'el',
 }
 
 export const supportedLanguages = [
@@ -87,5 +88,11 @@ export const supportedLanguages = [
     file: 'ko.json',
     displayName: '한국어',
     icon: 'svgo-flags-kr',
+  },
+  {
+    code: languageCode.greek,
+    file: 'el.json',
+    displayName: 'Ελληνικά',
+    icon: 'svgo-flags-gr',
   },
 ]

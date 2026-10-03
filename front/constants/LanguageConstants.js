@@ -9,6 +9,7 @@ export const LANGUAGE_SPANISH_MX = 'es-MX'
 export const LANGUAGE_PORTUGUESE_BR = 'pt-BR'
 export const LANGUAGE_CHINESE = 'zh-CN'
 export const LANGUAGE_KOREAN = 'ko-KR'
+export const LANGUAGE_GREEK = 'el-GR'
 
 export const OPTION_ENGLISH = { code: LANGUAGE_ENGLISH, name: 'English', flag: 'en' }
 export const OPTION_ROMANIAN = { code: LANGUAGE_ROMANIAN, name: 'Română', flag: 'ro' }
@@ -21,6 +22,7 @@ export const OPTION_SPANISH_MX = { code: LANGUAGE_SPANISH_MX, name: 'Español (M
 export const OPTION_PORTUGUESE_BR = { code: LANGUAGE_PORTUGUESE_BR, name: 'Português (Brasil)', flag: 'br' }
 export const OPTION_CHINESE = { code: LANGUAGE_CHINESE, name: '简体中文', flag: 'cn' }
 export const OPTION_KOREAN = { code: LANGUAGE_KOREAN, name: '한국어', flag: 'kr' }
+export const OPTION_GREEK = { code: LANGUAGE_GREEK, name: 'Ελληνικά', flag: 'gr' }
 
 export const OPTIONS_LIST = [
   OPTION_ENGLISH,
@@ -34,4 +36,5 @@ export const OPTIONS_LIST = [
   OPTION_PORTUGUESE_BR,
   OPTION_CHINESE,
   OPTION_KOREAN,
+  OPTION_GREEK,
 ]
