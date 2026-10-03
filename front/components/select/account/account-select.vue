@@ -126,7 +126,7 @@ const accountList = computed(() => {
     return list
   }
   return list.filter((item) => {
-    return Account.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
+    return LanguageUtils.includesSearch(Account.getDisplayName(item), search.value)
   })
 })
 

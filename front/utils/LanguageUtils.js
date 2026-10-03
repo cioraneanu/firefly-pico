@@ -11,7 +11,13 @@ export default class LanguageUtils {
   static removeAccentsAndLowerCase(text) {
     text = LanguageUtils.removeAccents(text)
     text = LanguageUtils.lowercase(text)
-    return text
+    // Greek final sigma (ς) is the same letter as "σ"
+    return text.replaceAll('ς', 'σ')
+  }
+
+  // Case and accent insensitive "contains" for search fields
+  static includesSearch(text, search) {
+    return LanguageUtils.removeAccentsAndLowerCase(text).includes(LanguageUtils.removeAccentsAndLowerCase(search))
   }
 
   static lowercase(text) {

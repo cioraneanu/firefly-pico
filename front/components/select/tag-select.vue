@@ -90,7 +90,7 @@ const filteredList = computed(() => {
     return list
   }
   return list.filter((item) => {
-    return Tag.getDisplayNameEllipsized(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
+    return LanguageUtils.includesSearch(Tag.getDisplayNameEllipsized(item), search.value)
   })
 })
 

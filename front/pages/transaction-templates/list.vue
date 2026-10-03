@@ -45,7 +45,7 @@ const filteredList = computed(() => {
     return sortedList
   }
   return sortedList.filter((item) => {
-    return TransactionTemplate.getAllNames(item).some(item => item.toLowerCase().indexOf(search.value.toLowerCase()) !== -1)
+    return TransactionTemplate.getAllNames(item).some(item => LanguageUtils.includesSearch(item, search.value))
   })
 })
 
