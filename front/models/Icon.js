@@ -1,12 +1,18 @@
 import BaseModel from '~/models/BaseModel'
 import { avatarListIcons, duoToneListIcons, fluentListIcons } from '~/constants/SvgConstants.js'
 
+const CUSTOM_PREFIX = 'custom:'
+
 export default class Icon extends BaseModel {
   // ------------
 
   static getIcon(iconName) {
     if (!iconName) {
       return null
+    }
+    // Custom icons are not part of a static list => build the option from the file name
+    if (this.isTypeCustom(iconName)) {
+      return { name: this.getCustomIconFile(iconName).replace(/\.[^.]+$/, ''), icon: iconName }
     }
 
     let iconsList = []
@@ -42,6 +48,18 @@ export default class Icon extends BaseModel {
 
   static isTypeFluent(iconName) {
     return iconName?.startsWith('svgo-fluent')
+  }
+
+  static isTypeCustom(iconName) {
+    return iconName?.startsWith(CUSTOM_PREFIX)
+  }
+
+  static getCustomIcon(file) {
+    return CUSTOM_PREFIX + file
+  }
+
+  static getCustomIconFile(iconName) {
+    return iconName.slice(CUSTOM_PREFIX.length)
   }
 
   static isTypeTabler(iconName) {

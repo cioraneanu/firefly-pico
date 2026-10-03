@@ -16,6 +16,7 @@ import { useCurrencyStore } from '~/stores/currencyStore.js'
 import { useBudgetStore } from '~/stores/budgetStore.js'
 import { usePiggyBankStore } from '~/stores/piggyBankStore.js'
 import { useRecurringTransactionStore } from '~/stores/recurringTransactionStore.js'
+import { useIconStore } from '~/stores/iconStore.js'
 import DateUtils from '~/utils/DateUtils.js'
 
 export const useAppStore = defineStore('app', () => {
@@ -130,6 +131,7 @@ export const useAppStore = defineStore('app', () => {
     const budgetStore = useBudgetStore()
     const piggyBankStore = usePiggyBankStore()
     const recurringTransactionStore = useRecurringTransactionStore()
+    const iconStore = useIconStore()
     const profileStore = useProfileStore()
 
     await Promise.all([
@@ -141,6 +143,7 @@ export const useAppStore = defineStore('app', () => {
       budgetStore.fetchBudgets(),
       piggyBankStore.fetchPiggyBanks(),
       recurringTransactionStore.fetchRecurringTransactions(),
+      iconStore.fetchCustomIcons(),
       currencyStore.fetchExchangeRate(),
       profileStore.getProfiles(),
     ])

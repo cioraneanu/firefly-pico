@@ -5,6 +5,7 @@ use App\Http\Controllers\AssistantController;
 use App\Http\Controllers\BudgetController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CurrencyController;
+use App\Http\Controllers\CustomIconController;
 use App\Http\Controllers\FireflyProxyController;
 use App\Http\Controllers\PiggyBankController;
 use App\Http\Controllers\ProfileController;
@@ -35,6 +36,9 @@ Route::get('info', [VersionController::class, 'getInfo']);
 Route::get('user', [UserController::class, 'getUser']);
 
 RouteUtils::makeCRUD("transaction-templates", TransactionTemplateController::class);
+
+Route::get('custom-icons', [CustomIconController::class, 'getAll']);
+Route::get('custom-icons/{file}', [CustomIconController::class, 'getOne'])->where('file', '[^/]+');
 
 // Firefly proxied resources
 RouteUtils::makeCRUD("accounts", AccountController::class);
