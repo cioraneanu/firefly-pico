@@ -3,9 +3,7 @@ export default class LanguageUtils {
     if (!text) {
       return ''
     }
-    return text
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
+    return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
   }
 
   static removeAccentsAndLowerCase(text) {
@@ -17,7 +15,7 @@ export default class LanguageUtils {
 
   // Case and accent insensitive "contains" for search fields
   static includesSearch(text, search) {
-    return LanguageUtils.removeAccentsAndLowerCase(text).includes(LanguageUtils.removeAccentsAndLowerCase(search))
+    return LanguageUtils.removeAccents(text).toUpperCase().includes(LanguageUtils.removeAccents(search).toUpperCase())
   }
 
   static lowercase(text) {
@@ -26,6 +24,4 @@ export default class LanguageUtils {
     }
     return text.toLowerCase()
   }
-
-
 }
