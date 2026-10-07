@@ -73,7 +73,7 @@ const filteredList = computed(() => {
     return result
   }
   return result.filter((item) => {
-    return RecurringTransaction.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
+    return LanguageUtils.includesSearch(RecurringTransaction.getDisplayName(item), search.value)
   })
 })
 

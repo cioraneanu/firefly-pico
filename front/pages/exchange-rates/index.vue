@@ -52,7 +52,7 @@ const filteredList = computed(() => {
 
   return list.value.filter((item) =>
     ['code', 'name', 'country'].some((key) => {
-      return (item[key] ?? '').toLowerCase().includes(search.value.toLowerCase())
+      return LanguageUtils.includesSearch(item[key], search.value)
     }),
   )
 })

@@ -77,7 +77,7 @@ const filteredList = computed(() => {
     return list.value
   }
   return list.value.filter((icon) => {
-    return icon.name.toLowerCase().indexOf(search.value.toLowerCase()) !== -1
+    return LanguageUtils.includesSearch(icon.name, search.value)
   })
 })
 

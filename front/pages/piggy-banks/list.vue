@@ -42,7 +42,7 @@ const filteredList = computed(() => {
     return list.value
   }
   return list.value.filter((item) => {
-    return PiggyBank.getDisplayName(item).toUpperCase().indexOf(search.value.toUpperCase()) !== -1
+    return LanguageUtils.includesSearch(PiggyBank.getDisplayName(item), search.value)
   })
 })
 

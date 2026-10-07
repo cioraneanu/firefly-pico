@@ -148,6 +148,7 @@ const defaultSpeechLanguageCode = () => {
     'es-MX': LanguageConstants.LANGUAGE_SPANISH_MX,
     'pt-BR': LanguageConstants.LANGUAGE_PORTUGUESE_BR,
     'zh-CN': LanguageConstants.LANGUAGE_CHINESE,
+    el: LanguageConstants.LANGUAGE_GREEK,
   }
 
   return languageMap[profileStore.language] ?? LanguageConstants.LANGUAGE_ENGLISH

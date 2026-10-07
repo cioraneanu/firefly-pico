@@ -1,0 +1,22 @@
+<svg width="800" height="800" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" preserveAspectRatio="xMidYMid meet">
+  <defs>
+    <clipPath id="flag-gr-circle">
+      <circle cx="32" cy="32" r="30" />
+    </clipPath>
+  </defs>
+  <g clip-path="url(#flag-gr-circle)">
+    <rect width="64" height="64" fill="#ffffff" />
+    <g fill="#0d5eaf">
+      <rect y="0" width="64" height="7.11" />
+      <rect y="14.22" width="64" height="7.11" />
+      <rect y="28.44" width="64" height="7.11" />
+      <rect y="42.67" width="64" height="7.11" />
+      <rect y="56.89" width="64" height="7.11" />
+      <rect width="35.56" height="35.56" />
+    </g>
+    <g fill="#ffffff">
+      <rect y="14.22" width="35.56" height="7.11" />
+      <rect x="14.22" width="7.11" height="35.56" />
+    </g>
+  </g>
+</svg>
