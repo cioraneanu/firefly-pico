@@ -1,6 +1,6 @@
 <template>
   <!-- Custom icons are admin files => <img> never runs scripts embedded in an SVG -->
-  <img v-if="customIconUrl" class="svg-icon" :style="style" :src="customIconUrl" alt="" />
+  <img v-if="customIconUrl" class="svg-icon" :style="style" :src="customIconUrl" alt="" :color-invertable="isColorInvertable" />
   <component :is="props.icon" v-else :font-controlled="false" :style="style" :stroke-width="props.stroke" class="svg-icon" :color-invertable="isColorInvertable" />
 </template>
 

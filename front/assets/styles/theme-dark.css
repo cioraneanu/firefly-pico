@@ -3,6 +3,11 @@
     opacity: 0.9;
 }
 
+/* Custom icons: hue-rotate keeps colored icons close to their original hues */
+.van-theme-dark img.svg-icon[color-invertable='true'] {
+    filter: invert(100%) hue-rotate(180deg);
+}
+
 .van-theme-dark .body {
     color: var(--van-text-color-2);
 }

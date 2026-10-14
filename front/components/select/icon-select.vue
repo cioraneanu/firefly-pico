@@ -17,8 +17,12 @@
       <app-icon v-else :icon="modelValue.icon" style="width: 25px" />
     </template>
 
+    <template v-if="appStore.isDesktopLayout" #top-right>
+      <app-tabs v-model="activeTab" :items="tabs" />
+    </template>
+
     <template #popup="{ onSelectCell }">
-      <app-tabs v-model="activeTab" :items="tabs" class="mx-3 mb-2" />
+      <app-tabs v-if="!appStore.isDesktopLayout" v-model="activeTab" :items="tabs" class="mx-3 mb-2" />
 
       <van-list v-model:loading="isLoadingMore" :finished="visibleCount >= filteredList.length" @load="onLoadMore">
         <van-grid :column-num="6">
@@ -45,6 +49,7 @@ const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 const { t } = useI18n()
 const iconStore = useIconStore()
+const appStore = useAppStore()
 
 const props = defineProps({
   label: {
