@@ -303,7 +303,6 @@ export const fluentListIcons = [
   { name: 'glasses', icon: 'svgo-fluent-glasses' },
   { name: 'hat', icon: 'svgo-fluent-hat' },
   { name: 'ice-cream', icon: 'svgo-fluent-ice-cream' },
-  { name: 'ice-cream', icon: 'svgo-fluent-ice-cream' },
   { name: 'kid', icon: 'svgo-fluent-kid1' },
   { name: 'kid', icon: 'svgo-fluent-kid2' },
   { name: 'kid', icon: 'svgo-fluent-kid3' },
@@ -315,7 +314,6 @@ export const fluentListIcons = [
   { name: 'shoe', icon: 'svgo-fluent-shoe' },
   { name: 'underwear', icon: 'svgo-fluent-underwear' },
   { name: 'wifi internet', icon: 'svgo-fluent-wifi' },
-
   { name: 'building-24-regular', icon: 'svgo-fluent-building-24-regular' },
   { name: 'building-bank-20-regular', icon: 'svgo-fluent-building-bank-20-regular' },
   { name: 'building-home-16-regular', icon: 'svgo-fluent-building-home-16-regular' },

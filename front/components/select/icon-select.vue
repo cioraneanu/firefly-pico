@@ -20,14 +20,16 @@
     <template #popup="{ onSelectCell }">
       <app-tabs v-model="activeTab" :items="tabs" class="mx-3 mb-2" />
 
-      <van-grid :column-num="6">
-        <van-grid-item v-for="item in filteredList" :key="item.icon" class="cursor-pointer" :class="{ active: item.icon === modelValue?.icon }" @click="onSelectCell(item)">
-          <div class="flex-center flex-column mt-5 text-size-12">
-            <app-icon :icon="item.icon" style="width: 30px" />
-            <div class="app-icon-item" />
-          </div>
-        </van-grid-item>
-      </van-grid>
+      <van-list v-model:loading="isLoadingMore" :finished="visibleCount >= filteredList.length" @load="onLoadMore">
+        <van-grid :column-num="6">
+          <van-grid-item v-for="item in visibleList" :key="item.icon" class="cursor-pointer" :class="{ active: item.icon === modelValue?.icon }" @click="onSelectCell(item)">
+            <div class="flex-center flex-column mt-5 text-size-12">
+              <app-icon :icon="item.icon" style="width: 30px" />
+              <div class="app-icon-item" />
+            </div>
+          </van-grid-item>
+        </van-grid>
+      </van-list>
     </template>
   </app-select>
 </template>
@@ -73,6 +75,19 @@ const filteredList = computed(() => {
   }
   return list.value.filter((icon) => LanguageUtils.includesSearch(icon.name, search.value))
 })
+
+// Each icon is a lazy loaded component => render them in pages while scrolling
+const PAGE_SIZE = 60
+const visibleCount = ref(PAGE_SIZE)
+const isLoadingMore = ref(false)
+const visibleList = computed(() => filteredList.value.slice(0, visibleCount.value))
+
+const onLoadMore = () => {
+  visibleCount.value += PAGE_SIZE
+  isLoadingMore.value = false
+}
+
+watch([activeTab, search], () => (visibleCount.value = PAGE_SIZE))
 
 // ------ Methods ------
 
