@@ -112,6 +112,18 @@ export default defineNuxtConfig({
     },
     workbox: {
       navigateFallback: '/',
+      runtimeCaching: [
+        {
+          // Admin custom icons. The backend may be on another origin => also cache opaque responses (status 0)
+          urlPattern: ({ url }) => url.pathname.includes('/api/custom-icons/'),
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheName: 'custom-icons',
+            cacheableResponse: { statuses: [0, 200] },
+            expiration: { maxEntries: 500 },
+          },
+        },
+      ],
     },
     devOptions: {
       enabled: false,
