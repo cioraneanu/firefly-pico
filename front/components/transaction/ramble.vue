@@ -6,15 +6,15 @@
   </van-badge>
 
   <app-popup v-model:show="showRamblePopup" :popup-style="ramblePopupStyle">
-    <div ref="popupRef" class="display-flex flex-direction-column h-100 m-h-0 position-relative" :aria-busy="isInterpreting">
-      <div class="display-flex flex-direction-column h-100 m-h-0" :class="{ 'pointer-events-none': isRambleFormDisabled }" :inert="isRambleFormDisabled">
-        <div class="ramble-header flex-center-vertical gap-2">
-          <div class="ramble-header-icon flex-center">
+    <div ref="popupRef" class="flex flex-col h-full min-h-0 relative" :aria-busy="isInterpreting">
+      <div class="flex flex-col h-full min-h-0" :class="{ 'pointer-events-none': isRambleFormDisabled }" :inert="isRambleFormDisabled">
+        <div class="ramble-header flex items-center gap-2">
+          <div class="ramble-header-icon flex items-center justify-center">
             <app-icon :icon="TablerIconConstants.ramble" :size="22" :stroke="1.6" />
           </div>
-          <div class="flex-1-w">
-            <div class="font-700 text-size-16 line-height-normal">{{ $t('transaction.assistant_ramble_title') }}</div>
-            <div class="text-size-12 text-muted mt-1">
+          <div class="flex-1 min-w-0">
+            <div class="font-bold text-16 leading-[normal]">{{ $t('transaction.assistant_ramble_title') }}</div>
+            <div class="text-12 text-muted mt-1">
               {{ savedRamblesCount > 0 ? $t('transaction.assistant_ramble_saved_count', { count: savedRamblesCount }) : $t('transaction.assistant_ramble_input_hint') }}
             </div>
           </div>
@@ -23,7 +23,7 @@
           </van-button>
         </div>
 
-        <div ref="popupContentRef" class="flex-1 m-h-0 overflow-auto display-flex flex-direction-column gap-3 p-3 ramble-body">
+        <div ref="popupContentRef" class="flex-1 min-h-0 overflow-auto flex flex-col gap-4 p-4 ramble-body">
           <ramble-input-card
             ref="inputCardRef"
             v-model="rambleText"
@@ -39,14 +39,14 @@
             @delete-ramble="deleteSavedRamble"
           />
 
-          <div v-if="rambleError" class="ramble-error text-size-12">{{ rambleError }}</div>
+          <div v-if="rambleError" class="ramble-error text-12">{{ rambleError }}</div>
 
           <template v-if="rambleTransactions.length > 0">
-            <div class="flex-center-vertical gap-2 px-1">
+            <div class="flex items-center gap-2 px-1">
               <div class="ramble-section-label">{{ $t('transaction.assistant_ramble_preview') }}</div>
               <div class="ramble-count-pill">{{ rambleTransactions.length }}</div>
             </div>
-            <van-cell-group inset class="no-margin overflow-hidden">
+            <van-cell-group inset class="m-0 overflow-hidden">
               <ramble-transaction-item
                 v-for="(transaction, index) in rambleTransactions"
                 :key="transaction.id"
@@ -57,19 +57,19 @@
             </van-cell-group>
           </template>
 
-          <div v-else class="ramble-empty flex-1 flex-center flex-direction-column gap-2 text-center">
-            <div class="ramble-empty-icon flex-center">
+          <div v-else class="ramble-empty flex-1 flex items-center justify-center flex-col gap-2 text-center">
+            <div class="ramble-empty-icon flex items-center justify-center">
               <app-icon :icon="TablerIconConstants.ramble" :size="26" :stroke="1.4" />
             </div>
-            <div class="text-size-13 text-muted">
+            <div class="text-13 text-muted">
               {{ hasInterpreted ? $t('transaction.assistant_ramble_no_results') : $t('transaction.assistant_ramble_no_transactions_yet') }}
             </div>
           </div>
         </div>
 
-        <div v-if="hasCreateProgress || rambleTransactions.length > 0" class="p-3 ramble-footer">
-          <div v-if="hasCreateProgress" class="mb-3">
-            <div class="flex-center-vertical gap-2 text-size-12 text-muted mb-2">
+        <div v-if="hasCreateProgress || rambleTransactions.length > 0" class="p-4 ramble-footer">
+          <div v-if="hasCreateProgress" class="mb-4">
+            <div class="flex items-center gap-2 text-12 text-muted mb-2">
               <van-loading v-if="isCreatingRambleTransactions" size="16" />
               <div>{{ createProgressLabel }}</div>
             </div>

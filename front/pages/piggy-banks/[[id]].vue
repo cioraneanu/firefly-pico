@@ -9,7 +9,7 @@
     <van-form ref="form" :name="formName" @submit="saveItem" @failed="onValidationError" class="">
       <app-card-info v-if="itemId">
         <div class="van-cell-group-title">{{ $t('status') }}:</div>
-        <div class="px-3 pb-15 flex-column text-size-12">
+        <div class="px-4 pb-3.75 flex-col text-12">
           <div>{{ $t('piggy_bank_page.saved') }}: {{ piggyBankCurrentAmount }} / {{ piggyBankTargetAmount }} {{ piggyBankCurrencySymbol }}</div>
           <div>{{ $t('piggy_bank_page.percent') }}: {{ piggyBankPercent }} %</div>
           <div>{{ $t('piggy_bank_page.left_to_save') }}: {{ piggyBankLeftToSave }} {{ piggyBankCurrencySymbol }}</div>
@@ -35,7 +35,7 @@
       <div style="margin: 16px">
         <app-button-form-save />
 
-        <app-button-form-delete class="mt-10" v-if="itemId" @click="onDelete" />
+        <app-button-form-delete class="mt-2.5" v-if="itemId" @click="onDelete" />
       </div>
     </van-form>
   </div>

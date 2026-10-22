@@ -1,10 +1,10 @@
 <template>
   <transaction-split-view v-if="isSplitTransaction" :transaction="item" />
 
-  <transaction-type-tabs v-if="!isSplitTransaction" v-model="type" class="mx-3 mt-1 mb-1" />
+  <transaction-type-tabs v-if="!isSplitTransaction" v-model="type" class="mx-4 mt-1 mb-1" />
 
   <van-form v-if="!isSplitTransaction" ref="formRef" :disabled="isFormDisabled" :name="props.formName" class="transaction-form-group" @submit="emit('submit')" @failed="emit('failed', $event)">
-    <van-cell-group inset class="dynamic-masonry display-flex-column">
+    <van-cell-group inset class="dynamic-masonry flex flex-col">
       <transaction-amount-field
         v-model:amount="amount"
         v-model:amount-foreign="amountForeign"
@@ -25,7 +25,7 @@
         v-bind="accountSourceBinding"
       >
         <template #label>
-          <div class="flex-center-vertical gap-1">
+          <div class="flex items-center gap-1">
             <div class="flex-1">{{ $t('transaction.source_account') }}</div>
             <van-button v-if="showSourceAccountSuggestion" size="mini" class="suggestion-button cursor-pointer" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_DEFAULT_FORM_VALUES)">
               Set your default
@@ -63,7 +63,7 @@
       <div :style="getStyleForField(transactionFormField.date)">
         <app-date-time-grid v-model="date" name="date" :rules="[rule.required()]" required />
 
-        <div v-if="!isSplitTransaction" class="px-3 flex-center-vertical gap-1">
+        <div v-if="!isSplitTransaction" class="px-4 flex items-center gap-1">
           <van-button size="small" class="cursor-pointer" @click="onSubDay">{{ $t('sub_day') }}</van-button>
           <van-button size="small" class="cursor-pointer" @click="onToday">{{ $t('today') }}</van-button>
           <van-button size="small" class="cursor-pointer" @click="onAddDay">{{ $t('add_day') }}</van-button>

@@ -1,5 +1,5 @@
 <template>
-  <div class="text-size-14 flex-center-vertical gap-1">
+  <div class="text-14 flex items-center gap-1">
     <currency-dropdown v-model="dashboardStore.dashboardCurrency" />
 
     <div class="app-button-small cursor-pointer" @click="onToggleShowDashboardAccountValues">

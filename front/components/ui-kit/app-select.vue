@@ -15,10 +15,10 @@
       <template #input>
         <slot name="input">
           <div v-if="isEmpty" class="text-placeholder">{{ $t('select_is_empty') }}</div>
-          <div class="display-flex flex-wrap" style="gap: 4px">
-            <div v-for="item in modelValueList" :key="getDisplayName(item)" class="app-select-option-tag flex-center-vertical gap-2">
+          <div class="flex flex-wrap" style="gap: 4px">
+            <div v-for="item in modelValueList" :key="getDisplayName(item)" class="app-select-option-tag flex items-center gap-2">
               <slot name="inputItemContent" :item="item">
-                <span class="font-weight-400 text-size-12">{{ getDisplayName(item) }}</span>
+                <span class="font-normal text-12">{{ getDisplayName(item) }}</span>
               </slot>
               <van-icon v-if="isClearable" :size="16" style="color: #888" name="clear" class="cursor-pointer" @click.prevent.stop="onSelectCell(item)" />
             </div>
@@ -28,16 +28,16 @@
     </van-field>
 
     <app-popup v-model:show="showDropdown" :teleport="props.teleport" :z-index="props.zIndex">
-      <div ref="popupRef" class="display-flex flex-column h-100" style="min-height: 0">
+      <div ref="popupRef" class="flex flex-col h-full" style="min-height: 0">
         <div v-if="props.popupTitle" class="van-popup-title">{{ props.popupTitle }}</div>
 
-        <div v-if="hasSearch" style="margin-right: 12px" class="p-1 flex-center-vertical gap-1">
+        <div v-if="hasSearch" style="margin-right: 12px" class="p-1 flex items-center gap-1">
           <van-search v-model="search" :placeholder="$t('search_placeholder')" class="flex-1" />
 
           <slot name="top-right" />
         </div>
 
-        <div ref="popupContentRef" class="flex-column overflow-auto">
+        <div ref="popupContentRef" class="flex-col overflow-auto">
           <slot name="popup" :on-select-cell="onSelectCell">
             <van-grid :column-num="columns">
               <template v-for="(item, index) in list" :key="index">

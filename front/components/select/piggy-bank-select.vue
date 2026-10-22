@@ -27,9 +27,9 @@
     </template>
 
     <template #inputItemContent="{ item }">
-      <div class="flex-center gap-1">
+      <div class="flex items-center justify-center gap-1">
         <app-icon :icon="PiggyBank.getIcon(item) ?? TablerIconConstants.piggyBank" :size="18" />
-        <span class="font-weight-400 text-size-12">{{ getDisplayValue(item) }}</span>
+        <span class="font-normal text-12">{{ getDisplayValue(item) }}</span>
       </div>
     </template>
   </app-select>

@@ -1,6 +1,6 @@
 <template>
   <van-cell-group inset>
-    <div class="flex-center-vertical">
+    <div class="flex items-center">
       <div class="van-cell-group-title">{{ $t('dashboard.account_total') }}:</div>
     </div>
 
@@ -11,43 +11,43 @@
         </template>
 
         <template #text>
-          <div class="display-flex flex-column align-items-center">
-            <div class="font-400 text-size-12 text-center text-muted">{{ Account.getDisplayName(account) }}</div>
-            <div class="font-700 text-size-12 text-center">{{ getAccountAmount(account) }}</div>
+          <div class="flex flex-col items-center">
+            <div class="font-normal text-12 text-center text-muted">{{ Account.getDisplayName(account) }}</div>
+            <div class="font-bold text-12 text-center">{{ getAccountAmount(account) }}</div>
             <template v-if="Account.hasVirtualBalance(account)">
-              <div class="font-400 text-size-11 text-center text-muted">{{ $t('account_page.balance') }}</div>
-              <div class="tag-gray app-card-info mt-1 text-size-11 text-center">{{ $t('account_page.available') }}: {{ getAccountAvailableAmount(account) }}</div>
+              <div class="font-normal text-11 text-center text-muted">{{ $t('account_page.balance') }}</div>
+              <div class="tag-gray app-card-info mt-1 text-11 text-center">{{ $t('account_page.available') }}: {{ getAccountAvailableAmount(account) }}</div>
             </template>
-            <div v-if="!Account.getIsIncludedInNetWorth(account)" class="mt-1 font-400 text-size-11 text-center badge-excluded-net-worth">Not in net worth</div>
+            <div v-if="!Account.getIsIncludedInNetWorth(account)" class="mt-1 font-normal text-11 text-center badge-excluded-net-worth">Not in net worth</div>
           </div>
         </template>
       </van-grid-item>
     </van-grid>
 
-    <div class="flex-center text-size-13 m-10 flex-wrap">
-      <div class="flex-center text-size-13 me-1">
+    <div class="flex items-center justify-center text-13 m-2.5 flex-wrap">
+      <div class="flex items-center justify-center text-13">
         <icon-cash class="text-muted" :size="24" :stroke="1.5" />
-        <span class="font-400 text-muted">{{ $t('dashboard.accounts.by_currency') }}: </span>
+        <span class="font-normal text-muted">{{ $t('dashboard.accounts.by_currency') }}: </span>
       </div>
 
-      <span v-for="(totalValue, totalCurrency) in dashboardStore.dashboardAccountsTotalByCurrency" class="font-700 ms-1 mx-1 app-select-option-tag">
+      <span v-for="(totalValue, totalCurrency) in dashboardStore.dashboardAccountsTotalByCurrency" class="font-bold ms-1 mx-1 app-select-option-tag">
         {{ formatNumberForDashboard(totalValue) }} {{ totalCurrency }}
       </span>
     </div>
 
-    <div v-if="hasAccountGroups" class="flex-center text-size-13 mb-3 gap-1 flex-wrap">
-      <div class="flex-center text-size-13 me-1">
-        <span class="font-400 text-muted">{{ $t('dashboard.accounts.by_group') }}: </span>
+    <div v-if="hasAccountGroups" class="flex items-center justify-center text-13 mb-4 gap-1 flex-wrap">
+      <div class="flex items-center justify-center text-13">
+        <span class="font-normal text-muted">{{ $t('dashboard.accounts.by_group') }}: </span>
       </div>
 
-      <span v-for="(totalValue, groupName) in dashboardStore.dashboardAccountsTotalByGroup" class="font-700 ms-1 mx-1 app-select-option-tag">
+      <span v-for="(totalValue, groupName) in dashboardStore.dashboardAccountsTotalByGroup" class="font-bold ms-1 mx-1 app-select-option-tag">
         {{ groupName }} | {{ formatNumberForDashboard(totalValue) }} {{ Currency.getCode(dashboardStore.dashboardCurrency) }}
       </span>
     </div>
 
-    <div v-if="hasMultipleCurrencies" class="flex-center text-size-13 mb-3 gap-1">
-      <span class="font-400 text-muted">{{ $t('dashboard.accounts.total') }}: </span>
-      <span class="font-700">~{{ accountTotal }} {{ Currency.getCode(dashboardStore.dashboardCurrency) }}</span>
+    <div v-if="hasMultipleCurrencies" class="flex items-center justify-center text-13 mb-4 gap-1">
+      <span class="font-normal text-muted">{{ $t('dashboard.accounts.total') }}: </span>
+      <span class="font-bold">~{{ accountTotal }} {{ Currency.getCode(dashboardStore.dashboardCurrency) }}</span>
     </div>
   </van-cell-group>
 </template>

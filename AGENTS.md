@@ -8,7 +8,7 @@ Firefly Pico is a mobile-first Firefly III companion app for fast transaction en
 
 **Environment Requirements:** Node.js 18+ and PHP 8.2+.
 
-**Key versions:** Nuxt 3 (SSR disabled), Vue 3.4+ (`defineModel()`), Vant 4 (mobile UI), Laravel 12, Pinia 3 (composition API stores). All source files are `.js`/`.vue` — NOT TypeScript despite `tsconfig.json` existing.
+**Key versions:** Nuxt 3 (SSR disabled), Vue 3.4+ (`defineModel()`), Vant 4 (mobile UI), Tailwind v4 (utility classes), Laravel 12, Pinia 3 (composition API stores). All source files are `.js`/`.vue` — NOT TypeScript despite `tsconfig.json` existing.
 
 The repo is split into:
 
@@ -36,7 +36,8 @@ front/
 ├── stores/             # Pinia state (useLocalStorage for persistence)
 ├── constants/          # RouteConstants, TablerIconConstants, enums
 ├── i18n/locales/       # 12 files: en, ro, zh-CN, it, pt-BR, de-DE, fr, pl, ru-RU, es-MX, ko, el
-├── assets/styles/      # CSS variables, themes, helper classes
+├── assets/styles/      # CSS variables, themes, Tailwind entry
+│   ├── tailwind.css    # Tailwind v4 entry: important mode, dark variant, custom theme tokens
 │   ├── variables.css   # :root and .van-theme-dark custom properties
 │   ├── theme-white.css # Main theme + Vant overrides
 │   └── theme-dark.css  # Dark mode overrides
@@ -81,7 +82,7 @@ Prettier is the source of truth (`front/.prettierrc`). Write code that already m
 - Do NOT access entity data as `item.name` — use `get(item, 'attributes.name')`. All entities follow JSON:API shape: `{ id, type, attributes: { ... } }`.
 - Do NOT create Nuxt `server/api/` routes — this is `ssr: false`, all data goes through the Laravel API.
 - Do NOT use Options API — always `<script setup>`.
-- Do NOT add `<style scoped>` to components. Prioritize using CSS helper classes or adding CSS to `theme-white.css`.
+- Do NOT add `<style scoped>` to components. Prioritize Tailwind utility classes or adding CSS to `theme-white.css`.
 - Do NOT use `modelValue` prop + emit — use `defineModel()`.
 - Do NOT use standard Laravel controller method names — use `getOne`/`getAll`/`create`/`update`/`delete` (NOT `index`/`show`/`store`/`destroy`).
 - Do NOT create FormRequest classes — use static Validation classes in `App\Validations\`.
@@ -184,7 +185,7 @@ Use the command that matches the scope of the change. Do not run expensive Docke
 
 - Toasts and dialogs go through `UIUtils` (`showToastSuccess`, `showToastError`, `showDeleteConfirmation`) — never call Vant's `showToast`/`showDialog` directly from pages.
 - Deletes always require `UIUtils.showDeleteConfirmation(...)` first.
-- `front/assets/styles/helper.css` has utility classes (`display-flex`, `flex-center`, `flex-1`, spacing like `mt-10`/`p-1`, `opacity-*`) — reach for those before writing new CSS.
+- Use Tailwind v4 utilities (`flex items-center`, `gap-2`, `mt-2.5`, `text-12`, `font-semibold`, `truncate`) before writing new CSS. Tailwind runs in `important` mode so utilities beat Vant's own styles. Spacing is the default 4px scale (`mt-2.5` = 10px); font sizes use the px tokens `text-10`…`text-20` from `assets/styles/tailwind.css`; `dark:` targets `.van-theme-dark`. Bootstrap and `helper.css` were removed — don't reintroduce their class names (`display-flex`, `mt-10`, `text-size-12`, …).
 - Navigation uses `navigateTo(RouteConstants.ROUTE_...)`, not raw path strings or `router.push`.
 
 ### UI Design Language
@@ -195,7 +196,7 @@ Read this before generating any UI so new screens look like they belong. The app
 
 - Compact, information-dense, small type: titles 14px/600–700, subtitles 12–13px/400, section headers 14px 600 UPPERCASE, micro-badges 10–11px. Body font is the system stack (`ui-sans-serif, system-ui, ...`) — no custom fonts.
 - Everything is a soft rounded rectangle: cells/cards 6–10px radius, buttons and inputs 5–10px, amount pills 25px. No sharp corners anywhere.
-- Depth comes from soft layered shadows, not borders: signature shadows are `rgba(149,157,165,0.2) 0 8px 24px` (toolbars/sidebar), `rgba(0,0,0,0.24) 0 3px 8px` (buttons/floating elements), and hairline `0 0 0 1px` rings on bars/tabs. Helpers `shadow-depth1..5`, `shadow-soft-1` exist in `helper.css`.
+- Depth comes from soft layered shadows, not borders: signature shadows are `rgba(149,157,165,0.2) 0 8px 24px` (toolbars/sidebar), `rgba(0,0,0,0.24) 0 3px 8px` (buttons/floating elements), and hairline `0 0 0 1px` rings on bars/tabs. Tailwind shadow tokens `shadow-depth1..5`, `shadow-soft-1` exist in `tailwind.css`.
 - Dashed 1px borders are the visual code for "add / optional / informational" affordances (`.app-card-info`, `.add-attachment`, `.suggestion-button`, `.currency-dropdown`, `.badge`).
 - Scrollbars are hidden globally. Interactive cards use `user-select: none`. Almost every icon is a Tabler icon at 14–20px with stroke ~1.5–2, including a leading icon on nearly every form field and list-item subtitle row.
 
@@ -227,7 +228,7 @@ Read this before generating any UI so new screens look like they belong. The app
 - Toggled at runtime via `<van-config-provider :theme>` adding `.van-theme-dark` — not `prefers-color-scheme`. Any new class with hardcoded light colors needs a matching `.van-theme-dark` override in `theme-dark.css` (this is the established pattern; check both themes for every UI change).
 - Dark surfaces: cells `#1c1c1e`–`#2a2a2a`, sidebar `#111`, borders `#444`/`#666`, links light blue `#03a9f4`. Semantic pink/green/blue stay the same but text on colored pills flips to black; primary buttons turn green `#00a261`.
 
-**Cohesion checklist for new UI**: branch mobile/desktop via `appStore.isDesktopLayout`; compose from Vant + existing ui-kit wrappers; put styles in `theme-white.css` (+ dark override) using the CSS variables and helper classes (`flex-center-vertical`, `gap-*`, `text-size-*`, `font-weight-*`) rather than scoped styles; 6–10px radius + soft shadow; a Tabler icon on every field/row; small text; i18n every label.
+**Cohesion checklist for new UI**: branch mobile/desktop via `appStore.isDesktopLayout`; compose from Vant + existing ui-kit wrappers; put styles in `theme-white.css` (+ dark override) using the CSS variables and Tailwind utilities (`flex items-center`, `gap-*`, `text-12`, `font-semibold`) rather than scoped styles; 6–10px radius + soft shadow; a Tabler icon on every field/row; small text; i18n every label.
 
 
 ## Back-End Notes

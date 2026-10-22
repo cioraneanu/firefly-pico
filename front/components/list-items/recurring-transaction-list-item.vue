@@ -3,22 +3,22 @@
     <van-cell>
       <template #title>
         <div class="list-item-container">
-          <div class="first_column flex-center flex-column">
+          <div class="first_column flex items-center justify-center flex-col">
             <app-icon :icon="icon ?? TablerIconConstants.recurringTransaction" :size="TablerIconConstants.defaultSize" />
           </div>
 
           <div class="separator"></div>
 
-          <div class="second_column flex-1 flex-column">
-            <div v-if="displayName" class="title flex-center-vertical">
+          <div class="second_column flex-1 flex-col">
+            <div v-if="displayName" class="title flex items-center">
               <div class="flex-1">{{ displayName }}</div>
-              <div class="text-size-12" :class="amountClass">{{ amount }} {{ currencySymbol }}</div>
+              <div class="text-12" :class="amountClass">{{ amount }} {{ currencySymbol }}</div>
             </div>
-            <div class="display-flex flex-wrap gap-1 mt-5">
-              <div v-if="type" class="tag-gray list-item-subtitle text-size-12">{{ $t(type.t) }}</div>
-              <div v-if="repetitionType" class="tag-gray list-item-subtitle text-size-12">{{ repetitionType.name }}</div>
-              <div v-if="nextDate" class="tag-gray list-item-subtitle text-size-12">{{ $t('recurring_transaction_page.next_date') }}: {{ nextDate }}</div>
-              <div v-if="!isActive" class="tag-gray list-item-subtitle text-size-12">{{ $t('recurring_transaction_page.inactive') }}</div>
+            <div class="flex flex-wrap gap-1 mt-1.25">
+              <div v-if="type" class="tag-gray list-item-subtitle text-12">{{ $t(type.t) }}</div>
+              <div v-if="repetitionType" class="tag-gray list-item-subtitle text-12">{{ repetitionType.name }}</div>
+              <div v-if="nextDate" class="tag-gray list-item-subtitle text-12">{{ $t('recurring_transaction_page.next_date') }}: {{ nextDate }}</div>
+              <div v-if="!isActive" class="tag-gray list-item-subtitle text-12">{{ $t('recurring_transaction_page.inactive') }}</div>
             </div>
           </div>
         </div>
@@ -57,11 +57,11 @@ const isActive = computed(() => RecurringTransaction.isActive(props.value))
 const amountClass = computed(() => {
   switch (get(type.value, 'code')) {
     case Transaction.types.expense.code:
-      return 'text-danger'
+      return 'text-[#dc3545]'
     case Transaction.types.income.code:
-      return 'text-success'
+      return 'text-[#28a745]'
     case Transaction.types.transfer.code:
-      return 'text-primary'
+      return 'text-[#007bff]'
     default:
       return ''
   }

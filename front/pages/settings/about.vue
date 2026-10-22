@@ -5,7 +5,7 @@
     <van-cell-group inset>
       <div class="van-cell-group-title mb-0">{{ $t('about.info') }}</div>
 
-      <div class="text-muted text-size-12 p-20 pt-10">
+      <div class="text-muted text-12 p-5 pt-2.5">
         <div>{{ $t('about.items_list_deleted') }}</div>
         <div>{{ $t('about.list_updated') }}</div>
         <div>{{ $t('about.popups_dismissed') }}</div>
@@ -15,7 +15,7 @@
 
     <van-cell-group inset>
       <div class="van-cell-group-title mb-0">{{ $t('about.credits') }}</div>
-      <div class="text-muted text-size-12 p-20 pt-10">
+      <div class="text-muted text-12 p-5 pt-2.5">
         <div v-html="$t('about.developed_by', { url: REPO_URL })"/>
         <br >
         <div v-html="$t('about.using_laravel_nuxt')"/>

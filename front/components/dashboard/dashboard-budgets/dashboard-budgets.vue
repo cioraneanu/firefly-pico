@@ -3,7 +3,7 @@
     <div class="van-cell-group-title">{{ $t('budgets') }}:</div>
 
     <template v-if="hasBudgets">
-      <div class="flex-center-vertical justify-content-center flex-wrap gap-2 m-2">
+      <div class="flex items-center justify-center flex-wrap gap-2 m-2">
         <app-chip :title="`${$t('dashboard.budget.budgeted')}:`" :subtitle="budgetLimitTotalFormatted" />
         <app-chip :title="`${$t('dashboard.budget.spent')}:`" :subtitle="budgetLimitSpentFormatted" />
         <app-chip :title="`${$t('dashboard.budget.remaining')}:`" :subtitle="budgetLimitRemainingFormatted" />
@@ -14,7 +14,7 @@
       </van-grid>
     </template>
 
-    <div v-else class="text-muted text-size-12 px-3 mb-15" style="margin-top: -10px">No budgets ^_^</div>
+    <div v-else class="text-muted text-12 px-4 mb-3.75" style="margin-top: -10px">No budgets ^_^</div>
   </van-cell-group>
 </template>
 

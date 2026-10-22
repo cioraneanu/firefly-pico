@@ -1,6 +1,6 @@
 <template>
-  <div class="transaction-amount-operations flex-center-vertical gap-1" :style="style">
-    <div v-for="operator in operatorsList" class="button flex-center" @mousedown.prevent.stop="onOperation(operator)">
+  <div class="transaction-amount-operations flex items-center gap-1" :style="style">
+    <div v-for="operator in operatorsList" class="button flex items-center justify-center" @mousedown.prevent.stop="onOperation(operator)">
       <component :is="operator.icon" :size="16" :stroke="2.0" />
     </div>
   </div>

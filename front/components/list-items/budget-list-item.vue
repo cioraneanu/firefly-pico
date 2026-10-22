@@ -3,22 +3,22 @@
     <van-cell>
       <template #title>
         <div class="list-item-container" :class="itemClass">
-          <div class="first_column flex-center flex-column">
+          <div class="first_column flex items-center justify-center flex-col">
             <!--            <app-icon :icon="icon ?? TablerIconConstants.budget" :size="TablerIconConstants.defaultSize" />-->
             <budget-icon :value="props.value" />
           </div>
 
           <div class="separator"/>
 
-          <div class="second_column flex-1 flex-column">
-            <div v-if="displayName" class="title flex-center-vertical">
+          <div class="second_column flex-1 flex-col">
+            <div v-if="displayName" class="title flex items-center">
               <div class="flex-1">{{ displayName }}</div>
-              <div class="text-size-12">{{ budgetLimitSpent }} / {{ budgetLimitAmount }} {{ budgetCurrencySymbol }}</div>
+              <div class="text-12">{{ budgetLimitSpent }} / {{ budgetLimitAmount }} {{ budgetCurrencySymbol }}</div>
             </div>
-            <!--            <bar-chart-item-horizontal :percent="budgetLimitPercent" class="p-0 mb-10" />-->
-            <div class="display-flex flex-wrap gap-1 mt-5">
-              <div class="tag-gray list-item-subtitle text-size-12">{{ budgetType }}</div>
-              <div v-if="budgetAmount" class="tag-gray list-item-subtitle text-size-12">{{ budgetPeriod }}</div>
+            <!--            <bar-chart-item-horizontal :percent="budgetLimitPercent" class="p-0 mb-2.5" />-->
+            <div class="flex flex-wrap gap-1 mt-1.25">
+              <div class="tag-gray list-item-subtitle text-12">{{ budgetType }}</div>
+              <div v-if="budgetAmount" class="tag-gray list-item-subtitle text-12">{{ budgetPeriod }}</div>
             </div>
           </div>
         </div>

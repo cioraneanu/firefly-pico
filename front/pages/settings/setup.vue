@@ -46,14 +46,14 @@
     </van-form>
 
     <van-dialog v-model:show="showHeadersDialog" :title="$t('settings.setup.http_headers')" :confirm-button-text="$t('ok')" width="100%" style="margin: 20px; max-height: 500px">
-      <div class="p-20 overflow-auto" style="max-height: 400px">
-        <div class="display-flex font-600 text-size-13">
+      <div class="p-5 overflow-auto" style="max-height: 400px">
+        <div class="flex font-semibold text-13">
           <div class="flex-1">{{ $t('settings.setup.http_header_key') }}</div>
           <div class="flex-1">{{ $t('settings.setup.http_header_value') }}</div>
         </div>
         <app-repeater v-model="picoBackendHeaders" :empty-item="{ key: '', value: '' }" :is-draggable="false">
           <template #content="{ element }">
-            <div class="display-flex gap-1 mb-2">
+            <div class="flex gap-1 mb-2">
               <app-field v-model="element.key" class="flex-1 p-0" :placeholder="$t('settings.setup.http_header_key')" />
               <app-field v-model="element.value" class="flex-1 p-0" :placeholder="$t('settings.setup.http_header_value')" />
             </div>

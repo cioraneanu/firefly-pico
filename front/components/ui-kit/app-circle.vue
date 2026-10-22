@@ -1,5 +1,5 @@
 <template>
-  <div class="position-relative display-inline-block" :style="appCircleStyle">
+  <div class="relative inline-block" :style="appCircleStyle">
     <svg :width="size" :height="size" viewBox="0 0 100 100">
       <circle class="progress-background" cx="50" cy="50" :r="radius" fill="none" :stroke="progressBackgroundColor" :stroke-width="strokeWidth" />
       <circle
@@ -16,7 +16,7 @@
         style="transition: stroke-dashoffset 0.5s ease"
       />
     </svg>
-    <div class="position-absolute-100 no-edge-top no-edge-left flex-center">
+    <div class="absolute w-full h-full top-0 left-0 flex items-center justify-center">
       <slot/>
     </div>
   </div>

@@ -6,13 +6,13 @@
       <van-cell-group inset class="">
         <div class="van-cell-group-title mb-0">{{ $t('settings.transactions.list_fields.fields') }}:</div>
 
-        <div class="flex-column van-cell p-10">
+        <div class="flex-col van-cell p-2.5">
           <app-repeater v-model="fieldsList" :is-list-dynamic="false" :empty-item="{ value: '' }">
             <template #content="{ element, index }">
-              <div class="app-field m-5 cursor-pointer" @click="onClickIsVisible(element)">
-                <div class="van-field__body flex-center-vertical gap-1 pointer-events-none prevent-select">
+              <div class="app-field m-1.25 cursor-pointer" @click="onClickIsVisible(element)">
+                <div class="van-field__body flex items-center gap-1 pointer-events-none select-none">
                   <app-icon v-if="element.icon" :icon="element.icon" :size="20" />
-                  <div class="flex-1 text-size-14">{{ element.t ? $t(element.t) : element.name }}</div>
+                  <div class="flex-1 text-14">{{ element.t ? $t(element.t) : element.name }}</div>
                   <app-icon :icon="getIsVisibleIcon(element)" :size="20" />
                 </div>
               </div>
@@ -32,9 +32,9 @@
           :has-search="false"
           :get-display-value="getDisplayValueHero">
           <template #label>
-            <div class="flex-center-vertical">
+            <div class="flex items-center">
               <div class="">{{ $t('settings.transactions.list_fields.hero_icons') }}</div>
-              <span class="info ml-5">{{ $t('settings.transactions.list_fields.right_side_card') }}</span>
+              <span class="info ml-1.25">{{ $t('settings.transactions.list_fields.right_side_card') }}</span>
             </div>
           </template>
         </app-select>

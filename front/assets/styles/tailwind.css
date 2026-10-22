@@ -1,0 +1,93 @@
+/* important: utilities must win over Vant's unlayered component styles */
+@import 'tailwindcss' important;
+
+@custom-variant dark (&:where(.van-theme-dark, .van-theme-dark *));
+
+/* Defaults the app relied on from Bootstrap's reboot, which Tailwind's preflight resets */
+@layer base {
+  img,
+  svg {
+    display: inline;
+  }
+
+  label {
+    display: inline-block;
+  }
+
+  /* Rendered markdown (notes, tutorial). Lists are already reset by Vant's base.css */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+  }
+
+  h1 {
+    font-size: 2.5rem;
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  h3 {
+    font-size: 1.75rem;
+  }
+
+  h4 {
+    font-size: 1.5rem;
+  }
+
+  h5 {
+    font-size: 1.25rem;
+  }
+
+  h6 {
+    font-size: 1rem;
+  }
+
+  p {
+    margin-bottom: 1rem;
+  }
+
+  a {
+    color: #007bff;
+  }
+
+  a:hover {
+    color: #0056b3;
+    text-decoration: underline;
+  }
+
+  td,
+  th {
+    padding: 1px;
+  }
+
+  input:where([type='text'], [type='number'], [type='search'], :not([type])) {
+    padding: 1px 2px;
+  }
+}
+
+@theme {
+  --text-10: 10px;
+  --text-11: 11px;
+  --text-12: 12px;
+  --text-13: 13px;
+  --text-14: 14px;
+  --text-15: 15px;
+  --text-16: 16px;
+  --text-18: 18px;
+  --text-20: 20px;
+
+  --shadow-depth1: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --shadow-depth2: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+  --shadow-depth3: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  --shadow-depth4: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  --shadow-depth5: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
+  --shadow-soft-1: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+}

@@ -4,7 +4,7 @@
     <div class="app-top-toolbar-desktop">
       <div class="flex-1">
         <slot name="title">
-          <div class="flex-center-vertical gap-2">
+          <div class="flex items-center gap-2">
             <icon-arrow-left v-if="backRouteDesktop" :size="20" @click="onBack" />
             <div>
               <div class="app-toolbar-title">{{ title }}</div>

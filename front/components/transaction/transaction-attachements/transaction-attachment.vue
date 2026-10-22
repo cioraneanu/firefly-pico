@@ -1,7 +1,7 @@
 <template>
-  <div class="flex-center flex-column p-2 transaction-attachment" v-bind="tapBinding">
+  <div class="flex items-center justify-center flex-col p-2 transaction-attachment" v-bind="tapBinding">
     <icon-photo :size="30" :stroke="1.4" />
-    <div class="text-size-12">{{ displayName }}</div>
+    <div class="text-12">{{ displayName }}</div>
   </div>
 </template>
 

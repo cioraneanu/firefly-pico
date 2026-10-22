@@ -1,33 +1,33 @@
 <template>
   <van-cell-group inset>
-    <div class="van-cell-group-title flex-center-vertical">
+    <div class="van-cell-group-title flex items-center">
       <div class="flex-1">{{ $t('settings.dashboard.cards.recurring_transactions') }}:</div>
     </div>
 
     <template v-if="hasUpcoming">
-      <div class="display-flex flex-column ml-15 mr-15 mb-10">
+      <div class="flex flex-col ml-3.75 mr-3.75 mb-2.5">
         <div
           v-for="row in upcomingList"
           :key="`${row.recurringTransaction.id}-${row.date}`"
-          class="flex-center-vertical gap-2 my-1 cursor-pointer"
+          class="flex items-center gap-2 my-1 cursor-pointer"
           @click="onGoToRecurringTransaction(row.recurringTransaction)"
         >
           <app-icon :icon="getIcon(row)" :size="24" />
 
-          <div class="display-flex flex-column flex-1">
-            <span class="text-size-14 font-500 flex-1">{{ ellipsizeText(row.label, 25) }}</span>
-            <div class="flex-center-vertical gap-2 text-muted">
-              <div class="font-400 text-size-11">{{ row.timeAgo }}</div>
-              <div class="font-400 text-size-11"></div>
-              <div class="font-400 text-size-11">{{ row.dateFormatted }}</div>
+          <div class="flex flex-col flex-1">
+            <span class="text-14 font-medium flex-1">{{ ellipsizeText(row.label, 25) }}</span>
+            <div class="flex items-center gap-2 text-muted">
+              <div class="font-normal text-11">{{ row.timeAgo }}</div>
+              <div class="font-normal text-11"></div>
+              <div class="font-normal text-11">{{ row.dateFormatted }}</div>
             </div>
           </div>
 
-          <span class="text-size-13 font-weight-600" :class="row.amountClass" style="min-width: 70px; text-align: right">{{ row.amount }} {{ row.currencySymbol }}</span>
+          <span class="text-13 font-semibold" :class="row.amountClass" style="min-width: 70px; text-align: right">{{ row.amount }} {{ row.currencySymbol }}</span>
         </div>
       </div>
     </template>
-    <div v-else class="text-muted text-size-12 px-3 mb-15" style="margin-top: -10px">{{ $t('recurring_transaction_page.no_upcoming') }}</div>
+    <div v-else class="text-muted text-12 px-4 mb-3.75" style="margin-top: -10px">{{ $t('recurring_transaction_page.no_upcoming') }}</div>
   </van-cell-group>
 </template>
 <script setup>
@@ -48,11 +48,11 @@ const getIcon = (row) => RecurringTransaction.getIcon(row.recurringTransaction) 
 const getAmountClass = (recurringTransaction) => {
   switch (get(RecurringTransaction.getType(recurringTransaction), 'code')) {
     case Transaction.types.expense.code:
-      return 'text-danger'
+      return 'text-[#dc3545]'
     case Transaction.types.income.code:
-      return 'text-success'
+      return 'text-[#28a745]'
     case Transaction.types.transfer.code:
-      return 'text-primary'
+      return 'text-[#007bff]'
     default:
       return ''
   }

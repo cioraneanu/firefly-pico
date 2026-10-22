@@ -3,7 +3,7 @@
     <van-cell>
       <template #title>
         <div class="list-item-container">
-          <div class="first_column flex-center">
+          <div class="first_column flex items-center justify-center">
             <div v-for="n in level - 1" style="width: 30px" />
             <!--            <app-icon v-if="icon" :icon="icon" :size="TablerIconConstants.defaultSize" :stroke="TablerIconConstants.defaultStroke"/>-->
             <app-icon :icon="icon ?? TablerIconConstants.tag" :size="TablerIconConstants.defaultSize" />
@@ -11,14 +11,14 @@
 
           <div class="separator"/>
 
-          <div class="second_column display-flex flex-column justify-content-center">
-            <div class="flex-center-vertical gap-2 overflow-visible">
+          <div class="second_column flex flex-col justify-center">
+            <div class="flex items-center gap-2 overflow-visible">
               <div v-if="displayName" class="title app-tag app-select-option-text">{{ displayName }}</div>
               <div v-if="isTodo" class="tag-todo">Todo</div>
             </div>
-            <div v-if="date" class="text-muted text-size-11">{{ $t('tag_page.end_date') }}: {{ date }}</div>
-            <div v-if="totalFormatted" class="text-muted text-size-11">{{ $t('tag_page.total') }}: {{ totalFormatted }}</div>
-            <div v-if="description" class="text-muted text-size-11">{{ description }}</div>
+            <div v-if="date" class="text-muted text-11">{{ $t('tag_page.end_date') }}: {{ date }}</div>
+            <div v-if="totalFormatted" class="text-muted text-11">{{ $t('tag_page.total') }}: {{ totalFormatted }}</div>
+            <div v-if="description" class="text-muted text-11">{{ description }}</div>
             <div class="app-icon-item"/>
           </div>
 

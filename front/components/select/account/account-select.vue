@@ -17,9 +17,9 @@
     </template>
 
     <template #inputItemContent="{ item }">
-      <div class="flex-center">
+      <div class="flex items-center justify-center">
         <app-icon :icon="Account.getIcon(item) ?? TablerIconConstants.account" :size="20" />
-        <span class="font-weight-400 text-size-12">{{ getDisplayValue(item) }}</span>
+        <span class="font-normal text-12">{{ getDisplayValue(item) }}</span>
       </div>
     </template>
 
@@ -30,7 +30,7 @@
     </template>
 
     <template #popup="{ onSelectCell }">
-      <div class="display-flex flex-column h-100">
+      <div class="flex flex-col h-full">
         <template v-if="showAssets">
           <span class="account-select-section-title">{{ $t('account_select.asset_accounts') }}</span>
           <van-grid>
@@ -80,7 +80,7 @@
           </van-grid>
         </template>
         <template v-if="!showAssets && !showExpense && !showIncome">
-          <div class="flex-center text-muted text-size-12">{{ $t('account_select.no_accounts') }}</div>
+          <div class="flex items-center justify-center text-muted text-12">{{ $t('account_select.no_accounts') }}</div>
         </template>
       </div>
     </template>

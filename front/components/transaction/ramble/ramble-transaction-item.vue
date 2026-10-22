@@ -1,8 +1,8 @@
 <template>
   <div class="ramble-transaction-item" :class="statusClass">
-    <div v-if="isCreating || transaction.error" class="flex-center-vertical gap-2 px-3 pt-2">
+    <div v-if="isCreating || transaction.error" class="flex items-center gap-2 px-4 pt-2">
       <van-loading v-if="isCreating" size="14" />
-      <div v-if="transaction.error" class="text-size-12 text-danger word-break-word flex-1-w">{{ transaction.error }}</div>
+      <div v-if="transaction.error" class="text-12 text-[#dc3545] wrap-anywhere flex-1 min-w-0">{{ transaction.error }}</div>
     </div>
 
     <transaction-list-item :value="transaction.item" :is-detailed-mode="true" @on-edit="onEdit" @on-delete="onDelete" />

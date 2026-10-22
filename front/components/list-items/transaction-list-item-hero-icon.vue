@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isAnyIconVisible" class="hero-icons-section gap-1 flex-center-vertical">
+  <div v-if="isAnyIconVisible" class="hero-icons-section gap-1 flex items-center">
     <template v-if="isAccountIconVisible">
       <app-icon v-for="accountIcon in accountIcons" :icon="accountIcon" :size="30" />
     </template>

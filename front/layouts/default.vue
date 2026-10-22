@@ -1,7 +1,7 @@
 <template>
   <div :class="layoutClass">
     <template v-if="appStore.isDesktopLayout">
-      <div class="display-flex gap-3">
+      <div class="flex gap-4">
         <app-left-sidebar />
         <div class="desktop-content">
           <slot />

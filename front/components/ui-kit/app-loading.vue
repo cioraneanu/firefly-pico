@@ -1,13 +1,13 @@
 <template>
   <transition :name="transitionName">
     <div v-if="loadingStore.isLoadingDelayed" class="app-loading-background">
-      <div class="app-loading flex-column flex-center">
+      <div class="app-loading flex-col flex items-center justify-center">
         <icon-rotate :size="30" :stroke="1.4" class="animate-rotate-infinite" />
-        <div class="text-size-16">{{ loadingStore.loadingMessage }}</div>
+        <div class="text-16">{{ loadingStore.loadingMessage }}</div>
 
-        <!--        <div v-if="loadingStore.activeRequests.length > 0" class="text-size-12 text-muted mt-2">{{ loadingStore.activeRequests.length }} {{ $t('requests_remaining') }}</div>-->
+        <!--        <div v-if="loadingStore.activeRequests.length > 0" class="text-12 text-muted mt-2">{{ loadingStore.activeRequests.length }} {{ $t('requests_remaining') }}</div>-->
 
-        <!--        <van-button v-show="isCancelVisible" @click="loadingStore.cancelActiveRequests()" class="mt-4" size="small" type="danger">-->
+        <!--        <van-button v-show="isCancelVisible" @click="loadingStore.cancelActiveRequests()" class="mt-6" size="small" type="danger">-->
         <!--          {{ $t('stop') }}-->
         <!--        </van-button>-->
       </div>

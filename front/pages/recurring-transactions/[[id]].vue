@@ -10,7 +10,7 @@
       <app-card-info v-if="itemId">
         <template v-if="upcomingDates.length > 0">
           <div class="van-cell-group-title">{{ $t('recurring_transaction_page.upcoming') }}:</div>
-          <div class="px-3 display-flex gap-1 flex-wrap text-size-12">
+          <div class="px-4 flex gap-1 flex-wrap text-12">
             <div v-for="date in upcomingDates" :key="date" class="tag-gray">{{ date }}</div>
           </div>
         </template>
@@ -145,7 +145,7 @@
       <div style="margin: 16px">
         <app-button-form-save />
 
-        <app-button-form-delete v-if="itemId" class="mt-10" @click="onDelete" />
+        <app-button-form-delete v-if="itemId" class="mt-2.5" @click="onDelete" />
       </div>
     </van-form>
   </div>

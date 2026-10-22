@@ -3,9 +3,9 @@
     <div class="day-frame">
       <template v-if="isVisible">
         <div class="day-number text-unselectable">{{ dayOfMonth }}</div>
-        <div v-if="amountIncome" class="text-success text-size-10">{{ amountIncome }}</div>
-        <div v-if="amountExpense" class="text-danger text-size-10">{{ amountExpense }}</div>
-        <div v-if="amountTransfer" class="text-primary text-size-10">{{ amountTransfer }}</div>
+        <div v-if="amountIncome" class="text-[#28a745] text-10">{{ amountIncome }}</div>
+        <div v-if="amountExpense" class="text-[#dc3545] text-10">{{ amountExpense }}</div>
+        <div v-if="amountTransfer" class="text-[#007bff] text-10">{{ amountTransfer }}</div>
       </template>
     </div>
   </td>

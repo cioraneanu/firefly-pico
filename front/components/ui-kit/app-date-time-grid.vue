@@ -7,7 +7,7 @@
       </template>
 
       <template #input>
-        <div class="display-flex gap-2 w-100">
+        <div class="flex gap-2 w-full">
           <div class="fake-input flex-1 cursor-pointer" @click.stop="showDatePicker = true">
             <div :class="labelDateClass">
               <div class="day-of-week">{{ dayOfWeek }}</div>
@@ -15,17 +15,17 @@
             </div>
           </div>
 
-          <div class="fake-input flex-1 cursor-pointer position-relative display-inline-block" @click="onShowTimePicker">
-            <input ref="timeInput" v-model="modelValueTime" type="time" class="position-absolute-100 no-edge-top no-edge-left z-index--1 opacity-0 pointer-events-none" >
+          <div class="fake-input flex-1 cursor-pointer relative inline-block" @click="onShowTimePicker">
+            <input ref="timeInput" v-model="modelValueTime" type="time" class="absolute w-full h-full top-0 left-0 -z-1 opacity-0 pointer-events-none" >
             <div :class="labelDateClass">{{ getDisplayTime }}</div>
           </div>
         </div>
       </template>
     </van-field>
 
-    <div v-if="false" class="display-flex" style="gap: 3px">
-      <div class="display-flex flex-1 ml-15" style="justify-content: flex-start; align-items: center; gap: 3px">
-        <span class="text-size-14 mr-20 text-muted">Quick actions:</span>
+    <div v-if="false" class="flex" style="gap: 3px">
+      <div class="flex flex-1 ml-3.75" style="justify-content: flex-start; align-items: center; gap: 3px">
+        <span class="text-14 mr-5 text-muted">Quick actions:</span>
         <van-button type="default" size="normal" @click.prevent.stop="onClickedMinusDay">-1</van-button>
         <van-button type="default" size="normal" @click.prevent.stop="onClickedToday">Today</van-button>
         <van-button type="default" size="normal" @click.prevent.stop="onClickedAddDay">+1</van-button>
@@ -69,7 +69,7 @@ const timeInput = ref(null)
 
 const labelDateClass = computed(() => {
   return {
-    'flex-center-vertical gap-1': true,
+    'flex items-center gap-1': true,
     'text-muted': !props.modelValue,
   }
 })

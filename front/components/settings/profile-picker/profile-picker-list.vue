@@ -2,7 +2,7 @@
   <div class="profile-picker">
     <van-loading v-if="profileStore.isLoading" />
     <div v-else class="profile-picker-container">
-      <div class="flex-center-vertical font-600 text-size-14 gap-2">
+      <div class="flex items-center font-semibold text-14 gap-2">
         <div class="">{{ $t('profile_page.title') }}</div>
         <app-tutorial :title="$t('profile_page.title')" :body="$t('profile_page.tutorial_body')" />
         <div class="flex-1" />
@@ -10,7 +10,7 @@
         <van-button size="small" class="add-button" @click="onAdd">{{ $t('new') }}</van-button>
       </div>
 
-      <div class="text-muted text-size-12">{{ $t('profile_page.info') }}</div>
+      <div class="text-muted text-12">{{ $t('profile_page.info') }}</div>
       <div class="profile-picker-card-list">
         <div v-for="profile in profileStore.profileList" :class="getProfileCardClass(profile)" v-bind="tapBinding(profile)">
           {{ profile.name ?? $t('not_set') }}

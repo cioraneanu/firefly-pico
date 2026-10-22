@@ -7,10 +7,10 @@
     </van-field>
 
     <van-dialog v-model:show="showDialog" :confirm-button-text="$t('ok')" width="100%" style="margin: 20px; max-height: 500px">
-      <div class="p-20">
+      <div class="p-5">
         <app-field v-model="modelValue" type="textarea" left-icon="eye-o" :label="$t('settings.token.label')" :rules="[rule.required()]" />
 
-        <div class="flex-center gap-1 mt-3">
+        <div class="flex items-center justify-center gap-1 mt-4">
           <van-button size="small" @click="onCopy">
             {{ $t('copy') }}
             <icon-copy :size="20" :stroke-width="1.8" />

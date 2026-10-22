@@ -6,16 +6,16 @@
       <van-cell-group inset>
         <app-list-search v-model="search" />
 
-        <div class="van-cell-group-title mt-5 mb-0">{{ $t('date') }}: {{ exchangeDate }}</div>
-        <div class="text-muted text-size-12 ml-15 mb-10">{{ $t('exchange_rate_page.relative_to_usd') }}</div>
+        <div class="van-cell-group-title mt-1.25 mb-0">{{ $t('date') }}: {{ exchangeDate }}</div>
+        <div class="text-muted text-12 ml-3.75 mb-2.5">{{ $t('exchange_rate_page.relative_to_usd') }}</div>
 
         <van-grid :column-num="3">
           <van-grid-item v-for="currency in filteredList">
             <template #text>
               <div>
-                <div class="flex-center text-size-14 font-weight-600">{{ currency.code }}</div>
-                <div class="flex-center text-size-10">{{ currency.name }}</div>
-                <div class="flex-center text-size-10 text-muted">{{ currency.value }}</div>
+                <div class="flex items-center justify-center text-14 font-semibold">{{ currency.code }}</div>
+                <div class="flex items-center justify-center text-10">{{ currency.name }}</div>
+                <div class="flex items-center justify-center text-10 text-muted">{{ currency.value }}</div>
               </div>
             </template>
           </van-grid-item>

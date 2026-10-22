@@ -10,17 +10,17 @@
     :has-search="false"
     :clearable="false">
     <template #item="{ item, isActive }">
-      <div class="display-flex flex-column text-size-12">
-        <div class="flex-center gap-2 mx-1 flex-wrap">
+      <div class="flex flex-col text-12">
+        <div class="flex items-center justify-center gap-2 mx-1 flex-wrap">
           <app-icon :icon="item.icon" :size="24" />
           <div class="text-center">{{ item.displayName }}</div>
         </div>
-        <div v-if="isActive" class="app-icon-item mt-5"/>
+        <div v-if="isActive" class="app-icon-item mt-1.25"/>
       </div>
     </template>
 
     <template #inputItemContent="{ item }">
-      <div class="flex-center-vertical gap-2">
+      <div class="flex items-center gap-2">
         <app-icon :icon="item.icon" :size="18" />
         {{ item.displayName }}
       </div>

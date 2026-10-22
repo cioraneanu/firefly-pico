@@ -7,7 +7,7 @@
         :icon="TablerIconConstants.dashboardTotalIncomes"
         :title="$t('transaction.type.income')"
         :subtitle="totalIncomeFormatted"
-        subtitle-class="text-success"
+        subtitle-class="text-[#28a745]"
         @click="onGoToTransactionsByType(Transaction.types.income)"
       />
 
@@ -15,7 +15,7 @@
         :icon="TablerIconConstants.dashboardTotalExpenses"
         :title="$t('transaction.type.expense')"
         :subtitle="totalExpenseFormatted"
-        subtitle-class="text-danger"
+        subtitle-class="text-[#dc3545]"
         @click="onGoToTransactionsByType(Transaction.types.expense)"
       />
 
@@ -23,7 +23,7 @@
         :icon="TablerIconConstants.dashboardTotalTransfers"
         :title="$t('transaction.type.transfer')"
         :subtitle="totalTransferFormatted"
-        subtitle-class="text-primary"
+        subtitle-class="text-[#007bff]"
         @click="onGoToTransactionsByType(Transaction.types.transfer)"
       />
 
@@ -36,7 +36,7 @@
     <van-grid :column-num="3" @click="onNavigateToTransactionSavings">
       <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" :title="$t('toolbar.transactions')" :subtitle="dashboardStore.transactionsListSavingsCount" subtitle-class="" />
       <dashboard-summary-card :icon="TablerIconConstants.dashboardCoin" :title="$t('amount')" :subtitle="transactionsListSavingsAmount" :subtitle-class="savingsAmountClass" />
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardSavingsPercent" :title="$t('percentage')" :subtitle="savingsPercentFormatted" subtitle-class="text-primary" />
+      <dashboard-summary-card :icon="TablerIconConstants.dashboardSavingsPercent" :title="$t('percentage')" :subtitle="savingsPercentFormatted" subtitle-class="text-[#007bff]" />
     </van-grid>
   </van-cell-group>
 </template>
@@ -101,7 +101,7 @@ watch(
 )
 
 const transactionsListSavingsAmount = computed(() => formatNumberForDashboard(dashboardStore.transactionsListSavingsAmount))
-const savingsAmountClass = computed(() => (dashboardStore.transactionsListSavingsAmount > 0 ? 'text-success' : 'text-danger'))
+const savingsAmountClass = computed(() => (dashboardStore.transactionsListSavingsAmount > 0 ? 'text-[#28a745]' : 'text-[#dc3545]'))
 
 const savingsPercentFormatted = computed(() => {
   return `${Math.trunc(dashboardStore.transactionsListSavingsPercentage)} %`

@@ -25,14 +25,14 @@
     </nav>
 
     <div class="nav-section mt-auto">
-      <div class="flex-center-vertical gap-1">
+      <div class="flex items-center gap-1">
         <profile-picker-desktop-button class="flex-1" />
         <div class="profile-picker-dashboard-button">
           <app-icon :size="20" :stroke-width="2.0" :icon="profileStore.darkTheme ? TablerIconConstants.darkTheme : TablerIconConstants.whiteTheme" @click="onChangeTheme" />
         </div>
       </div>
 
-      <div class="section-label mt-3">{{ $t('toolbar.settings') }}</div>
+      <div class="section-label mt-4">{{ $t('toolbar.settings') }}</div>
       <app-left-sidebar-page v-for="page in settingsPages" :key="page.key" :label="page.label" :icon="page.icon" :route="page.route" :dot="page.dot" />
     </div>
   </div>

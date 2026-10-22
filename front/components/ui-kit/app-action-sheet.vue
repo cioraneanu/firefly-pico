@@ -6,7 +6,7 @@
 <!--      Debug-->
 <!--    </template>-->
     <template #action="{ action, index }">
-      <div class="flex-center">
+      <div class="flex items-center justify-center">
         <div>{{ action.name }}</div>
       </div>
     </template>

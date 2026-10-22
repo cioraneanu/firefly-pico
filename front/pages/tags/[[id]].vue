@@ -21,7 +21,7 @@
 
         <app-boolean v-model="isTodo">
           <template #label>
-            <div class="flex-center-vertical gap-1">
+            <div class="flex items-center gap-1">
               <div class="flex-1">{{ $t('tag_page.mark_as_todo') }}</div>
               <app-tutorial v-bind="TUTORIAL_CONSTANTS.todoTag" />
             </div>
@@ -32,7 +32,7 @@
       <div style="margin: 16px">
         <app-button-form-save />
 
-        <app-button-form-delete v-if="itemId" class="mt-10" @click="onDelete" />
+        <app-button-form-delete v-if="itemId" class="mt-2.5" @click="onDelete" />
       </div>
     </van-form>
 

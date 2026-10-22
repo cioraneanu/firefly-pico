@@ -1,15 +1,15 @@
 <template>
   <div class="van-cell-fake">
     <app-popup v-model:show="showDropdown" :style="style">
-      <div ref="popupRef" class="h-100 display-flex flex-column">
+      <div ref="popupRef" class="h-full flex flex-col">
         <div class="van-popup-title">Adjust balance</div>
 
-        <div class="text-muted text-size-12 px-3 mt-10 text-center">This will change the account opening balance</div>
+        <div class="text-muted text-12 px-4 mt-2.5 text-center">This will change the account opening balance</div>
 
-        <div ref="popupContentRef" class="display-flex flex-column flex-1 overflow-auto mt-20">
+        <div ref="popupContentRef" class="flex flex-col flex-1 overflow-auto mt-5">
           <app-field v-model="newAmount" label="New amount" :icon="TablerIconConstants.fieldText2" />
           <div class="flex-1" />
-          <van-button round type="primary" native-type="submit" class="mx-3 mb-20 shadow-depth2" @click="onSave">Save </van-button>
+          <van-button round type="primary" native-type="submit" class="mx-4 mb-5 shadow-depth2" @click="onSave">Save </van-button>
         </div>
       </div>
     </app-popup>

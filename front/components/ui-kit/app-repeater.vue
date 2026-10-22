@@ -1,10 +1,10 @@
 <!-- OK-->
 <template>
   <div>
-    <draggable v-model="modelValue" handle=".app-repeater-handle" class="w-100" item-key="id">
+    <draggable v-model="modelValue" handle=".app-repeater-handle" class="w-full" item-key="id">
       <template #item="{ element, index }">
         <div>
-          <div class="flex-center-vertical">
+          <div class="flex items-center">
             <div v-if="!disabled && isDraggable" class="p-1 app-repeater-handle">
               <app-icon :icon="TablerIconConstants.repeaterHandler" :size="20" />
             </div>
@@ -24,7 +24,7 @@
         <div>
           <div v-if="isListEmpty" class="app-repeater-no-values">{{ $t('repeater_no_values') }}</div>
           <div v-if="!props.disabled && props.isListDynamic">
-            <van-button class="w-100" style="border: 1px dashed #888" @click="addItem"> {{ $t('add') }}</van-button>
+            <van-button class="w-full" style="border: 1px dashed #888" @click="addItem"> {{ $t('add') }}</van-button>
           </div>
         </div>
       </template>

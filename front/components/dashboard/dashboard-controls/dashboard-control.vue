@@ -1,16 +1,16 @@
 <template>
   <van-cell-group inset class="dashboard-control-date" :style="style">
-    <div class="flex-center-vertical gap-2">
-      <app-icon :icon="TablerIconConstants.leftArrow" :size="24" class="m-10 cursor-pointer" @click.stop="onPreviousMonth" />
+    <div class="flex items-center gap-2">
+      <app-icon :icon="TablerIconConstants.leftArrow" :size="24" class="m-2.5 cursor-pointer" @click.stop="onPreviousMonth" />
 
-      <div class="flex-1 flex-center flex-column my-2">
-        <div class="text-size-14 font-weight-600 cursor-pointer" @click="onChooseMonth">{{ rangeTitle }}</div>
+      <div class="flex-1 flex items-center justify-center flex-col my-2">
+        <div class="text-14 font-semibold cursor-pointer" @click="onChooseMonth">{{ rangeTitle }}</div>
         <transition name="dashboard-controls-row">
           <dashboard-control-buttons v-if="y < 20" />
         </transition>
       </div>
 
-      <app-icon :icon="TablerIconConstants.rightArrow" :size="24" class="m-10 cursor-pointer" @click.stop="onNextMonth" />
+      <app-icon :icon="TablerIconConstants.rightArrow" :size="24" class="m-2.5 cursor-pointer" @click.stop="onNextMonth" />
     </div>
   </van-cell-group>
 

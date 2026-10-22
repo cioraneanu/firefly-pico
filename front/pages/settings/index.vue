@@ -19,7 +19,7 @@
 
 
 
-    <div class="text-muted subtitle flex-center mt-20 flex-column">
+    <div class="text-muted subtitle flex items-center justify-center mt-5 flex-col">
       <div>
         <a :href="REPO_URL">{{$t('settings.version')}}: {{ appStore.currentAppVersion }}</a>
       </div>

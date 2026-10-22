@@ -1,6 +1,6 @@
 <template>
-  <div class="flex-1 flex-center flex-column cursor-pointer" :class="labelClass" style="gap: 2px" @click="onChange">
-    <div class="position-relative">
+  <div class="flex-1 flex items-center justify-center flex-col cursor-pointer" :class="labelClass" style="gap: 2px" @click="onChange">
+    <div class="relative">
       <slot name="icon">
         <div v-if="dot" class="van-badge van-badge--dot van-badge--fixed" style="top: -2px; right: -4px"/>
         <app-icon :icon="icon" :size="20" :invertable="!isSelected" />

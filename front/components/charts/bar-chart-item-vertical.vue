@@ -1,6 +1,6 @@
 <template>
   <div :class="computedClass">
-    <div class="subtitle font-weight-600">{{ props.value }}</div>
+    <div class="subtitle font-semibold">{{ props.value }}</div>
     <div class="bar-container">
       <div class="bar-filled" :style="barStyle" />
     </div>
@@ -23,7 +23,7 @@ const barStyle = computed(() => {
 
 
 const computedClass = computed(() => ({
-  'bar-container-vertical display-flex flex-column align-items-center gap-1': true,
+  'bar-container-vertical flex flex-col items-center gap-1': true,
   'flex-1': !appStore.isDesktopLayout,
 }))
 </script>

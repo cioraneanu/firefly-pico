@@ -20,7 +20,7 @@
       <div style="margin: 16px">
         <app-button-form-save />
 
-        <app-button-form-delete v-if="itemId" class="mt-10" @click="onDelete" />
+        <app-button-form-delete v-if="itemId" class="mt-2.5" @click="onDelete" />
       </div>
     </van-form>
   </div>

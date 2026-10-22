@@ -1,15 +1,15 @@
 <template>
   <van-cell-group inset>
-    <div class="van-cell-group-title flex-center-vertical">
+    <div class="van-cell-group-title flex items-center">
       <div class="flex-1">{{ $t('dashboard.expenses_by_tags.title') }}:</div>
       <van-popover v-model:show="showOptionsPopover" placement="bottom-end">
-        <div class="display-flex flex-column gap-2 p-10">
-          <div class="display-flex flex-column gap-1">
-            <div class="text-size-12 font-weight-600 text-muted">{{ $t('tags') }}</div>
+        <div class="flex flex-col gap-2 p-2.5">
+          <div class="flex flex-col gap-1">
+            <div class="text-12 font-semibold text-muted">{{ $t('tags') }}</div>
             <app-tabs v-model="dashboardStore.tagsWidgetModeOnlyRootTag" :items="tagModeTabs" />
           </div>
-          <div class="display-flex flex-column gap-1">
-            <div class="text-size-12 font-weight-600 text-muted">{{ $t('amount') }}</div>
+          <div class="flex flex-col gap-1">
+            <div class="text-12 font-semibold text-muted">{{ $t('amount') }}</div>
             <app-tabs v-model="dashboardStore.widgetsNetAmountMode" :items="amountModeTabs" />
           </div>
         </div>
@@ -21,13 +21,13 @@
         </template>
       </van-popover>
     </div>
-    <div class="display-flex flex-column ml-15 mr-15">
+    <div class="flex flex-col ml-3.75 mr-3.75">
       <table>
         <tr v-for="bar in barsList" :key="bar.tag_id" class="cursor-pointer" @click="onShowActionSheet(bar)">
           <td style="width: 1%">
-            <div class="flex-center-vertical gap-1 my-1">
+            <div class="flex items-center gap-1 my-1">
               <app-icon :icon="Tag.getIcon(bar.tag) ?? TablerIconConstants.tag" :size="20" />
-              <span class="text-size-12 font-weight-400 flex-1">{{ ellipsizeText(bar.label, 25) }}</span>
+              <span class="text-12 font-normal flex-1">{{ ellipsizeText(bar.label, 25) }}</span>
             </div>
           </td>
 
@@ -36,8 +36,8 @@
           </td>
 
           <td style="width: 1%">
-            <div class="display-flex flex-column">
-              <span class="text-size-12 font-weight-400">{{ bar.value }}</span>
+            <div class="flex flex-col">
+              <span class="text-12 font-normal">{{ bar.value }}</span>
             </div>
           </td>
         </tr>

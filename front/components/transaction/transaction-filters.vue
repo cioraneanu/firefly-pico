@@ -1,8 +1,8 @@
 <template>
   <app-popup v-model:show="showDropdown" :style="style">
-      <van-form class="flex-1 display-flex flex-column" style="overflow: hidden" @submit="onApplyFilters">
-        <div class="flex-center-vertical m-10 mb-0">
-          <div class="flex-1 text-center font-weight-600 text-size-18">{{ $t('filters.transaction_filters') }}</div>
+      <van-form class="flex-1 flex flex-col" style="overflow: hidden" @submit="onApplyFilters">
+        <div class="flex items-center m-2.5 mb-0">
+          <div class="flex-1 text-center font-semibold text-18">{{ $t('filters.transaction_filters') }}</div>
         </div>
 
         <div ref="popupContentRef" class="flex-1 overflow-hidden" style="padding-bottom: 70px">

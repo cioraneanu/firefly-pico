@@ -1,7 +1,7 @@
 <template>
-  <van-cell-group inset class="ramble-composer no-margin overflow-hidden">
-    <div class="p-3 display-flex flex-column gap-2">
-      <div class="flex-center-vertical flex-wrap gap-2">
+  <van-cell-group inset class="ramble-composer m-0 overflow-hidden">
+    <div class="p-4 flex flex-col gap-2">
+      <div class="flex items-center flex-wrap gap-2">
         <van-badge :content="savedRamblesCount" :show-zero="false" max="99" class="ramble-modern-badge">
           <van-button round size="small" plain class="cursor-pointer" :loading="isLoadingSaved" :disabled="isDisabled" @click="emit('loadSaved')">
             <app-icon :icon="TablerIconConstants.list" :size="16" />
@@ -40,14 +40,14 @@
           <app-icon :icon="isRecording ? TablerIconConstants.stop : TablerIconConstants.microphone" :size="16" />
         </van-button>
 
-        <speech-language-dropdown v-if="appStore.isDesktopLayout" v-model="speechLanguageCode" class="text-size-13" />
+        <speech-language-dropdown v-if="appStore.isDesktopLayout" v-model="speechLanguageCode" class="text-13" />
       </div>
 
-      <div v-if="savedRambles.length > 0" class="ramble-saved-list display-flex flex-column gap-2">
-        <div v-for="savedRamble in savedRambles" :key="savedRamble.id" class="ramble-saved-item display-flex gap-2">
-          <div class="flex-1-w">
-            <div class="text-size-13 word-break-word">{{ savedRamble.text }}</div>
-            <div class="text-size-11 text-muted mt-1">{{ formatCreatedAt(savedRamble.created_at) }}</div>
+      <div v-if="savedRambles.length > 0" class="ramble-saved-list flex flex-col gap-2">
+        <div v-for="savedRamble in savedRambles" :key="savedRamble.id" class="ramble-saved-item flex gap-2">
+          <div class="flex-1 min-w-0">
+            <div class="text-13 wrap-anywhere">{{ savedRamble.text }}</div>
+            <div class="text-11 text-muted mt-1">{{ formatCreatedAt(savedRamble.created_at) }}</div>
           </div>
           <van-button
             v-if="savedRamble.has_voice"
@@ -78,9 +78,9 @@
         :disabled="isDisabled"
       />
 
-      <div v-if="isRecording" class="flex-center-vertical gap-2 text-size-12">
+      <div v-if="isRecording" class="flex items-center gap-2 text-12">
         <span class="ramble-live-dot" />
-        <span class="word-break-word flex-1-w text-muted">{{ speechTemporary || $t('transaction.assistant_ramble_listening') }}</span>
+        <span class="wrap-anywhere flex-1 min-w-0 text-muted">{{ speechTemporary || $t('transaction.assistant_ramble_listening') }}</span>
       </div>
 
       <van-button block round class="cursor-pointer mt-1 ramble-interpret-button" :loading="isInterpreting" :disabled="isDisabled || !canInterpret" @click="onInterpret">

@@ -1,7 +1,7 @@
 <template>
   <div class="app-badge account-badge overflow-hidden">
     <app-icon :icon="Account.getIcon(value) ?? TablerIconConstants.account" :size="iconSize" />
-    <span class="ellipse-text">{{ Account.getDisplayName(value) }}</span>
+    <span class="truncate">{{ Account.getDisplayName(value) }}</span>
   </div>
 </template>
 

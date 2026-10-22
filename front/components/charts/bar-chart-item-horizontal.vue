@@ -1,6 +1,6 @@
 <template>
-  <div class="bar-container-horizontal display-flex align-items-center gap-1 flex-1">
-    <div v-if="props.value" class="subtitle font-weight-600">{{ props.value }}</div>
+  <div class="bar-container-horizontal flex items-center gap-1 flex-1">
+    <div v-if="props.value" class="subtitle font-semibold">{{ props.value }}</div>
     <div class="bar-container">
       <div class="bar-filled" :style="barStyle" />
     </div>

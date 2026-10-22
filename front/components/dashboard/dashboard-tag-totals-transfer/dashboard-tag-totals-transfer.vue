@@ -1,18 +1,18 @@
 <template>
   <van-cell-group inset>
-    <div class="van-cell-group-title flex-center-vertical">
+    <div class="van-cell-group-title flex items-center">
       <div class="flex-1">{{ $t('dashboard.transfers_by_tags.title') }}:</div>
       <div>
         <van-button size="small" @click="onToggleTagMode">{{ tagModeDisplayName }}</van-button>
       </div>
     </div>
-    <div class="display-flex flex-column ml-15 mr-15">
+    <div class="flex flex-col ml-3.75 mr-3.75">
       <table>
         <tr v-for="bar in barsList" class="cursor-pointer" @click="onShowActionSheet(bar)">
           <td style="width: 1%">
-            <div class="flex-center-vertical gap-1 my-1">
+            <div class="flex items-center gap-1 my-1">
               <app-icon :icon="Tag.getIcon(bar.tag) ?? TablerIconConstants.tag" :size="20" />
-              <span class="text-size-12 font-weight-400 flex-1">{{ ellipsizeText(bar.label, 25) }}</span>
+              <span class="text-12 font-normal flex-1">{{ ellipsizeText(bar.label, 25) }}</span>
             </div>
           </td>
 
@@ -21,8 +21,8 @@
           </td>
 
           <td style="width: 1%">
-            <div class="display-flex flex-column">
-              <span class="text-size-12 font-weight-400">{{ bar.value }}</span>
+            <div class="flex flex-col">
+              <span class="text-12 font-normal">{{ bar.value }}</span>
             </div>
           </td>
         </tr>

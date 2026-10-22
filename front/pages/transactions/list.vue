@@ -2,8 +2,8 @@
   <div :class="formClass">
     <app-top-toolbar>
       <template #right>
-        <div class="flex-center-vertical gap-1">
-          <div class="mr-10 cursor-pointer" @click.prevent.stop="onShowFilters">
+        <div class="flex items-center gap-1">
+          <div class="mr-2.5 cursor-pointer" @click.prevent.stop="onShowFilters">
             <app-icon :icon="TablerIconConstants.search" size="20" :stroke="1.9" />
           </div>
 
@@ -13,16 +13,16 @@
     </app-top-toolbar>
 
     <div v-if="filtersDisplayList.length > 0" class="applied-filters-container">
-      <div class="flex-center-vertical">
+      <div class="flex items-center">
         <div class="title flex-1">{{ $t('filters.applied_filters') }}</div>
         <van-button size="small" class="search-total-toggle" @click="onToggleSearchTotal">
           <icon-settings :size="14" :stroke="1.9" />
         </van-button>
       </div>
 
-      <div class="display-flex flex-wrap gap-1">
+      <div class="flex flex-wrap gap-1">
         <div v-for="appliedFilter in filtersDisplayList" :key="appliedFilter" class="tag-filter">
-          <span class="ml-5">{{ appliedFilter }}</span>
+          <span class="ml-1.25">{{ appliedFilter }}</span>
         </div>
         <div class="cursor-pointer" style="z-index: 2" @click="onClearFilters">
           <icon-square-rounded-x :size="26" :stroke="1.5" />

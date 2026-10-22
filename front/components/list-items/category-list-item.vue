@@ -3,13 +3,13 @@
     <van-cell>
       <template #title>
         <div class="list-item-container">
-          <div class="first_column flex-center flex-column">
+          <div class="first_column flex items-center justify-center flex-col">
             <app-icon :icon="icon ?? TablerIconConstants.category" :size="TablerIconConstants.defaultSize" />
           </div>
 
           <div class="separator"/>
 
-          <div class="second_column flex-1 flex-center-vertical">
+          <div class="second_column flex-1 flex items-center">
             <div v-if="displayName" class="title">{{ displayName }}</div>
           </div>
         </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="app-badge tag-badge overflow-hidden">
     <app-icon :icon="Tag.getIcon(value) ?? TablerIconConstants.tag" :size="iconSize" />
-    <span class="ellipse-text">{{ Tag.getDisplayNameEllipsized(value, maxLength) }}</span>
+    <span class="truncate">{{ Tag.getDisplayNameEllipsized(value, maxLength) }}</span>
   </div>
 </template>
 

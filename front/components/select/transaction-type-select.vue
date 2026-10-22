@@ -11,14 +11,14 @@
     :has-search="false"
   >
     <template #item="{ item }">
-      <div class="flex-center-vertical gap-2">
+      <div class="flex items-center gap-2">
         <component :is="getIconComponentForType(item)" :size="24" :class="getClass(item)" />
         {{ $t(item.t) }}
       </div>
     </template>
 
     <template #inputItemContent="{ item }">
-      <div class="flex-center-vertical gap-2">
+      <div class="flex items-center gap-2">
         <component :is="getIconComponentForType(item)" :size="16" :class="getClass(item)" />
         {{ $t(item.t) }}
       </div>
@@ -55,11 +55,11 @@ const getIconComponentForType = (transactionType) => {
 const getClass = (transactionType) => {
   switch (transactionType.code) {
     case Transaction.types.expense.code:
-      return 'text-danger'
+      return 'text-[#dc3545]'
     case Transaction.types.income.code:
-      return 'text-success'
+      return 'text-[#28a745]'
     case Transaction.types.transfer.code:
-      return 'text-primary'
+      return 'text-[#007bff]'
   }
 }
 

@@ -14,7 +14,7 @@
     <template #label>
       <div>
         <div>{{ props.label ?? $t('currency') }}</div>
-        <div v-if="info" class="text-muted text-size-11 line-height-normal">{{ info }}</div>
+        <div v-if="info" class="text-muted text-11 leading-[normal]">{{ info }}</div>
       </div>
     </template>
 

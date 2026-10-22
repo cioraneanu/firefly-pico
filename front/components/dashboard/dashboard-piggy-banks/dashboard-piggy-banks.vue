@@ -1,17 +1,17 @@
 <template>
   <van-cell-group inset>
-    <div class="van-cell-group-title flex-center-vertical">
+    <div class="van-cell-group-title flex items-center">
       <div class="flex-1">{{ $t('settings.dashboard.cards.piggy_banks') }}:</div>
     </div>
 
     <template v-if="hasPiggyBanks">
-      <div class="display-flex flex-column ml-15 mr-15">
+      <div class="flex flex-col ml-3.75 mr-3.75">
         <table>
           <tr v-for="bar in barsList" :key="bar.piggyBank.id" class="cursor-pointer" @click="onGoToPiggyBank(bar.piggyBank)">
             <td style="width: 1%">
-              <div class="flex-center-vertical gap-1 my-1">
+              <div class="flex items-center gap-1 my-1">
                 <app-icon :icon="getIcon(bar)" :size="TablerIconConstants.defaultSize" />
-                <span class="text-size-12 font-weight-400 flex-1">{{ ellipsizeText(bar.label, 25) }}</span>
+                <span class="text-12 font-normal flex-1">{{ ellipsizeText(bar.label, 25) }}</span>
               </div>
             </td>
 
@@ -20,15 +20,15 @@
             </td>
 
             <td style="width: 1%">
-              <div class="display-flex flex-column">
-                <span class="text-size-12 font-weight-400">{{ bar.value }}</span>
+              <div class="flex flex-col">
+                <span class="text-12 font-normal">{{ bar.value }}</span>
               </div>
             </td>
           </tr>
         </table>
       </div>
     </template>
-    <div v-else class="text-muted text-size-12 px-3 mb-15" style="margin-top: -10px">No piggy banks ^_^</div>
+    <div v-else class="text-muted text-12 px-4 mb-3.75" style="margin-top: -10px">No piggy banks ^_^</div>
   </van-cell-group>
 </template>
 <script setup>

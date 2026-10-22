@@ -1,5 +1,5 @@
 <template>
-  <div class="display-flex flex-column align-items-center">
+  <div class="flex flex-col items-center">
     <app-icon v-if="props.icon" :icon="props.icon" />
     <div class="van-grid-item__text app-tag app-select-option-text">{{ props.text }}</div>
     <div class="app-icon-item"/>

@@ -1,9 +1,9 @@
 <template>
   <div>
     <van-floating-bubble v-model:offset="position" axis="y" magnetic="x" :gap="0" class="profile-floating-button" @click="isListVisible = true">
-      <div class="flex-center flex-column" style="padding: 0 8px;">
+      <div class="flex items-center justify-center flex-col" style="padding: 0 8px;">
         <icon-nut size="20" color="#fff" stroke="1.6" />
-        <span v-if="profileStore.shortProfileName" class="text-size-10">{{ profileStore.shortProfileName }}</span>
+        <span v-if="profileStore.shortProfileName" class="text-10">{{ profileStore.shortProfileName }}</span>
       </div>
     </van-floating-bubble>
 

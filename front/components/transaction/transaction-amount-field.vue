@@ -1,19 +1,19 @@
 <template>
-  <div class="van-cell-fake pb-10">
+  <div class="van-cell-fake pb-2.5">
     <div>
-      <van-field v-model="amount" :label="$t('amount')" :placeholder="$t('amount')" class="flex-center-vertical app-field transaction-amount-field" v-bind="amountBindings" label-align="top">
+      <van-field v-model="amount" :label="$t('amount')" :placeholder="$t('amount')" class="flex items-center app-field transaction-amount-field" v-bind="amountBindings" label-align="top">
         <template #left-icon>
           <app-icon :icon="TablerIconConstants.cashBanknote" :size="20" />
         </template>
 
         <template #right-icon>
-          <div class="flex-center-vertical gap-2">
+          <div class="flex items-center gap-2">
             {{ currencySymbol ?? '' }}
           </div>
         </template>
 
         <template #input>
-          <div class="flex-center-vertical w-100">
+          <div class="flex items-center w-full">
             <input
               ref="inputAmount"
               v-bind="amountInput"
@@ -26,7 +26,7 @@
             >
             <van-button v-if="isConvertButtonVisible" size="small" class="" @click="convertAmountToForeign">
               <template #icon>
-                <div class="display-flex">
+                <div class="flex">
                   <app-icon :icon="TablerIconConstants.transaction" :size="16" />
                   <app-icon :icon="TablerIconConstants.downArrow" :size="16" />
                 </div>
@@ -39,12 +39,12 @@
 
     <template v-if="props.isForeignAmountVisible">
       <!--    Foreign amount field    -->
-      <div class="flex-center-vertical">
+      <div class="flex items-center">
         <van-field
           v-model="amountForeign"
           placeholder="Foreign amount "
           label="Foreign amount"
-          class="flex-1 flex-center-vertical app-field transaction-amount-field transaction-foreign-amount-field"
+          class="flex-1 flex items-center app-field transaction-amount-field transaction-foreign-amount-field"
           v-bind="foreignAmountBindings"
           label-align="top"
           @click="() => inputAmountForeign.focus()"
@@ -54,18 +54,18 @@
           </template>
 
           <template #right-icon>
-            <div class="flex-center" @click.prevent.stop>
+            <div class="flex items-center justify-center" @click.prevent.stop>
               <currency-dropdown v-model="currencyForeign" class="borderless" />
             </div>
           </template>
 
           <template #input>
-            <div class="flex-center-vertical gap-1 w-100">
+            <div class="flex items-center gap-1 w-full">
               <input ref="inputAmountForeign" v-model="amountForeign" style="width: 100%; border: none; background: transparent; height: 24px" type="text" inputmode="decimal" >
 
               <van-button v-if="isConvertButtonVisible" size="small" class="" @click="convertForeignToAmount">
                 <template #icon>
-                  <div class="display-flex">
+                  <div class="flex">
                     <app-icon :icon="TablerIconConstants.transaction" :size="16" />
                     <app-icon :icon="TablerIconConstants.upArrow" :size="16" />
                   </div>
@@ -77,11 +77,11 @@
       </div>
     </template>
 
-    <table v-if="showQuickButtons && !disabled" class="ml-15">
+    <table v-if="showQuickButtons && !disabled" class="ml-3.75">
       <tbody>
         <tr>
           <td v-for="quickButton in quickButtons" :key="quickButton">
-            <van-button class="w-100 transaction-amount-button" type="default" size="normal" @mousedown.prevent.stop="onQuickButton(quickButton)">
+            <van-button class="w-full transaction-amount-button" type="default" size="normal" @mousedown.prevent.stop="onQuickButton(quickButton)">
               {{ quickButton }}
             </van-button>
           </td>

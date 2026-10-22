@@ -4,11 +4,11 @@
       <budget-icon :value="props.value" />
     </template>
     <template #text>
-      <div class="display-flex flex-column align-items-center">
-        <div class="font-600 text-size-12 text-center">{{ displayName }}</div>
-        <div class="font-500 text-size-10 text-center">{{ formatNumberForDashboard(budgetLimitSpent) }} / {{ formatNumberForDashboard(budgetLimitAmount) }} {{ budgetCurrencySymbol }}</div>
-        <div class="font-500 text-size-10 text-center" :style="isOverBudget ? 'color: var(--expense2)' : ''">{{ formatNumberForDashboard(budgetLimitRemaining) }} {{ budgetCurrencySymbol }}</div>
-        <div class="font-500 text-size-10 text-center text-muted">{{ budgetLimitInterval }}</div>
+      <div class="flex flex-col items-center">
+        <div class="font-semibold text-12 text-center">{{ displayName }}</div>
+        <div class="font-medium text-10 text-center">{{ formatNumberForDashboard(budgetLimitSpent) }} / {{ formatNumberForDashboard(budgetLimitAmount) }} {{ budgetCurrencySymbol }}</div>
+        <div class="font-medium text-10 text-center" :style="isOverBudget ? 'color: var(--expense2)' : ''">{{ formatNumberForDashboard(budgetLimitRemaining) }} {{ budgetCurrencySymbol }}</div>
+        <div class="font-medium text-10 text-center text-muted">{{ budgetLimitInterval }}</div>
       </div>
     </template>
   </van-grid-item>

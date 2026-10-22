@@ -1,8 +1,8 @@
 <template>
-  <div v-if="appStore.isDesktopLayout" class="flex-1-w overflow-hidden">
-    <div class="profile-picker-dashboard-button flex-center" @click="isListVisible = true">
+  <div v-if="appStore.isDesktopLayout" class="flex-1 min-w-0 overflow-hidden">
+    <div class="profile-picker-dashboard-button flex items-center justify-center" @click="isListVisible = true">
       <icon-nut size="20" stroke="1.6"  />
-      <div class="profile-picker-dashboard-button-text flex-1-w ellipse-text">{{ $t('profile') }}: {{ profileStore.activeProfile?.name ?? $t('not_set') }}</div>
+      <div class="profile-picker-dashboard-button-text flex-1 min-w-0 truncate">{{ $t('profile') }}: {{ profileStore.activeProfile?.name ?? $t('not_set') }}</div>
     </div>
 
     <app-popup v-model:show="isListVisible"  :style="appStore.isDesktopLayout ? null : { height: '40%' }">

@@ -1,7 +1,7 @@
 <template>
   <app-popup v-model:show="showDropdown" style="height: 50%; padding-top: 4px">
-    <div ref="popupRef" class="h-100 display-flex flex-column qqq">
-      <div class="van-popup-title flex-center-vertical px-4">
+    <div ref="popupRef" class="h-full flex flex-col qqq">
+      <div class="van-popup-title flex items-center px-6">
         <div class="flex-1">{{ props.popupTitle }}</div>
         <van-button size="small" @click="onSet">Set</van-button>
       </div>

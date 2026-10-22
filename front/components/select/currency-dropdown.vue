@@ -2,7 +2,7 @@
   <div class="currency-dropdown cursor-pointer">
     <van-popover v-model:show="showPopover" :actions="list" @select="onSelect" >
       <template #reference>
-        <div class="flex-center-vertical gap-1 text-size-12 font-600" :class="$attrs.class">
+        <div class="flex items-center gap-1 text-12 font-semibold" :class="$attrs.class">
           {{ currencyCode }}
           <icon-caret-down :size="18" />
         </div>

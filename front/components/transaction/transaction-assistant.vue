@@ -1,16 +1,16 @@
 <template>
-  <div class="vant-card flex-column mt-5">
-    <div class="vant-card-title flex-center-vertical gap-1">
+  <div class="vant-card flex-col mt-1.25">
+    <div class="vant-card-title flex items-center gap-1">
       {{ $t('transaction.assistant') }}
       <app-tutorial :title="$t('transaction.assistant_tutorial_title')" :body="$t('transaction.assistant_tutorial_body')" />
 
       <div class="flex-1" />
-      <currency-dropdown v-model="profileStore.assistantCurrency" class="text-size-12" :is-clearable="true" />
+      <currency-dropdown v-model="profileStore.assistantCurrency" class="text-12" :is-clearable="true" />
     </div>
-    <div class="text-size-12 text-muted mb-5">{{ $t('transaction.assistant_format') }}</div>
+    <div class="text-12 text-muted mb-1.25">{{ $t('transaction.assistant_format') }}</div>
 
-    <div class="display-flex flex-column">
-      <div class="flex-center-vertical gap-2 transaction-assistant-input-row">
+    <div class="flex flex-col">
+      <div class="flex items-center gap-2 transaction-assistant-input-row">
         <app-field
           ref="assistantFieldRef"
           v-model="assistantText"
@@ -25,7 +25,7 @@
       </div>
 
       <template v-if="previewTags.length > 0 || parsed.isTodo">
-        <div class="display-flex flex-center-vertical gap-2 p-5 mt-10 text-size-12 flex-wrap border border-radius">
+        <div class="flex items-center gap-2 p-1.25 mt-2.5 text-12 flex-wrap border border-[#dee2e6] rounded-[3px]">
           <van-tag v-for="previewTag in previewTags" :key="previewTag.label" round class="assistant-tag" size="medium" type="primary">
             <span>{{ previewTag.label }}</span>
             <span>|</span>

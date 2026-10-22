@@ -3,14 +3,14 @@
     <app-top-toolbar />
 
     <van-form class="" @submit="onSave">
-      <van-cell-group inset class="p-10">
-        <div class="van-cell-fake flex-column">
+      <van-cell-group inset class="p-2.5">
+        <div class="van-cell-fake flex-col">
           <app-repeater v-model="fieldsList" :is-list-dynamic="false" :empty-item="{ value: '' }">
             <template #content="{ element }">
-              <div class="app-field m-5 cursor-pointer" @click="onClickIsVisible(element)">
+              <div class="app-field m-1.25 cursor-pointer" @click="onClickIsVisible(element)">
                 <div :class="getElementClass(element)">
                   <app-icon :icon="element.icon" :size="20" />
-                  <div class="flex-1 text-size-14">{{ element.t ? $t(element.t) : element.name }}</div>
+                  <div class="flex-1 text-14">{{ element.t ? $t(element.t) : element.name }}</div>
                   <app-icon :icon="getIsVisibleIcon(element)" :size="20" />
                 </div>
               </div>
@@ -72,7 +72,7 @@ const getIsVisibleIcon = (element) => {
 
 const getElementClass = (element) => {
   return {
-    'van-field__body flex-center-vertical gap-1 pointer-events-none prevent-select': true,
+    'van-field__body flex items-center gap-1 pointer-events-none select-none': true,
     'text-muted': !element.isVisible,
   }
 }

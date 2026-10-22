@@ -2,14 +2,14 @@
   <van-swipe-cell ref="swipeCell" v-bind="clickWithoutSwipe">
     <van-cell :class="cellClass">
       <template #title>
-        <div class="display-flex transaction-card prevent-select align-items-lg-stretch">
-          <div class="second_column flex-1-w">
-            <div v-if="isSplitPayment && props.isDetailedMode" class="mt-1 display-flex">
+        <div class="flex transaction-card select-none lg:items-stretch">
+          <div class="second_column flex-1 min-w-0">
+            <div v-if="isSplitPayment && props.isDetailedMode" class="mt-1 flex">
               <transaction-split-badge />
             </div>
 
-            <div class="flex-center-vertical gap-1">
-              <div v-if="description" class="list-item-title max-2-lines word-break-word">{{ description }}</div>
+            <div class="flex items-center gap-1">
+              <div v-if="description" class="list-item-title line-clamp-2 wrap-anywhere">{{ description }}</div>
               <app-icon v-if="hasAttachments" :icon="TablerIconConstants.attachment" :size="20" color="#1E88E5" />
             </div>
 
@@ -26,7 +26,7 @@
 
             <div v-if="notes && props.isDetailedMode" class="list-item-subtitle" :style="getStyleForField(transactionListField.notes)">
               <app-icon :icon="TablerIconConstants.fieldText1" :size="20" />
-              <span class="transaction-notes-markdown notes-markdown max-2-lines word-break-word" v-html="notes" />
+              <span class="transaction-notes-markdown notes-markdown line-clamp-2 wrap-anywhere" v-html="notes" />
             </div>
 
             <div v-if="profileStore.tagsEnabled && tags && props.isDetailedMode" class="tags-container" :style="getStyleForField(transactionListField.tags)">
@@ -40,16 +40,16 @@
           </div>
 
           <div class="third_column">
-            <div class="font-weight-700 text-size-14" :style="amountStyle">{{ transactionAmount }} {{ transactionCurrency }}</div>
+            <div class="font-bold text-14" :style="amountStyle">{{ transactionAmount }} {{ transactionCurrency }}</div>
 
             <transaction-list-item-hero-icon v-if="props.isDetailedMode" :value="props.value" />
 
-            <div class="display-flex flex-column align-items-end text-size-12 gap-1 line-height-normal mt-1">
+            <div class="flex flex-col items-end text-12 gap-1 leading-[normal] mt-1">
               <div>{{ dateFormatted }}</div>
               <div class="text-muted">{{ timeAgo }}</div>
             </div>
 
-            <div class="flex-center-vertical text-muted text-size-12 gap-1" />
+            <div class="flex items-center text-muted text-12 gap-1" />
           </div>
         </div>
       </template>

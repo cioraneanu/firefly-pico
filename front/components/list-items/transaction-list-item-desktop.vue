@@ -3,20 +3,20 @@
     <div class="transaction-desktop-row cursor-pointer" :class="cellClass">
       <div class="transaction-desktop-type-dot" :class="typeClass" />
 
-      <div class="transaction-desktop-date line-height-normal">
+      <div class="transaction-desktop-date leading-[normal]">
         <div class="transaction-desktop-date-value">{{ dateFormatted }}</div>
         <div class="transaction-desktop-muted">{{ timeAgo }}</div>
       </div>
 
-      <div class="transaction-desktop-description overflow-hidden line-height-normal">
-        <div class="flex-center-vertical gap-1">
-          <span class="transaction-desktop-title ellipse-text">{{ description }}</span>
+      <div class="transaction-desktop-description overflow-hidden leading-[normal]">
+        <div class="flex items-center gap-1">
+          <span class="transaction-desktop-title truncate">{{ description }}</span>
           <app-icon v-if="hasAttachments" :icon="TablerIconConstants.attachment" :size="13" color="#1E88E5" />
         </div>
-        <div v-if="notes" class="transaction-notes-markdown transaction-desktop-muted transaction-desktop-notes ellipse-text" v-html="notes" />
+        <div v-if="notes" class="transaction-notes-markdown transaction-desktop-muted transaction-desktop-notes truncate" v-html="notes" />
       </div>
 
-      <div class="transaction-desktop-amount text-left line-height-normal">
+      <div class="transaction-desktop-amount text-left leading-[normal]">
         <div class="transaction-desktop-amount-value" :style="amountStyle">{{ transactionAmount }} {{ transactionCurrency }}</div>
         <transaction-split-badge v-if="isSplitPayment" />
       </div>
@@ -44,7 +44,7 @@
       <div class="transaction-desktop-budget overflow-hidden">
         <div v-if="profileStore.budgetsEnabled && budget" class="transaction-desktop-chip overflow-hidden">
           <app-icon :icon="TablerIconConstants.budget" :size="13" />
-          <span class="ellipse-text">{{ Budget.getDisplayName(budget) }}</span>
+          <span class="truncate">{{ Budget.getDisplayName(budget) }}</span>
         </div>
       </div>
     </div>

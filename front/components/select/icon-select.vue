@@ -22,12 +22,12 @@
     </template>
 
     <template #popup="{ onSelectCell }">
-      <app-tabs v-if="!appStore.isDesktopLayout" v-model="activeTab" :items="tabs" class="mx-3 mb-2" />
+      <app-tabs v-if="!appStore.isDesktopLayout" v-model="activeTab" :items="tabs" class="mx-4 mb-2" />
 
       <van-list v-model:loading="isLoadingMore" :finished="visibleCount >= filteredList.length" @load="onLoadMore">
         <van-grid :column-num="6">
           <van-grid-item v-for="item in visibleList" :key="item.icon" class="cursor-pointer" :class="{ active: item.icon === modelValue?.icon }" @click="onSelectCell(item)">
-            <div class="flex-center flex-column mt-5 text-size-12">
+            <div class="flex items-center justify-center flex-col mt-1.25 text-12">
               <app-icon :icon="item.icon" style="width: 30px" />
               <div class="app-icon-item" />
             </div>

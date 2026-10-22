@@ -1,5 +1,5 @@
 <template>
-  <div class="flex-center-vertical gap-2">
+  <div class="flex items-center gap-2">
     <div class="simple-button">
       <app-icon :icon="TablerIconConstants.leftArrow" :size="22" class="cursor-pointer" @click.stop="onPreviousMonth" />
     </div>
@@ -8,7 +8,7 @@
       <app-icon :icon="TablerIconConstants.rightArrow" :size="22" class="cursor-pointer" @click.stop="onNextMonth" />
     </div>
 
-    <div class="text-size-13 font-weight-500 cursor-pointer mx-2" @click="onChooseMonth">{{ rangeTitle }}</div>
+    <div class="text-13 font-medium cursor-pointer mx-2" @click="onChooseMonth">{{ rangeTitle }}</div>
 
     <dashboard-control-buttons />
   </div>

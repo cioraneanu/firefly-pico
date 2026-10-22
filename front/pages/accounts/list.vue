@@ -13,8 +13,8 @@
         <app-list-search v-if="isSearchVisible && list.length > 0" v-model="search">
           <template #right>
             <van-popover v-model:show="showFilterPopover" placement="bottom-end" overlay :overlay-style="{ background: 'transparent' }">
-              <div class="display-flex flex-column gap-1 p-10">
-                <div class="text-size-12 font-weight-600 text-muted">{{ $t('account_page.account_type') }}</div>
+              <div class="flex flex-col gap-1 p-2.5">
+                <div class="text-12 font-semibold text-muted">{{ $t('account_page.account_type') }}</div>
                 <app-tabs v-model="filterAccountType" :items="accountTypeTabs" />
               </div>
 

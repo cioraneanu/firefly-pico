@@ -30,7 +30,7 @@ const style = computed(() => {
 })
 
 const classComputed = computed(() => ({
-  'app-button-save  flex-center-vertical gap-2': true,
+  'app-button-save flex items-center gap-2': true,
   mobile: !appStore.isDesktopLayout,
   desktop: appStore.isDesktopLayout,
 }))

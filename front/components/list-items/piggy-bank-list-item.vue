@@ -3,21 +3,21 @@
     <van-cell>
       <template #title>
         <div class="list-item-container">
-          <div class="first_column flex-center flex-column">
+          <div class="first_column flex items-center justify-center flex-col">
             <app-icon :icon="icon ?? TablerIconConstants.piggyBank" :size="TablerIconConstants.defaultSize" />
           </div>
 
           <div class="separator"></div>
 
-          <div class="second_column flex-1 flex-column">
-            <div v-if="displayName" class="title flex-center-vertical">
+          <div class="second_column flex-1 flex-col">
+            <div v-if="displayName" class="title flex items-center">
               <div class="flex-1">{{ displayName }}</div>
-              <div class="text-size-12">{{ currentAmount }} / {{ targetAmount }} {{ currencySymbol }}</div>
+              <div class="text-12">{{ currentAmount }} / {{ targetAmount }} {{ currencySymbol }}</div>
             </div>
-            <div class="display-flex flex-wrap gap-1 mt-5">
-              <div class="tag-gray list-item-subtitle text-size-12">{{ percent }} %</div>
-              <div v-if="accountName" class="tag-gray list-item-subtitle text-size-12">{{ accountName }}</div>
-              <div v-if="targetDate" class="tag-gray list-item-subtitle text-size-12">{{ targetDate }}</div>
+            <div class="flex flex-wrap gap-1 mt-1.25">
+              <div class="tag-gray list-item-subtitle text-12">{{ percent }} %</div>
+              <div v-if="accountName" class="tag-gray list-item-subtitle text-12">{{ accountName }}</div>
+              <div v-if="targetDate" class="tag-gray list-item-subtitle text-12">{{ targetDate }}</div>
               <div class="flex-1" />
               <bar-chart-item-horizontal :percent="percent" style="max-width: 90px" />
             </div>

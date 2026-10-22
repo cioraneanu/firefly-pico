@@ -1,11 +1,11 @@
 <template>
   <van-cell-group inset>
-    <div class="van-cell-group-title flex-center-vertical">
+    <div class="van-cell-group-title flex items-center">
       <div class="flex-1">{{ $t('settings.dashboard.cards.todo_transactions') }}:</div>
 
       <van-button v-if="tagStore.tagTodo" size="small" @click="onGoToTodos">{{ $t('todo') }}: {{ dashboardStore.transactionsWithTodo.length }}</van-button>
-      <div v-else class="flex-center-vertical gap-1">
-        <span class="text-muted text-size-10 font-weight-400"> No "todo" tag </span>
+      <div v-else class="flex items-center gap-1">
+        <span class="text-muted text-10 font-normal"> No "todo" tag </span>
         <app-tutorial v-bind="TUTORIAL_CONSTANTS.todoTag" />
       </div>
     </div>

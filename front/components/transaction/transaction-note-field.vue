@@ -3,14 +3,14 @@
     <template #right-icon>
       <van-button v-if="isMarkdown && !isFocused" size="small" class="" @click.prevent.stop="onShowPreview">
         <template #icon>
-          <div class="display-flex">
+          <div class="flex">
             <icon-eye :size="16" :stroke="1.6"  />
           </div>
         </template>
       </van-button>
 
       <van-dialog v-model:show="isPreviewVisible" confirm-button-text="OK" :close-on-click-overlay="true" style="top: 50%;">
-        <div class="p-20">
+        <div class="p-5">
           <div class="transaction-notes-markdown app-toolbar-body" style="overflow: auto; max-height: 70vh" v-html="markdown"/>
         </div>
       </van-dialog>

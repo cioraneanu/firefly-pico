@@ -3,7 +3,7 @@
     <van-cell>
       <template #title>
         <div class="list-item-container">
-          <div class="first_column flex-center flex-column">
+          <div class="first_column flex items-center justify-center flex-col">
             <app-icon :icon="icon ?? TablerIconConstants.account" :size="32" />
             <!--            <span class="badge2"> {{ currencySymbol }}</span>-->
           </div>
@@ -11,19 +11,19 @@
           <div class="separator"/>
 
           <div class="second_column flex-1">
-            <div v-if="displayName" class="flex-center-vertical gap-1">
+            <div v-if="displayName" class="flex items-center gap-1">
               <span class="title flex-1"> {{ displayName }}</span>
             </div>
 
-            <div class="subtitle display-flex flex-wrap gap-2">
+            <div class="subtitle flex flex-wrap gap-2">
               <span v-if="accountType" class="tag-gray list-item-subtitle">{{ accountType }}</span>
               <span v-if="accountRole" class="tag-gray list-item-subtitle">{{ $t('account_page.account_role') }}: {{ accountRole }}</span>
               <span v-if="accountGroup" class="tag-gray list-item-subtitle">{{ $t('account_page.account_group') }}: {{ accountGroup }}</span>
             </div>
 
-            <div class="display-flex flex-wrap gap-1">
-              <span class="tag-gray list-item-subtitle mt-5">{{ $t('account_page.balance') }}: {{ accountBalance }}</span>
-              <span v-if="hasVirtualBalance" class="tag-gray app-card-info list-item-subtitle mt-5">{{ $t('account_page.available') }}: {{ accountAvailableBalance }}</span>
+            <div class="flex flex-wrap gap-1">
+              <span class="tag-gray list-item-subtitle mt-1.25">{{ $t('account_page.balance') }}: {{ accountBalance }}</span>
+              <span v-if="hasVirtualBalance" class="tag-gray app-card-info list-item-subtitle mt-1.25">{{ $t('account_page.available') }}: {{ accountAvailableBalance }}</span>
             </div>
           </div>
         </div>

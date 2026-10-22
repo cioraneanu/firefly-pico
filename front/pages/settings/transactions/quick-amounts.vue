@@ -4,7 +4,7 @@
 
     <van-form class="" @submit="onSave">
       <van-cell-group inset>
-        <div class="van-cell-fake flex-column van-cell">
+        <div class="van-cell-fake flex-col van-cell">
           <app-repeater v-model="quickAmountValues" :empty-item="{ value: '' }">
             <template #content="{ element, index }">
               <app-field v-model="element.value" :placeholder="$t('settings.transactions.quick_amounts.value')" inputmode="decimal" />

@@ -9,7 +9,7 @@
     <van-form ref="form" :name="formName" class="" @submit="saveItem" @failed="onValidationError">
       <app-card-info v-if="itemId">
         <div class="van-cell-group-title">{{ $t('status') }}:</div>
-        <div class="px-3 pb-15 flex-column text-size-12">
+        <div class="px-4 pb-3.75 flex-col text-12">
           <div>{{ $t('budget_page.spent') }}: {{ budgetLimitSpent }} / {{ budgetLimitAmount }} {{ budgetCurrencySymbol }}</div>
           <div>{{ $t('budget_page.percent') }}: {{ budgetLimitPercent }} %</div>
           <div>{{ $t('budget_page.interval') }}: {{ budgetLimitInterval }}</div>
@@ -36,7 +36,7 @@
       <div style="margin: 16px">
         <app-button-form-save />
 
-        <app-button-form-delete v-if="itemId" class="mt-10" @click="onDelete" />
+        <app-button-form-delete v-if="itemId" class="mt-2.5" @click="onDelete" />
       </div>
     </van-form>
   </div>

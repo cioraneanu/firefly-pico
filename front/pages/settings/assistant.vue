@@ -12,17 +12,17 @@
       </van-cell-group>
 
       <van-cell-group inset>
-        <div class="p-3 display-flex flex-column gap-3">
-          <div class="flex-center-vertical gap-2">
-            <div class="ramble-header-icon flex-center">
+        <div class="p-4 flex flex-col gap-4">
+          <div class="flex items-center gap-2">
+            <div class="ramble-header-icon flex items-center justify-center">
               <app-icon :icon="TablerIconConstants.ramble" :size="20" :stroke="1.6" />
             </div>
-            <div class="flex-1-w">
-              <div class="font-600 text-size-14 line-height-normal">{{ $t('settings.assistant.llm_status') }}</div>
-              <div class="text-size-12 text-muted">{{ $t('settings.assistant.llm_status_subtitle') }}</div>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold text-14 leading-[normal]">{{ $t('settings.assistant.llm_status') }}</div>
+              <div class="text-12 text-muted">{{ $t('settings.assistant.llm_status_subtitle') }}</div>
             </div>
           </div>
-          <div class="display-flex">
+          <div class="flex">
             <div class="llm-status-pill" :class="appStore.llmIsConfigured ? 'llm-status-pill-on' : 'llm-status-pill-off'">
               <span class="llm-status-dot" />
               {{ appStore.llmIsConfigured ? $t('settings.assistant.llm_configured') : $t('settings.assistant.llm_not_configured') }}
@@ -43,7 +43,7 @@
 
           <app-text-area v-model="assistantLlmContext" class="assistant-llm-context" :label="$t('settings.assistant.llm_context')" :placeholder="$t('settings.assistant.llm_context_placeholder')" :visible-lines="2" />
 
-          <div v-if="appStore.llmIsConfigured" class="flex-center">
+          <div v-if="appStore.llmIsConfigured" class="flex items-center justify-center">
             <van-button round size="small" plain :loading="isTestingLlm" @click="testLlm">
               <app-icon :icon="TablerIconConstants.magic" :size="16" />
               {{ $t('settings.assistant.llm_test') }}
@@ -51,8 +51,8 @@
           </div>
 
           <template v-else>
-            <div class="text-size-13 text-muted">{{ $t('settings.assistant.llm_not_configured_info') }}</div>
-            <div class="display-flex flex-wrap gap-1">
+            <div class="text-13 text-muted">{{ $t('settings.assistant.llm_not_configured_info') }}</div>
+            <div class="flex flex-wrap gap-1">
               <div class="llm-env-chip">ASSISTANT_LLM_ENDPOINT</div>
               <div class="llm-env-chip">ASSISTANT_LLM_MODEL</div>
               <div class="llm-env-chip">ASSISTANT_LLM_API_KEY</div>
@@ -63,17 +63,17 @@
       </van-cell-group>
 
       <van-cell-group inset>
-        <div class="p-3 display-flex flex-column gap-3">
-          <div class="flex-center-vertical gap-2">
-            <div class="ramble-header-icon flex-center">
+        <div class="p-4 flex flex-col gap-4">
+          <div class="flex items-center gap-2">
+            <div class="ramble-header-icon flex items-center justify-center">
               <app-icon :icon="TablerIconConstants.microphone" :size="20" :stroke="1.6" />
             </div>
-            <div class="flex-1-w">
-              <div class="font-600 text-size-14 line-height-normal">{{ $t('settings.assistant.transcription_status') }}</div>
-              <div class="text-size-12 text-muted">{{ $t('settings.assistant.transcription_status_subtitle') }}</div>
+            <div class="flex-1 min-w-0">
+              <div class="font-semibold text-14 leading-[normal]">{{ $t('settings.assistant.transcription_status') }}</div>
+              <div class="text-12 text-muted">{{ $t('settings.assistant.transcription_status_subtitle') }}</div>
             </div>
           </div>
-          <div class="display-flex">
+          <div class="flex">
             <div class="llm-status-pill" :class="appStore.transcriptionIsConfigured ? 'llm-status-pill-on' : 'llm-status-pill-off'">
               <span class="llm-status-dot" />
               {{ appStore.transcriptionIsConfigured ? $t('settings.assistant.llm_configured') : $t('settings.assistant.llm_not_configured') }}
@@ -97,9 +97,9 @@
             </div>
           </div>
 
-          <div v-if="appStore.transcriptionIsConfigured && !appStore.transcriptionLanguage" class="text-size-12 text-muted">{{ $t('settings.assistant.transcription_language_info') }}</div>
+          <div v-if="appStore.transcriptionIsConfigured && !appStore.transcriptionLanguage" class="text-12 text-muted">{{ $t('settings.assistant.transcription_language_info') }}</div>
 
-          <div v-if="appStore.transcriptionIsConfigured" class="flex-center">
+          <div v-if="appStore.transcriptionIsConfigured" class="flex items-center justify-center">
             <van-button round size="small" plain :loading="isTestingTranscription" @click="testTranscription">
               <app-icon :icon="TablerIconConstants.microphone" :size="16" />
               {{ $t('settings.assistant.transcription_test') }}
@@ -107,8 +107,8 @@
           </div>
 
           <template v-else>
-            <div class="text-size-13 text-muted">{{ $t('settings.assistant.llm_not_configured_info') }}</div>
-            <div class="display-flex flex-wrap gap-1">
+            <div class="text-13 text-muted">{{ $t('settings.assistant.llm_not_configured_info') }}</div>
+            <div class="flex flex-wrap gap-1">
               <div class="llm-env-chip">ASSISTANT_TRANSCRIPTION_ENDPOINT</div>
               <div class="llm-env-chip">ASSISTANT_TRANSCRIPTION_MODEL</div>
               <div class="llm-env-chip">ASSISTANT_TRANSCRIPTION_API_KEY</div>

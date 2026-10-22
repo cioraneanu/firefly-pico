@@ -3,7 +3,7 @@
     <van-cell>
       <template #title>
         <div class="list-item-container" :class="itemClass">
-          <div class="first_column flex-center flex-column">
+          <div class="first_column flex items-center justify-center flex-col">
             <app-icon :icon="TablerIconConstants.currency" :size="TablerIconConstants.sizeItemList" :class="itemClass" />
           </div>
 

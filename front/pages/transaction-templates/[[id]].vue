@@ -6,14 +6,14 @@
       </template>
     </app-top-toolbar>
 
-    <transaction-type-tabs v-model="type" class="mx-3 mt-3 mb-2" />
+    <transaction-type-tabs v-model="type" class="mx-4 mt-4 mb-2" />
 
     <!--    @submit="onSave"-->
     <van-form ref="form" :name="formName" class="transaction-form-group" @submit="saveItem" @failed="onValidationError">
       <van-cell-group inset>
         <app-field v-model="name" :icon="TablerIconConstants.fieldText2" :label="$t('name')" name="name" required :rules="[rule.required()]" />
 
-        <div class="van-cell-fake flex-column van-cell">
+        <div class="van-cell-fake flex-col van-cell">
           <span>{{ $t('transaction_template_page.extra_names') }}</span>
           <app-repeater v-model="extra_names" :empty-item="{ value: '' }">
             <template #content="{ element, index }">
@@ -42,7 +42,7 @@
       <div style="margin: 16px">
         <app-button-form-save />
 
-        <app-button-form-delete v-if="itemId" class="mt-10" @click="onDelete" />
+        <app-button-form-delete v-if="itemId" class="mt-2.5" @click="onDelete" />
       </div>
     </van-form>
   </div>

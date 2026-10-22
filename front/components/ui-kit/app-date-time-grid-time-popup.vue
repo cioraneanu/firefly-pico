@@ -1,6 +1,6 @@
 <template>
   <app-popup v-model:show="modelValueShow" style="padding-top: 4px">
-    <div ref="popupRef" class="h-100 display-flex flex-column app-date-time-grid">
+    <div ref="popupRef" class="h-full flex flex-col app-date-time-grid">
         <van-time-picker v-if="localModelValue" v-model="localModelValue" @confirm="onClose" @cancel="onClose" />
     </div>
   </app-popup>

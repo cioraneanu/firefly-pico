@@ -1,5 +1,5 @@
 <template>
-  <div class="app-list-search flex-center-vertical gap-2">
+  <div class="app-list-search flex items-center gap-2">
     <slot name="left" />
     <van-search v-model="modelValue" class="flex-1" :placeholder="$t('search_placeholder')" />
     <slot name="right" />

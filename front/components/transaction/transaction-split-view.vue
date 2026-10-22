@@ -4,7 +4,7 @@
       <van-cell class="transaction-split-summary-cell">
         <template #title>
           <div class="transaction-split-summary-heading">
-            <div class="font-600">{{ groupTitle }}</div>
+            <div class="font-semibold">{{ groupTitle }}</div>
             <transaction-split-badge />
           </div>
           <div class="transaction-split-summary-meta">
@@ -30,7 +30,7 @@
         <van-cell class="transaction-split-card-header">
           <template #title>
             <div class="transaction-split-card-position">{{ index + 1 }} / {{ splits.length }}</div>
-            <div class="transaction-split-card-title word-break-word" role="heading" aria-level="2">{{ split.description }}</div>
+            <div class="transaction-split-card-title wrap-anywhere" role="heading" aria-level="2">{{ split.description }}</div>
           </template>
 
           <template #value>
@@ -132,7 +132,7 @@
               <app-icon :icon="TablerIconConstants.fieldText1" :size="17" />
               <span>{{ $t('notes') }}</span>
             </div>
-            <div class="transaction-split-notes word-break-word">{{ split.notes }}</div>
+            <div class="transaction-split-notes wrap-anywhere">{{ split.notes }}</div>
           </template>
         </van-cell>
       </van-cell-group>

@@ -1,6 +1,6 @@
 <template>
   <nuxt-link :to="route">
-    <div class="flex-center-vertical">
+    <div class="flex items-center">
       <app-icon :icon="icon" :size="20" />
       {{ label }}
       <div v-if="dot" class="van-badge van-badge--dot"/>

@@ -2,33 +2,33 @@
   <van-swipe-cell ref="swipeCell" v-bind="clickWithoutSwipe">
     <van-cell>
       <template #title>
-        <div class="display-flex transaction-card prevent-select align-items-lg-stretch">
-          <!--          <div class="first_column flex-center flex-column">-->
+        <div class="flex transaction-card select-none lg:items-stretch">
+          <!--          <div class="first_column flex items-center justify-center flex-col">-->
           <!--            <app-icon :icon="TablerIconConstants.transactionTemplate"/>-->
           <!--          </div>-->
 
           <!--          <div class="separator"></div>-->
 
           <div class="second_column flex-1">
-            <div class="flex-center-vertical gap-2">
+            <div class="flex items-center gap-2">
               <app-icon :icon="TablerIconConstants.transactionTemplate" :size="24" />
 
               <div>
-                <div class="flex-center-vertical gap-1">
+                <div class="flex items-center gap-1">
                   <transaction-type-dot :transaction-type="transactionType" />
                   <div v-if="name" class="list-item-title" style="line-height: 18px !important">{{ name }}</div>
                 </div>
 
-                <div class="text-size-12 font-weight-400 text-muted" style="line-height: 18px !important">{{ extraNames }}</div>
+                <div class="text-12 font-normal text-muted" style="line-height: 18px !important">{{ extraNames }}</div>
               </div>
-              <!--              <div v-if="extraNames" class="text-size-12 font-weight-400 text-muted">( {{ extraNames }} )</div>-->
+              <!--              <div v-if="extraNames" class="text-12 font-normal text-muted">( {{ extraNames }} )</div>-->
             </div>
 
-            <!--            <div v-if="extraNames" class="flex-center-vertical gap-2">-->
-            <!--              <div class="ml-20 text-size-12 font-weight-400 text-muted"> {{ extraNames }}</div>-->
+            <!--            <div v-if="extraNames" class="flex items-center gap-2">-->
+            <!--              <div class="ml-5 text-12 font-normal text-muted"> {{ extraNames }}</div>-->
             <!--            </div>-->
 
-            <div v-if="displayedAccounts.length > 0" class="flex-column">
+            <div v-if="displayedAccounts.length > 0" class="flex-col">
               <div v-for="displayedAccount in displayedAccounts" class="list-item-subtitle">
                 <app-icon :icon="Account.getIcon(displayedAccount) ?? TablerIconConstants.account" :size="20" />
                 <span>{{ Account.getDisplayName(displayedAccount) }}</span>
@@ -58,13 +58,13 @@
             <div v-if="tags" class="tags-container">
               <div v-for="tag in visibleTags" class="tag">
                 <app-icon :icon="Tag.getIcon(tag) ?? TablerIconConstants.tag" :size="14" />
-                <div class="list-item-subtitle ml-5">{{ Tag.getDisplayNameEllipsized(tag, 10) }}</div>
+                <div class="list-item-subtitle ml-1.25">{{ Tag.getDisplayNameEllipsized(tag, 10) }}</div>
               </div>
             </div>
           </div>
 
           <div class="third_column">
-            <div v-show="transactionAmount > 0" class="font-weight-700 text-size-14">
+            <div v-show="transactionAmount > 0" class="font-bold text-14">
               {{ transactionAmount }}
               {{ transactionCurrency }}
             </div>

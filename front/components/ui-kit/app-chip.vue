@@ -1,6 +1,6 @@
 <template>
-  <div class="app-chip display-flex flex-column align-items-center">
-    <div v-if="title" class="title font-600">{{ title }}</div>
+  <div class="app-chip flex flex-col items-center">
+    <div v-if="title" class="title font-semibold">{{ title }}</div>
     <div v-if="subtitle" class="subtitle">{{ subtitle }}</div>
   </div>
 </template>

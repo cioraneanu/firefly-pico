@@ -2,6 +2,7 @@
 // @ts-ignore
 import pkg from './package.json'
 import { supportedLanguages } from './i18n'
+import tailwindcss from '@tailwindcss/vite'
 
 const appName = 'Firefly Pico'
 const appDescription = 'Firefly III companion app.'
@@ -35,6 +36,7 @@ export default defineNuxtConfig({
     },
   },
   vite: {
+    plugins: [tailwindcss()],
     vue: {
       script: {
         defineModel: true,
@@ -61,14 +63,7 @@ export default defineNuxtConfig({
     },
   ],
 
-  css: [
-    '@/assets/styles/bootstrap.min.css',
-    '@/assets/styles/variables.css',
-    '@/assets/styles/theme-white.css',
-    '@/assets/styles/theme-dark.css',
-    '@/assets/styles/helper.css',
-    '@/assets/styles/animations.css',
-  ],
+  css: ['@/assets/styles/tailwind.css', '@/assets/styles/variables.css', '@/assets/styles/theme-white.css', '@/assets/styles/theme-dark.css', '@/assets/styles/animations.css'],
 
   build: {
     // transpile: ['vuetify'],

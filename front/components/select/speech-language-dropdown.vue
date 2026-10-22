@@ -2,7 +2,7 @@
   <div class="speech-language-dropdown cursor-pointer currency-dropdown">
     <van-popover v-model:show="showPopover" :actions="languages" @select="onSelect">
       <template #reference>
-        <div class="flex-center-vertical gap-1" :class="$attrs.class">
+        <div class="flex items-center gap-1" :class="$attrs.class">
           <app-icon v-if="selectedLanguage" :icon="`svgo-flags-${selectedLanguage.flag}`" :size="16" />
           <span>{{ selectedShortCode }}</span>
           <icon-caret-down :size="18" />
@@ -10,7 +10,7 @@
       </template>
 
       <template #action="{ action }">
-        <div class="flex-center-vertical gap-2">
+        <div class="flex items-center gap-2">
           <app-icon :icon="`svgo-flags-${action.flag}`" :size="18" />
           {{ action.name }}
         </div>

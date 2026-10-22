@@ -1,15 +1,15 @@
 <template>
   <div class="month">
-    <div class="month-header flex-1 display-flex-column pb-2">
-      <div class="month-title text-center p-2 font-700 mb-5 mt-5">
-        <span class="text-primary mr-5">{{ monthName }}</span> {{ yearName }}
+    <div class="month-header flex-1 flex flex-col pb-2">
+      <div class="month-title text-center p-2 font-bold mb-1.25 mt-1.25">
+        <span class="text-[#007bff] mr-1.25">{{ monthName }}</span> {{ yearName }}
       </div>
-      <div class="display-flex font-400 text-size-12 text-muted">
+      <div class="flex font-normal text-12 text-muted">
         <div v-for="dayName in dayNames" class="text-center flex-1">{{ dayName }}</div>
       </div>
     </div>
 
-    <table class="w-100 funky-calendar" style="">
+    <table class="w-full funky-calendar" style="">
       <tbody>
         <tr v-for="week in calendar">
           <dashboard-calendar-month-day v-for="day in week" :day="day" :month="month" :is-visible="getIsVisible(day)" />
