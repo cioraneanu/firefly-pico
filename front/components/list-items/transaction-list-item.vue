@@ -1,6 +1,6 @@
 <template>
   <van-swipe-cell ref="swipeCell" v-bind="clickWithoutSwipe">
-    <van-cell :class="cellClass">
+    <van-cell :class="[cellClass, { 'transaction-review-display': props.reviewDisplay }]">
       <template #title>
         <div class="display-flex transaction-card prevent-select align-items-lg-stretch">
           <div class="second_column flex-1-w">
@@ -20,20 +20,28 @@
               </template>
             </div>
 
-            <div v-if="profileStore.categoriesEnabled && categories && props.isDetailedMode" class="tags-container" :style="getStyleForField(transactionListField.category)">
+            <div
+              v-if="profileStore.categoriesEnabled && categories && props.isDetailedMode"
+              class="tags-container"
+              :style="props.reviewDisplay ? undefined : getStyleForField(transactionListField.category)"
+            >
               <category-badge v-for="category in categories" :key="category.id" :value="category" />
             </div>
 
-            <div v-if="notes && props.isDetailedMode" class="list-item-subtitle" :style="getStyleForField(transactionListField.notes)">
+            <div v-if="notes && props.isDetailedMode" class="list-item-subtitle" :style="props.reviewDisplay ? undefined : getStyleForField(transactionListField.notes)">
               <app-icon :icon="TablerIconConstants.fieldText1" :size="20" />
               <span class="transaction-notes-markdown notes-markdown max-2-lines word-break-word" v-html="notes" />
             </div>
 
-            <div v-if="profileStore.tagsEnabled && tags && props.isDetailedMode" class="tags-container" :style="getStyleForField(transactionListField.tags)">
-              <tag-badge v-for="tag in visibleTags" :key="tag.id" :value="tag" />
+            <div v-if="profileStore.tagsEnabled && tags && props.isDetailedMode" class="tags-container" :style="props.reviewDisplay ? undefined : getStyleForField(transactionListField.tags)">
+              <tag-badge v-for="tag in visibleTags" :key="tag.id" :value="tag" :max-length="props.reviewDisplay ? Infinity : 10" />
             </div>
 
-            <div v-if="profileStore.budgetsEnabled && budget && props.isDetailedMode" class="list-item-subtitle" :style="getStyleForField(transactionListField.budget)">
+            <div
+              v-if="profileStore.budgetsEnabled && budget && props.isDetailedMode"
+              class="list-item-subtitle"
+              :style="props.reviewDisplay ? undefined : getStyleForField(transactionListField.budget)"
+            >
               <app-icon :icon="TablerIconConstants.budget" :size="20" />
               {{ Budget.getDisplayName(budget) }}
             </div>
@@ -55,7 +63,7 @@
       </template>
     </van-cell>
 
-    <template #right>
+    <template v-if="props.canDelete" #right>
       <van-button class="delete-button" square type="danger" text="Delete" @click="onDelete" />
     </template>
   </van-swipe-cell>
@@ -72,9 +80,12 @@ import { useTransactionListItem } from '~/composables/useTransactionListItem.js'
 
 const props = defineProps({
   value: Object,
+  reviewDisplay: Boolean,
+  safeNotes: Boolean,
   isDetailedMode: {
     default: true,
   },
+  canDelete: { type: Boolean, default: true },
 })
 
 const emit = defineEmits(['onEdit', 'onDelete'])

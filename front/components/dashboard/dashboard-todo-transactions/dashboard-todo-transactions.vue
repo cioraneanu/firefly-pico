@@ -17,7 +17,6 @@
 <script setup>
 import RouteConstants from '~/constants/RouteConstants.js'
 import { TUTORIAL_CONSTANTS } from '~/constants/TutorialConstants.js'
-import { get } from 'lodash-es'
 
 const dashboardStore = useDashboardStore()
 const tagStore = useTagStore()
@@ -27,10 +26,9 @@ const onEditTransaction = async (transaction) => {
 }
 
 const onGoToTodos = async () => {
-  const todoTagId = get(tagStore.tagTodo, 'id')
-  if (!todoTagId) {
+  if (!tagStore.tagTodo) {
     return
   }
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${todoTagId}`)
+  await navigateTo(RouteConstants.ROUTE_TODO_INBOX)
 }
 </script>

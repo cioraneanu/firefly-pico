@@ -22,4 +22,19 @@ export default class TransactionRepository extends BaseRepository {
     let searchUrl = this.getUrlForRequest({ filters, page: null, pageSize: null, url })
     return await axios.get(searchUrl)
   }
+
+  async getTodoTransaction(id) {
+    return await axios.get(`${this.getUrl()}/${id}`, {
+      showLoading: false,
+      showErrorToast: false,
+    })
+  }
+
+  async updateTodoTransaction(id, requestData) {
+    return await axios.put(`${this.getUrl()}/${id}`, requestData, {
+      showLoading: false,
+      showErrorToast: false,
+      retryOnTimeout: false,
+    })
+  }
 }

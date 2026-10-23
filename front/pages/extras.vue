@@ -8,7 +8,12 @@
       <app-field-link :label="$t('template')" :icon="TablerIconConstants.transactionTemplate" @click="onGoToTransactionTemplatesList" />
       <app-field-link v-if="profileStore.budgetsEnabled" :label="$t('budgets')" :icon="TablerIconConstants.budget" @click="onGoToBudgetsList" />
       <app-field-link v-if="profileStore.piggyBanksEnabled" :label="$t('piggy_banks')" :icon="TablerIconConstants.piggyBank" @click="onGoToPiggyBanksList" />
-      <app-field-link v-if="profileStore.recurringTransactionsEnabled" :label="$t('recurring_transactions')" :icon="TablerIconConstants.recurringTransaction" @click="onGoToRecurringTransactionsList" />
+      <app-field-link
+        v-if="profileStore.recurringTransactionsEnabled"
+        :label="$t('recurring_transactions')"
+        :icon="TablerIconConstants.recurringTransaction"
+        @click="onGoToRecurringTransactionsList"
+      />
     </van-cell-group>
 
     <van-cell-group v-if="profileStore.tagsEnabled || profileStore.categoriesEnabled" inset style="overflow: auto">
@@ -19,6 +24,7 @@
 
     <van-cell-group inset style="overflow: auto">
       <div class="van-cell-group-title">{{ $t('extra') }}:</div>
+      <app-field-link v-if="profileStore.tagsEnabled" :label="$t('todo_inbox.title')" :icon="TablerIconConstants.booleanCheckOn" @click="navigateTo(RouteConstants.ROUTE_TODO_INBOX)" />
       <app-field-link :label="$t('exchange_rates')" :icon="TablerIconConstants.exchangeRates" @click="navigateTo(RouteConstants.ROUTE_EXCHANGE_RATES)" />
       <app-field-link :label="$t('currencies')" :icon="TablerIconConstants.currency" @click="onGoToCurrenciesList" />
     </van-cell-group>

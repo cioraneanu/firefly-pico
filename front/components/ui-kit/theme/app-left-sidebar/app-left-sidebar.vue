@@ -95,6 +95,7 @@ const sidebarSections = computed(() =>
       key: 'extra',
       label: t('extra'),
       pages: [
+        { key: 'todo-inbox', label: t('todo_inbox.title'), icon: TablerIconConstants.booleanCheckOn, route: RouteConstants.ROUTE_TODO_INBOX, visible: profileStore.tagsEnabled },
         { key: 'exchange-rates', label: t('exchange_rates'), icon: TablerIconConstants.exchangeRates, route: RouteConstants.ROUTE_EXCHANGE_RATES },
         { key: 'currencies', label: t('currencies'), icon: TablerIconConstants.currency, route: RouteConstants.ROUTE_CURRENCY_LIST },
       ],
