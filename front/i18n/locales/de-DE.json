@@ -541,6 +541,13 @@
     "inactive": "Inaktiv",
     "extra_names": "Weitere Namen",
     "extra_names_hint": "Weitere Namen, unter denen der Assistent diese Vorlage findet.",
-    "foreign_amount": "Fremdwährungsbetrag"
+    "foreign_amount": "Fremdwährungsbetrag",
+    "convert": "Umrechnen",
+    "set_default": "Standard festlegen",
+    "one_day": "1 Tag",
+    "add_file": "Datei hinzufügen",
+    "ramble": "Diktat",
+    "ramble_description": "Sprich oder tippe mehrere Buchungen auf einmal, der Assistent trennt sie.",
+    "filters": "Filter"
   }
 }

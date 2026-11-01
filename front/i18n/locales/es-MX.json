@@ -540,6 +540,13 @@
     "inactive": "Inactivo",
     "extra_names": "Nombres adicionales",
     "extra_names_hint": "Otros nombres con los que el asistente encuentra esta plantilla.",
-    "foreign_amount": "Monto en moneda extranjera"
+    "foreign_amount": "Monto en moneda extranjera",
+    "convert": "Convertir",
+    "set_default": "Establecer predeterminado",
+    "one_day": "1 día",
+    "add_file": "Agregar archivo",
+    "ramble": "Dictado",
+    "ramble_description": "Di o escribe varias transacciones a la vez y deja que el asistente las separe.",
+    "filters": "Filtros"
   }
 }

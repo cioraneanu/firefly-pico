@@ -9,7 +9,7 @@
         </span>
       </nuxt-link>
       <div class="flex gap-1.5">
-        <d-button variant="primary" :icon="IconPlus" class="flex-1 justify-start" @click="openTransaction()">
+        <d-button variant="primary" :icon="IconPlus" class="flex-1 justify-start" :to="RouteConstants.ROUTE_TRANSACTION_ID">
           {{ $t('new_transaction') }}
           <kbd class="ml-auto rounded-sm bg-on-primary/20 px-1.5 text-xs">N</kbd>
         </d-button>
@@ -51,7 +51,6 @@ import RouteConstants from '~/core/constants/RouteConstants'
 
 const appStore = useAppStore()
 const { groups, active } = useDesktopNav()
-const { openTransaction } = useTransactionDialog()
 const { t } = useI18n()
 
 const isSyncing = ref(false)

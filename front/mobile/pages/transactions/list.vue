@@ -33,7 +33,7 @@
         <van-button size="mini" class="search-total-compute-button" :loading="isComputingSearchTotal" @click="onComputeSearchTotal">
           {{ $t('filters.compute_total') }}
         </van-button>
-        <div class="flex-1"/>
+        <div class="flex-1" />
         <div class="search-total-amount">{{ searchTotalFormatted }}</div>
         <currency-dropdown v-model="searchTotalCurrency" />
       </div>
@@ -63,150 +63,47 @@
 </template>
 
 <script setup>
-import RouteConstants from '~/core/constants/RouteConstants'
-import { useList } from '~/core/composables/useList'
-import Transaction from '~/core/models/Transaction'
+import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import EmptyList from '~/mobile/components/general/empty-list.vue'
-import { ref, computed, watch, onMounted } from 'vue'
-import TransactionRepository from '~/core/repository/TransactionRepository'
-import { get, isEqual, maxBy } from 'lodash-es'
-import Currency from '~/core/models/Currency.js'
-import { convertCurrency } from '~/core/utils/CurrencyUtils.js'
 import { animateSwipeList } from '~/core/utils/AnimationUtils.js'
-import TransactionFilterUtils from '~/core/utils/TransactionFilterUtils.js'
-import { IconChevronDown, IconChevronUp, IconSquareRoundedX, IconSettings } from '@tabler/icons-vue'
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import { filterBagHasValues, getFiltersFromURL, saveToUrl } from '~/core/utils/FilterUtils.js'
-import { useListFilters } from '~/core/composables/useListFilters.js'
+import { IconSquareRoundedX, IconSettings } from '@tabler/icons-vue'
 
 const appStore = useAppStore()
-
-const listScroller = computed(() => (appStore.isDesktopLayout ? window : undefined))
-
-const listClass = computed(() => ({
-  'p-1': true,
-}))
-const transactionFiltersRef = ref(null)
-
-const transactionRepository = new TransactionRepository()
-const onCustomGetAll = async ({ page, pageSize }) => {
-  if (filtersBackendList.value.length === 0) {
-    return await transactionRepository.getAll({ page: page, pageSize })
-  }
-  const filters = [{ field: 'query', value: filtersBackendList.value.join(' ') }]
-  return await transactionRepository.searchTransaction({
-    page: page,
-    pageSize: pageSize,
-    filters: filters,
-  })
-}
-
-const { isLoading, isFinished, isRefreshing, listTotalCount, list, isEmpty, onAdd, onEdit, onDelete, onLoadMore, onRefresh } = useList({
-  routeList: RouteConstants.ROUTE_TRANSACTION_LIST,
-  routeForm: RouteConstants.ROUTE_TRANSACTION_ID,
-  model: new Transaction(),
-  getAll: onCustomGetAll,
-})
-
-const onShowFilters = () => {
-  transactionFiltersRef.value.show()
-}
-
-const formClass = computed(() => ({
-  'app-form': true,
-  empty: isEmpty.value,
-}))
-
-const { filters, filtersBackendList, filtersDisplayList, activeFilters } = useListFilters({
-  filterDefinitions: Object.values(TransactionFilterUtils.filters),
-})
-
-watch(filtersBackendList, (newValue, oldValue) => {
-  if (isEqual(newValue, oldValue)) {
-    return
-  }
-  searchTotal.value = null
-  onRefresh()
-})
-
-watch(filters, (newValue, oldValue) => {
-  if (isEqual(newValue, oldValue)) {
-    return
-  }
-  saveToUrl(activeFilters.value)
-})
-
-const onClearFilters = () => {
-  filters.value = {}
-}
-
 const { t } = useI18n()
 
-const currencyStore = useCurrencyStore()
+const listScroller = computed(() => (appStore.isDesktopLayout ? window : undefined))
+const listClass = { 'p-1': true }
 
-const showSearchTotal = ref(false)
-const searchTotal = ref(null)
-const searchTotalCurrency = ref(null)
-const isComputingSearchTotal = ref(false)
+const {
+  isLoading,
+  isFinished,
+  isRefreshing,
+  listTotalCount,
+  list,
+  isEmpty,
+  onAdd,
+  onEdit,
+  onDelete,
+  onLoadMore,
+  onRefresh,
+  filters,
+  filtersDisplayList,
+  onClearFilters,
+  showSearchTotal,
+  searchTotalCurrency,
+  isComputingSearchTotal,
+  searchTotalFormatted,
+  onToggleSearchTotal,
+  onComputeSearchTotal,
+} = useTransactionList()
 
-const onToggleSearchTotal = () => {
-  showSearchTotal.value = !showSearchTotal.value
-  if (showSearchTotal.value && !get(currencyStore.exchangeRates, 'rates')) {
-    currencyStore.fetchExchangeRate()
-  }
-}
-
-const searchTotalFormatted = computed(() => {
-  const totals = get(searchTotal.value, 'totals') ?? []
-  const targetCode = Currency.getCode(searchTotalCurrency.value)
-  if (totals.length === 0 || !targetCode) {
-    return null
-  }
-  const amount = totals.reduce((result, total) => {
-    const convertedAmount = total.currency_code === targetCode ? total.amount : convertCurrency(total.amount, total.currency_code, targetCode)
-    return result + convertedAmount
-  }, 0)
-  if (isNaN(amount)) {
-    return null
-  }
-  return Currency.formatAmountWithSymbol(amount, get(searchTotalCurrency.value, 'id'))
-})
-
-const onComputeSearchTotal = async () => {
-  if (isComputingSearchTotal.value) {
-    return
-  }
-  isComputingSearchTotal.value = true
-  const searchFilters = [{ field: 'query', value: filtersBackendList.value.join(' ') }]
-  const response = await transactionRepository.searchTransactionsTotal({ filters: searchFilters })
-  isComputingSearchTotal.value = false
-
-  // On error the axios interceptor already shows the backend message in a toast
-  if (!ResponseUtils.isSuccess(response)) {
-    return
-  }
-  searchTotal.value = get(response, 'data.data')
-
-  if (!searchTotalCurrency.value) {
-    const dominantTotal = maxBy(get(searchTotal.value, 'totals') ?? [], 'count')
-    searchTotalCurrency.value = currencyStore.currenciesList.find((currency) => Currency.getCode(currency) === dominantTotal?.currency_code) ?? currencyStore.defaultCurrency
-  }
-}
+const formClass = computed(() => ({ 'app-form': true, empty: isEmpty.value }))
 
 const toolbar = useToolbar()
 toolbar.init({
   title: t('transaction.title_list'),
   subtitle: computed(() => `${listTotalCount.value} ${t('items')}`),
-})
-
-onMounted(() => {
-  const filterDefinitions = Object.values(TransactionFilterUtils.filters)
-  filters.value = getFiltersFromURL(filterDefinitions)
-
-  if (!filterBagHasValues(filters.value)) {
-    filters.value = TransactionFilterUtils.getPredefinedFilters()
-  }
 })
 
 animateSwipeList(list)

@@ -540,6 +540,13 @@
     "inactive": "Nieaktywny",
     "extra_names": "Dodatkowe nazwy",
     "extra_names_hint": "Inne nazwy, po których asystent znajdzie ten szablon.",
-    "foreign_amount": "Kwota w walucie"
+    "foreign_amount": "Kwota w walucie",
+    "convert": "Przelicz",
+    "set_default": "Ustaw domyślne",
+    "one_day": "1 dzień",
+    "add_file": "Dodaj plik",
+    "ramble": "Dyktowanie",
+    "ramble_description": "Powiedz lub wpisz kilka transakcji naraz, a asystent je rozdzieli.",
+    "filters": "Filtry"
   }
 }

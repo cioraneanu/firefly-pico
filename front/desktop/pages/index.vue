@@ -11,5 +11,5 @@ const routes = {
   [Page.types.transactionList.code]: RouteConstants.ROUTE_TRANSACTION_LIST,
 }
 
-navigateTo(routes[useProfileStore().startingPage?.code] ?? { path: RouteConstants.ROUTE_TRANSACTION_LIST, query: { tx: 'new' } }, { replace: true })
+navigateTo(routes[useProfileStore().startingPage?.code] ?? RouteConstants.ROUTE_TRANSACTION_ID, { replace: true })
 </script>

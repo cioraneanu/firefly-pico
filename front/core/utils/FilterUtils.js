@@ -7,7 +7,6 @@ import Account from '~/core/models/Account.js'
 import { useProfileStore } from '~/core/stores/profileStore.js'
 import { translate } from '~/plugins/plugin-i18n.js'
 
-
 export const getActiveFilters = (filterDefinition, filterBag) => {
   return filterDefinition
     .map((item) => {
@@ -17,6 +16,7 @@ export const getActiveFilters = (filterDefinition, filterBag) => {
       }
 
       return {
+        bagKey: item.bagKey,
         filter: item.filter(bagKeyValue),
         display: item.display(bagKeyValue),
         toUrl: item.toUrl?.(bagKeyValue) ?? `${item.bagKey}=${bagKeyValue}`,
@@ -26,7 +26,6 @@ export const getActiveFilters = (filterDefinition, filterBag) => {
 }
 
 export const getFiltersFromURL = (filterDefinition) => {
-
   const route = useRoute()
 
   return filterDefinition.reduce((result, item) => {

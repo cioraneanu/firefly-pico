@@ -540,6 +540,13 @@
     "inactive": "Inactif",
     "extra_names": "Noms supplémentaires",
     "extra_names_hint": "Autres noms permettant à l'assistant de trouver ce modèle.",
-    "foreign_amount": "Montant en devise"
+    "foreign_amount": "Montant en devise",
+    "convert": "Convertir",
+    "set_default": "Définir par défaut",
+    "one_day": "1 jour",
+    "add_file": "Ajouter un fichier",
+    "ramble": "Dictée",
+    "ramble_description": "Dictez ou saisissez plusieurs transactions d'un coup, l'assistant les sépare.",
+    "filters": "Filtres"
   }
 }

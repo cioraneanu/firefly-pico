@@ -540,6 +540,13 @@
     "inactive": "Inattivo",
     "extra_names": "Nomi aggiuntivi",
     "extra_names_hint": "Altri nomi con cui l'assistente trova questo modello.",
-    "foreign_amount": "Importo in valuta"
+    "foreign_amount": "Importo in valuta",
+    "convert": "Converti",
+    "set_default": "Imposta il predefinito",
+    "one_day": "1 giorno",
+    "add_file": "Aggiungi file",
+    "ramble": "Dettatura",
+    "ramble_description": "Detta o scrivi più transazioni insieme e lascia che l'assistente le separi.",
+    "filters": "Filtri"
   }
 }

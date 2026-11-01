@@ -12,7 +12,7 @@
 
       <div v-if="!isLoading && !readOnly" class="add-attachment flex items-center justify-center">
         <icon-plus :size="30" :stroke="0.8" />
-        <input type="file" @change="onUpload" >
+        <input type="file" @change="onUpload" />
       </div>
     </div>
   </div>
@@ -21,16 +21,9 @@
 <script setup>
 import { IconPlus } from '@tabler/icons-vue'
 import TransactionAttachment from '~/mobile/components/transaction/transaction-attachements/transaction-attachment.vue'
-import AttachmentRepository from '~/core/repository/AttachmentRepository.js'
-import { get, head } from 'lodash-es'
-import { ref } from 'vue'
-import AttachmentTransformer from '~/core/transformers/AttachmentTransformer.js'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 
 const emit = defineEmits(['count'])
-
-const isLoading = ref(false)
-const list = ref([])
 
 const props = defineProps({
   transaction: {
@@ -43,36 +36,11 @@ const props = defineProps({
   },
 })
 
+const { list, isLoading, fetch: fetchAttachments, upload } = useAttachments(() => props.transaction)
 const transactionId = computed(() => props.transaction?.id)
 
-const fetchAttachments = async () => {
-  isLoading.value = true
-  const response = await new AttachmentRepository().getForTransaction(transactionId.value)
-  if (ResponseUtils.isSuccess(response)) {
-    list.value = AttachmentTransformer.transformFromApiList(response.data?.data ?? [])
-    emit('count', list.value.length)
-  }
-  isLoading.value = false
-}
+watch(list, (value) => emit('count', value.length))
 
-watch(
-  transactionId,
-  (newValue) => {
-    if (newValue) {
-      fetchAttachments()
-    }
-  },
-  { immediate: true },
-)
-
-const onUpload = async (e) => {
-  const file = head(e.target.files ?? [])
-  const id = get(props.transaction, 'attributes.transactions.0.transaction_journal_id')
-  await new AttachmentRepository().uploadForTransaction(id, file)
-  await fetchAttachments()
-}
-
-const onLoadingChange = (value) => {
-  isLoading.value = value
-}
+const onUpload = (e) => upload(e.target.files)
+const onLoadingChange = (value) => (isLoading.value = value)
 </script>

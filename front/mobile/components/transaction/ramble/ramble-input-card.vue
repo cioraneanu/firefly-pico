@@ -92,12 +92,8 @@
 </template>
 
 <script setup>
-import { useLocalStorage } from '@vueuse/core'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import * as LanguageConstants from '~/core/constants/LanguageConstants.js'
 import SpeechLanguageDropdown from '~/mobile/components/select/speech-language-dropdown.vue'
-import { useSpeechRecognition } from '~/core/composables/useSpeechRecognition.js'
-import AssistantRepository from '~/core/repository/AssistantRepository.js'
 import DateUtils from '~/core/utils/DateUtils.js'
 
 const props = defineProps({
@@ -129,126 +125,29 @@ const props = defineProps({
 
 const emit = defineEmits(['interpret', 'loadSaved', 'deleteSaved', 'deleteRamble'])
 const rambleText = defineModel({ type: String, default: '' })
-
-const profileStore = useProfileStore()
 const appStore = useAppStore()
-const speechTemporary = ref('')
 
-// The app UI language is only the initial default. The dropdown selection is remembered per browser.
-const defaultSpeechLanguageCode = () => {
-  const languageMap = {
-    en: LanguageConstants.LANGUAGE_ENGLISH,
-    ro: LanguageConstants.LANGUAGE_ROMANIAN,
-    pl: LanguageConstants.LANGUAGE_POLISH,
-    it: LanguageConstants.LANGUAGE_ITALIAN,
-    'ru-RU': LanguageConstants.LANGUAGE_RUSSIAN,
-    'fr-FR': LanguageConstants.LANGUAGE_FRENCH,
-    'de-DE': LanguageConstants.LANGUAGE_GERMAN,
-    'de-CH': LanguageConstants.LANGUAGE_GERMAN,
-    'es-MX': LanguageConstants.LANGUAGE_SPANISH_MX,
-    'pt-BR': LanguageConstants.LANGUAGE_PORTUGUESE_BR,
-    'zh-CN': LanguageConstants.LANGUAGE_CHINESE,
-    el: LanguageConstants.LANGUAGE_GREEK,
-  }
-
-  return languageMap[profileStore.language] ?? LanguageConstants.LANGUAGE_ENGLISH
-}
-
-const speechLanguageCode = useLocalStorage('rambleSpeechLanguage', defaultSpeechLanguageCode())
-const speechLanguage = computed(() => ({ code: speechLanguageCode.value }))
-
-const appendDictatedText = (text) => {
-  text = (text ?? '').trim()
-  if (!text) {
-    return
-  }
-
-  rambleText.value = [rambleText.value.trim(), text].filter(Boolean).join(' ')
-}
-
-const { startRecording, stopRecording, isRecording } = useSpeechRecognition({
-  language: speechLanguage,
-  continuous: true,
-  interimResults: true,
-  onSpeechFinished: appendDictatedText,
-  onSpeechTemporary: (text) => {
-    speechTemporary.value = text
-  },
-})
+const {
+  speechTemporary,
+  speechLanguageCode,
+  isRecording,
+  stopRecording,
+  toggleRecording: toggleDictation,
+  playingVoiceRambleId,
+  loadingVoiceRambleId,
+  toggleSavedRambleVoice,
+} = useRambleDictation(rambleText)
 
 const canInterpret = computed(() => !!rambleText.value.trim() || props.savedRambles.length > 0)
 const formatCreatedAt = (createdAt) => (createdAt ? DateUtils.dateToUIWithTime(new Date(createdAt)) : '')
 
-const assistantRepository = new AssistantRepository()
-const playingVoiceRambleId = ref(null)
-const loadingVoiceRambleId = ref(null)
-let voiceAudio = null
-let voiceObjectUrl = null
-
-const stopSavedRambleVoice = () => {
-  voiceAudio?.pause()
-  voiceAudio = null
-  if (voiceObjectUrl) {
-    URL.revokeObjectURL(voiceObjectUrl)
-    voiceObjectUrl = null
-  }
-  playingVoiceRambleId.value = null
-}
-
-const toggleSavedRambleVoice = async (savedRamble) => {
-  if (playingVoiceRambleId.value === savedRamble.id) {
-    stopSavedRambleVoice()
-    return
-  }
-
-  stopSavedRambleVoice()
-  loadingVoiceRambleId.value = savedRamble.id
-
-  try {
-    const voiceBlob = await assistantRepository.getSavedRambleVoice(savedRamble.id)
-    if (loadingVoiceRambleId.value !== savedRamble.id || !voiceBlob) {
-      return
-    }
-
-    voiceObjectUrl = URL.createObjectURL(voiceBlob)
-    voiceAudio = new Audio(voiceObjectUrl)
-    voiceAudio.onended = stopSavedRambleVoice
-    playingVoiceRambleId.value = savedRamble.id
-    await voiceAudio.play()
-  } catch {
-    stopSavedRambleVoice()
-  } finally {
-    if (loadingVoiceRambleId.value === savedRamble.id) {
-      loadingVoiceRambleId.value = null
-    }
-  }
-}
-
-onBeforeUnmount(stopSavedRambleVoice)
-
-const toggleRecording = () => {
-  if (props.isDisabled) {
-    return
-  }
-
-  if (isRecording.value) {
-    stopRecording()
-    return
-  }
-
-  startRecording()
-}
+const toggleRecording = () => !props.isDisabled && toggleDictation()
 
 const onInterpret = () => {
-  if (props.isDisabled) {
-    return
-  }
-
+  if (props.isDisabled) return
   stopRecording()
   emit('interpret')
 }
 
-defineExpose({
-  stopRecording,
-})
+defineExpose({ stopRecording })
 </script>

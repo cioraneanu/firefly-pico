@@ -541,6 +541,13 @@
     "inactive": "비활성",
     "extra_names": "추가 이름",
     "extra_names_hint": "어시스턴트가 이 템플릿을 찾을 수 있는 다른 이름입니다.",
-    "foreign_amount": "외화 금액"
+    "foreign_amount": "외화 금액",
+    "convert": "환산",
+    "set_default": "기본값 설정",
+    "one_day": "1일",
+    "add_file": "파일 추가",
+    "ramble": "받아쓰기",
+    "ramble_description": "여러 거래를 한 번에 말하거나 입력하면 어시스턴트가 나눠 줍니다.",
+    "filters": "필터"
   }
 }

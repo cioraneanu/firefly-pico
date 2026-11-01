@@ -246,13 +246,16 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
     date.value = addDays(date.value, 1)
   }
 
+  const isFieldVisible = (fieldType) => {
+    const field = profileStore.transactionFormFieldsConfig.find((item) => item.code === fieldType.code)
+    // Fields missing from the saved config (added in a newer app version) keep their default visibility
+    return field ? field.isVisible : fieldType.isVisible
+  }
+
   const getStyleForField = (fieldType) => {
     const fieldCode = fieldType.code
     const position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
-    const field = profileStore.transactionFormFieldsConfig.find((item) => item.code === fieldCode)
-    // Fields missing from the saved config (added in a newer app version) keep their default visibility
-    const isVisible = field ? field.isVisible : fieldType.isVisible
-    const displayStyle = isVisible ? '' : 'display: none'
+    const displayStyle = isFieldVisible(fieldType) ? '' : 'display: none'
 
     if (isTypeExpense.value) {
       return `order: ${position}; ${displayStyle}`
@@ -324,6 +327,7 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
     onAddDay,
     isTypeTransfer,
     getStyleForField,
+    isFieldVisible,
     accountSourceBinding,
     accountDestinationBinding,
     showSourceAccountSuggestion,

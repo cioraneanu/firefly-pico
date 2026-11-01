@@ -15,6 +15,7 @@
 import { useLocalStorage, useMagicKeys, whenever } from '@vueuse/core'
 import '~/desktop/styles/desktop.css'
 import UIUtils from '~/core/utils/UIUtils'
+import RouteConstants from '~/core/constants/RouteConstants'
 
 UIUtils.ui = DesktopUI
 
@@ -25,9 +26,8 @@ watchEffect(() => (portal.className = profileStore.darkTheme ? 'd-portal van-the
 onBeforeUnmount(() => portal.remove())
 
 const isSidebarOpen = useLocalStorage('desktopSidebarOpen', true)
-const { openTransaction } = useTransactionDialog()
 const { n } = useMagicKeys()
 
 const isTyping = () => ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName) || document.querySelector('[aria-modal]')
-whenever(n, () => !isTyping() && openTransaction())
+whenever(n, () => !isTyping() && navigateTo(RouteConstants.ROUTE_TRANSACTION_ID))
 </script>

@@ -40,79 +40,27 @@
 
 <script setup>
 import RouteConstants from '~/core/constants/RouteConstants'
-
-import { get } from 'lodash-es'
-import { ref } from 'vue'
-import { useForm } from '~/core/composables/useForm'
-import Transaction from '~/core/models/Transaction'
-import { useToolbar } from '~/mobile/composables/useToolbar'
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
+import { useToolbar } from '~/mobile/composables/useToolbar'
 import { animateTransactionForm } from '~/core/utils/AnimationUtils.js'
-import TransactionRepository from '~/core/repository/TransactionRepository.js'
-import TransactionTransformer from '~/core/transformers/TransactionTransformer.js'
-import { useI18n } from '#imports'
 import TransactionForm from '~/mobile/components/transaction/TransactionForm.vue'
-
-const route = useRoute()
 
 const assistantText = ref('')
 const transactionFormRef = ref(null)
 
-const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
-  routeList: RouteConstants.ROUTE_TRANSACTION_LIST,
-  routeForm: RouteConstants.ROUTE_TRANSACTION_ID,
-  model: new Transaction(),
-  resetFields: () => {
-    assistantText.value = ''
-  },
+const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName, isCloning, isSplitTransaction, cloneRoute, templateRoute, title } = useTransactionEditor({
+  resetFields: () => (assistantText.value = ''),
 })
 
-const onAssistant = async (assistantTransaction) => {
-  await transactionFormRef.value?.applyAssistantTransaction(assistantTransaction)
-}
-
-const onCreateTransactionTemplate = async () => {
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID}?transaction_id=${itemId.value}`)
-}
-const onCreateClone = async () => {
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_ID}?transaction_id=${itemId.value}`)
-}
-
-const isCloning = computed(() => !!get(route.query, 'transaction_id'))
-const isSplitTransaction = computed(() => Transaction.isSplitPayment(item.value))
-
-const { t } = useI18n()
-const title = computed(() => {
-  return isCloning.value
-    ? t('transaction.title_clone_transaction')
-    : isSplitTransaction.value
-      ? t('transaction.title_split_details')
-      : itemId.value
-        ? t('transaction.title_edit_transaction')
-        : t('transaction.title_add_transaction')
-})
+const onAssistant = (assistantTransaction) => transactionFormRef.value?.applyAssistantTransaction(assistantTransaction)
+const onCreateTransactionTemplate = () => navigateTo(templateRoute.value)
+const onCreateClone = () => navigateTo(cloneRoute.value)
 
 const toolbar = useToolbar()
 toolbar.init({
-  title: title,
+  title,
   backRoute: RouteConstants.ROUTE_TRANSACTION_LIST,
 })
 
-onMounted(async () => {
-  animateTransactionForm()
-  cloneTransactions()
-})
-
-const cloneTransactions = async () => {
-  const cloneId = get(route.query, 'transaction_id')
-  if (!cloneId) {
-    return
-  }
-
-  let cloneItem = await new TransactionRepository().getOne(cloneId)
-  cloneItem = TransactionTransformer.transformFromApi(cloneItem.data)
-
-  delete cloneItem.id
-  item.value = cloneItem
-}
+onMounted(animateTransactionForm)
 </script>

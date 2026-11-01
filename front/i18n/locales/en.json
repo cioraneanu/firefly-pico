@@ -541,6 +541,13 @@
     "inactive": "Inactive",
     "extra_names": "Extra names",
     "extra_names_hint": "Other names the assistant can find this template by.",
-    "foreign_amount": "Foreign amount"
+    "foreign_amount": "Foreign amount",
+    "convert": "Convert",
+    "set_default": "Set your default",
+    "one_day": "1 day",
+    "add_file": "Add file",
+    "ramble": "Ramble",
+    "ramble_description": "Say or type several transactions at once and let the assistant split them.",
+    "filters": "Filters"
   }
 }

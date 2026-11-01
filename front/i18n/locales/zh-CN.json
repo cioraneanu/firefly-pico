@@ -488,6 +488,13 @@
     "inactive": "未启用",
     "extra_names": "其他名称",
     "extra_names_hint": "助手可用来查找此模板的其他名称。",
-    "foreign_amount": "外币金额"
+    "foreign_amount": "外币金额",
+    "convert": "换算",
+    "set_default": "设置默认值",
+    "one_day": "1 天",
+    "add_file": "添加文件",
+    "ramble": "口述",
+    "ramble_description": "一次说出或输入多笔交易，由助手自动拆分。",
+    "filters": "筛选"
   }
 }

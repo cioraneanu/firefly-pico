@@ -1,6 +1,8 @@
 export default [
   { path: '/', component: () => import('./pages/index.vue') },
   { path: '/dashboard', component: () => import('./pages/dashboard.vue') },
+  { path: '/transactions/:id?', component: () => import('./pages/transactions.vue') },
+  { path: '/ramble', component: () => import('./pages/ramble.vue'), meta: { crumb: 'transaction.assistant_ramble_title' } },
   { path: '/accounts/:id?', component: () => import('./pages/accounts.vue') },
   { path: '/budgets/:id?', component: () => import('./pages/budgets.vue') },
   { path: '/piggy-banks/:id?', component: () => import('./pages/piggy-banks.vue') },

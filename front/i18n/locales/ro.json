@@ -540,6 +540,13 @@
     "inactive": "Inactiv",
     "extra_names": "Nume suplimentare",
     "extra_names_hint": "Alte nume după care asistentul poate găsi acest șablon.",
-    "foreign_amount": "Sumă în valută"
+    "foreign_amount": "Sumă în valută",
+    "convert": "Convertește",
+    "set_default": "Setează contul implicit",
+    "one_day": "1 zi",
+    "add_file": "Adaugă fișier",
+    "ramble": "Dictare",
+    "ramble_description": "Spune sau scrie mai multe tranzacții deodată, iar asistentul le separă.",
+    "filters": "Filtre"
   }
 }
