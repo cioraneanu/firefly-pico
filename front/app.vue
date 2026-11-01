@@ -9,11 +9,11 @@
 </template>
 
 <script setup>
-import { useDashboardStore } from '~/stores/dashboardStore'
-import RouteConstants from '~/constants/RouteConstants'
+import { useDashboardStore } from '~/core/stores/dashboardStore'
+import RouteConstants from '~/core/constants/RouteConstants'
 
-import '~/assets/styles/variables.css'
-import AppLoading from '~/components/ui-kit/app-loading.vue'
+import '~/mobile/styles/variables.css'
+import AppLoading from '~/mobile/components/ui-kit/app-loading.vue'
 
 const dashboardStore = useDashboardStore()
 const profileStore = useProfileStore()

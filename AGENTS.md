@@ -21,27 +21,31 @@ The repo is split into:
 
 ```
 front/
-├── pages/              # File-based routing (Nuxt)
-│   └── {entity}/
-│       ├── list.vue    # List page using useList() composable
-│       └── [[id]].vue  # Form page using useForm() composable (create + edit)
-├── components/
-│   ├── ui-kit/         # Reusable primitives (wrap Vant components)
-│   │   └── theme/      # Themed wrappers (toolbars, save/delete buttons)
-│   └── global/         # Auto-registered global components
-├── composables/        # useXxx() hooks (useForm, useList, useToolbar, etc.)
-├── repository/         # API data access classes (extend BaseRepository)
-├── models/             # Domain object shapes (extend BaseModel)
-├── transformers/       # API ↔ form data conversion (extend ApiTransformer)
-├── stores/             # Pinia state (useLocalStorage for persistence)
-├── constants/          # RouteConstants, TablerIconConstants, enums
+├── core/               # UI-agnostic logic shared by the mobile and desktop apps
+│   ├── composables/    # useForm, useList, useTransactionForm, ... (no Vant, no DOM)
+│   ├── repository/     # API data access classes (extend BaseRepository)
+│   ├── models/         # Domain object shapes (extend BaseModel)
+│   ├── transformers/   # API ↔ form data conversion (extend ApiTransformer)
+│   ├── stores/         # Pinia state (useLocalStorage for persistence)
+│   ├── constants/      # RouteConstants, TablerIconConstants, enums
+│   └── utils/          # Pure utilities (VueUtils.js has generateChildren)
+├── mobile/             # The Vant mobile app
+│   ├── pages/          # File-based routing (Nuxt `dir.pages`)
+│   │   └── {entity}/
+│   │       ├── list.vue    # List page using useList() composable
+│   │       └── [[id]].vue  # Form page using useForm() composable (create + edit)
+│   ├── components/
+│   │   ├── ui-kit/     # Reusable primitives (wrap Vant components)
+│   │   │   └── theme/  # Themed wrappers (toolbars, save/delete buttons)
+│   │   └── global/     # Auto-registered global components
+│   ├── composables/    # Mobile-only hooks (useToolbar, useActionSheet, swipe/tap helpers)
+│   ├── layouts/
+│   └── styles/
+│       ├── variables.css   # :root and .van-theme-dark custom properties
+│       ├── theme-white.css # Main theme + Vant overrides
+│       └── theme-dark.css  # Dark mode overrides
 ├── i18n/locales/       # 12 files: en, ro, zh-CN, it, pt-BR, de-DE, fr, pl, ru-RU, es-MX, ko, el
-├── assets/styles/      # CSS variables, themes, Tailwind entry
-│   ├── tailwind.css    # Tailwind v4 entry: important mode, dark variant, custom theme tokens
-│   ├── variables.css   # :root and .van-theme-dark custom properties
-│   ├── theme-white.css # Main theme + Vant overrides
-│   └── theme-dark.css  # Dark mode overrides
-├── utils/              # Pure utilities (VueUtils.js has generateChildren)
+├── assets/             # Shared icons, images, tailwind.css (Tailwind v4 entry), animations.css
 └── plugins/            # Axios setup (auto-adds auth header)
 back/
 ├── routes/api.php      # Route registration (makeCRUD + catch-all Firefly proxy)
@@ -59,7 +63,7 @@ back/
 - Read the nearby code before editing. This project has strong local patterns; follow them instead of introducing new architecture.
 - Keep changes small and directly connected to the request. Avoid drive-by refactors, formatting churn, or dependency updates unless they are part of the task.
 - Protect user work. Check `git status --short` before larger edits and never overwrite unrelated modified files.
-- Prefer existing helpers, constants, repositories, stores, transformers, and UI-kit components over one-off logic. Before writing a utility, check `front/utils/` — it likely already exists (`DateUtils`, `NumberUtils`, `UIUtils`, `ResponseUtils`, etc.).
+- Prefer existing helpers, constants, repositories, stores, transformers, and UI-kit components over one-off logic. Before writing a utility, check `front/core/utils/` — it likely already exists (`DateUtils`, `NumberUtils`, `UIUtils`, `ResponseUtils`, etc.).
 - A new feature should be mostly declarative glue over existing building blocks (`useForm()`, `useList()`, `generateChildren()`, UI-kit components). If you are writing many lines of imperative logic for a CRUD page, you are off-pattern.
 - Prefer `computed` over `watch`; prefer store dictionaries (`categoryDictionary`, `tagDictionary`, …) over `.find()` scans for id lookups.
 - Do not create abstractions, props, or options for hypothetical future use. Do not generalize a component used in one place.
@@ -99,19 +103,19 @@ Prettier is the source of truth (`front/.prettierrc`). Write code that already m
 
 ## Page Recipes
 
-Every entity screen follows the same two-page shape. Copy an existing entity (e.g. `pages/categories/`) instead of inventing structure.
+Every entity screen follows the same two-page shape. Copy an existing entity (e.g. `mobile/pages/categories/`) instead of inventing structure.
 
-**Form page (`pages/{entity}/[[id]].vue`)** — handles both create and edit:
+**Form page (`mobile/pages/{entity}/[[id]].vue`)** — handles both create and edit:
 
 - Root `<div class="app-form">` containing `<app-top-toolbar>`, then `<van-form :name="formName" @submit="saveItem" @failed="onValidationError">` with fields inside `<van-cell-group inset>`.
 - Wire everything through `useForm({ routeList, routeForm, model, resetFields, fetchItem, onEvent })` — it provides `item`, `itemId`, `saveItem`, `onDelete`, `onNew`, `onValidationError`, `formName`.
 - Bind fields to `item` sub-paths with `generateChildren(item, [{ computed: 'name', parentKey: 'attributes.name' }])` from `VueUtils` — never hand-write per-field computeds.
-- Validation rules come from `rule` in `utils/ValidationUtils.js` (e.g. `:rules="[rule.required()]"`).
+- Validation rules come from `rule` in `core/utils/ValidationUtils.js` (e.g. `:rules="[rule.required()]"`).
 - Buttons: `<app-button-form-save />` and `<app-button-form-delete v-if="itemId" @click="onDelete" />`.
 - Finish with `useToolbar().init({ title: itemId.value ? t('..._page.title_edit') : t('..._page.title_add'), backRoute })`.
 - Sync the entity store in `onEvent` on `onPostSave` / `onPostDelete`.
 
-**List page (`pages/{entity}/list.vue`)**:
+**List page (`mobile/pages/{entity}/list.vue`)**:
 
 - Root `<div :class="formClass">` (adds `empty` when list is empty) with `<app-top-toolbar>` + `<app-button-list-add @click="onAdd" />`, `<empty-list v-if="isEmpty" />`, then `<van-pull-refresh>` wrapping `<van-list>` with a `{entity}-list-item` per row.
 - Wire through `useList({ routeList, routeForm, model, onEvent })`.
@@ -173,13 +177,13 @@ Use the command that matches the scope of the change. Do not run expensive Docke
 - UI-kit components (`app-field`, `app-select`, etc.) wrap Vant components (`van-field`, `van-cell`, etc.).
 - Components use `defineModel()` for v-model binding.
 - Nuxt is configured as `ssr: false`; treat the app as a purely client-side PWA. Do not create or use Nuxt `server/api/` routes.
-- Data access goes through classes in `front/repository`, usually extending `BaseRepository`.
-- Domain shape lives in `front/models`, transformation in `front/transformers`, app-wide state in `front/stores`, and reusable behavior in `front/composables`.
+- Data access goes through classes in `front/core/repository`, usually extending `BaseRepository`.
+- Domain shape lives in `front/core/models`, transformation in `front/core/transformers`, app-wide state in `front/core/stores`, and reusable behavior in `front/core/composables`. Nothing in `core/` may import Vant or a component.
 - Keep the app mobile-first while preserving desktop layout paths such as `appStore.isDesktopLayout`.
-- Use CSS variables and existing theme files in `front/assets/styles` for colors and spacing. Check both light and dark theme impact.
+- Use CSS variables and existing theme files in `front/mobile/styles` for colors and spacing. Check both light and dark theme impact.
 - Never hard code labels in HTML. Use i18n from `front/i18n/locales`. When adding a key, update ALL 12 locale files: `en.json`, `ro.json`, `zh-CN.json`, `it.json`, `pt-BR.json`, `de-DE.json`, `fr.json`, `pl.json`, `ru-RU.json`, `es-MX.json`, `ko.json`, `el.json`. Keys use **underscores** for word separation and **dots** for nesting (e.g., `category_page.title_edit`).
 - Icons come from Tabler constants (`TablerIconConstants.js`), SVG components (via nuxt-svgo from `assets/icons/`), or Vant built-in icons. Use `TablerIconConstants` for new icons. Avoid adding a new icon system.
-- Routes should be mirrored through `front/constants/RouteConstants.js` where app navigation depends on constants.
+- Routes should be mirrored through `front/core/constants/RouteConstants.js` where app navigation depends on constants.
 
 ### UI Feedback and Interaction
 
@@ -203,13 +207,13 @@ Read this before generating any UI so new screens look like they belong. The app
 **Layout: mobile vs desktop**
 
 - The switch is `appStore.isDesktopLayout` = window width > 800px AND a desktop device (`useDevice()`), NOT a CSS media query. Components branch in the template (`v-if="appStore.isDesktopLayout"`); many have separate mobile/desktop variants (e.g. `transaction-list-item.vue` vs `transaction-list-item-desktop.vue`, `app-top-toolbar` renders `van-nav-bar` on mobile vs a floating card on desktop). New UI must handle both branches.
-- **Mobile** (`layouts/default.vue`): fixed top `van-nav-bar` (centered bold 14px title, optional grey 12px subtitle, left back-arrow), scrollable content, fixed bottom `van-tabbar` with 5 items — Dashboard, Transactions, a center red rounded-square "+" button that pokes above the bar, Extras, Settings (11px labels, selected item blue `#1565C0`). Safe-area insets (`env(safe-area-inset-*)`) are respected top and bottom. A blue (`#1E88E5`) profile-picker floating button hugs the right edge (rounded on the left side only). The tabbar hides when the on-screen keyboard is up.
+- **Mobile** (`mobile/layouts/default.vue`): fixed top `van-nav-bar` (centered bold 14px title, optional grey 12px subtitle, left back-arrow), scrollable content, fixed bottom `van-tabbar` with 5 items — Dashboard, Transactions, a center red rounded-square "+" button that pokes above the bar, Extras, Settings (11px labels, selected item blue `#1565C0`). Safe-area insets (`env(safe-area-inset-*)`) are respected top and bottom. A blue (`#1E88E5`) profile-picker floating button hugs the right edge (rounded on the left side only). The tabbar hides when the on-screen keyboard is up.
 - **Desktop**: fixed left sidebar, 15rem wide, full height; content gets `padding-inline-start: 16.25rem`. The sidebar is the newer Tailwind-flavored "slate" aesthetic (rem units, slate hex comments): white surface, `#e2e8f0` right border, nav links 0.875rem/500 in slate-500 `#64748b` that hover/activate to slate-100 bg + slate-900 text, uppercase 0.75rem slate-400 section labels, collapsible sections persisted in localStorage. Top of sidebar: full-width black (`#0f172a`, hover `#1e293b`) "New transaction" button. Bottom: profile picker, theme toggle, Settings. Pages get a sticky floating toolbar card (`.app-top-toolbar-desktop`: white, 10px radius, 15px padding/margin, soft shadow, `top: 10px`) instead of the nav-bar.
 - Content max widths: forms/cards use Vant inset groups (16px side margins); the dashboard uses CSS-columns masonry (`.dynamic-masonry`, `column-width: 500px`) so cards flow into 1 column on mobile and 2–3 on desktop.
 
 **Color**
 
-- All colors live as CSS custom properties in `assets/styles/variables.css` with light values on `:root` and dark overrides on `.van-theme-dark`. `--white`/`--black` intentionally invert in dark mode — use them for "surface" and "ink", not literal colors.
+- All colors live as CSS custom properties in `mobile/styles/variables.css` with light values on `:root` and dark overrides on `.van-theme-dark`. `--white`/`--black` intentionally invert in dark mode — use them for "surface" and "ink", not literal colors.
 - Transaction-type semantics (used consistently in dots, pills, borders, charts): expense = pink `#ec407a` (`--expense1..3`), income = green `#66bb6a` (`--income1..3`), transfer = light blue `#4fc3f7` (`--transfer1..3`). Amounts render as white-text pills: `.amount-expense` (`#ef5350`) / `.amount-income` (`#66bb6a`).
 - Primary action green `#00a261` (`--primary-action`) for add/confirm accents; Vant primary buttons are solid black in light mode and green in dark mode. General accent blue `#1E88E5`/`#1976D2`/`#42a5f5` marks profile UI, attachments, "today", links.
 - Neutral surfaces: page bg `--van-background`, input/field bg `--van-background-2-5` (`#f7f8fa` light / `#2f2f2f` dark), muted text `#999`/`#aaa` or `--van-text-color-3`.
@@ -221,7 +225,7 @@ Read this before generating any UI so new screens look like they belong. The app
 - **Lists** (`useList()` pages): `van-pull-refresh` + `van-list` infinite scroll. Each row is a `van-swipe-cell` — tap to edit, swipe left to reveal a full-height red Delete button. Row anatomy: optional 30px icon column, middle column with `.list-item-title` (14px/700) and icon-prefixed `.list-item-subtitle` lines (13px, grey), right column right-aligned with amount pill, date, and muted relative time. Small outlined `.tag` chips wrap in a 5px-gap flex row. Empty states are a centered faded icon + 12px grey text (`.empty-list`). Filtering opens from a toolbar search icon; active filters appear as dark chips in a white sticky `.applied-filters-container` bar.
 - **Dashboard**: masonry of cards, each a `van-cell-group inset` with an uppercase `.van-cell-group-title`; stat tiles are `van-grid` cells (icon above 12px title above bold value, value colored by semantic type). Month is changed by horizontal swipe (animated slide) or the sticky date control; pull-to-refresh reloads. Users can reorder/hide cards, and cards respect feature toggles from `profileStore` (`tagsEnabled`, `budgetsEnabled`, ...) — new UI for an optional feature must check those.
 - **Feedback**: toasts via `van-notify` (`.app-toast`) — full-width top banner on mobile, repositioned to a bottom-left 360px rounded card on desktop. Blocking loads use `app-loading` (centered white rounded card + spinner over a dim overlay); background syncs use `app-bottom-loading` (small bordered pill, bottom-left, above the tabbar).
-- **Motion**: subtle and short. Page transitions 0.15s fade+blur (`app.vue`), transition classes in `animations.css` (`zoom-fade`, `fade`), anime.js helpers in `utils/AnimationUtils.js` (save button pop, list stagger, dashboard month slide). Gate non-trivial animation behind `profileStore.showAnimations`.
+- **Motion**: subtle and short. Page transitions 0.15s fade+blur (`app.vue`), transition classes in `animations.css` (`zoom-fade`, `fade`), anime.js helpers in `core/utils/AnimationUtils.js` (save button pop, list stagger, dashboard month slide). Gate non-trivial animation behind `profileStore.showAnimations`.
 
 **Dark theme**
 

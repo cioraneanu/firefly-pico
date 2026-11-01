@@ -1,0 +1,48 @@
+import BaseModel from '~/core/models/BaseModel'
+import TransactionTemplateTransformer from '~/core/transformers/TransactionTemplateTransformer'
+import TransactionTemplateRepository from '~/core/repository/TransactionTemplateRepository'
+import Transaction from '~/core/models/Transaction'
+import { get, isEqual } from 'lodash-es'
+
+export default class TransactionTemplate extends BaseModel {
+  getTransformer() {
+    return TransactionTemplateTransformer
+  }
+
+  getRepository() {
+    return new TransactionTemplateRepository()
+  }
+
+  getEmpty() {
+    let type = Transaction.typesList.find((item) => isEqual(item, Transaction.types.expense))
+    return {
+      type: type,
+      amount: '',
+      tags: [],
+      extra_names: [],
+      description: '',
+      notes: '',
+      accountSource: null,
+      accountDestination: null,
+      category: null,
+    }
+  }
+
+  // ------------
+
+  getFake() {
+    return {}
+  }
+
+  static getDisplayName(item) {
+    return get(item, 'name')
+  }
+
+  static getExtraNames(item) {
+    return (get(item, 'extra_names') ?? []).map((item) => item.value)
+  }
+
+  static getAllNames(item) {
+    return [this.getDisplayName(item), ...this.getExtraNames(item)]
+  }
+}

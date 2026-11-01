@@ -1,0 +1,38 @@
+import _, { get } from 'lodash-es'
+import DateUtils from '~/core/utils/DateUtils'
+import Account from '~/core/models/Account'
+import Utils from '~/core/utils/Utils'
+import ApiTransformer from '~/core/transformers/ApiTransformer'
+import Icon from '~/core/models/Icon.js'
+import Budget from '~/core/models/Budget.js'
+
+import { roundNumber } from '~/core/utils/MathUtils.js'
+
+export default class BudgetLimitTransformer extends ApiTransformer {
+  static transformFromApi(item) {
+    if (!item) {
+      return null
+    }
+
+    item.attributes.start = DateUtils.autoToDate(item.attributes.start)
+    item.attributes.end = DateUtils.autoToDate(item.attributes.end)
+
+    item.attributes.spent = parseFloat(get(item, 'attributes.spent.0.sum') ?? '0')
+    item.attributes.amount = parseFloat(get(item, 'attributes.amount') ?? '0')
+
+    let percent = item.attributes.spent === 0 ? 0 : (Math.abs(item.attributes.spent) * 100.0) / item.attributes.amount
+    item.attributes.percent = roundNumber(percent)
+
+    item.attributes.remaining = item.attributes.amount + item.attributes.spent
+
+    return item
+  }
+
+  static transformToApi(item) {
+    if (!item) {
+      return null
+    }
+
+    return item
+  }
+}

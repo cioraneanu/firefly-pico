@@ -1,0 +1,108 @@
+<template>
+  <div class="app-form">
+    <app-top-toolbar>
+      <template #right>
+        <app-button-list-add v-if="itemId" @click="onNew" />
+      </template>
+    </app-top-toolbar>
+
+    <app-card-info v-if="itemId">
+      <app-field-link :label="$t('show_transactions')" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
+    </app-card-info>
+
+    <van-form ref="form" :name="formName" class="" @submit="saveItem" @failed="onValidationError">
+      <van-cell-group inset>
+        <app-field v-model="name" name="name" :label="$t('name')" rows="1" autosize :icon="TablerIconConstants.fieldText2" :rules="[rule.required()]" />
+
+        <icon-select v-model="icon" />
+      </van-cell-group>
+
+      <div style="margin: 16px">
+        <app-button-form-save />
+
+        <app-button-form-delete v-if="itemId" class="mt-2.5" @click="onDelete" />
+      </div>
+    </van-form>
+  </div>
+</template>
+
+import { ref } from 'vue';
+
+<script setup>
+import RouteConstants from '~/core/constants/RouteConstants'
+import { useCategoryStore } from '~/core/stores/categoryStore'
+import _ from 'lodash-es'
+import { useProfileStore } from '~/core/stores/profileStore'
+import { ref } from 'vue'
+import { useForm } from '~/core/composables/useForm'
+import { generateChildren } from '~/core/utils/VueUtils'
+import Category from '~/core/models/Category'
+import { useToolbar } from '~/mobile/composables/useToolbar'
+import CategoryTransformer from '~/core/transformers/CategoryTransformer'
+import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
+import { rule } from '~/core/utils/ValidationUtils.js'
+
+const categoryStore = useCategoryStore()
+const profileStore = useProfileStore()
+const route = useRoute()
+
+const form = ref(null)
+
+const resetFields = () => {
+  name.value = ''
+}
+
+const fetchItem = () => {
+  const categoryStore = useCategoryStore()
+  item.value = categoryStore.categoryDictionary[useRoute().params.id]
+}
+
+const onEvent = (event, payload) => {
+  if (event === 'onPostSave') {
+    let newItem = _.get(payload, 'data.data')
+    newItem = CategoryTransformer.transformFromApi(newItem)
+    categoryStore.categoryList = [newItem, ...categoryStore.categoryList.filter((item) => item.id !== itemId.value)]
+  }
+  if (event === 'onPostDelete') {
+    categoryStore.categoryList = categoryStore.categoryList.filter((item) => item.id !== itemId.value)
+  }
+}
+
+const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+  form: form,
+  routeList: RouteConstants.ROUTE_CATEGORY_LIST,
+  routeForm: RouteConstants.ROUTE_CATEGORY_ID,
+  model: new Category(),
+  resetFields: resetFields,
+  fetchItem: fetchItem,
+  onEvent: onEvent,
+})
+
+const { name, icon } = generateChildren(item, [
+  { computed: 'name', parentKey: 'attributes.name' },
+  { computed: 'icon', parentKey: `attributes.icon` },
+])
+
+watch(name, (newValue) => {
+  if (profileStore.lowerCaseCategoryName) {
+    newValue = newValue.toLowerCase()
+  }
+  if (profileStore.stripAccents) {
+    newValue = LanguageUtils.removeAccents(newValue)
+  }
+  name.value = newValue
+})
+
+const onNavigateToTransactionsList = async () => {
+  const filters = TransactionFilterUtils.filters.category.toUrl(item.value)
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
+}
+
+const toolbar = useToolbar()
+const { t } = useI18n()
+
+toolbar.init({
+  title: itemId.value ? t('category_page.title_edit') : t('category_page.title_add'),
+  backRoute: RouteConstants.ROUTE_CATEGORY_LIST,
+})
+</script>

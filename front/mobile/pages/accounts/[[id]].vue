@@ -1,0 +1,157 @@
+<template>
+  <div class="app-form">
+    <app-top-toolbar>
+      <template #right>
+        <app-button-list-add v-if="itemId" @click="onNew" />
+      </template>
+    </app-top-toolbar>
+
+    <app-card-info v-if="itemId">
+      <app-field-link :label="adjustBalanceText" :icon="TablerIconConstants.extras" @click="onAdjustBalance" />
+      <app-field-link :label="$t('show_transactions')" :icon="TablerIconConstants.transaction" @click="onNavigateToTransactionsList" />
+    </app-card-info>
+
+    <van-form ref="form" :name="formName" class="" @submit="saveItem" @failed="onValidationError">
+      <van-cell-group inset>
+        <app-field v-model="name" name="Description" :label="$t('description')" type="textarea" rows="1" autosize :icon="TablerIconConstants.fieldText2" :rules="[rule.required()]" required/>
+
+        <icon-select v-model="icon" default-tab="avatars" />
+
+        <currency-select v-model="currency" name="curerency" :rules="[rule.required()]" required />
+
+        <account-type-select v-model="type" name="accountType" :rules="[rule.required()]" required />
+        <account-role-select v-if="isRoleVisible" v-model="role" name="accountRoleSelect" :rules="[rule.required()]" required />
+
+        <account-liability-type-select v-if="isLiability" v-model="liabilityType" name="accountLiabilityType" :rules="[rule.required()]" required />
+        <account-liability-direction-select v-if="isLiability" v-model="liabilityDirection" name="accountLiabilityDirection" :rules="[rule.required()]" required />
+
+<!--        <app-field v-model="group" name="Description" :label="$t('account_page.account_group')" :icon="TablerIconConstants.fieldText2"> </app-field>-->
+        <app-field-dropdown v-model="group" :list="getGroupList" name="Description" :label="$t('account_page.account_group')" :icon="TablerIconConstants.fieldText2"/>
+
+        <app-boolean v-model="includeNetWorth" :label="$t('account_page.include_net_worth')" />
+
+        <app-boolean v-model="isDashboardVisible" :label="$t('account_page.visible_on_dashboard')" />
+      </van-cell-group>
+
+      <div style="margin: 16px" class="">
+        <app-button-form-save />
+        <app-button-form-delete v-if="itemId" class="mt-2.5" @click="onDelete" />
+      </div>
+    </van-form>
+
+    <account-adjust-balance v-model:show-dropdown="isAdjustBalanceVisible" :value="item" @result="onEvent" />
+  </div>
+</template>
+
+import { ref } from 'vue';
+
+<script setup>
+import RouteConstants from '~/core/constants/RouteConstants'
+import { useAccountStore } from '~/core/stores/accountStore'
+import { get } from 'lodash-es'
+import { useProfileStore } from '~/core/stores/profileStore'
+import { ref } from 'vue'
+import { useForm } from '~/core/composables/useForm'
+import Account from '~/core/models/Account'
+import { generateChildren } from '~/core/utils/VueUtils'
+import AccountTypeSelect from '~/mobile/components/select/account/account-type-select.vue'
+import AccountTransformer from '~/core/transformers/AccountTransformer'
+import { useToolbar } from '~/mobile/composables/useToolbar'
+import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
+import { rule } from '~/core/utils/ValidationUtils.js'
+import AppFieldDropdown from '~/mobile/components/ui-kit/app-field-dropdown.vue'
+import AccountRepository from '~/core/repository/AccountRepository.js'
+
+const accountStore = useAccountStore()
+const profileStore = useProfileStore()
+const route = useRoute()
+const { t } = useI18n()
+
+const resetFields = () => {
+  // name.value = ''
+}
+
+const form = ref(null)
+const isAdjustBalanceVisible = ref(false)
+
+const fetchItem = () => {
+  const accountStore = useAccountStore()
+  item.value = accountStore.accountDictionary[useRoute().params.id]
+}
+
+const onEvent = (event, payload) => {
+  if (event === 'onPostSave') {
+    let newItem = get(payload, 'data.data')
+    newItem = AccountTransformer.transformFromApi(newItem)
+    accountStore.accountList = [newItem, ...accountStore.accountList.filter((item) => item.id !== itemId.value)]
+    item.value = newItem
+  }
+  if (event === 'onPostDelete') {
+    accountStore.accountList = accountStore.accountList.filter((item) => item.id !== itemId.value)
+  }
+}
+
+const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
+  form: form,
+  routeList: RouteConstants.ROUTE_ACCOUNT_LIST,
+  routeForm: RouteConstants.ROUTE_ACCOUNT_ID,
+  model: new Account(),
+  fetchItem: fetchItem,
+  resetFields: resetFields,
+  onEvent: onEvent,
+})
+
+// const type = ref(null)
+
+const pathKey = 'attributes'
+
+// const name = ref("")
+const { name, type, role, currency, icon, includeNetWorth, isDashboardVisible, liabilityType, liabilityDirection, group } = generateChildren(item, [
+  { computed: 'name', parentKey: `${pathKey}.name` },
+  { computed: 'group', parentKey: `${pathKey}.group` },
+  { computed: 'icon', parentKey: `${pathKey}.icon` },
+  { computed: 'type', parentKey: `${pathKey}.type` },
+  { computed: 'role', parentKey: `${pathKey}.account_role` },
+  { computed: 'liabilityType', parentKey: `${pathKey}.liability_type` },
+  { computed: 'liabilityDirection', parentKey: `${pathKey}.liability_direction` },
+  { computed: 'currency', parentKey: `${pathKey}.currency` },
+  { computed: 'includeNetWorth', parentKey: `${pathKey}.include_net_worth` },
+  { computed: 'isDashboardVisible', parentKey: `${pathKey}.is_dashboard_visible` },
+])
+
+const isRoleVisible = computed(() => get(type.value, 'fireflyCode') === Account.types.asset.fireflyCode)
+const isLiability = computed(() => get(type.value, 'fireflyCode') === Account.types.liability.fireflyCode)
+
+watch(name, (newValue) => {
+  if (profileStore.lowerCaseAccountName) {
+    newValue = newValue.toLowerCase()
+  }
+  if (profileStore.stripAccents) {
+    newValue = LanguageUtils.removeAccents(newValue)
+  }
+  name.value = newValue
+})
+
+const accountBalance = computed(() => Account.getBalance(item.value))
+const accountCurrency = computed(() => get(item.value, 'attributes.currency_symbol') ?? '')
+const adjustBalanceText = computed(() => `${t('account_page.adjust_balance')} (${accountBalance.value} ${accountCurrency.value})`)
+const onAdjustBalance = () => {
+  isAdjustBalanceVisible.value = true
+}
+
+const getGroupList = async (text) => {
+  return await new AccountRepository().getGroups(text)
+}
+
+const onNavigateToTransactionsList = async () => {
+  const filters = TransactionFilterUtils.filters.account.toUrl([item.value])
+  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
+}
+
+const toolbar = useToolbar()
+toolbar.init({
+  title: itemId.value ? t('account_page.title_edit') : t('account_page.title_add'),
+  leftText: t('list'),
+  backRoute: RouteConstants.ROUTE_ACCOUNT_LIST,
+})
+</script>

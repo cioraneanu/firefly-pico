@@ -51,19 +51,31 @@ export default defineNuxtConfig({
 
   ssr: false,
 
-  // components: {},
+  dir: {
+    pages: 'mobile/pages',
+    layouts: 'mobile/layouts',
+  },
+
+  imports: {
+    dirs: ['core/composables', 'core/utils', 'mobile/composables'],
+  },
+
+  pinia: {
+    storesDirs: ['core/stores'],
+  },
+
   components: [
     {
-      path: '~/components',
+      path: '~/mobile/components',
       pathPrefix: false,
     },
     {
-      path: '~/components/global',
+      path: '~/mobile/components/global',
       global: true,
     },
   ],
 
-  css: ['@/assets/styles/tailwind.css', '@/assets/styles/variables.css', '@/assets/styles/theme-white.css', '@/assets/styles/theme-dark.css', '@/assets/styles/animations.css'],
+  css: ['~/assets/styles/tailwind.css', '~/mobile/styles/variables.css', '~/mobile/styles/theme-white.css', '~/mobile/styles/theme-dark.css', '~/assets/styles/animations.css'],
 
   build: {
     // transpile: ['vuetify'],

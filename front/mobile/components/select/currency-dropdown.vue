@@ -1,0 +1,45 @@
+<template>
+  <div class="currency-dropdown cursor-pointer">
+    <van-popover v-model:show="showPopover" :actions="list" @select="onSelect" >
+      <template #reference>
+        <div class="flex items-center gap-1 text-12 font-semibold" :class="$attrs.class">
+          {{ currencyCode }}
+          <icon-caret-down :size="18" />
+        </div>
+      </template>
+
+      <template #action="{ action }">
+        {{ Currency.getCode(action) }}
+      </template>
+    </van-popover>
+    <icon-square-rounded-x v-if="modelValue && isClearable" :size="20" :stroke="1.5" @click="modelValue = null" />
+  </div>
+
+</template>
+
+<script setup>
+import _, { get } from 'lodash-es'
+import { useCurrencyStore } from '~/core/stores/currencyStore'
+import { useFormAttributes } from '~/core/composables/useFormAttributes'
+import { IconCaretDown, IconSquareRoundedX } from '@tabler/icons-vue'
+import Currency from '~/core/models/Currency'
+
+const currencyStore = useCurrencyStore()
+const showPopover = ref(false)
+const modelValue = defineModel()
+const props = defineProps({
+  isClearable: {
+    default: false,
+  }
+})
+const list = computed(() => currencyStore.currenciesList.filter((item) => get(item, 'attributes.enabled')))
+
+const currencyCode = computed(() => Currency.getCode(modelValue.value))
+
+// ------ Methods ------
+
+const onSelect = (item) => {
+  modelValue.value = item
+}
+</script>
+

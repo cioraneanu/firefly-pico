@@ -1,0 +1,26 @@
+import BaseRepository from '~/core/repository/BaseRepository'
+import axios from 'axios'
+import { get } from 'lodash-es'
+
+export default class CurrencyRepository extends BaseRepository {
+  constructor() {
+    super(`api/currencies`)
+  }
+
+  async update(id, data) {
+    return await axios.put(`${this.getUrl()}/${data.code}`, data)
+  }
+
+  async delete(id) {
+    let currencyStore = useCurrencyStore()
+    let currencyCode = currencyStore.currencyDictionary[id]?.attributes?.code
+    return await axios.delete(`${this.getUrl()}/${currencyCode}`)
+  }
+
+  async getCurrencyExchange() {
+    const appStore = useAppStore()
+    const url = `${appStore.picoBackendURL}/api/currencies/exchange`
+    let response = await axios.get(url)
+    return get(response, 'data', {})
+  }
+}
