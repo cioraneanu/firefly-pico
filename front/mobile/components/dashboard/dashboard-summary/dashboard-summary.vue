@@ -42,49 +42,18 @@
 </template>
 <script setup>
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import { addMonths, differenceInDays, startOfDay, subDays, subMonths } from 'date-fns'
-import RouteConstants from '~/core/constants/RouteConstants.js'
+import { addMonths } from 'date-fns'
 import Transaction from '~/core/models/Transaction.js'
 
 import { useDashboardStore } from '~/core/stores/dashboardStore'
 
-const profileStore = useProfileStore()
 const dashboardStore = useDashboardStore()
 
-const startDate = computed(() => {
-  const dateCurrentMonth = startOfDay(new Date()).setDate(profileStore.dashboard.firstDayOfMonth)
-  return dateCurrentMonth > new Date() ? subMonths(dateCurrentMonth, 1) : dateCurrentMonth
-})
+const { rangeTitle, remainingDays, totalExpenseFormatted, totalIncomeFormatted, totalTransferFormatted, totalSurplusFormatted, transactionsListSavingsAmount, savingsPercentFormatted } =
+  useDashboardSummary()
 
-// const endDate = computed(() => startOfDay(new Date()))
-const endDate = computed(() => {
-  return subDays(addMonths(startDate.value, 1), 1)
-})
-
-const rangeTitle = computed(() => {
-  const date1 = DateUtils.dateToUI(dashboardStore.dashboardDateStart)
-  const date2 = DateUtils.dateToUI(dashboardStore.dashboardDateEnd)
-  return `${date1} - ${date2}`
-})
-const remainingDays = computed(() => {
-  return differenceInDays(endDate.value, startOfDay(new Date())) + 1
-})
-
-const totalExpenseFormatted = computed(() => formatNumberForDashboard(dashboardStore.totalExpenseThisMonth))
-const totalIncomeFormatted = computed(() => formatNumberForDashboard(dashboardStore.totalIncomeThisMonth))
-const totalTransferFormatted = computed(() => formatNumberForDashboard(dashboardStore.totalTransfersThisMonth))
-const totalSurplusFormatted = computed(() => formatNumberForDashboard(dashboardStore.totalSurplusThisMonth))
-
-const onGoToTransactionsByType = async (transactionType) => {
-  const excludedUrl = getExcludedTransactionUrl()
-  const filters = [
-    TransactionFilterUtils.filters.transactionType.toUrl(transactionType),
-    TransactionFilterUtils.filters.dateAfter.toUrl(dashboardStore.dashboardDateStart),
-    TransactionFilterUtils.filters.dateBefore.toUrl(dashboardStore.dashboardDateEnd),
-  ].join('&')
-
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}${excludedUrl}`)
-}
+const links = useDashboardLinks()
+const onGoToTransactionsByType = (transactionType) => navigateTo(links.byType(transactionType))
 
 const onNextMonth = () => {
   dashboardStore.month = addMonths(dashboardStore.month, 1)
@@ -100,18 +69,7 @@ watch(
   },
 )
 
-const transactionsListSavingsAmount = computed(() => formatNumberForDashboard(dashboardStore.transactionsListSavingsAmount))
 const savingsAmountClass = computed(() => (dashboardStore.transactionsListSavingsAmount > 0 ? 'text-[#28a745]' : 'text-[#dc3545]'))
 
-const savingsPercentFormatted = computed(() => {
-  return `${Math.trunc(dashboardStore.transactionsListSavingsPercentage)} %`
-})
-const onNavigateToTransactionSavings = async () => {
-  if (dashboardStore.transactionsListSavings.length === 0) {
-    return
-  }
-  const transactionIds = dashboardStore.transactionsListSavings.map((item) => item.id).join(',')
-  const filters = TransactionFilterUtils.filters.id.toUrl(transactionIds)
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
-}
+const onNavigateToTransactionSavings = () => dashboardStore.transactionsListSavings.length > 0 && navigateTo(links.savings())
 </script>

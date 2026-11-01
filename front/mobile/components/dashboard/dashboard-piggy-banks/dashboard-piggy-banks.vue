@@ -43,17 +43,7 @@ const piggyBankStore = usePiggyBankStore()
 const getIcon = (bar) => PiggyBank.getIcon(bar.piggyBank) ?? TablerIconConstants.piggyBank
 const hasPiggyBanks = computed(() => piggyBankStore.piggyBankList.length > 0)
 
-const barsList = computed(() => {
-  const bars = piggyBankStore.piggyBankList.map((piggyBank) => {
-    return {
-      piggyBank: piggyBank,
-      label: PiggyBank.getDisplayName(piggyBank),
-      value: formatNumberForDashboard(PiggyBank.getCurrentAmount(piggyBank)),
-      percent: PiggyBank.getPercent(piggyBank),
-    }
-  })
-  return bars.sort((a, b) => b.percent - a.percent).slice(0, 15)
-})
+const { piggyBanks: barsList } = useDashboardBars()
 
 const onGoToPiggyBank = async (piggyBank) => {
   if (piggyBank) {

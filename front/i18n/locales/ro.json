@@ -547,6 +547,8 @@
     "add_file": "Adaugă fișier",
     "ramble": "Dictare",
     "ramble_description": "Spune sau scrie mai multe tranzacții deodată, iar asistentul le separă.",
-    "filters": "Filtre"
+    "filters": "Filtre",
+    "not_in_net_worth": "Nu e inclus în avere",
+    "no_todo_tag": "Nu există încă o etichetă de sarcini"
   }
 }

@@ -26,39 +26,19 @@
   </van-cell-group>
 </template>
 <script setup>
-import { get } from 'lodash-es'
 import RouteConstants from '~/core/constants/RouteConstants.js'
 import Transaction from '~/core/models/Transaction.js'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 import Category from '~/core/models/Category.js'
-import { getExcludedTransactionUrl } from '~/core/utils/DashboardUtils.js'
 import { useActionSheet } from '~/mobile/composables/useActionSheet.js'
 
 import { useCategoryStore } from '~/core/stores/categoryStore'
 import { useDashboardStore } from '~/core/stores/dashboardStore'
 
-const categoryStore = useCategoryStore()
-const dashboardStore = useDashboardStore()
 const { t } = useI18n()
 
-const barsList = computed(() => {
-  const dictionary = dashboardStore.dashboardTransfersByCategory
-
-  const maxAmount = Math.max(...Object.values(dictionary))
-
-  const bars = Object.keys(dictionary).map((categoryId) => {
-    const category = categoryStore.categoryDictionary[categoryId]
-    const amount = dictionary[categoryId]
-    const percent = (amount / maxAmount) * 100
-    return {
-      category: category,
-      label: category ? Category.getDisplayName(category) : t('not_set'),
-      value: formatNumberForDashboard(amount),
-      percent: percent,
-    }
-  })
-  return bars.sort((a, b) => b.percent - a.percent).slice(0, 15)
-})
+const { transfersByCategory: barsList } = useDashboardBars()
+const links = useDashboardLinks()
 
 const getBarColor = (bar) => {
   return '#4DB6AC'
@@ -78,16 +58,5 @@ const onGoToCategory = async (category) => {
   }
 }
 
-const onGoToTransactions = async (category) => {
-  const startDate = DateUtils.dateToString(dashboardStore.dashboardDateStart)
-  const endDate = DateUtils.dateToString(dashboardStore.dashboardDateEnd)
-  const excludedUrl = getExcludedTransactionUrl()
-
-  if (!category) {
-    await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_category=true&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.transfer.code}${excludedUrl}`)
-    return
-  }
-
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?category_id=${category.id}&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.transfer.code}${excludedUrl}`)
-}
+const onGoToTransactions = (category) => navigateTo(links.byCategory(category, Transaction.types.transfer))
 </script>

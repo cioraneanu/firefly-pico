@@ -547,6 +547,8 @@
     "add_file": "Aggiungi file",
     "ramble": "Dettatura",
     "ramble_description": "Detta o scrivi più transazioni insieme e lascia che l'assistente le separi.",
-    "filters": "Filtri"
+    "filters": "Filtri",
+    "not_in_net_worth": "Escluso dal patrimonio",
+    "no_todo_tag": "Nessun tag da fare"
   }
 }

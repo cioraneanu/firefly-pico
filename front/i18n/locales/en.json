@@ -548,6 +548,8 @@
     "add_file": "Add file",
     "ramble": "Ramble",
     "ramble_description": "Say or type several transactions at once and let the assistant split them.",
-    "filters": "Filters"
+    "filters": "Filters",
+    "not_in_net_worth": "Not in net worth",
+    "no_todo_tag": "No todo tag yet"
   }
 }

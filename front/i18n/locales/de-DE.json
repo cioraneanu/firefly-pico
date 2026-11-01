@@ -548,6 +548,8 @@
     "add_file": "Datei hinzufügen",
     "ramble": "Diktat",
     "ramble_description": "Sprich oder tippe mehrere Buchungen auf einmal, der Assistent trennt sie.",
-    "filters": "Filter"
+    "filters": "Filter",
+    "not_in_net_worth": "Nicht im Nettovermögen",
+    "no_todo_tag": "Noch kein Aufgaben-Tag"
   }
 }

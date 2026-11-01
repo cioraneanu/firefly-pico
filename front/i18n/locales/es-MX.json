@@ -547,6 +547,8 @@
     "add_file": "Agregar archivo",
     "ramble": "Dictado",
     "ramble_description": "Di o escribe varias transacciones a la vez y deja que el asistente las separe.",
-    "filters": "Filtros"
+    "filters": "Filtros",
+    "not_in_net_worth": "Fuera del patrimonio",
+    "no_todo_tag": "Aún no hay etiqueta de pendientes"
   }
 }

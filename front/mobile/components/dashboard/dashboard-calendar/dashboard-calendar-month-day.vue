@@ -12,13 +12,11 @@
 </template>
 
 <script setup>
-import { format, getDate, isAfter, isBefore, isMonday, isSameDay, isSameMonth, isToday, isWeekend, startOfWeek, isFirstDayOfMonth } from 'date-fns'
+import { format, getDate, isToday, isWeekend } from 'date-fns'
 import { computed } from 'vue'
 import Transaction from '~/core/models/Transaction.js'
 import { get } from 'lodash-es'
 import { formatNumberForDashboard } from '~/core/utils/NumberUtils.js'
-import { getExcludedTransactionUrl } from '~/core/utils/DashboardUtils.js'
-import RouteConstants from '~/core/constants/RouteConstants.js'
 
 const props = defineProps({
   day: {},
@@ -67,12 +65,6 @@ const dayStyle = computed(() => {
   }
 })
 
-const onClick = async () => {
-  const excludedUrl = getExcludedTransactionUrl()
-  const filters = [
-    TransactionFilterUtils.filters.dateAfter.toUrl(props.day),
-    TransactionFilterUtils.filters.dateBefore.toUrl(props.day),
-  ].join('&')
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}${excludedUrl}`)
-}
+const links = useDashboardLinks()
+const onClick = () => navigateTo(links.byDay(props.day))
 </script>

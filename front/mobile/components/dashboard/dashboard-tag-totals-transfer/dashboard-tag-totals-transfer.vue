@@ -17,7 +17,7 @@
           </td>
 
           <td>
-            <bar-chart-item-horizontal :percent="bar.percent" :get-background="getBarColor"/>
+            <bar-chart-item-horizontal :percent="bar.percent" :get-background="getBarColor" />
           </td>
 
           <td style="width: 1%">
@@ -31,16 +31,13 @@
   </van-cell-group>
 </template>
 <script setup>
-import { get } from 'lodash-es'
 import RouteConstants from '~/core/constants/RouteConstants.js'
 import Transaction from '~/core/models/Transaction.js'
 import Tag from '~/core/models/Tag.js'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import { getExcludedTransactionUrl } from '~/core/utils/DashboardUtils.js'
 import { useActionSheet } from '~/mobile/composables/useActionSheet.js'
 
 const dashboardStore = useDashboardStore()
-const tagStore = useTagStore()
 const { t } = useI18n()
 
 const onToggleTagMode = () => {
@@ -49,25 +46,8 @@ const onToggleTagMode = () => {
 
 const tagModeDisplayName = computed(() => (dashboardStore.tagsWidgetModeOnlyRootTag ? t('dashboard.expenses_by_tags.one_root_tag') : t('dashboard.expenses_by_tags.all_tags')))
 
-const barsList = computed(() => {
-  const tagTotalDictionary = dashboardStore.dashboardTransfersByTag
-
-  const maxAmount = Math.max(...Object.values(tagTotalDictionary))
-
-  const bars = Object.keys(tagTotalDictionary).map((tagId) => {
-    const tag = tagStore.tagDictionaryById[tagId]
-    const amount = tagTotalDictionary[tagId]
-    const percent = (amount / maxAmount) * 100
-    return {
-      tag: tag,
-      tag_id: tagId,
-      label: tag ? Tag.getDisplayNameEllipsized(tag) : t('not_set'),
-      value: formatNumberForDashboard(amount),
-      percent: percent,
-    }
-  })
-  return bars.sort((a, b) => b.percent - a.percent).slice(0, 15)
-})
+const { transfersByTag: barsList } = useDashboardBars()
+const links = useDashboardLinks()
 
 const getBarColor = (bar) => {
   return '#FFD54F'
@@ -87,16 +67,5 @@ const onGoToTag = async (tag) => {
   }
 }
 
-const onGoToTransactions = async (tag) => {
-  const startDate = DateUtils.dateToString(dashboardStore.dashboardDateStart)
-  const endDate = DateUtils.dateToString(dashboardStore.dashboardDateEnd)
-  const excludedUrl = getExcludedTransactionUrl()
-
-  if (!tag) {
-    await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?without_tag=true&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.transfer.code}${excludedUrl}`)
-    return
-  }
-
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${tag.id}&date_start=${startDate}&date_end=${endDate}&type=${Transaction.types.transfer.code}${excludedUrl}`)
-}
+const onGoToTransactions = (tag) => navigateTo(links.byTag(tag, Transaction.types.transfer))
 </script>

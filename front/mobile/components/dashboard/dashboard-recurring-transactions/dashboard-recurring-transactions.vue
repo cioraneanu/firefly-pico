@@ -34,14 +34,11 @@
 import RouteConstants from '~/core/constants/RouteConstants.js'
 import RecurringTransaction from '~/core/models/RecurringTransaction.js'
 import Transaction from '~/core/models/Transaction.js'
-import DateUtils from '~/core/utils/DateUtils.js'
 import { computed } from 'vue'
-import { capitalize, get } from 'lodash-es'
+import { get } from 'lodash-es'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 import { useRecurringTransactionStore } from '~/core/stores/recurringTransactionStore'
-import { formatTimeAgo } from '@vueuse/core'
 
-const recurringTransactionStore = useRecurringTransactionStore()
 
 const getIcon = (row) => RecurringTransaction.getIcon(row.recurringTransaction) ?? TablerIconConstants.recurringTransaction
 
@@ -58,25 +55,8 @@ const getAmountClass = (recurringTransaction) => {
   }
 }
 
-const upcomingList = computed(() => {
-  const rows = recurringTransactionStore.recurringTransactionList
-    .filter((recurringTransaction) => RecurringTransaction.isActive(recurringTransaction))
-    .flatMap((recurringTransaction) => {
-      return RecurringTransaction.getOccurrences(recurringTransaction).map((date) => {
-        return {
-          recurringTransaction: recurringTransaction,
-          label: RecurringTransaction.getDisplayName(recurringTransaction),
-          date: date,
-          timeAgo: capitalize(formatTimeAgo(date)),
-          dateFormatted: DateUtils.dateToUI(date),
-          amount: formatNumberForDashboard(RecurringTransaction.getAmount(recurringTransaction)),
-          currencySymbol: RecurringTransaction.getCurrencySymbol(recurringTransaction),
-          amountClass: getAmountClass(recurringTransaction),
-        }
-      })
-    })
-  return rows.sort((a, b) => a.date - b.date).slice(0, 6)
-})
+const { upcomingRecurring } = useDashboardBars()
+const upcomingList = computed(() => upcomingRecurring.value.map((row) => ({ ...row, amountClass: getAmountClass(row.recurringTransaction) })))
 
 const hasUpcoming = computed(() => upcomingList.value.length > 0)
 

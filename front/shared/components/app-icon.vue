@@ -36,6 +36,9 @@ const isColorInvertable = computed(() => {
   if (props.invertable !== null) {
     return props.invertable
   }
+  if (typeof props.icon === 'function') {
+    return false
+  }
   if (typeof props.icon !== 'string') {
     return true
   }

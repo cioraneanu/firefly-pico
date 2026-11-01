@@ -548,6 +548,8 @@
     "add_file": "파일 추가",
     "ramble": "받아쓰기",
     "ramble_description": "여러 거래를 한 번에 말하거나 입력하면 어시스턴트가 나눠 줍니다.",
-    "filters": "필터"
+    "filters": "필터",
+    "not_in_net_worth": "순자산 제외",
+    "no_todo_tag": "할 일 태그가 없습니다"
   }
 }

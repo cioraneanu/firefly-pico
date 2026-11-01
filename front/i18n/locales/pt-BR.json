@@ -547,6 +547,8 @@
     "add_file": "Adicionar arquivo",
     "ramble": "Ditado",
     "ramble_description": "Fale ou digite várias transações de uma vez e deixe o assistente separá-las.",
-    "filters": "Filtros"
+    "filters": "Filtros",
+    "not_in_net_worth": "Fora do patrimônio",
+    "no_todo_tag": "Nenhuma etiqueta de pendência"
   }
 }

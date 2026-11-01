@@ -547,6 +547,8 @@
     "add_file": "Dodaj plik",
     "ramble": "Dyktowanie",
     "ramble_description": "Powiedz lub wpisz kilka transakcji naraz, a asystent je rozdzieli.",
-    "filters": "Filtry"
+    "filters": "Filtry",
+    "not_in_net_worth": "Poza wartością netto",
+    "no_todo_tag": "Brak tagu do zrobienia"
   }
 }

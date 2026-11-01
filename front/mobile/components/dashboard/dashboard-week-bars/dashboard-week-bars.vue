@@ -11,43 +11,11 @@
   </van-cell-group>
 </template>
 <script setup>
-import { eachDayOfInterval, format, startOfDay, subDays } from 'date-fns'
-import { capitalize, get } from 'lodash-es'
-import RouteConstants from '~/core/constants/RouteConstants.js'
 import Transaction from '~/core/models/Transaction.js'
-import { getExcludedTransactionUrl } from '~/core/utils/DashboardUtils.js'
 
-const dashboardStore = useDashboardStore()
 
-const barsList = computed(() => {
-  const amountsList = Object.values(dashboardStore.dashboardExpenseByDay)
-  const maxAmount = Math.max(...amountsList)
+const { weekBars: barsList } = useDashboardBars()
+const links = useDashboardLinks()
 
-  const daysList = eachDayOfInterval({
-    start: subDays(new Date(), 7),
-    end: startOfDay(new Date()),
-  })
-  return daysList.map((date) => {
-    const weekdayName = capitalize(format(date, 'E'))
-    const amount = get(dashboardStore.dashboardExpenseByDay, DateUtils.dateToString(date), 0)
-    const percent = (amount / maxAmount) * 100
-
-    return {
-      date: date,
-      label: weekdayName,
-      value: formatNumberForDashboard(amount),
-      percent: percent,
-    }
-  })
-})
-
-const onClick = async (bar) => {
-  const excludedUrl = getExcludedTransactionUrl()
-  const filters = [
-    TransactionFilterUtils.filters.dateAfter.toUrl(bar.date),
-    TransactionFilterUtils.filters.dateBefore.toUrl(bar.date),
-    TransactionFilterUtils.filters.transactionType.toUrl(Transaction.types.expense),
-  ].join('&')
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}${excludedUrl}`)
-}
+const onClick = (bar) => navigateTo(links.byDay(bar.date, Transaction.types.expense))
 </script>

@@ -547,6 +547,8 @@
     "add_file": "Ajouter un fichier",
     "ramble": "Dictée",
     "ramble_description": "Dictez ou saisissez plusieurs transactions d'un coup, l'assistant les sépare.",
-    "filters": "Filtres"
+    "filters": "Filtres",
+    "not_in_net_worth": "Hors patrimoine net",
+    "no_todo_tag": "Aucun tag à faire"
   }
 }
