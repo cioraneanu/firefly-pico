@@ -201,7 +201,6 @@ const toolbar = useToolbar()
 toolbar.init({
   title: t('settings.assistant.title'),
   backRoute: RouteConstants.ROUTE_SETTINGS,
-  backRouteDesktop: RouteConstants.ROUTE_SETTINGS,
 })
 
 onMounted(() => {

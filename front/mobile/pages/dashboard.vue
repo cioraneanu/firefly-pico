@@ -1,13 +1,9 @@
 <template>
   <div class="app-form">
-    <app-top-toolbar>
-      <template #subtitle>
-        <dashboard-control-desktop v-if="appStore.isDesktopLayout" />
-      </template>
-    </app-top-toolbar>
+    <app-top-toolbar />
 
     <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
-      <dashboard-control v-if="!appStore.isDesktopLayout" />
+      <dashboard-control />
 
       <div ref="dashboard" class="dashboard-cards-frame" :class="{ 'dashboard-cards-back': isDashboardCardsBack }">
         <transition :name="profileStore.showAnimations ? 'dashboard-cards' : ''" mode="out-in">
@@ -49,7 +45,6 @@ import DashboardRecurringTransactions from '~/mobile/components/dashboard/dashbo
 import { useDashboardStore } from '~/core/stores/dashboardStore'
 
 const dashboardStore = useDashboardStore()
-const appStore = useAppStore()
 const profileStore = useProfileStore()
 
 const cardComponents = {

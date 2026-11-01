@@ -30,20 +30,14 @@ const props = defineProps({
 
 const localModelValue = ref({})
 const showDropdown = ref(false)
-const appStore = useAppStore()
 
-const style = computed(() => {
-  if (appStore.isDesktopLayout) {
-    return { overflow: 'hidden', display: 'flex', flexDirection: 'column' }
-  }
-  return {
-    height: '90%',
-    'padding-top': '4px',
-    'border-radius': '0px',
-    display: 'flex',
-    flexDirection: 'column',
-  }
-})
+const style = {
+  height: '90%',
+  'padding-top': '4px',
+  'border-radius': '0px',
+  display: 'flex',
+  flexDirection: 'column',
+}
 
 watch(modelValue, (newValue) => {
   localModelValue.value = cloneDeep(newValue)

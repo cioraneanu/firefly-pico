@@ -4,7 +4,6 @@ let titleIcon = ref(null)
 let leftText = ref('')
 let onBackButton = () => {}
 let backRoute = ref(null)
-let backRouteDesktop = ref(null)
 
 // Maybe implement them later...
 // let rightButtons = ref([])
@@ -17,7 +16,6 @@ export function useToolbar() {
     titleIcon: _titleIcon = null,
     leftText: _leftText = null,
     backRoute: _backRoute = null,
-    backRouteDesktop: _backRouteDesktop = null,
     // rightButtons: _rightButtons = [],
     // onRightButton: _onRightButton = () => {}
   } = {}) => {
@@ -50,7 +48,6 @@ export function useToolbar() {
     titleIcon.value = _titleIcon
     leftText.value = _leftText
     backRoute.value = _backRoute
-    backRouteDesktop.value = _backRouteDesktop
 
     onBackButton = !_backRoute
       ? () => {}
@@ -83,7 +80,6 @@ export function useToolbar() {
     leftText,
     onBack,
     backRoute,
-    backRouteDesktop,
     titleIcon,
   }
 }

@@ -7,7 +7,7 @@
     :popup-title="$t('account_select.title')"
     class=""
     :list="accountList"
-    :columns="appStore.gridColumns"
+    :columns="3"
     :is-multi-select="props.isMultiSelect"
     :get-display-value="getDisplayValue"
     v-bind="dynamicAttrs"
@@ -95,11 +95,9 @@
 import { useAccountStore } from '~/core/stores/accountStore'
 import Account from '~/core/models/Account.js'
 import { useFormAttributes } from '~/core/composables/useFormAttributes.js'
-import { IconRefresh } from '@tabler/icons-vue'
 import { isEqual } from 'lodash-es/lang'
 
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-const appStore = useAppStore()
 const accountStore = useAccountStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)

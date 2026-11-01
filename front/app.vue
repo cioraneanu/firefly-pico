@@ -22,8 +22,6 @@ useHead({
   meta: [{ name: 'theme-color', content: pwaColor }],
 })
 
-useResize()
-
 onMounted(async () => {
   if (!appStore.authToken) {
     navigateTo(`${RouteConstants.ROUTE_SETTINGS_SETUP}`)

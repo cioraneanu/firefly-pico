@@ -27,20 +27,7 @@
 
         <div class="flex-1" />
 
-        <van-button
-          v-if="appStore.isDesktopLayout"
-          round
-          size="small"
-          :type="isRecording ? 'danger' : 'default'"
-          class="cursor-pointer ramble-icon-button"
-          :class="{ 'ramble-recording': isRecording }"
-          :disabled="isDisabled"
-          @click="toggleRecording"
-        >
-          <app-icon :icon="isRecording ? TablerIconConstants.stop : TablerIconConstants.microphone" :size="16" />
-        </van-button>
 
-        <speech-language-dropdown v-if="appStore.isDesktopLayout" v-model="speechLanguageCode" class="text-13" />
       </div>
 
       <div v-if="savedRambles.length > 0" class="ramble-saved-list flex flex-col gap-2">
@@ -93,7 +80,6 @@
 
 <script setup>
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import SpeechLanguageDropdown from '~/mobile/components/select/speech-language-dropdown.vue'
 import DateUtils from '~/core/utils/DateUtils.js'
 
 const props = defineProps({
@@ -125,23 +111,11 @@ const props = defineProps({
 
 const emit = defineEmits(['interpret', 'loadSaved', 'deleteSaved', 'deleteRamble'])
 const rambleText = defineModel({ type: String, default: '' })
-const appStore = useAppStore()
 
-const {
-  speechTemporary,
-  speechLanguageCode,
-  isRecording,
-  stopRecording,
-  toggleRecording: toggleDictation,
-  playingVoiceRambleId,
-  loadingVoiceRambleId,
-  toggleSavedRambleVoice,
-} = useRambleDictation(rambleText)
+const { speechTemporary, isRecording, stopRecording, playingVoiceRambleId, loadingVoiceRambleId, toggleSavedRambleVoice } = useRambleDictation(rambleText)
 
 const canInterpret = computed(() => !!rambleText.value.trim() || props.savedRambles.length > 0)
 const formatCreatedAt = (createdAt) => (createdAt ? DateUtils.dateToUIWithTime(new Date(createdAt)) : '')
-
-const toggleRecording = () => !props.isDisabled && toggleDictation()
 
 const onInterpret = () => {
   if (props.isDisabled) return

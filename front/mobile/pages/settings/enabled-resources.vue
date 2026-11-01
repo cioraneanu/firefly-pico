@@ -58,7 +58,6 @@ const toolbar = useToolbar()
 toolbar.init({
   title: computed(() => t('settings.setup.enabled_resources')),
   backRoute: RouteConstants.ROUTE_SETTINGS_SETUP,
-  backRouteDesktop: RouteConstants.ROUTE_SETTINGS_SETUP,
 })
 
 onMounted(() => {

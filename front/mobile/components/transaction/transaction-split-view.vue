@@ -1,5 +1,5 @@
 <template>
-  <div class="transaction-split-view" :class="{ 'transaction-split-view-desktop': appStore.isDesktopLayout }">
+  <div class="transaction-split-view">
     <van-cell-group inset class="transaction-split-summary">
       <van-cell class="transaction-split-summary-cell">
         <template #title>
@@ -163,7 +163,6 @@ const props = defineProps({
 
 const hasAttachments = ref(false)
 
-const appStore = useAppStore()
 const profileStore = useProfileStore()
 const { locale } = useI18n()
 

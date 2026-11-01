@@ -36,7 +36,7 @@ import UIUtils from '~/core/utils/UIUtils'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import RouteConstants from '~/core/constants/RouteConstants'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import { transactionFormFieldList, transactionListHeroIconList } from '~/core/constants/TransactionConstants.js'
+import { transactionFormFieldList } from '~/core/constants/TransactionConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/core/utils/SettingUtils.js'
 import { migrateTypeList } from '~/core/utils/MigrateUtils.js'
 import { useI18n } from 'vue-i18n'
@@ -86,7 +86,6 @@ const toolbar = useToolbar()
 toolbar.init({
   title: t('settings.transactions.form_fields.title'),
   backRoute: RouteConstants.ROUTE_SETTINGS_TRANSACTION,
-  backRouteDesktop: RouteConstants.ROUTE_SETTINGS_TRANSACTION,
 })
 
 onMounted(() => {

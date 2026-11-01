@@ -7,7 +7,7 @@
     class=""
     :popup-title="$t('budget_select')"
     :list="filteredList"
-    :columns="appStore.gridColumns"
+    :columns="3"
     :get-display-value="getDisplayValue"
     v-bind="dynamicAttrs"
   >
@@ -38,14 +38,11 @@
 <script setup>
 import { useBudgetStore } from '~/core/stores/budgetStore'
 import { useFormAttributes } from '~/core/composables/useFormAttributes'
-import { IconRefresh } from '@tabler/icons-vue'
 
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
-import Tag from '~/core/models/Tag.js'
 import Budget from '~/core/models/Budget.js'
 
 const budgetStore = useBudgetStore()
-const appStore = useAppStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 

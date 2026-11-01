@@ -6,7 +6,7 @@
     :label="props.label ?? $t('currency')"
     :popup-title="$t('currency_select.title')"
     :list="filteredList"
-    :columns="appStore.gridColumns"
+    :columns="3"
     :get-display-value="getDisplayValue"
     v-bind="dynamicAttrs"
   >
@@ -38,13 +38,11 @@
 import _, { get } from 'lodash-es'
 import { useCurrencyStore } from '~/core/stores/currencyStore'
 import { useFormAttributes } from '~/core/composables/useFormAttributes'
-import { IconRefresh } from '@tabler/icons-vue'
 
 import Currency from '~/core/models/Currency'
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
 
 const currencyStore = useCurrencyStore()
-const appStore = useAppStore()
 
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)

@@ -7,7 +7,7 @@
     class=""
     :popup-title="$t('category_select')"
     :list="filteredList"
-    :columns="appStore.gridColumns"
+    :columns="3"
 
     :get-display-value="getDisplayValue"
     v-bind="dynamicAttrs"
@@ -38,14 +38,11 @@
 <script setup>
 import { useCategoryStore } from '~/core/stores/categoryStore'
 import { useFormAttributes } from '~/core/composables/useFormAttributes'
-import { IconRefresh } from '@tabler/icons-vue'
 import Category from '~/core/models/Category'
 
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
-import Tag from '~/core/models/Tag.js'
 
 const categoryStore = useCategoryStore()
-const appStore = useAppStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 

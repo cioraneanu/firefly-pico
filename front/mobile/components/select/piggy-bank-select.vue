@@ -7,7 +7,7 @@
     class=""
     :popup-title="$t('piggy_bank_select')"
     :list="filteredList"
-    :columns="appStore.gridColumns"
+    :columns="3"
     :get-display-value="getDisplayValue"
     v-bind="dynamicAttrs"
   >
@@ -43,7 +43,6 @@ import TablerIconConstants from '~/core/constants/TablerIconConstants'
 import PiggyBank from '~/core/models/PiggyBank.js'
 
 const piggyBankStore = usePiggyBankStore()
-const appStore = useAppStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 

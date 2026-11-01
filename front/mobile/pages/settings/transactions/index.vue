@@ -72,7 +72,6 @@ const toolbar = useToolbar()
 toolbar.init({
   title: t('settings.transactions.title'),
   backRoute: RouteConstants.ROUTE_SETTINGS,
-  backRouteDesktop: RouteConstants.ROUTE_SETTINGS,
 })
 
 onMounted(() => {

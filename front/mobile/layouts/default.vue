@@ -1,20 +1,9 @@
 <template>
   <div :class="layoutClass">
-    <template v-if="appStore.isDesktopLayout">
-      <div class="flex gap-4">
-        <app-left-sidebar />
-        <div class="desktop-content">
-          <slot />
-        </div>
-      </div>
-    </template>
+    <slot />
+    <app-bottom-toolbar />
 
-    <template v-else>
-      <slot />
-      <app-bottom-toolbar />
-    </template>
-
-    <profile-picker-float v-if="profileStore.dashboard.isProfileFloatVisible && !appStore.isDesktopLayout" />
+    <profile-picker-float v-if="profileStore.dashboard.isProfileFloatVisible" />
     <app-bottom-loading />
   </div>
 </template>
@@ -22,18 +11,14 @@
 import { ref } from 'vue';
 
 <script setup>
-import RouteConstants from '~/core/constants/RouteConstants.js'
 import { useProfileStore } from '~/core/stores/profileStore'
 
-const device = useDevice()
-const appStore = useAppStore()
 const profileStore = useProfileStore()
 
 const layoutClass = computed(() => {
   return {
     layout: true,
-    'layout-desktop': appStore.isDesktopLayout,
-    'layout-mobile': !appStore.isDesktopLayout,
+    'layout-mobile': true,
     // desktop: device.isDesktop,
     // mobile: device.isMobile,
   }

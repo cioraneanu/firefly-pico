@@ -5,7 +5,7 @@
     :label="$t('language_select.label')"
     :popup-title="$t('language_select.title')"
     :list="list"
-    :columns="appStore.gridColumns"
+    :columns="3"
     v-bind="dynamicAttrs"
     :has-search="false"
     :clearable="false">
@@ -29,14 +29,9 @@
 </template>
 
 <script setup>
-import Account from '~/core/models/Account.js'
 import { useFormAttributes } from '~/core/composables/useFormAttributes.js'
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import { format, startOfWeek, addDays } from 'date-fns'
 import { supportedLanguages } from '~/i18n/index.js'
-import Category from '~/core/models/Category.js'
 
-const appStore = useAppStore()
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
 

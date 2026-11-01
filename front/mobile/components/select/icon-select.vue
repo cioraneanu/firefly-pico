@@ -17,12 +17,8 @@
       <app-icon v-else :icon="modelValue.icon" style="width: 25px" />
     </template>
 
-    <template v-if="appStore.isDesktopLayout" #top-right>
-      <app-tabs v-model="activeTab" :items="tabs" />
-    </template>
-
     <template #popup="{ onSelectCell }">
-      <app-tabs v-if="!appStore.isDesktopLayout" v-model="activeTab" :items="tabs" class="mx-4 mb-2" />
+      <app-tabs v-model="activeTab" :items="tabs" class="mx-4 mb-2" />
 
       <van-list v-model:loading="isLoadingMore" :finished="isFinished" @load="onLoadMore">
         <van-grid :column-num="6">
@@ -44,7 +40,6 @@ import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
-const appStore = useAppStore()
 
 const props = defineProps({
   label: {

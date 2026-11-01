@@ -85,17 +85,6 @@ body {
     margin: 0 auto;
 }
 
-.app-button-save.desktop {
-    position: fixed !important;
-    right: 50px;
-    bottom: 50px !important;
-    /*right: 20px;*/
-    z-index: 2;
-    width: 200px;
-    /*max-width: var(--max-device-width);*/
-    /*margin: 0 auto;*/
-}
-
 .transaction-amount-operations {
     position: fixed !important;
     right: 20px;
@@ -844,11 +833,6 @@ body {
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
 
-.layout-desktop .applied-filters-container {
-    margin: -5px 17px 5px;
-    border-radius: 10px;
-}
-
 .app-toolbar-title {
     font-weight: 700;
 }
@@ -1233,10 +1217,6 @@ svg {
     margin-top: 0;
 }
 
-.transaction-split-view-desktop .transaction-split-list {
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-}
-
 .day-frame {
     display: flex;
     flex-direction: column;
@@ -1485,41 +1465,6 @@ svg {
     left: 0;
 }
 
-.desktop-content {
-    flex: 1;
-    min-width: 0;
-    overflow-x: hidden;
-    padding-inline-start: 16.25rem;
-}
-
-.app-top-toolbar-desktop {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    box-sizing: border-box;
-    width: calc(100% - 30px);
-    min-width: 0;
-    padding: 15px;
-    margin: 15px;
-    background: var(--white);
-    border-radius: 10px;
-    position: sticky;
-    top: 10px;
-    z-index: 2;
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-}
-
-.app-top-toolbar-desktop > .flex-1 {
-    min-width: 0;
-}
-
-.app-top-toolbar-desktop .app-toolbar-title,
-.app-top-toolbar-desktop .app-toolbar-subtitle {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
 .app-bottom-toolbar-item {
     font-size: 11px;
     font-weight: 500;
@@ -1535,8 +1480,7 @@ svg {
     border-width: 0 !important;
 }
 
-.add-transaction-btn-mobile,
-.add-transaction-btn-desktop {
+.add-transaction-btn-mobile {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1556,34 +1500,6 @@ svg {
     border: 2px solid white;
     box-shadow: rgba(50, 50, 93, 0.25) 0px 0px 5px -1px,
     rgba(0, 0, 0, 0.3) 0px -1px 3px -1px;
-}
-
-.add-transaction-btn-desktop {
-    gap: 0.5rem;
-    width: 100%;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem; /* rounded-md */
-    background-color: #0f172a; /* slate-900 */
-    border: 1px solid #0f172a;
-}
-
-.add-transaction-btn-desktop:hover {
-    background-color: #1e293b; /* slate-800 */
-}
-
-.profile-picker-dashboard-button {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    padding: 0.5rem 0.75rem;
-    border-radius: 0.375rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    background: #f2f2f2;
-    border: 1px solid #eee;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    cursor: pointer;
 }
 
 .masonry-2-columns {
@@ -1609,10 +1525,6 @@ svg {
     background: #eee;
     border-radius: 5px;
     padding: 3px 5px;
-}
-
-.layout-desktop .van-swipe-cell__right {
-    right: -1px;
 }
 
 .grid-columns-2 {
@@ -1644,120 +1556,8 @@ svg {
     }
 }
 
-/*--------------------------------*/
-
-.app-left-sidebar {
-    display: flex;
-    flex-direction: column;
-    padding: 1rem; /* p-4 equivalent */
-    border-right: 1px solid #e2e8f0; /* slate-200 */
-    gap: 1.5rem;
-
-    background: var(--white);
-    position: fixed;
-    height: 100vh;
-    /*padding: 20px;*/
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    width: 15rem;
-
-    a {
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-        padding: 0.5rem 0.75rem;
-        border-radius: 0.375rem;
-        font-size: 0.875rem;
-        font-weight: 500;
-        color: #64748b; /* slate-500 */
-        text-decoration: none;
-        transition: all 0.2s ease;
-    }
-
-    a:hover {
-        background-color: #f1f5f9; /* slate-100 */
-        color: #0f172a; /* slate-900 */
-    }
-
-    .router-link-active {
-        background-color: #f1f5f9; /* slate-100 */
-        color: #0f172a; /* slate-900 */
-    }
-
-    /* Adjust icon inside link if needed */
-
-    a svg,
-    a i {
-        color: currentColor;
-        opacity: 0.8;
-    }
-
-    /* Target the inner div of the app-left-sidebar-page component (which likely has .flex-center-vertical) */
-
-    a > div {
-        width: 100%;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem; /* Enforce consistent gap between icon and label */
-    }
-}
-
-.add-btn-wrapper {
-    margin-bottom: 0.5rem;
-}
-
-.sidebar-nav {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-}
-
-.nav-section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-}
-
-.section-label {
-    padding-left: 0.75rem;
-    margin-bottom: 0.5rem;
-    font-size: 0.75rem; /* text-xs */
-    font-weight: 600;
-    text-transform: uppercase;
-    color: #94a3b8; /* slate-400 */
-    letter-spacing: 0.05em;
-}
-
-.section-label-toggle {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    padding: 0 0 0 0.75rem;
-    border: 0;
-    appearance: none;
-    background: transparent;
-    cursor: pointer;
-    font-family: inherit;
-    text-align: left;
-}
-
-.section-label-toggle svg {
-    flex-shrink: 0;
-}
-
 .mt-auto {
     margin-top: auto;
-}
-
-/* Deep selector to style the child component (app-left-sidebar-page) */
-
-/*--------------------------------*/
-
-.app-left-sidebar {
-    z-index: 2001;
 }
 
 body {
@@ -2111,144 +1911,3 @@ body {
     color: #94a3b8;
 }
 
-/* ------------------------ Desktop transactions ------------------------ */
-
-/* Columns: type | date | description | amount | accounts | classification (categories + tags) | budget.
-   The grid lives on the list container and every row joins it via subgrid, so the
-   amount column (max-content) is sized by the widest amount in the list and stays
-   aligned across rows no matter how many digits a currency needs.
-   Subgrid subtracts the row's 16px horizontal padding from the edge tracks, hence
-   19px (16px padding + 3px type bar) and +16px on the last track of every template. */
-.transaction-desktop-list {
-    display: grid;
-    grid-template-columns: 19px max-content minmax(200px, 1.9fr) max-content minmax(160px, 1.2fr) minmax(150px, 1.3fr) minmax(126px, 0.9fr);
-    column-gap: 14px;
-}
-
-.transaction-desktop-list > .van-swipe-cell,
-.transaction-desktop-list .van-swipe-cell__wrapper,
-.transaction-desktop-row {
-    display: grid;
-    grid-column: 1 / -1;
-    grid-template-columns: subgrid;
-}
-
-.transaction-desktop-row {
-    align-items: center;
-    min-height: 46px;
-    padding: 5px 16px;
-    border-bottom: 1px solid #eef2f7;
-    background: var(--van-cell-background);
-    color: #0f172a;
-    transition: background-color 0.12s ease;
-}
-
-.transaction-desktop-row:hover {
-    background: #f8fafc;
-}
-
-.transaction-desktop-list .van-swipe-cell:last-child .transaction-desktop-row {
-    border-bottom: 0;
-}
-
-.transaction-desktop-type-dot {
-    width: 3px;
-    height: 20px;
-    border-radius: 3px;
-}
-
-.transaction-desktop-date-value {
-    font-size: 12.5px;
-    font-weight: 600;
-    white-space: nowrap;
-    font-variant-numeric: tabular-nums;
-}
-
-.transaction-desktop-title {
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.transaction-desktop-amount-value {
-    font-size: 12px;
-    font-weight: 600;
-    white-space: nowrap;
-    font-variant-numeric: tabular-nums;
-}
-
-.transaction-desktop-muted {
-    margin-top: 1px;
-    color: #94a3b8;
-    font-size: 11px;
-}
-
-.transaction-desktop-notes * {
-    display: inline;
-    margin: 0;
-}
-
-/* Keep source -> destination on one line; the badges themselves truncate. */
-.transaction-desktop-accounts {
-    display: flex;
-    align-items: center;
-    gap: 3px;
-}
-
-.transaction-desktop-accounts .app-badge {
-    min-width: 0;
-}
-
-.transaction-desktop-chips {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 4px;
-}
-
-.transaction-desktop-chip {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    max-width: 100%;
-    padding: 2px 7px;
-    border: 1px solid #e2e8f0;
-    border-radius: 6px;
-    background: #f8fafc;
-    color: #475569;
-    font-size: 11px;
-    line-height: 1.35;
-}
-
-.transaction-desktop-more,
-.transaction-desktop-split {
-    align-self: flex-start;
-    margin-top: 3px;
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-}
-
-.transaction-desktop-amount {
-    white-space: nowrap;
-}
-
-/* Progressively drop the categorisation columns when the list gets narrow,
-   keeping type, date, description, amount and accounts always visible. */
-@container transaction-list (max-width: 1080px) {
-    .transaction-desktop-list {
-        grid-template-columns: 19px max-content minmax(200px, 1.9fr) max-content minmax(160px, 1.2fr) minmax(166px, 1.3fr);
-    }
-
-    .transaction-desktop-budget {
-        display: none;
-    }
-}
-
-@container transaction-list (max-width: 840px) {
-    .transaction-desktop-list {
-        grid-template-columns: 19px max-content minmax(180px, 2fr) max-content minmax(176px, 1.2fr);
-    }
-
-    .transaction-desktop-classification {
-        display: none;
-    }
-}

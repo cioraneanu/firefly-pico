@@ -37,8 +37,6 @@ export const useAppStore = defineStore('app', () => {
   // General info from backend, { latest_version, use_llm, etc }
   const info = useLocalStorage('info', null, { serializer: StorageSerializers.object })
 
-  const windowWidth = ref(null)
-
   const lastSync = useLocalStorage('lastSync', null, DateUtils.storageSerializer)
   const isSyncRequiredByMissingExtras = ref(false)
 
@@ -73,17 +71,6 @@ export const useAppStore = defineStore('app', () => {
     }
 
     return Object.entries(routeMapping).find(([, routes]) => routes.includes(route.path))?.[0]
-  })
-
-  const isDesktopLayout = computed(() => {
-    return (windowWidth.value ?? 0) > 800 && useDevice().isDesktop
-  })
-
-  const gridColumns = computed(() => {
-    if (isDesktopLayout.value) {
-      return Math.floor(windowWidth.value / 200)
-    }
-    return 3
   })
 
   const hasAuthToken = computed(() => {
@@ -174,10 +161,7 @@ export const useAppStore = defineStore('app', () => {
     transcriptionEndpoint,
     transcriptionLanguage,
 
-    windowWidth,
     activePage,
-    isDesktopLayout,
-    gridColumns,
     hasAuthToken,
     isNewVersionAvailable,
     fetchInfo,

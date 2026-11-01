@@ -88,7 +88,6 @@ import { rule } from '~/core/utils/ValidationUtils.js'
 
 const appStore = useAppStore()
 const profileStore = useProfileStore()
-const dashboardStore = useDashboardStore()
 const accountStore = useAccountStore()
 const categoryStore = useCategoryStore()
 const tagStore = useTagStore()
@@ -155,7 +154,6 @@ const toolbar = useToolbar()
 toolbar.init({
   title: t('settings.setup.title'),
   backRoute: RouteConstants.ROUTE_SETTINGS,
-  backRouteDesktop: RouteConstants.ROUTE_SETTINGS,
 })
 
 onMounted(() => {

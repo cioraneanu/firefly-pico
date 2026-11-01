@@ -43,17 +43,8 @@
       <empty-list v-if="isEmpty && !isLoading" />
 
       <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
-        <van-list :class="listClass" :finished="isFinished" :scroller="listScroller" @load="onLoadMore">
-          <template v-if="appStore.isDesktopLayout">
-            <div class="transaction-desktop-list-wrapper">
-              <div class="transaction-desktop-list">
-                <transaction-list-item-desktop v-for="item in list" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
-              </div>
-            </div>
-          </template>
-          <template v-else>
-            <transaction-list-item v-for="item in list" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
-          </template>
+        <van-list :class="listClass" :finished="isFinished" @load="onLoadMore">
+          <transaction-list-item v-for="item in list" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
         </van-list>
       </van-pull-refresh>
     </div>
@@ -69,10 +60,8 @@ import EmptyList from '~/mobile/components/general/empty-list.vue'
 import { animateSwipeList } from '~/core/utils/AnimationUtils.js'
 import { IconSquareRoundedX, IconSettings } from '@tabler/icons-vue'
 
-const appStore = useAppStore()
 const { t } = useI18n()
 
-const listScroller = computed(() => (appStore.isDesktopLayout ? window : undefined))
 const listClass = { 'p-1': true }
 
 const {

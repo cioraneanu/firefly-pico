@@ -43,13 +43,11 @@ import { onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-const profileStore = useProfileStore()
 
 const toolbar = useToolbar()
 toolbar.init({
   title: t('about.title'),
   backRoute: RouteConstants.ROUTE_SETTINGS,
-  backRouteDesktop: RouteConstants.ROUTE_SETTINGS,
 })
 
 onMounted(() => {

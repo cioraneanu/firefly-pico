@@ -264,11 +264,9 @@
     background: #00a261;
 }
 
-
 .van-theme-dark .latest-version-badge a {
     color: #fff;
 }
-
 
 .van-theme-dark .hero-icons-section {
     background: var(--van-cell-background);
@@ -382,21 +380,6 @@
     background: rgba(236, 64, 122, 0.16);
 }
 
-.van-theme-dark .transaction-desktop-row {
-    border-color: #2e2e33;
-    color: #f1f5f9;
-}
-
-.van-theme-dark .transaction-desktop-row:hover,
-.van-theme-dark .transaction-desktop-chip {
-    background: #222;
-}
-
-.van-theme-dark .transaction-desktop-chip {
-    border-color: #444;
-    color: #cbd5e1;
-}
-
 .van-theme-dark .account-badge {
     border: 1.5px dashed #777;
 }
@@ -420,7 +403,6 @@
 .app-card-info {
     border: 1px dashed #666;
 }
-
 
 .van-theme-dark .split-transaction-badge {
     background: #424242;
@@ -469,45 +451,9 @@
 }
 
 .van-theme-dark {
-    .app-top-toolbar-desktop {
-        background: #2a2a2a;
-        box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 24px;
-
-    }
 
     .simple-button {
         background: #181818;
-    }
-
-
-    .profile-picker-dashboard-button {
-        background: #292929;
-        border: 1px solid #444;
-    }
-
-    .app-left-sidebar {
-        background-color: #111;
-        border-right: 1px solid #222; /* slate-200 */
-        box-shadow: rgba(0, 0, 0, 0.2) 0px 8px 24px;
-
-
-        a {
-            color: white;
-        }
-
-        a:hover {
-            background-color: #222;
-        }
-
-
-        .router-link-active {
-            background-color: #222;
-        }
-
-        .add-transaction-btn-desktop {
-            background-color: #292929;
-            border: 1px solid #444;
-        }
     }
 
     .app-bottom-toolbar-item.selected {

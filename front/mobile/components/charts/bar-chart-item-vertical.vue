@@ -15,7 +15,6 @@ const props = defineProps({
   percent: {},
 })
 
-const appStore = useAppStore()
 
 const barStyle = computed(() => {
   return `height: ${props.percent}%`
@@ -24,6 +23,6 @@ const barStyle = computed(() => {
 
 const computedClass = computed(() => ({
   'bar-container-vertical flex flex-col items-center gap-1': true,
-  'flex-1': !appStore.isDesktopLayout,
+  'flex-1': true,
 }))
 </script>

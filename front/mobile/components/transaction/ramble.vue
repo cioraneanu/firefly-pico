@@ -153,7 +153,7 @@ useSwipeToDismiss({
   showDropdown: showRamblePopup,
 })
 
-const ramblePopupStyle = computed(() => (appStore.isDesktopLayout ? { width: 'min(680px, 94vw)', height: '82vh', maxHeight: '82vh', padding: '0' } : { height: '90%' }))
+const ramblePopupStyle = { height: '90%' }
 const isRambleFormDisabled = computed(() => isInterpreting.value)
 
 const openRamblePopup = async () => {

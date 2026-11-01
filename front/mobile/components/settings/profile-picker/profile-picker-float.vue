@@ -7,7 +7,7 @@
       </div>
     </van-floating-bubble>
 
-    <app-popup v-model:show="isListVisible" :style="appStore.isDesktopLayout ? null : { height: '40%' }">
+    <app-popup v-model:show="isListVisible" :style="{ height: '40%' }">
       <profile-picker-list/>
     </app-popup>
   </div>

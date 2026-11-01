@@ -55,7 +55,6 @@ import UIUtils from '~/core/utils/UIUtils'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import RouteConstants from '~/core/constants/RouteConstants'
 import { NUMBER_FORMAT } from '~/core/utils/NumberUtils.js'
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/core/utils/SettingUtils.js'
 import DaySelect from '~/mobile/components/select/general/day-select.vue'
 import { rule } from '~/core/utils/ValidationUtils.js'
@@ -104,7 +103,6 @@ const toolbar = useToolbar()
 toolbar.init({
   title: t('settings.formatting.title'),
   backRoute: RouteConstants.ROUTE_SETTINGS,
-  backRouteDesktop: RouteConstants.ROUTE_SETTINGS,
 })
 
 onMounted(() => {

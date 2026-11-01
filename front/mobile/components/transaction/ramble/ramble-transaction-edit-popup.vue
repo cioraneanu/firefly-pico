@@ -30,7 +30,6 @@ const emit = defineEmits(['save'])
 const show = defineModel('show', { type: Boolean, default: false })
 const transaction = defineModel({ type: Object, default: null })
 
-const appStore = useAppStore()
 const formRef = ref(null)
 const popupRef = ref(null)
 const popupContentRef = ref(null)
@@ -42,13 +41,7 @@ useSwipeToDismiss({
   showDropdown: show,
 })
 
-const popupStyle = computed(() => {
-  if (appStore.isDesktopLayout) {
-    return { width: '94vw', maxHeight: '92vh' }
-  }
-
-  return { height: '96%' }
-})
+const popupStyle = { height: '96%' }
 
 const onSave = async () => {
   try {

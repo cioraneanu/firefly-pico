@@ -17,12 +17,9 @@
 </template>
 
 <script setup>
-import { useFormAttributes } from '~/core/composables/useFormAttributes'
-import { isEqual } from 'lodash-es/lang'
 import { useSwipeToDismiss } from '~/mobile/composables/useSwipeToDismiss'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 import AccountRepository from '~/core/repository/AccountRepository.js'
-import UIUtils from '~/core/utils/UIUtils.js'
 import Account from '~/core/models/Account.js'
 
 const showDropdown = defineModel('showDropdown', false)
@@ -35,16 +32,10 @@ const props = defineProps({
   value: {},
 })
 
-const appStore = useAppStore()
-const style = computed(() => {
-  if (appStore.isDesktopLayout) {
-    return null
-  }
-  return {
-    height: '250px',
-    paddingTop: '4px',
-  }
-})
+const style = {
+  height: '250px',
+  paddingTop: '4px',
+}
 
 const emits = defineEmits('result')
 

@@ -22,20 +22,12 @@ const props = defineProps({
   },
 })
 
-const appStore = useAppStore()
 
 const mergePopupStyle = (style) => {
   return [style, props.popupStyle].filter(Boolean)
 }
 
 const popupProps = computed(() => {
-  if (appStore.isDesktopLayout) {
-    return {
-      position: 'center',
-      style: mergePopupStyle({ width: '80vw', maxHeight: '70vh', borderRadius: '12px', padding: '16px', display: 'flex', flexDirection: 'column', overflow: 'hidden' }),
-    }
-  }
-
   return {
     round: true,
     position: 'bottom',

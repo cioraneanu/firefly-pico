@@ -10,7 +10,6 @@
 
 <script setup>
 import { animateSaveButton } from '~/core/utils/AnimationUtils.js'
-const appStore = useAppStore()
 
 const props = defineProps({
   label: {},
@@ -31,8 +30,7 @@ const style = computed(() => {
 
 const classComputed = computed(() => ({
   'app-button-save flex items-center gap-2': true,
-  mobile: !appStore.isDesktopLayout,
-  desktop: appStore.isDesktopLayout,
+  mobile: true,
 }))
 
 onMounted(async () => {

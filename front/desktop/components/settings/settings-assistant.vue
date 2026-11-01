@@ -56,7 +56,8 @@ const runTest = async (key, request, success, failure) => {
   testing[key] = true
   const response = await request()
   testing[key] = false
-  ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t(success)) : UIUtils.showToastError(response?.data?.message ?? t(failure))
+  if (ResponseUtils.isSuccess(response)) return UIUtils.showToastSuccess(t(success))
+  UIUtils.showToastError(response?.data?.message ?? t(failure))
 }
 
 const services = computed(() => [
