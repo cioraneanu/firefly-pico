@@ -1,7 +1,7 @@
 <template>
   <section class="flex min-w-0 flex-col gap-4 rounded-xl bg-card py-4 ring-1 ring-fg/10">
     <div v-if="title || $slots.actions" class="flex items-start justify-between gap-2 px-4">
-      <div class="min-w-0">
+      <div class="min-w-0 flex-1">
         <h2 class="text-base font-medium">{{ title }}</h2>
         <p v-if="description" class="text-sm text-dim">{{ description }}</p>
       </div>

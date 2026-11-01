@@ -18,6 +18,11 @@ export default class LanguageUtils {
     return LanguageUtils.removeAccents(text).toUpperCase().includes(LanguageUtils.removeAccents(search).toUpperCase())
   }
 
+  static formatName(text, isLowercase) {
+    const value = isLowercase ? LanguageUtils.lowercase(text) : (text ?? '')
+    return useProfileStore().stripAccents ? LanguageUtils.removeAccents(value) : value
+  }
+
   static lowercase(text) {
     if (!text) {
       return ''

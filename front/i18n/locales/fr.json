@@ -521,6 +521,16 @@
       "planning": "Planification",
       "reference": "Référence"
     },
-    "toggle_sidebar": "Afficher/masquer la barre latérale"
+    "toggle_sidebar": "Afficher/masquer la barre latérale",
+    "categories_description": "Regroupez les transactions selon l'usage de l'argent.",
+    "tags_description": "Étiquetez les transactions entre catégories. Les tags peuvent être imbriqués sous un tag parent.",
+    "currencies_description": "Devises connues de Firefly III. Les devises désactivées sont estompées.",
+    "exchange_rates_description": "Taux quotidiens utilisés pour convertir les montants en devises.",
+    "category_transactions": "Transactions de cette catégorie",
+    "todo_hint": "Les transactions avec ce tag apparaissent dans la liste à faire du tableau de bord.",
+    "default_currency": "Par défaut",
+    "disabled": "Désactivée",
+    "country": "Pays",
+    "per_usd": "Pour 1 USD"
   }
 }

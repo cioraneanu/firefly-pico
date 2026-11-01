@@ -8,7 +8,6 @@
     <d-confirm />
     <d-toaster />
     <d-loading-bar />
-    <div id="d-portal" />
   </div>
 </template>
 
@@ -18,6 +17,12 @@ import '~/desktop/styles/desktop.css'
 import UIUtils from '~/core/utils/UIUtils'
 
 UIUtils.ui = DesktopUI
+
+const profileStore = useProfileStore()
+const portal = Object.assign(document.createElement('div'), { id: 'd-portal' })
+document.body.append(portal)
+watchEffect(() => (portal.className = profileStore.darkTheme ? 'd-portal van-theme-dark' : 'd-portal'))
+onBeforeUnmount(() => portal.remove())
 
 const isSidebarOpen = useLocalStorage('desktopSidebarOpen', true)
 const { openTransaction } = useTransactionDialog()

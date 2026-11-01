@@ -1,5 +1,5 @@
 <template>
-  <Teleport defer to="#d-portal">
+  <Teleport to="#d-portal">
     <TransitionGroup name="d-toast" tag="div" class="fixed bottom-6 right-6 z-[80] flex w-89 flex-col gap-2">
       <div v-for="toast in toasts" :key="toast.id" role="status" class="flex items-center gap-2 rounded-lg border border-line bg-pop p-4 text-[13px] shadow-lg">
         <icon-circle-check v-if="toast.type === 'success'" :size="16" class="text-success" />

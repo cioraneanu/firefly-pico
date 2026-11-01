@@ -36,7 +36,7 @@ const isColorInvertable = computed(() => {
   if (props.invertable !== null) {
     return props.invertable
   }
-  if (typeof props.icon === 'object') {
+  if (typeof props.icon !== 'string') {
     return true
   }
   if (Icon.isTypeTabler(props.icon) || Icon.isTypeAvatar(props.icon) || Icon.isTypeFlag(props.icon)) {

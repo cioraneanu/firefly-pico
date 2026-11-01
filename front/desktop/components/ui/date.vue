@@ -11,8 +11,10 @@ const props = defineProps({ time: Boolean, clearable: Boolean })
 
 const pattern = computed(() => (props.time ? "yyyy-MM-dd'T'HH:mm" : 'yyyy-MM-dd'))
 
+const date = computed(() => DateUtils.autoToDate(model.value))
+
 const text = computed({
-  get: () => (isValid(model.value) ? format(model.value, pattern.value) : ''),
+  get: () => (isValid(date.value) ? format(date.value, pattern.value) : ''),
   set: (value) => (model.value = value ? parseISO(value) : null),
 })
 </script>

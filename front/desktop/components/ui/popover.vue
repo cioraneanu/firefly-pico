@@ -1,8 +1,8 @@
 <template>
-  <Teleport defer to="#d-portal">
-    <div v-if="open" class="fixed inset-0 z-40" @mousedown="open = false" />
+  <Teleport to="#d-portal">
+    <div v-if="open" class="fixed inset-0 z-[64]" @mousedown="open = false" />
     <Transition name="d-pop">
-      <div v-if="open" :style class="fixed z-50 flex flex-col overflow-y-auto rounded-lg bg-pop p-1 text-sm shadow-md ring-1 ring-fg/10">
+      <div v-if="open" :style class="fixed z-[65] flex flex-col overflow-y-auto rounded-lg bg-pop p-1 text-sm shadow-md ring-1 ring-fg/10">
         <slot />
       </div>
     </Transition>

@@ -521,6 +521,16 @@
       "planning": "Planejamento",
       "reference": "Referência"
     },
-    "toggle_sidebar": "Alternar barra lateral"
+    "toggle_sidebar": "Alternar barra lateral",
+    "categories_description": "Agrupe transações pelo propósito do dinheiro.",
+    "tags_description": "Rotule transações entre categorias. Etiquetas podem ficar sob uma etiqueta pai.",
+    "currencies_description": "Moedas conhecidas pelo Firefly III. As desativadas aparecem esmaecidas.",
+    "exchange_rates_description": "Taxas diárias usadas para converter valores estrangeiros.",
+    "category_transactions": "Transações nesta categoria",
+    "todo_hint": "Transações com esta etiqueta aparecem na lista de pendências do painel.",
+    "default_currency": "Padrão",
+    "disabled": "Desativada",
+    "country": "País",
+    "per_usd": "Por 1 USD"
   }
 }

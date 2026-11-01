@@ -469,6 +469,16 @@
       "planning": "规划",
       "reference": "参考"
     },
-    "toggle_sidebar": "切换侧边栏"
+    "toggle_sidebar": "切换侧边栏",
+    "categories_description": "按资金用途对交易进行分组。",
+    "tags_description": "跨分类为交易添加标签。标签可以嵌套在父标签下。",
+    "currencies_description": "Firefly III 已知的货币。已禁用的显示为灰色。",
+    "exchange_rates_description": "用于换算外币金额的每日汇率。",
+    "category_transactions": "此分类中的交易",
+    "todo_hint": "带有此标签的交易会显示在仪表板的待办列表中。",
+    "default_currency": "默认",
+    "disabled": "已禁用",
+    "country": "国家",
+    "per_usd": "每 1 美元"
   }
 }

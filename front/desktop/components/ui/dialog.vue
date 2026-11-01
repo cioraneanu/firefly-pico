@@ -1,6 +1,6 @@
 <template>
-  <Teleport defer to="#d-portal">
-    <Transition name="d-dialog">
+  <Teleport to="#d-portal">
+    <Transition name="d-dialog" appear>
       <div v-if="open" class="fixed inset-0 z-[60] overflow-y-auto">
         <div class="fixed inset-0 bg-black/10 backdrop-blur-xs dark:bg-black/50" @click="emit('close')" />
         <div class="pointer-events-none relative flex min-h-full items-start justify-center px-4 py-12">

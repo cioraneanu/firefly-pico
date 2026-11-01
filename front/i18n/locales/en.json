@@ -522,6 +522,16 @@
       "planning": "Planning",
       "reference": "Reference"
     },
-    "toggle_sidebar": "Toggle sidebar"
+    "toggle_sidebar": "Toggle sidebar",
+    "categories_description": "Group transactions by what the money was for.",
+    "tags_description": "Label transactions across categories. Tags can nest under a parent tag.",
+    "currencies_description": "Currencies known to Firefly III. Disabled ones are dimmed.",
+    "exchange_rates_description": "Daily rates used to convert foreign amounts.",
+    "category_transactions": "Transactions in this category",
+    "todo_hint": "Transactions with this tag show in the dashboard's todo list.",
+    "default_currency": "Default",
+    "disabled": "Disabled",
+    "country": "Country",
+    "per_usd": "Per 1 USD"
   }
 }

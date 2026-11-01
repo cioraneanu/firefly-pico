@@ -44,74 +44,30 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/core/constants/RouteConstants'
-import { useTagStore } from '~/core/stores/tagStore'
-import _, { cloneDeep, get, set } from 'lodash-es'
-import { useProfileStore } from '~/core/stores/profileStore'
-import { ref } from 'vue'
-import { useForm } from '~/core/composables/useForm'
-import { generateChildren } from '~/core/utils/VueUtils'
-import Tag from '~/core/models/Tag'
 import { useToolbar } from '~/mobile/composables/useToolbar'
-import TagTransformer from '~/core/transformers/TagTransformer'
-import TagRepository from '~/core/repository/TagRepository'
-import TagSelect from '~/mobile/components/select/tag-select.vue'
 import { TUTORIAL_CONSTANTS } from '~/core/constants/TutorialConstants.js'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 import { rule } from '~/core/utils/ValidationUtils.js'
-import UIUtils from '~/core/utils/UIUtils.js'
 
-const tagStore = useTagStore()
-const profileStore = useProfileStore()
-const route = useRoute()
+const {
+  itemId,
+  saveItem,
+  onDelete,
+  onNew,
+  onValidationError,
+  formName,
+  tag,
+  description,
+  date,
+  parentTag,
+  icon,
+  isTodo,
+  transactionsRoute,
+  totalLabel: computeTotalLabel,
+  computeTotal: onComputeTotal,
+} = useTagForm()
 
-const form = ref(null)
-
-const fetchItem = async () => {
-  const tag = cloneDeep(tagStore.tagDictionaryById[useRoute().params.id])
-
-  const parentTagId = get(tag, 'attributes.parent_id')
-  if (parentTagId) {
-    tag.attributes.parentTag = tagStore.tagDictionaryById[parentTagId]
-  }
-  item.value = tag
-}
-
-const onEvent = (event, payload) => {
-  if (event === 'onPostSave') {
-    let newItem = _.get(payload, 'data.data')
-    newItem = TagTransformer.transformFromApi(newItem)
-
-    const isTodo = get(newItem, 'attributes.is_todo')
-    const oldTagsList = tagStore.tagList.map((item) => (isTodo && set(item, 'attributes.is_todo', false)) || item).filter((item) => item.id !== itemId.value)
-    tagStore.tagList = [newItem, ...oldTagsList]
-  }
-  if (event === 'onPostDelete') {
-    tagStore.tagList = tagStore.tagList.filter((item) => parseInt(item.id) !== parseInt(itemId.value))
-  }
-}
-
-const resetFields = () => {
-  tag.value = ''
-}
-
-const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
-  form: form,
-  routeList: RouteConstants.ROUTE_TAG_LIST,
-  routeForm: RouteConstants.ROUTE_TAG_ID,
-  model: new Tag(),
-  resetFields: resetFields,
-  fetchItem: fetchItem,
-  onEvent: onEvent,
-})
-
-const { tag, description, date, parentTag, icon, isTodo } = generateChildren(item, [
-  { computed: 'tag', parentKey: 'attributes.tag' },
-  { computed: 'description', parentKey: 'attributes.description' },
-  { computed: 'date', parentKey: 'attributes.date' },
-  { computed: 'parentTag', parentKey: 'attributes.parentTag' },
-  { computed: 'icon', parentKey: 'attributes.icon' },
-  { computed: 'isTodo', parentKey: 'attributes.is_todo' },
-])
+const onNavigateToTransactionsList = () => navigateTo(transactionsRoute.value)
 
 const toolbar = useToolbar()
 const { t } = useI18n()
@@ -119,53 +75,5 @@ const { t } = useI18n()
 toolbar.init({
   title: itemId.value ? t('tag_page.title_edit') : t('tag_page.title_add'),
   backRoute: RouteConstants.ROUTE_TAG_LIST,
-})
-
-const onNavigateToTransactionsList = async () => {
-  const filters = TransactionFilterUtils.filters.tag.toUrl(item.value)
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
-}
-
-const computeTotalLabel = computed(() => {
-  const totalFormatted = Tag.getTotalFormatted(item.value)
-  return totalFormatted ? `${t('tag_page.total')}: ${totalFormatted}` : t('tag_page.compute_total')
-})
-
-const isComputingTotal = ref(false)
-const onComputeTotal = async () => {
-  if (isComputingTotal.value) {
-    return
-  }
-  isComputingTotal.value = true
-  const response = await new TagRepository().computeTotal(itemId.value)
-  isComputingTotal.value = false
-
-  // On error the axios interceptor already shows the backend message in a toast
-  if (!ResponseUtils.isSuccess(response)) {
-    return
-  }
-
-  const totalAmount = get(response, 'data.data.total_amount')
-  const totalCurrencyId = get(response, 'data.data.total_currency_id')
-  set(item.value, 'attributes.total_amount', totalAmount)
-  set(item.value, 'attributes.total_currency_id', totalCurrencyId)
-
-  const storeTag = tagStore.tagDictionaryById[itemId.value]
-  if (storeTag) {
-    set(storeTag, 'attributes.total_amount', totalAmount)
-    set(storeTag, 'attributes.total_currency_id', totalCurrencyId)
-  }
-
-  UIUtils.showToastSuccess(t('tag_page.total_success'))
-}
-
-watch(tag, (newValue) => {
-  if (profileStore.lowerCaseTagName) {
-    newValue = newValue.toLowerCase()
-  }
-  if (profileStore.stripAccents) {
-    newValue = LanguageUtils.removeAccents(newValue)
-  }
-  tag.value = newValue
 })
 </script>

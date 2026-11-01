@@ -522,6 +522,16 @@
       "planning": "계획",
       "reference": "참조"
     },
-    "toggle_sidebar": "사이드바 전환"
+    "toggle_sidebar": "사이드바 전환",
+    "categories_description": "돈의 용도별로 거래를 묶습니다.",
+    "tags_description": "카테고리와 관계없이 거래에 태그를 붙입니다. 태그는 상위 태그 아래에 둘 수 있습니다.",
+    "currencies_description": "Firefly III에 등록된 통화입니다. 비활성 통화는 흐리게 표시됩니다.",
+    "exchange_rates_description": "외화 금액 환산에 쓰이는 일일 환율입니다.",
+    "category_transactions": "이 카테고리의 거래",
+    "todo_hint": "이 태그가 붙은 거래는 대시보드의 할 일 목록에 표시됩니다.",
+    "default_currency": "기본",
+    "disabled": "비활성",
+    "country": "국가",
+    "per_usd": "1 USD당"
   }
 }

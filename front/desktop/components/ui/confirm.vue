@@ -1,5 +1,5 @@
 <template>
-  <Teleport defer to="#d-portal">
+  <Teleport to="#d-portal">
     <Transition name="d-dialog">
       <div v-if="confirmState" class="fixed inset-0 z-[70] grid place-items-center p-4">
         <div class="absolute inset-0 bg-black/10 backdrop-blur-xs dark:bg-black/50" @click="close(false)" />

@@ -521,6 +521,16 @@
       "planning": "Planowanie",
       "reference": "Odniesienia"
     },
-    "toggle_sidebar": "Przełącz pasek boczny"
+    "toggle_sidebar": "Przełącz pasek boczny",
+    "categories_description": "Grupuj transakcje według celu wydatku.",
+    "tags_description": "Oznaczaj transakcje niezależnie od kategorii. Tagi mogą mieć tag nadrzędny.",
+    "currencies_description": "Waluty znane Firefly III. Wyłączone są wyszarzone.",
+    "exchange_rates_description": "Dzienne kursy używane do przeliczania kwot w obcych walutach.",
+    "category_transactions": "Transakcje w tej kategorii",
+    "todo_hint": "Transakcje z tym tagiem pojawiają się na liście do zrobienia na pulpicie.",
+    "default_currency": "Domyślna",
+    "disabled": "Wyłączona",
+    "country": "Kraj",
+    "per_usd": "Za 1 USD"
   }
 }

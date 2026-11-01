@@ -521,6 +521,16 @@
       "planning": "Pianificazione",
       "reference": "Riferimenti"
     },
-    "toggle_sidebar": "Mostra/nascondi barra laterale"
+    "toggle_sidebar": "Mostra/nascondi barra laterale",
+    "categories_description": "Raggruppa le transazioni in base allo scopo della spesa.",
+    "tags_description": "Etichetta le transazioni tra le categorie. I tag possono avere un tag padre.",
+    "currencies_description": "Valute note a Firefly III. Quelle disattivate sono attenuate.",
+    "exchange_rates_description": "Tassi giornalieri usati per convertire gli importi in valuta estera.",
+    "category_transactions": "Transazioni in questa categoria",
+    "todo_hint": "Le transazioni con questo tag compaiono nella lista da fare della dashboard.",
+    "default_currency": "Predefinita",
+    "disabled": "Disattivata",
+    "country": "Paese",
+    "per_usd": "Per 1 USD"
   }
 }

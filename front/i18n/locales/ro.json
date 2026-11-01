@@ -521,6 +521,16 @@
       "planning": "Planificare",
       "reference": "Referințe"
     },
-    "toggle_sidebar": "Comută bara laterală"
+    "toggle_sidebar": "Comută bara laterală",
+    "categories_description": "Grupează tranzacțiile după scopul banilor.",
+    "tags_description": "Etichetează tranzacțiile indiferent de categorie. Etichetele pot avea o etichetă părinte.",
+    "currencies_description": "Monedele cunoscute de Firefly III. Cele dezactivate sunt estompate.",
+    "exchange_rates_description": "Cursuri zilnice folosite la conversia sumelor în valută.",
+    "category_transactions": "Tranzacțiile din această categorie",
+    "todo_hint": "Tranzacțiile cu această etichetă apar în lista de sarcini din panou.",
+    "default_currency": "Implicită",
+    "disabled": "Dezactivată",
+    "country": "Țară",
+    "per_usd": "La 1 USD"
   }
 }

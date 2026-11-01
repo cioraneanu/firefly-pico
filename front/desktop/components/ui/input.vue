@@ -1,7 +1,7 @@
 <template>
   <label
     :class="[
-      'flex h-8 w-full min-w-0 cursor-text items-center rounded-lg border bg-transparent transition-shadow focus-within:ring-3 dark:bg-field/30',
+      'flex h-8 min-w-0 cursor-text items-center rounded-lg border bg-transparent transition-shadow focus-within:ring-3 dark:bg-field/30',
       isInvalid ? 'border-danger ring-danger/20 focus-within:ring-danger/20' : 'border-field focus-within:border-ring focus-within:ring-ring/50',
     ]"
   >

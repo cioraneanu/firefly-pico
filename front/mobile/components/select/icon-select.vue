@@ -24,7 +24,7 @@
     <template #popup="{ onSelectCell }">
       <app-tabs v-if="!appStore.isDesktopLayout" v-model="activeTab" :items="tabs" class="mx-4 mb-2" />
 
-      <van-list v-model:loading="isLoadingMore" :finished="visibleCount >= filteredList.length" @load="onLoadMore">
+      <van-list v-model:loading="isLoadingMore" :finished="isFinished" @load="onLoadMore">
         <van-grid :column-num="6">
           <van-grid-item v-for="item in visibleList" :key="item.icon" class="cursor-pointer" :class="{ active: item.icon === modelValue?.icon }" @click="onSelectCell(item)">
             <div class="flex items-center justify-center flex-col mt-1.25 text-12">
@@ -40,15 +40,10 @@
 
 <script setup>
 import { useFormAttributes } from '~/core/composables/useFormAttributes'
-import { avatarListIcons, duoToneListIcons, fluentListIcons } from '~/core/constants/SvgConstants.js'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import Icon from '~/core/models/Icon.js'
-import { useIconStore } from '~/core/stores/iconStore.js'
 
 const attrs = useAttrs()
 const { dynamicAttrs } = useFormAttributes(attrs)
-const { t } = useI18n()
-const iconStore = useIconStore()
 const appStore = useAppStore()
 
 const props = defineProps({
@@ -63,55 +58,16 @@ const props = defineProps({
 
 const modelValue = defineModel()
 const showDropdown = ref(false)
-const search = ref('')
-const activeTab = ref(props.defaultTab)
-
-const tabs = computed(() => [
-  { value: 'classic', label: t('icon_select_classic'), list: [...duoToneListIcons, ...fluentListIcons] },
-  { value: 'avatars', label: t('icon_select_avatars'), list: avatarListIcons },
-  ...(iconStore.customIconList.length > 0 ? [{ value: 'custom', label: t('icon_select_custom'), list: iconStore.customIconList }] : []),
-])
-
-const list = computed(() => tabs.value.find((tab) => tab.value === activeTab.value)?.list ?? [])
-
-const filteredList = computed(() => {
-  if (search.value.length === 0) {
-    return list.value
-  }
-  return list.value.filter((icon) => LanguageUtils.includesSearch(icon.name, search.value))
-})
-
-// Each icon is a lazy loaded component => render them in pages while scrolling
-const PAGE_SIZE = 60
-const visibleCount = ref(PAGE_SIZE)
 const isLoadingMore = ref(false)
-const visibleList = computed(() => filteredList.value.slice(0, visibleCount.value))
+
+const { search, activeTab, tabs, visibleList, isFinished, loadMore, onOpen } = useIconPicker(modelValue, props.defaultTab)
 
 const onLoadMore = () => {
-  visibleCount.value += PAGE_SIZE
+  loadMore()
   isLoadingMore.value = false
-}
-
-watch([activeTab, search], () => (visibleCount.value = PAGE_SIZE))
-
-// ------ Methods ------
-
-const getTabForIcon = (icon) => {
-  if (Icon.isTypeCustom(icon)) {
-    return 'custom'
-  }
-  if (Icon.isTypeAvatar(icon)) {
-    return 'avatars'
-  }
-  return icon ? 'classic' : props.defaultTab
 }
 
 const getDisplayValue = (value) => value?.name
 
-watch(showDropdown, (isShown) => {
-  if (isShown) {
-    activeTab.value = getTabForIcon(modelValue.value?.icon)
-    iconStore.fetchCustomIcons()
-  }
-})
+watch(showDropdown, (isShown) => isShown && onOpen())
 </script>

@@ -522,6 +522,16 @@
       "planning": "Planung",
       "reference": "Referenz"
     },
-    "toggle_sidebar": "Seitenleiste umschalten"
+    "toggle_sidebar": "Seitenleiste umschalten",
+    "categories_description": "Gruppiere Buchungen danach, wofür das Geld ausgegeben wurde.",
+    "tags_description": "Versehe Buchungen kategorieübergreifend mit Tags. Tags können einem übergeordneten Tag untergeordnet werden.",
+    "currencies_description": "In Firefly III bekannte Währungen. Deaktivierte sind abgeblendet.",
+    "exchange_rates_description": "Tageskurse zur Umrechnung von Fremdwährungsbeträgen.",
+    "category_transactions": "Buchungen in dieser Kategorie",
+    "todo_hint": "Buchungen mit diesem Tag erscheinen in der Aufgabenliste des Dashboards.",
+    "default_currency": "Standard",
+    "disabled": "Deaktiviert",
+    "country": "Land",
+    "per_usd": "Pro 1 USD"
   }
 }
