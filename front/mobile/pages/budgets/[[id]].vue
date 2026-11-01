@@ -46,87 +46,34 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/core/constants/RouteConstants'
-import { useBudgetStore } from '~/core/stores/budgetStore'
-import _, { get } from 'lodash-es'
-import { useProfileStore } from '~/core/stores/profileStore'
-import { ref } from 'vue'
-import { useForm } from '~/core/composables/useForm'
-import { generateChildren } from '~/core/utils/VueUtils'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import BudgetTransformer from '~/core/transformers/BudgetTransformer.js'
-import Budget from '~/core/models/Budget.js'
-import AccountTypeSelect from '~/mobile/components/select/account/account-type-select.vue'
-import BudgetLimit from '~/core/models/BudgetLimit.js'
 import { rule } from '~/core/utils/ValidationUtils.js'
-import { TUTORIAL_CONSTANTS } from '~/core/constants/TutorialConstants.js'
 
-const budgetStore = useBudgetStore()
-const profileStore = useProfileStore()
-const route = useRoute()
+const {
+  itemId,
+  saveItem,
+  onDelete,
+  onNew,
+  onValidationError,
+  formName,
+  name,
+  icon,
+  type,
+  period,
+  currency,
+  amount,
+  active,
+  isPeriodVisible,
+  limitPercent: budgetLimitPercent,
+  limitSpent: budgetLimitSpent,
+  limitAmount: budgetLimitAmount,
+  limitInterval: budgetLimitInterval,
+  currencySymbol: budgetCurrencySymbol,
+  transactionsRoute,
+} = useBudgetForm()
 
-const form = ref(null)
-
-const resetFields = () => {
-  name.value = ''
-}
-
-const fetchItem = () => {
-  const budgetStore = useBudgetStore()
-  item.value = budgetStore.budgetDictionary[useRoute().params.id]
-}
-
-const isPeriodVisible = computed(() => get(type.value, 'fireflyCode') !== Budget.types.manual.fireflyCode)
-
-const budgetLimit = computed(() => Budget.getLimit(item.value))
-const budgetLimitPercent = computed(() => get(budgetLimit.value, `attributes.percent`, 0).toFixed(2))
-const budgetLimitSpent = computed(() => Math.abs(get(budgetLimit.value, `attributes.spent`, 0)))
-const budgetLimitAmount = computed(() => get(budgetLimit.value, `attributes.amount`) ?? 0)
-const budgetLimitInterval = computed(() => BudgetLimit.getLimitInterval(budgetLimit.value))
-const budgetCurrencySymbol = computed(() => Budget.getCurrencySymbol(item.value))
-
-const onEvent = (event, payload) => {
-  if (event === 'onPostSave') {
-    let newItem = _.get(payload, 'data.data')
-    newItem = BudgetTransformer.transformFromApi(newItem)
-    budgetStore.budgetList = [newItem, ...budgetStore.budgetList.filter((item) => item.id !== itemId.value)]
-  }
-  if (event === 'onPostDelete') {
-    budgetStore.budgetList = budgetStore.budgetList.filter((item) => item.id !== itemId.value)
-  }
-}
-
-const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
-  form: form,
-  routeList: RouteConstants.ROUTE_BUDGET_LIST,
-  routeForm: RouteConstants.ROUTE_BUDGET_ID,
-  model: new Budget(),
-  resetFields: resetFields,
-  fetchItem: fetchItem,
-  onEvent: onEvent,
-})
-
-const { name, icon, type, period, currency, amount, active } = generateChildren(item, [
-  { computed: 'name', parentKey: 'attributes.name' },
-  { computed: 'icon', parentKey: `attributes.icon` },
-  { computed: 'type', parentKey: `attributes.auto_budget_type` },
-  { computed: 'period', parentKey: `attributes.auto_budget_period` },
-  { computed: 'currency', parentKey: `attributes.currency` },
-  { computed: 'amount', parentKey: `attributes.amount` },
-  { computed: 'active', parentKey: `attributes.active` },
-])
-
-watch(name, (newValue) => {
-  if (profileStore.stripAccents) {
-    newValue = LanguageUtils.removeAccents(newValue)
-  }
-  name.value = newValue
-})
-
-const onNavigateToTransactionsList = async () => {
-  const filters = TransactionFilterUtils.filters.budget.toUrl(item.value)
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
-}
+const onNavigateToTransactionsList = () => navigateTo(transactionsRoute.value)
 
 const toolbar = useToolbar()
 const { t } = useI18n()

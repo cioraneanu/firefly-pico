@@ -52,93 +52,34 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/core/constants/RouteConstants'
-import { useTemplateStore } from '~/core/stores/templateStore'
-import _, { get } from 'lodash-es'
-import { ref } from 'vue'
-import { useForm } from '~/core/composables/useForm'
-import Account from '~/core/models/Account'
-import { generateChildren } from '~/core/utils/VueUtils'
-import TransactionTemplate from '~/core/models/TransactionTemplate'
 import { useToolbar } from '~/mobile/composables/useToolbar'
-import TransactionTemplateTransformer from '~/core/transformers/TransactionTemplateTransformer'
-import TransactionRepository from '~/core/repository/TransactionRepository'
-import TransactionTransformer from '~/core/transformers/TransactionTransformer'
-import { areIntEqual } from '~/core/utils/DataUtils'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 import { rule } from '~/core/utils/ValidationUtils.js'
 
 const refAmount = ref(null)
-
-// ------------------------------------
-
-const templateStore = useTemplateStore()
-const route = useRoute()
 const { t } = useI18n()
 
-const form = ref(null)
-
-const onEvent = (event, payload) => {
-  if (event === 'onPostSave') {
-    let newItem = _.get(payload, 'data.data')
-    newItem = TransactionTemplateTransformer.transformFromApi(newItem)
-    templateStore.transactionTemplateList = [newItem, ...templateStore.transactionTemplateList.filter((item) => !areIntEqual(item.id, itemId.value))]
-  }
-  if (event === 'onPostDelete') {
-    templateStore.transactionTemplateList = templateStore.transactionTemplateList.filter((item) => !areIntEqual(item.id, itemId.value))
-  }
-}
-
-const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
-  form: form,
-  routeList: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST,
-  routeForm: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID,
-  model: new TransactionTemplate(),
-  onEvent: onEvent,
-})
-
-const { name, extra_names, amount, tags, description, notes, account_source, account_destination, category, type, budget } = generateChildren(item, [
-  { computed: 'type', parentKey: `type` },
-  { computed: 'name', parentKey: `name` },
-  { computed: 'extra_names', parentKey: `extra_names` },
-  { computed: 'amount', parentKey: `amount` },
-  { computed: 'budget', parentKey: `budget` },
-  { computed: 'description', parentKey: `description` },
-  { computed: 'notes', parentKey: `notes` },
-  { computed: 'account_source', parentKey: `account_source` },
-  { computed: 'account_destination', parentKey: `account_destination` },
-  { computed: 'category', parentKey: `category` },
-  { computed: 'tags', parentKey: `tags` },
-])
-
-const accountSourceAllowedTypes = computed(() => Account.getAccountTypesForTransactionTypeSource(type.value))
-const accountDestinationAllowedTypes = computed(() => Account.getAccountTypesForTransactionTypeDestination(type.value))
-
-// ----- Custom logic -----
-
-onMounted(async () => {
-  const sourceTransactionId = get(route.query, 'transaction_id')
-  if (!sourceTransactionId) {
-    return
-  }
-
-  let sourceTransaction = await new TransactionRepository().getOne(sourceTransactionId)
-  sourceTransaction = TransactionTransformer.transformFromApi(sourceTransaction.data)
-  sourceTransaction = get(sourceTransaction, 'attributes.transactions.0')
-  if (!sourceTransaction) {
-    return
-  }
-
-  amount.value = sourceTransaction.amount
-  name.value = sourceTransaction.description
-  type.value = sourceTransaction.type
-  description.value = sourceTransaction.description
-  notes.value = sourceTransaction.notes
-  account_source.value = sourceTransaction.accountSource
-  account_destination.value = sourceTransaction.accountDestination
-  category.value = sourceTransaction.category
-  tags.value = sourceTransaction.tags
-  budget.value = sourceTransaction.budget
-})
+const {
+  itemId,
+  saveItem,
+  onDelete,
+  onNew,
+  onValidationError,
+  formName,
+  name,
+  extra_names,
+  amount,
+  tags,
+  description,
+  notes,
+  account_source,
+  account_destination,
+  category,
+  type,
+  budget,
+  accountSourceAllowedTypes,
+  accountDestinationAllowedTypes,
+} = useTemplateForm()
 
 const toolbar = useToolbar()
 toolbar.init({

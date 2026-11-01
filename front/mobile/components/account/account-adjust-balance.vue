@@ -17,13 +17,11 @@
 </template>
 
 <script setup>
-import { cloneDeep, get } from 'lodash-es'
 import { useFormAttributes } from '~/core/composables/useFormAttributes'
 import { isEqual } from 'lodash-es/lang'
 import { useSwipeToDismiss } from '~/mobile/composables/useSwipeToDismiss'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 import AccountRepository from '~/core/repository/AccountRepository.js'
-import AccountTransformer from '~/core/transformers/AccountTransformer.js'
 import UIUtils from '~/core/utils/UIUtils.js'
 import Account from '~/core/models/Account.js'
 
@@ -55,12 +53,7 @@ watch(showDropdown, (newValue) => {
 })
 
 const onSave = async () => {
-  const accountId = get(props.value, 'id')
-  let accountBody = cloneDeep(props.value)
-  const amountOffset = parseFloat(newAmount.value) - parseFloat(Account.getBalance(props.value))
-  accountBody.attributes.opening_balance = parseFloat(accountBody.attributes.opening_balance) + amountOffset
-  accountBody = AccountTransformer.transformToApi(accountBody)
-  const response = await new AccountRepository().update(accountId, accountBody)
+  const response = await new AccountRepository().adjustBalance(props.value, newAmount.value)
   emits('result', 'onPostSave', response)
   showDropdown.value = false
 }
@@ -75,4 +68,3 @@ useSwipeToDismiss({
   showDropdown: showDropdown,
 })
 </script>
-

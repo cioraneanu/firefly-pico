@@ -41,20 +41,23 @@
         @keydown.enter.prevent="pick(filtered[active])"
       />
     </div>
-    <button
-      v-for="(item, index) in filtered"
-      :key="keyOf(item)"
-      type="button"
-      :class="['relative flex w-full shrink-0 cursor-default items-center gap-2 rounded-md py-1 pl-1.5 pr-8 text-left', index === active && 'bg-soft']"
-      :style="{ paddingLeft: `${6 + getIndent(item) * 16}px` }"
-      @mouseenter="active = index"
-      @click="pick(item)"
-    >
-      <app-icon v-if="getIcon(item)" :icon="getIcon(item)" :size="16" />
-      <span class="truncate">{{ getLabel(item) }}</span>
-      <span v-if="getMeta(item)" class="ml-auto pl-3 text-xs text-dim">{{ getMeta(item) }}</span>
-      <icon-check v-if="isSelected(item)" :size="16" class="absolute right-2" />
-    </button>
+    <template v-for="(item, index) in filtered" :key="keyOf(item)">
+      <p v-if="getGroup(item) && getGroup(item) !== getGroup(filtered[index - 1])" class="px-1.5 pb-1 pt-2 text-xs font-medium text-dim">{{ getGroup(item) }}</p>
+      <button
+        type="button"
+        role="option"
+        :aria-selected="isSelected(item)"
+        :class="['relative flex w-full shrink-0 cursor-default items-center gap-2 rounded-md py-1 pl-1.5 pr-8 text-left', index === active && 'bg-soft']"
+        :style="{ paddingLeft: `${6 + getIndent(item) * 16}px` }"
+        @mouseenter="active = index"
+        @click="pick(item)"
+      >
+        <app-icon v-if="getIcon(item)" :icon="getIcon(item)" :size="16" />
+        <span class="truncate">{{ getLabel(item) }}</span>
+        <span v-if="getMeta(item)" class="ml-auto pl-3 text-xs text-dim">{{ getMeta(item) }}</span>
+        <icon-check v-if="isSelected(item)" :size="16" class="absolute right-2" />
+      </button>
+    </template>
     <p v-if="!filtered.length" class="py-6 text-center text-dim">{{ $t('select_is_empty') }}</p>
   </d-popover>
 </template>
@@ -70,6 +73,7 @@ const props = defineProps({
   getMeta: { type: Function, default: () => null },
   getKey: { type: Function, default: null },
   getIndent: { type: Function, default: () => 0 },
+  getGroup: { type: Function, default: () => null },
   multiple: Boolean,
   searchable: { type: Boolean, default: null },
   clearable: Boolean,
@@ -86,7 +90,7 @@ const active = ref(0)
 
 const field = inject('d-field', null)
 const isInvalid = computed(() => props.invalid || !!field?.error.value)
-const keyOf = (item) => props.getKey?.(item) ?? item?.id ?? item?.code ?? item?.value ?? props.getLabel(item)
+const keyOf = (item) => props.getKey?.(item) ?? item?.id ?? item?.fireflyCode ?? item?.code ?? item?.value ?? props.getLabel(item)
 const hasValue = computed(() => (props.multiple ? model.value?.length > 0 : model.value !== null && model.value !== undefined && model.value !== ''))
 const isSearchable = computed(() => props.searchable ?? props.options.length > 7)
 const isSelected = (item) => (props.multiple ? (model.value ?? []).some((selected) => keyOf(selected) === keyOf(item)) : hasValue.value && keyOf(model.value) === keyOf(item))

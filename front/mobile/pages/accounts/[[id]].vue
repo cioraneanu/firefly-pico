@@ -47,106 +47,44 @@ import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/core/constants/RouteConstants'
-import { useAccountStore } from '~/core/stores/accountStore'
-import { get } from 'lodash-es'
-import { useProfileStore } from '~/core/stores/profileStore'
-import { ref } from 'vue'
-import { useForm } from '~/core/composables/useForm'
 import Account from '~/core/models/Account'
-import { generateChildren } from '~/core/utils/VueUtils'
 import AccountTypeSelect from '~/mobile/components/select/account/account-type-select.vue'
-import AccountTransformer from '~/core/transformers/AccountTransformer'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 import { rule } from '~/core/utils/ValidationUtils.js'
 import AppFieldDropdown from '~/mobile/components/ui-kit/app-field-dropdown.vue'
-import AccountRepository from '~/core/repository/AccountRepository.js'
 
-const accountStore = useAccountStore()
-const profileStore = useProfileStore()
-const route = useRoute()
 const { t } = useI18n()
-
-const resetFields = () => {
-  // name.value = ''
-}
-
-const form = ref(null)
 const isAdjustBalanceVisible = ref(false)
 
-const fetchItem = () => {
-  const accountStore = useAccountStore()
-  item.value = accountStore.accountDictionary[useRoute().params.id]
-}
+const {
+  itemId,
+  item,
+  saveItem,
+  onDelete,
+  onNew,
+  onValidationError,
+  formName,
+  sync: onEvent,
+  name,
+  type,
+  role,
+  currency,
+  icon,
+  includeNetWorth,
+  isDashboardVisible,
+  liabilityType,
+  liabilityDirection,
+  group,
+  isRoleVisible,
+  isLiability,
+  transactionsRoute,
+  getGroups: getGroupList,
+} = useAccountForm()
 
-const onEvent = (event, payload) => {
-  if (event === 'onPostSave') {
-    let newItem = get(payload, 'data.data')
-    newItem = AccountTransformer.transformFromApi(newItem)
-    accountStore.accountList = [newItem, ...accountStore.accountList.filter((item) => item.id !== itemId.value)]
-    item.value = newItem
-  }
-  if (event === 'onPostDelete') {
-    accountStore.accountList = accountStore.accountList.filter((item) => item.id !== itemId.value)
-  }
-}
-
-const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
-  form: form,
-  routeList: RouteConstants.ROUTE_ACCOUNT_LIST,
-  routeForm: RouteConstants.ROUTE_ACCOUNT_ID,
-  model: new Account(),
-  fetchItem: fetchItem,
-  resetFields: resetFields,
-  onEvent: onEvent,
-})
-
-// const type = ref(null)
-
-const pathKey = 'attributes'
-
-// const name = ref("")
-const { name, type, role, currency, icon, includeNetWorth, isDashboardVisible, liabilityType, liabilityDirection, group } = generateChildren(item, [
-  { computed: 'name', parentKey: `${pathKey}.name` },
-  { computed: 'group', parentKey: `${pathKey}.group` },
-  { computed: 'icon', parentKey: `${pathKey}.icon` },
-  { computed: 'type', parentKey: `${pathKey}.type` },
-  { computed: 'role', parentKey: `${pathKey}.account_role` },
-  { computed: 'liabilityType', parentKey: `${pathKey}.liability_type` },
-  { computed: 'liabilityDirection', parentKey: `${pathKey}.liability_direction` },
-  { computed: 'currency', parentKey: `${pathKey}.currency` },
-  { computed: 'includeNetWorth', parentKey: `${pathKey}.include_net_worth` },
-  { computed: 'isDashboardVisible', parentKey: `${pathKey}.is_dashboard_visible` },
-])
-
-const isRoleVisible = computed(() => get(type.value, 'fireflyCode') === Account.types.asset.fireflyCode)
-const isLiability = computed(() => get(type.value, 'fireflyCode') === Account.types.liability.fireflyCode)
-
-watch(name, (newValue) => {
-  if (profileStore.lowerCaseAccountName) {
-    newValue = newValue.toLowerCase()
-  }
-  if (profileStore.stripAccents) {
-    newValue = LanguageUtils.removeAccents(newValue)
-  }
-  name.value = newValue
-})
-
-const accountBalance = computed(() => Account.getBalance(item.value))
-const accountCurrency = computed(() => get(item.value, 'attributes.currency_symbol') ?? '')
-const adjustBalanceText = computed(() => `${t('account_page.adjust_balance')} (${accountBalance.value} ${accountCurrency.value})`)
-const onAdjustBalance = () => {
-  isAdjustBalanceVisible.value = true
-}
-
-const getGroupList = async (text) => {
-  return await new AccountRepository().getGroups(text)
-}
-
-const onNavigateToTransactionsList = async () => {
-  const filters = TransactionFilterUtils.filters.account.toUrl([item.value])
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
-}
+const adjustBalanceText = computed(() => `${t('account_page.adjust_balance')} (${Account.getBalance(item.value)} ${item.value?.attributes?.currency_symbol ?? ''})`)
+const onAdjustBalance = () => (isAdjustBalanceVisible.value = true)
+const onNavigateToTransactionsList = () => navigateTo(transactionsRoute.value)
 
 const toolbar = useToolbar()
 toolbar.init({

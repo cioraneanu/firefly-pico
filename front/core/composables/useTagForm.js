@@ -1,4 +1,4 @@
-import { cloneDeep, get, set } from 'lodash-es'
+import { cloneDeep, get } from 'lodash-es'
 import RouteConstants from '~/core/constants/RouteConstants'
 import Tag from '~/core/models/Tag'
 import TagRepository from '~/core/repository/TagRepository'
@@ -18,17 +18,14 @@ export function useTagForm(options = {}) {
   }
 
   const onEvent = (event, payload) => {
-    const others = tagStore.tagList.filter((item) => parseInt(item.id) !== parseInt(form.itemId.value))
-    if (event === useFormEvent.postSave) {
-      const tag = TagTransformer.transformFromApi(get(payload, 'data.data'))
-      const isTodo = get(tag, 'attributes.is_todo')
-      tagStore.tagList = [tag, ...others.map((item) => (isTodo && set(item, 'attributes.is_todo', false)) || item)]
-    }
-    if (event === useFormEvent.postDelete) tagStore.tagList = others
+    const [saved, ...others] = tagStore.tagList
+    if (event === useFormEvent.postSave && saved.attributes.is_todo) others.forEach((tag) => (tag.attributes.is_todo = false))
     options.onEvent?.(event, payload)
   }
 
-  const form = useForm({
+  const form = useEntityForm({
+    list: toRef(tagStore, 'tagList'),
+    transformer: TagTransformer,
     routeList: RouteConstants.ROUTE_TAG_LIST,
     routeForm: RouteConstants.ROUTE_TAG_ID,
     model: new Tag(),

@@ -153,64 +153,17 @@
 
 <script setup>
 import RouteConstants from '~/core/constants/RouteConstants'
-import { useRecurringTransactionStore } from '~/core/stores/recurringTransactionStore'
-import _, { isEqual } from 'lodash-es'
-import { useProfileStore } from '~/core/stores/profileStore'
-import { ref } from 'vue'
-import { useForm } from '~/core/composables/useForm'
-import { generateChildren } from '~/core/utils/VueUtils'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import RecurringTransactionTransformer from '~/core/transformers/RecurringTransactionTransformer.js'
-import RecurringTransaction from '~/core/models/RecurringTransaction.js'
-import Transaction from '~/core/models/Transaction.js'
-import Account from '~/core/models/Account.js'
-import DateUtils from '~/core/utils/DateUtils.js'
 import { rule } from '~/core/utils/ValidationUtils.js'
-import { addDays, startOfDay, subYears } from 'date-fns'
-
-const recurringTransactionStore = useRecurringTransactionStore()
-const profileStore = useProfileStore()
-
-const form = ref(null)
-
-const resetFields = () => {
-  title.value = ''
-}
-
-const fetchItem = () => {
-  item.value = recurringTransactionStore.recurringTransactionDictionary[useRoute().params.id]
-}
-
-const upcomingDates = computed(() => RecurringTransaction.getOccurrences(item.value).map((date) => DateUtils.dateToUI(date)))
-
-const onNavigateToTransactionsList = async () => {
-  const filters = TransactionFilterUtils.filters.recurrence.toUrl(item.value)
-  await navigateTo(`${RouteConstants.ROUTE_TRANSACTION_LIST}?${filters}`)
-}
-
-const onEvent = (event, payload) => {
-  if (event === 'onPostSave') {
-    let newItem = _.get(payload, 'data.data')
-    newItem = RecurringTransactionTransformer.transformFromApi(newItem)
-    recurringTransactionStore.recurringTransactionList = [newItem, ...recurringTransactionStore.recurringTransactionList.filter((item) => item.id !== itemId.value)]
-  }
-  if (event === 'onPostDelete') {
-    recurringTransactionStore.recurringTransactionList = recurringTransactionStore.recurringTransactionList.filter((item) => item.id !== itemId.value)
-  }
-}
-
-const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
-  form: form,
-  routeList: RouteConstants.ROUTE_RECURRING_TRANSACTION_LIST,
-  routeForm: RouteConstants.ROUTE_RECURRING_TRANSACTION_ID,
-  model: new RecurringTransaction(),
-  resetFields: resetFields,
-  fetchItem: fetchItem,
-  onEvent: onEvent,
-})
 
 const {
+  itemId,
+  saveItem,
+  onDelete,
+  onNew,
+  onValidationError,
+  formName,
   title,
   icon,
   type,
@@ -234,118 +187,31 @@ const {
   nrOfRepetitions,
   active,
   notes,
-} = generateChildren(item, [
-  { computed: 'title', parentKey: 'attributes.title' },
-  { computed: 'icon', parentKey: `attributes.icon` },
-  { computed: 'type', parentKey: `attributes.type` },
-  { computed: 'amount', parentKey: `attributes.amount` },
-  { computed: 'amountForeign', parentKey: `attributes.amountForeign` },
-  { computed: 'currencyForeign', parentKey: `attributes.currencyForeign` },
-  { computed: 'accountSource', parentKey: `attributes.accountSource` },
-  { computed: 'accountDestination', parentKey: `attributes.accountDestination` },
-  { computed: 'category', parentKey: `attributes.category` },
-  { computed: 'budget', parentKey: `attributes.budget` },
-  { computed: 'tags', parentKey: `attributes.tags` },
-  { computed: 'description', parentKey: `attributes.description` },
-  { computed: 'repetitionType', parentKey: `attributes.repetitionType` },
-  { computed: 'repetitionWeekday', parentKey: `attributes.repetitionWeekday` },
-  { computed: 'repetitionDay', parentKey: `attributes.repetitionDay` },
-  { computed: 'repetitionWeek', parentKey: `attributes.repetitionWeek` },
-  { computed: 'repetitionDate', parentKey: `attributes.repetitionDate` },
-  { computed: 'firstDate', parentKey: `attributes.first_date` },
-  { computed: 'repetitionEndType', parentKey: `attributes.repetitionEndType` },
-  { computed: 'repeatUntil', parentKey: `attributes.repeat_until` },
-  { computed: 'nrOfRepetitions', parentKey: `attributes.nr_of_repetitions` },
-  { computed: 'active', parentKey: `attributes.active` },
-  { computed: 'notes', parentKey: `attributes.notes` },
-])
+  upcomingDates,
+  transactionsRoute,
+  isRepetitionWeekly,
+  isRepetitionMonthly,
+  isRepetitionNdom,
+  isRepetitionYearly,
+  isEndUntilDate,
+  isEndNrOfTimes,
+  maxFireflyDate,
+  firstDateMin,
+  firstDateRules,
+  repeatUntilRules,
+  accountSourceAllowedTypes,
+  accountDestinationAllowedTypes,
+  amountCurrency,
+  isForeignAmountVisible,
+  isAccountSourceRequired,
+  isAccountDestinationRequired,
+} = useRecurringTransactionForm()
 
-const isRepetitionWeekly = computed(() => isEqual(repetitionType.value, RecurringTransaction.repetitionTypes.weekly))
-const isRepetitionMonthly = computed(() => isEqual(repetitionType.value, RecurringTransaction.repetitionTypes.monthly))
-const isRepetitionNdom = computed(() => isEqual(repetitionType.value, RecurringTransaction.repetitionTypes.ndom))
-const isRepetitionYearly = computed(() => isEqual(repetitionType.value, RecurringTransaction.repetitionTypes.yearly))
+const onNavigateToTransactionsList = () => navigateTo(transactionsRoute.value)
 
-const isEndUntilDate = computed(() => isEqual(repetitionEndType.value, RecurringTransaction.repetitionEndTypes.untilDate))
-const isEndNrOfTimes = computed(() => isEqual(repetitionEndType.value, RecurringTransaction.repetitionEndTypes.nrOfTimes))
-const maxFireflyDate = new Date(2038, 0, 16)
-const firstDateMin = computed(() => (itemId.value ? subYears(new Date(), 5) : startOfDay(addDays(new Date(), 1))))
-const firstDateRules = computed(() => [rule.required(), ...(!itemId.value ? [rule.afterDate(new Date())] : [])])
-const repeatUntilRules = computed(() => [rule.required(), rule.afterDate(firstDate.value, true)])
-
-// Firefly III only accepts one end condition, so clear the value that no longer applies
-watch(repetitionEndType, () => {
-  if (!isEndUntilDate.value) {
-    repeatUntil.value = null
-  }
-  if (!isEndNrOfTimes.value) {
-    nrOfRepetitions.value = null
-  }
-})
-
-const isTypeExpense = computed(() => isEqual(type.value, Transaction.types.expense))
-const isTypeIncome = computed(() => isEqual(type.value, Transaction.types.income))
-const isTypeTransfer = computed(() => isEqual(type.value, Transaction.types.transfer))
-
-const accountSourceAllowedTypes = computed(() => Account.getAccountTypesForTransactionTypeSource(type.value))
-const accountDestinationAllowedTypes = computed(() => Account.getAccountTypesForTransactionTypeDestination(type.value))
-const isIncomeFromLiability = computed(() => isTypeIncome.value && isEqual(Account.getType(accountSource.value), Account.types.liability))
-const amountCurrency = computed(() => Account.getCurrency(isTypeIncome.value && !isIncomeFromLiability.value ? accountDestination.value : accountSource.value))
-
-const isForeignAmountVisible = computed(() => {
-  const sourceCurrency = Account.getCurrency(accountSource.value)
-  const destinationCurrency = Account.getCurrency(accountDestination.value)
-  const currencyAwareTypes = [Account.types.asset.fireflyCode, Account.types.liability.fireflyCode]
-  const sourceType = Account.getType(accountSource.value)?.fireflyCode
-  const destinationType = Account.getType(accountDestination.value)?.fireflyCode
-  return Boolean(currencyAwareTypes.includes(sourceType) && currencyAwareTypes.includes(destinationType) && sourceCurrency && destinationCurrency && sourceCurrency.id !== destinationCurrency.id)
-})
-
-watch(type, (newValue, oldValue) => {
-  if (itemId.value || !oldValue || isEqual(newValue, oldValue)) {
-    return
-  }
-  const { source, destination } = Transaction.attemptAccountFixOnTypeChange(newValue, accountSource.value, accountDestination.value)
-  accountSource.value = source
-  accountDestination.value = destination
-})
-
-watch([accountSource, accountDestination], (_, [oldSource, oldDestination]) => {
-  // Skip the initial item load so an existing foreign amount isn't wiped just by opening the form
-  if (oldSource === undefined && oldDestination === undefined) {
-    return
-  }
-  if (isForeignAmountVisible.value) {
-    currencyForeign.value = Account.getCurrency(accountDestination.value)
-    return
-  }
-  amountForeign.value = ''
-  currencyForeign.value = null
-})
-
-const accountSourceBinding = computed(() => {
-  const isRequired = isTypeExpense.value || isTypeTransfer.value
-  return {
-    required: isRequired,
-    clearable: isRequired || !itemId.value,
-    rules: isRequired ? [rule.required()] : [],
-  }
-})
-
-const accountDestinationBinding = computed(() => {
-  const isRequired = isTypeIncome.value || isTypeTransfer.value
-  return {
-    required: isRequired,
-    clearable: isRequired || !itemId.value,
-    rules: isRequired ? [rule.required()] : [],
-  }
-})
-
-watch(title, (newValue) => {
-  if (profileStore.stripAccents) {
-    newValue = LanguageUtils.removeAccents(newValue)
-  }
-  title.value = newValue
-})
+const accountBinding = (isRequired) => ({ required: isRequired, clearable: isRequired || !itemId.value, rules: isRequired ? [rule.required()] : [] })
+const accountSourceBinding = computed(() => accountBinding(isAccountSourceRequired.value))
+const accountDestinationBinding = computed(() => accountBinding(isAccountDestinationRequired.value))
 
 const toolbar = useToolbar()
 const { t } = useI18n()

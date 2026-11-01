@@ -38,5 +38,10 @@ import Currency from '~/core/models/Currency'
 const currencyStore = useCurrencyStore()
 const { id, isOpen } = useRouteDialog(RouteConstants.ROUTE_CURRENCY_LIST)
 const sorted = computed(() => orderBy(currencyStore.currenciesList, ['attributes.enabled', 'attributes.name'], ['desc', 'asc']))
-const { search, filtered } = useSearch(sorted, Currency.getName, Currency.getCode, Currency.getSymbol)
+const { search, filtered } = useSearch(
+  sorted,
+  (item) => Currency.getName(item),
+  (item) => Currency.getCode(item),
+  (item) => Currency.getSymbol(item),
+)
 </script>

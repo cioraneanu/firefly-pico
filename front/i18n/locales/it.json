@@ -531,6 +531,15 @@
     "default_currency": "Predefinita",
     "disabled": "Disattivata",
     "country": "Paese",
-    "per_usd": "Per 1 USD"
+    "per_usd": "Per 1 USD",
+    "accounts_description": "Conti di attività, spesa, entrata, passività e contanti da Firefly III.",
+    "budgets_description": "Limiti di spesa per periodo e quanto ne è stato usato.",
+    "piggy_banks_description": "Obiettivi di risparmio e quanto sei vicino a ciascuno.",
+    "templates_description": "Transazioni precompilate che l'assistente trova per nome.",
+    "recurring_description": "Transazioni che Firefly III crea secondo una pianificazione.",
+    "inactive": "Inattivo",
+    "extra_names": "Nomi aggiuntivi",
+    "extra_names_hint": "Altri nomi con cui l'assistente trova questo modello.",
+    "foreign_amount": "Importo in valuta"
   }
 }

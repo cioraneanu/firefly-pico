@@ -532,6 +532,15 @@
     "default_currency": "Default",
     "disabled": "Disabled",
     "country": "Country",
-    "per_usd": "Per 1 USD"
+    "per_usd": "Per 1 USD",
+    "accounts_description": "Asset, expense, revenue, liability and cash accounts from Firefly III.",
+    "budgets_description": "Spending limits per period and how much of them is used.",
+    "piggy_banks_description": "Savings goals and how close you are to each one.",
+    "templates_description": "Prefilled transactions the assistant can find by name.",
+    "recurring_description": "Transactions Firefly III creates on a schedule.",
+    "inactive": "Inactive",
+    "extra_names": "Extra names",
+    "extra_names_hint": "Other names the assistant can find this template by.",
+    "foreign_amount": "Foreign amount"
   }
 }

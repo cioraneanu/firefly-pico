@@ -32,5 +32,8 @@ import { sortByPath } from '~/core/utils/DataUtils'
 
 const categoryStore = useCategoryStore()
 const { id, isOpen } = useRouteDialog(RouteConstants.ROUTE_CATEGORY_LIST)
-const { search, filtered } = useSearch(() => sortByPath([...categoryStore.categoryList], 'attributes.name'), Category.getDisplayName)
+const { search, filtered } = useSearch(
+  () => sortByPath([...categoryStore.categoryList], 'attributes.name'),
+  (item) => Category.getDisplayName(item),
+)
 </script>

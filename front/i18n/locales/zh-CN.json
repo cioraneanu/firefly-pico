@@ -479,6 +479,15 @@
     "default_currency": "默认",
     "disabled": "已禁用",
     "country": "国家",
-    "per_usd": "每 1 美元"
+    "per_usd": "每 1 美元",
+    "accounts_description": "来自 Firefly III 的资产、支出、收入、负债和现金账户。",
+    "budgets_description": "每个周期的支出限额及其使用情况。",
+    "piggy_banks_description": "储蓄目标以及你离每个目标还有多远。",
+    "templates_description": "助手可按名称查找的预填交易。",
+    "recurring_description": "Firefly III 按计划自动创建的交易。",
+    "inactive": "未启用",
+    "extra_names": "其他名称",
+    "extra_names_hint": "助手可用来查找此模板的其他名称。",
+    "foreign_amount": "外币金额"
   }
 }

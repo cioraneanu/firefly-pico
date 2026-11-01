@@ -531,6 +531,15 @@
     "default_currency": "По умолчанию",
     "disabled": "Отключена",
     "country": "Страна",
-    "per_usd": "За 1 USD"
+    "per_usd": "За 1 USD",
+    "accounts_description": "Счета активов, расходов, доходов, обязательств и наличных из Firefly III.",
+    "budgets_description": "Лимиты расходов на период и их использование.",
+    "piggy_banks_description": "Цели накоплений и прогресс по каждой.",
+    "templates_description": "Заготовки транзакций, которые ассистент находит по имени.",
+    "recurring_description": "Транзакции, которые Firefly III создаёт по расписанию.",
+    "inactive": "Неактивен",
+    "extra_names": "Доп. названия",
+    "extra_names_hint": "Другие имена, по которым ассистент найдёт этот шаблон.",
+    "foreign_amount": "Сумма в валюте"
   }
 }

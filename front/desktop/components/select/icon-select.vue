@@ -19,7 +19,7 @@
       <icon-search :size="16" />
       <input v-model="search" autofocus class="h-full flex-1 text-fg" :placeholder="$t('search_placeholder')" />
     </div>
-    <d-tabs v-if="tabs.length > 1" v-model="activeTab" :options="tabs" class="mb-1 w-full shrink-0" />
+    <d-tabs v-if="tabs.length > 1" v-model="activeTab" :options="tabs" block class="mb-1 shrink-0" />
     <div class="grid grid-cols-8 gap-0.5 overflow-y-auto" @scroll="onScroll">
       <button
         v-for="item in visibleList"
@@ -40,10 +40,11 @@
 import { IconSearch, IconSelector, IconX } from '@tabler/icons-vue'
 
 const model = defineModel()
+const props = defineProps({ defaultTab: { type: String, default: 'classic' } })
 const trigger = ref(null)
 const open = ref(false)
 
-const { search, activeTab, tabs, visibleList, isFinished, loadMore, onOpen } = useIconPicker(model)
+const { search, activeTab, tabs, visibleList, isFinished, loadMore, onOpen } = useIconPicker(model, props.defaultTab)
 
 const onScroll = ({ target }) => !isFinished.value && target.scrollTop + target.clientHeight > target.scrollHeight - 80 && loadMore()
 

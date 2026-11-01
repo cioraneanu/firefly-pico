@@ -532,6 +532,15 @@
     "default_currency": "Standard",
     "disabled": "Deaktiviert",
     "country": "Land",
-    "per_usd": "Pro 1 USD"
+    "per_usd": "Pro 1 USD",
+    "accounts_description": "Bestands-, Ausgaben-, Einnahmen-, Verbindlichkeits- und Bargeldkonten aus Firefly III.",
+    "budgets_description": "Ausgabenlimits pro Zeitraum und wie viel davon verbraucht ist.",
+    "piggy_banks_description": "Sparziele und wie nah du ihnen bist.",
+    "templates_description": "Vorausgefüllte Buchungen, die der Assistent per Name findet.",
+    "recurring_description": "Buchungen, die Firefly III nach Zeitplan anlegt.",
+    "inactive": "Inaktiv",
+    "extra_names": "Weitere Namen",
+    "extra_names_hint": "Weitere Namen, unter denen der Assistent diese Vorlage findet.",
+    "foreign_amount": "Fremdwährungsbetrag"
   }
 }

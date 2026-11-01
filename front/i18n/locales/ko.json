@@ -532,6 +532,15 @@
     "default_currency": "기본",
     "disabled": "비활성",
     "country": "국가",
-    "per_usd": "1 USD당"
+    "per_usd": "1 USD당",
+    "accounts_description": "Firefly III의 자산, 지출, 수익, 부채, 현금 계정입니다.",
+    "budgets_description": "기간별 지출 한도와 사용량입니다.",
+    "piggy_banks_description": "저축 목표와 각 목표의 진행 상황입니다.",
+    "templates_description": "어시스턴트가 이름으로 찾을 수 있는 미리 채워진 거래입니다.",
+    "recurring_description": "Firefly III가 일정에 따라 생성하는 거래입니다.",
+    "inactive": "비활성",
+    "extra_names": "추가 이름",
+    "extra_names_hint": "어시스턴트가 이 템플릿을 찾을 수 있는 다른 이름입니다.",
+    "foreign_amount": "외화 금액"
   }
 }

@@ -7,7 +7,10 @@
   >
     <component :is="icon" v-if="icon" :size="16" class="ml-2.5 text-dim" />
     <span v-if="prefix" class="ml-2.5 text-dim">{{ prefix }}</span>
-    <input ref="input" v-model="model" :type :placeholder :step :min :autofocus :disabled class="h-full min-w-0 flex-1 px-2.5 text-sm tabular-nums" />
+    <input ref="input" v-model="model" :type :placeholder :step :min :autofocus :disabled :list="options && listId" class="h-full min-w-0 flex-1 px-2.5 text-sm tabular-nums" />
+    <datalist v-if="options" :id="listId">
+      <option v-for="option in options" :key="option" :value="option" />
+    </datalist>
     <span v-if="suffix" class="mr-2.5 text-dim">{{ suffix }}</span>
     <d-button v-if="clearable && model" variant="ghost" size="icon-xs" :icon="IconX" class="mr-1 text-dim" :aria-label="$t('filters.clear')" @click.prevent="model = ''" />
     <slot />
@@ -30,7 +33,10 @@ const props = defineProps({
   autofocus: Boolean,
   disabled: Boolean,
   invalid: Boolean,
+  options: Array,
 })
+
+const listId = useId()
 
 const field = inject('d-field', null)
 const isInvalid = computed(() => props.invalid || !!field?.error.value)

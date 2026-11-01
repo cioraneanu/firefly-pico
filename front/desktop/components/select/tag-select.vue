@@ -1,5 +1,5 @@
 <template>
-  <d-select v-model="model" :options :get-label="Tag.getDisplayName" :get-icon="getIcon" :get-indent="getIndent" :icon="IconTag" :placeholder="$t('tags_select')" :multiple clearable />
+  <d-select v-model="model" :options :get-label="(item) => Tag.getDisplayName(item)" :get-icon="getIcon" :get-indent="getIndent" :icon="IconTag" :placeholder="$t('tags_select')" :multiple clearable />
 </template>
 
 <script setup>

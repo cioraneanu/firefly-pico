@@ -531,6 +531,15 @@
     "default_currency": "Implicită",
     "disabled": "Dezactivată",
     "country": "Țară",
-    "per_usd": "La 1 USD"
+    "per_usd": "La 1 USD",
+    "accounts_description": "Conturi de active, cheltuieli, venituri, datorii și numerar din Firefly III.",
+    "budgets_description": "Limite de cheltuieli pe perioadă și cât s-a consumat din ele.",
+    "piggy_banks_description": "Obiective de economisire și cât de aproape ești de fiecare.",
+    "templates_description": "Tranzacții precompletate pe care asistentul le găsește după nume.",
+    "recurring_description": "Tranzacții create automat de Firefly III după un program.",
+    "inactive": "Inactiv",
+    "extra_names": "Nume suplimentare",
+    "extra_names_hint": "Alte nume după care asistentul poate găsi acest șablon.",
+    "foreign_amount": "Sumă în valută"
   }
 }

@@ -134,11 +134,49 @@ body:has(.van-theme-dark .d-app) {
   filter: invert(100%) hue-rotate(180deg);
 }
 
+.d-table {
+  width: 100%;
+  font-size: 14px;
+}
+
+.d-table th {
+  height: 40px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--d-line);
+  color: var(--d-dim);
+  font-size: 13px;
+  font-weight: 400;
+  text-align: left;
+}
+
+.d-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--d-line);
+}
+
+.d-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.d-table tbody tr {
+  transition: background-color 0.15s;
+}
+
+.d-table tbody tr:hover {
+  background: color-mix(in oklch, var(--d-soft) 50%, transparent);
+}
+
 .d-pop-enter-active,
 .d-pop-leave-active {
   transition:
     opacity 0.12s ease-out,
     transform 0.12s ease-out;
+}
+
+.d-pop-leave-active,
+.d-dialog-leave-active,
+.d-sheet-leave-active {
+  pointer-events: none;
 }
 
 .d-pop-enter-from,

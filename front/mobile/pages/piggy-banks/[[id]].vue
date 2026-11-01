@@ -43,80 +43,17 @@
 
 <script setup>
 import RouteConstants from '~/core/constants/RouteConstants'
-import { usePiggyBankStore } from '~/core/stores/piggyBankStore'
-import _ from 'lodash-es'
-import { useProfileStore } from '~/core/stores/profileStore'
-import { ref } from 'vue'
-import { useForm } from '~/core/composables/useForm'
-import { generateChildren } from '~/core/utils/VueUtils'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import PiggyBankTransformer from '~/core/transformers/PiggyBankTransformer.js'
-import PiggyBank from '~/core/models/PiggyBank.js'
-import Account from '~/core/models/Account.js'
 import { rule } from '~/core/utils/ValidationUtils.js'
 
-const piggyBankStore = usePiggyBankStore()
-const profileStore = useProfileStore()
+const { itemId, saveItem, onDelete, onNew, onValidationError, formName, name, icon, account, targetAmount, currentAmount, startDate, targetDate, notes, stats, accountAllowedTypes } = usePiggyBankForm()
 
-const form = ref(null)
-
-// Firefly III only allows piggy banks on asset and liability accounts
-const accountAllowedTypes = [Account.types.asset, Account.types.liability]
-
-const resetFields = () => {
-  name.value = ''
-}
-
-const fetchItem = () => {
-  const piggyBankStore = usePiggyBankStore()
-  item.value = piggyBankStore.piggyBankDictionary[useRoute().params.id]
-}
-
-const piggyBankCurrentAmount = computed(() => PiggyBank.getCurrentAmount(item.value))
-const piggyBankTargetAmount = computed(() => PiggyBank.getTargetAmount(item.value))
-const piggyBankPercent = computed(() => PiggyBank.getPercent(item.value).toFixed(2))
-const piggyBankLeftToSave = computed(() => PiggyBank.getLeftToSave(item.value))
-const piggyBankCurrencySymbol = computed(() => PiggyBank.getCurrencySymbol(item.value))
-
-const onEvent = (event, payload) => {
-  if (event === 'onPostSave') {
-    let newItem = _.get(payload, 'data.data')
-    newItem = PiggyBankTransformer.transformFromApi(newItem)
-    piggyBankStore.piggyBankList = [newItem, ...piggyBankStore.piggyBankList.filter((item) => item.id !== itemId.value)]
-  }
-  if (event === 'onPostDelete') {
-    piggyBankStore.piggyBankList = piggyBankStore.piggyBankList.filter((item) => item.id !== itemId.value)
-  }
-}
-
-const { itemId, item, saveItem, onDelete, onNew, onValidationError, formName } = useForm({
-  form: form,
-  routeList: RouteConstants.ROUTE_PIGGY_BANK_LIST,
-  routeForm: RouteConstants.ROUTE_PIGGY_BANK_ID,
-  model: new PiggyBank(),
-  resetFields: resetFields,
-  fetchItem: fetchItem,
-  onEvent: onEvent,
-})
-
-const { name, icon, account, targetAmount, currentAmount, startDate, targetDate, notes } = generateChildren(item, [
-  { computed: 'name', parentKey: 'attributes.name' },
-  { computed: 'icon', parentKey: `attributes.icon` },
-  { computed: 'account', parentKey: `attributes.account` },
-  { computed: 'targetAmount', parentKey: `attributes.target_amount` },
-  { computed: 'currentAmount', parentKey: `attributes.current_amount` },
-  { computed: 'startDate', parentKey: `attributes.start_date` },
-  { computed: 'targetDate', parentKey: `attributes.target_date` },
-  { computed: 'notes', parentKey: `attributes.notes` },
-])
-
-watch(name, (newValue) => {
-  if (profileStore.stripAccents) {
-    newValue = LanguageUtils.removeAccents(newValue)
-  }
-  name.value = newValue
-})
+const piggyBankCurrentAmount = computed(() => stats.value.current)
+const piggyBankTargetAmount = computed(() => stats.value.target)
+const piggyBankPercent = computed(() => stats.value.percent)
+const piggyBankLeftToSave = computed(() => stats.value.left)
+const piggyBankCurrencySymbol = computed(() => stats.value.symbol)
 
 const toolbar = useToolbar()
 const { t } = useI18n()

@@ -531,6 +531,15 @@
     "default_currency": "Domyślna",
     "disabled": "Wyłączona",
     "country": "Kraj",
-    "per_usd": "Za 1 USD"
+    "per_usd": "Za 1 USD",
+    "accounts_description": "Konta aktywów, wydatków, przychodów, zobowiązań i gotówki z Firefly III.",
+    "budgets_description": "Limity wydatków na okres i ich wykorzystanie.",
+    "piggy_banks_description": "Cele oszczędnościowe i postęp w ich realizacji.",
+    "templates_description": "Gotowe transakcje, które asystent znajdzie po nazwie.",
+    "recurring_description": "Transakcje tworzone przez Firefly III według harmonogramu.",
+    "inactive": "Nieaktywny",
+    "extra_names": "Dodatkowe nazwy",
+    "extra_names_hint": "Inne nazwy, po których asystent znajdzie ten szablon.",
+    "foreign_amount": "Kwota w walucie"
   }
 }

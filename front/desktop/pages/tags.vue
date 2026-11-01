@@ -38,7 +38,10 @@ import Tag from '~/core/models/Tag'
 const tagStore = useTagStore()
 const { t } = useI18n()
 const { id, isOpen } = useRouteDialog(RouteConstants.ROUTE_TAG_LIST)
-const { search, filtered } = useSearch(() => tagStore.tagListHierarchy, Tag.getDisplayName)
+const { search, filtered } = useSearch(
+  () => tagStore.tagListHierarchy,
+  (item) => Tag.getDisplayName(item),
+)
 
 const subtitle = (tag) =>
   [

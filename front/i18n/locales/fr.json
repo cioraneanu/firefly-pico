@@ -531,6 +531,15 @@
     "default_currency": "Par défaut",
     "disabled": "Désactivée",
     "country": "Pays",
-    "per_usd": "Pour 1 USD"
+    "per_usd": "Pour 1 USD",
+    "accounts_description": "Comptes d'actifs, de dépenses, de revenus, de passifs et d'espèces de Firefly III.",
+    "budgets_description": "Plafonds de dépenses par période et leur consommation.",
+    "piggy_banks_description": "Objectifs d'épargne et votre progression pour chacun.",
+    "templates_description": "Transactions préremplies que l'assistant retrouve par leur nom.",
+    "recurring_description": "Transactions que Firefly III crée selon un calendrier.",
+    "inactive": "Inactif",
+    "extra_names": "Noms supplémentaires",
+    "extra_names_hint": "Autres noms permettant à l'assistant de trouver ce modèle.",
+    "foreign_amount": "Montant en devise"
   }
 }

@@ -8,23 +8,23 @@
       <template #actions>
         <d-input v-model="search" :icon="IconSearch" :placeholder="$t('search_placeholder')" clearable class="w-70" />
       </template>
-      <table v-if="filtered.length" class="w-full border-t border-line text-sm">
-        <thead class="text-left text-[13px] text-dim">
-          <tr class="h-10 border-b border-line">
-            <th class="px-4 font-normal">{{ $t('code') }}</th>
-            <th class="px-4 font-normal">{{ $t('currency') }}</th>
-            <th class="px-4 font-normal">{{ $t('desktop.country') }}</th>
-            <th class="px-4 text-right font-normal">{{ $t('desktop.per_usd') }}</th>
+      <table v-if="filtered.length" class="d-table border-t border-line">
+        <thead>
+          <tr>
+            <th>{{ $t('code') }}</th>
+            <th>{{ $t('currency') }}</th>
+            <th>{{ $t('desktop.country') }}</th>
+            <th class="text-right">{{ $t('desktop.per_usd') }}</th>
           </tr>
         </thead>
-        <tbody class="divide-y divide-line">
-          <tr v-for="rate in filtered" :key="rate.code" class="h-11 transition-colors hover:bg-soft/40">
-            <td class="px-4">
+        <tbody>
+          <tr v-for="rate in filtered" :key="rate.code">
+            <td>
               <span class="inline-grid h-6 min-w-11 place-items-center rounded-md bg-soft px-1.5 font-mono text-xs font-medium">{{ rate.code }}</span>
             </td>
-            <td class="px-4 font-medium">{{ rate.name }}</td>
-            <td class="px-4 text-dim">{{ rate.country }}</td>
-            <td class="px-4 text-right font-mono text-[13px] tabular-nums">{{ rate.value }}</td>
+            <td class="font-medium">{{ rate.name }}</td>
+            <td class="text-dim">{{ rate.country }}</td>
+            <td class="text-right font-mono text-[13px] tabular-nums">{{ rate.value }}</td>
           </tr>
         </tbody>
       </table>
