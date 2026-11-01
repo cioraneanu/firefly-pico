@@ -550,6 +550,18 @@
     "ramble_description": "여러 거래를 한 번에 말하거나 입력하면 어시스턴트가 나눠 줍니다.",
     "filters": "필터",
     "not_in_net_worth": "순자산 제외",
-    "no_todo_tag": "할 일 태그가 없습니다"
+    "no_todo_tag": "할 일 태그가 없습니다",
+    "settings_description": "Pico의 연결, 모양, 동작을 관리합니다.",
+    "settings_connection": "연결 및 데이터",
+    "settings_appearance": "모양 및 서식",
+    "settings_fields": "거래 필드",
+    "settings_defaults": "거래 기본값",
+    "interface": "인터페이스",
+    "interface_hint": "이 기기에 저장됩니다. 변경하면 앱이 다시 로드됩니다.",
+    "interface_auto": "자동",
+    "interface_desktop": "데스크톱",
+    "interface_mobile": "모바일",
+    "sync_now": "지금 동기화",
+    "reset": "초기화"
   }
 }

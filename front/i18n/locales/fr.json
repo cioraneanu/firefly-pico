@@ -549,6 +549,18 @@
     "ramble_description": "Dictez ou saisissez plusieurs transactions d'un coup, l'assistant les sépare.",
     "filters": "Filtres",
     "not_in_net_worth": "Hors patrimoine net",
-    "no_todo_tag": "Aucun tag à faire"
+    "no_todo_tag": "Aucun tag à faire",
+    "settings_description": "Gérez la connexion, l'apparence et le comportement de Pico.",
+    "settings_connection": "Connexion et données",
+    "settings_appearance": "Apparence et format",
+    "settings_fields": "Champs de transaction",
+    "settings_defaults": "Valeurs par défaut des transactions",
+    "interface": "Interface",
+    "interface_hint": "Enregistré sur cet appareil. Le changer recharge l'application.",
+    "interface_auto": "Automatique",
+    "interface_desktop": "Bureau",
+    "interface_mobile": "Mobile",
+    "sync_now": "Synchroniser",
+    "reset": "Réinitialiser"
   }
 }

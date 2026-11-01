@@ -549,6 +549,18 @@
     "ramble_description": "Detta o scrivi più transazioni insieme e lascia che l'assistente le separi.",
     "filters": "Filtri",
     "not_in_net_worth": "Escluso dal patrimonio",
-    "no_todo_tag": "Nessun tag da fare"
+    "no_todo_tag": "Nessun tag da fare",
+    "settings_description": "Gestisci come Pico si connette, appare e si comporta.",
+    "settings_connection": "Connessione e dati",
+    "settings_appearance": "Aspetto e formattazione",
+    "settings_fields": "Campi transazione",
+    "settings_defaults": "Valori predefiniti transazioni",
+    "interface": "Interfaccia",
+    "interface_hint": "Salvato su questo dispositivo. Cambiarlo ricarica l'app.",
+    "interface_auto": "Automatica",
+    "interface_desktop": "Desktop",
+    "interface_mobile": "Mobile",
+    "sync_now": "Sincronizza ora",
+    "reset": "Ripristina"
   }
 }

@@ -497,6 +497,18 @@
     "ramble_description": "一次说出或输入多笔交易，由助手自动拆分。",
     "filters": "筛选",
     "not_in_net_worth": "不计入净资产",
-    "no_todo_tag": "尚无待办标签"
+    "no_todo_tag": "尚无待办标签",
+    "settings_description": "管理 Pico 的连接、外观和行为。",
+    "settings_connection": "连接与数据",
+    "settings_appearance": "外观与格式",
+    "settings_fields": "交易字段",
+    "settings_defaults": "交易默认值",
+    "interface": "界面",
+    "interface_hint": "保存在此设备上。更改后应用会重新加载。",
+    "interface_auto": "自动",
+    "interface_desktop": "桌面",
+    "interface_mobile": "移动",
+    "sync_now": "立即同步",
+    "reset": "重置"
   }
 }

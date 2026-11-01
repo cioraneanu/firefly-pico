@@ -549,6 +549,18 @@
     "ramble_description": "Продиктуйте или введите несколько транзакций сразу — ассистент их разделит.",
     "filters": "Фильтры",
     "not_in_net_worth": "Не в чистых активах",
-    "no_todo_tag": "Тег задач ещё не задан"
+    "no_todo_tag": "Тег задач ещё не задан",
+    "settings_description": "Настройте подключение, внешний вид и поведение Pico.",
+    "settings_connection": "Подключение и данные",
+    "settings_appearance": "Внешний вид и формат",
+    "settings_fields": "Поля транзакций",
+    "settings_defaults": "Значения по умолчанию",
+    "interface": "Интерфейс",
+    "interface_hint": "Хранится на этом устройстве. Изменение перезагружает приложение.",
+    "interface_auto": "Автоматически",
+    "interface_desktop": "Десктоп",
+    "interface_mobile": "Мобильный",
+    "sync_now": "Синхронизировать",
+    "reset": "Сбросить"
   }
 }

@@ -549,6 +549,18 @@
     "ramble_description": "Fale ou digite várias transações de uma vez e deixe o assistente separá-las.",
     "filters": "Filtros",
     "not_in_net_worth": "Fora do patrimônio",
-    "no_todo_tag": "Nenhuma etiqueta de pendência"
+    "no_todo_tag": "Nenhuma etiqueta de pendência",
+    "settings_description": "Gerencie como o Pico se conecta, aparece e se comporta.",
+    "settings_connection": "Conexão e dados",
+    "settings_appearance": "Aparência e formatação",
+    "settings_fields": "Campos da transação",
+    "settings_defaults": "Padrões de transação",
+    "interface": "Interface",
+    "interface_hint": "Salvo neste dispositivo. Alterar recarrega o app.",
+    "interface_auto": "Automático",
+    "interface_desktop": "Desktop",
+    "interface_mobile": "Celular",
+    "sync_now": "Sincronizar agora",
+    "reset": "Redefinir"
   }
 }

@@ -549,6 +549,18 @@
     "ramble_description": "Spune sau scrie mai multe tranzacții deodată, iar asistentul le separă.",
     "filters": "Filtre",
     "not_in_net_worth": "Nu e inclus în avere",
-    "no_todo_tag": "Nu există încă o etichetă de sarcini"
+    "no_todo_tag": "Nu există încă o etichetă de sarcini",
+    "settings_description": "Gestionează cum se conectează, arată și se comportă Pico.",
+    "settings_connection": "Conexiune și date",
+    "settings_appearance": "Aspect și formatare",
+    "settings_fields": "Câmpuri tranzacții",
+    "settings_defaults": "Valori implicite tranzacții",
+    "interface": "Interfață",
+    "interface_hint": "Salvat pe acest dispozitiv. Schimbarea reîncarcă aplicația.",
+    "interface_auto": "Automat",
+    "interface_desktop": "Desktop",
+    "interface_mobile": "Mobil",
+    "sync_now": "Sincronizează acum",
+    "reset": "Resetează"
   }
 }

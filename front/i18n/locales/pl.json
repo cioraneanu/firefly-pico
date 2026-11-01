@@ -549,6 +549,18 @@
     "ramble_description": "Powiedz lub wpisz kilka transakcji naraz, a asystent je rozdzieli.",
     "filters": "Filtry",
     "not_in_net_worth": "Poza wartością netto",
-    "no_todo_tag": "Brak tagu do zrobienia"
+    "no_todo_tag": "Brak tagu do zrobienia",
+    "settings_description": "Zarządzaj połączeniem, wyglądem i działaniem Pico.",
+    "settings_connection": "Połączenie i dane",
+    "settings_appearance": "Wygląd i formatowanie",
+    "settings_fields": "Pola transakcji",
+    "settings_defaults": "Domyślne wartości transakcji",
+    "interface": "Interfejs",
+    "interface_hint": "Zapisane na tym urządzeniu. Zmiana przeładowuje aplikację.",
+    "interface_auto": "Automatyczny",
+    "interface_desktop": "Komputer",
+    "interface_mobile": "Mobilny",
+    "sync_now": "Synchronizuj teraz",
+    "reset": "Resetuj"
   }
 }

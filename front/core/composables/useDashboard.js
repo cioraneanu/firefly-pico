@@ -36,7 +36,7 @@ export function useDashboardCards() {
       .sort((a, b) => a.position - b.position),
   )
 
-  return { visibleCards }
+  return { visibleCards, isCardEnabled }
 }
 
 export function useDashboardLinks() {

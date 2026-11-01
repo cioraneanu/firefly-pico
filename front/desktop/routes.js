@@ -1,4 +1,25 @@
+import sections from './settings-sections'
+
+const settings = () => import('./pages/settings.vue')
+
+const settingsRedirects = {
+  '/settings': 'connection',
+  '/settings/setup': 'connection',
+  '/settings/enabled-resources': 'connection',
+  '/settings/ui': 'appearance',
+  '/settings/formatting': 'appearance',
+  '/settings/dashboard/cards': 'dashboard',
+  '/settings/transactions': 'transaction-defaults',
+  '/settings/transactions/default-form-values': 'transaction-defaults',
+  '/settings/transactions/default-list-filters': 'transaction-defaults',
+  '/settings/transactions/quick-amounts': 'transaction-defaults',
+  '/settings/transactions/form-fields': 'transaction-fields',
+  '/settings/transactions/list-fields': 'transaction-fields',
+}
+
 export default [
+  ...sections.map((section) => ({ path: `/settings/${section.code}`, component: settings, meta: { section: section.code, crumb: section.t } })),
+  ...Object.entries(settingsRedirects).map(([path, code]) => ({ path, redirect: `/settings/${code}` })),
   { path: '/', component: () => import('./pages/index.vue') },
   { path: '/dashboard', component: () => import('./pages/dashboard.vue') },
   { path: '/transactions/:id?', component: () => import('./pages/transactions.vue') },

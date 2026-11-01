@@ -550,6 +550,18 @@
     "ramble_description": "Sprich oder tippe mehrere Buchungen auf einmal, der Assistent trennt sie.",
     "filters": "Filter",
     "not_in_net_worth": "Nicht im Nettovermögen",
-    "no_todo_tag": "Noch kein Aufgaben-Tag"
+    "no_todo_tag": "Noch kein Aufgaben-Tag",
+    "settings_description": "Lege fest, wie Pico sich verbindet, aussieht und verhält.",
+    "settings_connection": "Verbindung & Daten",
+    "settings_appearance": "Darstellung & Format",
+    "settings_fields": "Buchungsfelder",
+    "settings_defaults": "Buchungsvorgaben",
+    "interface": "Oberfläche",
+    "interface_hint": "Auf diesem Gerät gespeichert. Eine Änderung lädt die App neu.",
+    "interface_auto": "Automatisch",
+    "interface_desktop": "Desktop",
+    "interface_mobile": "Mobil",
+    "sync_now": "Jetzt synchronisieren",
+    "reset": "Zurücksetzen"
   }
 }

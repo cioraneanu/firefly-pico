@@ -4,6 +4,12 @@
 
     <van-form class="" @submit="onSave">
       <van-cell-group inset>
+        <div class="van-cell-group-title mb-0">{{ $t('desktop.interface') }}:</div>
+        <app-tabs v-model="uiMode" :items="uiModes" class="mx-4 mb-1" />
+        <div class="text-muted text-12 mx-4 mb-3">{{ $t('desktop.interface_hint') }}</div>
+      </van-cell-group>
+
+      <van-cell-group inset>
         <div class="van-cell-group-title mb-0">{{ $t('settings.ui.theme') }}:</div>
 
         <app-boolean v-model="darkTheme" :label="themeText">
@@ -12,9 +18,9 @@
           </template>
         </app-boolean>
 
-        <language-select v-model="language"/>
+        <language-select v-model="language" />
 
-        <page-select v-model="startingPage"/>
+        <page-select v-model="startingPage" />
 
         <app-boolean v-model="showAnimations" :label="$t('settings.ui.show_animations')" />
 
@@ -28,6 +34,7 @@
 </template>
 
 <script setup>
+import { UI_MODES } from '~/core/utils/UIModeUtils'
 import { onMounted, ref } from 'vue'
 import { useProfileStore } from '~/core/stores/profileStore'
 import UIUtils from '~/core/utils/UIUtils'
@@ -38,6 +45,9 @@ import { saveSettingsToStore, watchSettingsStore } from '~/core/utils/SettingUti
 import LanguageSelect from '~/mobile/components/select/general/language-select.vue'
 
 const { t } = useI18n()
+
+const uiModes = computed(() => UI_MODES.map((mode) => ({ value: mode, label: t(`desktop.interface_${mode}`) })))
+const uiMode = useUIMode()
 const profileStore = useProfileStore()
 const themeText = computed(() => (darkTheme.value ? t('settings.ui.dark') : t('settings.ui.light')))
 const darkTheme = ref(false)
