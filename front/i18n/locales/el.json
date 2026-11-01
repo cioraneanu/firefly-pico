@@ -562,6 +562,33 @@
     "interface_desktop": "Υπολογιστής",
     "interface_mobile": "Κινητό",
     "sync_now": "Συγχρονισμός τώρα",
-    "reset": "Επαναφορά"
+    "reset": "Επαναφορά",
+    "dashboard": {
+      "out": "Έξοδα",
+      "in": "Έσοδα",
+      "moved": "Μεταφορές",
+      "amounts_in": "ποσά σε {currency}",
+      "spent_last_days": "Δαπάνες τις τελευταίες {count} ημέρες",
+      "vs_previous_days": "έναντι των {count} προηγούμενων ημερών",
+      "today_amount": "Σήμερα {amount}",
+      "share_of_funds": "{percent} % των κεφαλαίων σε {currency}",
+      "owed_share": "Οφειλή, {percent} % των κεφαλαίων σε {currency}",
+      "amount_hidden": "Κρυφό ποσό",
+      "per_day": "≈ {amount} την ημέρα",
+      "no_days_yet": "Καμία ημέρα ακόμη",
+      "of_income": "{percent} % του εισοδήματος",
+      "income_kept": "{percent} % του εισοδήματος διατηρήθηκε",
+      "more_out_than_in": "Περισσότερα έξοδα από έσοδα",
+      "on_pace_for": "Ρυθμός για {count}",
+      "whole_month": "Ολόκληρος ο μήνας",
+      "month_not_started": "Ο μήνας δεν έχει ξεκινήσει",
+      "days_left": "Ημέρες που απομένουν",
+      "of_days": "από {count} ημέρες",
+      "to_savings_accounts": "Προς λογαριασμούς ταμιευτηρίου",
+      "of_income_amount": "από {amount} εισόδημα",
+      "of_income_saved": "του εισοδήματος αποταμιεύτηκε",
+      "this_month": "Αυτός ο μήνας",
+      "nothing_to_do": "Τίποτα για να κάνεις"
+    }
   }
 }

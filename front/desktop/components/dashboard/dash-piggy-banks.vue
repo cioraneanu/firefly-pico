@@ -1,20 +1,21 @@
 <template>
-  <d-card :title="$t('piggy_banks')" flush>
-    <div class="flex flex-col gap-0.5 px-2">
+  <d-card :title="$t('piggy_banks')">
+    <div class="-mx-2 -my-0.5 flex flex-col">
       <nuxt-link
         v-for="bar in piggyBanks"
         :key="bar.piggyBank.id"
         :to="`${RouteConstants.ROUTE_PIGGY_BANK_ID}/${bar.piggyBank.id}`"
-        class="flex items-center gap-2 rounded-md px-2 py-1.5 hover:bg-soft/60"
+        :title="`${Math.round(bar.percent)}%`"
+        class="grid h-[34px] grid-cols-[minmax(112px,1fr)_minmax(40px,1.4fr)_auto] items-center gap-3 rounded-lg px-2 transition-colors hover:bg-soft/60"
       >
-        <d-tile :icon="PiggyBank.getIcon(bar.piggyBank) ?? IconPigMoney" size="sm" />
-        <span class="flex min-w-0 flex-1 flex-col gap-1">
-          <span class="flex items-center justify-between gap-2 text-[13px]">
-            <span class="truncate">{{ bar.label }}</span>
-            <span class="font-medium tabular-nums">{{ bar.value }} · {{ Math.round(bar.percent) }}%</span>
-          </span>
-          <d-progress :value="bar.percent" />
+        <span class="flex min-w-0 items-center gap-2">
+          <app-icon :icon="PiggyBank.getIcon(bar.piggyBank) ?? IconPigMoney" :size="14" :stroke="2" class="shrink-0 text-dim" />
+          <span class="truncate">{{ bar.label }}</span>
         </span>
+        <span class="h-2 overflow-hidden rounded-full bg-soft">
+          <span class="block h-full rounded-full bg-fg transition-[width]" :style="{ width: `${Math.min(bar.percent, 100)}%` }" />
+        </span>
+        <span class="min-w-[72px] whitespace-nowrap text-right font-medium tabular-nums">{{ bar.value }} {{ PiggyBank.getCurrencySymbol(bar.piggyBank) }}</span>
       </nuxt-link>
     </div>
     <d-empty v-if="!piggyBanks.length" :icon="IconPigMoney" />

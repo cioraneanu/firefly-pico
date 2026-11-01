@@ -561,6 +561,33 @@
     "interface_desktop": "Desktop",
     "interface_mobile": "Mobil",
     "sync_now": "Sincronizează acum",
-    "reset": "Resetează"
+    "reset": "Resetează",
+    "dashboard": {
+      "out": "Ieșiri",
+      "in": "Intrări",
+      "moved": "Mutat",
+      "amounts_in": "sume în {currency}",
+      "spent_last_days": "Cheltuit în ultimele {count} zile",
+      "vs_previous_days": "față de cele {count} zile anterioare",
+      "today_amount": "Azi {amount}",
+      "share_of_funds": "{percent} % din fondurile în {currency}",
+      "owed_share": "Datorat, {percent} % din fondurile în {currency}",
+      "amount_hidden": "Sumă ascunsă",
+      "per_day": "≈ {amount} pe zi",
+      "no_days_yet": "Nicio zi încă",
+      "of_income": "{percent} % din venit",
+      "income_kept": "{percent} % din venit păstrat",
+      "more_out_than_in": "Mai mult ieșit decât intrat",
+      "on_pace_for": "Ritm spre {count}",
+      "whole_month": "Toată luna",
+      "month_not_started": "Luna nu a început",
+      "days_left": "Zile rămase",
+      "of_days": "din {count} zile",
+      "to_savings_accounts": "Către conturi de economii",
+      "of_income_amount": "din venitul de {amount}",
+      "of_income_saved": "din venit economisit",
+      "this_month": "Luna aceasta",
+      "nothing_to_do": "Nimic de făcut"
+    }
   }
 }

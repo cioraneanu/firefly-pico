@@ -561,6 +561,33 @@
     "interface_desktop": "Komputer",
     "interface_mobile": "Mobilny",
     "sync_now": "Synchronizuj teraz",
-    "reset": "Resetuj"
+    "reset": "Resetuj",
+    "dashboard": {
+      "out": "Wydatki",
+      "in": "Wpływy",
+      "moved": "Przeniesione",
+      "amounts_in": "kwoty w {currency}",
+      "spent_last_days": "Wydano w ostatnich {count} dniach",
+      "vs_previous_days": "vs poprzednie {count} dni",
+      "today_amount": "Dziś {amount}",
+      "share_of_funds": "{percent} % środków w {currency}",
+      "owed_share": "Dług, {percent} % środków w {currency}",
+      "amount_hidden": "Kwota ukryta",
+      "per_day": "≈ {amount} dziennie",
+      "no_days_yet": "Jeszcze brak dni",
+      "of_income": "{percent} % przychodu",
+      "income_kept": "{percent} % przychodu zachowane",
+      "more_out_than_in": "Więcej wydatków niż wpływów",
+      "on_pace_for": "W tempie na {count}",
+      "whole_month": "Cały miesiąc",
+      "month_not_started": "Miesiąc się nie zaczął",
+      "days_left": "Pozostałe dni",
+      "of_days": "z {count} dni",
+      "to_savings_accounts": "Na konta oszczędnościowe",
+      "of_income_amount": "z {amount} przychodu",
+      "of_income_saved": "przychodu zaoszczędzone",
+      "this_month": "Ten miesiąc",
+      "nothing_to_do": "Nic do zrobienia"
+    }
   }
 }

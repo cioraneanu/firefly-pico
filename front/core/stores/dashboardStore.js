@@ -92,7 +92,8 @@ export const useDashboardStore = defineStore('dashboard', () => {
   async function fetchTransactionsForWeek() {
     isLoadingTransactionsLastWeek.value = true
 
-    let startDate = DateUtils.dateToString(subDays(startOfDay(new Date()), 7))
+    // 16 days: the last 8 for the week card plus the 8 before them to compare against
+    let startDate = DateUtils.dateToString(subDays(startOfDay(new Date()), 15))
     let endDate = DateUtils.dateToString(startOfDay(new Date()))
 
     let filtersParts = [`date_after:${startDate}`, `date_before:${endDate}`, `type:withdrawal`, ...getExcludedTransactionFilters()]

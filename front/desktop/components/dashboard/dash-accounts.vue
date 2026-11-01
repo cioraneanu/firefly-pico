@@ -1,18 +1,14 @@
 <template>
   <d-card :title="$t('dashboard.account_total')" :description="hasManyCurrencies ? `~${mask(formatNumberForDashboard(dashboardStore.dashboardAccountsEstimatedTotal))} ${currencyCode}` : null">
-    <div class="grid grid-cols-[repeat(auto-fill,minmax(9.5rem,1fr))] gap-2">
+    <div class="grid grid-cols-3 gap-2">
       <d-dash-tile
         v-for="account in dashboardStore.dashboardAccountsVisible"
         :key="account.id"
         :label="Account.getDisplayName(account)"
         :value="mask(`${formatNumberForDashboard(Account.getBalance(account))} ${Account.getCurrencySymbol(account)}`)"
-        :hint="
-          Account.hasVirtualBalance(account)
-            ? `${$t('account_page.available')}: ${mask(formatNumberForDashboard(Account.getAvailableBalance(account)))}`
-            : !Account.getIsIncludedInNetWorth(account)
-              ? $t('desktop.not_in_net_worth')
-              : null
-        "
+        :tone="balance(account) < 0 ? 'expense' : null"
+        :meter="profileStore.dashboard.showAccountAmounts ? share(account) : 0"
+        :hint="hint(account)"
         :icon="Account.getIcon(account) ?? IconCreditCard"
         :to="`${RouteConstants.ROUTE_TRANSACTION_LIST}?${TransactionFilterUtils.filters.account.toUrl([account])}`"
       />
@@ -39,10 +35,30 @@ import Account from '~/core/models/Account'
 import Currency from '~/core/models/Currency'
 import { formatNumberForDashboard } from '~/core/utils/NumberUtils'
 
+const { t } = useI18n()
 const dashboardStore = useDashboardStore()
 const profileStore = useProfileStore()
 
 const currencyCode = computed(() => Currency.getCode(dashboardStore.dashboardCurrency))
 const hasManyCurrencies = computed(() => dashboardStore.dashboardAccountsCurrencyList.length > 1)
 const mask = (value) => (profileStore.dashboard.showAccountAmounts ? value : '•••')
+const balance = (account) => Number(Account.getBalance(account)) || 0
+
+// Each account's share of the positive balances in its currency (debts: how much of them they owe)
+const fundsByCurrency = computed(() =>
+  dashboardStore.dashboardAccountsVisible.reduce((result, account) => {
+    const code = Account.getCurrencyCode(account)
+    result[code] = (result[code] ?? 0) + Math.max(balance(account), 0)
+    return result
+  }, {}),
+)
+const share = (account) => Math.min(Math.abs(balance(account)) / (fundsByCurrency.value[Account.getCurrencyCode(account)] || 1), 1) * 100
+
+const hint = (account) => {
+  if (!profileStore.dashboard.showAccountAmounts) return t('desktop.dashboard.amount_hidden')
+  if (Account.hasVirtualBalance(account)) return `${t('account_page.available')}: ${formatNumberForDashboard(Account.getAvailableBalance(account))}`
+  if (!Account.getIsIncludedInNetWorth(account)) return t('desktop.not_in_net_worth')
+  const values = { percent: Math.round(share(account)), currency: Account.getCurrencyCode(account) }
+  return balance(account) < 0 ? t('desktop.dashboard.owed_share', values) : t('desktop.dashboard.share_of_funds', values)
+}
 </script>

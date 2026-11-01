@@ -1,7 +1,7 @@
 <template>
-  <d-button ref="trigger" :icon="IconFilter" @click="isOpen = !isOpen">
+  <d-button ref="trigger" :icon="IconSearch" @click="isOpen = !isOpen">
     {{ $t('desktop.filters') }}
-    <d-badge v-if="activeFiltersCount">{{ activeFiltersCount }}</d-badge>
+    <d-badge v-if="activeFiltersCount" class="text-dim tabular-nums">{{ activeFiltersCount }}</d-badge>
   </d-button>
   <d-popover v-model:open="isOpen" :anchor="trigger" align="end" width="20rem">
     <div class="flex flex-col gap-3 p-2">
@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { IconFilter } from '@tabler/icons-vue'
+import { IconSearch } from '@tabler/icons-vue'
 import { cloneDeep } from 'lodash-es'
 
 const filters = defineModel()

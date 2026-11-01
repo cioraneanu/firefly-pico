@@ -562,6 +562,33 @@
     "interface_desktop": "Desktop",
     "interface_mobile": "Mobil",
     "sync_now": "Jetzt synchronisieren",
-    "reset": "Zurücksetzen"
+    "reset": "Zurücksetzen",
+    "dashboard": {
+      "out": "Aus",
+      "in": "Ein",
+      "moved": "Verschoben",
+      "amounts_in": "Beträge in {currency}",
+      "spent_last_days": "Ausgegeben in den letzten {count} Tagen",
+      "vs_previous_days": "ggü. den vorherigen {count} Tagen",
+      "today_amount": "Heute {amount}",
+      "share_of_funds": "{percent} % des {currency}-Guthabens",
+      "owed_share": "Geschuldet, {percent} % des {currency}-Guthabens",
+      "amount_hidden": "Betrag ausgeblendet",
+      "per_day": "≈ {amount} pro Tag",
+      "no_days_yet": "Noch keine Tage",
+      "of_income": "{percent} % der Einnahmen",
+      "income_kept": "{percent} % der Einnahmen behalten",
+      "more_out_than_in": "Mehr Ausgaben als Einnahmen",
+      "on_pace_for": "Auf Kurs für {count}",
+      "whole_month": "Ganzer Monat",
+      "month_not_started": "Monat noch nicht begonnen",
+      "days_left": "Verbleibende Tage",
+      "of_days": "von {count} Tagen",
+      "to_savings_accounts": "Auf Sparkonten",
+      "of_income_amount": "von {amount} Einnahmen",
+      "of_income_saved": "der Einnahmen gespart",
+      "this_month": "Dieser Monat",
+      "nothing_to_do": "Nichts zu erledigen"
+    }
   }
 }

@@ -562,6 +562,33 @@
     "interface_desktop": "데스크톱",
     "interface_mobile": "모바일",
     "sync_now": "지금 동기화",
-    "reset": "초기화"
+    "reset": "초기화",
+    "dashboard": {
+      "out": "지출",
+      "in": "수입",
+      "moved": "이체",
+      "amounts_in": "{currency} 기준 금액",
+      "spent_last_days": "최근 {count}일 지출",
+      "vs_previous_days": "이전 {count}일 대비",
+      "today_amount": "오늘 {amount}",
+      "share_of_funds": "{currency} 자금의 {percent} %",
+      "owed_share": "부채, {currency} 자금의 {percent} %",
+      "amount_hidden": "금액 숨김",
+      "per_day": "≈ 하루 {amount}",
+      "no_days_yet": "아직 지난 날이 없음",
+      "of_income": "수입의 {percent} %",
+      "income_kept": "수입의 {percent} % 유지",
+      "more_out_than_in": "수입보다 지출이 많음",
+      "on_pace_for": "예상 {count}건",
+      "whole_month": "한 달 전체",
+      "month_not_started": "아직 시작되지 않은 달",
+      "days_left": "남은 일수",
+      "of_days": "{count}일 중",
+      "to_savings_accounts": "저축 계좌로",
+      "of_income_amount": "수입 {amount} 중",
+      "of_income_saved": "수입 중 저축",
+      "this_month": "이번 달",
+      "nothing_to_do": "할 일 없음"
+    }
   }
 }

@@ -97,13 +97,19 @@ export function useDashboardBars() {
   const expensesByCategory = computed(() => categoryBars(dashboardStore.dashboardExpensesByCategory))
   const transfersByCategory = computed(() => categoryBars(dashboardStore.dashboardTransfersByCategory))
 
+  const expenseOnDay = (date) => get(dashboardStore.dashboardExpenseByDay, DateUtils.dateToString(date), 0)
+
   const weekBars = computed(() => {
-    const max = Math.max(...Object.values(dashboardStore.dashboardExpenseByDay))
-    return eachDayOfInterval({ start: subDays(new Date(), 7), end: startOfDay(new Date()) }).map((date) => {
-      const amount = get(dashboardStore.dashboardExpenseByDay, DateUtils.dateToString(date), 0)
+    const dates = eachDayOfInterval({ start: subDays(new Date(), 7), end: startOfDay(new Date()) })
+    const max = Math.max(...dates.map(expenseOnDay))
+    return dates.map((date) => {
+      const amount = expenseOnDay(date)
       return { date, label: capitalize(format(date, 'E')), amount, value: formatNumberForDashboard(amount), percent: (amount / max) * 100 }
     })
   })
+
+  // The 8 days before weekBars, fetched along with them by fetchTransactionsForWeek()
+  const previousWeekTotal = computed(() => eachDayOfInterval({ start: subDays(new Date(), 15), end: subDays(startOfDay(new Date()), 8) }).reduce((sum, date) => sum + expenseOnDay(date), 0))
 
   const piggyBanks = computed(() =>
     piggyBankStore.piggyBankList
@@ -131,7 +137,7 @@ export function useDashboardBars() {
       .slice(0, 6),
   )
 
-  return { expensesByTag, transfersByTag, expensesByCategory, transfersByCategory, weekBars, piggyBanks, upcomingRecurring }
+  return { expensesByTag, transfersByTag, expensesByCategory, transfersByCategory, weekBars, previousWeekTotal, piggyBanks, upcomingRecurring }
 }
 
 export function useDashboardSummary() {
@@ -143,7 +149,11 @@ export function useDashboardSummary() {
     return date > new Date() ? subMonths(date, 1) : date
   })
 
+  const periodDays = computed(() => differenceInDays(dashboardStore.dashboardDateEnd, dashboardStore.dashboardDateStart) + 1)
+
   return {
+    periodDays,
+    elapsedDays: computed(() => Math.min(Math.max(differenceInDays(startOfDay(new Date()), dashboardStore.dashboardDateStart) + 1, 0), periodDays.value)),
     remainingDays: computed(() => differenceInDays(subDays(addMonths(startDate.value, 1), 1), startOfDay(new Date())) + 1),
     rangeTitle: computed(() => `${DateUtils.dateToUI(dashboardStore.dashboardDateStart)} - ${DateUtils.dateToUI(dashboardStore.dashboardDateEnd)}`),
     totalExpenseFormatted: computed(() => formatNumberForDashboard(dashboardStore.totalExpenseThisMonth)),

@@ -561,6 +561,33 @@
     "interface_desktop": "Desktop",
     "interface_mobile": "Celular",
     "sync_now": "Sincronizar agora",
-    "reset": "Redefinir"
+    "reset": "Redefinir",
+    "dashboard": {
+      "out": "Saídas",
+      "in": "Entradas",
+      "moved": "Movido",
+      "amounts_in": "valores em {currency}",
+      "spent_last_days": "Gasto nos últimos {count} dias",
+      "vs_previous_days": "vs {count} dias anteriores",
+      "today_amount": "Hoje {amount}",
+      "share_of_funds": "{percent} % dos fundos em {currency}",
+      "owed_share": "Devido, {percent} % dos fundos em {currency}",
+      "amount_hidden": "Valor oculto",
+      "per_day": "≈ {amount} por dia",
+      "no_days_yet": "Nenhum dia ainda",
+      "of_income": "{percent} % da receita",
+      "income_kept": "{percent} % da receita mantida",
+      "more_out_than_in": "Mais saídas que entradas",
+      "on_pace_for": "No ritmo para {count}",
+      "whole_month": "Mês inteiro",
+      "month_not_started": "Mês não iniciado",
+      "days_left": "Dias restantes",
+      "of_days": "de {count} dias",
+      "to_savings_accounts": "Para contas de poupança",
+      "of_income_amount": "de {amount} de receita",
+      "of_income_saved": "da receita poupada",
+      "this_month": "Este mês",
+      "nothing_to_do": "Nada a fazer"
+    }
   }
 }

@@ -562,6 +562,33 @@
     "interface_desktop": "Desktop",
     "interface_mobile": "Mobile",
     "sync_now": "Sync now",
-    "reset": "Reset"
+    "reset": "Reset",
+    "dashboard": {
+      "out": "Out",
+      "in": "In",
+      "moved": "Moved",
+      "amounts_in": "amounts in {currency}",
+      "spent_last_days": "Spent in the last {count} days",
+      "vs_previous_days": "vs previous {count} days",
+      "today_amount": "Today {amount}",
+      "share_of_funds": "{percent} % of {currency} funds",
+      "owed_share": "Owed, {percent} % of {currency} funds",
+      "amount_hidden": "Amount hidden",
+      "per_day": "≈ {amount} a day",
+      "no_days_yet": "No days yet",
+      "of_income": "{percent} % of income",
+      "income_kept": "{percent} % of income kept",
+      "more_out_than_in": "More out than in",
+      "on_pace_for": "On pace for {count}",
+      "whole_month": "Whole month",
+      "month_not_started": "Month not started",
+      "days_left": "Days left",
+      "of_days": "of {count} days",
+      "to_savings_accounts": "To savings accounts",
+      "of_income_amount": "of {amount} income",
+      "of_income_saved": "of income saved",
+      "this_month": "This month",
+      "nothing_to_do": "Nothing left to do"
+    }
   }
 }

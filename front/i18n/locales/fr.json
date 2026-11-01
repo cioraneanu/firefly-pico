@@ -561,6 +561,33 @@
     "interface_desktop": "Bureau",
     "interface_mobile": "Mobile",
     "sync_now": "Synchroniser",
-    "reset": "Réinitialiser"
+    "reset": "Réinitialiser",
+    "dashboard": {
+      "out": "Sorties",
+      "in": "Entrées",
+      "moved": "Déplacé",
+      "amounts_in": "montants en {currency}",
+      "spent_last_days": "Dépensé ces {count} derniers jours",
+      "vs_previous_days": "vs les {count} jours précédents",
+      "today_amount": "Aujourd’hui {amount}",
+      "share_of_funds": "{percent} % des fonds en {currency}",
+      "owed_share": "Dû, {percent} % des fonds en {currency}",
+      "amount_hidden": "Montant masqué",
+      "per_day": "≈ {amount} par jour",
+      "no_days_yet": "Aucun jour encore",
+      "of_income": "{percent} % des revenus",
+      "income_kept": "{percent} % des revenus conservés",
+      "more_out_than_in": "Plus de sorties que d’entrées",
+      "on_pace_for": "En voie pour {count}",
+      "whole_month": "Mois entier",
+      "month_not_started": "Mois non commencé",
+      "days_left": "Jours restants",
+      "of_days": "sur {count} jours",
+      "to_savings_accounts": "Vers les comptes d’épargne",
+      "of_income_amount": "sur {amount} de revenus",
+      "of_income_saved": "des revenus épargnés",
+      "this_month": "Ce mois-ci",
+      "nothing_to_do": "Rien à faire"
+    }
   }
 }

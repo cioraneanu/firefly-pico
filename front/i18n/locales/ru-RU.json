@@ -561,6 +561,33 @@
     "interface_desktop": "Десктоп",
     "interface_mobile": "Мобильный",
     "sync_now": "Синхронизировать",
-    "reset": "Сбросить"
+    "reset": "Сбросить",
+    "dashboard": {
+      "out": "Расход",
+      "in": "Доход",
+      "moved": "Перевод",
+      "amounts_in": "суммы в {currency}",
+      "spent_last_days": "Потрачено за последние {count} дней",
+      "vs_previous_days": "по сравнению с предыдущими {count} днями",
+      "today_amount": "Сегодня {amount}",
+      "share_of_funds": "{percent} % средств в {currency}",
+      "owed_share": "Долг, {percent} % средств в {currency}",
+      "amount_hidden": "Сумма скрыта",
+      "per_day": "≈ {amount} в день",
+      "no_days_yet": "Пока нет дней",
+      "of_income": "{percent} % дохода",
+      "income_kept": "{percent} % дохода сохранено",
+      "more_out_than_in": "Расходы больше доходов",
+      "on_pace_for": "Темп: {count}",
+      "whole_month": "Весь месяц",
+      "month_not_started": "Месяц не начался",
+      "days_left": "Осталось дней",
+      "of_days": "из {count} дней",
+      "to_savings_accounts": "На сберегательные счета",
+      "of_income_amount": "из {amount} дохода",
+      "of_income_saved": "дохода сбережено",
+      "this_month": "Этот месяц",
+      "nothing_to_do": "Нечего делать"
+    }
   }
 }

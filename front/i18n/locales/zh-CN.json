@@ -509,6 +509,33 @@
     "interface_desktop": "桌面",
     "interface_mobile": "移动",
     "sync_now": "立即同步",
-    "reset": "重置"
+    "reset": "重置",
+    "dashboard": {
+      "out": "支出",
+      "in": "收入",
+      "moved": "转移",
+      "amounts_in": "金额单位 {currency}",
+      "spent_last_days": "过去 {count} 天支出",
+      "vs_previous_days": "对比之前 {count} 天",
+      "today_amount": "今天 {amount}",
+      "share_of_funds": "占 {currency} 资金的 {percent} %",
+      "owed_share": "欠款，占 {currency} 资金的 {percent} %",
+      "amount_hidden": "金额已隐藏",
+      "per_day": "≈ 每天 {amount}",
+      "no_days_yet": "尚无天数",
+      "of_income": "占收入的 {percent} %",
+      "income_kept": "保留收入的 {percent} %",
+      "more_out_than_in": "支出多于收入",
+      "on_pace_for": "预计达到 {count}",
+      "whole_month": "整月",
+      "month_not_started": "本月尚未开始",
+      "days_left": "剩余天数",
+      "of_days": "共 {count} 天",
+      "to_savings_accounts": "转入储蓄账户",
+      "of_income_amount": "占 {amount} 收入",
+      "of_income_saved": "收入的储蓄比例",
+      "this_month": "本月",
+      "nothing_to_do": "没有待办事项"
+    }
   }
 }
