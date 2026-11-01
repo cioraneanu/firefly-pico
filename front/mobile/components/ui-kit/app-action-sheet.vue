@@ -15,7 +15,7 @@
 
 <script setup>
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import AppIcon from '~/mobile/components/ui-kit/app-icon.vue'
+import AppIcon from '~/shared/components/app-icon.vue'
 
 const show = defineModel('show')
 

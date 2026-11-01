@@ -512,5 +512,15 @@
   "general": {
     "list_empty": "Nessun elemento ancora",
     "list_empty_subtitle": "Aggiungi alcune voci con il pulsante in alto a destra."
+  },
+  "cancel": "Annulla",
+  "close": "Chiudi",
+  "desktop": {
+    "nav": {
+      "overview": "Panoramica",
+      "planning": "Pianificazione",
+      "reference": "Riferimenti"
+    },
+    "toggle_sidebar": "Mostra/nascondi barra laterale"
   }
 }

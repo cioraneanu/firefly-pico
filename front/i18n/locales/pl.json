@@ -512,5 +512,15 @@
   "general": {
     "list_empty": "Brak elementów",
     "list_empty_subtitle": "Dodaj wpisy za pomocą przycisku w prawym górnym rogu."
+  },
+  "cancel": "Anuluj",
+  "close": "Zamknij",
+  "desktop": {
+    "nav": {
+      "overview": "Przegląd",
+      "planning": "Planowanie",
+      "reference": "Odniesienia"
+    },
+    "toggle_sidebar": "Przełącz pasek boczny"
   }
 }

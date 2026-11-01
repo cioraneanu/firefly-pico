@@ -513,5 +513,15 @@
   "general": {
     "list_empty": "Noch keine Elemente",
     "list_empty_subtitle": "Füge einige Einträge mit dem Button oben rechts hinzu."
+  },
+  "cancel": "Abbrechen",
+  "close": "Schließen",
+  "desktop": {
+    "nav": {
+      "overview": "Übersicht",
+      "planning": "Planung",
+      "reference": "Referenz"
+    },
+    "toggle_sidebar": "Seitenleiste umschalten"
   }
 }

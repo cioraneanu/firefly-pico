@@ -513,5 +513,15 @@
   "general": {
     "list_empty": "No items yet",
     "list_empty_subtitle": "Add some entries with the top-right button."
+  },
+  "cancel": "Cancel",
+  "close": "Close",
+  "desktop": {
+    "nav": {
+      "overview": "Overview",
+      "planning": "Planning",
+      "reference": "Reference"
+    },
+    "toggle_sidebar": "Toggle sidebar"
   }
 }

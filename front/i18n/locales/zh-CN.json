@@ -460,5 +460,15 @@
   "general": {
     "list_empty": "暂无项目",
     "list_empty_subtitle": "使用右上角的按钮添加一些条目。"
+  },
+  "cancel": "取消",
+  "close": "关闭",
+  "desktop": {
+    "nav": {
+      "overview": "概览",
+      "planning": "规划",
+      "reference": "参考"
+    },
+    "toggle_sidebar": "切换侧边栏"
   }
 }

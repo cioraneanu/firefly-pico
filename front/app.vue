@@ -1,19 +1,16 @@
 <template>
   <van-config-provider :theme="theme">
     <NuxtPwaManifest />
-    <NuxtLayout>
-      <NuxtPage />
-    </NuxtLayout>
-    <app-loading />
+    <component :is="shell" />
   </van-config-provider>
 </template>
 
 <script setup>
 import { useDashboardStore } from '~/core/stores/dashboardStore'
 import RouteConstants from '~/core/constants/RouteConstants'
+import { isDesktopUI } from '~/core/utils/UIModeUtils'
 
-import '~/mobile/styles/variables.css'
-import AppLoading from '~/mobile/components/ui-kit/app-loading.vue'
+const shell = defineAsyncComponent(isDesktopUI ? () => import('~/desktop/desktop-app.vue') : () => import('~/mobile/mobile-app.vue'))
 
 const dashboardStore = useDashboardStore()
 const profileStore = useProfileStore()

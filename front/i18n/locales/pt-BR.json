@@ -512,5 +512,15 @@
   "general": {
     "list_empty": "Nenhum item ainda",
     "list_empty_subtitle": "Adicione algumas entradas com o botão no canto superior direito."
+  },
+  "cancel": "Cancelar",
+  "close": "Fechar",
+  "desktop": {
+    "nav": {
+      "overview": "Visão geral",
+      "planning": "Planejamento",
+      "reference": "Referência"
+    },
+    "toggle_sidebar": "Alternar barra lateral"
   }
 }

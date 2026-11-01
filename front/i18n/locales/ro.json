@@ -512,5 +512,15 @@
   "general": {
     "list_empty": "Niciun element deocamdată",
     "list_empty_subtitle": "Adaugă câteva intrări folosind butonul din dreapta sus."
+  },
+  "cancel": "Anulează",
+  "close": "Închide",
+  "desktop": {
+    "nav": {
+      "overview": "Prezentare",
+      "planning": "Planificare",
+      "reference": "Referințe"
+    },
+    "toggle_sidebar": "Comută bara laterală"
   }
 }

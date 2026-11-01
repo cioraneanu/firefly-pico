@@ -513,5 +513,15 @@
   "general": {
     "list_empty": "아직 항목이 없습니다",
     "list_empty_subtitle": "오른쪽 상단 버튼으로 항목을 추가하세요."
+  },
+  "cancel": "취소",
+  "close": "닫기",
+  "desktop": {
+    "nav": {
+      "overview": "개요",
+      "planning": "계획",
+      "reference": "참조"
+    },
+    "toggle_sidebar": "사이드바 전환"
   }
 }

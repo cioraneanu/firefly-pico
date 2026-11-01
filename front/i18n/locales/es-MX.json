@@ -512,5 +512,15 @@
   "general": {
     "list_empty": "Aún no hay artículos",
     "list_empty_subtitle": "Agregue algunas entradas con el botón superior derecho."
+  },
+  "cancel": "Cancelar",
+  "close": "Cerrar",
+  "desktop": {
+    "nav": {
+      "overview": "Resumen",
+      "planning": "Planeación",
+      "reference": "Referencia"
+    },
+    "toggle_sidebar": "Mostrar/ocultar barra lateral"
   }
 }

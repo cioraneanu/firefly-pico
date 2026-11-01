@@ -512,5 +512,15 @@
   "general": {
     "list_empty": "Aucun élément pour le moment",
     "list_empty_subtitle": "Ajoutez des entrées avec le bouton en haut à droite."
+  },
+  "cancel": "Annuler",
+  "close": "Fermer",
+  "desktop": {
+    "nav": {
+      "overview": "Vue d'ensemble",
+      "planning": "Planification",
+      "reference": "Référence"
+    },
+    "toggle_sidebar": "Afficher/masquer la barre latérale"
   }
 }

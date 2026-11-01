@@ -52,12 +52,13 @@ export default defineNuxtConfig({
   ssr: false,
 
   dir: {
+    app: '.',
     pages: 'mobile/pages',
     layouts: 'mobile/layouts',
   },
 
   imports: {
-    dirs: ['core/composables', 'core/utils', 'mobile/composables'],
+    dirs: ['core/composables', 'core/utils', 'mobile/composables', 'desktop/composables'],
   },
 
   pinia: {
@@ -65,6 +66,15 @@ export default defineNuxtConfig({
   },
 
   components: [
+    {
+      path: '~/shared/components',
+      pathPrefix: false,
+    },
+    {
+      path: '~/desktop/components',
+      prefix: 'D',
+      pathPrefix: false,
+    },
     {
       path: '~/mobile/components',
       pathPrefix: false,

@@ -91,3 +91,25 @@
   --shadow-depth5: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   --shadow-soft-1: rgba(0, 0, 0, 0.1) 0px 4px 12px;
 }
+
+@theme inline {
+  --color-bg: var(--d-bg);
+  --color-fg: var(--d-fg);
+  --color-card: var(--d-card);
+  --color-pop: var(--d-pop);
+  --color-primary: var(--d-primary);
+  --color-on-primary: var(--d-on-primary);
+  --color-soft: var(--d-soft);
+  --color-dim: var(--d-dim);
+  --color-line: var(--d-line);
+  --color-field: var(--d-field);
+  --color-ring: var(--d-ring);
+  --color-danger: var(--d-danger);
+  --color-side: var(--d-side);
+  --color-success: var(--d-success);
+  --color-warning: var(--d-warning);
+  --color-info: var(--d-info);
+  --color-income: var(--d-income);
+  --color-expense: var(--d-expense);
+  --color-transfer: var(--d-transfer);
+}
