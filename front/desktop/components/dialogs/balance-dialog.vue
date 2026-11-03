@@ -20,7 +20,8 @@ import AccountTransformer from '~/core/transformers/AccountTransformer'
 import { rule } from '~/core/utils/ValidationUtils'
 
 const props = defineProps({ account: Object })
-const emit = defineEmits(['close'])
+const emit = defineEmits(['close', 'saved'])
+const { t } = useI18n()
 
 const accountStore = useAccountStore()
 const formId = useId()
@@ -35,7 +36,8 @@ const save = async () => {
 
   const account = AccountTransformer.transformFromApi(get(response, 'data.data'))
   accountStore.accountList = accountStore.accountList.map((item) => (item.id === account.id ? account : item))
-  UIUtils.showToastSuccess('Success')
+  UIUtils.showToastSuccess(t('success'))
+  emit('saved', account)
   emit('close')
 }
 </script>

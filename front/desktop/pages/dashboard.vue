@@ -108,5 +108,10 @@ watch(filtersBackendList, (value) => {
   dashboardStore.fetchDashboard()
 })
 
-onMounted(() => !dashboardStore.transactionsListLastWeek.length && dashboardStore.fetchDashboard())
+// Filters start empty on every visit, so drop the ones left in the store by the previous visit
+onMounted(() => {
+  if (!dashboardStore.backendFilters.length && dashboardStore.transactionsListLastWeek.length) return
+  dashboardStore.backendFilters = []
+  dashboardStore.fetchDashboard()
+})
 </script>

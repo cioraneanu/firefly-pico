@@ -45,7 +45,7 @@ const fields = ref(null)
 const assistantText = ref('')
 
 const onEvent = (event) => {
-  emit('changed')
+  if ([useFormEvent.postSave, useFormEvent.postDelete].includes(event)) emit('changed')
   const keepOpen = event === useFormEvent.postSave && !editor.itemId && profileStore.resetFormOnCreate
   if (event === useFormEvent.postSave && !keepOpen) close()
 }

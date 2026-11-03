@@ -89,6 +89,9 @@ const {
 
 const formClass = computed(() => ({ 'app-form': true, empty: isEmpty.value }))
 
+const transactionFiltersRef = useTemplateRef('transactionFiltersRef')
+const onShowFilters = () => transactionFiltersRef.value.show()
+
 const toolbar = useToolbar()
 toolbar.init({
   title: t('transaction.title_list'),

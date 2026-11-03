@@ -44,7 +44,7 @@
     </d-field>
   </d-form-dialog>
 
-  <d-balance-dialog v-if="isBalanceOpen" :account="form.item" @close="isBalanceOpen = false" />
+  <d-balance-dialog v-if="isBalanceOpen" :account="form.item" @saved="(account) => (form.item = account)" @close="isBalanceOpen = false" />
 </template>
 
 <script setup>
