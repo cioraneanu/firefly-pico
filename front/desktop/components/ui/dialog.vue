@@ -4,7 +4,7 @@
       <div v-if="open" class="fixed inset-0 z-[60] overflow-y-auto">
         <div class="fixed inset-0 bg-black/10 backdrop-blur-xs dark:bg-black/50" @click="emit('close')" />
         <div class="pointer-events-none relative flex min-h-full items-start justify-center px-4 py-12">
-          <div role="dialog" aria-modal="true" :class="['d-dialog-panel pointer-events-auto relative flex w-full flex-col rounded-xl bg-pop shadow-lg ring-1 ring-fg/10', sizes[size]]">
+          <div ref="panel" role="dialog" aria-modal="true" :class="['d-dialog-panel pointer-events-auto relative flex w-full flex-col rounded-xl bg-pop shadow-lg ring-1 ring-fg/10', sizes[size]]">
             <div class="absolute right-3 top-3 flex items-center gap-1">
               <slot name="actions" />
               <d-button variant="ghost" size="icon-sm" :icon="IconX" class="text-dim" :aria-label="$t('close')" @click="emit('close')" />
@@ -34,5 +34,6 @@ const emit = defineEmits(['close'])
 
 const sizes = { sm: 'max-w-sm', md: 'max-w-md', lg: 'max-w-xl', xl: 'max-w-3xl' }
 
-useLayer(toRef(props, 'open'), () => emit('close'))
+const panel = ref(null)
+useLayer(toRef(props, 'open'), () => emit('close'), panel)
 </script>

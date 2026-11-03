@@ -30,10 +30,10 @@
               </span>
             </td>
             <td>
-              <d-badge variant="outline">{{ $t(account.attributes.type?.t ?? '') }}</d-badge>
+              <d-badge variant="outline">{{ $t(get(account, 'attributes.type.t', '')) }}</d-badge>
             </td>
-            <td class="text-dim">{{ account.attributes.account_role?.t ? $t(account.attributes.account_role.t) : '—' }}</td>
-            <td class="text-dim">{{ account.attributes.group || '—' }}</td>
+            <td class="text-dim">{{ get(account, 'attributes.account_role.t') ? $t(get(account, 'attributes.account_role.t')) : '—' }}</td>
+            <td class="text-dim">{{ get(account, 'attributes.group') || '—' }}</td>
             <td class="text-right">
               <span class="font-medium tabular-nums">{{ Account.getBalanceWithCurrency(account) }}</span>
               <span v-if="Account.hasVirtualBalance(account)" class="block text-xs text-dim">{{ $t('account_page.available') }}: {{ Account.getAvailableBalanceWithCurrency(account) }}</span>
@@ -54,6 +54,7 @@
 
 <script setup>
 import { IconAdjustments, IconCoins, IconCreditCard, IconPencil, IconPlus, IconSearch, IconTrash } from '@tabler/icons-vue'
+import { get } from 'lodash-es'
 import RouteConstants from '~/core/constants/RouteConstants'
 import Account from '~/core/models/Account'
 

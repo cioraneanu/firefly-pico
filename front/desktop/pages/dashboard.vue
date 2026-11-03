@@ -45,7 +45,7 @@
 
 <script setup>
 import { IconCalendar, IconChevronLeft, IconChevronRight, IconEye, IconEyeOff, IconSettings, IconX } from '@tabler/icons-vue'
-import { addMonths, format, isSameMonth, startOfMonth } from 'date-fns'
+import { addMonths, isSameMonth, startOfMonth } from 'date-fns'
 import { omit } from 'lodash-es'
 import RouteConstants from '~/core/constants/RouteConstants'
 import { dashboardCard } from '~/core/constants/DashboardConstants'
@@ -61,7 +61,7 @@ import DashRecurring from '~/desktop/components/dashboard/dash-recurring.vue'
 
 const dashboardStore = useDashboardStore()
 const profileStore = useProfileStore()
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const { visibleCards } = useDashboardCards()
 const { rangeTitle } = useDashboardSummary()
 const { expensesByTag, transfersByTag, expensesByCategory, transfersByCategory } = useDashboardBars()
@@ -72,7 +72,7 @@ const { filters, filtersBackendList, activeFilters, activeFiltersCount } = useLi
 const monthOptions = computed(() =>
   Array.from({ length: 48 }, (_, index) => addMonths(startOfMonth(new Date()), 12 - index)).map((date) => ({
     value: +date,
-    label: format(date, 'MMM yyyy'),
+    label: date.toLocaleDateString(locale.value, { month: 'short', year: 'numeric' }),
     meta: isSameMonth(date, new Date()) ? t('desktop.dashboard.this_month') : null,
   })),
 )

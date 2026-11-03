@@ -1,7 +1,7 @@
 <template>
   <section class="flex items-center justify-between gap-4 rounded-xl px-4 py-3.5 ring-1 ring-fg/10">
     <div class="flex min-w-0 flex-col gap-0.5">
-      <h3 class="truncate text-base font-semibold">{{ transaction.attributes.group_title || Transaction.getDescription(transaction) }}</h3>
+      <h3 class="truncate text-base font-semibold">{{ get(transaction, 'attributes.group_title') || Transaction.getDescription(transaction) }}</h3>
       <p class="text-[13px] tabular-nums text-dim">{{ DateUtils.dateToUIWithTime(Transaction.getDate(transaction)) }} · {{ $t('transaction.split_count', { count: splits.length }) }}</p>
     </div>
     <div class="flex flex-col items-end">
@@ -41,6 +41,7 @@
 
 <script setup>
 import { IconArrowRight, IconBasket, IconCategory, IconCreditCard, IconTag } from '@tabler/icons-vue'
+import { get } from 'lodash-es'
 import Account from '~/core/models/Account'
 import Budget from '~/core/models/Budget'
 import Category from '~/core/models/Category'

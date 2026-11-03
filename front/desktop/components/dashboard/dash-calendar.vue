@@ -28,7 +28,7 @@ import { get } from 'lodash-es'
 import Currency from '~/core/models/Currency'
 import { formatNumberForDashboard } from '~/core/utils/NumberUtils'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 const dashboardStore = useDashboardStore()
 const profileStore = useProfileStore()
 const links = useDashboardLinks()
@@ -42,8 +42,12 @@ const weekOptions = computed(() => ({ weekStartsOn: profileStore.weekStartsOn })
 const start = computed(() => dashboardStore.dashboardDateStart)
 const end = computed(() => dashboardStore.dashboardDateEnd)
 
-const title = computed(() => start.value && `${format(start.value, 'MMMM yyyy')} · ${t('desktop.dashboard.amounts_in', { currency: Currency.getSymbol(dashboardStore.dashboardCurrency) })}`)
-const weekdays = computed(() => Array.from({ length: 7 }, (_, index) => format(addDays(startOfWeek(new Date(), weekOptions.value), index), 'EEEEEE')))
+const title = computed(
+  () =>
+    start.value &&
+    `${start.value.toLocaleDateString(locale.value, { month: 'long', year: 'numeric' })} · ${t('desktop.dashboard.amounts_in', { currency: Currency.getSymbol(dashboardStore.dashboardCurrency) })}`,
+)
+const weekdays = computed(() => Array.from({ length: 7 }, (_, index) => addDays(startOfWeek(new Date(), weekOptions.value), index).toLocaleDateString(locale.value, { weekday: 'short' })))
 const days = computed(() => (start.value ? eachDayOfInterval({ start: startOfWeek(start.value, weekOptions.value), end: endOfWeek(end.value, weekOptions.value) }) : []))
 
 const isInRange = (day) => day >= start.value && day <= end.value

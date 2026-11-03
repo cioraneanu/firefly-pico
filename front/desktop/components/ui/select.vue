@@ -8,7 +8,9 @@
       isInvalid ? 'border-danger ring-danger/20' : 'border-field focus-visible:border-ring focus-visible:ring-ring/50',
     ]"
     @click="open = !open"
-    @keydown.down.prevent="open = true"
+    @keydown.down.prevent="open ? move(1) : (open = true)"
+    @keydown.up.prevent="open && move(-1)"
+    @keydown.enter.prevent="open ? pick(filtered[active]) : (open = true)"
   >
     <component :is="icon" v-if="icon && !hasValue" :size="16" class="text-dim" />
     <span v-if="!hasValue" class="flex-1 truncate text-dim">{{ placeholder ?? $t('select_is_empty') }}</span>

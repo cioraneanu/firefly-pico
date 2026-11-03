@@ -54,7 +54,7 @@ const { groups, active } = useDesktopNav()
 const { t } = useI18n()
 
 const isSyncing = ref(false)
-const host = computed(() => URL.parse(appStore.picoBackendURL)?.host ?? appStore.picoBackendURL)
+const host = computed(() => appStore.picoBackendURL?.replace(/^\w+:\/\//, '').split('/')[0])
 const syncLabel = computed(() =>
   isSyncing.value ? t('settings.setup.fetching') : `${t('settings.setup.last_sync')}: ${appStore.lastSync ? formatTimeAgo(new Date(appStore.lastSync)) : t('not_set')}`,
 )

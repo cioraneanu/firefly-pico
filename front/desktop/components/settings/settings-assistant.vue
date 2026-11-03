@@ -39,7 +39,7 @@
       </d-field>
     </d-settings-group>
 
-    <d-settings-actions :loading="isSaving" @save="save" @reset="reset" />
+    <d-settings-actions :loading="isSaving" @reset="reset" />
   </d-form>
 </template>
 

@@ -23,9 +23,9 @@
         <span v-if="Budget.getLimit(budget)" class="flex w-56 flex-col gap-1.5">
           <span class="flex justify-between text-xs tabular-nums text-dim">
             <span>{{ limitText(budget) }}</span>
-            <span>{{ Math.round(Budget.getLimit(budget).attributes.percent ?? 0) }}%</span>
+            <span>{{ Math.round(get(Budget.getLimit(budget), 'attributes.percent', 0)) }}%</span>
           </span>
-          <d-progress :value="Budget.getLimit(budget).attributes.percent ?? 0" />
+          <d-progress :value="get(Budget.getLimit(budget), 'attributes.percent', 0)" />
         </span>
       </d-list-item>
     </d-list>

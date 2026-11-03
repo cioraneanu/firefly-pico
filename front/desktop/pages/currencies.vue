@@ -15,10 +15,10 @@
         :icon="IconCoin"
         :to="`${RouteConstants.ROUTE_CURRENCY_ID}/${currency.id}`"
         :active="currency.id === id"
-        :class="!currency.attributes.enabled && 'opacity-60'"
+        :class="!get(currency, 'attributes.enabled') && 'opacity-60'"
       >
-        <d-badge v-if="currency.attributes.default" variant="success">{{ $t('desktop.default_currency') }}</d-badge>
-        <d-badge v-if="!currency.attributes.enabled">{{ $t('desktop.disabled') }}</d-badge>
+        <d-badge v-if="get(currency, 'attributes.default')" variant="success">{{ $t('desktop.default_currency') }}</d-badge>
+        <d-badge v-if="!get(currency, 'attributes.enabled')">{{ $t('desktop.disabled') }}</d-badge>
       </d-list-item>
     </d-list>
     <d-list v-else>
@@ -31,7 +31,7 @@
 
 <script setup>
 import { IconCoin, IconPlus } from '@tabler/icons-vue'
-import { orderBy } from 'lodash-es'
+import { get, orderBy } from 'lodash-es'
 import RouteConstants from '~/core/constants/RouteConstants'
 import Currency from '~/core/models/Currency'
 

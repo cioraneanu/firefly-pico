@@ -39,7 +39,7 @@
       </div>
     </d-settings-group>
 
-    <d-settings-actions :loading="isSaving" @save="save" @reset="reset">
+    <d-settings-actions :loading="isSaving" @reset="reset">
       <d-button variant="ghost" :icon="IconRefresh" :loading="isSyncing" class="ml-auto" @click="sync">{{ $t('desktop.sync_now') }}</d-button>
     </d-settings-actions>
   </d-form>

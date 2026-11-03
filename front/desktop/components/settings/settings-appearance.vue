@@ -49,19 +49,19 @@
       </div>
     </d-settings-group>
 
-    <d-settings-actions :loading="isSaving" @save="save" @reset="reset" />
+    <d-settings-actions :loading="isSaving" @reset="reset" />
   </d-form>
 </template>
 
 <script setup>
 import { IconDeviceDesktop, IconDeviceMobile, IconMoon, IconSparkles, IconSun } from '@tabler/icons-vue'
-import { addDays, format, startOfWeek } from 'date-fns'
+import { addDays, startOfWeek } from 'date-fns'
 import { capitalize } from 'lodash-es'
 import { supportedLanguages } from '~/i18n/index.js'
 import Page from '~/core/models/Page'
 import { NUMBER_FORMAT } from '~/core/utils/NumberUtils'
 
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 const casings = [
   { path: 'lowerCaseTransactionDescription', t: 'settings.formatting.force_transaction_description_lowercase' },
@@ -101,9 +101,11 @@ const language = computed({
   set: (option) => (draft.language = option.code),
 })
 
-const weekdays = Array.from({ length: 7 }, (_, index) => ({ value: index, label: capitalize(format(addDays(startOfWeek(new Date(), { weekStartsOn: 0 }), index), 'EEEE')) }))
+const weekdays = computed(() =>
+  Array.from({ length: 7 }, (_, index) => ({ value: index, label: capitalize(addDays(startOfWeek(new Date(), { weekStartsOn: 0 }), index).toLocaleDateString(locale.value, { weekday: 'long' })) })),
+)
 const weekStart = computed({
-  get: () => weekdays[draft.weekStartsOn],
+  get: () => weekdays.value[draft.weekStartsOn],
   set: (option) => (draft.weekStartsOn = option.value),
 })
 </script>

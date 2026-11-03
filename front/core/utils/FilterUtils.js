@@ -51,8 +51,8 @@ export const saveToUrl = (activeFilters) => {
   // Parse string into an object({type: "expense"}) since that is what VueRouter expects.
   const newQueryParams = Object.fromEntries(new URLSearchParams(queryParams))
 
-  // Merge with existing query params and update the route
-  router.replace({ query: { ...newQueryParams } })
+  // Keep the clone source (desktop opens the clone dialog over the list) and update the route
+  router.replace({ query: { transaction_id: route.query.transaction_id, ...newQueryParams } })
 }
 
 export const filterBagHasValues = (filterBag) => {

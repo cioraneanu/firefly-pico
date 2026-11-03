@@ -15,8 +15,8 @@ export function useTransactionEditor(options = {}) {
     ...options,
   })
 
-  const cloneId = get(route.query, 'transaction_id')
-  const isCloning = computed(() => !!cloneId)
+  const cloneId = computed(() => get(route.query, 'transaction_id'))
+  const isCloning = computed(() => !!cloneId.value)
   const isSplitTransaction = computed(() => Transaction.isSplitPayment(form.item.value))
   const cloneRoute = computed(() => `${RouteConstants.ROUTE_TRANSACTION_ID}?transaction_id=${form.itemId.value}`)
   const templateRoute = computed(() => `${RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID}?transaction_id=${form.itemId.value}`)
@@ -28,8 +28,8 @@ export function useTransactionEditor(options = {}) {
   })
 
   onMounted(async () => {
-    if (!cloneId) return
-    const response = await new TransactionRepository().getOne(cloneId)
+    if (!cloneId.value) return
+    const response = await new TransactionRepository().getOne(cloneId.value)
     const clone = TransactionTransformer.transformFromApi(response.data)
     delete clone.id
     form.item.value = clone

@@ -76,10 +76,16 @@ const isVisible = (field) => getStyleForField(field).display !== 'none'
 const isTodo = computed(() => tags.value.some((tag) => tag?.attributes?.is_todo))
 const icon = computed(() => Category.getIcon(categories.value[0]) ?? Tag.getIcon(tags.value[0]) ?? IconCoins)
 
-const menu = computed(() => [
-  { label: t('transaction.title_edit_transaction'), icon: IconPencil, action: () => navigateTo(`${RouteConstants.ROUTE_TRANSACTION_ID}/${props.value.id}`) },
-  { label: t('clone'), icon: IconCopy, action: () => navigateTo(`${RouteConstants.ROUTE_TRANSACTION_ID}?transaction_id=${props.value.id}`) },
-  { label: t('transaction.make_template'), icon: IconTemplate, action: () => navigateTo(`${RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID}?transaction_id=${props.value.id}`) },
-  { label: t('delete'), icon: IconTrash, danger: true, action: () => emit('delete', props.value) },
-])
+const menu = computed(() =>
+  [
+    { label: t('transaction.title_edit_transaction'), icon: IconPencil, action: () => navigateTo(`${RouteConstants.ROUTE_TRANSACTION_ID}/${props.value.id}`) },
+    !isSplitPayment.value && { label: t('clone'), icon: IconCopy, action: () => navigateTo(`${RouteConstants.ROUTE_TRANSACTION_ID}?transaction_id=${props.value.id}`) },
+    !isSplitPayment.value && {
+      label: t('transaction.make_template'),
+      icon: IconTemplate,
+      action: () => navigateTo(`${RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID}?transaction_id=${props.value.id}`),
+    },
+    { label: t('delete'), icon: IconTrash, danger: true, action: () => emit('delete', props.value) },
+  ].filter(Boolean),
+)
 </script>

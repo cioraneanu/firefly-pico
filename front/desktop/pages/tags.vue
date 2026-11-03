@@ -17,7 +17,7 @@
         :to="`${RouteConstants.ROUTE_TAG_ID}/${tag.id}`"
         :active="tag.id === id"
       >
-        <template v-if="tag.attributes.is_todo" #title>
+        <template v-if="get(tag, 'attributes.is_todo')" #title>
           <d-badge variant="warning">{{ $t('todo') }}</d-badge>
         </template>
       </d-list-item>
@@ -32,6 +32,7 @@
 
 <script setup>
 import { IconPlus, IconTag } from '@tabler/icons-vue'
+import { get } from 'lodash-es'
 import RouteConstants from '~/core/constants/RouteConstants'
 import Tag from '~/core/models/Tag'
 
@@ -45,9 +46,9 @@ const { search, filtered } = useSearch(
 
 const subtitle = (tag) =>
   [
-    tag.attributes.date && `${t('tag_page.end_date')}: ${DateUtils.dateToUI(tag.attributes.date)}`,
+    get(tag, 'attributes.date') && `${t('tag_page.end_date')}: ${DateUtils.dateToUI(get(tag, 'attributes.date'))}`,
     Tag.getTotalFormatted(tag) && `${t('tag_page.total')}: ${Tag.getTotalFormatted(tag)}`,
-    tag.attributes.description,
+    get(tag, 'attributes.description'),
   ]
     .filter(Boolean)
     .join(' · ')

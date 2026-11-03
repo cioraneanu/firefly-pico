@@ -2,7 +2,7 @@
   <Teleport to="#d-portal">
     <div v-if="open" class="fixed inset-0 z-[64]" @mousedown="open = false" />
     <Transition name="d-pop">
-      <div v-if="open" :style class="fixed z-[65] flex flex-col overflow-y-auto rounded-lg bg-pop p-1 text-sm shadow-md ring-1 ring-fg/10">
+      <div v-if="open" ref="panel" :style class="fixed z-[65] flex flex-col overflow-y-auto rounded-lg bg-pop p-1 text-sm shadow-md ring-1 ring-fg/10">
         <slot />
       </div>
     </Transition>
@@ -32,6 +32,7 @@ const place = () => {
 }
 
 watch(open, (value) => value && place())
-useLayer(open, () => (open.value = false))
+const panel = ref(null)
+useLayer(open, () => (open.value = false), panel)
 useEventListener(window, ['resize', 'scroll'], () => (open.value = false))
 </script>

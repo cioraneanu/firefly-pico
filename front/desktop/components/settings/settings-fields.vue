@@ -12,7 +12,7 @@
       </d-field>
     </d-settings-group>
 
-    <d-settings-actions :loading="isSaving" @save="saveAll" @reset="resetAll" />
+    <d-settings-actions :loading="isSaving" @reset="resetAll" />
   </d-form>
 </template>
 
@@ -33,6 +33,7 @@ const resetAll = () => {
   listFields.value = cloneDeep(profileStore.transactionListFieldsConfig.length === transactionListFieldList.length ? profileStore.transactionListFieldsConfig : transactionListFieldList)
 }
 resetAll()
+watch(() => profileStore.profileActiveId, resetAll)
 
 const saveAll = async () => {
   profileStore.transactionFormFieldsConfig = cloneDeep(formFields.value)

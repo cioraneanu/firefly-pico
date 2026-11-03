@@ -2,7 +2,9 @@
   <div class="flex flex-col gap-1.5">
     <div v-for="attachment in list" :key="attachment.id" class="flex h-9 items-center gap-2 rounded-lg border border-line pl-2.5 pr-1">
       <icon-paperclip :size="16" class="text-dim" />
-      <button type="button" class="flex-1 cursor-pointer truncate text-left hover:underline" @click="open(attachment)">{{ attachment.attributes.title ?? attachment.attributes.filename }}</button>
+      <button type="button" class="flex-1 cursor-pointer truncate text-left hover:underline" @click="open(attachment)">
+        {{ get(attachment, 'attributes.title') ?? get(attachment, 'attributes.filename') }}
+      </button>
       <d-button variant="ghost" size="icon-sm" :icon="IconTrash" class="text-dim" :aria-label="$t('delete')" @click="onRemove(attachment)" />
     </div>
     <label class="w-fit">
@@ -18,6 +20,7 @@
 
 <script setup>
 import { IconLoader2, IconPaperclip, IconTrash, IconUpload } from '@tabler/icons-vue'
+import { get } from 'lodash-es'
 
 const props = defineProps({ transaction: Object })
 const { list, isLoading, upload, open, remove } = useAttachments(() => props.transaction)

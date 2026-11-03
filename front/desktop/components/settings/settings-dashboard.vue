@@ -30,7 +30,7 @@
       <d-order-list v-model="cards" />
     </d-settings-group>
 
-    <d-settings-actions :loading="isSaving" @save="saveAll" @reset="resetAll" />
+    <d-settings-actions :loading="isSaving" @reset="resetAll" />
   </d-form>
 </template>
 
@@ -55,6 +55,7 @@ const config = () => (profileStore.dashboardWidgetsConfig.length === dashboardCa
 const cards = ref([])
 const resetCards = () => (cards.value = cloneDeep(config().filter((card) => isCardEnabled(card.code))))
 resetCards()
+watch(() => profileStore.profileActiveId, resetCards)
 
 const resetAll = () => {
   reset()

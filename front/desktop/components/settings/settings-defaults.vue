@@ -52,7 +52,7 @@
       </div>
     </d-settings-group>
 
-    <d-settings-actions :loading="isSaving" @save="saveAll" @reset="resetAll" />
+    <d-settings-actions :loading="isSaving" @reset="resetAll" />
   </d-form>
 </template>
 
@@ -83,6 +83,7 @@ const resetAll = () => {
   quickAmounts.value = profileStore.quickValueButtons.map((value) => ({ value }))
 }
 resetAll()
+watch(() => profileStore.profileActiveId, resetAll)
 
 const saveAll = async () => {
   profileStore.quickValueButtons = quickAmounts.value
