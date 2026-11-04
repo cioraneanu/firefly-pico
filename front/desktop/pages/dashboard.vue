@@ -14,6 +14,7 @@
       <d-button size="icon" :icon="profileStore.dashboard.showAccountAmounts ? IconEye : IconEyeOff" @click="profileStore.dashboard.showAccountAmounts = !profileStore.dashboard.showAccountAmounts" />
       <d-dash-filters v-model="filters" :active-filters-count />
       <d-refresh-button :action="dashboardStore.fetchDashboard" />
+      <d-button size="icon" :icon="IconAdjustmentsHorizontal" :to="RouteConstants.ROUTE_SETTINGS_DASHBOARD" :title="$t('dashboard.configure_cards')" />
     </template>
 
     <div v-if="activeFilters.length" class="-mt-2 flex flex-wrap items-center gap-2">
@@ -31,20 +32,11 @@
         <component :is="cards[card.code]" v-bind="cardProps[card.code]" />
       </div>
     </div>
-
-    <nuxt-link
-      :to="RouteConstants.ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER"
-      class="-mt-2 flex h-11 items-center gap-2.5 rounded-xl border border-dashed border-field px-4 text-sm font-medium text-dim transition-colors hover:bg-soft/50 hover:text-fg"
-    >
-      <icon-settings :size="16" />
-      <span class="flex-1">{{ $t('dashboard.configure_cards') }}</span>
-      <icon-chevron-right :size="16" />
-    </nuxt-link>
   </d-page>
 </template>
 
 <script setup>
-import { IconCalendar, IconChevronLeft, IconChevronRight, IconEye, IconEyeOff, IconSettings, IconX } from '@tabler/icons-vue'
+import { IconAdjustmentsHorizontal, IconCalendar, IconChevronLeft, IconChevronRight, IconEye, IconEyeOff, IconX } from '@tabler/icons-vue'
 import { addMonths, isSameMonth, startOfMonth } from 'date-fns'
 import { omit } from 'lodash-es'
 import RouteConstants from '~/core/constants/RouteConstants'
