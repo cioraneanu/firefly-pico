@@ -17,6 +17,8 @@ export function useTransactionEditor(options = {}) {
 
   const cloneId = computed(() => get(route.query, 'transaction_id'))
   const isCloning = computed(() => !!cloneId.value)
+  // When editing, wait for the fetched transaction instead of rendering the empty placeholder first
+  const isReady = computed(() => !route.params.id || !!form.itemId.value)
   const isSplitTransaction = computed(() => Transaction.isSplitPayment(form.item.value))
   const cloneRoute = computed(() => `${RouteConstants.ROUTE_TRANSACTION_ID}?transaction_id=${form.itemId.value}`)
   const templateRoute = computed(() => `${RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID}?transaction_id=${form.itemId.value}`)
@@ -24,7 +26,7 @@ export function useTransactionEditor(options = {}) {
   const title = computed(() => {
     if (isCloning.value) return t('transaction.title_clone_transaction')
     if (isSplitTransaction.value) return t('transaction.title_split_details')
-    return form.itemId.value ? t('transaction.title_edit_transaction') : t('transaction.title_add_transaction')
+    return form.itemId.value || route.params.id ? t('transaction.title_edit_transaction') : t('transaction.title_add_transaction')
   })
 
   onMounted(async () => {
@@ -35,5 +37,5 @@ export function useTransactionEditor(options = {}) {
     form.item.value = clone
   })
 
-  return { ...form, isCloning, isSplitTransaction, cloneRoute, templateRoute, title }
+  return { ...form, isReady, isCloning, isSplitTransaction, cloneRoute, templateRoute, title }
 }

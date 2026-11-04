@@ -1,5 +1,5 @@
 <template>
-  <d-dialog open :title="editor.title" size="xl" @close="close">
+  <d-dialog :open="editor.isReady" :title="editor.title" size="xl" @close="close">
     <template #actions>
       <d-badge v-if="editor.isSplitTransaction" variant="outline">{{ $t('transaction.split_short') }}</d-badge>
       <d-button

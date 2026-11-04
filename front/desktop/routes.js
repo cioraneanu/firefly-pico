@@ -17,6 +17,9 @@ const settingsRedirects = {
   '/settings/transactions/list-fields': 'transaction-fields',
 }
 
+// Opening or closing a route dialog (/transactions/list ↔ /transactions/42) stays on the same page, so keep its scroll position
+const scrollToTop = (to, from) => to.matched[0]?.path !== from.matched[0]?.path
+
 export default [
   ...sections.map((section) => ({ path: `/settings/${section.code}`, component: settings, meta: { section: section.code, crumb: section.t } })),
   ...Object.entries(settingsRedirects).map(([path, code]) => ({ path, redirect: `/settings/${code}` })),
@@ -34,4 +37,4 @@ export default [
   { path: '/currencies/:id?', component: () => import('./pages/currencies.vue') },
   { path: '/exchange-rates', component: () => import('./pages/exchange-rates.vue') },
   { path: '/:pathMatch(.*)*', redirect: '/dashboard' },
-]
+].map((route) => ({ ...route, meta: { scrollToTop, ...route.meta } }))
