@@ -2,6 +2,7 @@
 // @ts-ignore
 import pkg from './package.json'
 import { supportedLanguages } from './i18n'
+import tailwindcss from '@tailwindcss/vite'
 
 const appName = 'Firefly Pico'
 const appDescription = 'Firefly III companion app.'
@@ -35,6 +36,7 @@ export default defineNuxtConfig({
     },
   },
   vite: {
+    plugins: [tailwindcss()],
     vue: {
       script: {
         defineModel: true,
@@ -49,26 +51,41 @@ export default defineNuxtConfig({
 
   ssr: false,
 
-  // components: {},
+  dir: {
+    app: '.',
+    pages: 'mobile/pages',
+    layouts: 'mobile/layouts',
+  },
+
+  imports: {
+    dirs: ['core/composables', 'core/utils', 'mobile/composables', 'desktop/composables'],
+  },
+
+  pinia: {
+    storesDirs: ['core/stores'],
+  },
+
   components: [
     {
-      path: '~/components',
+      path: '~/shared/components',
       pathPrefix: false,
     },
     {
-      path: '~/components/global',
+      path: '~/desktop/components',
+      prefix: 'D',
+      pathPrefix: false,
+    },
+    {
+      path: '~/mobile/components',
+      pathPrefix: false,
+    },
+    {
+      path: '~/mobile/components/global',
       global: true,
     },
   ],
 
-  css: [
-    '@/assets/styles/bootstrap.min.css',
-    '@/assets/styles/variables.css',
-    '@/assets/styles/theme-white.css',
-    '@/assets/styles/theme-dark.css',
-    '@/assets/styles/helper.css',
-    '@/assets/styles/animations.css',
-  ],
+  css: ['~/assets/styles/tailwind.css', '~/mobile/styles/variables.css', '~/mobile/styles/theme-white.css', '~/mobile/styles/theme-dark.css', '~/assets/styles/animations.css'],
 
   build: {
     // transpile: ['vuetify'],
@@ -88,6 +105,15 @@ export default defineNuxtConfig({
       title: 'Pico',
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover',
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico', sizes: '48x48' },
+        { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' },
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
+        { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
+        { rel: 'apple-touch-icon', sizes: '180x180', href: '/apple-touch-icon.png' },
+        { rel: 'mask-icon', href: '/safari-pinned-tab.svg', color: '#4A3ED0' },
+      ],
+      meta: [{ name: 'msapplication-TileColor', content: '#4A3ED0' }],
     },
   },
   pwa: {
@@ -107,6 +133,12 @@ export default defineNuxtConfig({
           src: '/android-chrome-512x512.png',
           sizes: '512x512',
           type: 'image/png',
+        },
+        {
+          src: '/maskable-512x512.png',
+          sizes: '512x512',
+          type: 'image/png',
+          purpose: 'maskable',
         },
       ],
     },

@@ -1,0 +1,54 @@
+<template>
+  <div class="app-form">
+    <app-top-toolbar />
+
+    <van-cell-group inset style="overflow: auto">
+      <div class="van-cell-group-title">{{ $t('primary') }}:</div>
+      <app-field-link :label="$t('accounts')" :icon="TablerIconConstants.account" @click="onGoToAccountsList" />
+      <app-field-link :label="$t('template')" :icon="TablerIconConstants.transactionTemplate" @click="onGoToTransactionTemplatesList" />
+      <app-field-link v-if="profileStore.budgetsEnabled" :label="$t('budgets')" :icon="TablerIconConstants.budget" @click="onGoToBudgetsList" />
+      <app-field-link v-if="profileStore.piggyBanksEnabled" :label="$t('piggy_banks')" :icon="TablerIconConstants.piggyBank" @click="onGoToPiggyBanksList" />
+      <app-field-link v-if="profileStore.recurringTransactionsEnabled" :label="$t('recurring_transactions')" :icon="TablerIconConstants.recurringTransaction" @click="onGoToRecurringTransactionsList" />
+    </van-cell-group>
+
+    <van-cell-group v-if="profileStore.tagsEnabled || profileStore.categoriesEnabled" inset style="overflow: auto">
+      <div class="van-cell-group-title">{{ $t('classification') }}:</div>
+      <app-field-link v-if="profileStore.tagsEnabled" :label="$t('tags')" :icon="TablerIconConstants.tag" @click="onGoToTagsList" />
+      <app-field-link v-if="profileStore.categoriesEnabled" :label="$t('categories')" :icon="TablerIconConstants.category" @click="onGoToCategoriesList" />
+    </van-cell-group>
+
+    <van-cell-group inset style="overflow: auto">
+      <div class="van-cell-group-title">{{ $t('extra') }}:</div>
+      <app-field-link :label="$t('exchange_rates')" :icon="TablerIconConstants.exchangeRates" @click="navigateTo(RouteConstants.ROUTE_EXCHANGE_RATES)" />
+      <app-field-link :label="$t('currencies')" :icon="TablerIconConstants.currency" @click="onGoToCurrenciesList" />
+    </van-cell-group>
+  </div>
+</template>
+
+<script setup>
+import { useProfileStore } from '~/core/stores/profileStore'
+import RouteConstants from '~/core/constants/RouteConstants'
+import { useToolbar } from '~/mobile/composables/useToolbar'
+import TablerIconConstants from '~/core/constants/TablerIconConstants'
+import { onMounted } from 'vue'
+
+const profileStore = useProfileStore()
+
+const onGoToAccountsList = async () => await navigateTo(RouteConstants.ROUTE_ACCOUNT_LIST)
+const onGoToCategoriesList = async () => await navigateTo(RouteConstants.ROUTE_CATEGORY_LIST)
+const onGoToTagsList = async () => await navigateTo(RouteConstants.ROUTE_TAG_LIST)
+const onGoToCurrenciesList = async () => await navigateTo(RouteConstants.ROUTE_CURRENCY_LIST)
+const onGoToTransactionTemplatesList = async () => await navigateTo(RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST)
+
+const onGoToBudgetsList = async () => await navigateTo(RouteConstants.ROUTE_BUDGET_LIST)
+const onGoToPiggyBanksList = async () => await navigateTo(RouteConstants.ROUTE_PIGGY_BANK_LIST)
+const onGoToRecurringTransactionsList = async () => await navigateTo(RouteConstants.ROUTE_RECURRING_TRANSACTION_LIST)
+
+const toolbar = useToolbar()
+const { t } = useI18n()
+toolbar.init({ title: t('toolbar.extras') })
+
+onMounted(() => {
+  animateSettings()
+})
+</script>

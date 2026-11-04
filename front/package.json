@@ -21,12 +21,14 @@
     "@nuxt/eslint": "^1.8.0",
     "@nuxtjs/device": "^3.2.4",
     "@nuxtjs/i18n": "^10.0.3",
+    "@tailwindcss/vite": "^4.3.3",
     "@vant/nuxt": "^1.0.7",
     "@vite-pwa/nuxt": "^1.0.4",
     "eslint-config-prettier": "^10.1.8",
     "nuxt": "^4.1.2",
     "nuxt-svgo": "^4.2.6",
-    "prettier": "^3.6.2"
+    "prettier": "^3.6.2",
+    "tailwindcss": "^4.3.3"
   },
   "dependencies": {
     "@pinia/nuxt": "^0.11.2",

@@ -1,0 +1,78 @@
+<template>
+  <van-swipe-cell ref="swipeCell" v-bind="clickWithoutSwipe">
+    <van-cell>
+      <template #title>
+        <div class="list-item-container">
+          <div class="first_column flex items-center justify-center flex-col">
+            <app-icon :icon="icon ?? TablerIconConstants.account" :size="32" />
+            <!--            <span class="badge2"> {{ currencySymbol }}</span>-->
+          </div>
+
+          <div class="separator"/>
+
+          <div class="second_column flex-1">
+            <div v-if="displayName" class="flex items-center gap-1">
+              <span class="title flex-1"> {{ displayName }}</span>
+            </div>
+
+            <div class="subtitle flex flex-wrap gap-2">
+              <span v-if="accountType" class="tag-gray list-item-subtitle">{{ accountType }}</span>
+              <span v-if="accountRole" class="tag-gray list-item-subtitle">{{ $t('account_page.account_role') }}: {{ accountRole }}</span>
+              <span v-if="accountGroup" class="tag-gray list-item-subtitle">{{ $t('account_page.account_group') }}: {{ accountGroup }}</span>
+            </div>
+
+            <div class="flex flex-wrap gap-1">
+              <span class="tag-gray list-item-subtitle mt-1.25">{{ $t('account_page.balance') }}: {{ accountBalance }}</span>
+              <span v-if="hasVirtualBalance" class="tag-gray app-card-info list-item-subtitle mt-1.25">{{ $t('account_page.available') }}: {{ accountAvailableBalance }}</span>
+            </div>
+          </div>
+        </div>
+      </template>
+    </van-cell>
+
+    <template #right>
+      <van-button class="delete-button" square type="danger" text="Delete" @click="onDelete" />
+    </template>
+  </van-swipe-cell>
+</template>
+
+<script setup>
+import { get } from 'lodash-es'
+import { useClickWithoutSwipe } from '~/mobile/composables/useClickWithoutSwipe'
+import TablerIconConstants from '~/core/constants/TablerIconConstants'
+import Account from '~/core/models/Account.js'
+
+const props = defineProps({
+  value: Object,
+})
+
+const emit = defineEmits(['onEdit', 'onDelete'])
+
+const { t } = useI18n()
+
+const displayName = computed(() => get(props.value, 'attributes.name', ' - '))
+
+const accountGroup = computed(() => get(props.value, 'attributes.group'))
+const accountType = computed(() => t(get(props.value, 'attributes.type.t')))
+const accountRole = computed(() => {
+  const translate = get(props.value, 'attributes.account_role.t')
+  return translate ? t(translate) : null
+})
+const currencySymbol = computed(() => get(props.value, 'attributes.currency_code'))
+const accountBalance = computed(() => Account.getBalanceWithCurrency(props.value))
+const accountAvailableBalance = computed(() => Account.getAvailableBalanceWithCurrency(props.value))
+const hasVirtualBalance = computed(() => Account.hasVirtualBalance(props.value))
+const icon = computed(() => Account.getIcon(props.value))
+
+const onEdit = async (e) => {
+  emit('onEdit', props.value)
+}
+
+const onDelete = async () => {
+  emit('onDelete', props.value)
+}
+
+const swipeCell = ref(null)
+const clickWithoutSwipe = useClickWithoutSwipe({ swipeCell: swipeCell, onClick: onEdit })
+</script>
+

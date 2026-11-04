@@ -1,4 +1,4 @@
-// import { flags } from '~/constants/SvgConstants.js'
+// import { flags } from '~/core/constants/SvgConstants.js'
 
 export const languageCode = {
   english: 'en',

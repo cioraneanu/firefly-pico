@@ -1,0 +1,31 @@
+import _, { get } from 'lodash-es'
+import DateUtils from '~/core/utils/DateUtils'
+import Account from '~/core/models/Account'
+import Utils from '~/core/utils/Utils'
+import ApiTransformer from '~/core/transformers/ApiTransformer'
+import Icon from '~/core/models/Icon.js'
+
+export default class CategoryTransformer extends ApiTransformer {
+  static transformFromApi(item) {
+    if (!item) {
+      return null
+    }
+    item.attributes.icon = Icon.getIcon(get(item, 'attributes.icon'))
+
+    // Utils.stringToData(item, 'data.attributes.account_role', Account.roleAssetsList())
+    // Utils.stringToData(item, 'data.attributes.type', Account.typesList())
+    return item
+  }
+
+  static transformToApi(item) {
+    if (!item) {
+      return null
+    }
+
+    let data = _.get(item, 'attributes')
+    return {
+      name: get(data, 'name', ''),
+      icon: get(data, 'icon.icon'),
+    }
+  }
+}
