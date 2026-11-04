@@ -20,6 +20,7 @@
 
 
     <div class="text-muted subtitle flex items-center justify-center mt-5 flex-col">
+      <img src="/logo.svg" alt="" class="size-12 mb-2">
       <div>
         <a :href="REPO_URL">{{$t('settings.version')}}: {{ appStore.currentAppVersion }}</a>
       </div>

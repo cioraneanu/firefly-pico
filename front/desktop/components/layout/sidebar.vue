@@ -2,7 +2,7 @@
   <aside class="sticky top-0 flex h-screen w-64 shrink-0 flex-col">
     <div class="flex flex-col gap-2 p-2">
       <nuxt-link :to="RouteConstants.ROUTE_DASHBOARD" class="flex h-12 items-center gap-2 rounded-lg p-2 transition-colors hover:bg-soft">
-        <d-tile primary><icon-coins :size="16" /></d-tile>
+        <img src="/logo.svg" alt="" class="size-8 shrink-0">
         <span class="grid min-w-0 leading-tight">
           <b class="truncate text-sm font-semibold">Firefly Pico</b>
           <span class="truncate text-xs text-dim">{{ host }}</span>
@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-import { IconCoins, IconMicrophone, IconPlus, IconRefresh } from '@tabler/icons-vue'
+import { IconMicrophone, IconPlus, IconRefresh } from '@tabler/icons-vue'
 import { formatTimeAgo } from '@vueuse/core'
 import RouteConstants from '~/core/constants/RouteConstants'
 

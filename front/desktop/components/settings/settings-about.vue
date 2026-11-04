@@ -1,7 +1,7 @@
 <template>
   <d-settings-group>
     <div class="flex flex-wrap items-center gap-3">
-      <d-tile primary size="lg"><icon-coins :size="20" /></d-tile>
+      <img src="/logo.svg" alt="" class="size-10 shrink-0">
       <div>
         <b class="font-semibold">Firefly Pico</b>
         <p class="text-[13px] text-dim">{{ $t('settings.version') }}: {{ appStore.currentAppVersion }}</p>
@@ -21,7 +21,7 @@
 </template>
 
 <script setup>
-import { IconCoins, IconDownload } from '@tabler/icons-vue'
+import { IconDownload } from '@tabler/icons-vue'
 import { REPO_URL } from '~/core/constants/Constants'
 
 const appStore = useAppStore()
