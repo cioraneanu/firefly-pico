@@ -1,6 +1,6 @@
 <template>
   <d-form-dialog :form :title="$t(form.itemId ? 'transaction_template_page.title_edit' : 'transaction_template_page.title_add')" @close="close">
-    <d-tabs v-model="form.type" :options="typeOptions" block />
+    <d-type-pills v-model="form.type" />
     <d-field :label="$t('name')" :rules="[rule.required()]" :value="form.name">
       <d-input v-model="form.name" autofocus />
     </d-field>
@@ -40,5 +40,4 @@ import { rule } from '~/core/utils/ValidationUtils'
 
 const { close } = useRouteDialog(RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST)
 const form = reactive(useTemplateForm({ routeForm: null, onEvent: (event) => event === useFormEvent.postSave && close() }))
-const typeOptions = useTransactionTypeOptions()
 </script>
