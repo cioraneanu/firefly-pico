@@ -185,18 +185,18 @@ body:has(.van-theme-dark .d-app) {
   transform: translateY(-4px) scale(0.97);
 }
 
+/* The roots only time the transition: fading a root would cut its backdrop's blur until the fade ends */
 .d-dialog-enter-active,
-.d-dialog-leave-active {
-  transition: opacity 0.15s ease-out;
+.d-dialog-leave-active,
+.d-dialog-enter-active :is(.d-backdrop, .d-dialog-panel),
+.d-dialog-leave-active :is(.d-backdrop, .d-dialog-panel) {
+  transition:
+    opacity 0.15s ease-out,
+    transform 0.15s ease-out;
 }
 
-.d-dialog-enter-active .d-dialog-panel,
-.d-dialog-leave-active .d-dialog-panel {
-  transition: transform 0.15s ease-out;
-}
-
-.d-dialog-enter-from,
-.d-dialog-leave-to {
+.d-dialog-enter-from :is(.d-backdrop, .d-dialog-panel),
+.d-dialog-leave-to :is(.d-backdrop, .d-dialog-panel) {
   opacity: 0;
 }
 
@@ -206,17 +206,16 @@ body:has(.van-theme-dark .d-app) {
 }
 
 .d-sheet-enter-active,
-.d-sheet-leave-active {
-  transition: opacity 0.2s ease-in-out;
+.d-sheet-leave-active,
+.d-sheet-enter-active :is(.d-backdrop, .d-sheet-panel),
+.d-sheet-leave-active :is(.d-backdrop, .d-sheet-panel) {
+  transition:
+    opacity 0.2s ease-in-out,
+    transform 0.2s ease-in-out;
 }
 
-.d-sheet-enter-active .d-sheet-panel,
-.d-sheet-leave-active .d-sheet-panel {
-  transition: transform 0.2s ease-in-out;
-}
-
-.d-sheet-enter-from,
-.d-sheet-leave-to {
+.d-sheet-enter-from :is(.d-backdrop, .d-sheet-panel),
+.d-sheet-leave-to :is(.d-backdrop, .d-sheet-panel) {
   opacity: 0;
 }
 
@@ -243,18 +242,5 @@ body:has(.van-theme-dark .d-app) {
 @keyframes d-spin {
   to {
     transform: rotate(360deg);
-  }
-}
-
-.d-progress {
-  animation: d-progress 1.2s ease-in-out infinite;
-}
-
-@keyframes d-progress {
-  0% {
-    transform: translateX(-100%);
-  }
-  100% {
-    transform: translateX(400%);
   }
 }

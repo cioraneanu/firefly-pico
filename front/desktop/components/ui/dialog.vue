@@ -2,7 +2,7 @@
   <Teleport to="#d-portal">
     <Transition name="d-dialog" appear>
       <div v-if="open" class="fixed inset-0 z-[60] overflow-y-auto">
-        <div class="fixed inset-0 bg-black/10 backdrop-blur-xs dark:bg-black/50" @click="emit('close')" />
+        <div class="d-backdrop fixed inset-0 bg-black/10 backdrop-blur-xs dark:bg-black/50" @click="emit('close')" />
         <div class="pointer-events-none relative flex min-h-full items-start justify-center px-4 py-12">
           <div ref="panel" role="dialog" aria-modal="true" :class="['d-dialog-panel pointer-events-auto relative flex w-full flex-col rounded-xl bg-pop shadow-lg ring-1 ring-fg/10', sizes[size]]">
             <div class="absolute right-3 top-3 flex items-center gap-1">
@@ -13,9 +13,9 @@
               <h2 class="text-base font-medium">{{ title }}</h2>
               <p v-if="description" class="text-sm text-dim">{{ description }}</p>
             </div>
-            <div class="flex flex-col gap-4 p-4">
+            <d-loading class="flex flex-col gap-4 p-4">
               <slot />
-            </div>
+            </d-loading>
             <div v-if="$slots.footer" class="flex flex-wrap items-center justify-end gap-2 rounded-b-xl border-t border-line bg-soft/50 p-4">
               <slot name="footer" />
             </div>

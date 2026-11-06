@@ -1,5 +1,5 @@
 <template>
-  <d-dialog :open="editor.isReady" :title="editor.title" size="xl" @close="close">
+  <d-dialog open :title="editor.title" size="xl" @close="close">
     <template #actions>
       <d-badge v-if="editor.isSplitTransaction" variant="outline">{{ $t('transaction.split_short') }}</d-badge>
       <d-button
@@ -12,12 +12,14 @@
       />
     </template>
 
-    <template v-if="!editor.itemId && !editor.isCloning">
+    <template v-if="editor.isReady && !editor.itemId && !editor.isCloning">
       <d-assistant-input v-model="assistantText" @change="(change) => fields?.applyAssistantTransaction(change)" />
       <div class="h-px bg-line" />
     </template>
 
-    <d-split-view v-if="editor.isSplitTransaction" :transaction="editor.item" />
+    <!-- An empty stand-in keeps the dialog's size while loading; the real fields mount with the data so their watchers skip hydration -->
+    <d-transaction-fields v-if="!editor.isReady" />
+    <d-split-view v-else-if="editor.isSplitTransaction" :transaction="editor.item" />
     <d-transaction-fields v-else ref="fields" v-model="editor.item" :form-name="editor.formName" @submit="editor.saveItem" />
 
     <template #footer>
@@ -28,7 +30,7 @@
       </template>
       <span class="flex-1" />
       <d-button @click="close">{{ $t('cancel') }}</d-button>
-      <d-button v-if="!editor.isSplitTransaction" variant="primary" type="submit" :form="editor.formName" :loading="editor.isLoading">{{ $t('save') }}</d-button>
+      <d-button v-if="!editor.isSplitTransaction" variant="primary" type="submit" :form="editor.formName" :loading="editor.isLoading || !editor.isReady">{{ $t('save') }}</d-button>
     </template>
   </d-dialog>
 </template>

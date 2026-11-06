@@ -2,7 +2,7 @@
   <Teleport to="#d-portal">
     <Transition name="d-sheet">
       <div v-if="open" class="fixed inset-0 z-[60]">
-        <div class="absolute inset-0 bg-black/10 backdrop-blur-xs dark:bg-black/50" @click="open = false" />
+        <div class="d-backdrop absolute inset-0 bg-black/10 backdrop-blur-xs dark:bg-black/50" @click="open = false" />
         <aside ref="panel" role="dialog" aria-modal="true" class="d-sheet-panel absolute inset-y-0 right-0 flex w-[92%] max-w-115 flex-col border-l border-line bg-pop shadow-lg">
           <d-button variant="ghost" size="icon-sm" :icon="IconX" class="absolute right-3 top-3 text-dim" :aria-label="$t('close')" @click="open = false" />
           <h2 class="px-4 pb-4 pr-12 pt-4 text-base font-medium">{{ title }}</h2>

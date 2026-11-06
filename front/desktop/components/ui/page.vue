@@ -9,7 +9,10 @@
         <slot name="actions" />
       </div>
     </div>
-    <slot />
+    <!-- min-h-96 keeps the loading pill at its 5.25rem cap while the content is still short -->
+    <d-loading class="flex min-h-96 flex-col gap-5">
+      <slot />
+    </d-loading>
   </main>
 </template>
 

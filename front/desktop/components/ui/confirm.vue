@@ -2,7 +2,7 @@
   <Teleport to="#d-portal">
     <Transition name="d-dialog">
       <div v-if="confirmState" class="fixed inset-0 z-[70] grid place-items-center p-4">
-        <div class="absolute inset-0 bg-black/10 backdrop-blur-xs dark:bg-black/50" @click="close(false)" />
+        <div class="d-backdrop absolute inset-0 bg-black/10 backdrop-blur-xs dark:bg-black/50" @click="close(false)" />
         <div ref="panel" role="alertdialog" aria-modal="true" class="d-dialog-panel relative grid w-full max-w-sm gap-4 rounded-xl bg-pop p-4 ring-1 ring-fg/10">
           <div class="flex items-start gap-4">
             <span class="grid size-10 shrink-0 place-items-center rounded-lg bg-danger/10 text-danger"><icon-trash :size="22" /></span>

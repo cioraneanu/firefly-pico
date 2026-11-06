@@ -7,7 +7,6 @@
     </div>
     <d-confirm />
     <d-toaster />
-    <d-loading-bar />
   </div>
 </template>
 

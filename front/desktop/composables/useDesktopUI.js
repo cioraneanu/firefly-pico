@@ -17,6 +17,16 @@ export const DesktopUI = {
 
 export const useDesktopUI = () => ({ toasts, confirmState })
 
+const loadingLayers = shallowReactive([])
+
+// Requests show their loading pill only in the innermost d-loading (an open dialog over its page)
+export function useLoadingLayer() {
+  const layer = {}
+  loadingLayers.push(layer)
+  onBeforeUnmount(() => loadingLayers.splice(loadingLayers.indexOf(layer), 1))
+  return computed(() => useLoadingStore().isLoadingDelayed && loadingLayers.at(-1) === layer)
+}
+
 // A layer moves focus to its [autofocus] element when it opens and gives focus back when it closes
 export function useLayer(isOpen, onEscape, panel) {
   const layer = { onEscape, panel }
