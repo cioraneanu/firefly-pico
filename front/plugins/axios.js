@@ -13,13 +13,13 @@ axios.interceptors.request.use(
     config.showLoading = config.showLoading !== false
     config.showLoading && loadingStore.addActiveRequest({ id: requestId, controller })
 
-    let authToken = appStore.authToken
-    if (!appStore.hasAuthToken) {
+    const { authToken, picoBackendHeaders } = config.connection ?? appStore
+    if (!authToken) {
       UIUtils.showToastError('No personal access token...')
       controller.abort()
     }
 
-    appStore.picoBackendHeaders?.forEach(({ key, value }) => {
+    picoBackendHeaders?.forEach(({ key, value }) => {
       if (key?.trim()) {
         config.headers[key.trim()] = value
       }

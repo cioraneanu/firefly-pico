@@ -165,6 +165,8 @@
       "verifying": "Επαλήθευση...",
       "invalid_endpoint": "Η διεύθυνση που δόθηκε δεν είναι σωστή.",
       "invalid_token": "Το token που δόθηκε δεν είναι σωστό ή έχει λήξει.",
+      "test_connection": "Δοκιμή σύνδεσης",
+      "connection_successful": "Επιτυχής σύνδεση",
       "fetching": "Λήψη..."
     },
     "ui_entry": "Διεπαφή χρήστη",

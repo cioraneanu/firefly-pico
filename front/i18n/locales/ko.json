@@ -165,6 +165,8 @@
       "verifying": "확인 중...",
       "invalid_endpoint": "입력한 엔드포인트가 올바르지 않습니다.",
       "invalid_token": "입력한 토큰이 올바르지 않거나 만료되었습니다.",
+      "test_connection": "연결 테스트",
+      "connection_successful": "연결 성공",
       "fetching": "가져오는 중..."
     },
     "ui_entry": "사용자 인터페이스",

@@ -150,6 +150,8 @@
       "verifying": "验证中...",
       "invalid_endpoint": "提供的端点不正确。",
       "invalid_token": "提供的令牌不正确或已过期。",
+      "test_connection": "测试连接",
+      "connection_successful": "连接成功",
       "fetching": "获取中..."
     },
     "ui_entry": "用户界面",

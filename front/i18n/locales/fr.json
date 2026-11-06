@@ -165,6 +165,8 @@
       "verifying": "Vérification...",
       "invalid_endpoint": "L'url de l'Api n'est pas correcte.",
       "invalid_token": "Le token n'est pas valide.",
+      "test_connection": "Tester la connexion",
+      "connection_successful": "Connexion réussie",
       "fetching": "Récupération ..."
     },
     "ui_entry": "Interfacte Utilisateur",

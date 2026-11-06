@@ -6,7 +6,8 @@ export default class UserRepository extends BaseRepository {
     super('api/user')
   }
 
-  async getUser() {
-    return await axios.get(`${this.getUrl()}`)
+  async getUser(connection) {
+    const url = connection ? `${connection.picoBackendURL}/${this.endpoint}` : this.getUrl()
+    return await axios.get(url, { connection })
   }
 }

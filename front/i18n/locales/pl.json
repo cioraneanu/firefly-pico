@@ -165,6 +165,8 @@
       "verifying": "Weryfikacja...",
       "invalid_endpoint": "Podany punkt końcowy API jest nieprawidłowy.",
       "invalid_token": "Podany token jest nieprawidłowy lub stracił ważność.",
+      "test_connection": "Testuj połączenie",
+      "connection_successful": "Połączenie udane",
       "fetching": "Pobieranie..."
     },
     "ui_entry": "Interfejs użytkownika",

@@ -8,6 +8,7 @@
         <d-input v-model="connection.authToken" :type="isTokenVisible ? 'text' : 'password'" :icon="IconKey" :placeholder="$t('settings.token.placeholder')">
           <d-button variant="ghost" size="icon-xs" :icon="isTokenVisible ? IconEyeOff : IconEye" class="mr-1 text-dim" @click.prevent="isTokenVisible = !isTokenVisible" />
         </d-input>
+        <d-button size="sm" :icon="IconPlugConnected" :loading="isTesting" class="self-start" @click="testConnection(connection)">{{ $t('settings.setup.test_connection') }}</d-button>
       </d-field>
       <d-field :label="$t('settings.setup.http_headers')" top>
         <div class="flex flex-col gap-2">
@@ -57,6 +58,7 @@ import {
   IconKey,
   IconLink,
   IconPigMoney,
+  IconPlugConnected,
   IconPlus,
   IconRefresh,
   IconTag,
@@ -72,6 +74,7 @@ const appStore = useAppStore()
 const isTokenVisible = ref(false)
 const isSyncing = ref(false)
 const isVerifying = ref(false)
+const { testConnection, isTesting } = useConnectionTest()
 
 const resources = [
   { path: 'budgetsEnabled', t: 'settings.setup.enable_budgets' },

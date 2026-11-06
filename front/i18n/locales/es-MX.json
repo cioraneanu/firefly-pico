@@ -165,6 +165,8 @@
       "verifying": "Verificando...",
       "invalid_endpoint": "El endpoint proporcionado no es correcto.",
       "invalid_token": "El token proporcionado no es correcto o ha expirado.",
+      "test_connection": "Probar conexión",
+      "connection_successful": "Conexión exitosa",
       "fetching": "Obteniendo..."
     },
     "ui_entry": "Interfaz de usuario",

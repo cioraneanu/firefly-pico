@@ -165,6 +165,8 @@
       "verifying": "Se verifică...",
       "invalid_endpoint": "Endpoint-ul furnizat nu este corect.",
       "invalid_token": "Token-ul furnizat nu este corect sau a expirat.",
+      "test_connection": "Testează conexiunea",
+      "connection_successful": "Conexiune reușită",
       "fetching": "Se obține..."
     },
     "ui_entry": "Interfața utilizatorului",

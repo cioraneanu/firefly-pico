@@ -14,6 +14,14 @@
           </template>
         </app-field>
         <settings-token-field v-model="authToken" required />
+        <van-cell>
+          <van-button size="small" block native-type="button" :loading="isTesting" @click="testConnection({ picoBackendURL, authToken, picoBackendHeaders })">
+            <div class="flex items-center gap-1">
+              <icon-plug-connected :size="18" :stroke-width="1.8" />
+              {{ $t('settings.setup.test_connection') }}
+            </div>
+          </van-button>
+        </van-cell>
         <app-boolean v-model="syncProfileInDB" left-icon="points" :label="$t('settings.setup.sync_settings_via_token')" />
         <app-field v-model="daysBetweenFullSync" :label="$t('settings.setup.days_between_sync')" :rules="[rule.required()]" required />
       </van-cell-group>
@@ -85,6 +93,7 @@ import UserRepository from '~/core/repository/UserRepository'
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
 import { cloneDeep, get } from 'lodash-es'
 import { rule } from '~/core/utils/ValidationUtils.js'
+import { IconPlugConnected } from '@tabler/icons-vue'
 
 const appStore = useAppStore()
 const profileStore = useProfileStore()
@@ -102,6 +111,7 @@ const picoBackendHeaders = ref([])
 const syncProfileInDB = ref(true)
 const daysBetweenFullSync = ref(4)
 const showHeadersDialog = ref(false)
+const { testConnection, isTesting } = useConnectionTest()
 
 const accountsCount = computed(() => accountStore.accountList.length)
 const categoriesCount = computed(() => categoryStore.categoryList.length)
