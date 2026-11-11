@@ -1,30 +1,18 @@
 <template>
-  <div class="app-form">
+  <div class="mx-page">
     <app-top-toolbar />
 
-    <van-form class="" @submit="onSave">
-      <van-cell-group inset class="">
-        <div class="flex-col van-cell p-2.5">
-          <app-repeater v-model="fieldsList" :is-list-dynamic="false" :empty-item="{ value: '' }">
-            <template #content="{ element, index }">
-              <div class="app-field m-1.25 cursor-pointer" @click="onClickIsVisible(element)">
-                <div :class="getElementClass(element)">
-                  <app-icon :icon="element.icon" :size="20" />
-                  <div class="flex-1 text-14">{{ element.t ? $t(element.t) : element.name }}</div>
-                  <app-icon :icon="getIsVisibleIcon(element)" :size="20" />
-                </div>
-              </div>
-            </template>
-          </app-repeater>
-        </div>
-      </van-cell-group>
+    <app-form @submit="onSave">
+      <main class="mx-body has-save">
+        <settings-order-list v-model="fieldsList" :hint="$t('settings.reorder_hint_fields')" />
 
-      <van-cell-group inset>
-        <app-boolean v-model="isForeignCurrencyAlwaysVisible" :label="$t('settings.transactions.form_fields.always_show_foreign_currency')" />
-      </van-cell-group>
+        <app-card>
+          <app-boolean v-model="isForeignCurrencyAlwaysVisible" :label="$t('settings.transactions.form_fields.always_show_foreign_currency')" />
+        </app-card>
+      </main>
 
       <app-button-form-save />
-    </van-form>
+    </app-form>
   </div>
 </template>
 
@@ -35,7 +23,6 @@ import { useProfileStore } from '~/core/stores/profileStore'
 import UIUtils from '~/core/utils/UIUtils'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import RouteConstants from '~/core/constants/RouteConstants'
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 import { transactionFormFieldList } from '~/core/constants/TransactionConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/core/utils/SettingUtils.js'
 import { migrateTypeList } from '~/core/utils/MigrateUtils.js'
@@ -43,7 +30,6 @@ import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
-
 
 const fieldsList = ref([])
 
@@ -59,23 +45,10 @@ const onSave = async () => {
   profileStore.transactionFormFieldsConfig = fieldsList.value
   saveSettingsToStore(syncedSettings)
   const response = await profileStore.writeProfile()
-  ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
-  init()
-}
-
-const getIsVisibleIcon = (element) => {
-  return element.isVisible ? TablerIconConstants.eyeVisible : TablerIconConstants.eyeHidden
-}
-
-const getElementClass = (element) => {
-  return {
-    'van-field__body flex items-center gap-1 pointer-events-none select-none': true,
-    'text-muted' : !element.isVisible
+  if (ResponseUtils.isSuccess(response)) {
+    UIUtils.showToastSuccess(t('settings.settings_saved'))
   }
-}
-
-const onClickIsVisible = (element) => {
-  element.isVisible = !element.isVisible
+  init()
 }
 
 const init = () => {

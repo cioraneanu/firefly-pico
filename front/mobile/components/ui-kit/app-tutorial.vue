@@ -1,22 +1,28 @@
 <template>
+  <slot :open="onOpen">
+    <button type="button" class="mx-help" :aria-label="title" aria-haspopup="dialog" @click.stop.prevent="onOpen">
+      <app-icon :icon="IconHelpCircle" :size="14" :stroke="2" />
+    </button>
+  </slot>
 
-  <div class="app-tutorial">
-    <div class="app-tutorial-button" @click.stop.prevent="showPopover = true">?</div>
-
-    <van-dialog v-model:show="showPopover" confirm-button-text="OK" :close-on-click-overlay="true" style="top: 50%;">
-      <div class="p-5">
-        <div class="app-toolbar-title mb-2.5">{{ props.title }}</div>
-        <div class="app-toolbar-body" style="overflow: auto; max-height: 70vh" v-html="props.body"/>
-      </div>
-    </van-dialog>
-  </div>
+  <app-sheet v-model:show="showPopover" :title="title">
+    <div class="mx-prose" v-html="body" />
+    <template #footer>
+      <button type="button" class="mx-btn pri" @click="showPopover = false">{{ $t('kit.got_it') }}</button>
+    </template>
+  </app-sheet>
 </template>
 
 <script setup>
-const showPopover = ref(false)
-const props = defineProps({
+import { IconHelpCircle } from '@tabler/icons-vue'
+
+// Help: a small (?) button that opens a sheet with the explanation (design: MX-HelpSheet).
+// The default slot replaces the button: <app-tutorial v-slot="{ open }"><button @click="open">…</button></app-tutorial>
+defineProps({
   title: {},
   body: {},
 })
-</script>
 
+const showPopover = ref(false)
+const onOpen = () => (showPopover.value = true)
+</script>

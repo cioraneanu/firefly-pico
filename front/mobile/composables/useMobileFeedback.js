@@ -8,7 +8,8 @@ export function useMobileFeedback() {
   const pushToast = (message, type = 'success', duration = 2000) => {
     const id = ++seq
     const close = () => (toasts.value = toasts.value.filter((item) => item.id !== id))
-    toasts.value = [...toasts.value.slice(-2), { id, message, type, close }]
+    // One toast at a time (design): a new one replaces the current one
+    toasts.value = [{ id, message, type, close }]
     if (duration > 0) {
       setTimeout(close, duration)
     }

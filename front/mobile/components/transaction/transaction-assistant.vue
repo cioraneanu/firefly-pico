@@ -1,56 +1,54 @@
 <template>
-  <div class="vant-card flex-col mt-1.25">
-    <div class="vant-card-title flex items-center gap-1">
-      {{ $t('transaction.assistant') }}
-      <app-tutorial :title="$t('transaction.assistant_tutorial_title')" :body="$t('transaction.assistant_tutorial_body')" />
-
-      <div class="flex-1" />
-      <currency-dropdown v-model="profileStore.assistantCurrency" class="text-12" :is-clearable="true" />
+  <section class="mx-card">
+    <div class="mx-card__h mx-card__h--asst">
+      <div>
+        <div class="ttl">
+          <h2 class="mx-card__t">{{ $t('transaction.assistant') }}</h2>
+          <div class="flex items-center gap-1">
+            <currency-dropdown v-model="profileStore.assistantCurrency" :is-clearable="true" />
+            <button type="button" class="mx-ib sm" :aria-label="$t('transaction.assistant_tutorial_title')" aria-haspopup="dialog" @click="isHelpVisible = true">
+              <app-icon :icon="IconHelpCircle" :size="16" :stroke="2" />
+            </button>
+          </div>
+        </div>
+        <p class="mx-card__d">{{ $t('transaction.assistant_format') }}</p>
+      </div>
     </div>
-    <div class="text-12 text-muted mb-1.25">{{ $t('transaction.assistant_format') }}</div>
 
-    <div class="flex flex-col">
-      <div class="flex items-center gap-2 transaction-assistant-input-row">
-        <app-field
-          ref="assistantFieldRef"
-          v-model="assistantText"
-          class="van-cell-no-padding compact flex-1"
-          label=""
-          :placeholder="`${$t('transaction.assistant')} ...`"
-          rows="1"
-          autosize
-          :clearable="true"
-        />
+    <div class="mx-card__c flex flex-col gap-2.5">
+      <div class="mx-tools">
+        <app-field ref="assistantFieldRef" v-model="assistantText" class="flex-1" :placeholder="`${$t('transaction.assistant')} ...`" :icon="IconSparkles" show-icon clearable />
         <ramble :assistant-text="assistantText" />
       </div>
 
-      <template v-if="previewTags.length > 0 || parsed.isTodo">
-        <div class="flex items-center gap-2 p-1.25 mt-2.5 text-12 flex-wrap border border-[#dee2e6] rounded-[3px]">
-          <van-tag v-for="previewTag in previewTags" :key="previewTag.label" round class="assistant-tag" size="medium" type="primary">
-            <span>{{ previewTag.label }}</span>
-            <span>|</span>
-            <span>{{ previewTag.value }}</span>
-          </van-tag>
-
-          <template v-if="parsed.isTodo">
-            <div class="assistant-tag tag-todo">
-              <span>{{ $t('todo') }}</span>
-            </div>
-          </template>
-        </div>
-      </template>
+      <div v-if="previewTags.length > 0 || parsed.isTodo" class="mx-chips" style="margin-top: 0">
+        <span v-for="previewTag in previewTags" :key="previewTag.label" class="mx-chip fill">
+          <span class="mx-muted">{{ previewTag.label }}</span>
+          <span>{{ previewTag.value }}</span>
+        </span>
+        <span v-if="parsed.isTodo" class="mx-chip todo">{{ $t('todo') }}</span>
+      </div>
     </div>
-  </div>
+
+    <app-sheet v-model:show="isHelpVisible" :title="$t('transaction.assistant_tutorial_title')">
+      <div class="mx-prose" v-html="$t('transaction.assistant_tutorial_body')" />
+      <template #footer>
+        <button type="button" class="mx-btn pri" @click="isHelpVisible = false">{{ $t('ok') }}</button>
+      </template>
+    </app-sheet>
+  </section>
 </template>
 
 <script setup>
-import AppTutorial from '~/mobile/components/ui-kit/app-tutorial.vue'
+import { IconHelpCircle, IconSparkles } from '@tabler/icons-vue'
 import Ramble from '~/mobile/components/transaction/ramble.vue'
 
+// Assistant card on the new-transaction page (design: MX-TransactionNew top card, help in a sheet as MX-HelpSheet).
 const profileStore = useProfileStore()
 const emit = defineEmits(['change'])
 const assistantText = defineModel({ type: String })
 const assistantFieldRef = ref(null)
+const isHelpVisible = ref(false)
 
 const { parsed, previewTags } = useTransactionAssistant(assistantText, (change) => emit('change', change))
 

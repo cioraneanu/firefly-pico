@@ -12,6 +12,7 @@
             <app-icon :icon="IconX" :size="16" :stroke="2" />
           </button>
         </div>
+        <p v-if="description" class="mx-sh__d">{{ description }}</p>
 
         <div v-if="searchable" class="mx-sh__s">
           <label class="mx-search">
@@ -47,6 +48,7 @@ const search = defineModel('search', { type: String, default: '' })
 
 defineProps({
   title: { type: String, default: '' },
+  description: { type: String, default: null },
   full: { type: Boolean, default: false },
   searchable: { type: Boolean, default: false },
   searchPlaceholder: { type: String, default: null },

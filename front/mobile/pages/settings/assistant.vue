@@ -1,125 +1,100 @@
 <template>
-  <div class="app-form">
+  <div class="mx-page">
     <app-top-toolbar />
 
-    <van-form class="" @submit="onSave">
-      <van-cell-group inset>
-        <div class="van-cell-group-title">{{ $t('settings.general') }}:</div>
+    <app-form @submit="onSave">
+      <main class="mx-body has-save">
+        <app-card :section="$t('settings.general')">
+          <app-boolean v-model="autoFocusAssistant" :label="$t('settings.assistant.auto_focus')" />
+          <div class="mx-hr" />
+          <app-field v-model="assistantTodoTagMatcher" name="assistantTodoTagMatcher" :label="$t('settings.assistant.substring_todo_tag')" :rules="[rule.required()]" />
+          <currency-select v-model="assistantCurrency" :info="$t('settings.assistant.currency')" />
+        </app-card>
 
-        <app-boolean v-model="autoFocusAssistant" :label="$t('settings.assistant.auto_focus')" />
-        <app-field v-model="assistantTodoTagMatcher" :icon="TablerIconConstants.fieldText2" :label="$t('settings.assistant.substring_todo_tag')" :rules="[rule.required()]" required />
-        <currency-select v-model="assistantCurrency" :info="$t('settings.assistant.currency')" />
-      </van-cell-group>
+        <app-card :title="$t('settings.assistant.llm_status')" :description="$t('settings.assistant.llm_status_subtitle')" :form="false">
+          <template #actions>
+            <span v-if="appStore.llmIsConfigured" class="mx-pill-ok">{{ $t('settings.assistant.llm_configured') }}</span>
+            <span v-else class="mx-chip warn">{{ $t('settings.assistant.llm_not_configured') }}</span>
+          </template>
 
-      <van-cell-group inset>
-        <div class="p-4 flex flex-col gap-4">
-          <div class="flex items-center gap-2">
-            <div class="ramble-header-icon flex items-center justify-center">
-              <app-icon :icon="TablerIconConstants.ramble" :size="20" :stroke="1.6" />
+          <div v-if="appStore.llmIsConfigured" class="mx-kv">
+            <div @click="showFullDetailValue(appStore.llmEndpoint)">
+              <span>{{ $t('settings.assistant.ramble_endpoint') }}</span>
+              <b>{{ appStore.llmEndpoint }}</b>
             </div>
-            <div class="flex-1 min-w-0">
-              <div class="font-semibold text-14 leading-[normal]">{{ $t('settings.assistant.llm_status') }}</div>
-              <div class="text-12 text-muted">{{ $t('settings.assistant.llm_status_subtitle') }}</div>
-            </div>
-          </div>
-          <div class="flex">
-            <div class="llm-status-pill" :class="appStore.llmIsConfigured ? 'llm-status-pill-on' : 'llm-status-pill-off'">
-              <span class="llm-status-dot" />
-              {{ appStore.llmIsConfigured ? $t('settings.assistant.llm_configured') : $t('settings.assistant.llm_not_configured') }}
-            </div>
-          </div>
-          <div v-if="appStore.llmIsConfigured" class="llm-detail-panel">
-            <div class="llm-detail-row">
-              <app-icon :icon="TablerIconConstants.external" :size="16" />
-              <span class="llm-detail-label text-muted">{{ $t('settings.assistant.ramble_endpoint') }}</span>
-              <span class="llm-detail-value cursor-pointer" :title="appStore.llmEndpoint" @click="showFullDetailValue(appStore.llmEndpoint)">{{ appStore.llmEndpoint }}</span>
-            </div>
-            <div class="llm-detail-row">
-              <app-icon :icon="TablerIconConstants.magic" :size="16" />
-              <span class="llm-detail-label text-muted">{{ $t('settings.assistant.ramble_model') }}</span>
-              <span class="llm-detail-value cursor-pointer" :title="appStore.llmModel" @click="showFullDetailValue(appStore.llmModel)">{{ appStore.llmModel }}</span>
+            <div @click="showFullDetailValue(appStore.llmModel)">
+              <span>{{ $t('settings.assistant.ramble_model') }}</span>
+              <b>{{ appStore.llmModel }}</b>
             </div>
           </div>
-
-          <app-text-area v-model="assistantLlmContext" class="assistant-llm-context" :label="$t('settings.assistant.llm_context')" :placeholder="$t('settings.assistant.llm_context_placeholder')" :visible-lines="2" />
-
-          <div v-if="appStore.llmIsConfigured" class="flex items-center justify-center">
-            <van-button round size="small" plain :loading="isTestingLlm" @click="testLlm">
-              <app-icon :icon="TablerIconConstants.magic" :size="16" />
-              {{ $t('settings.assistant.llm_test') }}
-            </van-button>
-          </div>
-
           <template v-else>
-            <div class="text-13 text-muted">{{ $t('settings.assistant.llm_not_configured_info') }}</div>
-            <div class="flex flex-wrap gap-1">
-              <div class="llm-env-chip">ASSISTANT_LLM_ENDPOINT</div>
-              <div class="llm-env-chip">ASSISTANT_LLM_MODEL</div>
-              <div class="llm-env-chip">ASSISTANT_LLM_API_KEY</div>
-              <div class="llm-env-chip">ASSISTANT_LLM_CONTEXT</div>
+            <div class="mx-note">
+              <app-icon :icon="IconInfoCircle" :size="16" :stroke="2" />
+              <span>{{ $t('settings.assistant.llm_not_configured_info') }}</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5 mt-2.5">
+              <span v-for="name in llmEnvVariables" :key="name" class="mx-chip font-mono">{{ name }}</span>
             </div>
           </template>
-        </div>
-      </van-cell-group>
 
-      <van-cell-group inset>
-        <div class="p-4 flex flex-col gap-4">
-          <div class="flex items-center gap-2">
-            <div class="ramble-header-icon flex items-center justify-center">
-              <app-icon :icon="TablerIconConstants.microphone" :size="20" :stroke="1.6" />
-            </div>
-            <div class="flex-1 min-w-0">
-              <div class="font-semibold text-14 leading-[normal]">{{ $t('settings.assistant.transcription_status') }}</div>
-              <div class="text-12 text-muted">{{ $t('settings.assistant.transcription_status_subtitle') }}</div>
-            </div>
-          </div>
-          <div class="flex">
-            <div class="llm-status-pill" :class="appStore.transcriptionIsConfigured ? 'llm-status-pill-on' : 'llm-status-pill-off'">
-              <span class="llm-status-dot" />
-              {{ appStore.transcriptionIsConfigured ? $t('settings.assistant.llm_configured') : $t('settings.assistant.llm_not_configured') }}
-            </div>
-          </div>
-          <div v-if="appStore.transcriptionIsConfigured" class="llm-detail-panel">
-            <div class="llm-detail-row">
-              <app-icon :icon="TablerIconConstants.external" :size="16" />
-              <span class="llm-detail-label text-muted">{{ $t('settings.assistant.transcription_endpoint') }}</span>
-              <span class="llm-detail-value cursor-pointer" :title="appStore.transcriptionEndpoint" @click="showFullDetailValue(appStore.transcriptionEndpoint)">{{ appStore.transcriptionEndpoint }}</span>
-            </div>
-            <div class="llm-detail-row">
-              <app-icon :icon="TablerIconConstants.magic" :size="16" />
-              <span class="llm-detail-label text-muted">{{ $t('settings.assistant.transcription_model') }}</span>
-              <span class="llm-detail-value cursor-pointer" :title="appStore.transcriptionModel" @click="showFullDetailValue(appStore.transcriptionModel)">{{ appStore.transcriptionModel }}</span>
-            </div>
-            <div class="llm-detail-row">
-              <app-icon :icon="TablerIconConstants.language" :size="16" />
-              <span class="llm-detail-label text-muted">{{ $t('settings.assistant.transcription_language') }}</span>
-              <span class="llm-detail-value">{{ appStore.transcriptionLanguage || $t('settings.assistant.transcription_language_auto') }}</span>
-            </div>
-          </div>
+          <div class="mx-hr my-3.5" />
 
-          <div v-if="appStore.transcriptionIsConfigured && !appStore.transcriptionLanguage" class="text-12 text-muted">{{ $t('settings.assistant.transcription_language_info') }}</div>
+          <app-text-area v-model="assistantLlmContext" :label="$t('settings.assistant.llm_context')" :placeholder="$t('settings.assistant.llm_context_placeholder')" :visible-lines="3" />
 
-          <div v-if="appStore.transcriptionIsConfigured" class="flex items-center justify-center">
-            <van-button round size="small" plain :loading="isTestingTranscription" @click="testTranscription">
-              <app-icon :icon="TablerIconConstants.microphone" :size="16" />
-              {{ $t('settings.assistant.transcription_test') }}
-            </van-button>
-          </div>
+          <button v-if="appStore.llmIsConfigured" type="button" class="mx-btn out block mt-3" :disabled="isTestingLlm" @click="testLlm">
+            <span v-if="isTestingLlm" class="mx-spin" />
+            <app-icon v-else :icon="IconPlugConnected" :size="16" :stroke="2" />
+            <span>{{ $t('settings.assistant.llm_test') }}</span>
+          </button>
+        </app-card>
 
+        <app-card :title="$t('settings.assistant.transcription_status')" :description="$t('settings.assistant.transcription_status_subtitle')" :form="false">
+          <template #actions>
+            <span v-if="appStore.transcriptionIsConfigured" class="mx-pill-ok">{{ $t('settings.assistant.llm_configured') }}</span>
+            <span v-else class="mx-chip warn">{{ $t('settings.assistant.llm_not_configured') }}</span>
+          </template>
+
+          <template v-if="appStore.transcriptionIsConfigured">
+            <div class="mx-kv">
+              <div @click="showFullDetailValue(appStore.transcriptionEndpoint)">
+                <span>{{ $t('settings.assistant.transcription_endpoint') }}</span>
+                <b>{{ appStore.transcriptionEndpoint }}</b>
+              </div>
+              <div @click="showFullDetailValue(appStore.transcriptionModel)">
+                <span>{{ $t('settings.assistant.transcription_model') }}</span>
+                <b>{{ appStore.transcriptionModel }}</b>
+              </div>
+              <div>
+                <span>{{ $t('settings.assistant.transcription_language') }}</span>
+                <b>{{ appStore.transcriptionLanguage || $t('settings.assistant.transcription_language_auto') }}</b>
+              </div>
+            </div>
+
+            <div v-if="!appStore.transcriptionLanguage" class="mx-note mt-3">
+              <app-icon :icon="IconInfoCircle" :size="16" :stroke="2" />
+              <span>{{ $t('settings.assistant.transcription_language_info') }}</span>
+            </div>
+
+            <button type="button" class="mx-btn out block mt-3" :disabled="isTestingTranscription" @click="testTranscription">
+              <span v-if="isTestingTranscription" class="mx-spin" />
+              <app-icon v-else :icon="IconMicrophone" :size="16" :stroke="2" />
+              <span>{{ $t('settings.assistant.transcription_test') }}</span>
+            </button>
+          </template>
           <template v-else>
-            <div class="text-13 text-muted">{{ $t('settings.assistant.llm_not_configured_info') }}</div>
-            <div class="flex flex-wrap gap-1">
-              <div class="llm-env-chip">ASSISTANT_TRANSCRIPTION_ENDPOINT</div>
-              <div class="llm-env-chip">ASSISTANT_TRANSCRIPTION_MODEL</div>
-              <div class="llm-env-chip">ASSISTANT_TRANSCRIPTION_API_KEY</div>
-              <div class="llm-env-chip">ASSISTANT_TRANSCRIPTION_LANGUAGE</div>
+            <div class="mx-note">
+              <app-icon :icon="IconInfoCircle" :size="16" :stroke="2" />
+              <span>{{ $t('settings.assistant.llm_not_configured_info') }}</span>
+            </div>
+            <div class="flex flex-wrap gap-1.5 mt-2.5">
+              <span v-for="name in transcriptionEnvVariables" :key="name" class="mx-chip font-mono">{{ name }}</span>
             </div>
           </template>
-        </div>
-      </van-cell-group>
+        </app-card>
+      </main>
 
       <app-button-form-save />
-    </van-form>
+    </app-form>
   </div>
 </template>
 
@@ -129,7 +104,7 @@ import { useProfileStore } from '~/core/stores/profileStore'
 import UIUtils from '~/core/utils/UIUtils'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import RouteConstants from '~/core/constants/RouteConstants'
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
+import { IconInfoCircle, IconMicrophone, IconPlugConnected } from '@tabler/icons-vue'
 import { saveSettingsToStore, watchSettingsStore } from '~/core/utils/SettingUtils.js'
 import { rule } from '~/core/utils/ValidationUtils.js'
 import AssistantRepository from '~/core/repository/AssistantRepository.js'
@@ -144,6 +119,9 @@ const autoFocusAssistant = ref(false)
 const assistantLlmContext = ref('')
 const isTestingLlm = ref(false)
 const isTestingTranscription = ref(false)
+
+const llmEnvVariables = ['ASSISTANT_LLM_ENDPOINT', 'ASSISTANT_LLM_MODEL', 'ASSISTANT_LLM_API_KEY', 'ASSISTANT_LLM_CONTEXT']
+const transcriptionEnvVariables = ['ASSISTANT_TRANSCRIPTION_ENDPOINT', 'ASSISTANT_TRANSCRIPTION_MODEL', 'ASSISTANT_TRANSCRIPTION_API_KEY', 'ASSISTANT_TRANSCRIPTION_LANGUAGE']
 
 const syncedSettings = [
   { store: profileStore, path: 'autoFocusAssistant', ref: autoFocusAssistant },
@@ -162,7 +140,7 @@ const onSave = async () => {
   }
 }
 
-// Desktop gets the native title tooltip on hover; on mobile a tap shows the full value.
+// The values are truncated; a tap shows the full value.
 const showFullDetailValue = (value) => {
   if (!value) {
     return

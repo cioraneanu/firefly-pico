@@ -131,7 +131,14 @@
     "configure_fields": "Configure fields",
     "title_clone_transaction": "Clone transaction",
     "title_edit_transaction": "Edit transaction",
-    "title_add_transaction": "Add transaction"
+    "title_add_transaction": "Add transaction",
+    "calculator": "Calculator",
+    "convert_from": "from {currency}",
+    "attachment_take_photo": "Take photo",
+    "attachment_delete_confirm": "This permanently deletes the attachment.",
+    "assistant_ramble_new": "New ramble",
+    "assistant_ramble_saved": "Saved rambles",
+    "assistant_ramble_no_saved": "No saved rambles"
   },
   "settings": {
     "settings_title": "Settings",
@@ -167,7 +174,9 @@
       "invalid_token": "The provided token is not correct or expired.",
       "test_connection": "Test connection",
       "connection_successful": "Connection successful",
-      "fetching": "Fetching..."
+      "fetching": "Fetching...",
+      "add_http_header": "Add header",
+      "http_headers_info": "Sent with every request to the Pico backend, e.g. for Cloudflare Access or a reverse proxy."
     },
     "ui_entry": "User interface",
     "ui": {
@@ -186,7 +195,8 @@
         "new_transacation": "New transaction",
         "transacation_list": "Transactions list",
         "dashboard": "Dashboard"
-      }
+      },
+      "appearance": "Appearance"
     },
     "assistant_entry": "Assistant",
     "assistant": {
@@ -252,7 +262,8 @@
       "copy_category_to_description": "When I select a Category copy it into Description",
       "quick_amounts": {
         "title": "Quick transaction amounts",
-        "value": "Value"
+        "value": "Value",
+        "info": "Shown next to the amount field, e.g. +1, +0.1, -10"
       },
       "list_fields": {
         "title": "Set list fields",
@@ -306,8 +317,17 @@
     },
     "token": {
       "label": "Personal access token",
-      "placeholder": "Personal token"
-    }
+      "placeholder": "Personal token",
+      "description": "Create one in Firefly III under Options › Profile › OAuth.",
+      "show": "Show token",
+      "hide": "Hide token",
+      "note": "Stored on this device only. It is sent to the Pico backend, which forwards it to Firefly III."
+    },
+    "sync_everything": "Sync everything",
+    "show": "Show",
+    "hide": "Hide",
+    "reorder_hint_cards": "Drag the handle to reorder · tap the eye to hide a card",
+    "reorder_hint_fields": "Drag the handle to reorder · tap the eye to hide a field"
   },
   "about": {
     "title": "About",
@@ -327,7 +347,14 @@
     "iconpacks_circle_avatar": "- IconPacks: <a href=\"https://www.svgrepo.com/author/Laura%20Reen\" target=\"_blank\">Circle Avatar Vectors by Laura Reen</a>",
     "iconpacks_svg_repo": "- IconPacks: <a href=\"https://www.svgrepo.com/\" target=\"_blank\">SVG Repo</a>",
     "iconpacks_freepik": "- IconPacks: <a href=\"https://www.freepik.com/\" target=\"_blank\">Freepik</a>",
-    "illustrations_undraw": "- Illustrations: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>"
+    "illustrations_undraw": "- Illustrations: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>",
+    "credit_developed_by": "Developed by Mihai Cioraneanu",
+    "credit_using": "Using",
+    "credit_consuming": "Consuming the REST API",
+    "credit_ui_theme": "With a UI theme based on",
+    "credit_exchange_rate": "Exchange rate by",
+    "credit_iconpacks": "IconPacks",
+    "credit_illustrations": "Illustrations"
   },
   "page_select": {
     "label": "Starting page",
@@ -397,12 +424,20 @@
     "visible_on_dashboard": "Is visible on Dashboard",
     "balance": "Balance",
     "available": "Available",
-    "account_group": "Group"
+    "account_group": "Group",
+    "search": "Search accounts…",
+    "empty_hint": "Your accounts will appear here",
+    "current_balance": "Current balance",
+    "new_balance": "New balance",
+    "difference": "Difference",
+    "adjust_balance_note": "The difference is added to the account's opening balance. No transaction is created."
   },
   "transaction_template_page": {
     "title_add": "Add template",
     "title_edit": "Edit template",
-    "extra_names": "Extra names (assistant findable):"
+    "extra_names": "Extra names (assistant findable):",
+    "search": "Search templates…",
+    "empty_hint": "Your templates will appear here"
   },
   "tag_page": {
     "title_add": "Add tag",
@@ -412,7 +447,9 @@
     "end_date": "End date",
     "total": "Total",
     "compute_total": "Compute total",
-    "total_success": "Tag total updated"
+    "total_success": "Tag total updated",
+    "search": "Search tags…",
+    "empty_hint": "Your tags will appear here"
   },
   "category_page": {
     "title_add": "Add category",
@@ -423,7 +460,9 @@
   "currency_page": {
     "title_add": "Add currency",
     "title_edit": "Edit currency",
-    "decimal_places": "Decimal places"
+    "decimal_places": "Decimal places",
+    "search": "Search currencies…",
+    "empty_hint": "Your currencies will appear here"
   },
   "budget_page": {
     "title_add": "Add budget",
@@ -432,7 +471,9 @@
     "percent": "Percent",
     "interval": "Interval",
     "type": "Budget type",
-    "period": "Budget period"
+    "period": "Budget period",
+    "search": "Search budgets…",
+    "empty_hint": "Your budgets will appear here"
   },
   "piggy_bank_page": {
     "title_add": "Add piggy bank",
@@ -443,7 +484,10 @@
     "target_amount": "Target amount",
     "current_amount": "Saved amount",
     "start_date": "Start date",
-    "target_date": "Target date"
+    "target_date": "Target date",
+    "search": "Search piggy banks…",
+    "empty_hint": "Your piggy banks will appear here",
+    "target_reached": "Target reached"
   },
   "recurring_transaction_page": {
     "title_add": "Add recurring transaction",
@@ -461,10 +505,14 @@
     "upcoming": "Upcoming occurrences",
     "next_date": "Next",
     "inactive": "Inactive",
-    "no_upcoming": "No upcoming recurring transactions ^_^"
+    "no_upcoming": "No upcoming recurring transactions ^_^",
+    "search": "Search recurring…",
+    "empty_hint": "Your recurring transactions will appear here"
   },
   "exchange_rate_page": {
-    "relative_to_usd": "Relative to USD"
+    "relative_to_usd": "Relative to USD",
+    "search": "Search currency…",
+    "empty_hint": "Exchange rates will appear here"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -604,5 +652,51 @@
   "no_matches": "No matches",
   "refreshing": "Refreshing…",
   "sync": "Sync",
-  "sync_required_by_extras": "Found extras that need a resync"
+  "sync_required_by_extras": "Found extras that need a resync",
+  "kit": {
+    "choose_month": "Choose month",
+    "choose_time": "Choose time",
+    "create": "Create",
+    "got_it": "Got it",
+    "hour": "Hour",
+    "minute": "Minute",
+    "next_month": "Next month",
+    "next_year": "Next year",
+    "no_date": "No date",
+    "no_time": "No time",
+    "now": "Now",
+    "previous_month": "Previous month",
+    "previous_year": "Previous year",
+    "profile_switched": "Switched to {name}",
+    "refresh": "Refresh",
+    "select_date": "Select a date",
+    "select_option": "Select an option",
+    "selected_count": "{count} selected",
+    "toggle_layout": "Switch between list and chips",
+    "what_is_profile": "What is a profile?"
+  },
+  "transaction_list_page": {
+    "search": "Search description…",
+    "without_category": "Without category",
+    "without_tag": "Without tags",
+    "without_budget": "Without budget",
+    "active_count": "{count} active",
+    "empty_hint": "Your transactions will appear here",
+    "showing": "Showing {count} of {total}"
+  },
+  "dash_page": {
+    "hide_amounts": "Hide amounts",
+    "previous_period": "Previous period",
+    "next_period": "Next period",
+    "period": "Period",
+    "previous_year": "Previous year",
+    "next_year": "Next year",
+    "card_options": "Card options",
+    "no_data": "Nothing in this period",
+    "no_budgets": "No budgets ^_^",
+    "no_piggy_banks": "No piggy banks ^_^",
+    "amount_left": "{amount} left",
+    "peak": "Peak {amount} · {date}",
+    "no_todo_tag": "No \"todo\" tag"
+  }
 }

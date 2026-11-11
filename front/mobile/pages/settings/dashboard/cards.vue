@@ -1,26 +1,14 @@
 <template>
-  <div class="app-form">
+  <div class="mx-page">
     <app-top-toolbar />
 
-    <van-form class="" @submit="onSave">
-      <van-cell-group inset class="p-2.5">
-        <div class="van-cell-fake flex-col">
-          <app-repeater v-model="fieldsList" :is-list-dynamic="false" :empty-item="{ value: '' }">
-            <template #content="{ element }">
-              <div class="app-field m-1.25 cursor-pointer" @click="onClickIsVisible(element)">
-                <div :class="getElementClass(element)">
-                  <app-icon :icon="element.icon" :size="20" />
-                  <div class="flex-1 text-14">{{ element.t ? $t(element.t) : element.name }}</div>
-                  <app-icon :icon="getIsVisibleIcon(element)" :size="20" />
-                </div>
-              </div>
-            </template>
-          </app-repeater>
-        </div>
-      </van-cell-group>
+    <app-form @submit="onSave">
+      <main class="mx-body has-save">
+        <settings-order-list v-model="fieldsList" :hint="$t('settings.reorder_hint_cards')" />
+      </main>
 
       <app-button-form-save />
-    </van-form>
+    </app-form>
   </div>
 </template>
 
@@ -30,7 +18,6 @@ import { useProfileStore } from '~/core/stores/profileStore'
 import UIUtils from '~/core/utils/UIUtils'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import RouteConstants from '~/core/constants/RouteConstants'
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 import { dashboardCard, dashboardCardList } from '~/core/constants/DashboardConstants.js'
 import { useI18n } from 'vue-i18n'
 
@@ -64,21 +51,6 @@ const onSave = async () => {
     UIUtils.showToastSuccess(t('settings.settings_saved'))
   }
   init()
-}
-
-const getIsVisibleIcon = (element) => {
-  return element.isVisible ? TablerIconConstants.eyeVisible : TablerIconConstants.eyeHidden
-}
-
-const getElementClass = (element) => {
-  return {
-    'van-field__body flex items-center gap-1 pointer-events-none select-none': true,
-    'text-muted': !element.isVisible,
-  }
-}
-
-const onClickIsVisible = (element) => {
-  element.isVisible = !element.isVisible
 }
 
 const init = () => {

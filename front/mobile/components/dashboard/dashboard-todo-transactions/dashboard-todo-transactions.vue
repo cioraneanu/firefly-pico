@@ -1,20 +1,36 @@
 <template>
-  <van-cell-group inset>
-    <div class="van-cell-group-title flex items-center">
-      <div class="flex-1">{{ $t('settings.dashboard.cards.todo_transactions') }}:</div>
+  <section class="mx-card">
+    <div class="mx-card__h">
+      <div>
+        <h2 class="mx-card__t">{{ $t('settings.dashboard.cards.todo_transactions') }}</h2>
+      </div>
 
-      <van-button v-if="tagStore.tagTodo" size="small" @click="onGoToTodos">{{ $t('todo') }}: {{ dashboardStore.transactionsWithTodo.length }}</van-button>
+      <button v-if="tagStore.tagTodo" type="button" class="mx-btn xs out" @click="onGoToTodos">
+        <app-icon :icon="IconListCheck" :size="14" :stroke="2" />
+        <span>{{ $t('todo') }}</span>
+        <span class="mx-badge pri">{{ dashboardStore.transactionsWithTodo.length }}</span>
+      </button>
       <div v-else class="flex items-center gap-1">
-        <span class="text-muted text-10 font-normal"> No "todo" tag </span>
+        <span class="mx-muted text-12">{{ $t('dash_page.no_todo_tag') }}</span>
         <app-tutorial v-bind="TUTORIAL_CONSTANTS.todoTag" />
       </div>
     </div>
-    <div>
-      <transaction-list-item v-for="transaction in dashboardStore.transactionsWithTodo" :key="transaction.id" :value="transaction" :is-detailed-mode="false" @on-edit="onEditTransaction" />
+
+    <div v-if="dashboardStore.transactionsWithTodo.length > 0" class="mx-dash-rows">
+      <transaction-list-item
+        v-for="transaction in dashboardStore.transactionsWithTodo"
+        :key="transaction.id"
+        :value="transaction"
+        :is-detailed-mode="false"
+        :deletable="false"
+        @on-edit="onEditTransaction"
+      />
     </div>
-  </van-cell-group>
+    <div v-else class="h-3.5" />
+  </section>
 </template>
 <script setup>
+import { IconListCheck } from '@tabler/icons-vue'
 import RouteConstants from '~/core/constants/RouteConstants.js'
 import { TUTORIAL_CONSTANTS } from '~/core/constants/TutorialConstants.js'
 

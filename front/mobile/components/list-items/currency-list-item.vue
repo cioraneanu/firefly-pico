@@ -1,30 +1,18 @@
 <template>
-  <van-swipe-cell ref="swipeCell" v-bind="clickWithoutSwipe">
-    <van-cell>
-      <template #title>
-        <div class="list-item-container" :class="itemClass">
-          <div class="first_column flex items-center justify-center flex-col">
-            <app-icon :icon="TablerIconConstants.currency" :size="TablerIconConstants.sizeItemList" :class="itemClass" />
-          </div>
-
-          <div class="separator"/>
-
-          <div class="second_column flex-1">
-            <div v-if="displayName" class="title">{{ displayName }}</div>
-          </div>
-        </div>
-      </template>
-    </van-cell>
-
-    <template #right>
-      <van-button class="delete-button" square type="danger" text="Delete" @click="onDelete" />
-    </template>
-  </van-swipe-cell>
+  <app-list-item :row-class="{ mid: true, 'is-off': !isEnabled }" @on-edit="emit('onEdit', value)" @on-delete="emit('onDelete', value)">
+    <span class="mx-lead sm"><app-icon :icon="TablerIconConstants.currency" :size="16" :stroke="2" /></span>
+    <span class="mx-row__m">
+      <span class="mx-row__t">{{ displayName }}</span>
+      <span v-if="isDefault || !isEnabled" class="mx-row__s">{{ isDefault ? $t('desktop.default_currency') : $t('desktop.disabled') }}</span>
+    </span>
+    <span v-if="symbol" class="mx-badge">{{ symbol }}</span>
+    <span class="mx-chev"><app-icon :icon="IconChevronRight" :size="16" :stroke="2" /></span>
+  </app-list-item>
 </template>
 
 <script setup>
-import _ from 'lodash-es'
-import { useClickWithoutSwipe } from '~/mobile/composables/useClickWithoutSwipe'
+import { get } from 'lodash-es'
+import { IconChevronRight } from '@tabler/icons-vue'
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
 
 const props = defineProps({
@@ -33,21 +21,8 @@ const props = defineProps({
 
 const emit = defineEmits(['onEdit', 'onDelete'])
 
-const displayName = computed(() => _.get(props.value, 'attributes.name', ' - '))
-
-const itemClass = computed(() => ({
-  'list-item-disabled': !_.get(props.value, 'attributes.enabled', true)
-}))
-
-const onEdit = async (e) => {
-  emit('onEdit', props.value)
-}
-
-const onDelete = async () => {
-  emit('onDelete', props.value)
-}
-
-const swipeCell = ref(null)
-const clickWithoutSwipe = useClickWithoutSwipe({ swipeCell: swipeCell, onClick: onEdit })
+const displayName = computed(() => get(props.value, 'attributes.name', ' - '))
+const symbol = computed(() => get(props.value, 'attributes.symbol'))
+const isEnabled = computed(() => get(props.value, 'attributes.enabled', true))
+const isDefault = computed(() => !!get(props.value, 'attributes.default'))
 </script>
-

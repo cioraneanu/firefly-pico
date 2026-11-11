@@ -1,65 +1,55 @@
 <template>
-  <div>
-    <app-popup v-model:show="showDropdown" style="padding-top: 4px; padding-bottom: 80px">
-      <div ref="popupRef" class="h-full flex flex-col qqq">
-        <div class="van-popup-title flex items-center px-6">
-          <div class="flex-1">{{ title }}</div>
-          <!--        <van-button size="small" @click="onSave">Close</van-button>-->
-        </div>
-
-        <van-cell-group inset>
-          <app-field v-model="item.name" :label="$t('name')" :rules="[rule.required()]" required />
-        </van-cell-group>
-
-        <app-button-form-delete v-if="itemId" class="mx-4 mt-1" style="width: auto" @click="onDelete" />
-        <app-button-form-save bottom=" - var(--van-tabbar-height) + 20px" @click="onSave" />
+  <app-sheet v-model:show="showDropdown" :title="title">
+    <app-form :id="formName" :name="formName" @submit="onSave">
+      <div class="mx-form">
+        <app-field v-model="name" name="name" :label="$t('name')" :rules="[rule.required()]" required />
       </div>
-    </app-popup>
-  </div>
+    </app-form>
+    <app-button-form-delete v-if="itemId" class="m-2" @click="onDelete" />
+
+    <template #footer>
+      <button type="button" class="mx-btn out" @click="onHide">{{ $t('cancel') }}</button>
+      <button type="submit" class="mx-btn pri" :form="formName">{{ itemId ? $t('save') : $t('kit.create') }}</button>
+    </template>
+  </app-sheet>
 </template>
 
 <script setup>
-import { IconPlus } from '@tabler/icons-vue'
+import { cloneDeep, get } from 'lodash-es'
 import { rule } from '~/core/utils/ValidationUtils.js'
-import ProfileRepository from '~/core/repository/ProfileRepository.js'
 import Profile from '~/core/models/Profile.js'
-import _, { cloneDeep, get } from 'lodash-es'
-import { ref } from 'vue'
-import CategoryTransformer from '~/core/transformers/CategoryTransformer.js'
 import { useForm, useFormEvent } from '~/core/composables/useForm.js'
-import RouteConstants from '~/core/constants/RouteConstants.js'
-import Category from '~/core/models/Category.js'
 import { generateChildren } from '~/core/utils/VueUtils.js'
-import BudgetTransformer from '~/core/transformers/BudgetTransformer.js'
 
-const props = defineProps({})
+// Add / edit profile sheet (design: MX-Profiles). Opened by the profiles sheet through onShow(profile | null).
 const emits = defineEmits(['saved'])
 const profileStore = useProfileStore()
 
-const showDropdown = defineModel('showDropdown', false)
-
-const form = ref(null)
+const showDropdown = defineModel('showDropdown', { type: Boolean, default: false })
 
 const resetFields = () => {
   name.value = ''
 }
 
 const onEvent = (event, payload) => {
-
   // When creating a new Profile auto-select it
   if (event === useFormEvent.postSave) {
     const newProfileId = get(payload, 'data.data.id')
-    newProfileId ? profileStore.profileActiveId = newProfileId : null
+    if (newProfileId) {
+      profileStore.profileActiveId = newProfileId
+    }
+  }
+  if (event === useFormEvent.postDelete) {
+    onHide()
   }
   profileStore.getProfiles()
 }
 
-const { itemId, item, saveItem, onDelete } = useForm({
-  form: form,
+const { itemId, item, saveItem, onDelete, formName } = useForm({
   model: new Profile(),
   resetFields,
   onEvent,
-  shouldFetchOnMount: false
+  shouldFetchOnMount: false,
 })
 
 const { name } = generateChildren(item, [{ computed: 'name', parentKey: 'name' }])
@@ -76,7 +66,6 @@ const onHide = () => {
 
 const onShow = (profile) => {
   item.value = cloneDeep(profile) ?? new Profile().getEmpty()
-  itemId.value = item.value.id
   showDropdown.value = true
 }
 

@@ -131,7 +131,14 @@
     "configure_fields": "Configurează câmpuri",
     "title_clone_transaction": "Clonează tranzacția",
     "title_edit_transaction": "Editează tranzacția",
-    "title_add_transaction": "Adaugă tranzacție"
+    "title_add_transaction": "Adaugă tranzacție",
+    "calculator": "Calculator",
+    "convert_from": "din {currency}",
+    "attachment_take_photo": "Fă o poză",
+    "attachment_delete_confirm": "Atașamentul va fi șters definitiv.",
+    "assistant_ramble_new": "Ramble nou",
+    "assistant_ramble_saved": "Ramble-uri salvate",
+    "assistant_ramble_no_saved": "Niciun ramble salvat"
   },
   "settings": {
     "settings_title": "Setări",
@@ -167,7 +174,9 @@
       "invalid_token": "Token-ul furnizat nu este corect sau a expirat.",
       "test_connection": "Testează conexiunea",
       "connection_successful": "Conexiune reușită",
-      "fetching": "Se obține..."
+      "fetching": "Se obține...",
+      "add_http_header": "Adaugă header",
+      "http_headers_info": "Trimise cu fiecare cerere către backend-ul Pico, de ex. pentru Cloudflare Access sau un reverse proxy."
     },
     "ui_entry": "Interfața utilizatorului",
     "ui": {
@@ -185,7 +194,8 @@
         "new_transacation": "Tranzacție nouă",
         "transacation_list": "Lista tranzacțiilor",
         "dashboard": "Tablou de bord"
-      }
+      },
+      "appearance": "Aspect"
     },
     "assistant_entry": "Asistent",
     "assistant": {
@@ -251,7 +261,8 @@
       "copy_category_to_description": "Când selectez o Categorie, copiază în Descriere",
       "quick_amounts": {
         "title": "Sume rapide tranzacții",
-        "value": "Valoare"
+        "value": "Valoare",
+        "info": "Afișate lângă câmpul de sumă, de ex. +1, +0.1, -10"
       },
       "list_fields": {
         "title": "Setează câmpuri listă",
@@ -305,8 +316,17 @@
     },
     "token": {
       "label": "Token de acces personal",
-      "placeholder": "Token personal"
-    }
+      "placeholder": "Token personal",
+      "description": "Creează unul în Firefly III la Opțiuni › Profil › OAuth.",
+      "show": "Afișează tokenul",
+      "hide": "Ascunde tokenul",
+      "note": "Salvat doar pe acest dispozitiv. Este trimis către backend-ul Pico, care îl transmite către Firefly III."
+    },
+    "sync_everything": "Sincronizează tot",
+    "show": "Afișează",
+    "hide": "Ascunde",
+    "reorder_hint_cards": "Trage de mâner pentru a reordona · atinge ochiul pentru a ascunde un card",
+    "reorder_hint_fields": "Trage de mâner pentru a reordona · atinge ochiul pentru a ascunde un câmp"
   },
   "about": {
     "title": "Despre",
@@ -326,7 +346,14 @@
     "iconpacks_circle_avatar": "- Pachete de iconițe: <a href=\"https://www.svgrepo.com/author/Laura%20Reen\" target=\"_blank\">Circle Avatar Vectors de Laura Reen</a>",
     "iconpacks_svg_repo": "- Pachete de iconițe: <a href=\"https://www.svgrepo.com/\" target=\"_blank\">SVG Repo</a>",
     "iconpacks_freepik": "- Pachete de iconițe: <a href=\"https://www.freepik.com/\" target=\"_blank\">Freepik</a>",
-    "illustrations_undraw": "- Ilustrații: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>"
+    "illustrations_undraw": "- Ilustrații: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>",
+    "credit_developed_by": "Dezvoltat de Mihai Cioraneanu",
+    "credit_using": "Folosind",
+    "credit_consuming": "Consumând API-ul REST",
+    "credit_ui_theme": "Cu o temă UI bazată pe",
+    "credit_exchange_rate": "Curs valutar de la",
+    "credit_iconpacks": "Pachete de iconițe",
+    "credit_illustrations": "Ilustrații"
   },
   "page_select": {
     "label": "Pagină de start",
@@ -396,12 +423,20 @@
     "visible_on_dashboard": "Este vizibil pe Dashboard",
     "balance": "Total",
     "available": "Disponibil",
-    "account_group": "Grup"
+    "account_group": "Grup",
+    "search": "Caută conturi…",
+    "empty_hint": "Conturile tale vor apărea aici",
+    "current_balance": "Sold curent",
+    "new_balance": "Sold nou",
+    "difference": "Diferență",
+    "adjust_balance_note": "Diferența se adaugă la soldul inițial al contului. Nu se creează nicio tranzacție."
   },
   "transaction_template_page": {
     "title_add": "Adaugă șablon",
     "title_edit": "Editează șablon",
-    "extra_names": "Nume suplimentare (găsit de asistent):"
+    "extra_names": "Nume suplimentare (găsit de asistent):",
+    "search": "Caută șabloane…",
+    "empty_hint": "Șabloanele tale vor apărea aici"
   },
   "tag_page": {
     "title_add": "Adaugă etichetă",
@@ -411,7 +446,9 @@
     "end_date": "Data de sfârşit",
     "total": "Total",
     "compute_total": "Calculează totalul",
-    "total_success": "Totalul etichetei a fost actualizat"
+    "total_success": "Totalul etichetei a fost actualizat",
+    "search": "Caută etichete…",
+    "empty_hint": "Etichetele tale vor apărea aici"
   },
   "category_page": {
     "title_add": "Adaugă categorie",
@@ -422,7 +459,9 @@
   "currency_page": {
     "title_add": "Adaugă monedă",
     "title_edit": "Editează monedă",
-    "decimal_places": "Zecimale"
+    "decimal_places": "Zecimale",
+    "search": "Caută monede…",
+    "empty_hint": "Monedele tale vor apărea aici"
   },
   "budget_page": {
     "title_add": "Adaugă buget",
@@ -431,7 +470,9 @@
     "percent": "Procent",
     "interval": "Interval",
     "type": "Tip buget",
-    "period": "Perioadă buget"
+    "period": "Perioadă buget",
+    "search": "Caută bugete…",
+    "empty_hint": "Bugetele tale vor apărea aici"
   },
   "piggy_bank_page": {
     "title_add": "Adăugați pușculița",
@@ -442,7 +483,10 @@
     "target_amount": "Suma țintă",
     "current_amount": "Suma economisită",
     "start_date": "Data de începere",
-    "target_date": "Data țintă"
+    "target_date": "Data țintă",
+    "search": "Caută pușculițe…",
+    "empty_hint": "Pușculițele tale vor apărea aici",
+    "target_reached": "Țintă atinsă"
   },
   "recurring_transaction_page": {
     "title_add": "Adăugați tranzacție recurentă",
@@ -460,10 +504,14 @@
     "upcoming": "Apariții viitoare",
     "next_date": "Următorul",
     "inactive": "Inactiv",
-    "no_upcoming": "Nu există tranzacții recurente viitoare ^_^"
+    "no_upcoming": "Nu există tranzacții recurente viitoare ^_^",
+    "search": "Caută recurente…",
+    "empty_hint": "Tranzacțiile recurente vor apărea aici"
   },
   "exchange_rate_page": {
-    "relative_to_usd": "Relativ la USD"
+    "relative_to_usd": "Relativ la USD",
+    "search": "Caută monedă…",
+    "empty_hint": "Cursurile de schimb vor apărea aici"
   },
   "dashboard": {
     "title": "Rezumat",
@@ -603,5 +651,51 @@
   "no_matches": "Niciun rezultat",
   "refreshing": "Se reîmprospătează…",
   "sync": "Sincronizează",
-  "sync_required_by_extras": "Există date noi care necesită resincronizare"
+  "sync_required_by_extras": "Există date noi care necesită resincronizare",
+  "kit": {
+    "choose_month": "Alege luna",
+    "choose_time": "Alege ora",
+    "create": "Creează",
+    "got_it": "Am înțeles",
+    "hour": "Oră",
+    "minute": "Minut",
+    "next_month": "Luna următoare",
+    "next_year": "Anul următor",
+    "no_date": "Fără dată",
+    "no_time": "Fără oră",
+    "now": "Acum",
+    "previous_month": "Luna anterioară",
+    "previous_year": "Anul anterior",
+    "profile_switched": "Ai trecut la {name}",
+    "refresh": "Reîmprospătează",
+    "select_date": "Alege o dată",
+    "select_option": "Alege o opțiune",
+    "selected_count": "{count} selectate",
+    "toggle_layout": "Comută între listă și etichete",
+    "what_is_profile": "Ce este un profil?"
+  },
+  "transaction_list_page": {
+    "search": "Caută în descriere…",
+    "without_category": "Fără categorie",
+    "without_tag": "Fără etichete",
+    "without_budget": "Fără buget",
+    "active_count": "{count} active",
+    "empty_hint": "Tranzacțiile tale vor apărea aici",
+    "showing": "Se afișează {count} din {total}"
+  },
+  "dash_page": {
+    "hide_amounts": "Ascunde sumele",
+    "previous_period": "Perioada anterioară",
+    "next_period": "Perioada următoare",
+    "period": "Perioadă",
+    "previous_year": "Anul anterior",
+    "next_year": "Anul următor",
+    "card_options": "Opțiuni card",
+    "no_data": "Nimic în această perioadă",
+    "no_budgets": "Niciun buget ^_^",
+    "no_piggy_banks": "Nicio pușculiță ^_^",
+    "amount_left": "{amount} rămași",
+    "peak": "Maxim {amount} · {date}",
+    "no_todo_tag": "Nicio etichetă \"todo\""
+  }
 }

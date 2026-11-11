@@ -1,40 +1,46 @@
 <template>
-  <van-cell-group inset>
-    <div class="van-cell-group-title">{{ $t('budgets') }}:</div>
-
-    <template v-if="hasBudgets">
-      <div class="flex items-center justify-center flex-wrap gap-2 m-2">
-        <app-chip :title="`${$t('dashboard.budget.budgeted')}:`" :subtitle="budgetLimitTotalFormatted" />
-        <app-chip :title="`${$t('dashboard.budget.spent')}:`" :subtitle="budgetLimitSpentFormatted" />
-        <app-chip :title="`${$t('dashboard.budget.remaining')}:`" :subtitle="budgetLimitRemainingFormatted" />
-      </div>
-
-      <van-grid :column-num="3">
-        <dashboard-budget-item v-for="budget in budgetList" :value="budget" />
-      </van-grid>
+  <app-card :title="$t('budgets')" :form="false">
+    <template #actions>
+      <span class="mx-badge">{{ dashboardStore.dashboardCurrencyCode }}</span>
     </template>
 
-    <div v-else class="text-muted text-12 px-4 mb-3.75" style="margin-top: -10px">No budgets ^_^</div>
-  </van-cell-group>
+    <template v-if="hasBudgets">
+      <div class="mx-stat3">
+        <div class="mx-stat">
+          <span>{{ $t('dashboard.budget.budgeted') }}</span>
+          <b class="mx-money">{{ formatNumberForDashboard(dashboardStore.budgetLimitTotal) }}</b>
+        </div>
+        <div class="mx-stat">
+          <span>{{ $t('dashboard.budget.spent') }}</span>
+          <b class="mx-money">{{ formatNumberForDashboard(dashboardStore.budgetLimitSpent) }}</b>
+        </div>
+        <div class="mx-stat">
+          <span>{{ $t('dashboard.budget.remaining') }}</span>
+          <b class="mx-money">{{ formatNumberForDashboard(dashboardStore.budgetLimitRemaining) }}</b>
+        </div>
+      </div>
+
+      <div class="mx-bars mt-3.5">
+        <dashboard-budget-item v-for="budget in budgetList" :key="budget.id" :value="budget" />
+      </div>
+    </template>
+
+    <div v-else class="mx-inline-empty">
+      <app-icon :icon="TablerIconConstants.budget" :size="16" :stroke="2" />
+      <span>{{ $t('dash_page.no_budgets') }}</span>
+    </div>
+  </app-card>
 </template>
 
 <script setup>
 import DashboardBudgetItem from '~/mobile/components/dashboard/dashboard-budgets/dashboard-budget-item.vue'
-import { get } from 'lodash-es'
-import Transaction from '~/core/models/Transaction.js'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import AppChip from '~/mobile/components/ui-kit/app-chip.vue'
 import Budget from '~/core/models/Budget.js'
+import { formatNumberForDashboard } from '~/core/utils/NumberUtils.js'
 
 const budgetStore = useBudgetStore()
-const currencyStore = useCurrencyStore()
 const dashboardStore = useDashboardStore()
-// const { t } = useI18n()
 
-const budgetList = budgetStore.budgetList.filter(item => Budget.isActive(item))
-const hasBudgets = computed(() => budgetList.length > 0)
-
-const budgetLimitTotalFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitTotal)} ${dashboardStore.dashboardCurrencyCode}`)
-const budgetLimitSpentFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitSpent)} ${dashboardStore.dashboardCurrencyCode}`)
-const budgetLimitRemainingFormatted = computed(() => `${formatNumberForDashboard(dashboardStore.budgetLimitRemaining) } ${dashboardStore.dashboardCurrencyCode}`)
+const budgetList = computed(() => budgetStore.budgetList.filter((item) => Budget.isActive(item)))
+const hasBudgets = computed(() => budgetList.value.length > 0)
 </script>

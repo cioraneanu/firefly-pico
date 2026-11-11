@@ -1,11 +1,11 @@
 <template>
   <div class="mx-f" :class="{ bad: !!error }">
     <slot name="label">
-      <div v-if="label" class="mx-l">{{ label }}<span v-if="isRequired" class="req">*</span></div>
+      <div v-if="label" class="mx-l">{{ label }}<span v-if="isRequired || required" class="req">*</span></div>
     </slot>
 
     <div class="mx-sel" :class="{ dis: disabled }" role="button" tabindex="0" aria-haspopup="dialog" :aria-label="label" :name="name" @click.stop="onOpen" @keydown.enter.prevent="onOpen">
-      <span class="val">
+      <span class="val" :class="{ wrap: isMultiSelect }">
         <slot name="input" :items="selectedItems">
           <span v-if="isEmpty" class="ph">{{ placeholder ?? $t('select_is_empty') }}</span>
           <template v-else-if="isMultiSelect">
@@ -35,7 +35,8 @@
     <slot name="extra" />
 
     <app-sheet v-model:show="showDropdown" v-model:search="search" :title="popupTitle ?? label" :searchable="isSearchVisible" :full="full">
-      <template v-if="$slots['top-right']" #header-right>
+      <template #header-right>
+        <span v-if="isMultiSelect && selectedItems.length" class="mx-badge">{{ $t('kit.selected_count', { count: selectedItems.length }) }}</span>
         <slot name="top-right" />
       </template>
 
@@ -111,6 +112,7 @@ const props = defineProps({
   full: { type: Boolean, default: false },
   clearable: { type: Boolean, default: true },
   disabled: { type: Boolean, default: false },
+  required: { type: Boolean, default: false },
   rules: { type: Array, default: () => [] },
   // Accepted for older call sites (the Vant grid layout); the sheet now picks its own layout
   columns: { default: null },
@@ -121,7 +123,8 @@ const props = defineProps({
 const { error, isRequired } = useFormField({ name: () => props.name, rules: () => props.rules, value: modelValue })
 
 const isClearable = computed(() => props.clearable)
-const isSearchVisible = computed(() => props.hasSearch ?? props.list.length > 7)
+// Callers that pass an already filtered list keep the search box while a search is typed
+const isSearchVisible = computed(() => props.hasSearch ?? (props.list.length > 7 || !!search.value))
 
 const getDisplayName = (item) => {
   if (props.getDisplayValue) {

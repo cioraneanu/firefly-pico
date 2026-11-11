@@ -1,11 +1,11 @@
 <template>
   <Teleport to="#mx-portal" defer>
-    <transition-group name="mx-fd">
-      <div v-for="toast in toasts" :key="toast.id" class="mx-toast" :class="toastClass(toast)" role="status" @click="toast.close">
+    <transition name="mx-fd" mode="out-in">
+      <div v-if="toast" :key="toast.id" class="mx-toast" :class="toastClass(toast)" role="status" @click="toast.close">
         <span class="ok"><app-icon :icon="toastIcon(toast)" :size="13" :stroke="3" /></span>
         <span class="flex-1 min-w-0">{{ toast.message }}</span>
       </div>
-    </transition-group>
+    </transition>
 
     <transition name="mx-fd">
       <div v-if="confirmState">
@@ -21,13 +21,19 @@
       </div>
     </transition>
   </Teleport>
+
+  <app-action-sheet v-model:show="isActionSheetVisible" :actions="actionSheetActions" :title="actionSheetTitle" />
 </template>
 
 <script setup>
 import { IconCheck, IconExclamationMark, IconX } from '@tabler/icons-vue'
 import { useMobileFeedback } from '~/mobile/composables/useMobileFeedback'
+import { useActionSheet } from '~/mobile/composables/useActionSheet'
 
 const { toasts, confirmState, answerConfirm } = useMobileFeedback()
+const { isVisible: isActionSheetVisible, actions: actionSheetActions, title: actionSheetTitle } = useActionSheet()
+
+const toast = computed(() => toasts.value[0] ?? null)
 
 const toastClass = (toast) => ({ err: toast.type === 'danger', warn: toast.type === 'warning' })
 const toastIcon = (toast) => ({ danger: IconX, warning: IconExclamationMark })[toast.type] ?? IconCheck

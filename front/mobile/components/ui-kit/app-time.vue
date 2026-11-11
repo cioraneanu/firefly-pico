@@ -1,82 +1,35 @@
 <template>
-  <div class="">
-    <!--    <van-cell :title="label" :value="date" @click="show = true"/>-->
-    <van-field v-model="getSelectedName" is-link readonly class="app-field" left-icon="calendar-o" :label="label" placeholder="No date" v-bind="dynamicAttrs" @click="onShowDropdown">
-      <template #input>
-        <div>
-          <div :class="labelClass">
-            {{ getSelectedName }}
-          </div>
-        </div>
-      </template>
+  <div class="mx-f">
+    <div class="mx-l">{{ label ?? $t('kit.choose_time') }}</div>
+    <div class="mx-sel" role="button" tabindex="0" aria-haspopup="dialog" :aria-label="label ?? $t('kit.choose_time')" @click="showDropdown = true" @keydown.enter.prevent="showDropdown = true">
+      <span class="val">
+        <app-icon :icon="IconClock" :size="16" :stroke="2" />
+        <span v-if="time" class="tx mx-tnum">{{ time }}</span>
+        <span v-else class="ph">{{ $t('kit.no_time') }}</span>
+      </span>
+      <button v-if="time" type="button" class="x" :aria-label="$t('clear')" @click.stop="modelValue = null">
+        <app-icon :icon="IconX" :size="14" :stroke="2" />
+      </button>
+    </div>
 
-      <template #right-icon>
-        <div>
-          <van-icon v-if="modelValue" name="clear" @click.prevent.stop="date = null" />
-        </div>
-      </template>
-    </van-field>
-
-    <app-popup v-model:show="showDropdown" style="padding-top: 4px">
-        <div>
-          <van-time-picker v-model="localModelValue" :filter="filter" title="Choose time" @confirm="onConfirm" />
-        </div>
-    </app-popup>
+    <app-date-time-grid-time-popup v-model:show="showDropdown" v-model="time" :title="label" />
   </div>
 </template>
 
 <script setup>
-import _ from 'lodash-es'
+import { IconClock, IconX } from '@tabler/icons-vue'
 
-import DateUtils from '~/core/utils/DateUtils'
-import { addDays, startOfDay } from 'date-fns'
-import { useFormAttributes } from '~/core/composables/useFormAttributes'
-import { bindOneWay } from '~/core/utils/VueUtils'
-
-const attrs = useAttrs()
-const { dynamicAttrs } = useFormAttributes(attrs)
-
-const props = defineProps({
-  label: {
-    type: String,
-    default: 'Time',
-  },
-})
-
+// Time field; the value is [hours, minutes] as before (the old Vant time picker shape).
 const modelValue = defineModel()
 
-const localModelValue = ref(null)
-bindOneWay(modelValue, localModelValue)
+defineProps({
+  label: { type: String, default: null },
+})
 
 const showDropdown = ref(false)
 
-const filter = (type, options) => {
-  if (type === 'minute') {
-    return options.filter((option) => Number(option.value) % 5 === 0)
-  }
-  return options
-}
-
-const labelClass = computed(() => {
-  return {
-    'text-muted': !modelValue.value,
-  }
+const time = computed({
+  get: () => (modelValue.value?.length ? modelValue.value.map((part) => String(part).padStart(2, '0')).join(':') : null),
+  set: (value) => (modelValue.value = value ? value.split(':') : null),
 })
-
-const getSelectedName = computed(() => {
-  if (!localModelValue.value) {
-    return 'No time'
-  }
-  return localModelValue.value.join(' ')
-})
-
-const onConfirm = (value) => {
-  showDropdown.value = false
-  modelValue.value = localModelValue.value
-}
-
-const onShowDropdown = () => {
-  showDropdown.value = true
-}
 </script>
-

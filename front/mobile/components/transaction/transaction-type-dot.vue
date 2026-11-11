@@ -1,27 +1,18 @@
 <template>
-  <div :class="iconTypeClass" />
+  <span class="mx-dot" :class="typeClass" />
 </template>
 
 <script setup>
-
 import { isEqual } from 'lodash-es'
 import Transaction from '~/core/models/Transaction.js'
 
 const props = defineProps({
-  transactionType: {}
+  transactionType: {},
 })
 
-const isTransactionExpense = computed(() => isEqual(props.transactionType, Transaction.types.expense))
-const isTransactionIncome = computed(() => isEqual(props.transactionType, Transaction.types.income))
-const isTransactionTransfer = computed(() => isEqual(props.transactionType, Transaction.types.transfer))
-const iconTypeClass = computed(() => {
-  return {
-    'icon-type': true,
-    'color-expense': isTransactionExpense.value,
-    'color-income': isTransactionIncome.value,
-    'color-transfer': isTransactionTransfer.value,
-  }
-})
-
+const typeClass = computed(() => ({
+  exp: isEqual(props.transactionType, Transaction.types.expense),
+  inc: isEqual(props.transactionType, Transaction.types.income),
+  tr: isEqual(props.transactionType, Transaction.types.transfer),
+}))
 </script>
-

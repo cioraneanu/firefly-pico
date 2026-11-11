@@ -1,158 +1,125 @@
 <template>
-  <div class="">
-    <!--    <van-cell :title="label" :value="date" @click="show = true"/>-->
-    <van-field v-model="getDisplayDate" is-link readonly :clickable="false" class="" left-icon="calendar-o" :label="label ?? $t('date')" placeholder="No date" v-bind="dynamicAttrs">
-      <template #left-icon>
-        <app-icon :icon="TablerIconConstants.settingsUserPreferencesDate" :size="20" />
-      </template>
+  <div class="mx-f" :class="{ bad: !!error }">
+    <slot name="label">
+      <div class="mx-l">{{ label ?? $t('date') }}<span v-if="isRequired || required" class="req">*</span></div>
+    </slot>
 
-      <template #input>
-        <div class="flex gap-2 w-full">
-          <div class="fake-input flex-1 cursor-pointer" @click.stop="showDatePicker = true">
-            <div :class="labelDateClass">
-              <div class="day-of-week">{{ dayOfWeek }}</div>
-              {{ getDisplayDate }}
-            </div>
-          </div>
-
-          <div class="fake-input flex-1 cursor-pointer relative inline-block" @click="onShowTimePicker">
-            <input ref="timeInput" v-model="modelValueTime" type="time" class="absolute w-full h-full top-0 left-0 -z-1 opacity-0 pointer-events-none" >
-            <div :class="labelDateClass">{{ getDisplayTime }}</div>
-          </div>
-        </div>
-      </template>
-    </van-field>
-
-    <div v-if="false" class="flex" style="gap: 3px">
-      <div class="flex flex-1 ml-3.75" style="justify-content: flex-start; align-items: center; gap: 3px">
-        <span class="text-14 mr-5 text-muted">Quick actions:</span>
-        <van-button type="default" size="normal" @click.prevent.stop="onClickedMinusDay">-1</van-button>
-        <van-button type="default" size="normal" @click.prevent.stop="onClickedToday">Today</van-button>
-        <van-button type="default" size="normal" @click.prevent.stop="onClickedAddDay">+1</van-button>
+    <div class="mx-3q">
+      <div
+        class="mx-sel"
+        :class="{ dis: disabled }"
+        role="button"
+        tabindex="0"
+        aria-haspopup="dialog"
+        :aria-label="label ?? $t('date')"
+        :name="name"
+        @click="onShowDate"
+        @keydown.enter.prevent="onShowDate"
+      >
+        <span class="val">
+          <app-icon :icon="IconCalendar" :size="16" :stroke="2" />
+          <span v-if="modelValue" class="tx"
+            ><span class="mt" style="margin-right: 6px">{{ dayOfWeek }}</span
+            >{{ DateUtils.dateToUI(modelValue) }}</span
+          >
+          <span v-else class="ph">{{ $t('kit.no_date') }}</span>
+        </span>
+      </div>
+      <div
+        class="mx-sel"
+        :class="{ dis: disabled || !modelValue }"
+        role="button"
+        tabindex="0"
+        aria-haspopup="dialog"
+        :aria-label="$t('kit.choose_time')"
+        @click="onShowTime"
+        @keydown.enter.prevent="onShowTime"
+      >
+        <span class="val">
+          <app-icon :icon="IconClock" :size="16" :stroke="2" />
+          <span v-if="modelValue" class="tx mx-tnum">{{ modelValueTime }}</span>
+          <span v-else class="ph">{{ $t('kit.no_time') }}</span>
+        </span>
       </div>
     </div>
 
-    <van-calendar v-model:show="showDatePicker" :show-confirm="false" :min-date="minDate" :max-date="maxDate" color="#000" first-day-of-week="1" @open="onOpen" @confirm="onConfirmDate" />
+    <div v-if="quick && !disabled" class="mx-quick" role="group" :aria-label="label ?? $t('date')">
+      <button type="button" class="mx-quick__b" @click="onShift(-1)">
+        <app-icon :icon="IconChevronLeft" :size="13" :stroke="2" />
+        <span>{{ $t('desktop.one_day') }}</span>
+      </button>
+      <button type="button" class="mx-quick__b" :class="{ on: isToday }" :aria-pressed="isToday" @click="onToday">{{ $t('today') }}</button>
+      <button type="button" class="mx-quick__b" @click="onShift(1)">
+        <span>{{ $t('desktop.one_day') }}</span>
+        <app-icon :icon="IconChevronRight" :size="13" :stroke="2" />
+      </button>
+    </div>
+
+    <div v-if="error" class="mx-ferr">{{ error }}</div>
+
+    <app-date-sheet
+      v-model:show="showDatePicker"
+      :model-value="modelValue"
+      :title="label ?? $t('date')"
+      :min-date="minDate"
+      :max-date="maxDate"
+      :clearable="false"
+      @update:model-value="onConfirmDate"
+    />
     <app-date-time-grid-time-popup v-model:show="showTimePicker" v-model="modelValueTime" />
   </div>
 </template>
 
 <script setup>
+import { IconCalendar, IconChevronLeft, IconChevronRight, IconClock } from '@tabler/icons-vue'
+import { addDays, addYears, isToday as isDateToday, subYears } from 'date-fns'
 import DateUtils from '~/core/utils/DateUtils'
-import { addDays, addYears, startOfDay, subYears } from 'date-fns'
-import { useFormAttributes } from '~/core/composables/useFormAttributes'
-import { clone, head, isNull } from 'lodash-es'
-import { usePointerSwipe } from '@vueuse/core'
-import { useSwipeToDismiss } from '~/mobile/composables/useSwipeToDismiss.js'
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import AppDateTimeGridTimePopup from '~/mobile/components/ui-kit/app-date-time-grid-time-popup.vue'
 
-const attrs = useAttrs()
-const { dynamicAttrs } = useFormAttributes(attrs)
+// Date + time of a transaction (design: MX-TransactionNew): date and time pickers side by side,
+// optional -1 day / Today / +1 day shortcuts below (`quick`).
+const modelValue = defineModel()
 
 const props = defineProps({
-  label: {
-    type: String,
-  },
+  label: { type: String, default: null },
+  name: { type: String, default: null },
+  rules: { type: Array, default: () => [] },
+  required: { type: Boolean, default: false },
+  disabled: { type: Boolean, default: false },
+  quick: { type: Boolean, default: false },
 })
 
-const modelValue = defineModel()
-const modelValueTime = ref(null)
+const { error, isRequired } = useFormField({ name: () => props.name, rules: () => props.rules, value: modelValue })
 
-const showDatePicker = ref(null)
-const showTimePicker = ref(null)
+const showDatePicker = ref(false)
+const showTimePicker = ref(false)
 
 const minDate = subYears(new Date(), 1)
 const maxDate = addYears(new Date(), 1)
 
-const timeInput = ref(null)
-
-const labelDateClass = computed(() => {
-  return {
-    'flex items-center gap-1': true,
-    'text-muted': !props.modelValue,
-  }
-})
-
-const getDisplayDate = computed(() => {
-  if (!modelValue.value) {
-    return 'No date'
-  }
-  return DateUtils.dateToUI(modelValue.value)
-})
-
 const dayOfWeek = computed(() => DateUtils.dateToString(modelValue.value, 'EEEEEE'))
+const isToday = computed(() => !!modelValue.value && isDateToday(modelValue.value))
 
-const onConfirmDate = (value) => {
-  showDatePicker.value = false
-
-  const newDate = clone(modelValue.value)
-  newDate.setFullYear(value.getFullYear())
-  newDate.setMonth(value.getMonth())
-  newDate.setDate(value.getDate())
-
+// Keep the time when the day changes
+const setDay = (day) => {
+  const newDate = new Date(modelValue.value ?? day)
+  newDate.setFullYear(day.getFullYear(), day.getMonth(), day.getDate())
   modelValue.value = newDate
 }
 
-// ------
+const onConfirmDate = (value) => value && setDay(value)
+const onShift = (days) => modelValue.value && (modelValue.value = addDays(modelValue.value, days))
+const onToday = () => setDay(new Date())
 
-const onShowTimePicker = () => {
-  const hasBrowserTimePicker = useDevice().isMobileOrTablet
-  if (hasBrowserTimePicker) {
-    timeInput.value?.focus()
-    timeInput.value?.showPicker?.()
-  } else {
-    showTimePicker.value = true
-  }
-}
+const onShowDate = () => !props.disabled && (showDatePicker.value = true)
+const onShowTime = () => !props.disabled && modelValue.value && (showTimePicker.value = true)
 
-watch(modelValueTime, (newValue, oldValue) => {
-  const parseValue = newValue === null || newValue === '' ? ':' : newValue
-  const [hours, minutes] = parseValue.split(':').map(Number)
-
-  const newDate = clone(modelValue.value)
-  newDate.setHours(hours)
-  newDate.setMinutes(minutes)
-  modelValue.value = newDate
-})
-
-const getDisplayTime = computed(() => {
-  if (!modelValue.value) {
-    return 'No time'
-  }
-  return DateUtils.dateToString(modelValue.value, 'HH:mm')
-})
-
-// -------------------------------
-
-watch(modelValue, (newValue) => {
-  modelValueTime.value = newValue ? DateUtils.dateToString(newValue, 'HH:mm') : null
-})
-
-const appCalendar = ref(null)
-
-const onOpen = async () => {
-  await nextTick()
-  appCalendar.value = head(document.getElementsByClassName('van-calendar__popup'))
-}
-
-useSwipeToDismiss({
-  onSwipe: () => {
-    showDatePicker.value = false
+const modelValueTime = computed({
+  get: () => (modelValue.value ? DateUtils.dateToString(modelValue.value, 'HH:mm') : null),
+  set: (value) => {
+    const [hours, minutes] = (value || '00:00').split(':').map(Number)
+    const newDate = new Date(modelValue.value)
+    newDate.setHours(hours, minutes)
+    modelValue.value = newDate
   },
-  swipeRef: appCalendar,
-  showDropdown: showDatePicker,
 })
-
-// -------------------------------
-const onClickedMinusDay = () => {
-  date.value = addDays(date.value, -1)
-}
-const onClickedToday = () => {
-  date.value = startOfDay(new Date())
-}
-const onClickedAddDay = () => {
-  date.value = addDays(date.value, 1)
-}
 </script>
-

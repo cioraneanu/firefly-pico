@@ -1,70 +1,44 @@
-<!-- OK-->
 <template>
-  <div>
-    <draggable v-model="modelValue" handle=".app-repeater-handle" class="w-full" item-key="id">
+  <div class="flex flex-col gap-2">
+    <draggable v-model="modelValue" handle=".grip" class="mx-repeat" item-key="id">
       <template #item="{ element, index }">
-        <div>
-          <div class="flex items-center">
-            <div v-if="!disabled && isDraggable" class="p-1 app-repeater-handle">
-              <app-icon :icon="TablerIconConstants.repeaterHandler" :size="20" />
-            </div>
-
-            <div class="flex-1">
-              <slot name="content" v-bind="{ index, element, removeItemAtIndex }" />
-            </div>
-
-            <van-button v-if="!props.disabled && props.isListDynamic" @click="removeItemAtIndex(index)">
-              <van-icon name="delete-o" size="20" />
-            </van-button>
+        <div class="mx-rep">
+          <span v-if="!disabled && isDraggable" class="grip mx-grip"><app-icon :icon="IconGripVertical" :size="16" :stroke="2" /></span>
+          <div class="flex-1 min-w-0">
+            <slot name="content" v-bind="{ index, element, removeItemAtIndex }" />
           </div>
-        </div>
-      </template>
-
-      <template #footer>
-        <div>
-          <div v-if="isListEmpty" class="app-repeater-no-values">{{ $t('repeater_no_values') }}</div>
-          <div v-if="!props.disabled && props.isListDynamic">
-            <van-button class="w-full" style="border: 1px dashed #888" @click="addItem"> {{ $t('add') }}</van-button>
-          </div>
+          <button v-if="!disabled && isListDynamic" type="button" class="mx-ib out mx-ib40" :aria-label="$t('delete')" @click="removeItemAtIndex(index)">
+            <app-icon :icon="IconTrash" :size="16" :stroke="2" />
+          </button>
         </div>
       </template>
     </draggable>
+
+    <p v-if="isListEmpty" class="mx-d">{{ $t('repeater_no_values') }}</p>
+    <button v-if="!disabled && isListDynamic" type="button" class="mx-btn sm out self-start" @click="addItem">
+      <app-icon :icon="IconPlus" :size="16" :stroke="2" />
+      <span>{{ $t('add') }}</span>
+    </button>
   </div>
 </template>
 
 <script setup>
+import { IconGripVertical, IconPlus, IconTrash } from '@tabler/icons-vue'
 import { cloneDeep, isEmpty } from 'lodash-es'
 import draggable from 'vuedraggable'
-import { computed, defineModel } from 'vue'
-import TablerIconConstants from '~/core/constants/TablerIconConstants'
 
+// Editable list (design: .mx-repeat / .mx-rep): drag handle, the row content from the `content` slot, a remove button,
+// and Add below. `isListDynamic: false` keeps the rows fixed (reorder only).
 const props = defineProps({
   emptyItem: {},
-  isDraggable: {
-    type: Boolean,
-    default: true,
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  isListDynamic: {
-    type: Boolean,
-    default: true,
-  },
+  isDraggable: { type: Boolean, default: true },
+  disabled: { type: Boolean, default: false },
+  isListDynamic: { type: Boolean, default: true },
 })
 
 const modelValue = defineModel()
 
-const isListEmpty = computed(() => {
-  return isEmpty(modelValue.value)
-})
-
-// const draggableElementClass = computed(() => {
-//   return {
-//     'draggable-list-element': props.isDraggable && !props.disabled
-//   }
-// })
+const isListEmpty = computed(() => isEmpty(modelValue.value))
 
 const addItem = () => {
   const oldValue = modelValue.value ?? []
@@ -75,4 +49,3 @@ const removeItemAtIndex = (index) => {
   modelValue.value.splice(index, 1)
 }
 </script>
-

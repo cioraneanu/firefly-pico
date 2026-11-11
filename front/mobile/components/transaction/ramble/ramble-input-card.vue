@@ -1,87 +1,104 @@
 <template>
-  <van-cell-group inset class="ramble-composer m-0 overflow-hidden">
-    <div class="p-4 flex flex-col gap-2">
-      <div class="flex items-center flex-wrap gap-2">
-        <van-badge :content="savedRamblesCount" :show-zero="false" max="99" class="ramble-modern-badge">
-          <van-button round size="small" plain class="cursor-pointer" :loading="isLoadingSaved" :disabled="isDisabled" @click="emit('loadSaved')">
-            <app-icon :icon="TablerIconConstants.list" :size="16" />
-            {{ $t('transaction.assistant_ramble_load_saved') }}
-          </van-button>
-        </van-badge>
-
-        <van-button
-          v-if="savedRambles.length > 0"
-          round
-          size="small"
-          type="danger"
-          plain
-          class="cursor-pointer"
-          :loading="isDeletingSaved"
-          :disabled="isDisabled"
-          :title="$t('transaction.assistant_ramble_delete_saved')"
-          @click="emit('deleteSaved')"
-        >
-          <van-icon name="delete-o" size="16" />
-          {{ $t('delete') }}
-        </van-button>
-
-        <div class="flex-1" />
-
-
-      </div>
-
-      <div v-if="savedRambles.length > 0" class="ramble-saved-list flex flex-col gap-2">
-        <div v-for="savedRamble in savedRambles" :key="savedRamble.id" class="ramble-saved-item flex gap-2">
-          <div class="flex-1 min-w-0">
-            <div class="text-13 wrap-anywhere">{{ savedRamble.text }}</div>
-            <div class="text-11 text-muted mt-1">{{ formatCreatedAt(savedRamble.created_at) }}</div>
-          </div>
-          <van-button
-            v-if="savedRamble.has_voice"
-            round
-            size="small"
-            plain
-            class="cursor-pointer ramble-icon-button"
-            :disabled="isDisabled"
-            :loading="loadingVoiceRambleId === savedRamble.id"
-            :title="playingVoiceRambleId === savedRamble.id ? $t('transaction.assistant_ramble_stop_playback') : $t('transaction.assistant_ramble_play')"
-            @click="toggleSavedRambleVoice(savedRamble)"
-          >
-            <app-icon :icon="playingVoiceRambleId === savedRamble.id ? TablerIconConstants.stop : TablerIconConstants.play" :size="15" />
-          </van-button>
-          <van-button round size="small" plain type="danger" class="cursor-pointer ramble-icon-button" :disabled="isDisabled" :title="$t('delete')" @click="emit('deleteRamble', savedRamble)">
-            <van-icon name="delete-o" size="15" />
-          </van-button>
-        </div>
-      </div>
-
-      <app-text-area
-        v-model="rambleText"
-        class="van-cell-no-padding compact ramble-composer-input"
-        label=""
-        :visible-lines="2"
-        :placeholder="$t('transaction.assistant_ramble_placeholder')"
-        :clearable="true"
+  <section class="mx-card mxr-card mxr-comp">
+    <div class="mxr-ch">
+      <h2 class="mx-card__t">{{ $t('transaction.assistant_ramble_new') }}</h2>
+      <span v-if="isRecording" class="mx-rec">
+        <span class="mx-wave" aria-hidden="true"><i v-for="n in 7" :key="n" /></span>
+        <b>{{ $t('transaction.assistant_ramble_listening') }}</b>
+      </span>
+      <button
+        type="button"
+        class="mx-mic mxr-mic"
+        :class="{ on: isRecording }"
         :disabled="isDisabled"
-      />
-
-      <div v-if="isRecording" class="flex items-center gap-2 text-12">
-        <span class="ramble-live-dot" />
-        <span class="wrap-anywhere flex-1 min-w-0 text-muted">{{ speechTemporary || $t('transaction.assistant_ramble_listening') }}</span>
-      </div>
-
-      <van-button block round class="cursor-pointer mt-1 ramble-interpret-button" :loading="isInterpreting" :disabled="isDisabled || !canInterpret" @click="onInterpret">
-        <app-icon :icon="TablerIconConstants.magic" :size="16" />
-        {{ $t('transaction.assistant_ramble_interpret') }}
-      </van-button>
+        :aria-pressed="isRecording"
+        :aria-label="$t('transaction.assistant_ramble_listening')"
+        @click="toggleRecording"
+      >
+        <app-icon :icon="isRecording ? IconPlayerStop : IconMicrophone" :size="18" :stroke="2" />
+      </button>
     </div>
-  </van-cell-group>
+    <div class="mxr-cb">
+      <textarea v-model="rambleText" rows="2" :placeholder="$t('transaction.assistant_ramble_placeholder')" :disabled="isDisabled" :aria-label="$t('transaction.assistant_ramble_new')" />
+      <p v-if="isRecording && speechTemporary" class="mx-d mt-1.5 wrap-anywhere">{{ speechTemporary }}</p>
+    </div>
+  </section>
+
+  <section class="mx-card mxr-card">
+    <div class="mxr-ch">
+      <h2 class="mx-card__t">{{ $t('transaction.assistant_ramble_saved') }}</h2>
+      <span v-if="savedRamblesCount > 0" class="mx-badge">{{ savedRamblesCount }}</span>
+      <button
+        v-if="savedRambles.length > 0"
+        type="button"
+        class="mx-btn xs dng mxr-delall"
+        :disabled="isDisabled || isDeletingSaved"
+        :title="$t('transaction.assistant_ramble_delete_saved')"
+        @click="emit('deleteSaved')"
+      >
+        <span v-if="isDeletingSaved" class="mx-spin" />
+        <app-icon v-else :icon="IconTrash" :size="14" :stroke="2" />
+        <span>{{ $t('delete') }}</span>
+      </button>
+    </div>
+
+    <div v-if="isLoadingSaved" class="mx-list" aria-busy="true">
+      <div v-for="n in 2" :key="n" class="mx-skrow">
+        <span class="mx-sk" style="width: 28px; height: 28px; border-radius: 8px; flex: none" />
+        <span class="m">
+          <span class="mx-sk" style="height: 10px" />
+          <span class="mx-sk" style="height: 9px; width: 45%" />
+        </span>
+      </div>
+    </div>
+
+    <div v-else-if="savedRambles.length > 0" class="mx-list mxr-saved">
+      <div v-for="savedRamble in savedRambles" :key="savedRamble.id" class="mx-row mid mxr-row">
+        <span class="mx-lead sm"><app-icon :icon="savedRamble.has_voice ? IconMicrophone : IconFileText" :size="16" :stroke="2" /></span>
+        <span class="mx-row__m">
+          <span class="mxr-txt wrap-anywhere">{{ savedRamble.text }}</span>
+          <span class="mx-row__s">{{ formatCreatedAt(savedRamble.created_at) }}</span>
+        </span>
+        <button
+          v-if="savedRamble.has_voice"
+          type="button"
+          class="mx-ib sm"
+          :disabled="isDisabled"
+          :aria-label="playingVoiceRambleId === savedRamble.id ? $t('transaction.assistant_ramble_stop_playback') : $t('transaction.assistant_ramble_play')"
+          @click="toggleSavedRambleVoice(savedRamble)"
+        >
+          <span v-if="loadingVoiceRambleId === savedRamble.id" class="mx-spin" />
+          <app-icon v-else :icon="playingVoiceRambleId === savedRamble.id ? IconPlayerStop : IconPlayerPlay" :size="16" :stroke="2" />
+        </button>
+        <button type="button" class="mx-ib sm" :disabled="isDisabled" :aria-label="$t('delete')" @click="emit('deleteRamble', savedRamble)">
+          <app-icon :icon="IconTrash" :size="16" :stroke="2" />
+        </button>
+      </div>
+    </div>
+
+    <button v-else-if="savedRamblesCount > 0" type="button" class="mx-btn mxr-ghostbtn" :disabled="isDisabled" @click="emit('loadSaved')">
+      <app-icon :icon="IconList" :size="16" :stroke="2" />
+      <span>{{ $t('transaction.assistant_ramble_load_saved') }}</span>
+    </button>
+
+    <div v-else class="mx-inline-empty">
+      <app-icon :icon="IconMicrophoneOff" :size="16" :stroke="2" />
+      <span>{{ $t('transaction.assistant_ramble_no_saved') }}</span>
+    </div>
+
+    <button type="button" class="mx-btn mxr-ghostbtn mxr-interp" :disabled="isDisabled || !canInterpret" @click="onInterpret">
+      <span v-if="isInterpreting" class="mx-spin" />
+      <app-icon v-else :icon="IconSparkles" :size="16" :stroke="2" />
+      <span>{{ $t('transaction.assistant_ramble_interpret') }}</span>
+    </button>
+  </section>
 </template>
 
 <script setup>
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
+import { IconFileText, IconList, IconMicrophone, IconMicrophoneOff, IconPlayerPlay, IconPlayerStop, IconSparkles, IconTrash } from '@tabler/icons-vue'
 import DateUtils from '~/core/utils/DateUtils.js'
 
+// Composer (type or dictate) + saved rambles + Interpret (design: MX-Ramble, first two cards).
 const props = defineProps({
   savedRambles: {
     type: Array,
@@ -112,7 +129,7 @@ const props = defineProps({
 const emit = defineEmits(['interpret', 'loadSaved', 'deleteSaved', 'deleteRamble'])
 const rambleText = defineModel({ type: String, default: '' })
 
-const { speechTemporary, isRecording, stopRecording, playingVoiceRambleId, loadingVoiceRambleId, toggleSavedRambleVoice } = useRambleDictation(rambleText)
+const { speechTemporary, isRecording, stopRecording, toggleRecording, playingVoiceRambleId, loadingVoiceRambleId, toggleSavedRambleVoice } = useRambleDictation(rambleText)
 
 const canInterpret = computed(() => !!rambleText.value.trim() || props.savedRambles.length > 0)
 const formatCreatedAt = (createdAt) => (createdAt ? DateUtils.dateToUIWithTime(new Date(createdAt)) : '')

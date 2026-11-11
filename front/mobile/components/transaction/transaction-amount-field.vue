@@ -1,131 +1,77 @@
 <template>
-  <div class="van-cell-fake pb-2.5">
-    <div>
-      <van-field v-model="amount" :label="$t('amount')" :placeholder="$t('amount')" class="flex items-center app-field transaction-amount-field" v-bind="amountBindings" label-align="top">
-        <template #left-icon>
-          <app-icon :icon="TablerIconConstants.cashBanknote" :size="20" />
-        </template>
+  <div class="mx-f" :class="[attrs.class, { bad: !!error }]" :style="attrs.style">
+    <div class="mx-l">{{ $t('amount') }}<span v-if="isAmountRequired" class="req">*</span></div>
+    <label class="mx-in mx-amt-in" :class="{ dis: disabled }">
+      <app-icon :icon="IconCoins" :size="16" :stroke="2" />
+      <input
+        ref="inputAmount"
+        v-bind="amountInput"
+        type="text"
+        inputmode="decimal"
+        placeholder="0"
+        class="transaction-amount-field-input"
+        :name="attrs.name"
+        :disabled="disabled"
+        :aria-label="$t('amount')"
+        @focus="onFocus"
+        @blur="onBlur"
+      />
+      <span v-if="currencySymbol" class="suf">{{ currencySymbol }}</span>
+    </label>
+    <div v-if="error" class="mx-ferr">{{ error }}</div>
 
-        <template #right-icon>
-          <div class="flex items-center gap-2">
-            {{ currencySymbol ?? '' }}
-          </div>
-        </template>
-
-        <template #input>
-          <div class="flex items-center w-full">
-            <input
-              ref="inputAmount"
-              v-bind="amountInput"
-              style="width: 100%; border: none; background: transparent; height: 24px"
-              type="text"
-              inputmode="decimal"
-              class="transaction-amount-field-input"
-              @focus="onFocus"
-              @blur="onBlur"
-            >
-            <van-button v-if="isConvertButtonVisible" size="small" class="" @click="convertAmountToForeign">
-              <template #icon>
-                <div class="flex">
-                  <app-icon :icon="TablerIconConstants.transaction" :size="16" />
-                  <app-icon :icon="TablerIconConstants.downArrow" :size="16" />
-                </div>
-              </template>
-            </van-button>
-          </div>
-        </template>
-      </van-field>
+    <div v-if="expression" class="mx-calc" :class="{ bad: expression.result === null }">
+      <span>{{ expression.text }}</span>
+      <b>= {{ expression.result ?? '?' }}</b>
     </div>
 
-    <template v-if="props.isForeignAmountVisible">
-      <!--    Foreign amount field    -->
-      <div class="flex items-center">
-        <van-field
-          v-model="amountForeign"
-          placeholder="Foreign amount "
-          label="Foreign amount"
-          class="flex-1 flex items-center app-field transaction-amount-field transaction-foreign-amount-field"
-          v-bind="foreignAmountBindings"
-          label-align="top"
-          @click="() => inputAmountForeign.focus()"
-        >
-          <template #left-icon>
-            <app-icon :icon="TablerIconConstants.cash" :size="20" />
-          </template>
+    <transaction-amount-field-operations v-if="isFocused && !disabled" @result="onOperation" />
 
-          <template #right-icon>
-            <div class="flex items-center justify-center" @click.prevent.stop>
-              <currency-dropdown v-model="currencyForeign" class="borderless" />
-            </div>
-          </template>
+    <div v-if="showQuickButtons && !disabled" class="mx-quick" role="group" :aria-label="$t('settings.transactions.quick_amounts.title')">
+      <button v-for="quickButton in profileStore.quickValueButtons" :key="quickButton" type="button" class="mx-quick__b" @mousedown.prevent @click="onQuickButton(quickButton)">
+        {{ quickButton }}
+      </button>
+    </div>
+  </div>
 
-          <template #input>
-            <div class="flex items-center gap-1 w-full">
-              <input ref="inputAmountForeign" v-model="amountForeign" style="width: 100%; border: none; background: transparent; height: 24px" type="text" inputmode="decimal" >
-
-              <van-button v-if="isConvertButtonVisible" size="small" class="" @click="convertForeignToAmount">
-                <template #icon>
-                  <div class="flex">
-                    <app-icon :icon="TablerIconConstants.transaction" :size="16" />
-                    <app-icon :icon="TablerIconConstants.upArrow" :size="16" />
-                  </div>
-                </template>
-              </van-button>
-            </div>
-          </template>
-        </van-field>
-      </div>
-    </template>
-
-    <table v-if="showQuickButtons && !disabled" class="ml-3.75">
-      <tbody>
-        <tr>
-          <td v-for="quickButton in quickButtons" :key="quickButton">
-            <van-button class="w-full transaction-amount-button" type="default" size="normal" @mousedown.prevent.stop="onQuickButton(quickButton)">
-              {{ quickButton }}
-            </van-button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-
-    <transaction-amount-field-operations v-if="isFocused && device.isMobileOrTablet" @result="onOperation" />
+  <div v-if="isForeignAmountVisible" class="mx-f fx-box" :class="{ bad: !!errorForeign }" :style="attrs.style">
+    <div class="mx-l">{{ $t('desktop.foreign_amount') }}<span v-if="isForeignAmountRequired" class="req">*</span></div>
+    <div class="mx-in" :class="{ dis: disabled }" @click.self="inputAmountForeign?.focus()">
+      <currency-dropdown v-model="currencyForeign" />
+      <input ref="inputAmountForeign" v-model="amountForeign" type="text" inputmode="decimal" placeholder="0" :disabled="disabled" :aria-label="$t('desktop.foreign_amount')" />
+    </div>
+    <div v-if="errorForeign" class="mx-ferr">{{ errorForeign }}</div>
+    <div v-if="isConvertButtonVisible" class="fx-rrow">
+      <span class="fx-rate">{{ exchangeRateLabel }}</span>
+      <span class="fx-rbtns">
+        <button type="button" class="fx-fill" @click="convertForeignToAmount">
+          <app-icon :icon="IconArrowUp" :size="14" :stroke="2" />
+          <span>{{ $t('transaction.convert_from', { currency: currencyForeignCode }) }}</span>
+        </button>
+        <button type="button" class="fx-fill" @click="convertAmountToForeign">
+          <app-icon :icon="IconArrowDown" :size="14" :stroke="2" />
+          <span>{{ $t('transaction.convert_from', { currency: currencyCode }) }}</span>
+        </button>
+      </span>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { sanitizeAmount } from '~/core/utils/MathUtils'
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
+import { IconArrowDown, IconArrowUp, IconCoins } from '@tabler/icons-vue'
+import { evalMath, removeEndOperators, sanitizeAmount } from '~/core/utils/MathUtils'
+import { formatAmount } from '~/core/utils/AmountUtils.js'
 import Currency from '~/core/models/Currency.js'
-import { animateTransactionAmountOperatorButtons } from '~/core/utils/AnimationUtils.js'
 import { useCurrencyConversion } from '~/core/composables/useCurrencyConversion.js'
 import { useAmountInput } from '~/core/composables/useAmountInput.js'
+import { useFormField } from '~/mobile/composables/useFormField.js'
 
-const device = useDevice()
+// Amount input with calculator keys, quick amounts and the optional foreign amount (design: MX-AmountField / MX-AmountFieldFx).
+// `rules` / `name` / `style` come in as attributes.
+defineOptions({ inheritAttrs: false })
+
 const profileStore = useProfileStore()
 const attrs = useAttrs()
-const amountBindings = computed(() => {
-  const rules = [...(attrs.rules ?? [])]
-  if (props.isAmountRequired) {
-    rules.unshift({ required: true, message: 'Amount is required' })
-  }
-  return {
-    ...attrs,
-    required: props.isAmountRequired || attrs.required,
-    rules,
-  }
-})
-const foreignAmountBindings = computed(() => {
-  const rules = [...(attrs.rules ?? [])]
-  if (props.isForeignAmountRequired) {
-    rules.unshift({ required: true, message: 'Foreign amount is required' })
-  }
-  return {
-    ...attrs,
-    required: props.isForeignAmountRequired || attrs.required,
-    rules,
-  }
-})
 
 const amount = defineModel('amount')
 const amountForeign = defineModel('amountForeign')
@@ -159,26 +105,55 @@ const props = defineProps({
   },
 })
 
-const currencySymbol = computed(() => Currency.getSymbol(props.currency))
-
-const currencyCode = computed(() => Currency.getCode(props.currency))
-const currencyForeignCode = computed(() => Currency.getCode(currencyForeign.value))
-
-const currencyDecimalPlaces = computed(() => Currency.getDecimalPlaces(props.currency))
-const currencyForeignDecimalPlaces = computed(() => Currency.getDecimalPlaces(currencyForeign.value))
-const isConvertButtonVisible = computed(() => props.isForeignAmountVisible && currencyForeign.value)
+const amountRules = computed(() => [...(props.isAmountRequired ? [{ required: true, message: 'Amount is required' }] : []), ...(attrs.rules ?? [])])
+const foreignAmountRules = computed(() => [...(props.isForeignAmountRequired ? [{ required: true, message: 'Foreign amount is required' }] : []), ...(attrs.rules ?? [])])
 
 const inputAmount = ref(null)
 const inputAmountForeign = ref(null)
 
+const { error } = useFormField({ name: () => attrs.name ?? 'amount', rules: amountRules, value: amount, el: () => inputAmount.value })
+const { error: errorForeign } = useFormField({
+  name: () => 'amountForeign',
+  rules: () => (props.isForeignAmountVisible ? foreignAmountRules.value : []),
+  value: amountForeign,
+  el: () => inputAmountForeign.value,
+})
+
+const currencySymbol = computed(() => Currency.getSymbol(props.currency))
+const currencyCode = computed(() => Currency.getCode(props.currency))
+const currencyForeignCode = computed(() => Currency.getCode(currencyForeign.value))
+const currencyDecimalPlaces = computed(() => Currency.getDecimalPlaces(props.currency))
+const currencyForeignDecimalPlaces = computed(() => Currency.getDecimalPlaces(currencyForeign.value))
+const isConvertButtonVisible = computed(() => props.isForeignAmountVisible && currencyForeign.value)
+
+const exchangeRateLabel = computed(() => {
+  const rate = convertCurrency(1, currencyForeignCode.value, currencyCode.value)
+  return Number.isFinite(rate) ? `1 ${currencyForeignCode.value} = ${formatAmount(rate.toFixed(4), profileStore.numberFormat.code)} ${currencyCode.value}` : ''
+})
+
+// Live preview of a typed expression, e.g. "12+30*2 = 72"
+const expression = computed(() => {
+  const text = `${amount.value ?? ''}`
+  if (!/[+\-*/]/.test(text.replace(/^-/, ''))) return null
+  const { wasSuccessful, value } = evalMath(removeEndOperators(text))
+  return { text, result: wasSuccessful && Number.isFinite(value) ? formatAmount(value.toFixed(currencyDecimalPlaces.value ?? 2), profileStore.numberFormat.code) : null }
+})
+
 const { input: amountInput, onFocus: onAmountInputFocus, onBlur: onAmountInputBlur } = useAmountInput(amount)
 
-const quickButtons = profileStore.quickValueButtons
-
-const onQuickButton = async (quickButton) => {
+const onQuickButton = (quickButton) => {
   const value = !amount.value || amount.value === '' ? '0' : amount.value
   const newAmount = parseFloat(value) + parseFloat(quickButton)
   amount.value = newAmount.toFixed(currencyDecimalPlaces.value ?? 2)
+}
+
+const evaluateAmount = async () => {
+  const currentAmount = amount.value
+  let newAmount = currentAmount ? await evaluateModelValue(currentAmount) : null
+  if (newAmount != null) {
+    newAmount = newAmount.toFixed(currencyDecimalPlaces.value ?? 2)
+  }
+  amount.value = newAmount ?? currentAmount
 }
 
 const onFocus = () => {
@@ -189,12 +164,7 @@ const onFocus = () => {
 const onBlur = async () => {
   await nextTick()
   isFocused.value = false
-  const currentAmount = amount.value
-  let newAmount = await evaluateModelValue(amount.value)
-  if (newAmount != null) {
-    newAmount = newAmount.toFixed(currencyDecimalPlaces.value ?? 2)
-  }
-  amount.value = newAmount ?? currentAmount
+  await evaluateAmount()
   onAmountInputBlur()
 
   // On iOS if you hide the keyboard via the "Done" button, onBlur gets called but it's not actually blurred. This is a temp fix...
@@ -209,16 +179,18 @@ const { evaluateModelValue, convertAmountToForeign, convertForeignToAmount } = u
   currencyForeignCode,
   currencyDecimalPlaces,
   currencyForeignDecimalPlaces,
-  currency: computed(() => props.currency)
+  currency: computed(() => props.currency),
 })
 
 const onOperation = async (button) => {
-  amount.value = sanitizeAmount(amount.value + button.value)
-}
-
-watch(isFocused, (newValue) => {
-  if (newValue) {
-    animateTransactionAmountOperatorButtons()
+  if (button.value === 'C') {
+    amount.value = ''
+    return
   }
-})
+  if (button.value === '=') {
+    await evaluateAmount()
+    return
+  }
+  amount.value = sanitizeAmount(`${amount.value ?? ''}${button.value}`)
+}
 </script>

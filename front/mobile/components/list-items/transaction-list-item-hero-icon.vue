@@ -1,27 +1,18 @@
 <template>
-  <div v-if="isAnyIconVisible" class="hero-icons-section gap-1 flex items-center">
+  <span v-if="isAnyIconVisible" class="mx-lead w-auto min-w-9 px-[9px] grid-flow-col gap-1">
     <template v-if="isAccountIconVisible">
-      <app-icon v-for="accountIcon in accountIcons" :icon="accountIcon" :size="30" />
+      <app-icon v-for="(accountIcon, index) in accountIcons" :key="index" :icon="accountIcon" :size="18" :stroke="2" />
     </template>
-
-    <template v-if="isTagIconVisible">
-      <app-icon :icon="tagIcon" :size="30" />
-    </template>
-
-    <template v-if="isCategoryIconVisible">
-      <app-icon :icon="categoryIcon" :size="30" />
-    </template>
-
-    <template v-if="isWeekdayIconVisible">
-      <div style="padding: 2px">
-        <div class="hero-icon-weekday">{{ dayOfWeek }}</div>
-      </div>
-    </template>
-  </div>
+    <app-icon v-if="isTagIconVisible" :icon="tagIcon" :size="18" :stroke="2" />
+    <app-icon v-if="isCategoryIconVisible" :icon="categoryIcon" :size="18" :stroke="2" />
+    <span v-if="isWeekdayIconVisible" class="text-10 font-bold leading-none">{{ dayOfWeek }}</span>
+    <transaction-type-dot :transaction-type="transactionType" class="mx-lead__dot" />
+  </span>
+  <transaction-type-dot v-else :transaction-type="transactionType" class="mt-1.5" />
 </template>
 
 <script setup>
-import _, { get, isEmpty, isEqual } from 'lodash-es'
+import { get, head, isEmpty, isEqual } from 'lodash-es'
 import DateUtils from '~/core/utils/DateUtils'
 import { format } from 'date-fns'
 import Account from '~/core/models/Account.js'
@@ -32,6 +23,7 @@ import { useAccountStore } from '~/core/stores/accountStore'
 import { useCategoryStore } from '~/core/stores/categoryStore'
 import { useProfileStore } from '~/core/stores/profileStore'
 
+// Lead tile of a transaction row: the hero icons picked in the list settings, with the type dot on its corner.
 const props = defineProps({
   value: Object,
 })
@@ -40,27 +32,16 @@ const profileStore = useProfileStore()
 const accountStore = useAccountStore()
 const categoryStore = useCategoryStore()
 
-const emit = defineEmits(['onEdit', 'onDelete'])
-
-const transactions = computed(() => _.get(props.value, 'attributes.transactions', []))
-const firstTransaction = computed(() => _.head(transactions.value))
-const transactionType = computed(() => _.get(firstTransaction.value, 'type'))
+const firstTransaction = computed(() => head(get(props.value, 'attributes.transactions', [])))
+const transactionType = computed(() => get(firstTransaction.value, 'type'))
 
 const isTypeExpense = computed(() => isEqual(transactionType.value, Transaction.types.expense))
 const isTypeIncome = computed(() => isEqual(transactionType.value, Transaction.types.income))
-const isTypeTransfer = computed(() => isEqual(transactionType.value, Transaction.types.transfer))
 
-const category = computed(() => _.get(firstTransaction.value, 'category.attributes.name'))
+const tags = computed(() => firstTransaction.value?.tags ?? [])
 
-const tags = computed(() => {
-  return firstTransaction.value.tags ?? []
-})
-
-const date = computed(() => DateUtils.autoToDate(_.get(firstTransaction.value, 'date')))
+const date = computed(() => DateUtils.autoToDate(get(firstTransaction.value, 'date')))
 const dayOfWeek = computed(() => (date.value ? format(date.value, 'E').toUpperCase() : ''))
-const time = computed(() => (date.value ? format(date.value, 'HH:mm') : ''))
-const timeHour = computed(() => (date.value ? format(date.value, 'HH') : ''))
-const timeMinute = computed(() => (date.value ? format(date.value, 'mm') : ''))
 
 const accountIcons = computed(() => {
   // Draft transactions (e.g. ramble previews) embed the account objects instead of ids.
@@ -88,14 +69,11 @@ const categoryIcon = computed(() => {
   return get(category, 'attributes.icon.icon') ?? TablerIconConstants.category
 })
 
-const isAccountIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIcon.account.code))
-const isTagIconVisible = computed(() => profileStore.tagsEnabled && profileStore.heroIcons.some((item) => item.code === transactionListHeroIcon.tags.code) && !isEmpty(tags.value))
-const isCategoryIconVisible = computed(() => profileStore.categoriesEnabled && profileStore.heroIcons.some((item) => item.code === transactionListHeroIcon.category.code))
-const isWeekdayIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === transactionListHeroIcon.dayOfWeek.code))
-const isHourIconVisible = computed(() => false)
-// const isHourIconVisible = computed(() => profileStore.heroIcons.some((item) => item.code === HERO_ICONS.hour))
+const hasHeroIcon = (heroIcon) => profileStore.heroIcons.some((item) => item.code === heroIcon.code)
+const isAccountIconVisible = computed(() => hasHeroIcon(transactionListHeroIcon.account))
+const isTagIconVisible = computed(() => profileStore.tagsEnabled && hasHeroIcon(transactionListHeroIcon.tags) && !isEmpty(tags.value))
+const isCategoryIconVisible = computed(() => profileStore.categoriesEnabled && hasHeroIcon(transactionListHeroIcon.category))
+const isWeekdayIconVisible = computed(() => hasHeroIcon(transactionListHeroIcon.dayOfWeek))
 
-const isAnyIconVisible = computed(() => {
-  return isAccountIconVisible.value || isTagIconVisible.value || isCategoryIconVisible.value || isWeekdayIconVisible || isHourIconVisible
-})
+const isAnyIconVisible = computed(() => isAccountIconVisible.value || isTagIconVisible.value || isCategoryIconVisible.value || isWeekdayIconVisible.value)
 </script>

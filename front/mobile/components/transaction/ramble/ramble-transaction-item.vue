@@ -1,8 +1,8 @@
 <template>
-  <div class="ramble-transaction-item" :class="statusClass">
-    <div v-if="isCreating || transaction.error" class="flex items-center gap-2 px-4 pt-2">
-      <van-loading v-if="isCreating" size="14" />
-      <div v-if="transaction.error" class="text-12 text-[#dc3545] wrap-anywhere flex-1 min-w-0">{{ transaction.error }}</div>
+  <div class="mxr-tx" :class="statusClass">
+    <div v-if="isCreating || transaction.error" class="mxr-tx__st">
+      <span v-if="isCreating" class="mx-spin" />
+      <span v-if="transaction.error" class="mx-ferr wrap-anywhere flex-1 min-w-0">{{ transaction.error }}</span>
     </div>
 
     <transaction-list-item :value="transaction.item" :is-detailed-mode="true" @on-edit="onEdit" @on-delete="onDelete" />
@@ -12,6 +12,7 @@
 <script setup>
 import TransactionListItem from '~/mobile/components/list-items/transaction-list-item.vue'
 
+// One interpreted transaction in the ramble preview: the regular transaction row plus its create status.
 const emit = defineEmits(['delete', 'edit'])
 const transaction = defineModel({
   type: Object,
@@ -24,11 +25,11 @@ const isFailed = computed(() => transaction.value.status === 'error')
 
 const statusClass = computed(() => {
   if (isCreated.value) {
-    return 'ramble-transaction-item-success'
+    return 'ok'
   }
 
   if (isFailed.value) {
-    return 'ramble-transaction-item-error'
+    return 'err'
   }
 
   return null

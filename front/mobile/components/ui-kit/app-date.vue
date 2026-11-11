@@ -1,116 +1,48 @@
 <template>
-  <div class="">
-    <!--    <van-cell :title="label" :value="date" @click="show = true"/>-->
-    <van-field v-model="getSelectedName" is-link readonly class="app-field" :label="label" placeholder="No date" v-bind="dynamicAttrs" @click="onShow">
-      <template v-if="attrs.icon" #left-icon>
-        <app-icon :icon="attrs.icon" :size="20" />
-      </template>
+  <div class="mx-f" :class="{ bad: !!error }">
+    <slot name="label">
+      <div class="mx-l">{{ label ?? $t('date') }}<span v-if="isRequired || required" class="req">*</span></div>
+    </slot>
 
-      <template #input>
-        <div>
-          <div :class="labelClass">
-            {{ getSelectedName }}
-          </div>
-        </div>
-      </template>
-
-      <template #right-icon>
-        <div>
-          <van-icon v-if="modelValue && !attrs.disabled" name="clear" class="cursor-pointer" @click.prevent.stop="modelValue = null" />
-        </div>
-      </template>
-    </van-field>
-
-    <div v-if="false" class="flex" style="gap: 3px">
-      <!--      <div class="van-field__label"/>-->
-
-      <div class="flex flex-1 ml-3.75" style="justify-content: flex-start; align-items: center; gap: 3px">
-        <span class="text-14 mr-5 text-muted">Quick actions:</span>
-        <van-button type="default" size="normal" @click.prevent.stop="onClickedMinusDay">-1</van-button>
-        <van-button type="default" size="normal" @click.prevent.stop="onClickedToday">Today</van-button>
-        <van-button type="default" size="normal" @click.prevent.stop="onClickedAddDay">+1</van-button>
-      </div>
+    <div class="mx-sel" :class="{ dis: disabled }" role="button" tabindex="0" aria-haspopup="dialog" :aria-label="label ?? $t('date')" :name="name" @click="onShow" @keydown.enter.prevent="onShow">
+      <span class="val">
+        <app-icon :icon="IconCalendar" :size="16" :stroke="2" />
+        <span v-if="modelValue" class="tx">{{ DateUtils.dateToUI(modelValue) }}</span>
+        <span v-else class="ph">{{ $t('kit.no_date') }}</span>
+      </span>
+      <button v-if="modelValue && !disabled" type="button" class="x" :aria-label="$t('clear')" @click.stop="modelValue = null">
+        <app-icon :icon="IconX" :size="14" :stroke="2" />
+      </button>
     </div>
 
-    <!--    <van-cell title="Cell title" :value="getSelectedName" is-link @click="show = true" />-->
+    <div v-if="error" class="mx-ferr">{{ error }}</div>
 
-    <van-calendar v-model:show="show" :show-confirm="false" color="#000" :min-date="props.minDate" :max-date="props.maxDate" @confirm="onConfirm">
-      <template #title>
-        <div ref="appCalendar">Select a date</div>
-      </template>
-    </van-calendar>
+    <app-date-sheet v-model:show="show" v-model="modelValue" :title="label ?? $t('date')" :min-date="minDate" :max-date="maxDate" />
   </div>
 </template>
 
 <script setup>
+import { IconCalendar, IconX } from '@tabler/icons-vue'
+import { subYears } from 'date-fns'
 import DateUtils from '~/core/utils/DateUtils'
-import { addDays, startOfDay, subYears } from 'date-fns'
-import { useFormAttributes } from '~/core/composables/useFormAttributes'
-import { useSwipeToDismiss } from '~/mobile/composables/useSwipeToDismiss.js'
 
-const attrs = useAttrs()
-const { dynamicAttrs } = useFormAttributes(attrs)
-
+// Date field (design: .mx-sel with a calendar icon) that opens the calendar sheet.
 const modelValue = defineModel()
 
 const props = defineProps({
-  label: {
-    type: String,
-    default: 'Date',
-  },
-  minDate: {
-    type: Date,
-    default: () => subYears(new Date(), 5),
-  },
-  maxDate: {
-    type: Date,
-    default: undefined,
-  },
+  label: { type: String, default: null },
+  name: { type: String, default: null },
+  rules: { type: Array, default: () => [] },
+  required: { type: Boolean, default: false },
+  disabled: { type: Boolean, default: false },
+  minDate: { type: Date, default: () => subYears(new Date(), 5) },
+  maxDate: { type: Date, default: undefined },
+  // Fields carry no leading icon in the design; accepted for older call sites
+  icon: { default: null },
 })
+
+const { error, isRequired } = useFormField({ name: () => props.name, rules: () => props.rules, value: modelValue })
 
 const show = ref(false)
-
-const onShow = () => {
-  if (!attrs.disabled) {
-    show.value = true
-  }
-}
-
-const labelClass = computed(() => {
-  return {
-    'text-muted': !modelValue.value,
-  }
-})
-
-const getSelectedName = computed(() => {
-  if (!modelValue.value) {
-    return 'No date'
-  }
-  return DateUtils.dateToUI(modelValue.value)
-})
-
-const onConfirm = (value) => {
-  show.value = false
-  modelValue.value = value
-  // emit('update:modelValue', value)
-}
-
-const onClickedMinusDay = () => {
-  modelValue.value = addDays(modelValue.value, -1)
-}
-const onClickedToday = () => {
-  modelValue.value = startOfDay(new Date())
-}
-const onClickedAddDay = () => {
-  modelValue.value = addDays(modelValue.value, 1)
-}
-
-const appCalendar = ref(null)
-useSwipeToDismiss({
-  onSwipe: () => {
-    show.value = false
-  },
-  swipeRef: appCalendar,
-  showDropdown: show,
-})
+const onShow = () => !props.disabled && (show.value = true)
 </script>

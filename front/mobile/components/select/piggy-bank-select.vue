@@ -1,83 +1,36 @@
 <template>
-  <app-select
-    v-model="modelValue"
-    v-model:show-dropdown="showDropdown"
-    v-model:search="search"
-    :label="label ?? $t('piggy_bank')"
-    class=""
-    :popup-title="$t('piggy_bank_select')"
-    :list="filteredList"
-    :columns="3"
-    :get-display-value="getDisplayValue"
-    v-bind="dynamicAttrs"
-  >
-
-    <template #left-icon>
-      <app-icon :icon="TablerIconConstants.piggyBank" :size="20" />
-    </template>
-
+  <app-select v-model="modelValue" :label="label ?? $t('piggy_bank')" :popup-title="$t('piggy_bank_select')" :list="list" :get-display-value="getDisplayValue" :get-icon-value="getIcon">
     <template #top-right>
-      <van-button size="small" class="" @click="onRefresh">
-        <app-icon :icon="TablerIconConstants.refresh" :stroke="1.7" size="14" />
-      </van-button>
-    </template>
-
-    <template #item="{ item }">
-      <app-select-option :text="PiggyBank.getDisplayName(item)" :icon="PiggyBank.getIcon(item) ?? TablerIconConstants.piggyBank" />
-    </template>
-
-    <template #inputItemContent="{ item }">
-      <div class="flex items-center justify-center gap-1">
-        <app-icon :icon="PiggyBank.getIcon(item) ?? TablerIconConstants.piggyBank" :size="18" />
-        <span class="font-normal text-12">{{ getDisplayValue(item) }}</span>
-      </div>
+      <button type="button" class="mx-ib sm" :aria-label="$t('kit.refresh')" @click="onRefresh">
+        <span v-if="isLoading" class="mx-spin" />
+        <app-icon v-else :icon="IconRefresh" :size="16" :stroke="2" />
+      </button>
     </template>
   </app-select>
 </template>
 
 <script setup>
+import { IconRefresh } from '@tabler/icons-vue'
 import { usePiggyBankStore } from '~/core/stores/piggyBankStore'
-import { useFormAttributes } from '~/core/composables/useFormAttributes'
-
+import PiggyBank from '~/core/models/PiggyBank'
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
-import PiggyBank from '~/core/models/PiggyBank.js'
 
-const piggyBankStore = usePiggyBankStore()
-const attrs = useAttrs()
-const { dynamicAttrs } = useFormAttributes(attrs)
-
-const props = defineProps({
-  label: {
-    type: String
-  },
+defineProps({
+  label: { type: String },
 })
 
+const store = usePiggyBankStore()
 const modelValue = defineModel()
-const showDropdown = ref(false)
-const search = ref('')
 
-const filteredList = computed(() => {
-  const list = piggyBankStore.piggyBankList
-  if (search.value.length === 0) {
-    return list
-  }
-  return list.filter((item) => {
-    return LanguageUtils.includesSearch(PiggyBank.getDisplayName(item), search.value)
-  })
-})
+const list = computed(() => store.piggyBankList)
 
-
-// ------ Methods ------
-
-const getDisplayValue = (value) => {
-  return PiggyBank.getDisplayName(value)
-}
+const getDisplayValue = (value) => PiggyBank.getDisplayName(value)
+const getIcon = (value) => PiggyBank.getIcon(value) ?? TablerIconConstants.piggyBank
 
 const isLoading = ref(false)
 const onRefresh = async () => {
   isLoading.value = true
-  await piggyBankStore.fetchPiggyBanks()
+  await store.fetchPiggyBanks()
   isLoading.value = false
 }
 </script>
-

@@ -43,7 +43,14 @@ const observe = () => {
   observer = new IntersectionObserver((entries) => entries.some((entry) => entry.isIntersecting) && !props.loading && !props.finished && emit('load'), { rootMargin: '200px' })
   observer.observe(sentinelRef.value)
 }
-onMounted(observe)
+// Like van-list's immediate check: load the first page on mount, without waiting for the observer
+// (it does not fire while the page is hidden, e.g. a PWA resumed in the background)
+onMounted(() => {
+  observe()
+  if (!props.finished && !props.loading) {
+    emit('load')
+  }
+})
 watch(sentinelRef, observe)
 // After each page, observe again: if the end is still in view, the next page loads
 watch(

@@ -1,0 +1,6 @@
+/* Mobile app styles for the entities area (on top of mx.css). Only add rules the design boards need that mx.css lacks. */
+
+/* Inactive budgets / disabled currencies: dim the row content (not the row, so the red swipe layer does not show through) */
+.mx-row.is-off > * {
+  opacity: 0.5;
+}

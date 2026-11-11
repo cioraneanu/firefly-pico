@@ -1,50 +1,51 @@
 <template>
-  <div class="app-form">
+  <div class="mx-page">
     <app-top-toolbar />
 
-    <van-form class="" @submit="onSave">
-      <van-cell-group inset>
-        <div class="van-cell-group-title">{{ $t('settings.general') }}:</div>
+    <app-form @submit="onSave">
+      <main class="mx-body has-save">
+        <app-card :section="$t('settings.general')">
+          <app-select
+            v-model="numberFormat"
+            v-model:show-dropdown="isDropdownNumberFormatVisible"
+            name="numberFormat"
+            :label="$t('settings.formatting.numbers_format')"
+            :popup-title="$t('settings.formatting.select_numbers_format')"
+            :list="numberFormatList"
+            :has-search="false"
+            :rules="[rule.required()]"
+            :clearable="false"
+          />
 
-        <app-select
-          v-model="numberFormat"
-          v-model:show-dropdown="isDropdownNumberFormatVisible"
-          :label="$t('settings.formatting.numbers_format') + ':'"
-          :popup-title="$t('settings.formatting.select_numbers_format')"
-          :list="numberFormatList"
-          :columns="1"
-          :has-search="false"
-          :rules="[rule.required()]"
-          required
-          :clearable="false"
-        />
+          <div class="mx-2">
+            <app-select
+              v-model="dateFormat"
+              v-model:show-dropdown="isDropdownDateFormatVisible"
+              :label="$t('settings.formatting.date_format')"
+              :popup-title="$t('settings.formatting.select_date_format')"
+              :list="dateFormatList"
+              :has-search="false"
+            />
 
-        <app-select
-          v-model="dateFormat"
-          v-model:show-dropdown="isDropdownDateFormatVisible"
-          :label="$t('settings.formatting.date_format')"
-          :popup-title="$t('settings.formatting.select_date_format')"
-          :list="dateFormatList"
-          :columns="1"
-          :has-search="false"
-        />
+            <day-select v-model="weekStartsOn" />
+          </div>
+        </app-card>
 
-        <day-select v-model="weekStartsOn" />
-
-      </van-cell-group>
-
-      <van-cell-group inset>
-        <div class="van-cell-group-title">{{ $t('settings.formatting.casing') }}:</div>
-
-        <app-boolean v-model="lowerCaseTransactionDescription" :label="$t('settings.formatting.force_transaction_description_lowercase')" />
-        <app-boolean v-model="lowerCaseAccountName" :label="$t('settings.formatting.force_account_name_lowercase')" />
-        <app-boolean v-model="lowerCaseCategoryName" :label="$t('settings.formatting.force_category_name_lowercase')" />
-        <app-boolean v-model="lowerCaseTagName" :label="$t('settings.formatting.force_tag_name_lowercase')" />
-        <app-boolean v-model="stripAccents" :label="$t('settings.formatting.strip_accents')" />
-      </van-cell-group>
+        <app-card :section="$t('settings.formatting.casing')">
+          <app-boolean v-model="lowerCaseTransactionDescription" :label="$t('settings.formatting.force_transaction_description_lowercase')" />
+          <div class="mx-hr" />
+          <app-boolean v-model="lowerCaseAccountName" :label="$t('settings.formatting.force_account_name_lowercase')" />
+          <div class="mx-hr" />
+          <app-boolean v-model="lowerCaseCategoryName" :label="$t('settings.formatting.force_category_name_lowercase')" />
+          <div class="mx-hr" />
+          <app-boolean v-model="lowerCaseTagName" :label="$t('settings.formatting.force_tag_name_lowercase')" />
+          <div class="mx-hr" />
+          <app-boolean v-model="stripAccents" :label="$t('settings.formatting.strip_accents')" />
+        </app-card>
+      </main>
 
       <app-button-form-save />
-    </van-form>
+    </app-form>
   </div>
 </template>
 
@@ -69,9 +70,6 @@ const dateFormat = ref(null)
 const weekStartsOn = ref(null)
 const dateFormatList = [DateUtils.FORMAT_ROMANIAN_DATE, DateUtils.FORMAT_ENGLISH_DATE]
 const isDropdownDateFormatVisible = ref(false)
-const isDropdownWeekStartsOnVisible = ref(false)
-
-
 
 const numberFormat = ref(null)
 const stripAccents = ref(false)
@@ -96,7 +94,9 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   const response = await profileStore.writeProfile()
-  ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
+  if (ResponseUtils.isSuccess(response)) {
+    UIUtils.showToastSuccess(t('settings.settings_saved'))
+  }
 }
 
 const toolbar = useToolbar()

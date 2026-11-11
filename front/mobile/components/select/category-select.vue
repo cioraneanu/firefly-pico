@@ -1,88 +1,36 @@
 <template>
-  <app-select
-    v-model="modelValue"
-    v-model:show-dropdown="showDropdown"
-    v-model:search="search"
-    :label="label ?? $t('category')"
-    class=""
-    :popup-title="$t('category_select')"
-    :list="filteredList"
-    :columns="3"
-
-    :get-display-value="getDisplayValue"
-    v-bind="dynamicAttrs"
-  >
-    <template #left-icon>
-      <app-icon :icon="TablerIconConstants.category" :size="20" />
-    </template>
-
+  <app-select v-model="modelValue" :label="label ?? $t('category')" :popup-title="$t('category_select')" :list="list" :get-display-value="getDisplayValue" :get-icon-value="getIcon">
     <template #top-right>
-      <van-button size="small" class="" @click="onRefresh">
-        <app-icon :icon="TablerIconConstants.refresh" :stroke="1.7" size="14" />
-      </van-button>
-    </template>
-
-    <template #item="{ item }">
-      <app-select-option :text="Category.getDisplayName(item)" :icon="Category.getIcon(item) ?? TablerIconConstants.category" />
-    </template>
-
-    <template #inputItemContent="{ item }">
-      <div class="flex items-center justify-center gap-1">
-        <app-icon :icon="Category.getIcon(item) ?? TablerIconConstants.category" :size="18" />
-        <span class="font-normal text-12">{{ getDisplayValue(item) }}</span>
-      </div>
+      <button type="button" class="mx-ib sm" :aria-label="$t('kit.refresh')" @click="onRefresh">
+        <span v-if="isLoading" class="mx-spin" />
+        <app-icon v-else :icon="IconRefresh" :size="16" :stroke="2" />
+      </button>
     </template>
   </app-select>
 </template>
 
 <script setup>
+import { IconRefresh } from '@tabler/icons-vue'
 import { useCategoryStore } from '~/core/stores/categoryStore'
-import { useFormAttributes } from '~/core/composables/useFormAttributes'
 import Category from '~/core/models/Category'
-
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
 
-const categoryStore = useCategoryStore()
-const attrs = useAttrs()
-const { dynamicAttrs } = useFormAttributes(attrs)
-
-const { t } = useI18n()
-
-const props = defineProps({
-  label: {
-    type: String,
-  },
+defineProps({
+  label: { type: String },
 })
 
+const store = useCategoryStore()
 const modelValue = defineModel()
-const showDropdown = ref(false)
-const search = ref('')
 
-const filteredList = computed(() => {
-  const list = categoryStore.categoryList
-  if (search.value.length === 0) {
-    return list
-  }
-  return list.filter((item) => {
-    return LanguageUtils.includesSearch(Category.getDisplayName(item), search.value)
-  })
-})
+const list = computed(() => store.categoryList)
 
-// ------ Methods ------
-
-const onSelectCell = (value) => {
-  modelValue.value = value
-  showDropdown.value = false
-}
-
-const getDisplayValue = (value) => {
-  return Category.getDisplayName(value)
-}
+const getDisplayValue = (value) => Category.getDisplayName(value)
+const getIcon = (value) => Category.getIcon(value) ?? TablerIconConstants.category
 
 const isLoading = ref(false)
 const onRefresh = async () => {
   isLoading.value = true
-  await categoryStore.fetchCategories()
+  await store.fetchCategories()
   isLoading.value = false
 }
 </script>

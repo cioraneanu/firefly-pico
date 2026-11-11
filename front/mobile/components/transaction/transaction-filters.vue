@@ -1,29 +1,26 @@
 <template>
-  <app-popup v-model:show="showDropdown" :style="style">
-      <van-form class="flex-1 flex flex-col" style="overflow: hidden" @submit="onApplyFilters">
-        <div class="flex items-center m-2.5 mb-0">
-          <div class="flex-1 text-center font-semibold text-18">{{ $t('filters.transaction_filters') }}</div>
-        </div>
+  <app-sheet v-model:show="showDropdown" :title="$t('filters.transaction_filters')" full>
+    <template #header-right>
+      <span v-if="activeCount > 0" class="mx-badge">{{ $t('transaction_list_page.active_count', { count: activeCount }) }}</span>
+    </template>
 
-        <div ref="popupContentRef" class="flex-1 overflow-hidden" style="padding-bottom: 70px">
-          <transaction-filters-content v-model="localModelValue" :show-date="showDate" :show-type="showType" />
-        </div>
+    <transaction-filters-content v-model="localModelValue" :show-date="showDate" :show-type="showType" />
 
-        <app-button-form-save :label="$t('filters.apply_filters')" bottom=" - var(--van-tabbar-height) + 20px">
-          <template #left>
-            <van-button v-if="isFiltered" round @click="onClearFilters">{{ $t('filters.clear') }}</van-button>
-          </template>
-        </app-button-form-save>
-      </van-form>
-  </app-popup>
+    <template #footer>
+      <button type="button" class="mx-btn out" @click="onClearFilters">{{ $t('filters.clear') }}</button>
+      <button type="button" class="mx-btn pri" @click="onApplyFilters">{{ $t('filters.apply_filters') }}</button>
+    </template>
+  </app-sheet>
 </template>
 
 <script setup>
-import { useSwipeToDismiss } from '~/mobile/composables/useSwipeToDismiss'
 import { cloneDeep } from 'lodash-es'
 
+// The sheet edits a copy of the filters; they apply on "Apply filters".
+defineOptions({ inheritAttrs: false })
+
 const modelValue = defineModel({})
-const props = defineProps({
+defineProps({
   showDate: { default: true },
   showType: { default: true },
 })
@@ -31,24 +28,16 @@ const props = defineProps({
 const localModelValue = ref({})
 const showDropdown = ref(false)
 
-const style = {
-  height: '90%',
-  'padding-top': '4px',
-  'border-radius': '0px',
-  display: 'flex',
-  flexDirection: 'column',
-}
-
-watch(modelValue, (newValue) => {
-  localModelValue.value = cloneDeep(newValue)
-}, { immediate: true })
+watch(
+  modelValue,
+  (newValue) => {
+    localModelValue.value = cloneDeep(newValue)
+  },
+  { immediate: true },
+)
 
 const show = () => {
   showDropdown.value = true
-}
-
-const onDismiss = () => {
-  showDropdown.value = false
 }
 
 const onApplyFilters = () => {
@@ -56,20 +45,11 @@ const onApplyFilters = () => {
   showDropdown.value = false
 }
 
-const isFiltered = computed(() => {
-  return Object.values(localModelValue.value).some((item) => !!item)
-})
+const activeCount = computed(() => Object.values(localModelValue.value ?? {}).filter((item) => !!item).length)
 
 const onClearFilters = () => {
   localModelValue.value = {}
 }
-
-const popupContentRef = ref(null)
-useSwipeToDismiss({
-  onSwipe: onDismiss,
-  swipeRef: popupContentRef,
-  showDropdown: showDropdown,
-})
 
 defineExpose({ show })
 </script>

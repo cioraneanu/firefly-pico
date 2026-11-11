@@ -1,38 +1,39 @@
 <template>
-  <app-popup v-model:show="modelValueShow" style="padding-top: 4px">
-    <div ref="popupRef" class="h-full flex flex-col app-date-time-grid">
-        <van-time-picker v-if="localModelValue" v-model="localModelValue" @confirm="onClose" @cancel="onClose" />
+  <app-sheet v-model:show="modelValueShow" :title="title ?? $t('kit.choose_time')">
+    <div class="mx-tp">
+      <div class="mx-tp__v">{{ hour }}:{{ minute }}</div>
+      <div class="mx-ogrp">{{ $t('kit.hour') }}</div>
+      <div class="mx-tp__g">
+        <button v-for="value in hours" :key="value" type="button" :class="{ on: value === hour }" @click="modelValue = `${value}:${minute}`">{{ value }}</button>
+      </div>
+      <div class="mx-ogrp">{{ $t('kit.minute') }}</div>
+      <div class="mx-tp__g">
+        <button v-for="value in minutes" :key="value" type="button" :class="{ on: value === minute }" @click="modelValue = `${hour}:${value}`">{{ value }}</button>
+      </div>
     </div>
-  </app-popup>
+
+    <template #footer>
+      <button type="button" class="mx-btn out" @click="onNow">{{ $t('kit.now') }}</button>
+      <button type="button" class="mx-btn pri" @click="modelValueShow = false">{{ $t('done') }}</button>
+    </template>
+  </app-sheet>
 </template>
 
 <script setup>
-import { isEqual } from 'lodash-es'
-
+// Time sheet (design: MX-TimePicker): hour and 5-minute grids, value as 'HH:mm'.
 const modelValueShow = defineModel('show')
 const modelValue = defineModel()
 
-const localModelValue = ref(null)
-
-watch(
-  modelValue,
-  (newValue, oldValue) => {
-    if (isEqual(newValue, oldValue) || !newValue) {
-      return
-    }
-    localModelValue.value = newValue.split(':')
-  },
-  { immediate: true },
-)
-
-watch(localModelValue, (newValue, oldValue) => {
-  if (isEqual(newValue, oldValue)) {
-    return
-  }
-  modelValue.value = newValue.join(':')
+defineProps({
+  title: { type: String, default: null },
 })
 
-const onClose = () => {
-  modelValueShow.value = false
-}
+const pad = (value) => String(value).padStart(2, '0')
+const hours = Array.from({ length: 24 }, (_, index) => pad(index))
+const minutes = Array.from({ length: 12 }, (_, index) => pad(index * 5))
+
+const hour = computed(() => (modelValue.value || '00:00').split(':')[0])
+const minute = computed(() => (modelValue.value || '00:00').split(':')[1])
+
+const onNow = () => (modelValue.value = DateUtils.dateToString(new Date(), 'HH:mm'))
 </script>

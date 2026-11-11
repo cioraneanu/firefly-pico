@@ -131,7 +131,14 @@
     "configure_fields": "필드 설정",
     "title_clone_transaction": "거래 복제",
     "title_edit_transaction": "거래 수정",
-    "title_add_transaction": "거래 추가"
+    "title_add_transaction": "거래 추가",
+    "calculator": "계산기",
+    "convert_from": "{currency}에서",
+    "attachment_take_photo": "사진 찍기",
+    "attachment_delete_confirm": "첨부 파일이 영구적으로 삭제됩니다.",
+    "assistant_ramble_new": "새 기록",
+    "assistant_ramble_saved": "저장된 기록",
+    "assistant_ramble_no_saved": "저장된 기록 없음"
   },
   "settings": {
     "settings_title": "설정",
@@ -167,7 +174,9 @@
       "invalid_token": "입력한 토큰이 올바르지 않거나 만료되었습니다.",
       "test_connection": "연결 테스트",
       "connection_successful": "연결 성공",
-      "fetching": "가져오는 중..."
+      "fetching": "가져오는 중...",
+      "add_http_header": "헤더 추가",
+      "http_headers_info": "Pico 백엔드로 보내는 모든 요청에 포함됩니다. 예: Cloudflare Access 또는 리버스 프록시."
     },
     "ui_entry": "사용자 인터페이스",
     "ui": {
@@ -186,7 +195,8 @@
         "new_transacation": "새 거래",
         "transacation_list": "거래 목록",
         "dashboard": "대시보드"
-      }
+      },
+      "appearance": "모양"
     },
     "assistant_entry": "어시스턴트",
     "assistant": {
@@ -252,7 +262,8 @@
       "copy_category_to_description": "카테고리를 선택하면 설명에 복사",
       "quick_amounts": {
         "title": "빠른 거래 금액",
-        "value": "값"
+        "value": "값",
+        "info": "금액 필드 옆에 표시됩니다. 예: +1, +0.1, -10"
       },
       "list_fields": {
         "title": "목록 필드 설정",
@@ -306,8 +317,17 @@
     },
     "token": {
       "label": "개인 액세스 토큰",
-      "placeholder": "개인 토큰"
-    }
+      "placeholder": "개인 토큰",
+      "description": "Firefly III의 옵션 › 프로필 › OAuth에서 만드세요.",
+      "show": "토큰 표시",
+      "hide": "토큰 숨기기",
+      "note": "이 기기에만 저장됩니다. Pico 백엔드로 전송되며, 백엔드가 Firefly III로 전달합니다."
+    },
+    "sync_everything": "모두 동기화",
+    "show": "표시",
+    "hide": "숨기기",
+    "reorder_hint_cards": "핸들을 끌어 순서 변경 · 눈 아이콘을 눌러 카드 숨기기",
+    "reorder_hint_fields": "핸들을 끌어 순서 변경 · 눈 아이콘을 눌러 필드 숨기기"
   },
   "about": {
     "title": "정보",
@@ -327,7 +347,14 @@
     "iconpacks_circle_avatar": "- 아이콘팩: <a href=\"https://www.svgrepo.com/author/Laura%20Reen\" target=\"_blank\">Circle Avatar Vectors by Laura Reen</a>",
     "iconpacks_svg_repo": "- 아이콘팩: <a href=\"https://www.svgrepo.com/\" target=\"_blank\">SVG Repo</a>",
     "iconpacks_freepik": "- 아이콘팩: <a href=\"https://www.freepik.com/\" target=\"_blank\">Freepik</a>",
-    "illustrations_undraw": "- 일러스트: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>"
+    "illustrations_undraw": "- 일러스트: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>",
+    "credit_developed_by": "Mihai Cioraneanu 개발",
+    "credit_using": "사용",
+    "credit_consuming": "REST API 사용",
+    "credit_ui_theme": "UI 테마 기반",
+    "credit_exchange_rate": "환율 제공",
+    "credit_iconpacks": "아이콘 팩",
+    "credit_illustrations": "일러스트"
   },
   "page_select": {
     "label": "시작 페이지",
@@ -397,12 +424,20 @@
     "visible_on_dashboard": "대시보드에 표시",
     "balance": "잔액",
     "available": "사용 가능",
-    "account_group": "그룹"
+    "account_group": "그룹",
+    "search": "계좌 검색…",
+    "empty_hint": "계좌가 여기에 표시됩니다",
+    "current_balance": "현재 잔액",
+    "new_balance": "새 잔액",
+    "difference": "차액",
+    "adjust_balance_note": "차액은 계좌의 시작 잔액에 더해집니다. 거래는 생성되지 않습니다."
   },
   "transaction_template_page": {
     "title_add": "템플릿 추가",
     "title_edit": "템플릿 수정",
-    "extra_names": "추가 이름(어시스턴트 검색 가능):"
+    "extra_names": "추가 이름(어시스턴트 검색 가능):",
+    "search": "템플릿 검색…",
+    "empty_hint": "템플릿이 여기에 표시됩니다"
   },
   "tag_page": {
     "title_add": "태그 추가",
@@ -412,7 +447,9 @@
     "end_date": "종료일",
     "total": "합계",
     "compute_total": "합계 계산",
-    "total_success": "태그 합계가 업데이트되었습니다"
+    "total_success": "태그 합계가 업데이트되었습니다",
+    "search": "태그 검색…",
+    "empty_hint": "태그가 여기에 표시됩니다"
   },
   "category_page": {
     "title_add": "카테고리 추가",
@@ -423,7 +460,9 @@
   "currency_page": {
     "title_add": "통화 추가",
     "title_edit": "통화 수정",
-    "decimal_places": "소수 자릿수"
+    "decimal_places": "소수 자릿수",
+    "search": "통화 검색…",
+    "empty_hint": "통화가 여기에 표시됩니다"
   },
   "budget_page": {
     "title_add": "예산 추가",
@@ -432,7 +471,9 @@
     "percent": "비율",
     "interval": "주기",
     "type": "예산 유형",
-    "period": "예산 기간"
+    "period": "예산 기간",
+    "search": "예산 검색…",
+    "empty_hint": "예산이 여기에 표시됩니다"
   },
   "piggy_bank_page": {
     "title_add": "저금통 추가",
@@ -443,7 +484,10 @@
     "target_amount": "목표 금액",
     "current_amount": "저축된 금액",
     "start_date": "시작일",
-    "target_date": "목표일"
+    "target_date": "목표일",
+    "search": "저금통 검색…",
+    "empty_hint": "저금통이 여기에 표시됩니다",
+    "target_reached": "목표 달성"
   },
   "recurring_transaction_page": {
     "title_add": "반복 거래 추가",
@@ -461,10 +505,14 @@
     "upcoming": "예정된 반복",
     "next_date": "다음",
     "inactive": "비활성",
-    "no_upcoming": "예정된 반복 거래가 없습니다 ^_^"
+    "no_upcoming": "예정된 반복 거래가 없습니다 ^_^",
+    "search": "반복 거래 검색…",
+    "empty_hint": "반복 거래가 여기에 표시됩니다"
   },
   "exchange_rate_page": {
-    "relative_to_usd": "USD 대비"
+    "relative_to_usd": "USD 대비",
+    "search": "통화 검색…",
+    "empty_hint": "환율이 여기에 표시됩니다"
   },
   "dashboard": {
     "title": "대시보드",
@@ -604,5 +652,51 @@
   "no_matches": "일치 항목 없음",
   "refreshing": "새로고침 중…",
   "sync": "동기화",
-  "sync_required_by_extras": "다시 동기화가 필요한 추가 항목이 있습니다"
+  "sync_required_by_extras": "다시 동기화가 필요한 추가 항목이 있습니다",
+  "kit": {
+    "choose_month": "월 선택",
+    "choose_time": "시간 선택",
+    "create": "만들기",
+    "got_it": "확인",
+    "hour": "시",
+    "minute": "분",
+    "next_month": "다음 달",
+    "next_year": "다음 해",
+    "no_date": "날짜 없음",
+    "no_time": "시간 없음",
+    "now": "지금",
+    "previous_month": "이전 달",
+    "previous_year": "이전 해",
+    "profile_switched": "{name}(으)로 전환됨",
+    "refresh": "새로고침",
+    "select_date": "날짜 선택",
+    "select_option": "옵션 선택",
+    "selected_count": "{count}개 선택됨",
+    "toggle_layout": "목록과 칩 보기 전환",
+    "what_is_profile": "프로필이란?"
+  },
+  "transaction_list_page": {
+    "search": "설명 검색…",
+    "without_category": "카테고리 없음",
+    "without_tag": "태그 없음",
+    "without_budget": "예산 없음",
+    "active_count": "{count}개 적용됨",
+    "empty_hint": "거래 내역이 여기에 표시됩니다",
+    "showing": "{total}개 중 {count}개 표시"
+  },
+  "dash_page": {
+    "hide_amounts": "금액 숨기기",
+    "previous_period": "이전 기간",
+    "next_period": "다음 기간",
+    "period": "기간",
+    "previous_year": "이전 연도",
+    "next_year": "다음 연도",
+    "card_options": "카드 옵션",
+    "no_data": "이 기간에 데이터가 없습니다",
+    "no_budgets": "예산 없음 ^_^",
+    "no_piggy_banks": "저금통 없음 ^_^",
+    "amount_left": "{amount} 남음",
+    "peak": "최고 {amount} · {date}",
+    "no_todo_tag": "\"todo\" 태그 없음"
+  }
 }

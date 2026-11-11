@@ -131,7 +131,14 @@
     "configure_fields": "Skonfiguruj pola",
     "title_clone_transaction": "Klonuj transakcję",
     "title_edit_transaction": "Edytuj transakcję",
-    "title_add_transaction": "Dodaj transakcję"
+    "title_add_transaction": "Dodaj transakcję",
+    "calculator": "Kalkulator",
+    "convert_from": "z {currency}",
+    "attachment_take_photo": "Zrób zdjęcie",
+    "attachment_delete_confirm": "Załącznik zostanie trwale usunięty.",
+    "assistant_ramble_new": "Nowy ramble",
+    "assistant_ramble_saved": "Zapisane rambles",
+    "assistant_ramble_no_saved": "Brak zapisanych rambles"
   },
   "settings": {
     "settings_title": "Ustawienia",
@@ -167,7 +174,9 @@
       "invalid_token": "Podany token jest nieprawidłowy lub stracił ważność.",
       "test_connection": "Testuj połączenie",
       "connection_successful": "Połączenie udane",
-      "fetching": "Pobieranie..."
+      "fetching": "Pobieranie...",
+      "add_http_header": "Dodaj nagłówek",
+      "http_headers_info": "Wysyłane z każdym żądaniem do backendu Pico, np. dla Cloudflare Access lub reverse proxy."
     },
     "ui_entry": "Interfejs użytkownika",
     "ui": {
@@ -185,7 +194,8 @@
         "new_transacation": "Nowa transakcja",
         "transacation_list": "Lista transakcji",
         "dashboard": "Pulpit"
-      }
+      },
+      "appearance": "Wygląd"
     },
     "assistant_entry": "Asystent",
     "assistant": {
@@ -251,7 +261,8 @@
       "copy_category_to_description": "Gdy wybieram Kategorię, skopiuj ją do pola Opis",
       "quick_amounts": {
         "title": "Szybkie kwoty transakcji",
-        "value": "Wartość"
+        "value": "Wartość",
+        "info": "Wyświetlane obok pola kwoty, np. +1, +0.1, -10"
       },
       "list_fields": {
         "title": "Ustaw listę pól",
@@ -305,8 +316,17 @@
     },
     "token": {
       "label": "Osobisty token dostępu",
-      "placeholder": "Osobisty token"
-    }
+      "placeholder": "Osobisty token",
+      "description": "Utwórz go w Firefly III w Opcje › Profil › OAuth.",
+      "show": "Pokaż token",
+      "hide": "Ukryj token",
+      "note": "Przechowywany tylko na tym urządzeniu. Jest wysyłany do backendu Pico, który przekazuje go do Firefly III."
+    },
+    "sync_everything": "Synchronizuj wszystko",
+    "show": "Pokaż",
+    "hide": "Ukryj",
+    "reorder_hint_cards": "Przeciągnij uchwyt, aby zmienić kolejność · dotknij oka, aby ukryć kartę",
+    "reorder_hint_fields": "Przeciągnij uchwyt, aby zmienić kolejność · dotknij oka, aby ukryć pole"
   },
   "about": {
     "title": "O aplikacji",
@@ -326,7 +346,14 @@
     "iconpacks_circle_avatar": "- IconPacks: <a href=\"https://www.svgrepo.com/author/Laura%20Reen\" target=\"_blank\">Circle Avatar Vectors by Laura Reen</a>",
     "iconpacks_svg_repo": "- IconPacks: <a href=\"https://www.svgrepo.com/\" target=\"_blank\">SVG Repo</a>",
     "iconpacks_freepik": "- IconPacks: <a href=\"https://www.freepik.com/\" target=\"_blank\">Freepik</a>",
-    "illustrations_undraw": "- Illustrations: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>"
+    "illustrations_undraw": "- Illustrations: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>",
+    "credit_developed_by": "Stworzone przez Mihai Cioraneanu",
+    "credit_using": "Używa",
+    "credit_consuming": "Korzysta z REST API",
+    "credit_ui_theme": "Z motywem UI opartym na",
+    "credit_exchange_rate": "Kursy walut od",
+    "credit_iconpacks": "Pakiety ikon",
+    "credit_illustrations": "Ilustracje"
   },
   "page_select": {
     "label": "Strona startowa",
@@ -396,12 +423,20 @@
     "visible_on_dashboard": "Jest widoczne na pulpicie nawigacyjnym",
     "balance": "Saldo",
     "available": "Dostępne",
-    "account_group": "Grupa"
+    "account_group": "Grupa",
+    "search": "Szukaj kont…",
+    "empty_hint": "Tutaj pojawią się Twoje konta",
+    "current_balance": "Bieżące saldo",
+    "new_balance": "Nowe saldo",
+    "difference": "Różnica",
+    "adjust_balance_note": "Różnica zostanie dodana do salda początkowego konta. Żadna transakcja nie zostanie utworzona."
   },
   "transaction_template_page": {
     "title_add": "Dodaj szablon",
     "title_edit": "Edytuj szablon",
-    "extra_names": "Dodatkowe nazwy (możliwość wyszukiwania Asystenta):"
+    "extra_names": "Dodatkowe nazwy (możliwość wyszukiwania Asystenta):",
+    "search": "Szukaj szablonów…",
+    "empty_hint": "Tutaj pojawią się Twoje szablony"
   },
   "tag_page": {
     "title_add": "Dodaj tag",
@@ -411,7 +446,9 @@
     "end_date": "Data zakończenia",
     "total": "Suma",
     "compute_total": "Oblicz sumę",
-    "total_success": "Suma tagu zaktualizowana"
+    "total_success": "Suma tagu zaktualizowana",
+    "search": "Szukaj tagów…",
+    "empty_hint": "Tutaj pojawią się Twoje tagi"
   },
   "category_page": {
     "title_add": "Dodaj kategorię",
@@ -422,7 +459,9 @@
   "currency_page": {
     "title_add": "Dodaj walutę",
     "title_edit": "Edytuj walutę",
-    "decimal_places": "Miejsca po przecinku"
+    "decimal_places": "Miejsca po przecinku",
+    "search": "Szukaj walut…",
+    "empty_hint": "Tutaj pojawią się Twoje waluty"
   },
   "budget_page": {
     "title_add": "Dodaj budżet",
@@ -431,7 +470,9 @@
     "percent": "Procent",
     "interval": "Przedział",
     "type": "Typ budżety",
-    "period": "Okres budżetowy"
+    "period": "Okres budżetowy",
+    "search": "Szukaj budżetów…",
+    "empty_hint": "Tutaj pojawią się Twoje budżety"
   },
   "piggy_bank_page": {
     "title_add": "Dodaj skarbonkę",
@@ -442,7 +483,10 @@
     "target_amount": "Kwota docelowa",
     "current_amount": "Zaoszczędzona kwota",
     "start_date": "Data rozpoczęcia",
-    "target_date": "Data docelowa"
+    "target_date": "Data docelowa",
+    "search": "Szukaj skarbonek…",
+    "empty_hint": "Tutaj pojawią się Twoje skarbonki",
+    "target_reached": "Cel osiągnięty"
   },
   "recurring_transaction_page": {
     "title_add": "Dodaj transakcję cykliczną",
@@ -460,10 +504,14 @@
     "upcoming": "Nadchodzące wydarzenia",
     "next_date": "Następny",
     "inactive": "Nieaktywny",
-    "no_upcoming": "Brak nadchodzących transakcji cyklicznych ^_^"
+    "no_upcoming": "Brak nadchodzących transakcji cyklicznych ^_^",
+    "search": "Szukaj cyklicznych…",
+    "empty_hint": "Tutaj pojawią się Twoje transakcje cykliczne"
   },
   "exchange_rate_page": {
-    "relative_to_usd": "W stosunku do USD"
+    "relative_to_usd": "W stosunku do USD",
+    "search": "Szukaj waluty…",
+    "empty_hint": "Tutaj pojawią się kursy walut"
   },
   "dashboard": {
     "title": "Pulpit",
@@ -603,5 +651,51 @@
   "no_matches": "Brak wyników",
   "refreshing": "Odświeżanie…",
   "sync": "Synchronizuj",
-  "sync_required_by_extras": "Znaleziono dodatki wymagające ponownej synchronizacji"
+  "sync_required_by_extras": "Znaleziono dodatki wymagające ponownej synchronizacji",
+  "kit": {
+    "choose_month": "Wybierz miesiąc",
+    "choose_time": "Wybierz godzinę",
+    "create": "Utwórz",
+    "got_it": "Rozumiem",
+    "hour": "Godzina",
+    "minute": "Minuta",
+    "next_month": "Następny miesiąc",
+    "next_year": "Następny rok",
+    "no_date": "Brak daty",
+    "no_time": "Brak godziny",
+    "now": "Teraz",
+    "previous_month": "Poprzedni miesiąc",
+    "previous_year": "Poprzedni rok",
+    "profile_switched": "Przełączono na {name}",
+    "refresh": "Odśwież",
+    "select_date": "Wybierz datę",
+    "select_option": "Wybierz opcję",
+    "selected_count": "Wybrano: {count}",
+    "toggle_layout": "Przełącz między listą a etykietami",
+    "what_is_profile": "Czym jest profil?"
+  },
+  "transaction_list_page": {
+    "search": "Szukaj w opisie…",
+    "without_category": "Bez kategorii",
+    "without_tag": "Bez tagów",
+    "without_budget": "Bez budżetu",
+    "active_count": "{count} aktywne",
+    "empty_hint": "Tutaj pojawią się Twoje transakcje",
+    "showing": "Wyświetlono {count} z {total}"
+  },
+  "dash_page": {
+    "hide_amounts": "Ukryj kwoty",
+    "previous_period": "Poprzedni okres",
+    "next_period": "Następny okres",
+    "period": "Okres",
+    "previous_year": "Poprzedni rok",
+    "next_year": "Następny rok",
+    "card_options": "Opcje karty",
+    "no_data": "Brak danych w tym okresie",
+    "no_budgets": "Brak budżetów ^_^",
+    "no_piggy_banks": "Brak skarbonek ^_^",
+    "amount_left": "Pozostało {amount}",
+    "peak": "Szczyt {amount} · {date}",
+    "no_todo_tag": "Brak tagu \"todo\""
+  }
 }

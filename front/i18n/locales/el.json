@@ -131,7 +131,14 @@
     "configure_fields": "Ρύθμιση πεδίων",
     "title_clone_transaction": "Αντιγραφή συναλλαγής",
     "title_edit_transaction": "Επεξεργασία συναλλαγής",
-    "title_add_transaction": "Προσθήκη συναλλαγής"
+    "title_add_transaction": "Προσθήκη συναλλαγής",
+    "calculator": "Αριθμομηχανή",
+    "convert_from": "από {currency}",
+    "attachment_take_photo": "Λήψη φωτογραφίας",
+    "attachment_delete_confirm": "Το συνημμένο θα διαγραφεί οριστικά.",
+    "assistant_ramble_new": "Νέο ramble",
+    "assistant_ramble_saved": "Αποθηκευμένα ramble",
+    "assistant_ramble_no_saved": "Κανένα αποθηκευμένο ramble"
   },
   "settings": {
     "settings_title": "Ρυθμίσεις",
@@ -167,7 +174,9 @@
       "invalid_token": "Το token που δόθηκε δεν είναι σωστό ή έχει λήξει.",
       "test_connection": "Δοκιμή σύνδεσης",
       "connection_successful": "Επιτυχής σύνδεση",
-      "fetching": "Λήψη..."
+      "fetching": "Λήψη...",
+      "add_http_header": "Προσθήκη κεφαλίδας",
+      "http_headers_info": "Αποστέλλονται με κάθε αίτημα στο backend του Pico, π.χ. για Cloudflare Access ή reverse proxy."
     },
     "ui_entry": "Διεπαφή χρήστη",
     "ui": {
@@ -186,7 +195,8 @@
         "new_transacation": "Νέα συναλλαγή",
         "transacation_list": "Λίστα συναλλαγών",
         "dashboard": "Πίνακας ελέγχου"
-      }
+      },
+      "appearance": "Εμφάνιση"
     },
     "assistant_entry": "Βοηθός",
     "assistant": {
@@ -252,7 +262,8 @@
       "copy_category_to_description": "Όταν επιλέγω κατηγορία, να αντιγράφεται στην Περιγραφή",
       "quick_amounts": {
         "title": "Γρήγορα ποσά συναλλαγών",
-        "value": "Τιμή"
+        "value": "Τιμή",
+        "info": "Εμφανίζονται δίπλα στο πεδίο ποσού, π.χ. +1, +0.1, -10"
       },
       "list_fields": {
         "title": "Ορισμός πεδίων λίστας",
@@ -306,8 +317,17 @@
     },
     "token": {
       "label": "Προσωπικό token πρόσβασης",
-      "placeholder": "Προσωπικό token"
-    }
+      "placeholder": "Προσωπικό token",
+      "description": "Δημιουργήστε ένα στο Firefly III από Επιλογές › Προφίλ › OAuth.",
+      "show": "Εμφάνιση token",
+      "hide": "Απόκρυψη token",
+      "note": "Αποθηκεύεται μόνο σε αυτή τη συσκευή. Αποστέλλεται στο backend του Pico, το οποίο το προωθεί στο Firefly III."
+    },
+    "sync_everything": "Συγχρονισμός όλων",
+    "show": "Εμφάνιση",
+    "hide": "Απόκρυψη",
+    "reorder_hint_cards": "Σύρετε τη λαβή για αναδιάταξη · πατήστε το μάτι για απόκρυψη κάρτας",
+    "reorder_hint_fields": "Σύρετε τη λαβή για αναδιάταξη · πατήστε το μάτι για απόκρυψη πεδίου"
   },
   "about": {
     "title": "Σχετικά",
@@ -327,7 +347,14 @@
     "iconpacks_circle_avatar": "- Πακέτα εικονιδίων: <a href=\"https://www.svgrepo.com/author/Laura%20Reen\" target=\"_blank\">Circle Avatar Vectors by Laura Reen</a>",
     "iconpacks_svg_repo": "- Πακέτα εικονιδίων: <a href=\"https://www.svgrepo.com/\" target=\"_blank\">SVG Repo</a>",
     "iconpacks_freepik": "- Πακέτα εικονιδίων: <a href=\"https://www.freepik.com/\" target=\"_blank\">Freepik</a>",
-    "illustrations_undraw": "- Εικονογραφήσεις: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>"
+    "illustrations_undraw": "- Εικονογραφήσεις: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>",
+    "credit_developed_by": "Ανάπτυξη από τον Mihai Cioraneanu",
+    "credit_using": "Χρησιμοποιεί",
+    "credit_consuming": "Χρησιμοποιεί το REST API",
+    "credit_ui_theme": "Με θέμα UI βασισμένο σε",
+    "credit_exchange_rate": "Συναλλαγματικές ισοτιμίες από",
+    "credit_iconpacks": "Πακέτα εικονιδίων",
+    "credit_illustrations": "Εικονογραφήσεις"
   },
   "page_select": {
     "label": "Αρχική σελίδα",
@@ -397,12 +424,20 @@
     "visible_on_dashboard": "Εμφανίζεται στον πίνακα ελέγχου",
     "balance": "Υπόλοιπο",
     "available": "Διαθέσιμο",
-    "account_group": "Ομάδα"
+    "account_group": "Ομάδα",
+    "search": "Αναζήτηση λογαριασμών…",
+    "empty_hint": "Οι λογαριασμοί σας θα εμφανιστούν εδώ",
+    "current_balance": "Τρέχον υπόλοιπο",
+    "new_balance": "Νέο υπόλοιπο",
+    "difference": "Διαφορά",
+    "adjust_balance_note": "Η διαφορά προστίθεται στο αρχικό υπόλοιπο του λογαριασμού. Δεν δημιουργείται συναλλαγή."
   },
   "transaction_template_page": {
     "title_add": "Προσθήκη προτύπου",
     "title_edit": "Επεξεργασία προτύπου",
-    "extra_names": "Επιπλέον ονόματα (για αναζήτηση από τον βοηθό):"
+    "extra_names": "Επιπλέον ονόματα (για αναζήτηση από τον βοηθό):",
+    "search": "Αναζήτηση προτύπων…",
+    "empty_hint": "Τα πρότυπά σας θα εμφανιστούν εδώ"
   },
   "tag_page": {
     "title_add": "Προσθήκη ετικέτας",
@@ -412,7 +447,9 @@
     "end_date": "Ημερομηνία λήξης",
     "total": "Σύνολο",
     "compute_total": "Υπολογισμός συνόλου",
-    "total_success": "Το σύνολο της ετικέτας ενημερώθηκε"
+    "total_success": "Το σύνολο της ετικέτας ενημερώθηκε",
+    "search": "Αναζήτηση ετικετών…",
+    "empty_hint": "Οι ετικέτες σας θα εμφανιστούν εδώ"
   },
   "category_page": {
     "title_add": "Προσθήκη κατηγορίας",
@@ -423,7 +460,9 @@
   "currency_page": {
     "title_add": "Προσθήκη νομίσματος",
     "title_edit": "Επεξεργασία νομίσματος",
-    "decimal_places": "Δεκαδικά ψηφία"
+    "decimal_places": "Δεκαδικά ψηφία",
+    "search": "Αναζήτηση νομισμάτων…",
+    "empty_hint": "Τα νομίσματά σας θα εμφανιστούν εδώ"
   },
   "budget_page": {
     "title_add": "Προσθήκη προϋπολογισμού",
@@ -432,7 +471,9 @@
     "percent": "Ποσοστό",
     "interval": "Διάστημα",
     "type": "Τύπος προϋπολογισμού",
-    "period": "Περίοδος προϋπολογισμού"
+    "period": "Περίοδος προϋπολογισμού",
+    "search": "Αναζήτηση προϋπολογισμών…",
+    "empty_hint": "Οι προϋπολογισμοί σας θα εμφανιστούν εδώ"
   },
   "piggy_bank_page": {
     "title_add": "Προσθήκη κουμπαρά",
@@ -443,7 +484,10 @@
     "target_amount": "Ποσό στόχος",
     "current_amount": "Αποταμιευμένο ποσό",
     "start_date": "Ημερομηνία έναρξης",
-    "target_date": "Ημερομηνία στόχος"
+    "target_date": "Ημερομηνία στόχος",
+    "search": "Αναζήτηση κουμπαράδων…",
+    "empty_hint": "Οι κουμπαράδες σας θα εμφανιστούν εδώ",
+    "target_reached": "Ο στόχος επιτεύχθηκε"
   },
   "recurring_transaction_page": {
     "title_add": "Προσθήκη επαναλαμβανόμενης συναλλαγής",
@@ -461,10 +505,14 @@
     "upcoming": "Επερχόμενες εμφανίσεις",
     "next_date": "Επόμενη",
     "inactive": "Ανενεργή",
-    "no_upcoming": "Δεν υπάρχουν επερχόμενες επαναλαμβανόμενες συναλλαγές ^_^"
+    "no_upcoming": "Δεν υπάρχουν επερχόμενες επαναλαμβανόμενες συναλλαγές ^_^",
+    "search": "Αναζήτηση επαναλαμβανόμενων…",
+    "empty_hint": "Οι επαναλαμβανόμενες συναλλαγές σας θα εμφανιστούν εδώ"
   },
   "exchange_rate_page": {
-    "relative_to_usd": "Σε σχέση με το USD"
+    "relative_to_usd": "Σε σχέση με το USD",
+    "search": "Αναζήτηση νομίσματος…",
+    "empty_hint": "Οι συναλλαγματικές ισοτιμίες θα εμφανιστούν εδώ"
   },
   "dashboard": {
     "title": "Πίνακας ελέγχου",
@@ -604,5 +652,51 @@
   "no_matches": "Δεν βρέθηκαν αποτελέσματα",
   "refreshing": "Ανανέωση…",
   "sync": "Συγχρονισμός",
-  "sync_required_by_extras": "Βρέθηκαν πρόσθετα που χρειάζονται επανασυγχρονισμό"
+  "sync_required_by_extras": "Βρέθηκαν πρόσθετα που χρειάζονται επανασυγχρονισμό",
+  "kit": {
+    "choose_month": "Επιλογή μήνα",
+    "choose_time": "Επιλογή ώρας",
+    "create": "Δημιουργία",
+    "got_it": "Κατάλαβα",
+    "hour": "Ώρα",
+    "minute": "Λεπτό",
+    "next_month": "Επόμενος μήνας",
+    "next_year": "Επόμενο έτος",
+    "no_date": "Χωρίς ημερομηνία",
+    "no_time": "Χωρίς ώρα",
+    "now": "Τώρα",
+    "previous_month": "Προηγούμενος μήνας",
+    "previous_year": "Προηγούμενο έτος",
+    "profile_switched": "Έγινε εναλλαγή σε {name}",
+    "refresh": "Ανανέωση",
+    "select_date": "Επιλογή ημερομηνίας",
+    "select_option": "Επιλογή μιας επιλογής",
+    "selected_count": "{count} επιλεγμένα",
+    "toggle_layout": "Εναλλαγή λίστας και ετικετών",
+    "what_is_profile": "Τι είναι ένα προφίλ;"
+  },
+  "transaction_list_page": {
+    "search": "Αναζήτηση στην περιγραφή…",
+    "without_category": "Χωρίς κατηγορία",
+    "without_tag": "Χωρίς ετικέτες",
+    "without_budget": "Χωρίς προϋπολογισμό",
+    "active_count": "{count} ενεργά",
+    "empty_hint": "Οι συναλλαγές σας θα εμφανίζονται εδώ",
+    "showing": "Εμφανίζονται {count} από {total}"
+  },
+  "dash_page": {
+    "hide_amounts": "Απόκρυψη ποσών",
+    "previous_period": "Προηγούμενη περίοδος",
+    "next_period": "Επόμενη περίοδος",
+    "period": "Περίοδος",
+    "previous_year": "Προηγούμενο έτος",
+    "next_year": "Επόμενο έτος",
+    "card_options": "Επιλογές κάρτας",
+    "no_data": "Τίποτα σε αυτή την περίοδο",
+    "no_budgets": "Κανένας προϋπολογισμός ^_^",
+    "no_piggy_banks": "Κανένας κουμπαράς ^_^",
+    "amount_left": "Απομένουν {amount}",
+    "peak": "Κορύφωση {amount} · {date}",
+    "no_todo_tag": "Δεν υπάρχει ετικέτα \"todo\""
+  }
 }

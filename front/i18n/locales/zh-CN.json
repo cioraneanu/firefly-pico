@@ -124,7 +124,14 @@
     "configure_fields": "配置字段",
     "title_clone_transaction": "克隆交易",
     "title_edit_transaction": "编辑交易",
-    "title_add_transaction": "添加交易"
+    "title_add_transaction": "添加交易",
+    "calculator": "计算器",
+    "convert_from": "从 {currency}",
+    "attachment_take_photo": "拍照",
+    "attachment_delete_confirm": "这将永久删除该附件。",
+    "assistant_ramble_new": "新的口述",
+    "assistant_ramble_saved": "已保存的口述",
+    "assistant_ramble_no_saved": "没有已保存的口述"
   },
   "settings": {
     "settings_title": "设置",
@@ -152,7 +159,9 @@
       "invalid_token": "提供的令牌不正确或已过期。",
       "test_connection": "测试连接",
       "connection_successful": "连接成功",
-      "fetching": "获取中..."
+      "fetching": "获取中...",
+      "add_http_header": "添加请求头",
+      "http_headers_info": "随每个请求发送到 Pico 后端，例如用于 Cloudflare Access 或反向代理。"
     },
     "ui_entry": "用户界面",
     "ui": {
@@ -170,7 +179,8 @@
         "new_transacation": "新交易",
         "transacation_list": "交易列表",
         "dashboard": "仪表板"
-      }
+      },
+      "appearance": "外观"
     },
     "assistant_entry": "助手",
     "assistant": {
@@ -236,7 +246,8 @@
       "copy_category_to_description": "选择类别时将其复制到描述中",
       "quick_amounts": {
         "title": "快速交易金额",
-        "value": "值"
+        "value": "值",
+        "info": "显示在金额字段旁，例如 +1、+0.1、-10"
       },
       "list_fields": {
         "title": "设置列表字段",
@@ -266,7 +277,11 @@
     },
     "token": {
       "label": "个人访问令牌",
-      "placeholder": "个人令牌"
+      "placeholder": "个人令牌",
+      "description": "在 Firefly III 的 选项 › 个人资料 › OAuth 中创建。",
+      "show": "显示令牌",
+      "hide": "隐藏令牌",
+      "note": "仅保存在此设备上。它会发送到 Pico 后端，再由后端转发给 Firefly III。"
     },
     "about_entry": "关于",
     "version": "版本",
@@ -289,7 +304,12 @@
         "transfers_by_category": "按类别分类的转账",
         "todo_transactions": "待处理交易"
       }
-    }
+    },
+    "sync_everything": "全部同步",
+    "show": "显示",
+    "hide": "隐藏",
+    "reorder_hint_cards": "拖动手柄以重新排序 · 点击眼睛图标隐藏卡片",
+    "reorder_hint_fields": "拖动手柄以重新排序 · 点击眼睛图标隐藏字段"
   },
   "about": {
     "title": "关于",
@@ -309,7 +329,14 @@
     "iconpacks_circle_avatar": "- 图标包：<a href=\"https://www.svgrepo.com/author/Laura%20Reen\" target=\"_blank\">Circle Avatar Vectors by Laura Reen</a>",
     "iconpacks_svg_repo": "- 图标包：<a href=\"https://www.svgrepo.com/\" target=\"_blank\">SVG Repo</a>",
     "iconpacks_freepik": "- 图标包：<a href=\"https://www.freepik.com/\" target=\"_blank\">Freepik</a>",
-    "illustrations_undraw": "- 插图：<a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>"
+    "illustrations_undraw": "- 插图：<a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>",
+    "credit_developed_by": "由 Mihai Cioraneanu 开发",
+    "credit_using": "使用",
+    "credit_consuming": "调用其 REST API",
+    "credit_ui_theme": "UI 主题基于",
+    "credit_exchange_rate": "汇率来源",
+    "credit_iconpacks": "图标包",
+    "credit_illustrations": "插图"
   },
   "page_select": {
     "label": "起始页面",
@@ -378,12 +405,20 @@
     "visible_on_dashboard": "是否在仪表板上显示",
     "balance": "平衡",
     "available": "可用",
-    "account_group": "组"
+    "account_group": "组",
+    "search": "搜索账户…",
+    "empty_hint": "你的账户将显示在这里",
+    "current_balance": "当前余额",
+    "new_balance": "新余额",
+    "difference": "差额",
+    "adjust_balance_note": "差额将计入账户的期初余额，不会创建交易。"
   },
   "transaction_template_page": {
     "title_add": "添加模板",
     "title_edit": "编辑模板",
-    "extra_names": "额外名称（助手可找到）："
+    "extra_names": "额外名称（助手可找到）：",
+    "search": "搜索模板…",
+    "empty_hint": "你的模板将显示在这里"
   },
   "tag_page": {
     "title_add": "添加标签",
@@ -393,7 +428,9 @@
     "end_date": "结束日期",
     "total": "总计",
     "compute_total": "计算总计",
-    "total_success": "标签总计已更新"
+    "total_success": "标签总计已更新",
+    "search": "搜索标签…",
+    "empty_hint": "你的标签将显示在这里"
   },
   "category_page": {
     "title_add": "添加类别",
@@ -404,7 +441,9 @@
   "currency_page": {
     "title_add": "添加货币",
     "title_edit": "编辑货币",
-    "decimal_places": "小数位"
+    "decimal_places": "小数位",
+    "search": "搜索货币…",
+    "empty_hint": "你的货币将显示在这里"
   },
   "budget_page": {
     "title_add": "添加预算",
@@ -413,10 +452,14 @@
     "percent": "百分比",
     "interval": "间隔",
     "type": "预算类型",
-    "period": "预算周期"
+    "period": "预算周期",
+    "search": "搜索预算…",
+    "empty_hint": "你的预算将显示在这里"
   },
   "exchange_rate_page": {
-    "relative_to_usd": "相对于美元"
+    "relative_to_usd": "相对于美元",
+    "search": "搜索货币…",
+    "empty_hint": "汇率将显示在这里"
   },
   "dashboard": {
     "title": "仪表板",
@@ -551,5 +594,60 @@
   "no_matches": "无匹配项",
   "refreshing": "正在刷新…",
   "sync": "同步",
-  "sync_required_by_extras": "发现需要重新同步的附加数据"
+  "sync_required_by_extras": "发现需要重新同步的附加数据",
+  "kit": {
+    "choose_month": "选择月份",
+    "choose_time": "选择时间",
+    "create": "创建",
+    "got_it": "知道了",
+    "hour": "小时",
+    "minute": "分钟",
+    "next_month": "下个月",
+    "next_year": "下一年",
+    "no_date": "无日期",
+    "no_time": "无时间",
+    "now": "现在",
+    "previous_month": "上个月",
+    "previous_year": "上一年",
+    "profile_switched": "已切换到 {name}",
+    "refresh": "刷新",
+    "select_date": "选择日期",
+    "select_option": "选择一个选项",
+    "selected_count": "已选 {count}",
+    "toggle_layout": "在列表和标签之间切换",
+    "what_is_profile": "什么是配置文件？"
+  },
+  "transaction_list_page": {
+    "search": "搜索描述…",
+    "without_category": "无分类",
+    "without_tag": "无标签",
+    "without_budget": "无预算",
+    "active_count": "{count} 个已启用",
+    "empty_hint": "你的交易将显示在这里",
+    "showing": "显示 {count} / {total}"
+  },
+  "dash_page": {
+    "hide_amounts": "隐藏金额",
+    "previous_period": "上一周期",
+    "next_period": "下一周期",
+    "period": "周期",
+    "previous_year": "上一年",
+    "next_year": "下一年",
+    "card_options": "卡片选项",
+    "no_data": "此期间没有数据",
+    "no_budgets": "没有预算 ^_^",
+    "no_piggy_banks": "没有存钱罐 ^_^",
+    "amount_left": "剩余 {amount}",
+    "peak": "峰值 {amount} · {date}",
+    "no_todo_tag": "没有 \"todo\" 标签"
+  },
+  "piggy_bank_page": {
+    "search": "搜索存钱罐…",
+    "empty_hint": "你的存钱罐将显示在这里",
+    "target_reached": "已达成目标"
+  },
+  "recurring_transaction_page": {
+    "search": "搜索定期交易…",
+    "empty_hint": "你的定期交易将显示在这里"
+  }
 }

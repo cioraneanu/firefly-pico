@@ -2,154 +2,104 @@
   <app-select
     v-model="modelValue"
     v-model:show-dropdown="showDropdown"
-    v-model:search="search"
     :label="label ?? $t('tags')"
-    class=""
     :popup-title="$t('tags_select')"
-    :list="filteredList"
-    :is-multi-select="props.isMultiSelect"
+    :list="tagStore.tagListHierarchy"
+    :is-multi-select="isMultiSelect"
     :get-display-value="getDisplayValue"
-    v-bind="dynamicAttrs"
+    :get-icon-value="getIcon"
   >
-
-    <template #left-icon>
-      <app-icon :icon="TablerIconConstants.tag" :size="20" />
-    </template>
-
     <template #top-right>
-      <van-button size="small" class="" @click="onRefresh">
-        <app-icon :icon="TablerIconConstants.refresh" :stroke="1.7" size="14" />
-      </van-button>
-
-      <van-button size="small" class="" @click="onToggleDisplayMode">
-        <app-icon :icon="showGridIcon" :size="14" />
-      </van-button>
+      <button type="button" class="mx-ib sm" :aria-label="$t('kit.refresh')" @click="onRefresh">
+        <span v-if="isLoading" class="mx-spin" />
+        <app-icon v-else :icon="IconRefresh" :size="16" :stroke="2" />
+      </button>
+      <button type="button" class="mx-ib sm" :aria-label="$t('kit.toggle_layout')" :aria-pressed="showTagSelectAsGrid" @click="showTagSelectAsGrid = !showTagSelectAsGrid">
+        <app-icon :icon="showTagSelectAsGrid ? IconList : IconTags" :size="16" :stroke="2" />
+      </button>
     </template>
 
-    <template #inputItemContent="{ item }">
-      <div class="flex items-center justify-center gap-1">
-        <app-icon :icon="Tag.getIcon(item) ?? TablerIconConstants.tag" :size="18" />
-        <span class="font-normal text-12">{{ getDisplayValue(item) }}</span>
+    <template #popup="{ list }">
+      <div v-if="showTagSelectAsGrid" class="mx-pickchips">
+        <button v-for="item in list" :key="item.id" type="button" class="mx-chip" :class="{ on: isItemSelected(item) }" :aria-pressed="isItemSelected(item)" @click="onSelectCell(item)">
+          <app-icon :icon="getIcon(item)" :size="14" :stroke="2" />
+          <span>{{ getDisplayValue(item) }}</span>
+        </button>
       </div>
-    </template>
-
-    <template #popup>
-      <van-grid v-if="showTagSelectAsGrid" :column-num="3">
-        <template v-for="(item, index) in filteredList" :key="index">
-          <van-grid-item style="cursor: pointer" :class="getOptionClass(item)" @click="onSelectCell(item)">
-            <app-select-option :text="Tag.getDisplayNameEllipsized(item)" :icon="Tag.getIcon(item) ?? TablerIconConstants.tag" />
-          </van-grid-item>
-        </template>
-      </van-grid>
-      <div v-else>
-        <div v-for="(item, index) in filteredList" :key="item.id" @click="onSelectCell(item)">
-          <tag-list-item :value="item" :class="getOptionClass(item)" :is-swipeable="false" />
-        </div>
-      </div>
+      <template v-else>
+        <button
+          v-for="item in list"
+          :key="item.id"
+          type="button"
+          class="mx-opt"
+          :class="{ on: isItemSelected(item) }"
+          :style="getIndentStyle(item)"
+          :aria-pressed="isItemSelected(item)"
+          @click="onSelectCell(item)"
+        >
+          <span v-if="isMultiSelect" class="mx-ck" :class="{ on: isItemSelected(item) }"><app-icon :icon="IconCheck" :size="14" :stroke="3" /></span>
+          <span class="ic"><app-icon :icon="getIcon(item)" :size="16" :stroke="2" /></span>
+          <span class="lb">{{ getDisplayValue(item) }}</span>
+          <span v-if="!isMultiSelect" class="ok"><app-icon :icon="IconCheck" :size="18" :stroke="2" /></span>
+        </button>
+      </template>
+      <div v-if="list.length === 0" class="mx-none">{{ $t('no_matches') }}</div>
     </template>
   </app-select>
 </template>
 
 <script setup>
+import { IconCheck, IconList, IconRefresh, IconTags } from '@tabler/icons-vue'
+import { get, isEqual, uniqBy } from 'lodash-es'
 import { useTagStore } from '~/core/stores/tagStore'
-import { useFormAttributes } from '~/core/composables/useFormAttributes'
 import Tag from '~/core/models/Tag'
-
-import { isEqual } from 'lodash-es/lang'
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
-import { uniqBy } from 'lodash-es/array.js'
+
+// Tag picker: list (indented by hierarchy) or compact chips, toggled from the sheet header.
+// Multi-select also picks the parents of a tag (`autoSelectParents`).
+const props = defineProps({
+  label: { type: String },
+  isMultiSelect: { default: true },
+  autoSelectParents: { default: true },
+})
 
 const tagStore = useTagStore()
 const profileStore = useProfileStore()
-const attrs = useAttrs()
-const { dynamicAttrs } = useFormAttributes(attrs)
-
 const { showTagSelectAsGrid } = storeToRefs(profileStore)
-
-const props = defineProps({
-  label: {
-    type: String,
-  },
-  isMultiSelect: {
-    default: true,
-  },
-  autoSelectParents: {
-    default: true,
-  },
-})
 
 const modelValue = defineModel()
 const showDropdown = ref(false)
-const search = ref('')
 
-const isLoading = ref(false)
-
-const filteredList = computed(() => {
-  const list = tagStore.tagListHierarchy
-  if (search.value.length === 0) {
-    return list
-  }
-  return list.filter((item) => {
-    return LanguageUtils.includesSearch(Tag.getDisplayNameEllipsized(item), search.value)
-  })
-})
-
-// ------ Methods ------
-
-const onSelectCell = (item) => {
-  if (props.isMultiSelect) {
-    const targetTags = props.autoSelectParents ? Tag.getTagWithParents(item) : [item]
-
-    let newValue = modelValue.value ?? []
-    const isSelected = newValue.some((value) => {
-      const result = item.id === value.id
-      return result
-    })
-    if (isSelected) {
-      newValue = newValue.filter((value) => item.id !== value.id)
-      // newValue = newValue.filter(value => !isEqual(item, value))
-    } else {
-      newValue = uniqBy([...newValue, ...targetTags], 'id')
-    }
-    modelValue.value = newValue
-  } else {
-    modelValue.value = item
-    showDropdown.value = false
-  }
-}
-
-const getDisplayValue = (value) => {
-  return Tag.getDisplayNameEllipsized(value)
-}
-
-const onRefresh = async () => {
-  isLoading.value = true
-  await tagStore.fetchTags()
-  isLoading.value = false
-}
+const getDisplayValue = (value) => Tag.getDisplayNameEllipsized(value)
+const getIcon = (value) => Tag.getIcon(value) ?? TablerIconConstants.tag
+const getIndentStyle = (item) => (get(item, 'level', 1) > 1 ? { paddingLeft: `${8 + (get(item, 'level') - 1) * 20}px` } : null)
 
 const isItemSelected = (option) => {
   if (!modelValue.value) {
     return false
   }
-  if (props.isMultiSelect) {
-    return modelValue.value.some((item) => item.id == option.id)
+  return props.isMultiSelect ? modelValue.value.some((item) => item.id == option.id) : isEqual(modelValue.value, option)
+}
+
+const onSelectCell = (item) => {
+  if (!props.isMultiSelect) {
+    modelValue.value = isItemSelected(item) ? null : item
+    showDropdown.value = false
+    return
   }
-  return isEqual(modelValue.value, option)
-}
-
-const getOptionClass = (option) => {
-  return {
-    active: isItemSelected(option),
+  const newValue = modelValue.value ?? []
+  if (isItemSelected(item)) {
+    modelValue.value = newValue.filter((value) => item.id !== value.id)
+  } else {
+    const targetTags = props.autoSelectParents ? Tag.getTagWithParents(item) : [item]
+    modelValue.value = uniqBy([...newValue, ...targetTags], 'id')
   }
 }
 
-const onToggleDisplayMode = () => {
-  showTagSelectAsGrid.value = !showTagSelectAsGrid.value
+const isLoading = ref(false)
+const onRefresh = async () => {
+  isLoading.value = true
+  await tagStore.fetchTags()
+  isLoading.value = false
 }
-
-const showGridIcon = computed(() => {
-  return showTagSelectAsGrid.value ? 'IconList' : 'IconGridDots'
-})
 </script>
-

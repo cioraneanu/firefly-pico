@@ -1,49 +1,60 @@
 <template>
-  <div :class="formClass">
+  <div class="mx-page">
     <app-top-toolbar>
       <template #right>
         <app-button-list-add @click="onAdd" />
       </template>
     </app-top-toolbar>
 
-    <empty-list v-if="isEmpty" />
+    <main class="mx-body">
+      <app-list v-model:refreshing="isRefreshing" :loading="isLoading" :finished="isFinished" @load="onLoadMore" @refresh="onRefresh">
+        <template v-if="list.length > 0">
+          <app-list-search v-model="search" :placeholder="$t('account_page.search')" />
 
-    <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
-      <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
-        <app-list-search v-if="isSearchVisible && list.length > 0" v-model="search">
-          <template #right>
-            <van-popover v-model:show="showFilterPopover" placement="bottom-end" overlay :overlay-style="{ background: 'transparent' }">
-              <div class="flex flex-col gap-1 p-2.5">
-                <div class="text-12 font-semibold text-muted">{{ $t('account_page.account_type') }}</div>
-                <app-tabs v-model="filterAccountType" :items="accountTypeTabs" />
-              </div>
+          <div class="mx-tabs" role="tablist" :aria-label="$t('account_page.account_type')">
+            <button
+              v-for="tab in accountTypeTabs"
+              :key="tab.value"
+              type="button"
+              role="tab"
+              :class="{ on: tab.value === filterAccountType }"
+              :aria-selected="tab.value === filterAccountType"
+              @click="filterAccountType = tab.value"
+            >
+              <span>{{ tab.label }}</span>
+              <span class="n">{{ tab.count }}</span>
+            </button>
+          </div>
+        </template>
 
-              <template #reference>
-                <button type="button" class="app-button-icon">
-                  <app-icon :icon="TablerIconConstants.settings" :size="18" />
-                </button>
-              </template>
-            </van-popover>
+        <div v-if="filteredList.length > 0" class="mx-list">
+          <account-list-item v-for="item in filteredList" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
+        </div>
+
+        <empty-list v-else-if="list.length > 0" filtered>
+          <template #action>
+            <button type="button" class="mx-btn out" @click="onClearFilters">{{ $t('general.clear_filters') }}</button>
           </template>
-        </app-list-search>
+        </empty-list>
 
-        <account-list-item v-for="item in filteredList" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
-      </van-list>
-    </van-pull-refresh>
+        <empty-list v-else-if="isEmpty" :icon="TablerIconConstants.account" :hint="$t('account_page.empty_hint')">
+          <template #action>
+            <button type="button" class="mx-btn pri" @click="onAdd">{{ $t('account_page.title_add') }}</button>
+          </template>
+        </empty-list>
+      </app-list>
+    </main>
   </div>
 </template>
 
 <script setup>
+import { get } from 'lodash-es'
 import RouteConstants from '~/core/constants/RouteConstants'
+import TablerIconConstants from '~/core/constants/TablerIconConstants'
 import { useAccountStore } from '~/core/stores/accountStore'
 import { useList } from '~/core/composables/useList'
 import Account from '~/core/models/Account'
 import { useToolbar } from '~/mobile/composables/useToolbar'
-import { ref } from 'vue'
-import { get } from 'lodash-es'
-
-import TablerIconConstants from '~/core/constants/TablerIconConstants'
-import AppListSearch from '~/mobile/components/ui-kit/theme/app-list-search.vue'
 import { animateSwipeList } from '~/core/utils/AnimationUtils.js'
 
 const { t } = useI18n()
@@ -56,7 +67,6 @@ const onEvent = (event, payload) => {
 }
 
 const { isLoading, isFinished, isRefreshing, list, isEmpty, onAdd, onEdit, onDelete } = useList({
-  title: 'Accounts list',
   routeList: RouteConstants.ROUTE_ACCOUNT_LIST,
   routeForm: RouteConstants.ROUTE_ACCOUNT_ID,
   model: new Account(),
@@ -64,26 +74,25 @@ const { isLoading, isFinished, isRefreshing, list, isEmpty, onAdd, onEdit, onDel
 })
 
 const search = ref('')
-const isSearchVisible = ref(true)
 
 const accountTypesSorted = [Account.types.asset, Account.types.expense, Account.types.liability, Account.types.revenue, Account.types.cash]
+const getTypeCode = (account) => get(Account.getType(account), 'fireflyCode')
 
-const showFilterPopover = ref(false)
 const filterAccountType = ref('all')
 const accountTypeTabs = computed(() => [
-  { label: t('transaction.type.all'), value: 'all' },
-  ...accountTypesSorted.map((type) => ({ label: t(type.t), value: type.fireflyCode })),
+  { label: t('transaction.type.all'), value: 'all', count: list.value.length },
+  ...accountTypesSorted.map((type) => ({ label: t(type.t), value: type.fireflyCode, count: list.value.filter((item) => getTypeCode(item) === type.fireflyCode).length })),
 ])
 
 const getTypeSortIndex = (account) => {
-  const index = accountTypesSorted.findIndex((type) => type.fireflyCode === get(Account.getType(account), 'fireflyCode'))
+  const index = accountTypesSorted.findIndex((type) => type.fireflyCode === getTypeCode(account))
   return index === -1 ? accountTypesSorted.length : index
 }
 
 const filteredList = computed(() => {
   let result = list.value
   if (filterAccountType.value !== 'all') {
-    result = result.filter((item) => get(Account.getType(item), 'fireflyCode') === filterAccountType.value)
+    result = result.filter((item) => getTypeCode(item) === filterAccountType.value)
   }
   if (search.value.length > 0) {
     result = result.filter((item) => LanguageUtils.includesSearch(Account.getDisplayName(item), search.value))
@@ -91,41 +100,30 @@ const filteredList = computed(() => {
   return [...result].sort((a, b) => getTypeSortIndex(a) - getTypeSortIndex(b))
 })
 
-const formClass = computed(() => ({
-  'app-form': true,
-  empty: isEmpty.value,
-}))
+const onClearFilters = () => {
+  search.value = ''
+  filterAccountType.value = 'all'
+}
 
 const onRefresh = async () => {
   isLoading.value = true
   isRefreshing.value = true
-
-  const accountStore = useAccountStore()
   await accountStore.fetchAccounts()
-
   isLoading.value = false
   isRefreshing.value = false
   onLoadMore()
 }
 
+// The whole list comes from the store, so one load finishes it
 const onLoadMore = () => {
-  const accountStore = useAccountStore()
   list.value = accountStore.accountList
-  // The whole list comes from the store => stop van-list from triggering more loads on scroll
   isFinished.value = true
 }
 
-// const onClickBack = async () => {
-//   await navigateTo(RouteConstants.ROUTE_EXTRAS)
-// }
-
-const toolbar = useToolbar()
-toolbar.init({
+useToolbar().init({
   title: t('accounts'),
-  titleIcon: TablerIconConstants.account,
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })
 
 animateSwipeList(list)
-
 </script>

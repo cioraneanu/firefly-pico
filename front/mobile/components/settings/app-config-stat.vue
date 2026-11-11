@@ -1,18 +1,15 @@
 <template>
-  <van-grid-item>
-    <div class="flex items-center justify-center flex-col" :class="{ 'opacity-35 grayscale': props.muted }">
-      <app-icon :icon="props.icon" :size="26" :stroke="1.4" />
-
-      <div class="font-normal text-12 text-center text-muted">{{ props.name }}</div>
-      <div class="font-extrabold text-12 text-center">{{ props.value }}</div>
-    </div>
-  </van-grid-item>
+  <div :class="{ 'opacity-40': props.muted }">
+    <span class="k"><app-icon :icon="props.icon" :size="14" :stroke="2" />{{ props.name }}</span>
+    <b>{{ props.value }}</b>
+  </div>
 </template>
 
 <script setup>
+// One key/value row of a .mx-kv list (Setup › Loaded data stats).
 const props = defineProps({
   icon: {
-    type: [String, Object],
+    type: [String, Object, Function],
     default: '',
   },
   name: {
@@ -29,4 +26,3 @@ const props = defineProps({
   },
 })
 </script>
-

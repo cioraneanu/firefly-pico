@@ -1,75 +1,60 @@
 <template>
-  <van-cell-group inset>
-    <div class="van-cell-group-title">{{ $t('dashboard.transactions_summary.title') }}:</div>
+  <app-card :title="$t('dashboard.transactions_summary.title')" :form="false">
+    <div class="mx-tiles c3">
+      <component :is="tile.onClick ? 'button' : 'div'" v-for="tile in summaryTiles" :key="tile.title" :type="tile.onClick ? 'button' : null" class="mx-tile" @click="tile.onClick?.()">
+        <span class="h"
+          ><span>{{ tile.title }}</span></span
+        >
+        <b class="mx-money" :class="tile.class">{{ tile.value }}</b>
+      </component>
+    </div>
+  </app-card>
 
-    <van-grid :column-num="3">
-      <dashboard-summary-card
-        :icon="TablerIconConstants.dashboardTotalIncomes"
-        :title="$t('transaction.type.income')"
-        :subtitle="totalIncomeFormatted"
-        subtitle-class="text-[#28a745]"
-        @click="onGoToTransactionsByType(Transaction.types.income)"
-      />
-
-      <dashboard-summary-card
-        :icon="TablerIconConstants.dashboardTotalExpenses"
-        :title="$t('transaction.type.expense')"
-        :subtitle="totalExpenseFormatted"
-        subtitle-class="text-[#dc3545]"
-        @click="onGoToTransactionsByType(Transaction.types.expense)"
-      />
-
-      <dashboard-summary-card
-        :icon="TablerIconConstants.dashboardTotalTransfers"
-        :title="$t('transaction.type.transfer')"
-        :subtitle="totalTransferFormatted"
-        subtitle-class="text-[#007bff]"
-        @click="onGoToTransactionsByType(Transaction.types.transfer)"
-      />
-
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardTotalSurplus" :title="$t('dashboard.transactions_summary.surplus')" :subtitle="totalSurplusFormatted" subtitle-class="" />
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" :title="$t('toolbar.transactions')" :subtitle="dashboardStore.totalTransactionsCount" subtitle-class="" />
-      <dashboard-summary-card :icon="TablerIconConstants.account" :title="$t('dashboard.transactions_summary.days_remaining')" :subtitle="remainingDays" />
-    </van-grid>
-
-    <div class="van-cell-group-title">{{ $t('dashboard.transactions_summary.savings_summary') }}:</div>
-    <van-grid :column-num="3" @click="onNavigateToTransactionSavings">
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardTransactionsCount" :title="$t('toolbar.transactions')" :subtitle="dashboardStore.transactionsListSavingsCount" subtitle-class="" />
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardCoin" :title="$t('amount')" :subtitle="transactionsListSavingsAmount" :subtitle-class="savingsAmountClass" />
-      <dashboard-summary-card :icon="TablerIconConstants.dashboardSavingsPercent" :title="$t('percentage')" :subtitle="savingsPercentFormatted" subtitle-class="text-[#007bff]" />
-    </van-grid>
-  </van-cell-group>
+  <app-card :title="$t('dashboard.transactions_summary.savings_summary')" :form="false">
+    <div class="mx-tiles c3">
+      <button v-for="tile in savingsTiles" :key="tile.title" type="button" class="mx-tile" @click="onNavigateToTransactionSavings">
+        <span class="h"
+          ><span>{{ tile.title }}</span></span
+        >
+        <b class="mx-money" :class="tile.class">{{ tile.value }}</b>
+      </button>
+    </div>
+  </app-card>
 </template>
 <script setup>
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import { addMonths } from 'date-fns'
 import Transaction from '~/core/models/Transaction.js'
 
 import { useDashboardStore } from '~/core/stores/dashboardStore'
 
 const dashboardStore = useDashboardStore()
+const { t } = useI18n()
 
-const { rangeTitle, remainingDays, totalExpenseFormatted, totalIncomeFormatted, totalTransferFormatted, totalSurplusFormatted, transactionsListSavingsAmount, savingsPercentFormatted } =
-  useDashboardSummary()
+const { remainingDays, totalExpenseFormatted, totalIncomeFormatted, totalTransferFormatted, totalSurplusFormatted, transactionsListSavingsAmount, savingsPercentFormatted } = useDashboardSummary()
 
 const links = useDashboardLinks()
 const onGoToTransactionsByType = (transactionType) => navigateTo(links.byType(transactionType))
 
-const onNextMonth = () => {
-  dashboardStore.month = addMonths(dashboardStore.month, 1)
-}
-const onPreviousMonth = () => {
-  dashboardStore.month = addMonths(dashboardStore.month, -1)
-}
-
 watch(
   () => dashboardStore.month,
-  (newValue) => {
+  () => {
     dashboardStore.fetchTransactionsForInterval()
   },
 )
 
-const savingsAmountClass = computed(() => (dashboardStore.transactionsListSavingsAmount > 0 ? 'text-[#28a745]' : 'text-[#dc3545]'))
+const summaryTiles = computed(() => [
+  { title: t('transaction.type.income'), value: totalIncomeFormatted.value, onClick: () => onGoToTransactionsByType(Transaction.types.income) },
+  { title: t('transaction.type.expense'), value: totalExpenseFormatted.value, onClick: () => onGoToTransactionsByType(Transaction.types.expense) },
+  { title: t('transaction.type.transfer'), value: totalTransferFormatted.value, onClick: () => onGoToTransactionsByType(Transaction.types.transfer) },
+  { title: t('dashboard.transactions_summary.surplus'), value: totalSurplusFormatted.value, class: { e: dashboardStore.totalSurplusThisMonth < 0 } },
+  { title: t('toolbar.transactions'), value: dashboardStore.totalTransactionsCount },
+  { title: t('dashboard.transactions_summary.days_remaining'), value: remainingDays.value },
+])
+
+const savingsTiles = computed(() => [
+  { title: t('toolbar.transactions'), value: dashboardStore.transactionsListSavingsCount },
+  { title: t('amount'), value: transactionsListSavingsAmount.value, class: { e: dashboardStore.transactionsListSavingsAmount < 0 } },
+  { title: t('percentage'), value: savingsPercentFormatted.value },
+])
 
 const onNavigateToTransactionSavings = () => dashboardStore.transactionsListSavings.length > 0 && navigateTo(links.savings())
 </script>

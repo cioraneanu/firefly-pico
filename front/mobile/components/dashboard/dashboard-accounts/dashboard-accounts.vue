@@ -1,55 +1,52 @@
 <template>
-  <van-cell-group inset>
-    <div class="flex items-center">
-      <div class="van-cell-group-title">{{ $t('dashboard.account_total') }}:</div>
-    </div>
-
-    <van-grid :column-num="2">
-      <van-grid-item v-for="account in dashboardStore.dashboardAccountsVisible" :key="account?.id" class="cursor-pointer" @click="onShowActionSheet(account)">
-        <template #icon>
-          <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="24" />
-        </template>
-
-        <template #text>
-          <div class="flex flex-col items-center">
-            <div class="font-normal text-12 text-center text-muted">{{ Account.getDisplayName(account) }}</div>
-            <div class="font-bold text-12 text-center">{{ getAccountAmount(account) }}</div>
-            <template v-if="Account.hasVirtualBalance(account)">
-              <div class="font-normal text-11 text-center text-muted">{{ $t('account_page.balance') }}</div>
-              <div class="tag-gray app-card-info mt-1 text-11 text-center">{{ $t('account_page.available') }}: {{ getAccountAvailableAmount(account) }}</div>
-            </template>
-            <div v-if="!Account.getIsIncludedInNetWorth(account)" class="mt-1 font-normal text-11 text-center badge-excluded-net-worth">Not in net worth</div>
-          </div>
-        </template>
-      </van-grid-item>
-    </van-grid>
-
-    <div class="flex items-center justify-center text-13 m-2.5 flex-wrap">
-      <div class="flex items-center justify-center text-13">
-        <icon-cash class="text-muted" :size="24" :stroke="1.5" />
-        <span class="font-normal text-muted">{{ $t('dashboard.accounts.by_currency') }}: </span>
+  <app-card :title="$t('dashboard.account_total')" :form="false">
+    <template #actions>
+      <div class="mx-total">
+        <b class="mx-money">~{{ accountTotal }} {{ dashboardStore.dashboardCurrencyCode }}</b>
       </div>
+    </template>
 
-      <span v-for="(totalValue, totalCurrency) in dashboardStore.dashboardAccountsTotalByCurrency" class="font-bold ms-1 mx-1 app-select-option-tag">
-        {{ formatNumberForDashboard(totalValue) }} {{ totalCurrency }}
-      </span>
-    </div>
-
-    <div v-if="hasAccountGroups" class="flex items-center justify-center text-13 mb-4 gap-1 flex-wrap">
-      <div class="flex items-center justify-center text-13">
-        <span class="font-normal text-muted">{{ $t('dashboard.accounts.by_group') }}: </span>
+    <template v-for="group in accountGroups" :key="group.key">
+      <div v-if="group.title" class="mx-sub">{{ group.title }}</div>
+      <div class="mx-tiles">
+        <button v-for="account in group.list" :key="account.id" type="button" class="mx-tile" :class="{ off: group.isExcluded }" @click="onShowActions(account)">
+          <span class="h">
+            <span>{{ Account.getDisplayName(account) }}</span>
+            <app-icon :icon="Account.getIcon(account) ?? TablerIconConstants.account" :size="14" :stroke="2" />
+          </span>
+          <b class="mx-money" :class="{ e: Account.getBalance(account) < 0 }">{{ getAccountAmount(account) }}</b>
+          <small v-if="Account.hasVirtualBalance(account)">{{ $t('account_page.available') }}: {{ getAccountAvailableAmount(account) }}</small>
+        </button>
       </div>
+    </template>
 
-      <span v-for="(totalValue, groupName) in dashboardStore.dashboardAccountsTotalByGroup" class="font-bold ms-1 mx-1 app-select-option-tag">
-        {{ groupName }} | {{ formatNumberForDashboard(totalValue) }} {{ Currency.getCode(dashboardStore.dashboardCurrency) }}
-      </span>
+    <div class="mx-sub">{{ $t('dashboard.accounts.by_currency') }}</div>
+    <div class="mx-kv">
+      <div v-for="(totalValue, totalCurrency) in dashboardStore.dashboardAccountsTotalByCurrency" :key="totalCurrency">
+        <span class="k"><app-icon :icon="IconCoins" :size="14" :stroke="2" />{{ totalCurrency }}</span>
+        <b class="mx-money">{{ formatNumberForDashboard(totalValue) }} {{ totalCurrency }}</b>
+      </div>
     </div>
 
-    <div v-if="hasMultipleCurrencies" class="flex items-center justify-center text-13 mb-4 gap-1">
-      <span class="font-normal text-muted">{{ $t('dashboard.accounts.total') }}: </span>
-      <span class="font-bold">~{{ accountTotal }} {{ Currency.getCode(dashboardStore.dashboardCurrency) }}</span>
-    </div>
-  </van-cell-group>
+    <template v-if="hasAccountGroups">
+      <div class="mx-sub">{{ $t('dashboard.accounts.by_group') }}</div>
+      <div class="mx-kv">
+        <div v-for="(totalValue, groupName) in dashboardStore.dashboardAccountsTotalByGroup" :key="groupName">
+          <span class="k"><app-icon :icon="IconFolder" :size="14" :stroke="2" />{{ groupName }}</span>
+          <b class="mx-money">{{ formatNumberForDashboard(totalValue) }} {{ dashboardStore.dashboardCurrencyCode }}</b>
+        </div>
+      </div>
+    </template>
+  </app-card>
+
+  <dashboard-item-sheet
+    v-model:show="showActions"
+    :title="Account.getDisplayName(selectedAccount)"
+    :description="selectedAccount ? getAccountAmount(selectedAccount) : null"
+    :edit-label="$t('account_page.title_edit')"
+    @edit="onGoToAccount(selectedAccount)"
+    @transactions="onGoToTransactions(selectedAccount)"
+  />
 </template>
 
 <script setup>
@@ -57,22 +54,26 @@ import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 import Account from '~/core/models/Account.js'
 import RouteConstants from '~/core/constants/RouteConstants.js'
 import TransactionFilterUtils from '~/core/utils/TransactionFilterUtils.js'
-import { IconCash, IconLibraryPlus, IconLibraryMinus } from '@tabler/icons-vue'
+import { IconCoins, IconFolder } from '@tabler/icons-vue'
 import { formatNumberForDashboard } from '~/core/utils/NumberUtils.js'
-import { useActionSheet } from '~/mobile/composables/useActionSheet.js'
-import Currency from '~/core/models/Currency.js'
 import { useDashboardStore } from '~/core/stores/dashboardStore.js'
 
-const profileStore = useProfileStore()
 const dashboardStore = useDashboardStore()
-
-const showHiddenAccounts = ref(false)
-const toggleHiddenAccounts = () => {
-  showHiddenAccounts.value = !showHiddenAccounts.value
-}
+const { t } = useI18n()
 
 const accountTotal = computed(() => {
   return formatNumberForDashboard(dashboardStore.dashboardAccountsEstimatedTotal)
+})
+
+// Accounts outside the net worth get their own faded group (design: "Not in net worth")
+const accountGroups = computed(() => {
+  const accounts = dashboardStore.dashboardAccountsVisible
+  const included = accounts.filter((account) => Account.getIsIncludedInNetWorth(account))
+  const excluded = accounts.filter((account) => !Account.getIsIncludedInNetWorth(account))
+  return [
+    { key: 'included', list: included },
+    { key: 'excluded', list: excluded, title: t('desktop.not_in_net_worth'), isExcluded: true },
+  ].filter((group) => group.list.length > 0)
 })
 
 const getAccountAmount = (account) => {
@@ -83,15 +84,13 @@ const getAccountAvailableAmount = (account) => {
   return `${formatNumberForDashboard(Account.getAvailableBalance(account))} ${Account.getCurrencySymbol(account)}`
 }
 
-const hasMultipleCurrencies = computed(() => dashboardStore.dashboardAccountsCurrencyList.length > 1)
 const hasAccountGroups = computed(() => dashboardStore.dashboardAccountsGroupsList.length > 0)
 
-const actionSheet = useActionSheet()
-const onShowActionSheet = (account) => {
-  actionSheet.show([
-    { name: 'Edit account', callback: () => onGoToAccount(account) },
-    { name: 'Show transactions', callback: () => onGoToTransactions(account) },
-  ])
+const showActions = ref(false)
+const selectedAccount = ref(null)
+const onShowActions = (account) => {
+  selectedAccount.value = account
+  showActions.value = true
 }
 
 const onGoToTransactions = async (account) => {
@@ -102,7 +101,7 @@ const onGoToTransactions = async (account) => {
 }
 
 const onGoToAccount = async (account) => {
-  if (account?.id) {
+  if (account) {
     await navigateTo(`${RouteConstants.ROUTE_ACCOUNT_ID}/${account.id}`)
   }
 }

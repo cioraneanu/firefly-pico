@@ -1444,7 +1444,7 @@ a.mx-tile, a.mx-bar, .mx-wk a.c { color: inherit; }
 .mx-sh__f .mx-btn:disabled { opacity: .5; }
 
 /* period picker link in the range bar: one line, never wraps */
-.mx-range .pick { display: inline-flex; align-items: center; gap: 5px; max-width: 100%; min-width: 0; color: var(--foreground); text-decoration: none; font-size: 13px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; white-space: nowrap; }
+.mx-range .pick { display: inline-flex; align-items: center; gap: 4px; max-width: 100%; min-width: 0; color: var(--foreground); text-decoration: none; font-size: 12.5px; font-weight: 600; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; white-space: nowrap; }
 .mx-range .pick svg { flex: none; width: 15px; height: 15px; color: var(--muted-foreground); }
 .mx-range .pick span { overflow: hidden; text-overflow: ellipsis; }
 
@@ -1800,7 +1800,8 @@ button.mx-bar { width: 100%; text-align: left; }
    Pages render <app-page> (top bar + .mx-body scroller); sheets, alerts and toasts
    teleport into #mx-portal, which sits inside .mx so they keep the tokens.
    ===================================================================================== */
-html, body { margin: 0; height: 100%; overscroll-behavior: none; }
+html, body, #__nuxt { margin: 0; height: 100%; }
+body:has(.mx-app) { overscroll-behavior: none; touch-action: pan-x pan-y; scrollbar-width: none; }
 body:has(> #__nuxt .mx-app) { background: var(--mx-page-bg, #fafafa); }
 .mx.mx-app { width: 100%; height: 100dvh; overflow: hidden; }
 .mx-app .mx-layout, .mx-app .mx-page { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; position: relative; }

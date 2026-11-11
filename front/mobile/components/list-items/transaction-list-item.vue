@@ -1,72 +1,68 @@
 <template>
-  <van-swipe-cell ref="swipeCell" v-bind="clickWithoutSwipe">
-    <van-cell :class="cellClass">
-      <template #title>
-        <div class="flex transaction-card select-none lg:items-stretch">
-          <div class="second_column flex-1 min-w-0">
-            <div v-if="isSplitPayment && props.isDetailedMode" class="mt-1 flex">
-              <transaction-split-badge />
-            </div>
+  <app-list-item row-class="mx-tx" @on-edit="onEdit" @on-delete="onDelete">
+    <div class="hd">
+      <transaction-list-item-hero-icon v-if="props.isDetailedMode" :value="props.value" />
+      <transaction-type-dot v-else :transaction-type="firstTransaction?.type" class="mt-1.5" />
 
-            <div class="flex items-center gap-1">
-              <div v-if="description" class="list-item-title line-clamp-2 wrap-anywhere">{{ description }}</div>
-              <app-icon v-if="hasAttachments" :icon="TablerIconConstants.attachment" :size="20" color="#1E88E5" />
-            </div>
+      <div class="m">
+        <span class="flex items-start gap-1">
+          <span class="mx-row__t wrap min-w-0 wrap-anywhere">{{ description }}</span>
+          <app-icon v-if="hasAttachments" :icon="TablerIconConstants.attachment" :size="16" :stroke="2" class="mt-0.5 flex-none text-[var(--tr)]" />
+        </span>
+        <span v-if="isFieldVisible(transactionListField.accounts) && displayedAccounts.length > 0" class="flow">
+          <app-icon :icon="Account.getIcon(displayedAccounts[0]) ?? TablerIconConstants.account" :size="13" :stroke="2" />
+          <span>{{ accountFlow }}</span>
+        </span>
+      </div>
 
-            <div class="account-badges-row" :style="getStyleForField(transactionListField.accounts)">
-              <template v-for="(displayedAccount, index) in displayedAccounts" :key="displayedAccount.id">
-                <app-icon v-if="index > 0" icon="IconArrowNarrowRight" :size="14" class="account-flow-arrow" />
-                <account-badge :value="displayedAccount" />
-              </template>
-            </div>
+      <span class="r">
+        <span class="mx-amt mx-money" :class="amountClass">{{ transactionAmount }} {{ transactionCurrency }}</span>
+        <span class="mx-date">{{ dateFormatted }}</span>
+        <span class="mx-date">{{ timeAgo }}</span>
+      </span>
+    </div>
 
-            <div v-if="profileStore.categoriesEnabled && categories && props.isDetailedMode" class="tags-container" :style="getStyleForField(transactionListField.category)">
-              <category-badge v-for="category in categories" :key="category.id" :value="category" />
-            </div>
+    <div v-if="props.isDetailedMode && hasChips" class="tray">
+      <div class="mx-chips">
+        <transaction-split-badge v-if="isSplitPayment" />
 
-            <div v-if="notes && props.isDetailedMode" class="list-item-subtitle" :style="getStyleForField(transactionListField.notes)">
-              <app-icon :icon="TablerIconConstants.fieldText1" :size="20" />
-              <span class="transaction-notes-markdown notes-markdown line-clamp-2 wrap-anywhere" v-html="notes" />
-            </div>
+        <template v-if="isCategoryVisible">
+          <span v-for="category in categories" :key="category.id" class="mx-chip" :style="getOrder(transactionListField.category)">
+            <app-icon :icon="Category.getIcon(category) ?? TablerIconConstants.category" :size="12" :stroke="2" />
+            <span>{{ Category.getDisplayName(category) }}</span>
+          </span>
+        </template>
 
-            <div v-if="profileStore.tagsEnabled && tags && props.isDetailedMode" class="tags-container" :style="getStyleForField(transactionListField.tags)">
-              <tag-badge v-for="tag in visibleTags" :key="tag.id" :value="tag" />
-            </div>
+        <template v-if="isTagsVisible">
+          <span v-for="tag in visibleTags" :key="tag.id" class="mx-chip" :class="{ todo: get(tag, 'attributes.is_todo') }" :style="getOrder(transactionListField.tags)">
+            <app-icon :icon="Tag.getIcon(tag) ?? TablerIconConstants.tag" :size="12" :stroke="2" />
+            <span>{{ Tag.getDisplayNameEllipsized(tag, 20) }}</span>
+          </span>
+          <span v-if="tags.length > visibleTags.length" class="mx-chip more" :style="getOrder(transactionListField.tags)">+{{ tags.length - visibleTags.length }}</span>
+        </template>
 
-            <div v-if="profileStore.budgetsEnabled && budget && props.isDetailedMode" class="list-item-subtitle" :style="getStyleForField(transactionListField.budget)">
-              <app-icon :icon="TablerIconConstants.budget" :size="20" />
-              {{ Budget.getDisplayName(budget) }}
-            </div>
-          </div>
+        <span v-if="isBudgetVisible" class="mx-chip" :style="getOrder(transactionListField.budget)">
+          <app-icon :icon="TablerIconConstants.budget" :size="12" :stroke="2" />
+          <span>{{ Budget.getDisplayName(budget) }}</span>
+        </span>
+      </div>
+    </div>
 
-          <div class="third_column">
-            <div class="font-bold text-14" :style="amountStyle">{{ transactionAmount }} {{ transactionCurrency }}</div>
-
-            <transaction-list-item-hero-icon v-if="props.isDetailedMode" :value="props.value" />
-
-            <div class="flex flex-col items-end text-12 gap-1 leading-[normal] mt-1">
-              <div>{{ dateFormatted }}</div>
-              <div class="text-muted">{{ timeAgo }}</div>
-            </div>
-
-            <div class="flex items-center text-muted text-12 gap-1" />
-          </div>
-        </div>
-      </template>
-    </van-cell>
-
-    <template #right>
-      <van-button class="delete-button" square type="danger" text="Delete" @click="onDelete" />
-    </template>
-  </van-swipe-cell>
+    <span v-if="props.isDetailedMode && notes && isFieldVisible(transactionListField.notes)" class="nt">
+      <app-icon :icon="IconBlockquote" :size="13" :stroke="2" />
+      <span class="mx-tx-notes line-clamp-2 wrap-anywhere" v-html="notes" />
+    </span>
+  </app-list-item>
 </template>
 
 <script setup>
+import { get } from 'lodash-es'
+import { IconBlockquote } from '@tabler/icons-vue'
+import Account from '~/core/models/Account.js'
 import Budget from '~/core/models/Budget.js'
-import { useClickWithoutSwipe } from '~/mobile/composables/useClickWithoutSwipe'
+import Category from '~/core/models/Category.js'
+import Tag from '~/core/models/Tag.js'
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
-import TransactionListItemHeroIcon from '~/mobile/components/list-items/transaction-list-item-hero-icon.vue'
-import TransactionSplitBadge from '~/mobile/components/transaction/transaction-split-badge.vue'
 import { transactionListField } from '~/core/constants/TransactionConstants.js'
 import { useTransactionListItem } from '~/core/composables/useTransactionListItem.js'
 
@@ -81,6 +77,10 @@ const emit = defineEmits(['onEdit', 'onDelete'])
 
 const {
   profileStore,
+  firstTransaction,
+  isTypeExpense,
+  isTypeIncome,
+  isTypeTransfer,
   isSplitPayment,
   displayedAccounts,
   description,
@@ -89,24 +89,26 @@ const {
   notes,
   tags,
   budget,
-  cellClass,
   visibleTags,
   transactionAmount,
   transactionCurrency,
   dateFormatted,
   timeAgo,
   getStyleForField,
-  amountStyle,
 } = useTransactionListItem(props)
 
-const onEdit = async () => {
-  emit('onEdit', props.value)
-}
+// The list settings (profileStore.transactionListFieldsConfig) decide which fields show and the order of the chips
+const isFieldVisible = (field) => getStyleForField(field).display !== 'none'
+const getOrder = (field) => ({ order: getStyleForField(field).order })
 
-const onDelete = async () => {
-  emit('onDelete', props.value)
-}
+const isCategoryVisible = computed(() => profileStore.categoriesEnabled && categories.value.length > 0 && isFieldVisible(transactionListField.category))
+const isTagsVisible = computed(() => profileStore.tagsEnabled && tags.value.length > 0 && isFieldVisible(transactionListField.tags))
+const isBudgetVisible = computed(() => profileStore.budgetsEnabled && !!budget.value && isFieldVisible(transactionListField.budget))
+const hasChips = computed(() => isSplitPayment.value || isCategoryVisible.value || isTagsVisible.value || isBudgetVisible.value)
 
-const swipeCell = ref(null)
-const clickWithoutSwipe = useClickWithoutSwipe({ swipeCell: swipeCell, onClick: onEdit })
+const accountFlow = computed(() => displayedAccounts.value.map((account) => Account.getDisplayName(account)).join(' → '))
+const amountClass = computed(() => ({ e: isTypeExpense.value, i: isTypeIncome.value, t: isTypeTransfer.value }))
+
+const onEdit = () => emit('onEdit', props.value)
+const onDelete = () => emit('onDelete', props.value)
 </script>

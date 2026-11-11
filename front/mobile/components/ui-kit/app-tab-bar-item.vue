@@ -1,15 +1,14 @@
 <template>
-  <van-tabbar-item replace :to="route" :name="route">
-    <template #icon>
-      <div class="flex-col flex items-center justify-center">
-        <img :src="icon" style="width: 25px; height: 25px" >
-        <div class="van-tabbar-item">{{ name }}</div>
-      </div>
-    </template>
-  </van-tabbar-item>
+  <a :class="{ on: isSelected }" :href="route" :aria-current="isSelected ? 'page' : null" @click.prevent="navigateTo(route, { replace: true })">
+    <span class="ic"><img :src="icon" alt="" style="width: 22px; height: 22px" /></span>
+    <span>{{ name }}</span>
+  </a>
 </template>
 
 <script setup>
+// Bottom nav item with an image icon (design: .mx-nav a). Place it inside a .mx-nav.
 const props = defineProps(['route', 'name', 'icon'])
-</script>
 
+const appStore = useAppStore()
+const isSelected = computed(() => appStore.activePage === props.route)
+</script>

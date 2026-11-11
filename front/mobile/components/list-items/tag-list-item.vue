@@ -1,46 +1,36 @@
 <template>
-  <van-swipe-cell ref="swipeCell" v-bind="clickWithoutSwipe" :disabled="!props.isSwipeable">
-    <van-cell>
-      <template #title>
-        <div class="list-item-container">
-          <div class="first_column flex items-center justify-center">
-            <div v-for="n in level - 1" style="width: 30px" />
-            <!--            <app-icon v-if="icon" :icon="icon" :size="TablerIconConstants.defaultSize" :stroke="TablerIconConstants.defaultStroke"/>-->
-            <app-icon :icon="icon ?? TablerIconConstants.tag" :size="TablerIconConstants.defaultSize" />
-          </div>
-
-          <div class="separator"/>
-
-          <div class="second_column flex flex-col justify-center">
-            <div class="flex items-center gap-2 overflow-visible">
-              <div v-if="displayName" class="title app-tag app-select-option-text">{{ displayName }}</div>
-              <div v-if="isTodo" class="tag-todo">Todo</div>
-            </div>
-            <div v-if="date" class="text-muted text-11">{{ $t('tag_page.end_date') }}: {{ date }}</div>
-            <div v-if="totalFormatted" class="text-muted text-11">{{ $t('tag_page.total') }}: {{ totalFormatted }}</div>
-            <div v-if="description" class="text-muted text-11">{{ description }}</div>
-            <div class="app-icon-item"/>
-          </div>
-
-          <div class="flex-1"/>
-        </div>
-      </template>
-    </van-cell>
-
-    <template #right>
-      <van-button class="delete-button" square type="danger" text="Delete" @mouseup.stop="onDelete" />
-    </template>
-  </van-swipe-cell>
+  <component :is="isSwipeable ? AppListItem : 'div'" :class="{ 'mx-row mid min-w-0 flex-1': !isSwipeable }" @on-edit="emit('onEdit', value)" @on-delete="emit('onDelete', value)">
+    <span v-if="level > 1" class="flex-none" :style="{ width: `${(level - 1) * 20}px` }" />
+    <span class="mx-lead sm"><app-icon :icon="icon ?? TablerIconConstants.tag" :size="16" :stroke="2" /></span>
+    <span class="mx-row__m">
+      <span class="mx-row__t">{{ displayName }}</span>
+      <span v-if="description" class="mx-row__s">{{ description }}</span>
+      <span v-if="isTodo || date || totalFormatted" class="mx-chips">
+        <span v-if="isTodo" class="mx-chip todo"
+          ><app-icon :icon="IconListCheck" :size="12" :stroke="2" /><span>{{ $t('todo') }}</span></span
+        >
+        <span v-if="date" class="mx-chip"
+          ><app-icon :icon="IconCalendarEvent" :size="12" :stroke="2" /><span>{{ $t('tag_page.end_date') }}: {{ date }}</span></span
+        >
+        <span v-if="totalFormatted" class="mx-chip"
+          ><app-icon :icon="IconSum" :size="12" :stroke="2" /><span>{{ $t('tag_page.total') }}: {{ totalFormatted }}</span></span
+        >
+      </span>
+    </span>
+    <span v-if="isSwipeable" class="mx-chev"><app-icon :icon="IconChevronRight" :size="16" :stroke="2" /></span>
+  </component>
 </template>
 
 <script setup>
 import { get } from 'lodash-es'
-import { useClickWithoutSwipe } from '~/mobile/composables/useClickWithoutSwipe'
+import { IconCalendarEvent, IconChevronRight, IconListCheck, IconSum } from '@tabler/icons-vue'
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
 import Tag from '~/core/models/Tag.js'
+import AppListItem from '~/mobile/components/list-items/app-list-item.vue'
 
 const props = defineProps({
   value: Object,
+  // false = plain row (used inside the tag picker)
   isSwipeable: {
     default: true,
   },
@@ -56,16 +46,4 @@ const description = computed(() => get(props.value, 'attributes.description'))
 const date = computed(() => DateUtils.dateToString(get(props.value, 'attributes.date')))
 const isTodo = computed(() => get(props.value, 'attributes.is_todo'))
 const totalFormatted = computed(() => Tag.getTotalFormatted(props.value))
-
-const onEdit = async (e) => {
-  emit('onEdit', props.value)
-}
-
-const onDelete = async () => {
-  emit('onDelete', props.value)
-}
-
-const swipeCell = ref(null)
-const clickWithoutSwipe = useClickWithoutSwipe({ swipeCell: swipeCell, onClick: onEdit })
 </script>
-

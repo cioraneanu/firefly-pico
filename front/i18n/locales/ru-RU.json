@@ -131,7 +131,14 @@
     "configure_fields": "Настроить поля",
     "title_clone_transaction": "Клонировать транзакцию",
     "title_edit_transaction": "Редактировать транзакцию",
-    "title_add_transaction": "Добавить транзакцию"
+    "title_add_transaction": "Добавить транзакцию",
+    "calculator": "Калькулятор",
+    "convert_from": "из {currency}",
+    "attachment_take_photo": "Сделать фото",
+    "attachment_delete_confirm": "Вложение будет удалено навсегда.",
+    "assistant_ramble_new": "Новая запись",
+    "assistant_ramble_saved": "Сохранённые записи",
+    "assistant_ramble_no_saved": "Нет сохранённых записей"
   },
   "settings": {
     "settings_title": "Настройки",
@@ -167,7 +174,9 @@
       "invalid_token": "Указанный токен неверен или истек.",
       "test_connection": "Проверить подключение",
       "connection_successful": "Подключение успешно",
-      "fetching": "Получение данных..."
+      "fetching": "Получение данных...",
+      "add_http_header": "Добавить заголовок",
+      "http_headers_info": "Отправляются с каждым запросом на бэкенд Pico, например для Cloudflare Access или обратного прокси."
     },
     "ui_entry": "Интерфейс пользователя",
     "ui": {
@@ -185,7 +194,8 @@
         "new_transacation": "Новая транзакция",
         "transacation_list": "Список транзакций",
         "dashboard": "Дашборд"
-      }
+      },
+      "appearance": "Внешний вид"
     },
     "assistant_entry": "Ассистент",
     "assistant": {
@@ -251,7 +261,8 @@
       "copy_category_to_description": "При выборе категории копировать её в Описание",
       "quick_amounts": {
         "title": "Быстрые суммы транзакций",
-        "value": "Значение"
+        "value": "Значение",
+        "info": "Показываются рядом с полем суммы, например +1, +0.1, -10"
       },
       "list_fields": {
         "title": "Настроить поля списка",
@@ -305,8 +316,17 @@
     },
     "token": {
       "label": "Персональный токен доступа",
-      "placeholder": "Персональный токен"
-    }
+      "placeholder": "Персональный токен",
+      "description": "Создайте его в Firefly III: Параметры › Профиль › OAuth.",
+      "show": "Показать токен",
+      "hide": "Скрыть токен",
+      "note": "Хранится только на этом устройстве. Отправляется на бэкенд Pico, который передаёт его в Firefly III."
+    },
+    "sync_everything": "Синхронизировать всё",
+    "show": "Показать",
+    "hide": "Скрыть",
+    "reorder_hint_cards": "Перетащите за ручку, чтобы изменить порядок · нажмите на глаз, чтобы скрыть карточку",
+    "reorder_hint_fields": "Перетащите за ручку, чтобы изменить порядок · нажмите на глаз, чтобы скрыть поле"
   },
   "about": {
     "title": "О приложении",
@@ -326,7 +346,14 @@
     "iconpacks_circle_avatar": "- Иконки: <a href=\"https://www.svgrepo.com/author/Laura%20Reen\" target=\"_blank\">Circle Avatar Vectors by Laura Reen</a>",
     "iconpacks_svg_repo": "- Иконки: <a href=\"https://www.svgrepo.com/\" target=\"_blank\">SVG Repo</a>",
     "iconpacks_freepik": "- Иконки: <a href=\"https://www.freepik.com/\" target=\"_blank\">Freepik</a>",
-    "illustrations_undraw": "- Иллюстрации: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>"
+    "illustrations_undraw": "- Иллюстрации: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>",
+    "credit_developed_by": "Разработано Mihai Cioraneanu",
+    "credit_using": "Использует",
+    "credit_consuming": "Использует REST API",
+    "credit_ui_theme": "С UI-темой на основе",
+    "credit_exchange_rate": "Курсы валют от",
+    "credit_iconpacks": "Наборы иконок",
+    "credit_illustrations": "Иллюстрации"
   },
   "page_select": {
     "label": "Стартовая страница",
@@ -396,12 +423,20 @@
     "visible_on_dashboard": "Виден на дашборде",
     "balance": "Баланс",
     "available": "Доступно",
-    "account_group": "Группа"
+    "account_group": "Группа",
+    "search": "Поиск счетов…",
+    "empty_hint": "Здесь появятся ваши счета",
+    "current_balance": "Текущий баланс",
+    "new_balance": "Новый баланс",
+    "difference": "Разница",
+    "adjust_balance_note": "Разница добавляется к начальному балансу счёта. Транзакция не создаётся."
   },
   "transaction_template_page": {
     "title_add": "Добавить шаблон",
     "title_edit": "Редактировать шаблон",
-    "extra_names": "Доп. имена (для поиска ассистентом):"
+    "extra_names": "Доп. имена (для поиска ассистентом):",
+    "search": "Поиск шаблонов…",
+    "empty_hint": "Здесь появятся ваши шаблоны"
   },
   "tag_page": {
     "title_add": "Добавить тег",
@@ -411,7 +446,9 @@
     "end_date": "Дата окончания",
     "total": "Итого",
     "compute_total": "Рассчитать итог",
-    "total_success": "Итог тега обновлён"
+    "total_success": "Итог тега обновлён",
+    "search": "Поиск тегов…",
+    "empty_hint": "Здесь появятся ваши теги"
   },
   "category_page": {
     "title_add": "Добавить категорию",
@@ -422,7 +459,9 @@
   "currency_page": {
     "title_add": "Добавить валюту",
     "title_edit": "Редактировать валюту",
-    "decimal_places": "Десятичные знаки"
+    "decimal_places": "Десятичные знаки",
+    "search": "Поиск валют…",
+    "empty_hint": "Здесь появятся ваши валюты"
   },
   "budget_page": {
     "title_add": "Добавить бюджет",
@@ -431,7 +470,9 @@
     "percent": "Процент",
     "interval": "Интервал",
     "type": "Тип бюджета",
-    "period": "Период бюджета"
+    "period": "Период бюджета",
+    "search": "Поиск бюджетов…",
+    "empty_hint": "Здесь появятся ваши бюджеты"
   },
   "piggy_bank_page": {
     "title_add": "Добавить копилку",
@@ -442,7 +483,10 @@
     "target_amount": "Целевая сумма",
     "current_amount": "Сэкономленная сумма",
     "start_date": "Дата начала",
-    "target_date": "Целевая дата"
+    "target_date": "Целевая дата",
+    "search": "Поиск копилок…",
+    "empty_hint": "Здесь появятся ваши копилки",
+    "target_reached": "Цель достигнута"
   },
   "recurring_transaction_page": {
     "title_add": "Добавить повторяющуюся транзакцию",
@@ -460,10 +504,14 @@
     "upcoming": "Предстоящие события",
     "next_date": "Следующий",
     "inactive": "Неактивный",
-    "no_upcoming": "Нет предстоящих повторяющихся транзакций ^_^"
+    "no_upcoming": "Нет предстоящих повторяющихся транзакций ^_^",
+    "search": "Поиск повторяющихся…",
+    "empty_hint": "Здесь появятся ваши повторяющиеся транзакции"
   },
   "exchange_rate_page": {
-    "relative_to_usd": "Относительно USD"
+    "relative_to_usd": "Относительно USD",
+    "search": "Поиск валюты…",
+    "empty_hint": "Здесь появятся курсы валют"
   },
   "dashboard": {
     "title": "Дашборд",
@@ -603,5 +651,51 @@
   "no_matches": "Нет совпадений",
   "refreshing": "Обновление…",
   "sync": "Синхронизировать",
-  "sync_required_by_extras": "Найдены дополнения, требующие повторной синхронизации"
+  "sync_required_by_extras": "Найдены дополнения, требующие повторной синхронизации",
+  "kit": {
+    "choose_month": "Выберите месяц",
+    "choose_time": "Выберите время",
+    "create": "Создать",
+    "got_it": "Понятно",
+    "hour": "Час",
+    "minute": "Минута",
+    "next_month": "Следующий месяц",
+    "next_year": "Следующий год",
+    "no_date": "Нет даты",
+    "no_time": "Нет времени",
+    "now": "Сейчас",
+    "previous_month": "Предыдущий месяц",
+    "previous_year": "Предыдущий год",
+    "profile_switched": "Переключено на {name}",
+    "refresh": "Обновить",
+    "select_date": "Выберите дату",
+    "select_option": "Выберите вариант",
+    "selected_count": "Выбрано: {count}",
+    "toggle_layout": "Переключить список и метки",
+    "what_is_profile": "Что такое профиль?"
+  },
+  "transaction_list_page": {
+    "search": "Поиск по описанию…",
+    "without_category": "Без категории",
+    "without_tag": "Без тегов",
+    "without_budget": "Без бюджета",
+    "active_count": "Активно: {count}",
+    "empty_hint": "Здесь появятся ваши транзакции",
+    "showing": "Показано {count} из {total}"
+  },
+  "dash_page": {
+    "hide_amounts": "Скрыть суммы",
+    "previous_period": "Предыдущий период",
+    "next_period": "Следующий период",
+    "period": "Период",
+    "previous_year": "Предыдущий год",
+    "next_year": "Следующий год",
+    "card_options": "Настройки карточки",
+    "no_data": "Нет данных за этот период",
+    "no_budgets": "Нет бюджетов ^_^",
+    "no_piggy_banks": "Нет копилок ^_^",
+    "amount_left": "Осталось {amount}",
+    "peak": "Пик {amount} · {date}",
+    "no_todo_tag": "Нет тега \"todo\""
+  }
 }

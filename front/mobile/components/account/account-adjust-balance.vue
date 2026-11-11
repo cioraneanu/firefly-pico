@@ -1,45 +1,67 @@
 <template>
-  <div class="van-cell-fake">
-    <app-popup v-model:show="showDropdown" :style="style">
-      <div ref="popupRef" class="h-full flex flex-col">
-        <div class="van-popup-title">Adjust balance</div>
+  <app-sheet v-model:show="showDropdown" :title="$t('account_page.adjust_balance')">
+    <template #top>
+      <p class="mx-sh__d">{{ accountName }}</p>
+    </template>
 
-        <div class="text-muted text-12 px-4 mt-2.5 text-center">This will change the account opening balance</div>
-
-        <div ref="popupContentRef" class="flex flex-col flex-1 overflow-auto mt-5">
-          <app-field v-model="newAmount" label="New amount" :icon="TablerIconConstants.fieldText2" />
-          <div class="flex-1" />
-          <van-button round type="primary" native-type="submit" class="mx-4 mb-5 shadow-depth2" @click="onSave">Save </van-button>
+    <div class="mx-form">
+      <div class="mx-kv">
+        <div>
+          <span>{{ $t('account_page.current_balance') }}</span>
+          <b class="mx-money">{{ currentBalance }}</b>
         </div>
       </div>
-    </app-popup>
-  </div>
+
+      <div class="mx-f">
+        <div class="mx-l">{{ $t('account_page.new_balance') }}</div>
+        <label class="mx-in mx-amt-in">
+          <app-icon :icon="IconScale" :size="16" :stroke="2" />
+          <input v-model="newAmount" type="text" inputmode="decimal" placeholder="0" :aria-label="$t('account_page.new_balance')" />
+          <span v-if="currencySymbol" class="suf">{{ currencySymbol }}</span>
+        </label>
+      </div>
+
+      <div class="mx-kv">
+        <div>
+          <span>{{ $t('account_page.difference') }}</span>
+          <b class="mx-money">{{ difference }}</b>
+        </div>
+      </div>
+
+      <div class="mx-note">
+        <app-icon :icon="IconInfoCircle" :size="16" :stroke="2" />
+        <span>{{ $t('account_page.adjust_balance_note') }}</span>
+      </div>
+    </div>
+
+    <template #footer>
+      <button type="button" class="mx-btn out" @click="showDropdown = false">{{ $t('cancel') }}</button>
+      <button type="button" class="mx-btn pri" @click="onSave">{{ $t('save') }}</button>
+    </template>
+  </app-sheet>
 </template>
 
 <script setup>
-import { useSwipeToDismiss } from '~/mobile/composables/useSwipeToDismiss'
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
+import { IconInfoCircle, IconScale } from '@tabler/icons-vue'
 import AccountRepository from '~/core/repository/AccountRepository.js'
 import Account from '~/core/models/Account.js'
 
-const showDropdown = defineModel('showDropdown', false)
-const popupRef = ref(null)
-const popupContentRef = ref(null)
-
-const newAmount = ref('0')
+const showDropdown = defineModel('showDropdown', { type: Boolean, default: false })
 
 const props = defineProps({
   value: {},
 })
 
-const style = {
-  height: '250px',
-  paddingTop: '4px',
-}
+const emits = defineEmits(['result'])
 
-const emits = defineEmits('result')
+const newAmount = ref('0')
 
-watch(showDropdown, (newValue) => {
+const accountName = computed(() => Account.getDisplayName(props.value))
+const currencySymbol = computed(() => Account.getCurrencySymbol(props.value))
+const currentBalance = computed(() => Account.getBalanceWithCurrency(props.value))
+const difference = computed(() => Account.getAmountWithCurrency(props.value, (parseFloat(newAmount.value) || 0) - (parseFloat(Account.getBalance(props.value)) || 0)))
+
+watch(showDropdown, () => {
   newAmount.value = Account.getBalance(props.value)
 })
 
@@ -48,14 +70,4 @@ const onSave = async () => {
   emits('result', 'onPostSave', response)
   showDropdown.value = false
 }
-
-const onHideDropdown = () => {
-  showDropdown.value = false
-}
-
-useSwipeToDismiss({
-  onSwipe: onHideDropdown,
-  swipeRef: popupContentRef,
-  showDropdown: showDropdown,
-})
 </script>

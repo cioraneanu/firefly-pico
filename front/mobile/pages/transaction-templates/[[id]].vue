@@ -1,63 +1,57 @@
 <template>
-  <div class="app-form">
+  <div class="mx-page">
     <app-top-toolbar>
       <template #right>
         <app-button-list-add v-if="itemId" @click="onNew" />
       </template>
     </app-top-toolbar>
 
-    <transaction-type-tabs v-model="type" class="mx-4 mt-4 mb-2" />
+    <app-form :name="formName" @submit="saveItem" @failed="onValidationError">
+      <main class="mx-body has-save">
+        <app-card>
+          <transaction-type-tabs v-model="type" />
 
-    <!--    @submit="onSave"-->
-    <van-form ref="form" :name="formName" class="transaction-form-group" @submit="saveItem" @failed="onValidationError">
-      <van-cell-group inset>
-        <app-field v-model="name" :icon="TablerIconConstants.fieldText2" :label="$t('name')" name="name" required :rules="[rule.required()]" />
+          <app-field v-model="name" name="name" :label="$t('name')" :rules="[rule.required()]" required />
 
-        <div class="van-cell-fake flex-col van-cell">
-          <span>{{ $t('transaction_template_page.extra_names') }}</span>
-          <app-repeater v-model="extra_names" :empty-item="{ value: '' }">
-            <template #content="{ element, index }">
-              <app-field v-model="element.value" placeholder="Name" class="compact" :name="`extra-name-${index}`" />
-            </template>
-          </app-repeater>
-        </div>
+          <div class="mx-f">
+            <div class="mx-l">{{ $t('desktop.extra_names') }}</div>
+            <app-repeater v-model="extra_names" :empty-item="{ value: '' }">
+              <template #content="{ element, index }">
+                <app-field v-model="element.value" :placeholder="$t('name')" :name="`extra-name-${index}`" />
+              </template>
+            </app-repeater>
+            <div class="mx-d">{{ $t('desktop.extra_names_hint') }}</div>
+          </div>
 
-        <transaction-amount-field ref="refAmount" v-model:amount="amount" />
+          <transaction-amount-field v-model:amount="amount" />
 
-        <account-select v-model="account_source" :label="$t('transaction.source_account')" :allowed-types="accountSourceAllowedTypes" />
+          <account-select v-model="account_source" :label="$t('transaction.source_account')" :allowed-types="accountSourceAllowedTypes" />
 
-        <account-select v-model="account_destination" :label="$t('transaction.destination_account')" :allowed-types="accountDestinationAllowedTypes" />
+          <account-select v-model="account_destination" :label="$t('transaction.destination_account')" :allowed-types="accountDestinationAllowedTypes" />
 
-        <app-field v-model="description" :label="$t('description')" :icon="TablerIconConstants.fieldText2" type="textarea" rows="1" autosize placeholder="Description" />
+          <app-field v-model="description" type="textarea" rows="2" autosize :label="$t('description')" />
 
-        <category-select v-model="category" />
+          <category-select v-model="category" />
 
-        <tag-select v-model="tags" />
+          <tag-select v-model="tags" />
 
-        <budget-select v-model="budget" />
+          <budget-select v-model="budget" />
 
-        <app-field v-model="notes" :label="$t('notes')" type="textarea" :icon="TablerIconConstants.fieldText1" rows="1" autosize />
-      </van-cell-group>
+          <app-field v-model="notes" type="textarea" rows="2" autosize :label="$t('notes')" />
+        </app-card>
 
-      <div style="margin: 16px">
-        <app-button-form-save />
+        <app-button-form-delete v-if="itemId" @click="onDelete" />
+      </main>
 
-        <app-button-form-delete v-if="itemId" class="mt-2.5" @click="onDelete" />
-      </div>
-    </van-form>
+      <app-button-form-save />
+    </app-form>
   </div>
 </template>
-
-import { ref } from 'vue';
 
 <script setup>
 import RouteConstants from '~/core/constants/RouteConstants'
 import { useToolbar } from '~/mobile/composables/useToolbar'
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 import { rule } from '~/core/utils/ValidationUtils.js'
-
-const refAmount = ref(null)
-const { t } = useI18n()
 
 const {
   itemId,
@@ -81,8 +75,8 @@ const {
   accountDestinationAllowedTypes,
 } = useTemplateForm()
 
-const toolbar = useToolbar()
-toolbar.init({
+const { t } = useI18n()
+useToolbar().init({
   title: itemId.value ? t('transaction_template_page.title_edit') : t('transaction_template_page.title_add'),
   backRoute: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST,
 })

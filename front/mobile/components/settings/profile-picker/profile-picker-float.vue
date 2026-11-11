@@ -1,16 +1,21 @@
 <template>
-  <div>
-    <van-floating-bubble v-model:offset="position" axis="y" magnetic="x" :gap="0" class="profile-floating-button" @click="isListVisible = true">
-      <div class="flex items-center justify-center flex-col" style="padding: 0 8px;">
-        <icon-nut size="20" color="#fff" stroke="1.6" />
-        <span v-if="profileStore.shortProfileName" class="text-10">{{ profileStore.shortProfileName }}</span>
-      </div>
-    </van-floating-bubble>
+  <button
+    type="button"
+    class="mx-prof-fab touch-none"
+    :style="{ top: `${top}px` }"
+    aria-haspopup="dialog"
+    :aria-label="$t('profile_page.title')"
+    @pointerdown="onDragStart"
+    @pointermove="onDragMove"
+    @pointerup="onDragEnd"
+    @pointercancel="onDragEnd"
+    @click="onClick"
+  >
+    <span class="av"><app-icon :icon="IconNut" :size="15" :stroke="2" /></span>
+    <span v-if="profileStore.shortProfileName" class="nm">{{ profileStore.shortProfileName }}</span>
+  </button>
 
-    <app-popup v-model:show="isListVisible" :style="{ height: '40%' }">
-      <profile-picker-list/>
-    </app-popup>
-  </div>
+  <profile-picker-list v-model:show="isListVisible" />
 </template>
 
 <script setup>
@@ -18,17 +23,37 @@ import { IconNut } from '@tabler/icons-vue'
 import { useWindowSize } from '@vueuse/core'
 import { useProfileStore } from '~/core/stores/profileStore.js'
 
+// Floating profile tab on the right edge (design: .mx-prof-fab). Drag it up or down; the position is remembered.
 const appStore = useAppStore()
 const profileStore = useProfileStore()
 const isListVisible = ref(false)
 
+const { height } = useWindowSize()
+const dragY = ref(null)
+const top = computed(() => Math.min(Math.max(dragY.value ?? appStore.profileFloatButtonPosition.y, 64), height.value - 180))
 
-const { width } = useWindowSize()
-// Only persist the Y position and set the X based on the current window width
-const position = computed({
-  get: () => ({ x: width.value - 40, y: appStore.profileFloatButtonPosition.y }),
-  set: (value) => {
-    appStore.profileFloatButtonPosition = { y: value.y }
-  },
-})
+let start = null
+const onDragStart = (event) => {
+  start = { pointerY: event.clientY, top: top.value, moved: false }
+  event.currentTarget.setPointerCapture?.(event.pointerId)
+}
+const onDragMove = (event) => {
+  if (!start || (!start.moved && Math.abs(event.clientY - start.pointerY) < 4)) {
+    return
+  }
+  start.moved = true
+  dragY.value = start.top + event.clientY - start.pointerY
+}
+const onDragEnd = () => {
+  if (start?.moved) {
+    appStore.profileFloatButtonPosition = { y: top.value }
+  }
+  dragY.value = null
+}
+const onClick = () => {
+  if (!start?.moved) {
+    isListVisible.value = true
+  }
+  start = null
+}
 </script>

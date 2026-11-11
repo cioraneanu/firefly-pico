@@ -87,18 +87,20 @@ export default defineNuxtConfig({
 
   css: [
     '~/assets/styles/tailwind.css',
-    '~/mobile/styles/variables.css',
-    '~/mobile/styles/theme-white.css',
-    '~/mobile/styles/theme-dark.css',
     '~/assets/styles/animations.css',
     '~/mobile/styles/mx.css',
+    '~/mobile/styles/mx-app-kit.css',
+    '~/mobile/styles/mx-app-tx.css',
+    '~/mobile/styles/mx-app-dash.css',
+    '~/mobile/styles/mx-app-entities.css',
+    '~/mobile/styles/mx-app-settings.css',
   ],
 
   build: {
     // transpile: ['vuetify'],
   },
 
-  modules: ['@vite-pwa/nuxt', '@nuxtjs/device', '@pinia/nuxt', '@vant/nuxt', 'nuxt-svgo', '@nuxt/eslint', '@nuxtjs/i18n'],
+  modules: ['@vite-pwa/nuxt', '@nuxtjs/device', '@pinia/nuxt', 'nuxt-svgo', '@nuxt/eslint', '@nuxtjs/i18n'],
 
   svgo: {
     defaultImport: 'component',

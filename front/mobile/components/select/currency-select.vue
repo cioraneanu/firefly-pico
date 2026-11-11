@@ -1,81 +1,44 @@
 <template>
   <app-select
     v-model="modelValue"
-    v-model:show-dropdown="showDropdown"
-    v-model:search="search"
-    :label="props.label ?? $t('currency')"
+    :label="label ?? $t('currency')"
     :popup-title="$t('currency_select.title')"
-    :list="filteredList"
-    :columns="3"
+    :list="list"
     :get-display-value="getDisplayValue"
-    v-bind="dynamicAttrs"
+    :get-icon-value="() => TablerIconConstants.currency"
+    :get-meta-value="(value) => Currency.getCode(value)"
   >
-
-    <template #label>
-      <div>
-        <div>{{ props.label ?? $t('currency') }}</div>
-        <div v-if="info" class="text-muted text-11 leading-[normal]">{{ info }}</div>
-      </div>
-    </template>
-
-    <template #left-icon>
-      <app-icon :icon="TablerIconConstants.currency" :size="20" />
-    </template>
-
     <template #top-right>
-      <van-button size="small" class="" @click="onRefresh">
-        <app-icon :icon="TablerIconConstants.refresh" :stroke="1.7" size="14" />
-      </van-button>
+      <button type="button" class="mx-ib sm" :aria-label="$t('kit.refresh')" @click="onRefresh">
+        <span v-if="isLoading" class="mx-spin" />
+        <app-icon v-else :icon="IconRefresh" :size="16" :stroke="2" />
+      </button>
     </template>
 
-    <template #item="{ item }">
-      <app-select-option :text="Currency.getDisplayName(item)" :icon="TablerIconConstants.account" />
+    <template v-if="info" #extra>
+      <div class="mx-d">{{ info }}</div>
     </template>
   </app-select>
 </template>
 
 <script setup>
-import _, { get } from 'lodash-es'
+import { IconRefresh } from '@tabler/icons-vue'
+import { get } from 'lodash-es'
 import { useCurrencyStore } from '~/core/stores/currencyStore'
-import { useFormAttributes } from '~/core/composables/useFormAttributes'
-
 import Currency from '~/core/models/Currency'
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
 
+defineProps({
+  label: { type: String },
+  info: { type: String },
+})
+
 const currencyStore = useCurrencyStore()
-
-const attrs = useAttrs()
-const { dynamicAttrs } = useFormAttributes(attrs)
-
-const props = defineProps({
-  label: {
-    type: String,
-  },
-  info: {
-    type: String,
-  }
-})
-
 const modelValue = defineModel()
-const showDropdown = ref(false)
-const search = ref('')
 
+const list = computed(() => currencyStore.currenciesList.filter((item) => get(item, 'attributes.enabled')))
 
-const filteredList = computed(() => {
-  const list = currencyStore.currenciesList.filter((item) => get(item, 'attributes.enabled'))
-  if (search.value.length === 0) {
-    return list
-  }
-  return list.filter((item) => {
-    return LanguageUtils.includesSearch(Currency.getDisplayName(item), search.value)
-  })
-})
-
-// ------ Methods ------
-
-const getDisplayValue = (value) => {
-  return Currency.getDisplayName(value)
-}
+const getDisplayValue = (value) => Currency.getDisplayName(value)
 
 const isLoading = ref(false)
 const onRefresh = async () => {
@@ -84,4 +47,3 @@ const onRefresh = async () => {
   isLoading.value = false
 }
 </script>
-

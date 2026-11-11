@@ -131,7 +131,14 @@
     "configure_fields": "Felder konfigurieren",
     "title_clone_transaction": "Transaktion duplizieren",
     "title_edit_transaction": "Transaktion bearbeiten",
-    "title_add_transaction": "Transaktion hinzufügen"
+    "title_add_transaction": "Transaktion hinzufügen",
+    "calculator": "Rechner",
+    "convert_from": "aus {currency}",
+    "attachment_take_photo": "Foto aufnehmen",
+    "attachment_delete_confirm": "Der Anhang wird endgültig gelöscht.",
+    "assistant_ramble_new": "Neuer Ramble",
+    "assistant_ramble_saved": "Gespeicherte Rambles",
+    "assistant_ramble_no_saved": "Keine gespeicherten Rambles"
   },
   "settings": {
     "settings_title": "Einstellungen",
@@ -167,7 +174,9 @@
       "invalid_token": "Der angegebene Token ist nich korrekt oder abgelaufen.",
       "test_connection": "Verbindung testen",
       "connection_successful": "Verbindung erfolgreich",
-      "fetching": "Abrufen..."
+      "fetching": "Abrufen...",
+      "add_http_header": "Header hinzufügen",
+      "http_headers_info": "Wird mit jeder Anfrage an das Pico-Backend gesendet, z. B. für Cloudflare Access oder einen Reverse Proxy."
     },
     "ui_entry": "Nutzer Interface",
     "ui": {
@@ -186,7 +195,8 @@
         "new_transacation": "Neue Transaktion",
         "transacation_list": "Transaktions-Liste",
         "dashboard": "Dashboard"
-      }
+      },
+      "appearance": "Darstellung"
     },
     "assistant_entry": "Assistent",
     "assistant": {
@@ -252,7 +262,8 @@
       "copy_category_to_description": "Wenn ich eine Kategorie auswähle, diese in die Beschreibung kopieren",
       "quick_amounts": {
         "title": "Schnell-Tranksaktions-Konti",
-        "value": "Wert"
+        "value": "Wert",
+        "info": "Werden neben dem Betragsfeld angezeigt, z. B. +1, +0.1, -10"
       },
       "list_fields": {
         "title": "Listen-Felder setzen",
@@ -306,8 +317,17 @@
     },
     "token": {
       "label": "Persönlicher Access Token",
-      "placeholder": "Persönlicher Token"
-    }
+      "placeholder": "Persönlicher Token",
+      "description": "Erstelle eines in Firefly III unter Optionen › Profil › OAuth.",
+      "show": "Token anzeigen",
+      "hide": "Token ausblenden",
+      "note": "Nur auf diesem Gerät gespeichert. Es wird an das Pico-Backend gesendet, das es an Firefly III weiterleitet."
+    },
+    "sync_everything": "Alles synchronisieren",
+    "show": "Anzeigen",
+    "hide": "Ausblenden",
+    "reorder_hint_cards": "Am Griff ziehen zum Sortieren · auf das Auge tippen, um eine Karte auszublenden",
+    "reorder_hint_fields": "Am Griff ziehen zum Sortieren · auf das Auge tippen, um ein Feld auszublenden"
   },
   "about": {
     "title": "Über",
@@ -327,7 +347,14 @@
     "iconpacks_circle_avatar": "- IconPacks: <a href=\"https://www.svgrepo.com/author/Laura%20Reen\" target=\"_blank\">Circle Avatar Vectors by Laura Reen</a>",
     "iconpacks_svg_repo": "- IconPacks: <a href=\"https://www.svgrepo.com/\" target=\"_blank\">SVG Repo</a>",
     "iconpacks_freepik": "- IconPacks: <a href=\"https://www.freepik.com/\" target=\"_blank\">Freepik</a>",
-    "illustrations_undraw": "- Illustrationen: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>"
+    "illustrations_undraw": "- Illustrationen: <a href=\"https://undraw.co\" target=\"_blank\">unDraw</a>",
+    "credit_developed_by": "Entwickelt von Mihai Cioraneanu",
+    "credit_using": "Verwendet",
+    "credit_consuming": "Nutzt die REST-API",
+    "credit_ui_theme": "Mit einem UI-Theme basierend auf",
+    "credit_exchange_rate": "Wechselkurse von",
+    "credit_iconpacks": "Icon-Pakete",
+    "credit_illustrations": "Illustrationen"
   },
   "page_select": {
     "label": "Startseite",
@@ -397,12 +424,20 @@
     "visible_on_dashboard": "Im Dashboard ersichtlich",
     "balance": "Kontostand",
     "available": "Verfügbar",
-    "account_group": "Gruppe"
+    "account_group": "Gruppe",
+    "search": "Konten suchen…",
+    "empty_hint": "Deine Konten erscheinen hier",
+    "current_balance": "Aktueller Kontostand",
+    "new_balance": "Neuer Kontostand",
+    "difference": "Differenz",
+    "adjust_balance_note": "Die Differenz wird zum Anfangssaldo des Kontos addiert. Es wird keine Buchung erstellt."
   },
   "transaction_template_page": {
     "title_add": "Template hinzufügen",
     "title_edit": "Template bearbeiten",
-    "extra_names": "Zusatznamen (für Assistenten auffindbar):"
+    "extra_names": "Zusatznamen (für Assistenten auffindbar):",
+    "search": "Vorlagen suchen…",
+    "empty_hint": "Deine Vorlagen erscheinen hier"
   },
   "tag_page": {
     "title_add": "Tag hinzufügen",
@@ -412,7 +447,9 @@
     "end_date": "End-Datum",
     "total": "Summe",
     "compute_total": "Summe berechnen",
-    "total_success": "Tag-Summe aktualisiert"
+    "total_success": "Tag-Summe aktualisiert",
+    "search": "Tags suchen…",
+    "empty_hint": "Deine Tags erscheinen hier"
   },
   "category_page": {
     "title_add": "Kategorie hinzufügen",
@@ -423,7 +460,9 @@
   "currency_page": {
     "title_add": "Währung hinzufügen",
     "title_edit": "Währung bearbeiten",
-    "decimal_places": "Dezimalstellen"
+    "decimal_places": "Dezimalstellen",
+    "search": "Währungen suchen…",
+    "empty_hint": "Deine Währungen erscheinen hier"
   },
   "budget_page": {
     "title_add": "Budget hinzufügen",
@@ -432,7 +471,9 @@
     "percent": "Prozent",
     "interval": "Intervall",
     "type": "Budget Typ",
-    "period": "Budget Zeitraum"
+    "period": "Budget Zeitraum",
+    "search": "Budgets suchen…",
+    "empty_hint": "Deine Budgets erscheinen hier"
   },
   "piggy_bank_page": {
     "title_add": "Sparschwein hinzufügen",
@@ -443,7 +484,10 @@
     "target_amount": "Zielbetrag",
     "current_amount": "Gesparter Betrag",
     "start_date": "Startdatum",
-    "target_date": "Zieldatum"
+    "target_date": "Zieldatum",
+    "search": "Sparschweine suchen…",
+    "empty_hint": "Deine Sparschweine erscheinen hier",
+    "target_reached": "Ziel erreicht"
   },
   "recurring_transaction_page": {
     "title_add": "Fügen Sie eine wiederkehrende Transaktion hinzu",
@@ -461,10 +505,14 @@
     "upcoming": "Kommende Ereignisse",
     "next_date": "Nächste",
     "inactive": "Inaktiv",
-    "no_upcoming": "Keine bevorstehenden wiederkehrenden Transaktionen ^_^"
+    "no_upcoming": "Keine bevorstehenden wiederkehrenden Transaktionen ^_^",
+    "search": "Daueraufträge suchen…",
+    "empty_hint": "Deine Daueraufträge erscheinen hier"
   },
   "exchange_rate_page": {
-    "relative_to_usd": "Beziehung zum USD"
+    "relative_to_usd": "Beziehung zum USD",
+    "search": "Währung suchen…",
+    "empty_hint": "Wechselkurse erscheinen hier"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -604,5 +652,51 @@
   "no_matches": "Keine Treffer",
   "refreshing": "Wird aktualisiert…",
   "sync": "Synchronisieren",
-  "sync_required_by_extras": "Zusätze gefunden, die neu synchronisiert werden müssen"
+  "sync_required_by_extras": "Zusätze gefunden, die neu synchronisiert werden müssen",
+  "kit": {
+    "choose_month": "Monat wählen",
+    "choose_time": "Uhrzeit wählen",
+    "create": "Erstellen",
+    "got_it": "Verstanden",
+    "hour": "Stunde",
+    "minute": "Minute",
+    "next_month": "Nächster Monat",
+    "next_year": "Nächstes Jahr",
+    "no_date": "Kein Datum",
+    "no_time": "Keine Uhrzeit",
+    "now": "Jetzt",
+    "previous_month": "Vorheriger Monat",
+    "previous_year": "Vorheriges Jahr",
+    "profile_switched": "Gewechselt zu {name}",
+    "refresh": "Aktualisieren",
+    "select_date": "Datum auswählen",
+    "select_option": "Option auswählen",
+    "selected_count": "{count} ausgewählt",
+    "toggle_layout": "Zwischen Liste und Chips wechseln",
+    "what_is_profile": "Was ist ein Profil?"
+  },
+  "transaction_list_page": {
+    "search": "Beschreibung durchsuchen…",
+    "without_category": "Ohne Kategorie",
+    "without_tag": "Ohne Tags",
+    "without_budget": "Ohne Budget",
+    "active_count": "{count} aktiv",
+    "empty_hint": "Deine Buchungen erscheinen hier",
+    "showing": "{count} von {total} angezeigt"
+  },
+  "dash_page": {
+    "hide_amounts": "Beträge ausblenden",
+    "previous_period": "Vorheriger Zeitraum",
+    "next_period": "Nächster Zeitraum",
+    "period": "Zeitraum",
+    "previous_year": "Vorheriges Jahr",
+    "next_year": "Nächstes Jahr",
+    "card_options": "Kartenoptionen",
+    "no_data": "Nichts in diesem Zeitraum",
+    "no_budgets": "Keine Budgets ^_^",
+    "no_piggy_banks": "Keine Sparschweine ^_^",
+    "amount_left": "{amount} übrig",
+    "peak": "Spitze {amount} · {date}",
+    "no_todo_tag": "Kein \"todo\"-Tag"
+  }
 }

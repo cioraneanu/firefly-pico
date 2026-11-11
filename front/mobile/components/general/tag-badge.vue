@@ -1,21 +1,17 @@
 <template>
-  <div class="app-badge tag-badge overflow-hidden">
-    <app-icon :icon="Tag.getIcon(value) ?? TablerIconConstants.tag" :size="iconSize" />
-    <span class="truncate">{{ Tag.getDisplayNameEllipsized(value, maxLength) }}</span>
-  </div>
+  <span class="mx-chip">
+    <app-icon :icon="Tag.getIcon(value) ?? TablerIconConstants.tag" :size="12" :stroke="2" />
+    <span>{{ Tag.getDisplayNameEllipsized(value, maxLength) }}</span>
+  </span>
 </template>
 
 <script setup>
 import Tag from '~/core/models/Tag.js'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 
+// Tag chip (design: outlined .mx-chip)
 defineProps({
   value: Object,
-  iconSize: {
-    default: 14,
-  },
-  maxLength: {
-    default: 10,
-  },
+  maxLength: { default: 10 },
 })
 </script>

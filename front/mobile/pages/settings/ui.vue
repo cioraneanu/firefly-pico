@@ -1,35 +1,51 @@
 <template>
-  <div class="app-form">
+  <div class="mx-page">
     <app-top-toolbar />
 
-    <van-form class="" @submit="onSave">
-      <van-cell-group inset>
-        <div class="van-cell-group-title mb-0">{{ $t('desktop.interface') }}:</div>
-        <app-tabs v-model="uiMode" :items="uiModes" class="mx-4 mb-1" />
-        <div class="text-muted text-12 mx-4 mb-3">{{ $t('desktop.interface_hint') }}</div>
-      </van-cell-group>
+    <app-form @submit="onSave">
+      <main class="mx-body has-save">
+        <app-card :section="$t('desktop.interface')">
+          <div class="mx-f">
+            <app-tabs v-model="uiMode" :items="uiModes" />
+            <div class="mx-d">{{ $t('desktop.interface_hint') }}</div>
+          </div>
+        </app-card>
 
-      <van-cell-group inset>
-        <div class="van-cell-group-title mb-0">{{ $t('settings.ui.theme') }}:</div>
+        <app-card :section="$t('settings.ui.appearance')">
+          <div class="mx-f">
+            <div class="mx-l">{{ $t('settings.ui.theme') }}</div>
+            <div class="mx-seg mx-seg--sm grid grid-cols-2 w-full" role="tablist" :aria-label="$t('settings.ui.theme')">
+              <button
+                v-for="option in themeOptions"
+                :key="option.label"
+                type="button"
+                role="tab"
+                class="justify-center"
+                :class="{ on: darkTheme === option.value }"
+                :aria-selected="darkTheme === option.value"
+                @click="darkTheme = option.value"
+              >
+                <app-icon :icon="option.icon" :size="15" :stroke="2" />
+                <span>{{ option.label }}</span>
+              </button>
+            </div>
+          </div>
 
-        <app-boolean v-model="darkTheme" :label="themeText">
-          <template #icon="{ value }">
-            <app-icon :size="23" :stroke-width="2.0" :icon="value ? TablerIconConstants.darkTheme : TablerIconConstants.whiteTheme" />
-          </template>
-        </app-boolean>
+          <language-select v-model="language" />
 
-        <language-select v-model="language" />
+          <page-select v-model="startingPage" />
 
-        <page-select v-model="startingPage" />
-
-        <app-boolean v-model="showAnimations" :label="$t('settings.ui.show_animations')" />
-
-        <app-boolean v-model="resetFormOnCreate" :label="$t('settings.ui.reset_forms_after_creation')" />
-        <app-boolean v-model="isProfileFloatVisible" :label="$t('settings.ui.is_profile_float_visible')" />
-      </van-cell-group>
+          <div class="mx-hr" />
+          <app-boolean v-model="showAnimations" :label="$t('settings.ui.show_animations')" />
+          <div class="mx-hr" />
+          <app-boolean v-model="resetFormOnCreate" :label="$t('settings.ui.reset_forms_after_creation')" />
+          <div class="mx-hr" />
+          <app-boolean v-model="isProfileFloatVisible" :label="$t('settings.ui.is_profile_float_visible')" />
+        </app-card>
+      </main>
 
       <app-button-form-save />
-    </van-form>
+    </app-form>
   </div>
 </template>
 
@@ -40,7 +56,7 @@ import { useProfileStore } from '~/core/stores/profileStore'
 import UIUtils from '~/core/utils/UIUtils'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import RouteConstants from '~/core/constants/RouteConstants'
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
+import { IconMoon, IconSun } from '@tabler/icons-vue'
 import { saveSettingsToStore, watchSettingsStore } from '~/core/utils/SettingUtils.js'
 import LanguageSelect from '~/mobile/components/select/general/language-select.vue'
 
@@ -49,7 +65,10 @@ const { t } = useI18n()
 const uiModes = computed(() => UI_MODES.map((mode) => ({ value: mode, label: t(`desktop.interface_${mode}`) })))
 const uiMode = useUIMode()
 const profileStore = useProfileStore()
-const themeText = computed(() => (darkTheme.value ? t('settings.ui.dark') : t('settings.ui.light')))
+const themeOptions = computed(() => [
+  { value: false, label: t('settings.ui.light'), icon: IconSun },
+  { value: true, label: t('settings.ui.dark'), icon: IconMoon },
+])
 const darkTheme = ref(false)
 const startingPage = ref(null)
 const language = ref(null)
@@ -71,7 +90,9 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   const response = await profileStore.writeProfile()
-  ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
+  if (ResponseUtils.isSuccess(response)) {
+    UIUtils.showToastSuccess(t('settings.settings_saved'))
+  }
 }
 
 const toolbar = useToolbar()

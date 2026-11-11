@@ -1,0 +1,21 @@
+/* Mobile app styles for the tx area (on top of mx.css). Only add rules the design boards need that mx.css lacks. */
+
+/* ----- transactions list ----- */
+/* first load: the skeleton list replaces the "Loading…" row */
+.mx-tx-sk ~ .mx-more { display: none; }
+/* notes are rendered markdown */
+.mx-tx-notes p, .mx-tx-notes ul, .mx-tx-notes ol, .mx-tx-notes pre { margin: 0; }
+.mx-tx-notes ul, .mx-tx-notes ol { padding-left: 16px; }
+.mx-tx-notes a { text-decoration: underline; }
+
+/* ----- transaction form ----- */
+/* app-form sits between .mx-page and .mx-body: let the body keep scrolling */
+.mx-app .mx-page > form { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.mx-l .hint.mx-spin { width: 14px; height: 14px; }
+/* ramble: cards inside the sheet keep their own spacing */
+.mx-sh .mxr-card .mx-list { margin: 0; }
+.mxr-error { color: var(--destructive); background: color-mix(in oklch, var(--destructive) 8%, transparent); }
+.mxr-tx__st { display: flex; align-items: center; gap: 8px; padding: 8px 12px 0; }
+.mxr-tx.ok { opacity: .6; }
+.mxr-tx.err { border-left: 3px solid var(--destructive); }
+.mx-list > .mxr-tx + .mxr-tx { box-shadow: inset 0 1px 0 var(--border); }

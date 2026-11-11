@@ -1,42 +1,34 @@
 <template>
-  <div class="app-form">
+  <div class="mx-page">
     <app-top-toolbar>
       <template #right>
         <app-button-list-add v-if="itemId" @click="onNew" />
       </template>
     </app-top-toolbar>
 
-    <template v-if="isReady">
-      <div class="mb-2.5" />
+    <app-form v-if="isReady" :name="formName" @submit="saveItem" @failed="onValidationError">
+      <main class="mx-body" :class="{ 'has-save': !isSplitTransaction }">
+        <!-- Enter in the assistant submits the form (implicit submission), as the old @keyup.enter did -->
+        <transaction-assistant v-if="!itemId && !isCloning" v-model="assistantText" @change="onAssistant" />
 
-      <transaction-assistant v-if="!itemId && !isCloning" v-model="assistantText" @change="onAssistant" @keyup.enter="saveItem" />
-
-      <transaction-form ref="transactionFormRef" v-model="item" :form-name="formName" @submit="saveItem" @failed="onValidationError">
-        <template #actions>
-          <div style="margin: 16px; position: relative">
-            <app-button-form-delete v-if="itemId && !isSplitTransaction" class="mt-2.5" @click="onDelete" />
-
-            <div class="flex gap-1">
-              <van-button v-if="itemId && !isSplitTransaction" block type="default" class="mt-2 flex-1 cursor-pointer" @click="onCreateClone">
-                <app-icon :icon="TablerIconConstants.clone" />
-                {{ $t('clone') }}
-              </van-button>
-
-              <van-button v-if="itemId && !isSplitTransaction" block type="default" class="mt-2 flex-1 cursor-pointer" @click="onCreateTransactionTemplate">
-                <app-icon :icon="TablerIconConstants.transactionTemplate" />
-                {{ $t('transaction.make_template') }}
-              </van-button>
+        <transaction-form ref="transactionFormRef" v-model="item">
+          <template #actions>
+            <div v-if="itemId" class="mx-list">
+              <app-field-link :label="$t('clone')" :icon="TablerIconConstants.clone" :is-link="false" @click="onCreateClone" />
+              <app-field-link :label="$t('transaction.make_template')" :icon="TablerIconConstants.transactionTemplate" :is-link="false" @click="onCreateTransactionTemplate" />
             </div>
-          </div>
 
-          <app-button-form-save v-if="!isSplitTransaction" />
-        </template>
-      </transaction-form>
+            <app-button-form-delete v-if="itemId" @click="onDelete" />
 
-      <app-card-info v-if="!isSplitTransaction" style="order: 99">
-        <app-field-link :label="$t('transaction.configure_fields')" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FORM_FIELDS)" />
-      </app-card-info>
-    </template>
+            <app-card-info>
+              <app-field-link :label="$t('transaction.configure_fields')" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION_FORM_FIELDS)" />
+            </app-card-info>
+          </template>
+        </transaction-form>
+      </main>
+
+      <app-button-form-save v-if="!isSplitTransaction" />
+    </app-form>
   </div>
 </template>
 

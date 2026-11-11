@@ -1,25 +1,27 @@
 <template>
-  <app-field v-model="modelValueCustom" :icon="TablerIconConstants.fieldText1" :label="$t('notes')" :placeholder="$t('notes')" type="textarea" rows="1" autosize @focus="onFocus" @blur="onBlur">
-    <template #right-icon>
-      <van-button v-if="isMarkdown && !isFocused" size="small" class="" @click.prevent.stop="onShowPreview">
-        <template #icon>
-          <div class="flex">
-            <icon-eye :size="16" :stroke="1.6"  />
-          </div>
-        </template>
-      </van-button>
+  <app-field v-model="modelValueCustom" :label="$t('notes')" :placeholder="$t('notes')" type="textarea" rows="1" autosize @focus="onFocus" @blur="onBlur">
+    <template #right>
+      <button
+        v-if="isMarkdown && !isFocused"
+        type="button"
+        class="mx-ib sm"
+        style="margin-right: -8px"
+        :aria-label="$t('transaction.assistant_ramble_preview')"
+        @click.prevent.stop="isPreviewVisible = true"
+      >
+        <app-icon :icon="IconEye" :size="16" :stroke="2" />
+      </button>
 
-      <van-dialog v-model:show="isPreviewVisible" confirm-button-text="OK" :close-on-click-overlay="true" style="top: 50%;">
-        <div class="p-5">
-          <div class="transaction-notes-markdown app-toolbar-body" style="overflow: auto; max-height: 70vh" v-html="markdown"/>
-        </div>
-      </van-dialog>
+      <app-sheet v-model:show="isPreviewVisible" :title="$t('notes')">
+        <div class="mx-prose transaction-notes-markdown" v-html="markdown" />
+        <template #footer>
+          <button type="button" class="mx-btn pri" @click="isPreviewVisible = false">{{ $t('ok') }}</button>
+        </template>
+      </app-sheet>
     </template>
   </app-field>
 </template>
 <script setup>
-import TablerIconConstants from '~/core/constants/TablerIconConstants'
-import { transactionFormField } from '~/core/constants/TransactionConstants'
 import { IconEye } from '@tabler/icons-vue'
 import { marked } from 'marked'
 
@@ -49,10 +51,6 @@ const onBlur = () => {
   isFocused.value = false
 }
 
-const onShowPreview = () => {
-  isPreviewVisible.value = true
-}
-
 const isMarkdown = computed(() => {
   if (!modelValue.value || typeof modelValue.value !== 'string') return false
 
@@ -71,7 +69,5 @@ const isMarkdown = computed(() => {
   return markdownPatterns.some((regex) => regex.test(modelValue.value))
 })
 
-
-const markdown = computed(() => isMarkdown.value ? marked(modelValue.value) : "")
-
+const markdown = computed(() => (isMarkdown.value ? marked(modelValue.value) : ''))
 </script>

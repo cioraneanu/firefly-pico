@@ -1,0 +1,24 @@
+/* Mobile app styles for the dash area (on top of mx.css). Only add rules the design boards need that mx.css lacks. */
+
+/* Cards column: a nested .mx-body (so .mx-body > .mx-card animations still apply) that does not scroll by itself */
+.mx-body.mx-dash-cards { flex: none; min-height: auto; overflow: visible; padding: 0; }
+
+/* Month change: cards slide in from the side of the swipe */
+.mx-dash-frame { --enter-x: 36px; --leave-x: -36px; }
+.mx-dash-frame.back { --enter-x: -36px; --leave-x: 36px; }
+.mx-dash-slide-enter-active, .mx-dash-slide-leave-active { transition: transform .22s cubic-bezier(.2, 0, 0, 1), opacity .18s ease; }
+.mx-dash-slide-enter-from { opacity: 0; transform: translateX(var(--enter-x)); }
+.mx-dash-slide-leave-to { opacity: 0; transform: translateX(var(--leave-x)); }
+
+/* Calendar days, tiles and chart points are buttons here */
+.mx-cal button.d, button.mx-tile { text-align: left; }
+.mx-cal .d .tr + .tr { margin-top: 1px; }
+.mx-cal .d .tr.i { color: var(--in); }
+.mx-cal .d .tr.t { color: var(--tr); }
+.mx-tile small { font-size: 11px; color: var(--muted-foreground); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mx-bar small .e { color: var(--destructive); }
+
+/* Rows straight inside a dashboard card (todo transactions, upcoming recurring): hairlines between them, rounded bottom */
+.mx-dash-rows { margin-top: 6px; overflow: hidden; border-radius: 0 0 14px 14px; }
+.mx-dash-rows > .mx-swipe + .mx-swipe { box-shadow: inset 0 1px 0 var(--border); }
+.mx-dash-rows > .mx-swipe + .mx-swipe > .mx-row { margin-top: 1px; }

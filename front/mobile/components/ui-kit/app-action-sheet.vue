@@ -1,26 +1,28 @@
 <template>
-  <van-action-sheet v-model:show="show" :actions="actions" :close-on-click-overlay="true" :close-on-click-action="true" title="Select an option">
-<!--    <template #description>-->
-<!--      &lt;!&ndash;      TODO: Find solution. Sadly using this component with h() render function doesnt work for app-icon because of dynamic component usage.... &ndash;&gt;-->
-<!--      <app-icon :icon="TablerIconConstants.account" :size="20" />-->
-<!--      Debug-->
-<!--    </template>-->
-    <template #action="{ action, index }">
-      <div class="flex items-center justify-center">
-        <div>{{ action.name }}</div>
-      </div>
-    </template>
-  </van-action-sheet>
+  <app-sheet v-model:show="show" :title="title ?? $t('kit.select_option')">
+    <button v-for="(action, index) in actions" :key="index" type="button" class="mx-opt" :class="{ dng: action.danger }" :disabled="action.disabled" @click="onAction(action, index)">
+      <span v-if="action.icon" class="ic"><app-icon :icon="action.icon" :size="16" :stroke="2" /></span>
+      <span class="lb">{{ action.name }}</span>
+      <span v-if="action.subname" class="mt">{{ action.subname }}</span>
+    </button>
+  </app-sheet>
 </template>
 
 <script setup>
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import AppIcon from '~/shared/components/app-icon.vue'
+// Action sheet: a titled sheet of options ({ name, subname?, icon?, danger?, disabled?, callback? }).
+// Picking one closes the sheet, runs its callback and emits `select`.
+const show = defineModel('show', { type: Boolean, default: false })
 
-const show = defineModel('show')
-
-const props = defineProps({
-  actions: {},
+defineProps({
+  actions: { type: Array, default: () => [] },
+  title: { type: String, default: null },
 })
-</script>
 
+const emit = defineEmits(['select'])
+
+const onAction = (action, index) => {
+  show.value = false
+  action.callback?.(action, index)
+  emit('select', action, index)
+}
+</script>

@@ -1,43 +1,32 @@
 <template>
-  <div class="text-14 flex items-center gap-1">
-    <currency-dropdown v-model="dashboardStore.dashboardCurrency" />
+  <button type="button" class="mx-ib" :aria-label="$t('dash_page.hide_amounts')" :aria-pressed="!profileStore.dashboard.showAccountAmounts" @click="onToggleShowDashboardAccountValues">
+    <app-icon :icon="profileStore.dashboard.showAccountAmounts ? TablerIconConstants.eyeVisible : TablerIconConstants.eyeHidden" :size="18" :stroke="2" />
+  </button>
 
-    <div class="app-button-small cursor-pointer" @click="onToggleShowDashboardAccountValues">
-      <app-icon :icon="profileStore.dashboard.showAccountAmounts ? TablerIconConstants.eyeHidden : TablerIconConstants.eyeVisible" :size="20" />
-    </div>
+  <button v-if="activeFiltersCount > 0" type="button" class="mx-ib" :aria-label="$t('filters.clear')" @click="onResetFilters">
+    <app-icon :icon="IconFilterOff" :size="18" :stroke="2" />
+  </button>
 
-    <div class="app-button-small">
-      <div class="cursor-pointer" @click="onShowFilters">
-        <app-icon :icon="TablerIconConstants.search" :size="18" />
-        <span v-if="activeFiltersCount > 0"> {{ activeFiltersCount }}</span>
-      </div>
-      <div v-if="activeFiltersCount > 0" class="cursor-pointer" @click="onResetFilters">
-        <icon-square-rounded-x :size="22" :stroke="1.5" />
-      </div>
-    </div>
+  <button type="button" class="mx-ib mx-fbtn" :aria-label="$t('filters.transaction_filters')" @click="onShowFilters">
+    <app-icon :icon="IconAdjustmentsHorizontal" :size="18" :stroke="2" />
+    <span v-if="activeFiltersCount > 0" class="mx-fbtn__n">{{ activeFiltersCount }}</span>
+  </button>
 
-    <transaction-filters ref="transactionFiltersRef" v-model="filters" :show-date="false" :show-type="false" style="height: 85%" />
-  </div>
+  <transaction-filters ref="transactionFiltersRef" v-model="filters" :show-date="false" :show-type="false" />
 </template>
 
 <script setup>
-import { addMonths } from 'date-fns'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import Currency from '~/core/models/Currency.js'
 import { useListFilters } from '~/core/composables/useListFilters.js'
 import TransactionFilterUtils from '~/core/utils/TransactionFilterUtils.js'
-import { IconSquareRoundedX } from '@tabler/icons-vue'
+import { IconAdjustmentsHorizontal, IconFilterOff } from '@tabler/icons-vue'
 
-import { useCurrencyStore } from '~/core/stores/currencyStore'
 import { useDashboardStore } from '~/core/stores/dashboardStore'
 
-const currencyStore = useCurrencyStore()
 const dashboardStore = useDashboardStore()
 const profileStore = useProfileStore()
 
 const transactionFiltersRef = useTemplateRef('transactionFiltersRef')
-
-const hasMultipleCurrencies = computed(() => dashboardStore.dashboardAccountsCurrencyList.length > 1)
 
 const onToggleShowDashboardAccountValues = async () => {
   profileStore.dashboard.showAccountAmounts = !profileStore.dashboard.showAccountAmounts
@@ -47,19 +36,18 @@ const onShowFilters = () => {
   transactionFiltersRef.value.show()
 }
 
-const { filters, filtersBackendList, activeFiltersCount, activeFilters } = useListFilters({
+const { filters, filtersBackendList, activeFiltersCount } = useListFilters({
   filterDefinitions: Object.values(TransactionFilterUtils.filters),
 })
 const onResetFilters = () => {
   filters.value = {}
 }
 
-watch(filters, (newValue) => {
+watch(filters, () => {
   dashboardStore.fetchDashboard()
 })
 
 watch(filtersBackendList, (newValue) => {
   dashboardStore.backendFilters = newValue
 })
-
 </script>

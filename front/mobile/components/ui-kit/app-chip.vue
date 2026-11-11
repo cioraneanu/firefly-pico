@@ -1,22 +1,16 @@
 <template>
-  <div class="app-chip flex flex-col items-center">
-    <div v-if="title" class="title font-semibold">{{ title }}</div>
-    <div v-if="subtitle" class="subtitle">{{ subtitle }}</div>
+  <div class="mx-tile">
+    <div v-if="title" class="h">
+      <span>{{ title }}</span>
+    </div>
+    <b v-if="subtitle" class="mx-money">{{ subtitle }}</b>
   </div>
 </template>
 
 <script setup>
-import DateUtils from '~/core/utils/DateUtils'
-import { addDays, startOfDay, subYears } from 'date-fns'
-import { useFormAttributes } from '~/core/composables/useFormAttributes'
-import { useSwipeToDismiss } from '~/mobile/composables/useSwipeToDismiss.js'
-
-const props = defineProps({
-  title: {
-    type: String,
-  },
-  subtitle: {
-    type: String,
-  },
+// Small stat (design: .mx-tile): muted caption above a bold value. Put several in a .mx-tiles grid.
+defineProps({
+  title: { type: String },
+  subtitle: { type: String },
 })
 </script>

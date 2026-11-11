@@ -1,81 +1,103 @@
 <template>
-  <div class="app-form">
+  <div class="mx-page">
     <app-top-toolbar />
 
-    <van-form class="" @submit="onSave">
-      <van-cell-group inset>
-        <!--        <div class="van-cell-group-title">Setup</div>-->
+    <app-form @submit="onSave">
+      <main class="mx-body has-save">
+        <app-card>
+          <app-field v-model="picoBackendURL" name="picoBackendURL" inputmode="url" :label="$t('settings.setup.pico_backend_url')" :rules="[rule.required()]">
+            <template #left-icon>
+              <app-icon :icon="IconWorld" :size="16" :stroke="2" />
+            </template>
+          </app-field>
 
-        <app-field v-model="picoBackendURL" left-icon="link-o" :label="$t('settings.setup.pico_backend_url')" :rules="[rule.required()]" required>
-          <template #button>
-            <van-button size="small" native-type="button" :aria-label="$t('settings.setup.http_headers')" @click.stop="showHeadersDialog = true">
-              <app-icon :icon="TablerIconConstants.settings" :size="18" />
-            </van-button>
-          </template>
-        </app-field>
-        <settings-token-field v-model="authToken" required />
-        <van-cell>
-          <van-button size="small" block native-type="button" :loading="isTesting" @click="testConnection({ picoBackendURL, authToken, picoBackendHeaders })">
-            <div class="flex items-center gap-1">
-              <icon-plug-connected :size="18" :stroke-width="1.8" />
-              {{ $t('settings.setup.test_connection') }}
+          <settings-token-field v-model="authToken" required />
+
+          <button type="button" class="mx-btn out mx-btn-block" @click="showHeadersSheet = true">
+            <app-icon :icon="IconWebhook" :size="16" :stroke="2" />
+            <span>{{ $t('settings.setup.http_headers') }}{{ headersCount ? ` · ${headersCount}` : '' }}</span>
+          </button>
+
+          <button type="button" class="mx-btn out mx-btn-block" :disabled="isTesting" @click="testConnection({ picoBackendURL, authToken, picoBackendHeaders })">
+            <span v-if="isTesting" class="mx-spin" />
+            <app-icon v-else :icon="IconPlugConnected" :size="16" :stroke="2" />
+            <span>{{ $t('settings.setup.test_connection') }}</span>
+          </button>
+
+          <div class="mx-hr" />
+          <app-boolean v-model="syncProfileInDB" :label="$t('settings.setup.sync_settings_via_token')" />
+          <div class="mx-hr" />
+
+          <app-field v-model="daysBetweenFullSync" name="daysBetweenFullSync" type="digit" :label="$t('settings.setup.days_between_sync')" :rules="[rule.required()]">
+            <template #left-icon>
+              <app-icon :icon="IconCalendarRepeat" :size="16" :stroke="2" />
+            </template>
+          </app-field>
+        </app-card>
+
+        <app-card-info>
+          <app-field-link :label="$t('settings.setup.enabled_resources')" :icon="IconToggleRight" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_ENABLED_RESOURCES)" />
+        </app-card-info>
+
+        <app-card :section="$t('settings.setup.loaded_data_stats')" :form="false">
+          <div class="mx-card__c">
+            <div class="mx-kv">
+              <app-config-stat :icon="TablerIconConstants.account" :name="$t('settings.setup.account')" :value="accountsCount" />
+              <app-config-stat :icon="TablerIconConstants.category" :name="$t('settings.setup.categories')" :value="categoriesCount" :muted="!profileStore.categoriesEnabled" />
+              <app-config-stat :icon="TablerIconConstants.tag" :name="$t('settings.setup.tags')" :value="tagsCount" :muted="!profileStore.tagsEnabled" />
+              <app-config-stat :icon="TablerIconConstants.transactionTemplate" :name="$t('settings.setup.templates')" :value="transactionTemplatesCount" />
+              <app-config-stat :icon="TablerIconConstants.budget" :name="$t('settings.setup.budgets')" :value="budgetsCount" :muted="!profileStore.budgetsEnabled" />
+              <app-config-stat :icon="TablerIconConstants.piggyBank" :name="$t('settings.setup.piggy_banks')" :value="piggyBanksCount" :muted="!profileStore.piggyBanksEnabled" />
+              <app-config-stat
+                :icon="TablerIconConstants.recurringTransaction"
+                :name="$t('settings.setup.recurring_transactions')"
+                :value="recurringTransactionsCount"
+                :muted="!profileStore.recurringTransactionsEnabled"
+              />
+              <app-config-stat :icon="TablerIconConstants.lastSync" :name="$t('settings.setup.last_sync')" :value="lastSync" />
             </div>
-          </van-button>
-        </van-cell>
-        <app-boolean v-model="syncProfileInDB" left-icon="points" :label="$t('settings.setup.sync_settings_via_token')" />
-        <app-field v-model="daysBetweenFullSync" :label="$t('settings.setup.days_between_sync')" :rules="[rule.required()]" required />
-      </van-cell-group>
-
-      <van-cell-group inset>
-        <app-field-link :label="$t('settings.setup.enabled_resources')" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_ENABLED_RESOURCES)" />
-      </van-cell-group>
-
-      <van-cell-group inset>
-        <div class="van-cell-group-title">{{ $t('settings.setup.loaded_data_stats') }}</div>
-
-        <van-grid :column-num="3">
-          <app-config-stat :icon="TablerIconConstants.account" :name="$t('settings.setup.account')" :value="accountsCount" />
-          <app-config-stat :icon="TablerIconConstants.category" :name="$t('settings.setup.categories')" :value="categoriesCount" :muted="!profileStore.categoriesEnabled" />
-          <app-config-stat :icon="TablerIconConstants.tag" :name="$t('settings.setup.tags')" :value="tagsCount" :muted="!profileStore.tagsEnabled" />
-          <app-config-stat :icon="TablerIconConstants.transactionTemplate" :name="$t('settings.setup.templates')" :value="transactionTemplatesCount" />
-          <app-config-stat :icon="TablerIconConstants.budget" :name="$t('settings.setup.budgets')" :value="budgetsCount" :muted="!profileStore.budgetsEnabled" />
-          <app-config-stat :icon="TablerIconConstants.piggyBank" :name="$t('settings.setup.piggy_banks')" :value="piggyBanksCount" :muted="!profileStore.piggyBanksEnabled" />
-          <app-config-stat
-            :icon="TablerIconConstants.recurringTransaction"
-            :name="$t('settings.setup.recurring_transactions')"
-            :value="recurringTransactionsCount"
-            :muted="!profileStore.recurringTransactionsEnabled"
-          />
-          <app-config-stat :icon="TablerIconConstants.lastSync" :name="$t('settings.setup.last_sync')" :value="lastSync" />
-        </van-grid>
-      </van-cell-group>
+          </div>
+        </app-card>
+      </main>
 
       <app-button-form-save />
-    </van-form>
+    </app-form>
 
-    <van-dialog v-model:show="showHeadersDialog" :title="$t('settings.setup.http_headers')" :confirm-button-text="$t('ok')" width="100%" style="margin: 20px; max-height: 500px">
-      <div class="p-5 overflow-auto" style="max-height: 400px">
-        <div class="flex font-semibold text-13">
-          <div class="flex-1">{{ $t('settings.setup.http_header_key') }}</div>
-          <div class="flex-1">{{ $t('settings.setup.http_header_value') }}</div>
+    <app-sheet v-model:show="showHeadersSheet" :title="$t('settings.setup.http_headers')">
+      <div class="mx-form">
+        <div v-if="picoBackendHeaders.length" class="mx-hdr-h">
+          <span>{{ $t('settings.setup.http_header_key') }}</span>
+          <span>{{ $t('settings.setup.http_header_value') }}</span>
+          <span />
         </div>
-        <app-repeater v-model="picoBackendHeaders" :empty-item="{ key: '', value: '' }" :is-draggable="false">
-          <template #content="{ element }">
-            <div class="flex gap-1 mb-2">
-              <app-field v-model="element.key" class="flex-1 p-0" :placeholder="$t('settings.setup.http_header_key')" />
-              <app-field v-model="element.value" class="flex-1 p-0" :placeholder="$t('settings.setup.http_header_value')" />
-            </div>
-          </template>
-        </app-repeater>
+        <div v-for="(header, index) in picoBackendHeaders" :key="index" class="mx-hdr">
+          <label class="mx-in">
+            <input v-model="header.key" type="text" :placeholder="$t('settings.setup.http_header_key')" :aria-label="$t('settings.setup.http_header_key')" />
+          </label>
+          <label class="mx-in">
+            <input v-model="header.value" type="text" :placeholder="$t('settings.setup.http_header_value')" :aria-label="$t('settings.setup.http_header_value')" />
+          </label>
+          <button type="button" class="mx-ib sm" :aria-label="$t('delete')" @click="picoBackendHeaders.splice(index, 1)">
+            <app-icon :icon="IconTrash" :size="16" :stroke="2" />
+          </button>
+        </div>
+        <button type="button" class="mx-btn dash block" @click="picoBackendHeaders.push({ key: '', value: '' })">
+          <app-icon :icon="IconPlus" :size="16" :stroke="2" />
+          <span>{{ $t('settings.setup.add_http_header') }}</span>
+        </button>
+        <div class="mx-d">{{ $t('settings.setup.http_headers_info') }}</div>
       </div>
-    </van-dialog>
+
+      <template #footer>
+        <button type="button" class="mx-btn pri" @click="showHeadersSheet = false">{{ $t('done') }}</button>
+      </template>
+    </app-sheet>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useProfileStore } from '~/core/stores/profileStore'
-import { useDashboardStore } from '~/core/stores/dashboardStore'
 import { useAccountStore } from '~/core/stores/accountStore'
 import { useCategoryStore } from '~/core/stores/categoryStore'
 import { useTagStore } from '~/core/stores/tagStore'
@@ -84,16 +106,13 @@ import { usePiggyBankStore } from '~/core/stores/piggyBankStore'
 import { useRecurringTransactionStore } from '~/core/stores/recurringTransactionStore'
 import { useTemplateStore } from '~/core/stores/templateStore'
 import UIUtils from '~/core/utils/UIUtils'
-import SettingsTokenField from '~/mobile/components/settings/settings-token-field.vue'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import RouteConstants from '~/core/constants/RouteConstants'
-
-import AppConfigStat from '~/mobile/components/settings/app-config-stat.vue'
 import UserRepository from '~/core/repository/UserRepository'
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
 import { cloneDeep, get } from 'lodash-es'
 import { rule } from '~/core/utils/ValidationUtils.js'
-import { IconPlugConnected } from '@tabler/icons-vue'
+import { IconCalendarRepeat, IconPlugConnected, IconPlus, IconToggleRight, IconTrash, IconWebhook, IconWorld } from '@tabler/icons-vue'
 
 const appStore = useAppStore()
 const profileStore = useProfileStore()
@@ -110,9 +129,10 @@ const picoBackendURL = ref('')
 const picoBackendHeaders = ref([])
 const syncProfileInDB = ref(true)
 const daysBetweenFullSync = ref(4)
-const showHeadersDialog = ref(false)
+const showHeadersSheet = ref(false)
 const { testConnection, isTesting } = useConnectionTest()
 
+const headersCount = computed(() => picoBackendHeaders.value.filter(({ key }) => key?.trim()).length)
 const accountsCount = computed(() => accountStore.accountList.length)
 const categoriesCount = computed(() => categoryStore.categoryList.length)
 const tagsCount = computed(() => tagStore.tagList.length)
@@ -128,7 +148,7 @@ const { t } = useI18n()
 onMounted(() => {
   authToken.value = appStore.authToken
   picoBackendURL.value = appStore.picoBackendURL
-  picoBackendHeaders.value = cloneDeep(appStore.picoBackendHeaders)
+  picoBackendHeaders.value = cloneDeep(appStore.picoBackendHeaders ?? [])
   syncProfileInDB.value = appStore.syncProfileInDB
   daysBetweenFullSync.value = appStore.daysBetweenFullSync
 })

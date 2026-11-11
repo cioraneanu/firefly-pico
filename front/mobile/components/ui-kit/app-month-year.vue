@@ -1,52 +1,46 @@
 <template>
-  <app-popup v-model:show="showDropdown" style="height: 50%; padding-top: 4px">
-    <div ref="popupRef" class="h-full flex flex-col qqq">
-      <div class="van-popup-title flex items-center px-6">
-        <div class="flex-1">{{ props.popupTitle }}</div>
-        <van-button size="small" @click="onSet">Set</van-button>
-      </div>
-
-      <van-date-picker v-model="localModelValue" :columns-type="['year', 'month']" confirm-button-text="" cancel-button-text="" />
+  <app-sheet v-model:show="showDropdown" :title="popupTitle ?? $t('kit.choose_month')">
+    <div class="mx-yr">
+      <button type="button" class="mx-ib sm out" :aria-label="$t('kit.previous_year')" @click="year--">
+        <app-icon :icon="IconChevronLeft" :size="16" :stroke="2" />
+      </button>
+      <b>{{ year }}</b>
+      <button type="button" class="mx-ib sm out" :aria-label="$t('kit.next_year')" @click="year++">
+        <app-icon :icon="IconChevronRight" :size="16" :stroke="2" />
+      </button>
     </div>
-  </app-popup>
+    <div class="mx-mgrid pb-2" role="radiogroup" :aria-label="popupTitle ?? $t('kit.choose_month')">
+      <button v-for="(name, month) in months" :key="month" type="button" role="radio" :class="{ on: isSelected(month) }" :aria-checked="isSelected(month)" @click="onPick(month)">
+        {{ name }}
+      </button>
+    </div>
+  </app-sheet>
 </template>
 
 <script setup>
-import { get } from 'lodash-es'
+import { IconChevronLeft, IconChevronRight } from '@tabler/icons-vue'
+import { upperFirst } from 'lodash-es'
 
-import { useFormAttributes } from '~/core/composables/useFormAttributes'
-import { isEqual } from 'lodash-es/lang'
-import { useSwipeToDismiss } from '~/mobile/composables/useSwipeToDismiss'
+// Month picker sheet (design: MX-DashPeriod month grid). The value is the first day of the picked month.
+const modelValue = defineModel()
+const showDropdown = defineModel('showDropdown', { type: Boolean, default: false })
 
-const modelValue = defineModel({
-  set: (value) => {
-    return DateUtils.stringToDate(`${value[0]}-${value[1]}-01`)
-  },
-  get: (value) => {
-    const result = value ?? new Date()
-    return [result.getFullYear(), result.getMonth() + 1]
-  },
+defineProps({
+  popupTitle: { type: String, default: null },
 })
 
-const localModelValue = ref(null)
-bindOneWay(modelValue, localModelValue)
+const { locale } = useI18n()
+const months = computed(() => Array.from({ length: 12 }, (_, month) => upperFirst(new Intl.DateTimeFormat(locale.value, { month: 'short' }).format(new Date(2000, month, 1)))))
 
-const showDropdown = defineModel('showDropdown', false)
+const year = ref(new Date().getFullYear())
+watch(showDropdown, (isShown) => isShown && (year.value = (modelValue.value ?? new Date()).getFullYear()), { immediate: true })
 
-const props = defineProps({
-  popupTitle: {
-    default: 'Choose Month / Year',
-  },
-})
+const isSelected = (month) => !!modelValue.value && modelValue.value.getFullYear() === year.value && modelValue.value.getMonth() === month
 
-const onSet = () => {
-  if (!isEqual(modelValue.value, localModelValue.value)) {
-    modelValue.value = localModelValue.value
+const onPick = (month) => {
+  if (!isSelected(month)) {
+    modelValue.value = new Date(year.value, month, 1)
   }
-  onHideDropdown()
-}
-
-const onHideDropdown = () => {
   showDropdown.value = false
 }
 </script>

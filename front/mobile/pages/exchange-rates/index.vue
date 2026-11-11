@@ -1,61 +1,59 @@
 <template>
-  <div class="app-form">
+  <div class="mx-page">
     <app-top-toolbar />
 
-    <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
-      <van-cell-group inset>
-        <app-list-search v-model="search" />
+    <main class="mx-body">
+      <app-list v-model:refreshing="isRefreshing" finished @refresh="onRefresh">
+        <app-list-search v-model="search" :placeholder="$t('exchange_rate_page.search')" />
 
-        <div class="van-cell-group-title mt-1.25 mb-0">{{ $t('date') }}: {{ exchangeDate }}</div>
-        <div class="text-muted text-12 ml-3.75 mb-2.5">{{ $t('exchange_rate_page.relative_to_usd') }}</div>
+        <div class="mx-meta-row">
+          <span class="mx-chip fill"
+            ><app-icon :icon="IconCalendar" :size="12" :stroke="2" /><span>{{ $t('date') }}: {{ exchangeDate }}</span></span
+          >
+          <span class="mx-chip"
+            ><app-icon :icon="IconCurrencyDollar" :size="12" :stroke="2" /><span>{{ $t('exchange_rate_page.relative_to_usd') }}</span></span
+          >
+        </div>
 
-        <van-grid :column-num="3">
-          <van-grid-item v-for="currency in filteredList">
-            <template #text>
-              <div>
-                <div class="flex items-center justify-center text-14 font-semibold">{{ currency.code }}</div>
-                <div class="flex items-center justify-center text-10">{{ currency.name }}</div>
-                <div class="flex items-center justify-center text-10 text-muted">{{ currency.value }}</div>
-              </div>
-            </template>
-          </van-grid-item>
-        </van-grid>
-      </van-cell-group>
-    </van-pull-refresh>
+        <div v-if="filteredList.length > 0" class="mx-list">
+          <div class="mx-rates">
+            <div v-for="currency in filteredList" :key="currency.code" class="mx-rate">
+              <b>{{ currency.code }}</b>
+              <span>{{ currency.name }}</span>
+              <i>{{ currency.value }}</i>
+            </div>
+          </div>
+        </div>
+
+        <empty-list v-else-if="list.length > 0" filtered>
+          <template #action>
+            <button type="button" class="mx-btn out" @click="search = ''">{{ $t('general.clear_filters') }}</button>
+          </template>
+        </empty-list>
+
+        <empty-list v-else :icon="TablerIconConstants.exchangeRates" :hint="$t('exchange_rate_page.empty_hint')" />
+      </app-list>
+    </main>
   </div>
 </template>
 
 <script setup>
 import { get } from 'lodash-es'
-import { useProfileStore } from '~/core/stores/profileStore'
+import { IconCalendar, IconCurrencyDollar } from '@tabler/icons-vue'
 import { useCurrencyStore } from '~/core/stores/currencyStore'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import RouteConstants from '~/core/constants/RouteConstants'
-import UIUtils from '~/core/utils/UIUtils.js'
-import AppListSearch from '~/mobile/components/ui-kit/theme/app-list-search.vue'
-import Tag from '~/core/models/Tag.js'
+import TablerIconConstants from '~/core/constants/TablerIconConstants'
 
-const profileStore = useProfileStore()
 const currencyStore = useCurrencyStore()
 
 const isRefreshing = ref(false)
 const search = ref('')
-const isSearchVisible = ref(true)
 
 const exchangeDate = computed(() => get(currencyStore.exchangeRates, 'date'))
 const list = computed(() => currencyStore.exchangeRatesList)
 
-const filteredList = computed(() => {
-  if (search.value.length === 0) {
-    return list.value
-  }
-
-  return list.value.filter((item) =>
-    ['code', 'name', 'country'].some((key) => {
-      return LanguageUtils.includesSearch(item[key], search.value)
-    }),
-  )
-})
+const filteredList = computed(() => (search.value ? list.value.filter((item) => ['code', 'name', 'country'].some((key) => LanguageUtils.includesSearch(item[key], search.value))) : list.value))
 
 const onRefresh = async () => {
   isRefreshing.value = true
@@ -63,10 +61,8 @@ const onRefresh = async () => {
   isRefreshing.value = false
 }
 
-
-const toolbar = useToolbar()
 const { t } = useI18n()
-toolbar.init({
+useToolbar().init({
   title: t('exchange_rates'),
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })

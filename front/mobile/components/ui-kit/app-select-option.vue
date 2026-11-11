@@ -1,27 +1,13 @@
 <template>
-  <div class="flex flex-col items-center">
-    <app-icon v-if="props.icon" :icon="props.icon" />
-    <div class="van-grid-item__text app-tag app-select-option-text">{{ props.text }}</div>
-    <div class="app-icon-item"/>
-  </div>
+  <span v-if="icon" class="ic"><app-icon :icon="icon" :size="16" :stroke="2" /></span>
+  <span class="lb">{{ text }}</span>
 </template>
 
 <script setup>
-import TablerIconConstants from '~/core/constants/TablerIconConstants'
-
-const props = defineProps({
+// Content of a picker option row (inside .mx-opt): icon tile + label.
+defineProps({
   text: {},
   icon: {},
-  isSelected: {
-    default: false,
-  },
-})
-
-const computedClass = computed(() => {
-  return {
-    active: props.isSelected,
-    // 'active': true,
-  }
+  isSelected: { default: false },
 })
 </script>
-
