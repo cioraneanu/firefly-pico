@@ -17,8 +17,7 @@
 
       <span class="r">
         <span class="mx-amt mx-money" :class="amountClass">{{ transactionAmount }} {{ transactionCurrency }}</span>
-        <span class="mx-date">{{ dateFormatted }}</span>
-        <span class="mx-date">{{ timeAgo }}</span>
+        <span class="mx-date">{{ dateOrTimeAgo }}</span>
       </span>
     </div>
 
@@ -92,8 +91,7 @@ const {
   visibleTags,
   transactionAmount,
   transactionCurrency,
-  dateFormatted,
-  timeAgo,
+  dateOrTimeAgo,
   getStyleForField,
 } = useTransactionListItem(props)
 
