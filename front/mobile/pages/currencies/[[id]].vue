@@ -40,8 +40,9 @@ import { rule } from '~/core/utils/ValidationUtils.js'
 const { itemId, saveItem, onDelete, onNew, onValidationError, formName, name, code, symbol, decimalPlaces, isEnabled, isDefault } = useCurrencyForm()
 
 const { t } = useI18n()
+const route = useRoute()
 useToolbar().init({
-  title: itemId.value ? t('currency_page.title_edit') : t('currency_page.title_add'),
+  title: computed(() => (itemId.value || route.params.id ? t('currency_page.title_edit') : t('currency_page.title_add'))),
   backRoute: RouteConstants.ROUTE_CURRENCY_LIST,
 })
 </script>

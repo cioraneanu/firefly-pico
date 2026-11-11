@@ -145,7 +145,7 @@ export const useProfileStore = defineStore('profile', () => {
 
   async function writeProfile() {
     const appStore = useAppStore()
-    if (!appStore.syncProfileInDB) {
+    if (!appStore.syncProfileInDB || !profileActiveId.value) {
       return
     }
 

@@ -75,8 +75,9 @@ const {
 const onNavigateToTransactionsList = () => navigateTo(transactionsRoute.value)
 
 const { t } = useI18n()
+const route = useRoute()
 useToolbar().init({
-  title: itemId.value ? t('tag_page.title_edit') : t('tag_page.title_add'),
+  title: computed(() => (itemId.value || route.params.id ? t('tag_page.title_edit') : t('tag_page.title_add'))),
   backRoute: RouteConstants.ROUTE_TAG_LIST,
 })
 </script>

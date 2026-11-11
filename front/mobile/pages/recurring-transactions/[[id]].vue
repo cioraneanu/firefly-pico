@@ -206,8 +206,9 @@ const accountSourceBinding = computed(() => accountBinding(isAccountSourceRequir
 const accountDestinationBinding = computed(() => accountBinding(isAccountDestinationRequired.value))
 
 const { t } = useI18n()
+const route = useRoute()
 useToolbar().init({
-  title: itemId.value ? t('recurring_transaction_page.title_edit') : t('recurring_transaction_page.title_add'),
+  title: computed(() => (itemId.value || route.params.id ? t('recurring_transaction_page.title_edit') : t('recurring_transaction_page.title_add'))),
   backRoute: RouteConstants.ROUTE_RECURRING_TRANSACTION_LIST,
 })
 </script>

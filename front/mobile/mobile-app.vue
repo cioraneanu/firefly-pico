@@ -1,5 +1,5 @@
 <template>
-  <div class="mx mx-app" :class="{ kb: isKeyboardVisible }" :data-theme="profileStore.darkTheme ? 'dark' : 'light'">
+  <div class="mx mx-app" :class="{ kb: isKeyboardVisible }" :style="keyboardStyle" :data-theme="profileStore.darkTheme ? 'dark' : 'light'">
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
@@ -16,7 +16,12 @@ import MobileUI from '~/mobile/utils/MobileUI'
 UIUtils.ui = MobileUI
 
 const profileStore = useProfileStore()
-const { isKeyboardVisible } = useKeyboard()
+const { isKeyboardVisible, visualViewportHeight, visualViewportOffsetTop } = useKeyboard()
+// iOS does not resize the page for the keyboard, it pans it: pin the app to the visible area so sheets and the save button sit above the keyboard
+const keyboardStyle = computed(() => (isKeyboardVisible.value ? { '--app-h': `${visualViewportHeight.value}px`, '--app-y': `${visualViewportOffsetTop.value}px` } : null))
+
+// iOS Safari only shows :active press states when the page listens to touches
+onMounted(() => document.addEventListener('touchstart', () => {}, { passive: true }))
 
 useHead({
   link: [

@@ -94,8 +94,9 @@ const balance = computed(() => Account.getBalanceWithCurrency(item.value))
 const onAdjustBalance = () => (isAdjustBalanceVisible.value = true)
 const onNavigateToTransactionsList = () => navigateTo(transactionsRoute.value)
 
+const route = useRoute()
 useToolbar().init({
-  title: itemId.value ? t('account_page.title_edit') : t('account_page.title_add'),
+  title: computed(() => (itemId.value || route.params.id ? t('account_page.title_edit') : t('account_page.title_add'))),
   backRoute: RouteConstants.ROUTE_ACCOUNT_LIST,
 })
 </script>

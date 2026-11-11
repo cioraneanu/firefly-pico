@@ -15,15 +15,21 @@ export function animateSwipeList(list) {
   watch(list, async (newValue, oldValue) => {
     await nextTick()
 
-    // initially animate everything, onLoadMore animate only new items
-    const animateFromIndex = oldValue?.length === newValue?.length ? 0 : (oldValue.length + 1 ?? 0)
-    const targets = `.mx-swipe:nth-child(n+${animateFromIndex})`
+    // Rows and their day / group headers: all of them on a refresh, only the ones a new page added on load more
+    const elements = [...document.querySelectorAll('.mx-body .mx-swipe, .mx-body .mx-grp')]
+    const targets = oldValue?.length === newValue?.length ? elements : elements.filter((element) => !element.dataset.shown)
+    elements.forEach((element) => (element.dataset.shown = '1'))
+    if (targets.length === 0) {
+      return
+    }
 
     animate(targets, {
-      translateY: [-50, 0],
+      translateY: [14, 0],
       opacity: [0, 1],
-      delay: stagger(25, { start: 0 }),
-      ease: 'outElastic(1, .5)',
+      duration: 380,
+      // Rows past the first screen do not wait for their turn
+      delay: (_, index) => Math.min(index, 14) * 22,
+      ease: 'outCubic',
     })
   })
 }

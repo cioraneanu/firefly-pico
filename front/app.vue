@@ -24,11 +24,12 @@ useHead({
 })
 
 onMounted(async () => {
+  // Before the token check: after a first setup the dashboard opens without a reload
+  await dashboardStore.init()
   if (!appStore.authToken) {
     navigateTo(`${RouteConstants.ROUTE_SETTINGS_SETUP}`)
     return
   }
-  await dashboardStore.init()
 
   appStore.fetchInfo()
   await profileStore.getProfiles({ showLoading: false })

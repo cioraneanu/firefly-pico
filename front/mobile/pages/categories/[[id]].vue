@@ -36,8 +36,9 @@ const { itemId, saveItem, onDelete, onNew, onValidationError, formName, name, ic
 const onNavigateToTransactionsList = () => navigateTo(transactionsRoute.value)
 
 const { t } = useI18n()
+const route = useRoute()
 useToolbar().init({
-  title: itemId.value ? t('category_page.title_edit') : t('category_page.title_add'),
+  title: computed(() => (itemId.value || route.params.id ? t('category_page.title_edit') : t('category_page.title_add'))),
   backRoute: RouteConstants.ROUTE_CATEGORY_LIST,
 })
 </script>

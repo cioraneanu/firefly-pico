@@ -100,8 +100,9 @@ const currencySymbol = computed(() => Currency.getSymbol(currency.value))
 const onNavigateToTransactionsList = () => navigateTo(transactionsRoute.value)
 
 const { t } = useI18n()
+const route = useRoute()
 useToolbar().init({
-  title: itemId.value ? t('budget_page.title_edit') : t('budget_page.title_add'),
+  title: computed(() => (itemId.value || route.params.id ? t('budget_page.title_edit') : t('budget_page.title_add'))),
   backRoute: RouteConstants.ROUTE_BUDGET_LIST,
 })
 </script>

@@ -76,8 +76,9 @@ const {
 } = useTemplateForm()
 
 const { t } = useI18n()
+const route = useRoute()
 useToolbar().init({
-  title: itemId.value ? t('transaction_template_page.title_edit') : t('transaction_template_page.title_add'),
+  title: computed(() => (itemId.value || route.params.id ? t('transaction_template_page.title_edit') : t('transaction_template_page.title_add'))),
   backRoute: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST,
 })
 </script>

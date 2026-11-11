@@ -76,8 +76,9 @@ const { itemId, saveItem, onDelete, onNew, onValidationError, formName, name, ic
 const currencySymbol = computed(() => Account.getCurrencySymbol(account.value))
 
 const { t } = useI18n()
+const route = useRoute()
 useToolbar().init({
-  title: itemId.value ? t('piggy_bank_page.title_edit') : t('piggy_bank_page.title_add'),
+  title: computed(() => (itemId.value || route.params.id ? t('piggy_bank_page.title_edit') : t('piggy_bank_page.title_add'))),
   backRoute: RouteConstants.ROUTE_PIGGY_BANK_LIST,
 })
 </script>

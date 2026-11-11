@@ -68,7 +68,8 @@ const props = defineProps({
 })
 const modelValue = defineModel()
 
-const { error, isRequired } = useFormField({ name: () => 'authToken', rules: () => (props.required ? [rule.required()] : []), value: modelValue })
+const requiredRules = [rule.required()]
+const { error, isRequired } = useFormField({ name: () => 'authToken', rules: () => (props.required ? requiredRules : []), value: modelValue })
 
 const showSheet = ref(false)
 const isTokenVisible = ref(false)

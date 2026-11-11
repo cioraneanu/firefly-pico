@@ -1,12 +1,13 @@
 <template>
-  <div class="mx-range mx-range--sticky dashboard-control-date">
+  <div class="mx-range mx-range--sticky dashboard-control-date" :class="{ loading: isLoading }">
     <button type="button" class="mx-ib out" :aria-label="$t('dash_page.previous_period')" @click.stop="onPreviousMonth">
       <app-icon :icon="IconChevronLeft" :size="18" :stroke="2" />
     </button>
 
     <div class="mid">
       <button type="button" class="pick" aria-haspopup="dialog" :aria-label="$t('dash_page.period')" @click="onOpenPeriod">
-        <app-icon :icon="IconCalendarMonth" :size="15" :stroke="2" />
+        <span v-if="isLoading" class="mx-spin" />
+        <app-icon v-else :icon="IconCalendarMonth" :size="15" :stroke="2" />
         <span>{{ rangeTitle }}</span>
       </button>
     </div>
@@ -64,6 +65,9 @@ import { useDashboardStore } from '~/core/stores/dashboardStore'
 import { useCurrencyStore } from '~/core/stores/currencyStore'
 
 const dashboardStore = useDashboardStore()
+// Changing month loads in the background (the spinner replaces the calendar icon), so months can be swiped through without waiting
+const loadingStore = useLoadingStore()
+const isLoading = computed(() => loadingStore.isLoading)
 const currencyStore = useCurrencyStore()
 const { showDropdown, rangeTitle, onNextMonth, onPreviousMonth, onChooseMonth } = useDashboardControls()
 

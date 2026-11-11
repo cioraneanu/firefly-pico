@@ -1098,10 +1098,10 @@ a.mx-tile, a.mx-bar, .mx-wk a.c { color: inherit; }
 
 /* date picker: months side by side, swipe or scroll horizontally (snaps one month at a time) */
 .mx-cp__wk { margin-bottom: 4px; }
-.mx-cp__strip { display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; animation: mx-cp-mount .01s; }
-.mx-cp__strip::-webkit-scrollbar { display: none; }
+.mx-cp__view { overflow: hidden; touch-action: pan-y; }
+.mx-cp__strip { display: flex; transition: transform .4s cubic-bezier(.22, .9, .3, 1); will-change: transform; }
+.mx-cp__strip.dragging { transition: none; }
 .mx-cp__m { flex: 0 0 100%; scroll-snap-align: center; scroll-snap-stop: always; grid-template-rows: repeat(6, 42px); align-content: start; }
-@keyframes mx-cp-mount { from { opacity: .999; } to { opacity: 1; } }
 
 /* swipe a list row left to reveal Delete (native horizontal scroll + snap, works with touch and trackpads) */
 .mx-swipe { position: relative; display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; background: var(--destructive); }
@@ -1801,9 +1801,26 @@ button.mx-bar { width: 100%; text-align: left; }
    teleport into #mx-portal, which sits inside .mx so they keep the tokens.
    ===================================================================================== */
 html, body, #__nuxt { margin: 0; height: 100%; }
-body:has(.mx-app) { overscroll-behavior: none; touch-action: pan-x pan-y; scrollbar-width: none; }
+/* The document never scrolls or bounces (no browser pull-to-refresh, no rubber band past the app): only .mx-body and sheet bodies scroll */
+html:has(.mx-app), body:has(.mx-app) { overflow: hidden; overscroll-behavior: none; }
+body:has(.mx-app) { touch-action: pan-x pan-y; scrollbar-width: none; }
 body:has(> #__nuxt .mx-app) { background: var(--mx-page-bg, #fafafa); }
-.mx.mx-app { width: 100%; height: 100dvh; overflow: hidden; }
+/* While the keyboard is up, --app-h / --app-y pin the app to the visible area above it (set in mobile-app.vue) */
+.mx.mx-app { position: fixed; top: 0; left: 0; width: 100%; height: var(--app-h, 100dvh); overflow: hidden; }
+.mx.mx-app.kb { transform: translateY(var(--app-y, 0px)); }
+/* Feel like an app, not a page: no grey tap flash, no text selection or callouts on long press (inputs excepted) */
+.mx-app { -webkit-tap-highlight-color: transparent; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-text-size-adjust: 100%; }
+.mx-app :is(input, textarea, [contenteditable]) { -webkit-user-select: text; user-select: text; -webkit-touch-callout: default; }
+.mx-app :is(.mx-body, .mx-sh__b) { overscroll-behavior-y: contain; }
+/* the page under an open sheet or dialog stays put (iOS hands touches on the sheet to the scroller underneath otherwise) */
+.mx-app:has(> .mx-portal .mx-ov:not(.dim)) .mx-body { overflow: hidden; }
+/* blocking loader: invisible until shown; gone while a list shows its own progress (pull spinner, "Loading" footer), so scrolling goes on */
+.mx-app .mx-loading > * { opacity: 0; animation: none; }
+.mx-app .mx-loading.shown > * { opacity: 1; }
+.mx-app .mx-loading.anim > * { transition: opacity .25s ease; }
+.mx-app .mx-loading:not(.blocking) > * { pointer-events: none; }
+.mx-app:has(.mx-more, .mx-pull .mx-spin:not(.idle), .mx-range.loading) .mx-loading { display: none; }
+.mx-range .mid .pick .mx-spin { width: 15px; height: 15px; border-width: 2px; }
 .mx-app .mx-layout, .mx-app .mx-page { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; position: relative; }
 .mx-app .mx-top { height: calc(56px + env(safe-area-inset-top, 0px)); padding-top: env(safe-area-inset-top, 0px); }
 .mx-app .mx-top__t h1 { margin: 0; }
@@ -1817,21 +1834,34 @@ body:has(> #__nuxt .mx-app) { background: var(--mx-page-bg, #fafafa); }
 .mx-app.kb .mx-save { padding-bottom: 10px; }
 .mx-app .mx-portal { position: absolute; inset: 0; pointer-events: none; z-index: 40; }
 .mx-app .mx-portal > * { pointer-events: auto; }
-.mx-app .mx-pull { overflow: hidden; transition: height .2s; }
-.mx-app .mx-pull.idle { margin: 0; }
-.mx-app .mx-pull svg { width: 18px; height: 18px; transition: transform .15s; }
+/* pull to refresh: the list slides down and the spinner sits in the gap above it */
+.mx-app .mx-plist { position: relative; transition: transform .45s cubic-bezier(.32, .72, 0, 1); }
+.mx-app .mx-plist.dragging { transition: none; }
+.mx-app .mx-pull { position: absolute; left: 0; right: 0; top: -46px; height: 40px; margin: 0; }
+.mx-app .mx-pull .mx-spin.idle { animation: none; }
 .mx-app .mx-ov, .mx-app .mx-sh, .mx-app .mx-alert, .mx-app .mx-toast { position: absolute; }
-.mx-app .mx-sh { padding-bottom: env(safe-area-inset-bottom, 0px); }
-.mx-app .mx-toast { top: calc(64px + env(safe-area-inset-top, 0px)); }
+.mx-app .mx-sh { padding-bottom: env(safe-area-inset-bottom, 0px); animation: none; transform: translateY(var(--dy, 0px)); transition: transform .5s cubic-bezier(.32, .72, 0, 1); }
+/* fills the gap under the sheet when it is pulled up and rubber-bands */
+.mx-app .mx-sh::after { content: ""; position: absolute; left: 0; right: 0; top: calc(100% - 1px); height: 120px; background: var(--popover); }
+.mx-app .mx-sh__h { touch-action: none; }
+.mx-app .mx-ov { animation: none; touch-action: none; transition: opacity .35s ease; }
+.mx-app .mx-sh.dragging, .mx-app .mx-ov.dragging { transition: none; }
+.mx-app.kb .mx-sh { padding-bottom: 0; }
+/* searching in a picker: the sheet takes the room above the keyboard and keeps its size while the results filter */
+.mx-app.kb .mx-sh--s { height: calc(100% - 8px); max-height: none; }
+.mx-app .mx-toast { top: calc(64px + env(safe-area-inset-top, 0px)); animation: mx-toast-in .45s cubic-bezier(.32, .72, 0, 1); }
+.mx-app .mx-alert { animation: mx-alert-in .3s cubic-bezier(.32, .72, 0, 1); }
+@keyframes mx-toast-in { from { transform: translateY(-28px) scale(.96); opacity: 0; } }
+@keyframes mx-alert-in { from { transform: translateY(-50%) scale(1.12); opacity: 0; } }
 .mx-app .mx-toast.err .ok { background: var(--destructive); }
 .mx-app .mx-toast.warn .ok { background: #f59e0b; }
 .mx-app .mx-toast .x { margin-left: auto; color: var(--muted-foreground); }
 .mx-app .mx-f.bad .mx-in, .mx-app .mx-f.bad .mx-sel { box-shadow: inset 0 0 0 1px var(--destructive); }
 .mx-app .mx-ferr { font-size: 12px; line-height: 16px; color: var(--destructive); }
 .mx-app .mx-sel.dis, .mx-app .mx-in.dis { opacity: .55; pointer-events: none; }
-.mx-app .mx-sh-enter-active, .mx-app .mx-sh-leave-active { transition: transform .2s ease, opacity .2s ease; }
-.mx-app .mx-sh-enter-from, .mx-app .mx-sh-leave-to { transform: translateY(40px); opacity: 0; }
-.mx-app .mx-fd-enter-active, .mx-app .mx-fd-leave-active { transition: opacity .15s ease; }
+.mx-app .mx-sh-leave-active { transition-duration: .35s; }
+.mx-app .mx-sh-enter-from, .mx-app .mx-sh-leave-to { transform: translateY(100%); }
+.mx-app .mx-fd-enter-active, .mx-app .mx-fd-leave-active { transition: opacity .35s ease; }
 .mx-app .mx-fd-enter-from, .mx-app .mx-fd-leave-to { opacity: 0; }
 .mx-app .mx-page > form { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
 .mx-app .mx-sel .val > .mx-lead.sm { margin: -2px 0 -2px -6px; }
