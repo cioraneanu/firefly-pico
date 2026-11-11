@@ -1,17 +1,12 @@
 <template>
-  <div v-if="appStore.isSyncRequiredByMissingExtras" class="app-bottom-loading flex flex-col">
-    <div class="flex items-center gap-2">
-      <span class="text-12 font-normal">Found extras that require resync.</span>
-      <van-button size="small" @click="onResync"> Sync </van-button>
-    </div>
+  <div v-if="appStore.isSyncRequiredByMissingExtras" class="mx-sync" role="status">
+    <span>{{ $t('sync_required_by_extras') }}</span>
+    <button type="button" class="mx-btn xs pri" @click="onResync">{{ $t('sync') }}</button>
   </div>
 </template>
 
 <script setup>
-import { useDashboardStore } from '~/core/stores/dashboardStore'
-import { useProfileStore } from '~/core/stores/profileStore'
-import { IconRotateClockwise } from '@tabler/icons-vue'
-
+// Background sync notice (design: .mx-sync pill, bottom-left above the nav)
 const appStore = useAppStore()
 
 const onResync = async () => {
@@ -19,4 +14,3 @@ const onResync = async () => {
   reloadNuxtApp()
 }
 </script>
-

@@ -1,8 +1,8 @@
 <template>
-  <van-config-provider :theme="theme">
+  <div :class="themeClass">
     <NuxtPwaManifest />
     <component :is="shell" />
-  </van-config-provider>
+  </div>
 </template>
 
 <script setup>
@@ -16,7 +16,8 @@ const dashboardStore = useDashboardStore()
 const profileStore = useProfileStore()
 const appStore = useAppStore()
 
-const theme = computed(() => (profileStore.darkTheme ? 'dark' : 'white'))
+// van-theme-dark is the dark-mode hook for the desktop tokens and Tailwind's dark: variant
+const themeClass = computed(() => ({ 'app-theme': true, 'van-theme-dark': profileStore.darkTheme }))
 const pwaColor = computed(() => (profileStore.darkTheme ? '#1c1c1e' : '#ffffff'))
 useHead({
   meta: [{ name: 'theme-color', content: pwaColor }],

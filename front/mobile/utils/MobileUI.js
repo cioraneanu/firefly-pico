@@ -1,13 +1,7 @@
-import { showConfirmDialog, showNotify } from 'vant'
+import { useMobileFeedback } from '~/mobile/composables/useMobileFeedback'
 
 export default {
-  toast(message, type, duration) {
-    const instance = showNotify({ type, message, duration, className: 'app-toast', onClick: () => instance?.close() })
-    return instance
-  },
+  toast: (message, type, duration) => useMobileFeedback().pushToast(message, type, duration),
 
-  confirm: (title, message) =>
-    showConfirmDialog({ title, message })
-      .then(() => true)
-      .catch(() => false),
+  confirm: (title, message) => useMobileFeedback().askConfirm(title, message),
 }

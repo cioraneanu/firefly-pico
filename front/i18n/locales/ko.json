@@ -416,7 +416,9 @@
   },
   "category_page": {
     "title_add": "카테고리 추가",
-    "title_edit": "카테고리 수정"
+    "title_edit": "카테고리 수정",
+    "search": "카테고리 검색…",
+    "empty_hint": "카테고리가 여기에 표시됩니다"
   },
   "currency_page": {
     "title_add": "통화 추가",
@@ -514,7 +516,10 @@
   "new_transaction": "새 거래",
   "general": {
     "list_empty": "아직 항목이 없습니다",
-    "list_empty_subtitle": "오른쪽 상단 버튼으로 항목을 추가하세요."
+    "list_empty_subtitle": "오른쪽 상단 버튼으로 항목을 추가하세요.",
+    "list_no_results": "일치하는 항목 없음",
+    "list_no_results_subtitle": "검색어와 필터로 모든 항목이 숨겨졌습니다.",
+    "clear_filters": "필터 지우기"
   },
   "cancel": "취소",
   "close": "닫기",
@@ -592,5 +597,12 @@
       "this_month": "이번 달",
       "nothing_to_do": "할 일 없음"
     }
-  }
+  },
+  "clear": "지우기",
+  "done": "완료",
+  "back": "뒤로",
+  "no_matches": "일치 항목 없음",
+  "refreshing": "새로고침 중…",
+  "sync": "동기화",
+  "sync_required_by_extras": "다시 동기화가 필요한 추가 항목이 있습니다"
 }

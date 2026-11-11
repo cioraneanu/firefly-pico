@@ -1,28 +1,22 @@
 <template>
-  <div class="app-list-search flex items-center gap-2">
+  <div class="mx-tools">
     <slot name="left" />
-    <van-search v-model="modelValue" class="flex-1" :placeholder="$t('search_placeholder')" />
+    <label class="mx-search">
+      <app-icon :icon="IconSearch" :size="16" :stroke="2" />
+      <input v-model="modelValue" type="search" :placeholder="placeholder ?? $t('search_placeholder')" :aria-label="$t('search_placeholder')" />
+      <button v-if="modelValue" type="button" class="mx-ib sm" style="margin-right: -8px" :aria-label="$t('clear')" @click="modelValue = ''">
+        <app-icon :icon="IconX" :size="14" :stroke="2" />
+      </button>
+    </label>
     <slot name="right" />
   </div>
 </template>
 
 <script setup>
-const modelValue = defineModel()
+import { IconSearch, IconX } from '@tabler/icons-vue'
+
+const modelValue = defineModel({ type: String, default: '' })
+defineProps({
+  placeholder: { type: String, default: null },
+})
 </script>
-
-<style scoped>
-.app-list-search {
-  padding: 10px 12px;
-}
-
-.app-list-search :deep(.van-search) {
-  padding: 0;
-  background: transparent;
-}
-
-.app-list-search :deep(.van-search__content) {
-  border-radius: 10px;
-  background: var(--white);
-  box-shadow: rgba(0, 0, 0, 0.06) 0px 0px 4px;
-}
-</style>

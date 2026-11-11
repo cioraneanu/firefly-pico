@@ -415,7 +415,9 @@
   },
   "category_page": {
     "title_add": "Ajouter une catégorie",
-    "title_edit": "Modifier une catégorie"
+    "title_edit": "Modifier une catégorie",
+    "search": "Rechercher des catégories…",
+    "empty_hint": "Vos catégories apparaîtront ici"
   },
   "currency_page": {
     "title_add": "Ajouter une devise",
@@ -513,7 +515,10 @@
   "new_transaction": "Nouvelle transaction",
   "general": {
     "list_empty": "Aucun élément pour le moment",
-    "list_empty_subtitle": "Ajoutez des entrées avec le bouton en haut à droite."
+    "list_empty_subtitle": "Ajoutez des entrées avec le bouton en haut à droite.",
+    "list_no_results": "Aucun résultat",
+    "list_no_results_subtitle": "Votre recherche et vos filtres masquent tout ici.",
+    "clear_filters": "Effacer les filtres"
   },
   "cancel": "Annuler",
   "close": "Fermer",
@@ -591,5 +596,12 @@
       "this_month": "Ce mois-ci",
       "nothing_to_do": "Rien à faire"
     }
-  }
+  },
+  "clear": "Effacer",
+  "done": "Terminé",
+  "back": "Retour",
+  "no_matches": "Aucun résultat",
+  "refreshing": "Actualisation…",
+  "sync": "Synchroniser",
+  "sync_required_by_extras": "Des extras nécessitent une nouvelle synchronisation"
 }

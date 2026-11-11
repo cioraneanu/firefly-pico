@@ -415,7 +415,9 @@
   },
   "category_page": {
     "title_add": "Adaugă categorie",
-    "title_edit": "Editează categorie"
+    "title_edit": "Editează categorie",
+    "search": "Caută categorii…",
+    "empty_hint": "Categoriile tale vor apărea aici"
   },
   "currency_page": {
     "title_add": "Adaugă monedă",
@@ -513,7 +515,10 @@
   "new_transaction": "Tranzacție nouă",
   "general": {
     "list_empty": "Niciun element deocamdată",
-    "list_empty_subtitle": "Adaugă câteva intrări folosind butonul din dreapta sus."
+    "list_empty_subtitle": "Adaugă câteva intrări folosind butonul din dreapta sus.",
+    "list_no_results": "Nimic nu se potrivește",
+    "list_no_results_subtitle": "Căutarea și filtrele ascund tot ce e aici.",
+    "clear_filters": "Șterge filtrele"
   },
   "cancel": "Anulează",
   "close": "Închide",
@@ -591,5 +596,12 @@
       "this_month": "Luna aceasta",
       "nothing_to_do": "Nimic de făcut"
     }
-  }
+  },
+  "clear": "Golește",
+  "done": "Gata",
+  "back": "Înapoi",
+  "no_matches": "Niciun rezultat",
+  "refreshing": "Se reîmprospătează…",
+  "sync": "Sincronizează",
+  "sync_required_by_extras": "Există date noi care necesită resincronizare"
 }

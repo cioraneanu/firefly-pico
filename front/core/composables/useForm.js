@@ -118,15 +118,12 @@ export function useForm(props) {
 
   const scrollToError = (errorInfo) => {
     let errorFields = (errorInfo.errors ?? []).map((item) => item.name).filter((item) => item)
-    const formElement = document.querySelector(`.van-form[name="${formName.value}"]`)
+    const formElement = document.querySelector(`form[name="${formName.value}"]`)
     if (!formElement) {
       return
     }
 
-    let topField = errorFields
-      .map((item) => formElement.querySelector(`[name="${item}"]`))
-      .filter((item) => item)
-      .reduce((result, item) => (item.offsetTop > (result.offsetTop ?? 0) ? item : result))
+    let topField = errorFields.map((item) => formElement.querySelector(`[name="${item}"]`)).find((item) => item)
 
     topField?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
@@ -138,7 +135,6 @@ export function useForm(props) {
   })
 
   // ----- Loading indicators -----
-
 
   // -----------------------------
 

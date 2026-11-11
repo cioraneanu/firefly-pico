@@ -1,41 +1,115 @@
 <template>
-  <van-field ref="vanFieldRef" v-model="modelValue" v-bind="dynamicAttrs" class="app-field app-field-text" clearable @focus="onFocus">
-    <template v-for="slot in Object.keys($slots)" #[slot]="scoped">
-      <slot :name="slot" v-bind="scoped ?? {}" />
-    </template>
+  <div class="mx-f" :class="{ bad: !!error }" @click="emit('click', $event)">
+    <slot name="label">
+      <div v-if="label" class="mx-l">
+        {{ label }}<span v-if="isRequired || required" class="req">*</span>
+        <span v-if="hint" class="hint">{{ hint }}</span>
+      </div>
+    </slot>
 
-    <template v-if="attrs.icon" #left-icon>
-      <app-icon :icon="attrs.icon" :size="20" />
-    </template>
+    <slot name="input">
+      <label class="mx-in" :class="{ ta: isTextarea, dis: disabled }">
+        <slot name="left-icon">
+          <app-icon v-if="showIcon && icon" :icon="icon" :size="16" :stroke="2" />
+        </slot>
+        <textarea
+          v-if="isTextarea"
+          ref="inputRef"
+          v-model="modelValue"
+          :name="name"
+          :rows="rows"
+          :placeholder="placeholder ?? label"
+          :readonly="readonly"
+          :disabled="disabled"
+          :maxlength="maxlength"
+          :aria-label="label"
+          :style="textareaStyle"
+          @input="autoGrow"
+          @focus="emit('focus', $event)"
+          @blur="emit('blur', $event)"
+        />
+        <input
+          v-else
+          ref="inputRef"
+          v-model="modelValue"
+          :name="name"
+          :type="inputType"
+          :inputmode="inputmode ?? defaultInputMode"
+          :placeholder="placeholder ?? label"
+          :readonly="readonly"
+          :disabled="disabled"
+          :maxlength="maxlength"
+          :aria-label="label"
+          @focus="emit('focus', $event)"
+          @blur="emit('blur', $event)"
+        />
+        <button v-if="isClearVisible" type="button" class="mx-ib sm" style="margin-right: -8px" :aria-label="$t('clear')" @click.prevent="modelValue = ''">
+          <app-icon :icon="IconX" :size="14" :stroke="2" />
+        </button>
+        <slot name="button" />
+        <slot name="right-icon" />
+        <slot name="right" />
+      </label>
+    </slot>
 
-  </van-field>
+    <div v-if="error" class="mx-ferr">{{ error }}</div>
+    <div v-else-if="description" class="mx-d">{{ description }}</div>
+    <slot name="extra" />
+  </div>
 </template>
 
 <script setup>
-import { useFormAttributes } from '~/core/composables/useFormAttributes'
-import { useScroll } from '@vueuse/core'
+import { IconX } from '@tabler/icons-vue'
 
+// Text input of the mobile kit (design: .mx-f > .mx-l + .mx-in). Label above, hint/description below.
 const modelValue = defineModel()
 
-const vanFieldRef = ref(null)
-const attrs = useAttrs()
-const { dynamicAttrs } = useFormAttributes(attrs)
+const props = defineProps({
+  label: { type: String, default: null },
+  name: { type: String, default: null },
+  type: { type: String, default: 'text' },
+  rules: { type: Array, default: () => [] },
+  placeholder: { type: String, default: null },
+  description: { type: String, default: null },
+  hint: { type: String, default: null },
+  rows: { type: [Number, String], default: 1 },
+  autosize: { type: [Boolean, Object], default: false },
+  readonly: { type: Boolean, default: false },
+  disabled: { type: Boolean, default: false },
+  required: { type: Boolean, default: false },
+  clearable: { type: Boolean, default: false },
+  maxlength: { type: [Number, String], default: null },
+  inputmode: { type: String, default: null },
+  // Fields carry no icon in the design; kept so existing call sites can still opt in
+  icon: { default: null },
+  showIcon: { type: Boolean, default: false },
+})
 
-const focus = () => {
-  vanFieldRef.value?.focus()
+const emit = defineEmits(['click', 'focus', 'blur'])
+
+const inputRef = ref(null)
+const fieldRoot = computed(() => inputRef.value)
+const { error, isRequired } = useFormField({ name: () => props.name, rules: () => props.rules, value: modelValue, el: () => fieldRoot.value })
+
+const isTextarea = computed(() => props.type === 'textarea')
+const inputType = computed(() => ({ digit: 'text', number: 'text' })[props.type] ?? props.type)
+const defaultInputMode = computed(() => ({ digit: 'numeric', number: 'decimal' })[props.type] ?? null)
+const isClearVisible = computed(
+  () => props.clearable && !props.readonly && !props.disabled && !isTextarea.value && modelValue.value !== null && modelValue.value !== undefined && modelValue.value !== '',
+)
+
+const textareaStyle = computed(() => (props.autosize ? { minHeight: 'unset' } : null))
+const autoGrow = (event) => {
+  if (!props.autosize) {
+    return
+  }
+  const el = event?.target ?? inputRef.value
+  el.style.height = 'auto'
+  el.style.height = `${el.scrollHeight}px`
 }
+onMounted(() => nextTick(() => isTextarea.value && autoGrow()))
+watch(modelValue, () => isTextarea.value && nextTick(() => autoGrow()))
+
+const focus = () => inputRef.value?.focus()
 defineExpose({ focus })
-
-const onFocus = async () => {
-  // const inputRect = vanFieldRef.value.$el.getBoundingClientRect();
-  // const inputTop = inputRect.top;
-  // const targetScrollPosition = window.scrollY + inputTop;
-  //
-  // await sleep(500)
-  // window.scrollTo({
-  //   top: targetScrollPosition,
-  //   // behavior: 'smooth' // Optionally, use smooth scrolling
-  // });
-}
 </script>
-

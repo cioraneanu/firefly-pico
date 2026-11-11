@@ -1,37 +1,18 @@
 <template>
-  <van-popup v-bind="popupProps" :teleport="teleport" :z-index="zIndex">
-    <template v-for="slot in Object.keys($slots)" #[slot]="scoped">
-      <slot :name="slot" v-bind="scoped ?? {}" />
+  <app-sheet v-model:show="show" :title="title" :full="full">
+    <slot />
+    <template v-if="$slots.footer" #footer>
+      <slot name="footer" />
     </template>
-  </van-popup>
+  </app-sheet>
 </template>
 
 <script setup>
-const props = defineProps({
-  teleport: {
-    type: String,
-    default: 'body',
-  },
-  zIndex: {
-    type: [String, Number],
-    default: undefined,
-  },
-  popupStyle: {
-    type: [String, Object, Array],
-    default: null,
-  },
-})
+// Kept for older call sites: a titled bottom sheet without search.
+const show = defineModel('show', { type: Boolean, default: false })
 
-
-const mergePopupStyle = (style) => {
-  return [style, props.popupStyle].filter(Boolean)
-}
-
-const popupProps = computed(() => {
-  return {
-    round: true,
-    position: 'bottom',
-    style: mergePopupStyle({ height: '90%', paddingTop: '4px' }),
-  }
+defineProps({
+  title: { type: String, default: '' },
+  full: { type: Boolean, default: true },
 })
 </script>

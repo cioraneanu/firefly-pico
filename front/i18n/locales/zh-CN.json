@@ -397,7 +397,9 @@
   },
   "category_page": {
     "title_add": "添加类别",
-    "title_edit": "编辑类别"
+    "title_edit": "编辑类别",
+    "search": "搜索分类…",
+    "empty_hint": "你的分类会显示在这里"
   },
   "currency_page": {
     "title_add": "添加货币",
@@ -461,7 +463,10 @@
   "new_transaction": "新交易",
   "general": {
     "list_empty": "暂无项目",
-    "list_empty_subtitle": "使用右上角的按钮添加一些条目。"
+    "list_empty_subtitle": "使用右上角的按钮添加一些条目。",
+    "list_no_results": "没有匹配的结果",
+    "list_no_results_subtitle": "搜索和筛选条件隐藏了所有内容。",
+    "clear_filters": "清除筛选"
   },
   "cancel": "取消",
   "close": "关闭",
@@ -539,5 +544,12 @@
       "this_month": "本月",
       "nothing_to_do": "没有待办事项"
     }
-  }
+  },
+  "clear": "清除",
+  "done": "完成",
+  "back": "返回",
+  "no_matches": "无匹配项",
+  "refreshing": "正在刷新…",
+  "sync": "同步",
+  "sync_required_by_extras": "发现需要重新同步的附加数据"
 }

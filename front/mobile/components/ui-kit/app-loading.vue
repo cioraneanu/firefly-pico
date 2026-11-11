@@ -1,36 +1,21 @@
 <template>
-  <transition :name="transitionName">
-    <div v-if="loadingStore.isLoadingDelayed" class="app-loading-background">
-      <div class="app-loading flex-col flex items-center justify-center">
-        <icon-rotate :size="30" :stroke="1.4" class="animate-rotate-infinite" />
-        <div class="text-16">{{ loadingStore.loadingMessage }}</div>
-
-        <!--        <div v-if="loadingStore.activeRequests.length > 0" class="text-12 text-muted mt-2">{{ loadingStore.activeRequests.length }} {{ $t('requests_remaining') }}</div>-->
-
-        <!--        <van-button v-show="isCancelVisible" @click="loadingStore.cancelActiveRequests()" class="mt-6" size="small" type="danger">-->
-        <!--          {{ $t('stop') }}-->
-        <!--        </van-button>-->
+  <Teleport to="#mx-portal" defer>
+    <transition :name="profileStore.showAnimations ? 'mx-fd' : ''">
+      <div v-if="loadingStore.isLoadingDelayed">
+        <div class="mx-ov dim" aria-hidden="true" />
+        <div class="mx-block" role="status">
+          <span class="mx-spin lg" />
+          <span>{{ loadingStore.loadingMessage }}</span>
+        </div>
       </div>
-    </div>
-  </transition>
+    </transition>
+  </Teleport>
 </template>
 
 <script setup>
-import { IconRotate } from '@tabler/icons-vue'
 import { useLoadingStore } from '~/core/stores/loadingStore'
-import { watchDebounced } from '@vueuse/core'
-import { debounce } from 'lodash-es'
-import { watch } from 'vue'
 
+// Blocking load (design: .mx-block over a dimmed page)
 const profileStore = useProfileStore()
-const transitionName = computed(() => (profileStore.showAnimations ? 'fade' : ''))
-
 const loadingStore = useLoadingStore()
-const isCancelVisible = ref(false)
-
-const setIsCancelVisible = debounce(() => (isCancelVisible.value = true), 1000)
-watch(
-  () => loadingStore.isLoadingDelayed,
-  (newValue) => (newValue ? setIsCancelVisible() : ((isCancelVisible.value = true), setIsCancelVisible.cancel())),
-)
 </script>

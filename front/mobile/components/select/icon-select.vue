@@ -6,49 +6,34 @@
     :label="label ?? $t('icon')"
     :popup-title="$t('icon_select')"
     :get-display-value="getDisplayValue"
-    v-bind="dynamicAttrs"
+    :has-search="true"
+    full
   >
-    <template #left-icon>
-      <app-icon :icon="TablerIconConstants.fieldIcon" :size="20" />
-    </template>
-
     <template #input>
-      <div v-if="!modelValue" class="text-muted">{{ $t('icon_empty') }}</div>
-      <app-icon v-else :icon="modelValue.icon" style="width: 25px" />
+      <span v-if="!modelValue" class="ph">{{ $t('icon_empty') }}</span>
+      <template v-else>
+        <span class="mx-lead sm"><app-icon :icon="modelValue.icon" :size="16" :stroke="2" /></span>
+        <span class="tx min-w-0 truncate">{{ getDisplayValue(modelValue) }}</span>
+      </template>
     </template>
 
     <template #popup="{ onSelectCell }">
-      <app-tabs v-model="activeTab" :items="tabs" class="mx-4 mb-2" />
-
-      <van-list v-model:loading="isLoadingMore" :finished="isFinished" @load="onLoadMore">
-        <van-grid :column-num="6">
-          <van-grid-item v-for="item in visibleList" :key="item.icon" class="cursor-pointer" :class="{ active: item.icon === modelValue?.icon }" @click="onSelectCell(item)">
-            <div class="flex items-center justify-center flex-col mt-1.25 text-12">
-              <app-icon :icon="item.icon" style="width: 30px" />
-              <div class="app-icon-item" />
-            </div>
-          </van-grid-item>
-        </van-grid>
-      </van-list>
+      <app-tabs v-model="activeTab" :items="tabs" class="mx-1 mb-2" />
+      <app-list :loading="isLoadingMore" :finished="isFinished" :pullable="false" @load="onLoadMore">
+        <div class="mx-ogrid">
+          <button v-for="item in visibleList" :key="item.icon" type="button" :class="{ on: item.icon === modelValue?.icon }" :aria-label="getDisplayValue(item)" @click="onSelectCell(item)">
+            <app-icon :icon="item.icon" :size="22" :stroke="1.75" />
+          </button>
+        </div>
+      </app-list>
     </template>
   </app-select>
 </template>
 
 <script setup>
-import { useFormAttributes } from '~/core/composables/useFormAttributes'
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-
-const attrs = useAttrs()
-const { dynamicAttrs } = useFormAttributes(attrs)
-
 const props = defineProps({
-  label: {
-    type: String,
-  },
-  defaultTab: {
-    type: String,
-    default: 'classic',
-  },
+  label: { type: String, default: null },
+  defaultTab: { type: String, default: 'classic' },
 })
 
 const modelValue = defineModel()

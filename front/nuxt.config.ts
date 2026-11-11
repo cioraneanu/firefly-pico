@@ -85,7 +85,14 @@ export default defineNuxtConfig({
     },
   ],
 
-  css: ['~/assets/styles/tailwind.css', '~/mobile/styles/variables.css', '~/mobile/styles/theme-white.css', '~/mobile/styles/theme-dark.css', '~/assets/styles/animations.css'],
+  css: [
+    '~/assets/styles/tailwind.css',
+    '~/mobile/styles/variables.css',
+    '~/mobile/styles/theme-white.css',
+    '~/mobile/styles/theme-dark.css',
+    '~/assets/styles/animations.css',
+    '~/mobile/styles/mx.css',
+  ],
 
   build: {
     // transpile: ['vuetify'],

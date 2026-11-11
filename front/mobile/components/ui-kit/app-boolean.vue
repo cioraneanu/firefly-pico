@@ -1,44 +1,25 @@
 <template>
-  <div class="van-cell-fake">
-    <van-field class="app-field" :label="label" v-bind="dynamicAttrs" readonly @click="onToggle">
-      <template v-for="slot in Object.keys($slots)" #[slot]="scoped">
-        <slot :name="slot" v-bind="scoped ?? {}" />
-      </template>
-
-      <template #left-icon>
-<!--        <app-icon :icon="TablerIconConstants.fieldCheckbox" :size="20" />-->
-      </template>
-
-      <template #input>
-        <div>
-          <slot name="icon" :value="modelValue">
-            <app-icon :icon="icon" :size="23" :stroke-width="2.0" />
-          </slot>
-        </div>
-      </template>
-    </van-field>
-  </div>
+  <button type="button" class="mx-tg" role="switch" :aria-checked="!!modelValue" :disabled="disabled" @click="onToggle">
+    <span class="m">
+      <b>{{ label }}</b>
+      <span v-if="description">{{ description }}</span>
+      <slot name="description" />
+    </span>
+    <span class="mx-sw" :class="{ on: !!modelValue }" />
+  </button>
 </template>
 
 <script setup>
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-
-const props = defineProps({
-  label: {
-    type: String,
-    default: 'Is it on?',
-  },
-})
-
+// Full-width toggle row (design: .mx-tg + .mx-sw).
 const modelValue = defineModel()
 
-const attrs = useAttrs()
-const { dynamicAttrs } = useFormAttributes(attrs, { 'label-align': 'top' })
+defineProps({
+  label: { type: String, default: '' },
+  description: { type: String, default: null },
+  disabled: { type: Boolean, default: false },
+})
 
 const onToggle = () => {
   modelValue.value = !modelValue.value
 }
-
-const icon = computed(() => (modelValue.value ? TablerIconConstants.booleanCheckOn : TablerIconConstants.booleanCheckOff))
 </script>
-

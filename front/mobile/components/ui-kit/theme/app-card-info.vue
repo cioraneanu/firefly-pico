@@ -1,10 +1,5 @@
 <template>
-  <van-cell-group inset class="app-card-info">
-    <slot/>
-  </van-cell-group>
+  <div class="mx-list">
+    <slot />
+  </div>
 </template>
-
-<script setup>
-
-</script>
-
