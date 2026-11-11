@@ -548,7 +548,15 @@
     "target_date": "Data prevista",
     "search": "Pesquisar cofrinhos…",
     "empty_hint": "Seus cofrinhos aparecerão aqui",
-    "target_reached": "Meta atingida"
+    "target_reached": "Meta atingida",
+    "add_money": "Adicionar dinheiro",
+    "remove_money": "Retirar dinheiro",
+    "move_money": "Movimentar dinheiro",
+    "remove": "Retirar",
+    "available_in": "Disponível em {name}",
+    "saved_after": "Guardado depois disso",
+    "remove_too_much": "Você não pode retirar mais do que os {amount} guardados.",
+    "money_updated": "Cofrinho atualizado"
   },
   "recurring_transaction_page": {
     "title_add": "Adicionar transação recorrente",
@@ -573,7 +581,13 @@
   "exchange_rate_page": {
     "relative_to_usd": "Relativo ao USD",
     "search": "Pesquisar moeda…",
-    "empty_hint": "As taxas de câmbio aparecerão aqui"
+    "empty_hint": "As taxas de câmbio aparecerão aqui",
+    "edit_hint": "Toque em uma taxa para definir a sua.",
+    "custom": "Personalizada",
+    "per_usd": "{code} por 1 USD",
+    "fetched_rate": "Exchange Rate API: {value}",
+    "use_fetched": "Usar a taxa obtida",
+    "rate_saved": "Taxa de {code} salva"
   },
   "dashboard": {
     "title": "Painel",
@@ -760,5 +774,45 @@
     "amount_left": "{amount} restantes",
     "peak": "Pico {amount} · {date}",
     "no_todo_tag": "Nenhuma tag \"todo\""
+  },
+  "todo_page": {
+    "title": "Caixa TODO",
+    "description": "Transações com a tag #{tag}. Confira cada uma e marque como concluída sem abri-la. Abra uma linha para editá-la ali mesmo.",
+    "review_controls": "Controles de revisão",
+    "left_to_review": "{count} para revisar",
+    "done_this_session": "{count} marcadas como concluídas nesta sessão",
+    "done_this_session_short": "{count} concluídas na sessão",
+    "done_of": "{done} de {total} concluídas",
+    "to_review_count": "Para revisar · {count}",
+    "done_count": "Concluídas · {count}",
+    "expand_all": "Expandir tudo",
+    "collapse_all": "Recolher tudo",
+    "mark_all_done": "Marcar todas como concluídas",
+    "put_all_back": "Devolver todas",
+    "mark_done": "Marcar como concluída",
+    "put_back": "Devolver #todo",
+    "edit": "Editar",
+    "more": "Mais",
+    "less": "Menos",
+    "save_done": "Salvar e concluir",
+    "foot_todo": "Marcar como concluída remove a tag #todo. Nada mais muda.",
+    "foot_done": "Devolver #todo leva a transação de volta à caixa. Editar permite alterá-la de novo.",
+    "nothing_done": "Nada marcado como concluído ainda",
+    "nothing_done_hint": "As transações marcadas como concluídas nesta sessão aparecem aqui, para editar de novo ou devolver a tag #todo.",
+    "back_to_review": "Voltar à revisão",
+    "all_caught_up": "Tudo em dia",
+    "all_caught_up_hint": "Todas as transações com a tag #todo foram revisadas.",
+    "review_done": "Revisar as {count} concluídas",
+    "back_to_dashboard": "Voltar ao painel",
+    "tagged_todo": "{count} com #todo",
+    "inbox_zero": "Caixa vazia",
+    "not_set": "Não definida",
+    "has_attachments": "Tem anexos",
+    "external_link": "Link externo",
+    "search": "Buscar descrição, notas, contas…",
+    "no_match": "Nenhuma transação #todo corresponde à busca.",
+    "select_all": "Selecionar tudo",
+    "selected": "{count} selecionadas",
+    "clear": "Limpar"
   }
 }

@@ -548,7 +548,15 @@
     "target_date": "fecha objetivo",
     "search": "Buscar alcancías…",
     "empty_hint": "Tus alcancías aparecerán aquí",
-    "target_reached": "Meta alcanzada"
+    "target_reached": "Meta alcanzada",
+    "add_money": "Agregar dinero",
+    "remove_money": "Retirar dinero",
+    "move_money": "Mover dinero",
+    "remove": "Retirar",
+    "available_in": "Disponible en {name}",
+    "saved_after": "Ahorrado después",
+    "remove_too_much": "No puedes retirar más de los {amount} ahorrados.",
+    "money_updated": "Alcancía actualizada"
   },
   "recurring_transaction_page": {
     "title_add": "Agregar transacción recurrente",
@@ -573,7 +581,13 @@
   "exchange_rate_page": {
     "relative_to_usd": "Relativo al USD",
     "search": "Buscar moneda…",
-    "empty_hint": "Los tipos de cambio aparecerán aquí"
+    "empty_hint": "Los tipos de cambio aparecerán aquí",
+    "edit_hint": "Toca una tasa para definir la tuya.",
+    "custom": "Personalizada",
+    "per_usd": "{code} por 1 USD",
+    "fetched_rate": "Exchange Rate API: {value}",
+    "use_fetched": "Usar la tasa obtenida",
+    "rate_saved": "Tasa de {code} guardada"
   },
   "dashboard": {
     "title": "Panel principal",
@@ -760,5 +774,45 @@
     "amount_left": "Quedan {amount}",
     "peak": "Máximo {amount} · {date}",
     "no_todo_tag": "Sin etiqueta \"todo\""
+  },
+  "todo_page": {
+    "title": "Bandeja TODO",
+    "description": "Transacciones con la etiqueta #{tag}. Revisa cada una y márcala como hecha sin abrirla. Abre una fila para editarla ahí mismo.",
+    "review_controls": "Controles de revisión",
+    "left_to_review": "{count} por revisar",
+    "done_this_session": "{count} marcadas como hechas en esta sesión",
+    "done_this_session_short": "{count} hechas en la sesión",
+    "done_of": "{done} de {total} hechas",
+    "to_review_count": "Por revisar · {count}",
+    "done_count": "Hechas · {count}",
+    "expand_all": "Expandir todo",
+    "collapse_all": "Contraer todo",
+    "mark_all_done": "Marcar todas como hechas",
+    "put_all_back": "Devolver todas",
+    "mark_done": "Marcar como hecha",
+    "put_back": "Devolver #todo",
+    "edit": "Editar",
+    "more": "Más",
+    "less": "Menos",
+    "save_done": "Guardar y hecha",
+    "foot_todo": "Marcar como hecha quita la etiqueta #todo. Nada más cambia.",
+    "foot_done": "Devolver #todo regresa la transacción a la bandeja. Editar te deja cambiarla otra vez.",
+    "nothing_done": "Aún no hay nada marcado como hecho",
+    "nothing_done_hint": "Las transacciones que marques como hechas en esta sesión aparecen aquí para editarlas otra vez o devolver la etiqueta #todo.",
+    "back_to_review": "Volver a revisar",
+    "all_caught_up": "Todo al día",
+    "all_caught_up_hint": "Todas las transacciones con la etiqueta #todo fueron revisadas.",
+    "review_done": "Revisar las {count} hechas",
+    "back_to_dashboard": "Volver al panel",
+    "tagged_todo": "{count} con #todo",
+    "inbox_zero": "Bandeja vacía",
+    "not_set": "Sin definir",
+    "has_attachments": "Tiene adjuntos",
+    "external_link": "Enlace externo",
+    "search": "Buscar descripción, notas, cuentas…",
+    "no_match": "Ninguna transacción #todo coincide con la búsqueda.",
+    "select_all": "Seleccionar todo",
+    "selected": "{count} seleccionadas",
+    "clear": "Limpiar"
   }
 }

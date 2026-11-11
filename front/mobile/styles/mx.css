@@ -1781,9 +1781,9 @@ button.mx-bar { width: 100%; text-align: left; }
 .td-esh__b { flex: 1; min-height: 0; position: relative; }
 .td-esh__b > * { height: 100%; }
 .td-cp__r { display: flex; align-items: center; gap: 10px; }
-.td-cp__l { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
-.td-cp__r { align-items: stretch; }
-.td-cp__r .mx-btn { flex: none; height: auto; min-height: 36px; align-self: stretch; padding: 0 12px; }
+.td-cp__r .td-trk { flex: 1; }
+.td-cp__r .mx-btn { flex: none; height: 26px; }
+.td-cp .td-sum__t + .td-cp__r { margin-top: -8px; }
 .td-cp__a { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 .td-cp__a .mx-btn { width: 100%; }
 .td-cp__v { display: flex; align-items: center; gap: 8px; height: 36px; margin: -2px -6px -6px; padding: 0 6px; border-radius: 8px; font-size: 13.5px; font-weight: 500; color: var(--foreground); text-align: left; }

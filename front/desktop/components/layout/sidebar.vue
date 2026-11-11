@@ -28,6 +28,7 @@
         >
           <component :is="item.icon" :size="16" class="opacity-90" />
           <span class="truncate">{{ item.label }}</span>
+          <span v-if="item.count" class="ml-auto text-xs tabular-nums text-dim">{{ item.count }}</span>
           <span v-if="item.to === RouteConstants.ROUTE_SETTINGS && appStore.isNewVersionAvailable" class="ml-auto size-1.5 rounded-full bg-info" />
         </nuxt-link>
       </div>

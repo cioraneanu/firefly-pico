@@ -39,18 +39,20 @@
 import { IconAdjustmentsHorizontal, IconArrowsSplit, IconCopy, IconTemplate, IconTrash } from '@tabler/icons-vue'
 import RouteConstants from '~/core/constants/RouteConstants'
 
+// listRoute: where closing goes (the TODO Inbox opens it over its own list)
+const props = defineProps({ listRoute: { type: String, default: RouteConstants.ROUTE_TRANSACTION_LIST } })
 const emit = defineEmits(['changed'])
 
 const profileStore = useProfileStore()
-const { close } = useRouteDialog(RouteConstants.ROUTE_TRANSACTION_LIST)
+const { close } = useRouteDialog(props.listRoute)
 const fields = ref(null)
 const assistantText = ref('')
 
-const onEvent = (event) => {
-  if ([useFormEvent.postSave, useFormEvent.postDelete].includes(event)) emit('changed')
+const onEvent = (event, response) => {
+  if ([useFormEvent.postSave, useFormEvent.postDelete].includes(event)) emit('changed', event, response)
   const keepOpen = event === useFormEvent.postSave && !editor.itemId && profileStore.resetFormOnCreate
   if (event === useFormEvent.postSave && !keepOpen) close()
 }
 
-const editor = reactive(useTransactionEditor({ routeForm: null, onEvent, resetFields: () => (assistantText.value = '') }))
+const editor = reactive(useTransactionEditor({ routeForm: null, routeList: props.listRoute, onEvent, resetFields: () => (assistantText.value = '') }))
 </script>

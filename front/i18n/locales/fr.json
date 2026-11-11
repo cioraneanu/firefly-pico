@@ -548,7 +548,15 @@
     "target_date": "Date cible",
     "search": "Rechercher des tirelires…",
     "empty_hint": "Vos tirelires apparaîtront ici",
-    "target_reached": "Objectif atteint"
+    "target_reached": "Objectif atteint",
+    "add_money": "Ajouter de l'argent",
+    "remove_money": "Retirer de l'argent",
+    "move_money": "Déplacer de l'argent",
+    "remove": "Retirer",
+    "available_in": "Disponible sur {name}",
+    "saved_after": "Épargné ensuite",
+    "remove_too_much": "Vous ne pouvez pas retirer plus que les {amount} épargnés.",
+    "money_updated": "Tirelire mise à jour"
   },
   "recurring_transaction_page": {
     "title_add": "Ajouter une transaction récurrente",
@@ -573,7 +581,13 @@
   "exchange_rate_page": {
     "relative_to_usd": "Par rapport au USD",
     "search": "Rechercher une devise…",
-    "empty_hint": "Les taux de change apparaîtront ici"
+    "empty_hint": "Les taux de change apparaîtront ici",
+    "edit_hint": "Touchez un taux pour définir le vôtre.",
+    "custom": "Personnalisé",
+    "per_usd": "{code} pour 1 USD",
+    "fetched_rate": "Exchange Rate API : {value}",
+    "use_fetched": "Utiliser le taux récupéré",
+    "rate_saved": "Taux {code} enregistré"
   },
   "dashboard": {
     "title": "Tableau de bord",
@@ -760,5 +774,45 @@
     "amount_left": "{amount} restants",
     "peak": "Pic {amount} · {date}",
     "no_todo_tag": "Aucune étiquette \"todo\""
+  },
+  "todo_page": {
+    "title": "Boîte TODO",
+    "description": "Transactions avec l’étiquette #{tag}. Vérifiez-les une par une et marquez-les comme faites sans les ouvrir. Ouvrez une ligne pour la modifier sur place.",
+    "review_controls": "Contrôles de revue",
+    "left_to_review": "{count} à vérifier",
+    "done_this_session": "{count} marquées comme faites dans cette session",
+    "done_this_session_short": "{count} faites dans la session",
+    "done_of": "{done} sur {total} faites",
+    "to_review_count": "À vérifier · {count}",
+    "done_count": "Faites · {count}",
+    "expand_all": "Tout déplier",
+    "collapse_all": "Tout replier",
+    "mark_all_done": "Tout marquer comme fait",
+    "put_all_back": "Tout remettre",
+    "mark_done": "Marquer comme fait",
+    "put_back": "Remettre #todo",
+    "edit": "Modifier",
+    "more": "Plus",
+    "less": "Moins",
+    "save_done": "Enregistrer et fait",
+    "foot_todo": "Marquer comme fait retire l’étiquette #todo. Rien d’autre ne change.",
+    "foot_done": "Remettre #todo renvoie la transaction dans la boîte. Modifier permet de la changer encore.",
+    "nothing_done": "Rien de marqué comme fait pour l’instant",
+    "nothing_done_hint": "Les transactions marquées comme faites dans cette session apparaissent ici, pour les modifier à nouveau ou remettre l’étiquette #todo.",
+    "back_to_review": "Retour à la revue",
+    "all_caught_up": "Tout est à jour",
+    "all_caught_up_hint": "Toutes les transactions avec l’étiquette #todo ont été vérifiées.",
+    "review_done": "Revoir les {count} faites",
+    "back_to_dashboard": "Retour au tableau de bord",
+    "tagged_todo": "{count} avec #todo",
+    "inbox_zero": "Boîte vide",
+    "not_set": "Non défini",
+    "has_attachments": "A des pièces jointes",
+    "external_link": "Lien externe",
+    "search": "Rechercher description, notes, comptes…",
+    "no_match": "Aucune transaction #todo ne correspond à cette recherche.",
+    "select_all": "Tout sélectionner",
+    "selected": "{count} sélectionnées",
+    "clear": "Effacer"
   }
 }

@@ -548,7 +548,15 @@
     "target_date": "Data țintă",
     "search": "Caută pușculițe…",
     "empty_hint": "Pușculițele tale vor apărea aici",
-    "target_reached": "Țintă atinsă"
+    "target_reached": "Țintă atinsă",
+    "add_money": "Adaugă bani",
+    "remove_money": "Retrage bani",
+    "move_money": "Mută bani",
+    "remove": "Retrage",
+    "available_in": "Disponibil în {name}",
+    "saved_after": "Economisit după asta",
+    "remove_too_much": "Nu poți retrage mai mult decât cei {amount} economisiți.",
+    "money_updated": "Pușculița a fost actualizată"
   },
   "recurring_transaction_page": {
     "title_add": "Adăugați tranzacție recurentă",
@@ -573,7 +581,13 @@
   "exchange_rate_page": {
     "relative_to_usd": "Relativ la USD",
     "search": "Caută monedă…",
-    "empty_hint": "Cursurile de schimb vor apărea aici"
+    "empty_hint": "Cursurile de schimb vor apărea aici",
+    "edit_hint": "Atinge un curs ca să-l setezi tu.",
+    "custom": "Personalizat",
+    "per_usd": "{code} pentru 1 USD",
+    "fetched_rate": "Exchange Rate API: {value}",
+    "use_fetched": "Folosește cursul preluat",
+    "rate_saved": "Cursul {code} a fost salvat"
   },
   "dashboard": {
     "title": "Rezumat",
@@ -760,5 +774,45 @@
     "amount_left": "{amount} rămași",
     "peak": "Maxim {amount} · {date}",
     "no_todo_tag": "Nicio etichetă \"todo\""
+  },
+  "todo_page": {
+    "title": "Inbox TODO",
+    "description": "Tranzacții cu eticheta #{tag}. Verifică-le pe rând și marchează-le ca rezolvate fără să le deschizi. Deschide un rând ca să-l editezi pe loc.",
+    "review_controls": "Control revizuire",
+    "left_to_review": "{count} de verificat",
+    "done_this_session": "{count} marcate ca rezolvate în această sesiune",
+    "done_this_session_short": "{count} rezolvate în sesiune",
+    "done_of": "{done} din {total} rezolvate",
+    "to_review_count": "De verificat · {count}",
+    "done_count": "Rezolvate · {count}",
+    "expand_all": "Extinde tot",
+    "collapse_all": "Restrânge tot",
+    "mark_all_done": "Marchează toate rezolvate",
+    "put_all_back": "Pune-le pe toate înapoi",
+    "mark_done": "Marchează rezolvat",
+    "put_back": "Pune înapoi #todo",
+    "edit": "Editează",
+    "more": "Mai mult",
+    "less": "Mai puțin",
+    "save_done": "Salvează și rezolvă",
+    "foot_todo": "Marcarea ca rezolvat scoate eticheta #todo. Nimic altceva nu se schimbă.",
+    "foot_done": "Pune înapoi #todo readuce tranzacția în inbox. Editează ca s-o schimbi din nou.",
+    "nothing_done": "Nimic marcat ca rezolvat încă",
+    "nothing_done_hint": "Tranzacțiile marcate ca rezolvate în această sesiune apar aici, ca să le poți edita din nou sau să pui înapoi eticheta #todo.",
+    "back_to_review": "Înapoi la verificare",
+    "all_caught_up": "Totul e la zi",
+    "all_caught_up_hint": "Toate tranzacțiile cu eticheta #todo au fost verificate.",
+    "review_done": "Revezi cele {count} rezolvate",
+    "back_to_dashboard": "Înapoi la panou",
+    "tagged_todo": "{count} cu #todo",
+    "inbox_zero": "Inbox gol",
+    "not_set": "Nesetat",
+    "has_attachments": "Are atașamente",
+    "external_link": "Link extern",
+    "search": "Caută descriere, note, conturi…",
+    "no_match": "Nicio tranzacție #todo nu se potrivește căutării.",
+    "select_all": "Selectează tot",
+    "selected": "{count} selectate",
+    "clear": "Golește"
   }
 }

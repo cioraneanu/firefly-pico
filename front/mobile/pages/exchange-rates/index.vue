@@ -17,13 +17,17 @@
 
         <div v-if="filteredList.length > 0" class="mx-list">
           <div class="mx-rates">
-            <div v-for="currency in filteredList" :key="currency.code" class="mx-rate">
+            <button v-for="currency in filteredList" :key="currency.code" type="button" class="mx-rate" :class="{ custom: currency.isCustom }" :disabled="!currency.isEditable" @click="open(currency)">
               <b>{{ currency.code }}</b>
               <span>{{ currency.name }}</span>
-              <i>{{ currency.value }}</i>
-            </div>
+              <i>
+                {{ currency.value }}
+                <app-icon v-if="currency.isCustom" :icon="IconPencil" :size="12" :stroke="2" :aria-label="$t('exchange_rate_page.custom')" />
+              </i>
+            </button>
           </div>
         </div>
+        <p v-if="filteredList.length > 0" class="mx-foot">{{ $t('exchange_rate_page.edit_hint') }}</p>
 
         <empty-list v-else-if="list.length > 0" filtered>
           <template #action>
@@ -34,18 +38,40 @@
         <empty-list v-else :icon="TablerIconConstants.exchangeRates" :hint="$t('exchange_rate_page.empty_hint')" />
       </app-list>
     </main>
+
+    <app-sheet v-model:show="isOpen" :title="rate?.code" :description="rate?.name">
+      <form class="mx-form" @submit.prevent="save">
+        <app-field
+          v-model="value"
+          type="number"
+          inputmode="decimal"
+          :label="$t('exchange_rate_page.per_usd', { code: rate?.code })"
+          :description="$t('exchange_rate_page.fetched_rate', { value: rate?.fetchedValue ?? '-' })"
+        />
+      </form>
+      <template #footer>
+        <button v-if="rate?.isCustom" type="button" class="mx-btn out" @click="reset">
+          <app-icon :icon="IconArrowBackUp" :size="16" :stroke="2" /><span>{{ $t('exchange_rate_page.use_fetched') }}</span>
+        </button>
+        <button type="button" class="mx-btn pri" :disabled="!isValid" @click="save">
+          <app-icon :icon="IconCheck" :size="16" :stroke="2" /><span>{{ $t('save') }}</span>
+        </button>
+      </template>
+    </app-sheet>
   </div>
 </template>
 
 <script setup>
 import { get } from 'lodash-es'
-import { IconCalendar, IconCurrencyDollar } from '@tabler/icons-vue'
+import { IconArrowBackUp, IconCalendar, IconCheck, IconCurrencyDollar, IconPencil } from '@tabler/icons-vue'
 import { useCurrencyStore } from '~/core/stores/currencyStore'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import RouteConstants from '~/core/constants/RouteConstants'
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
 
 const currencyStore = useCurrencyStore()
+
+const { rate, value, isOpen, isValid, open, save, reset } = useExchangeRateForm()
 
 const isRefreshing = ref(false)
 const search = ref('')

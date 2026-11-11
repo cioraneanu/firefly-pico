@@ -548,7 +548,15 @@
     "target_date": "Data docelowa",
     "search": "Szukaj skarbonek…",
     "empty_hint": "Tutaj pojawią się Twoje skarbonki",
-    "target_reached": "Cel osiągnięty"
+    "target_reached": "Cel osiągnięty",
+    "add_money": "Dodaj pieniądze",
+    "remove_money": "Wypłać pieniądze",
+    "move_money": "Przenieś pieniądze",
+    "remove": "Wypłać",
+    "available_in": "Dostępne w {name}",
+    "saved_after": "Zaoszczędzone potem",
+    "remove_too_much": "Nie możesz wypłacić więcej niż zaoszczędzone {amount}.",
+    "money_updated": "Skarbonka zaktualizowana"
   },
   "recurring_transaction_page": {
     "title_add": "Dodaj transakcję cykliczną",
@@ -573,7 +581,13 @@
   "exchange_rate_page": {
     "relative_to_usd": "W stosunku do USD",
     "search": "Szukaj waluty…",
-    "empty_hint": "Tutaj pojawią się kursy walut"
+    "empty_hint": "Tutaj pojawią się kursy walut",
+    "edit_hint": "Dotknij kursu, aby ustawić własny.",
+    "custom": "Własny",
+    "per_usd": "{code} za 1 USD",
+    "fetched_rate": "Exchange Rate API: {value}",
+    "use_fetched": "Użyj pobranego kursu",
+    "rate_saved": "Kurs {code} zapisany"
   },
   "dashboard": {
     "title": "Pulpit",
@@ -760,5 +774,45 @@
     "amount_left": "Pozostało {amount}",
     "peak": "Szczyt {amount} · {date}",
     "no_todo_tag": "Brak tagu \"todo\""
+  },
+  "todo_page": {
+    "title": "Skrzynka TODO",
+    "description": "Transakcje z tagiem #{tag}. Sprawdź każdą i oznacz jako zrobioną bez otwierania. Otwórz wiersz, aby edytować go na miejscu.",
+    "review_controls": "Sterowanie przeglądem",
+    "left_to_review": "{count} do sprawdzenia",
+    "done_this_session": "{count} oznaczonych jako zrobione w tej sesji",
+    "done_this_session_short": "{count} zrobionych w sesji",
+    "done_of": "{done} z {total} zrobionych",
+    "to_review_count": "Do sprawdzenia · {count}",
+    "done_count": "Zrobione · {count}",
+    "expand_all": "Rozwiń wszystko",
+    "collapse_all": "Zwiń wszystko",
+    "mark_all_done": "Oznacz wszystkie jako zrobione",
+    "put_all_back": "Przywróć wszystkie",
+    "mark_done": "Oznacz jako zrobione",
+    "put_back": "Przywróć #todo",
+    "edit": "Edytuj",
+    "more": "Więcej",
+    "less": "Mniej",
+    "save_done": "Zapisz i zrobione",
+    "foot_todo": "Oznaczenie jako zrobione usuwa tag #todo. Nic innego się nie zmienia.",
+    "foot_done": "Przywróć #todo zwraca transakcję do skrzynki. Edytuj, aby zmienić ją ponownie.",
+    "nothing_done": "Nic jeszcze nie oznaczono jako zrobione",
+    "nothing_done_hint": "Transakcje oznaczone w tej sesji jako zrobione pojawiają się tutaj, aby można je było ponownie edytować lub przywrócić tag #todo.",
+    "back_to_review": "Wróć do przeglądu",
+    "all_caught_up": "Wszystko zrobione",
+    "all_caught_up_hint": "Wszystkie transakcje z tagiem #todo zostały sprawdzone.",
+    "review_done": "Przejrzyj {count} zrobione",
+    "back_to_dashboard": "Wróć do pulpitu",
+    "tagged_todo": "{count} z #todo",
+    "inbox_zero": "Skrzynka pusta",
+    "not_set": "Nie ustawiono",
+    "has_attachments": "Ma załączniki",
+    "external_link": "Link zewnętrzny",
+    "search": "Szukaj opisu, notatek, kont…",
+    "no_match": "Żadna transakcja #todo nie pasuje do wyszukiwania.",
+    "select_all": "Zaznacz wszystko",
+    "selected": "Zaznaczono {count}",
+    "clear": "Wyczyść"
   }
 }

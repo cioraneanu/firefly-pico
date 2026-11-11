@@ -549,7 +549,15 @@
     "target_date": "Target date",
     "search": "Search piggy banks…",
     "empty_hint": "Your piggy banks will appear here",
-    "target_reached": "Target reached"
+    "target_reached": "Target reached",
+    "add_money": "Add money",
+    "remove_money": "Remove money",
+    "move_money": "Move money",
+    "remove": "Remove",
+    "available_in": "Available in {name}",
+    "saved_after": "Saved after this",
+    "remove_too_much": "You can't remove more than the {amount} saved.",
+    "money_updated": "Piggy bank updated"
   },
   "recurring_transaction_page": {
     "title_add": "Add recurring transaction",
@@ -574,7 +582,13 @@
   "exchange_rate_page": {
     "relative_to_usd": "Relative to USD",
     "search": "Search currency…",
-    "empty_hint": "Exchange rates will appear here"
+    "empty_hint": "Exchange rates will appear here",
+    "edit_hint": "Select a rate to set your own.",
+    "custom": "Custom",
+    "per_usd": "{code} per 1 USD",
+    "fetched_rate": "Exchange Rate API: {value}",
+    "use_fetched": "Use the fetched rate",
+    "rate_saved": "{code} rate saved"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -761,5 +775,45 @@
     "amount_left": "{amount} left",
     "peak": "Peak {amount} · {date}",
     "no_todo_tag": "No \"todo\" tag"
+  },
+  "todo_page": {
+    "title": "TODO Inbox",
+    "description": "Transactions tagged #{tag}. Check each one and mark it done without opening it. Open a row to edit it in place.",
+    "review_controls": "Review controls",
+    "left_to_review": "{count} left to review",
+    "done_this_session": "{count} marked as done this session",
+    "done_this_session_short": "{count} done this session",
+    "done_of": "{done} of {total} done",
+    "to_review_count": "To review · {count}",
+    "done_count": "Done · {count}",
+    "expand_all": "Expand all",
+    "collapse_all": "Collapse all",
+    "mark_all_done": "Mark all as done",
+    "put_all_back": "Put all back",
+    "mark_done": "Mark as done",
+    "put_back": "Put back #todo",
+    "edit": "Edit",
+    "more": "More",
+    "less": "Less",
+    "save_done": "Save & done",
+    "foot_todo": "Mark as done removes the #todo tag. Nothing else changes.",
+    "foot_done": "Put back #todo returns a transaction to the inbox. Edit lets you change it again.",
+    "nothing_done": "Nothing marked as done yet",
+    "nothing_done_hint": "Transactions you mark as done in this session show up here, so you can edit them again or put the #todo tag back.",
+    "back_to_review": "Back to review",
+    "all_caught_up": "All caught up",
+    "all_caught_up_hint": "Every transaction tagged #todo has been reviewed.",
+    "review_done": "Review the {count} done",
+    "back_to_dashboard": "Back to dashboard",
+    "tagged_todo": "{count} tagged #todo",
+    "inbox_zero": "Inbox zero",
+    "not_set": "Not set",
+    "has_attachments": "Has attachments",
+    "external_link": "External link",
+    "search": "Search description, notes, accounts…",
+    "no_match": "No #todo transaction matches this search.",
+    "select_all": "Select all",
+    "selected": "{count} selected",
+    "clear": "Clear"
   }
 }

@@ -4,3 +4,10 @@
 .mx-row.is-off > * {
   opacity: 0.5;
 }
+
+/* exchange rates: each rate opens its editor; the user's own rates are marked */
+.mx-app button.mx-rate { text-align: left; transition: background-color .12s; }
+.mx-app button.mx-rate:active:not(:disabled) { background: var(--accent); }
+.mx-app .mx-rate i { display: flex; align-items: center; gap: 4px; }
+.mx-app .mx-rate.custom i { font-weight: 600; color: var(--foreground); }
+.mx-app .mx-rate.custom i svg { color: var(--muted-foreground); }

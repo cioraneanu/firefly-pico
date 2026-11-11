@@ -16,6 +16,7 @@ export const icons = {
   transactionTemplate: 'IconTemplate',
   dashboard: 'IconDeviceDesktopAnalytics',
   exchangeRates: 'IconReplace',
+  todoInbox: 'IconListCheck',
   assistant: 'IconMessageChatbot',
 
   settingsAppConfig: 'IconTool',

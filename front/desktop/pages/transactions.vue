@@ -101,11 +101,9 @@
 
 <script setup>
 import { IconCheck, IconCoins, IconFilter, IconLoader2, IconPlus, IconRefresh, IconSearch, IconSum } from '@tabler/icons-vue'
-import { formatTimeAgo, useElementVisibility, watchDebounced } from '@vueuse/core'
-import { capitalize, groupBy, omit } from 'lodash-es'
+import { useElementVisibility, watchDebounced } from '@vueuse/core'
+import { omit } from 'lodash-es'
 import RouteConstants from '~/core/constants/RouteConstants'
-import Transaction from '~/core/models/Transaction'
-import { formatNumber } from '~/core/utils/NumberUtils'
 
 const route = useRoute()
 const { id, isOpen } = useRouteDialog(RouteConstants.ROUTE_TRANSACTION_LIST)
@@ -162,16 +160,5 @@ watch(filters, (value) => (search.value = value.description ?? ''), { immediate:
 watchDebounced(search, (value) => value !== (filters.value.description ?? '') && (filters.value = { ...filters.value, description: value }), { debounce: 400 })
 watchEffect(() => isSentinelVisible.value && !isFinished.value && !isLoading.value && onLoadMore())
 
-const groups = computed(() =>
-  Object.entries(groupBy(list.value, (transaction) => DateUtils.dateToUI(Transaction.getDate(transaction)))).map(([label, items]) => {
-    const expenses = items.filter((transaction) => Transaction.getTypeCode(transaction) === Transaction.types.expense.code)
-    const total = expenses.reduce((sum, transaction) => sum + parseFloat(Transaction.getAmount(transaction) || 0), 0)
-    return {
-      label,
-      items,
-      relative: capitalize(formatTimeAgo(DateUtils.autoToDate(Transaction.getDate(items[0])))),
-      total: total ? `−${formatNumber(total, 2)} ${Transaction.getFirstSplit(items[0])?.currency_symbol ?? ''}` : '',
-    }
-  }),
-)
+const groups = useTransactionGroups(list)
 </script>

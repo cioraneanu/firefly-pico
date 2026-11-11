@@ -24,6 +24,7 @@ export default {
   ROUTE_SETTINGS_ABOUT: '/settings/about',
 
   ROUTE_EXCHANGE_RATES: '/exchange-rates',
+  ROUTE_TODO: '/todo',
 
   ROUTE_TRANSACTION_TEMPLATE_LIST: '/transaction-templates/list',
   ROUTE_TRANSACTION_TEMPLATE_ID: '/transaction-templates',

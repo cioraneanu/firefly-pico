@@ -521,7 +521,13 @@
   "exchange_rate_page": {
     "relative_to_usd": "相对于美元",
     "search": "搜索货币…",
-    "empty_hint": "汇率将显示在这里"
+    "empty_hint": "汇率将显示在这里",
+    "edit_hint": "点按汇率可自行设置。",
+    "custom": "自定义",
+    "per_usd": "每 1 USD 兑 {code}",
+    "fetched_rate": "Exchange Rate API：{value}",
+    "use_fetched": "使用获取的汇率",
+    "rate_saved": "{code} 汇率已保存"
   },
   "dashboard": {
     "title": "仪表板",
@@ -707,10 +713,58 @@
   "piggy_bank_page": {
     "search": "搜索存钱罐…",
     "empty_hint": "你的存钱罐将显示在这里",
-    "target_reached": "已达成目标"
+    "target_reached": "已达成目标",
+    "add_money": "存入资金",
+    "remove_money": "取出资金",
+    "move_money": "转移资金",
+    "remove": "取出",
+    "available_in": "{name} 可用",
+    "saved_after": "操作后已存",
+    "remove_too_much": "取出金额不能超过已存的 {amount}。",
+    "money_updated": "存钱罐已更新"
   },
   "recurring_transaction_page": {
     "search": "搜索定期交易…",
     "empty_hint": "你的定期交易将显示在这里"
+  },
+  "todo_page": {
+    "title": "待办收件箱",
+    "description": "带有 #{tag} 标签的交易。逐条检查，无需打开即可标记为完成。打开一行即可就地编辑。",
+    "review_controls": "审阅控制",
+    "left_to_review": "还有 {count} 条待审阅",
+    "done_this_session": "本次已标记完成 {count} 条",
+    "done_this_session_short": "本次完成 {count} 条",
+    "done_of": "已完成 {done}/{total}",
+    "to_review_count": "待审阅 · {count}",
+    "done_count": "已完成 · {count}",
+    "expand_all": "全部展开",
+    "collapse_all": "全部收起",
+    "mark_all_done": "全部标记完成",
+    "put_all_back": "全部放回",
+    "mark_done": "标记完成",
+    "put_back": "放回 #todo",
+    "edit": "编辑",
+    "more": "更多",
+    "less": "收起",
+    "save_done": "保存并完成",
+    "foot_todo": "标记完成会移除 #todo 标签，其他内容不变。",
+    "foot_done": "放回 #todo 会把交易送回收件箱。编辑可再次修改。",
+    "nothing_done": "还没有标记完成的交易",
+    "nothing_done_hint": "本次标记完成的交易会显示在这里，方便再次编辑或放回 #todo 标签。",
+    "back_to_review": "返回审阅",
+    "all_caught_up": "全部处理完毕",
+    "all_caught_up_hint": "所有带 #todo 标签的交易都已审阅。",
+    "review_done": "查看已完成的 {count} 条",
+    "back_to_dashboard": "返回仪表盘",
+    "tagged_todo": "{count} 条带 #todo",
+    "inbox_zero": "收件箱已清空",
+    "not_set": "未设置",
+    "has_attachments": "有附件",
+    "external_link": "外部链接",
+    "search": "搜索描述、备注、账户…",
+    "no_match": "没有符合搜索的 #todo 交易。",
+    "select_all": "全选",
+    "selected": "已选 {count} 条",
+    "clear": "清除"
   }
 }

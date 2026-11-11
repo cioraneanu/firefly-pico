@@ -548,7 +548,15 @@
     "target_date": "Целевая дата",
     "search": "Поиск копилок…",
     "empty_hint": "Здесь появятся ваши копилки",
-    "target_reached": "Цель достигнута"
+    "target_reached": "Цель достигнута",
+    "add_money": "Добавить деньги",
+    "remove_money": "Снять деньги",
+    "move_money": "Перевести деньги",
+    "remove": "Снять",
+    "available_in": "Доступно на {name}",
+    "saved_after": "Накоплено после",
+    "remove_too_much": "Нельзя снять больше накопленных {amount}.",
+    "money_updated": "Копилка обновлена"
   },
   "recurring_transaction_page": {
     "title_add": "Добавить повторяющуюся транзакцию",
@@ -573,7 +581,13 @@
   "exchange_rate_page": {
     "relative_to_usd": "Относительно USD",
     "search": "Поиск валюты…",
-    "empty_hint": "Здесь появятся курсы валют"
+    "empty_hint": "Здесь появятся курсы валют",
+    "edit_hint": "Нажмите на курс, чтобы задать свой.",
+    "custom": "Свой",
+    "per_usd": "{code} за 1 USD",
+    "fetched_rate": "Exchange Rate API: {value}",
+    "use_fetched": "Использовать полученный курс",
+    "rate_saved": "Курс {code} сохранён"
   },
   "dashboard": {
     "title": "Дашборд",
@@ -760,5 +774,45 @@
     "amount_left": "Осталось {amount}",
     "peak": "Пик {amount} · {date}",
     "no_todo_tag": "Нет тега \"todo\""
+  },
+  "todo_page": {
+    "title": "Входящие TODO",
+    "description": "Транзакции с тегом #{tag}. Проверьте каждую и отметьте как выполненную, не открывая. Откройте строку, чтобы изменить её на месте.",
+    "review_controls": "Управление проверкой",
+    "left_to_review": "Осталось проверить: {count}",
+    "done_this_session": "{count} отмечено выполненными за сеанс",
+    "done_this_session_short": "{count} выполнено за сеанс",
+    "done_of": "Выполнено {done} из {total}",
+    "to_review_count": "К проверке · {count}",
+    "done_count": "Выполнено · {count}",
+    "expand_all": "Развернуть все",
+    "collapse_all": "Свернуть все",
+    "mark_all_done": "Отметить все выполненными",
+    "put_all_back": "Вернуть все",
+    "mark_done": "Отметить выполненной",
+    "put_back": "Вернуть #todo",
+    "edit": "Изменить",
+    "more": "Ещё",
+    "less": "Меньше",
+    "save_done": "Сохранить и выполнить",
+    "foot_todo": "Отметка «выполнено» убирает тег #todo. Больше ничего не меняется.",
+    "foot_done": "«Вернуть #todo» возвращает транзакцию во входящие. «Изменить» позволяет снова её поправить.",
+    "nothing_done": "Пока ничего не отмечено",
+    "nothing_done_hint": "Транзакции, отмеченные выполненными за этот сеанс, появляются здесь: их можно снова изменить или вернуть тег #todo.",
+    "back_to_review": "Назад к проверке",
+    "all_caught_up": "Всё проверено",
+    "all_caught_up_hint": "Все транзакции с тегом #todo проверены.",
+    "review_done": "Просмотреть выполненные ({count})",
+    "back_to_dashboard": "Назад к панели",
+    "tagged_todo": "{count} с #todo",
+    "inbox_zero": "Входящие пусты",
+    "not_set": "Не задано",
+    "has_attachments": "Есть вложения",
+    "external_link": "Внешняя ссылка",
+    "search": "Поиск по описанию, заметкам, счетам…",
+    "no_match": "Нет транзакций #todo по этому запросу.",
+    "select_all": "Выбрать все",
+    "selected": "Выбрано: {count}",
+    "clear": "Очистить"
   }
 }

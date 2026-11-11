@@ -44,6 +44,8 @@ export const useProfileStore = defineStore('profile', () => {
   const transactionListDefaultFilterDateEnd = useLocalStorage('transactionListDefaultFilterDateEnd', null)
 
   const isForeignCurrencyAlwaysVisible = useLocalStorage('isForeignCurrencyAlwaysVisible', false)
+  // Rates typed in by the user ({ RON: 4.55 }, per 1 USD). They win over the fetched exchange rates.
+  const exchangeRateOverrides = useLocalStorage('exchangeRateOverrides', {})
 
   const quickValueButtons = useLocalStorage('quickValueButtons', ['-10', '-1', '+1', '+10'])
 
@@ -196,6 +198,7 @@ export const useProfileStore = defineStore('profile', () => {
     transactionListDefaultFilterDateStart,
     transactionListDefaultFilterDateEnd,
     isForeignCurrencyAlwaysVisible,
+    exchangeRateOverrides,
     quickValueButtons,
     transactionFormFieldsConfig,
     transactionListFieldsConfig,

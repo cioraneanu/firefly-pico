@@ -25,6 +25,14 @@
               <span>{{ stats.percent }} %</span>
               <span>{{ $t('piggy_bank_page.left_to_save') }}: {{ stats.left }} {{ stats.symbol }}</span>
             </span>
+            <div class="mx-2 mt-1">
+              <button type="button" class="mx-btn out" @click="openMoney(true)">
+                <app-icon :icon="IconPlus" :size="16" :stroke="2" /><span>{{ $t('piggy_bank_page.add_money') }}</span>
+              </button>
+              <button type="button" class="mx-btn out" @click="openMoney(false)">
+                <app-icon :icon="IconMinus" :size="16" :stroke="2" /><span>{{ $t('piggy_bank_page.remove_money') }}</span>
+              </button>
+            </div>
           </div>
         </app-card>
 
@@ -61,21 +69,89 @@
 
       <app-button-form-save />
     </app-form>
+
+    <app-sheet v-model:show="money.isOpen" :title="$t('piggy_bank_page.move_money')" :description="name">
+      <div class="mx-form">
+        <app-tabs v-model="money.isAdd" :items="moneyDirections" />
+        <app-field v-model="money.amount" type="number" inputmode="decimal" :label="$t('amount')" placeholder="0">
+          <template #left-icon>
+            <app-icon :icon="IconCoins" :size="16" :stroke="2" />
+          </template>
+          <template #right>
+            <span v-if="stats.symbol" class="suf">{{ stats.symbol }}</span>
+          </template>
+          <template #extra>
+            <div class="mx-quick">
+              <button v-for="value in [100, 500]" :key="value" type="button" class="mx-quick__b" @click="addToMoneyAmount(value)">+{{ value }}</button>
+            </div>
+          </template>
+        </app-field>
+        <div class="mx-kv">
+          <div v-if="account">
+            <span>{{ $t('piggy_bank_page.available_in', { name: Account.getDisplayName(account) }) }}</span>
+            <b class="mx-money">{{ moneyAccountBalance }} {{ stats.symbol }}</b>
+          </div>
+          <div>
+            <span>{{ $t('piggy_bank_page.saved_after') }}</span>
+            <b class="mx-money">{{ Math.max(moneySavedAfter, 0) }} {{ stats.symbol }}</b>
+          </div>
+        </div>
+        <div v-if="isMoneyTooMuch" class="mx-note text-[var(--destructive)]">
+          <app-icon :icon="IconAlertTriangle" :size="16" :stroke="2" />
+          <span>{{ $t('piggy_bank_page.remove_too_much', { amount: `${stats.current} ${stats.symbol}` }) }}</span>
+        </div>
+      </div>
+      <template #footer>
+        <button type="button" class="mx-btn out" @click="money.isOpen = false">{{ $t('cancel') }}</button>
+        <button type="button" class="mx-btn pri" :disabled="!canApplyMoney" @click="applyMoney">
+          <app-icon :icon="IconCheck" :size="16" :stroke="2" /><span>{{ $t(money.isAdd ? 'add' : 'piggy_bank_page.remove') }}</span>
+        </button>
+      </template>
+    </app-sheet>
   </div>
 </template>
 
 <script setup>
+import { IconAlertTriangle, IconCheck, IconCoins, IconMinus, IconPlus } from '@tabler/icons-vue'
 import RouteConstants from '~/core/constants/RouteConstants'
 import Account from '~/core/models/Account'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import { rule } from '~/core/utils/ValidationUtils.js'
 
-const { itemId, saveItem, onDelete, onNew, onValidationError, formName, name, icon, account, targetAmount, currentAmount, startDate, targetDate, notes, stats, accountAllowedTypes } =
-  usePiggyBankForm()
-
-const currencySymbol = computed(() => Account.getCurrencySymbol(account.value))
+const {
+  itemId,
+  saveItem,
+  onDelete,
+  onNew,
+  onValidationError,
+  formName,
+  name,
+  icon,
+  account,
+  targetAmount,
+  currentAmount,
+  startDate,
+  targetDate,
+  notes,
+  stats,
+  accountAllowedTypes,
+  money,
+  moneySavedAfter,
+  moneyAccountBalance,
+  isMoneyTooMuch,
+  canApplyMoney,
+  openMoney,
+  addToMoneyAmount,
+  applyMoney,
+} = usePiggyBankForm()
 
 const { t } = useI18n()
+const moneyDirections = computed(() => [
+  { label: t('piggy_bank_page.add_money'), value: true },
+  { label: t('piggy_bank_page.remove_money'), value: false },
+])
+const currencySymbol = computed(() => Account.getCurrencySymbol(account.value))
+
 const route = useRoute()
 useToolbar().init({
   title: computed(() => (itemId.value || route.params.id ? t('piggy_bank_page.title_edit') : t('piggy_bank_page.title_add'))),

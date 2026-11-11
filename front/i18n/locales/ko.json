@@ -549,7 +549,15 @@
     "target_date": "목표일",
     "search": "저금통 검색…",
     "empty_hint": "저금통이 여기에 표시됩니다",
-    "target_reached": "목표 달성"
+    "target_reached": "목표 달성",
+    "add_money": "금액 추가",
+    "remove_money": "금액 빼기",
+    "move_money": "금액 이동",
+    "remove": "빼기",
+    "available_in": "{name} 사용 가능",
+    "saved_after": "이후 저축액",
+    "remove_too_much": "저축된 {amount}보다 많이 뺄 수 없습니다.",
+    "money_updated": "저금통이 업데이트되었습니다"
   },
   "recurring_transaction_page": {
     "title_add": "반복 거래 추가",
@@ -574,7 +582,13 @@
   "exchange_rate_page": {
     "relative_to_usd": "USD 대비",
     "search": "통화 검색…",
-    "empty_hint": "환율이 여기에 표시됩니다"
+    "empty_hint": "환율이 여기에 표시됩니다",
+    "edit_hint": "환율을 눌러 직접 설정하세요.",
+    "custom": "사용자 지정",
+    "per_usd": "1 USD당 {code}",
+    "fetched_rate": "Exchange Rate API: {value}",
+    "use_fetched": "가져온 환율 사용",
+    "rate_saved": "{code} 환율이 저장되었습니다"
   },
   "dashboard": {
     "title": "대시보드",
@@ -761,5 +775,45 @@
     "amount_left": "{amount} 남음",
     "peak": "최고 {amount} · {date}",
     "no_todo_tag": "\"todo\" 태그 없음"
+  },
+  "todo_page": {
+    "title": "TODO 받은함",
+    "description": "#{tag} 태그가 붙은 거래입니다. 하나씩 확인하고 열지 않고도 완료로 표시하세요. 행을 열면 바로 편집할 수 있습니다.",
+    "review_controls": "검토 컨트롤",
+    "left_to_review": "검토할 항목 {count}개",
+    "done_this_session": "이번 세션에서 {count}개 완료",
+    "done_this_session_short": "이번 세션 {count}개 완료",
+    "done_of": "{total}개 중 {done}개 완료",
+    "to_review_count": "검토 · {count}",
+    "done_count": "완료 · {count}",
+    "expand_all": "모두 펼치기",
+    "collapse_all": "모두 접기",
+    "mark_all_done": "모두 완료로 표시",
+    "put_all_back": "모두 되돌리기",
+    "mark_done": "완료로 표시",
+    "put_back": "#todo 되돌리기",
+    "edit": "편집",
+    "more": "더 보기",
+    "less": "접기",
+    "save_done": "저장 후 완료",
+    "foot_todo": "완료로 표시하면 #todo 태그만 제거됩니다. 다른 것은 바뀌지 않습니다.",
+    "foot_done": "#todo 되돌리기는 거래를 받은함으로 돌려보냅니다. 편집으로 다시 바꿀 수 있습니다.",
+    "nothing_done": "아직 완료로 표시한 항목이 없습니다",
+    "nothing_done_hint": "이번 세션에서 완료로 표시한 거래가 여기에 나타나며, 다시 편집하거나 #todo 태그를 되돌릴 수 있습니다.",
+    "back_to_review": "검토로 돌아가기",
+    "all_caught_up": "모두 처리했습니다",
+    "all_caught_up_hint": "#todo 태그가 붙은 모든 거래를 검토했습니다.",
+    "review_done": "완료된 {count}개 보기",
+    "back_to_dashboard": "대시보드로 돌아가기",
+    "tagged_todo": "#todo {count}개",
+    "inbox_zero": "받은함 비움",
+    "not_set": "설정 안 됨",
+    "has_attachments": "첨부 있음",
+    "external_link": "외부 링크",
+    "search": "설명, 메모, 계좌 검색…",
+    "no_match": "검색과 일치하는 #todo 거래가 없습니다.",
+    "select_all": "모두 선택",
+    "selected": "{count}개 선택됨",
+    "clear": "지우기"
   }
 }

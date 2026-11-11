@@ -549,7 +549,15 @@
     "target_date": "Zieldatum",
     "search": "Sparschweine suchen…",
     "empty_hint": "Deine Sparschweine erscheinen hier",
-    "target_reached": "Ziel erreicht"
+    "target_reached": "Ziel erreicht",
+    "add_money": "Geld hinzufügen",
+    "remove_money": "Geld entnehmen",
+    "move_money": "Geld bewegen",
+    "remove": "Entnehmen",
+    "available_in": "Verfügbar in {name}",
+    "saved_after": "Danach gespart",
+    "remove_too_much": "Du kannst nicht mehr als die gesparten {amount} entnehmen.",
+    "money_updated": "Sparschwein aktualisiert"
   },
   "recurring_transaction_page": {
     "title_add": "Fügen Sie eine wiederkehrende Transaktion hinzu",
@@ -574,7 +582,13 @@
   "exchange_rate_page": {
     "relative_to_usd": "Beziehung zum USD",
     "search": "Währung suchen…",
-    "empty_hint": "Wechselkurse erscheinen hier"
+    "empty_hint": "Wechselkurse erscheinen hier",
+    "edit_hint": "Tippe auf einen Kurs, um deinen eigenen festzulegen.",
+    "custom": "Eigener",
+    "per_usd": "{code} pro 1 USD",
+    "fetched_rate": "Exchange Rate API: {value}",
+    "use_fetched": "Abgerufenen Kurs verwenden",
+    "rate_saved": "{code}-Kurs gespeichert"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -761,5 +775,45 @@
     "amount_left": "{amount} übrig",
     "peak": "Spitze {amount} · {date}",
     "no_todo_tag": "Kein \"todo\"-Tag"
+  },
+  "todo_page": {
+    "title": "TODO-Eingang",
+    "description": "Buchungen mit dem Tag #{tag}. Prüfe jede einzeln und markiere sie als erledigt, ohne sie zu öffnen. Öffne eine Zeile, um sie direkt zu bearbeiten.",
+    "review_controls": "Prüfsteuerung",
+    "left_to_review": "Noch {count} zu prüfen",
+    "done_this_session": "{count} in dieser Sitzung erledigt",
+    "done_this_session_short": "{count} in dieser Sitzung erledigt",
+    "done_of": "{done} von {total} erledigt",
+    "to_review_count": "Zu prüfen · {count}",
+    "done_count": "Erledigt · {count}",
+    "expand_all": "Alle aufklappen",
+    "collapse_all": "Alle zuklappen",
+    "mark_all_done": "Alle als erledigt markieren",
+    "put_all_back": "Alle zurücklegen",
+    "mark_done": "Als erledigt markieren",
+    "put_back": "#todo zurücksetzen",
+    "edit": "Bearbeiten",
+    "more": "Mehr",
+    "less": "Weniger",
+    "save_done": "Speichern & erledigt",
+    "foot_todo": "Als erledigt markieren entfernt den Tag #todo. Sonst ändert sich nichts.",
+    "foot_done": "#todo zurücksetzen bringt die Buchung in den Eingang zurück. Bearbeiten ändert sie erneut.",
+    "nothing_done": "Noch nichts als erledigt markiert",
+    "nothing_done_hint": "In dieser Sitzung erledigte Buchungen erscheinen hier, damit du sie erneut bearbeiten oder den Tag #todo zurücksetzen kannst.",
+    "back_to_review": "Zurück zur Prüfung",
+    "all_caught_up": "Alles erledigt",
+    "all_caught_up_hint": "Alle Buchungen mit dem Tag #todo wurden geprüft.",
+    "review_done": "Die {count} erledigten ansehen",
+    "back_to_dashboard": "Zurück zum Dashboard",
+    "tagged_todo": "{count} mit #todo",
+    "inbox_zero": "Eingang leer",
+    "not_set": "Nicht gesetzt",
+    "has_attachments": "Hat Anhänge",
+    "external_link": "Externer Link",
+    "search": "Beschreibung, Notizen, Konten suchen…",
+    "no_match": "Keine #todo-Buchung passt zu dieser Suche.",
+    "select_all": "Alle auswählen",
+    "selected": "{count} ausgewählt",
+    "clear": "Leeren"
   }
 }

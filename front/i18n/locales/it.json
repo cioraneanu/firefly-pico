@@ -548,7 +548,15 @@
     "target_date": "Data prevista",
     "search": "Cerca salvadanai…",
     "empty_hint": "I tuoi salvadanai appariranno qui",
-    "target_reached": "Obiettivo raggiunto"
+    "target_reached": "Obiettivo raggiunto",
+    "add_money": "Aggiungi denaro",
+    "remove_money": "Rimuovi denaro",
+    "move_money": "Sposta denaro",
+    "remove": "Rimuovi",
+    "available_in": "Disponibile in {name}",
+    "saved_after": "Risparmiato dopo",
+    "remove_too_much": "Non puoi rimuovere più dei {amount} risparmiati.",
+    "money_updated": "Salvadanaio aggiornato"
   },
   "recurring_transaction_page": {
     "title_add": "Aggiungi transazione ricorrente",
@@ -573,7 +581,13 @@
   "exchange_rate_page": {
     "relative_to_usd": "Rispetto all'USD",
     "search": "Cerca valuta…",
-    "empty_hint": "I tassi di cambio appariranno qui"
+    "empty_hint": "I tassi di cambio appariranno qui",
+    "edit_hint": "Tocca un tasso per impostarne uno tuo.",
+    "custom": "Personalizzato",
+    "per_usd": "{code} per 1 USD",
+    "fetched_rate": "Exchange Rate API: {value}",
+    "use_fetched": "Usa il tasso scaricato",
+    "rate_saved": "Tasso {code} salvato"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -760,5 +774,45 @@
     "amount_left": "{amount} rimanenti",
     "peak": "Picco {amount} · {date}",
     "no_todo_tag": "Nessun tag \"todo\""
+  },
+  "todo_page": {
+    "title": "Inbox TODO",
+    "description": "Transazioni con il tag #{tag}. Controllale una per una e segnale come fatte senza aprirle. Apri una riga per modificarla sul posto.",
+    "review_controls": "Controlli revisione",
+    "left_to_review": "{count} da controllare",
+    "done_this_session": "{count} segnate come fatte in questa sessione",
+    "done_this_session_short": "{count} fatte in sessione",
+    "done_of": "{done} di {total} fatte",
+    "to_review_count": "Da controllare · {count}",
+    "done_count": "Fatte · {count}",
+    "expand_all": "Espandi tutto",
+    "collapse_all": "Comprimi tutto",
+    "mark_all_done": "Segna tutte come fatte",
+    "put_all_back": "Rimetti tutte",
+    "mark_done": "Segna come fatta",
+    "put_back": "Rimetti #todo",
+    "edit": "Modifica",
+    "more": "Altro",
+    "less": "Meno",
+    "save_done": "Salva e fatto",
+    "foot_todo": "Segna come fatta rimuove il tag #todo. Nient’altro cambia.",
+    "foot_done": "Rimetti #todo riporta la transazione nell’inbox. Modifica per cambiarla di nuovo.",
+    "nothing_done": "Ancora niente segnato come fatto",
+    "nothing_done_hint": "Le transazioni segnate come fatte in questa sessione compaiono qui, per modificarle di nuovo o rimettere il tag #todo.",
+    "back_to_review": "Torna alla revisione",
+    "all_caught_up": "Tutto in ordine",
+    "all_caught_up_hint": "Tutte le transazioni con il tag #todo sono state controllate.",
+    "review_done": "Rivedi le {count} fatte",
+    "back_to_dashboard": "Torna alla dashboard",
+    "tagged_todo": "{count} con #todo",
+    "inbox_zero": "Inbox vuota",
+    "not_set": "Non impostata",
+    "has_attachments": "Ha allegati",
+    "external_link": "Link esterno",
+    "search": "Cerca descrizione, note, conti…",
+    "no_match": "Nessuna transazione #todo corrisponde alla ricerca.",
+    "select_all": "Seleziona tutto",
+    "selected": "{count} selezionate",
+    "clear": "Pulisci"
   }
 }
