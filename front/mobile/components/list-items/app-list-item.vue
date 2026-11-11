@@ -1,6 +1,6 @@
 <template>
   <div ref="swipeRef" class="mx-swipe" :class="{ 'no-del': !deletable }" @scroll.passive="onScroll">
-    <div class="mx-row" :class="rowClass" role="button" tabindex="0" @click="onEdit" @keydown.enter="onEdit">
+    <div class="mx-row" :class="rowClass" role="button" tabindex="0" @touchstart.passive="onTouchStart" @touchmove.passive="onTouchMove" @click="onEdit" @keydown.enter="onEdit">
       <slot />
     </div>
     <button v-if="deletable" type="button" class="mx-swipe__del" :aria-label="$t('delete')" @click.stop="onDelete">
@@ -50,7 +50,23 @@ const setOpen = (value) => {
 const onScroll = () => setOpen(swipeRef.value.scrollLeft > 4)
 onBeforeUnmount(() => setOpen(false))
 
+// A tap may wobble a few pixels, but a drag (scroll, pull to refresh) must not open the row on release:
+// the pull gesture prevents the native scroll, so the browser would still fire the click
+let touchStart = null
+let hasDragged = false
+const onTouchStart = (event) => {
+  touchStart = { x: event.touches[0].clientX, y: event.touches[0].clientY }
+  hasDragged = false
+}
+const onTouchMove = (event) => {
+  hasDragged ||= Math.hypot(event.touches[0].clientX - touchStart.x, event.touches[0].clientY - touchStart.y) > 10
+}
+
 const onEdit = () => {
+  if (hasDragged) {
+    hasDragged = false
+    return
+  }
   if (isOpen) {
     close()
     return
