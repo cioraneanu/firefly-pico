@@ -244,12 +244,13 @@ class AssistantController extends BaseController
 
         try {
             $response = Http::withHeaders($headers)
+                ->withoutRedirecting()
                 ->connectTimeout(10)
                 ->timeout(60)
                 ->post($config['endpoint'], $payload);
-        } catch (ConnectionException $exception) {
+        } catch (ConnectionException) {
             return $this->setStatusCode(502)->respond([
-                'message' => $exception->getMessage() ?: 'Assistant LLM request failed.',
+                'message' => 'Assistant LLM request failed.',
             ]);
         }
 
@@ -261,8 +262,14 @@ class AssistantController extends BaseController
             ]);
         }
 
-        if ($debug && is_array($responseBody)) {
-            $responseBody['pico_debug'] = [
+        // Only the answer goes back, never the raw body: a user's own endpoint can point anywhere the server reaches.
+        $result = [
+            'content' => fget($responseBody, 'choices.0.message.content') ?? ($config['source'] === 'server' && !is_array($responseBody) ? $response->body() : null),
+            'usage' => fget($responseBody, 'usage'),
+        ];
+
+        if ($debug) {
+            $result['pico_debug'] = [
                 'messages' => fget($payload, 'messages'),
                 'model' => $config['model'],
                 'source' => $config['source'],
@@ -270,13 +277,7 @@ class AssistantController extends BaseController
             ];
         }
 
-        if (is_array($responseBody)) {
-            return $this->respond($responseBody);
-        }
-
-        return $this->respond([
-            'content' => $response->body(),
-        ]);
+        return $this->respond($result);
     }
 
 }

@@ -9,8 +9,6 @@
 .mx-tx-notes a { text-decoration: underline; }
 
 /* ----- transaction form ----- */
-/* app-form sits between .mx-page and .mx-body: let the body keep scrolling */
-.mx-app .mx-page > form { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
 .mx-l .hint.mx-spin { width: 14px; height: 14px; }
 /* ramble: cards inside the sheet keep their own spacing */
 .mx-sh .mxr-card .mx-list { margin: 0; }

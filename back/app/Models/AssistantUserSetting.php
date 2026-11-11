@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Casts\EncryptedOrNull;
 use Illuminate\Database\Eloquent\Builder;
 
 class AssistantUserSetting extends BaseModel
@@ -24,8 +25,8 @@ class AssistantUserSetting extends BaseModel
     protected $casts = [
         'llm_use_own' => 'boolean',
         'transcription_use_own' => 'boolean',
-        'llm_api_key' => 'encrypted',
-        'transcription_api_key' => 'encrypted',
+        'llm_api_key' => EncryptedOrNull::class,
+        'transcription_api_key' => EncryptedOrNull::class,
     ];
 
     public function getLlmHasApiKeyAttribute()

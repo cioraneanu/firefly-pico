@@ -93,7 +93,6 @@ export default defineNuxtConfig({
     '~/mobile/styles/mx-app-tx.css',
     '~/mobile/styles/mx-app-dash.css',
     '~/mobile/styles/mx-app-entities.css',
-    '~/mobile/styles/mx-app-settings.css',
   ],
 
   build: {
