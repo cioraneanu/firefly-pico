@@ -644,7 +644,8 @@
       "of_income_saved": "of income saved",
       "this_month": "This month",
       "nothing_to_do": "Nothing left to do"
-    }
+    },
+    "refresh": "Refresh"
   },
   "clear": "Clear",
   "done": "Done",

@@ -643,7 +643,8 @@
       "of_income_saved": "przychodu zaoszczędzone",
       "this_month": "Ten miesiąc",
       "nothing_to_do": "Nic do zrobienia"
-    }
+    },
+    "refresh": "Odśwież"
   },
   "clear": "Wyczyść",
   "done": "Gotowe",

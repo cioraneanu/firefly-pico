@@ -643,7 +643,8 @@
       "of_income_saved": "del ingreso ahorrado",
       "this_month": "Este mes",
       "nothing_to_do": "Nada pendiente"
-    }
+    },
+    "refresh": "Actualizar"
   },
   "clear": "Limpiar",
   "done": "Listo",

@@ -1,5 +1,5 @@
 <template>
-  <d-form class="[--label-w:13rem]" @submit="save">
+  <d-form class="[--label-w:13.75rem]" @submit="save">
     <d-settings-group>
       <d-field :label="$t('settings.setup.pico_backend_url')" :rules="[rule.required()]" :value="connection.picoBackendURL">
         <d-input v-model="connection.picoBackendURL" :icon="IconLink" />
@@ -35,8 +35,14 @@
     </d-settings-group>
 
     <d-settings-group :title="$t('settings.setup.loaded_data_stats')">
-      <div class="grid grid-cols-[repeat(auto-fill,minmax(9rem,1fr))] gap-2">
-        <d-dash-tile v-for="stat in stats" :key="stat.t" :label="$t(stat.t)" :value="stat.value" :icon="stat.icon" />
+      <div class="grid grid-cols-[repeat(auto-fill,minmax(min(10.5rem,100%),1fr))] gap-3">
+        <div v-for="stat in stats" :key="stat.t" class="flex min-w-0 flex-col gap-1 rounded-lg border border-line bg-card p-3">
+          <span class="flex min-w-0 items-center gap-1.5 text-[13px] text-dim">
+            <component :is="stat.icon" :size="14" class="shrink-0" />
+            <span class="truncate">{{ $t(stat.t) }}</span>
+          </span>
+          <b class="truncate text-xl font-semibold tracking-[-0.01em] tabular-nums">{{ stat.value }}</b>
+        </div>
       </div>
     </d-settings-group>
 

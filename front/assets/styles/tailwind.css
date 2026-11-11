@@ -112,4 +112,7 @@
   --color-income: var(--d-income);
   --color-expense: var(--d-expense);
   --color-transfer: var(--d-transfer);
+  --color-tx-expense: var(--d-tx-expense);
+  --color-tx-income: var(--d-tx-income);
+  --color-tx-transfer: var(--d-tx-transfer);
 }

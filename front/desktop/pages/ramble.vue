@@ -24,7 +24,10 @@
           </span>
 
           <div v-if="savedRambles.length" class="divide-y divide-line rounded-lg border border-line">
-            <div v-for="saved in savedRambles" :key="saved.id" class="flex items-start gap-2 px-3 py-2.5">
+            <div v-for="saved in savedRambles" :key="saved.id" class="flex items-center gap-2 px-3 py-2.5">
+              <span class="grid size-7 shrink-0 place-items-center rounded-md bg-soft text-dim">
+                <component :is="saved.has_voice ? IconMicrophone : IconAlignLeft" :size="16" />
+              </span>
               <div class="min-w-0 flex-1">
                 <p class="break-words text-sm">{{ saved.text }}</p>
                 <p class="mt-0.5 text-xs text-dim">{{ saved.created_at && DateUtils.dateToUIWithTime(new Date(saved.created_at)) }}</p>
@@ -100,6 +103,7 @@
 
 <script setup>
 import {
+  IconAlignLeft,
   IconCategory,
   IconCheck,
   IconCircleCheck,

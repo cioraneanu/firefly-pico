@@ -20,10 +20,11 @@
         <template v-if="!Budget.isActive(budget)" #title>
           <d-badge>{{ $t('desktop.inactive') }}</d-badge>
         </template>
-        <span v-if="Budget.getLimit(budget)" class="flex w-56 flex-col gap-1.5">
-          <span class="flex justify-between text-xs tabular-nums text-dim">
-            <span>{{ limitText(budget) }}</span>
-            <span>{{ Math.round(get(Budget.getLimit(budget), 'attributes.percent', 0)) }}%</span>
+        <span v-if="Budget.getLimit(budget)" class="flex w-60 shrink-0 flex-col gap-1.5">
+          <span class="flex items-baseline gap-1.5 text-[13px] leading-[18px] tabular-nums">
+            <b class="font-medium">{{ Math.abs(get(Budget.getLimit(budget), 'attributes.spent', 0)) }}</b>
+            <span class="whitespace-nowrap text-dim">/ {{ get(Budget.getLimit(budget), 'attributes.amount', 0) }} {{ Budget.getCurrencySymbol(budget) }}</span>
+            <span class="ml-auto text-dim">{{ Math.round(get(Budget.getLimit(budget), 'attributes.percent', 0)) }}%</span>
           </span>
           <d-progress :value="get(Budget.getLimit(budget), 'attributes.percent', 0)" />
         </span>
@@ -52,5 +53,4 @@ const { search, filtered } = useSearch(
 
 const refresh = () => Promise.all([budgetStore.fetchBudgets(), budgetStore.fetchBudgetLimits()])
 const subtitle = (budget) => [get(budget, 'attributes.auto_budget_type.name'), get(budget, 'attributes.auto_budget_period.name')].filter(Boolean).join(' · ')
-const limitText = (budget) => `${Math.abs(get(Budget.getLimit(budget), 'attributes.spent', 0))} / ${get(Budget.getLimit(budget), 'attributes.amount', 0)} ${Budget.getCurrencySymbol(budget)}`
 </script>

@@ -7,7 +7,7 @@
 
     <section class="overflow-hidden rounded-xl bg-card ring-1 ring-fg/10">
       <d-tabs v-model="activeType" :options="tabs" line />
-      <div class="p-3">
+      <div class="px-4 py-3">
         <d-input v-model="search" :icon="IconSearch" :placeholder="$t('search_placeholder')" clearable class="w-80" />
       </div>
       <table v-if="filtered.length" class="d-table border-t border-line">
@@ -35,7 +35,7 @@
             <td class="text-dim">{{ get(account, 'attributes.account_role.t') ? $t(get(account, 'attributes.account_role.t')) : '—' }}</td>
             <td class="text-dim">{{ get(account, 'attributes.group') || '—' }}</td>
             <td class="text-right">
-              <span class="font-medium tabular-nums">{{ Account.getBalanceWithCurrency(account) }}</span>
+              <span :class="['whitespace-nowrap font-medium tabular-nums', Account.getBalance(account) < 0 && 'text-danger']">{{ Account.getBalanceWithCurrency(account) }}</span>
               <span v-if="Account.hasVirtualBalance(account)" class="block text-xs text-dim">{{ $t('account_page.available') }}: {{ Account.getAvailableBalanceWithCurrency(account) }}</span>
             </td>
             <td @click.stop>

@@ -1,34 +1,42 @@
+/* shadcndashboard.dev "nova" tokens (neutral hex), Geist type */
 .d-app,
 .d-portal {
-  --d-bg: oklch(1 0 0);
-  --d-fg: oklch(0.145 0 0);
-  --d-card: oklch(1 0 0);
-  --d-pop: oklch(1 0 0);
-  --d-primary: oklch(0.205 0 0);
-  --d-on-primary: oklch(0.985 0 0);
-  --d-soft: oklch(0.97 0 0);
-  --d-dim: oklch(0.556 0 0);
-  --d-line: oklch(0.922 0 0);
-  --d-field: oklch(0.922 0 0);
-  --d-ring: oklch(0.708 0 0);
-  --d-danger: oklch(0.577 0.245 27.325);
-  --d-side: oklch(0.985 0 0);
+  --d-bg: #ffffff;
+  --d-fg: #0a0a0a;
+  --d-card: #ffffff;
+  --d-pop: #ffffff;
+  --d-primary: #171717;
+  --d-on-primary: #fafafa;
+  --d-soft: #f5f5f5;
+  --d-dim: #737373;
+  --d-line: #e5e5e5;
+  --d-field: #e5e5e5;
+  --d-ring: #a1a1a1;
+  --d-danger: #e40014;
+  --d-side: #fafafa;
   --d-success: #10b981;
   --d-warning: #ca8a04;
   --d-info: #8b5cf6;
   --d-income: #047857;
-  --d-expense: #e11d48;
+  --d-expense: #e40014;
   --d-transfer: #0284c7;
+  /* transaction type dots and pills (the mobile palette) */
+  --d-tx-expense: #ec407a;
+  --d-tx-income: #66bb6a;
+  --d-tx-transfer: #4fc3f7;
+  /* shadcn radii: --radius 0.625rem, md = 0.8x, sm = 0.6x (cards stay 12px) */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   color: var(--d-fg);
   font-family:
+    'Geist',
     ui-sans-serif,
     system-ui,
     -apple-system,
     'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
     sans-serif;
   font-size: 14px;
   line-height: 20px;
@@ -38,39 +46,39 @@
 
 .van-theme-dark .d-app,
 .d-portal.van-theme-dark {
-  --d-bg: oklch(0.145 0 0);
-  --d-fg: oklch(0.985 0 0);
-  --d-card: oklch(0.205 0 0);
-  --d-pop: oklch(0.205 0 0);
-  --d-primary: oklch(0.922 0 0);
-  --d-on-primary: oklch(0.205 0 0);
-  --d-soft: oklch(0.269 0 0);
-  --d-dim: oklch(0.708 0 0);
-  --d-line: oklch(1 0 0 / 10%);
-  --d-field: oklch(1 0 0 / 15%);
-  --d-ring: oklch(0.556 0 0);
-  --d-danger: oklch(0.704 0.191 22.216);
-  --d-side: oklch(0.18 0 0);
+  --d-bg: #0a0a0a;
+  --d-fg: #fafafa;
+  --d-card: #0a0a0a;
+  --d-pop: #171717;
+  --d-primary: #e5e5e5;
+  --d-on-primary: #171717;
+  --d-soft: #262626;
+  --d-dim: #a1a1a1;
+  --d-line: #ffffff1a;
+  --d-field: #ffffff26;
+  --d-ring: #737373;
+  --d-danger: #ff6568;
+  --d-side: #171717;
   --d-warning: #eab308;
   --d-income: #10b981;
-  --d-expense: #fb7185;
+  --d-expense: #ff6568;
   --d-transfer: #38bdf8;
   color-scheme: dark;
 }
 
 .d-app {
   min-height: 100vh;
-  background: var(--d-side);
+  background: var(--d-bg);
 }
 
 body:has(.d-app) {
-  background: oklch(0.985 0 0);
+  background: #ffffff;
   touch-action: auto;
   scrollbar-width: thin;
 }
 
 body:has(.van-theme-dark .d-app) {
-  background: oklch(0.18 0 0);
+  background: #0a0a0a;
 }
 
 :is(.d-app, .d-portal) :where(h1, h2, h3, h4, p) {
@@ -145,7 +153,7 @@ body:has(.van-theme-dark .d-app) {
   border-bottom: 1px solid var(--d-line);
   color: var(--d-dim);
   font-size: 13px;
-  font-weight: 400;
+  font-weight: 500;
   text-align: left;
 }
 
@@ -163,7 +171,7 @@ body:has(.van-theme-dark .d-app) {
 }
 
 .d-table tbody tr:hover {
-  background: color-mix(in oklch, var(--d-soft) 50%, transparent);
+  background: color-mix(in srgb, var(--d-soft) 60%, transparent);
 }
 
 .d-pop-enter-active,

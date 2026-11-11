@@ -1,7 +1,7 @@
 <template>
   <div class="d-app flex">
     <d-sidebar v-if="isSidebarOpen" />
-    <div :class="['my-2 mr-2 flex min-h-[calc(100vh-1rem)] min-w-0 flex-1 flex-col rounded-xl bg-bg shadow-sm', !isSidebarOpen && 'ml-2']">
+    <div class="flex min-h-screen min-w-0 flex-1 flex-col bg-bg">
       <d-header v-model:sidebar="isSidebarOpen" />
       <NuxtPage :page-key="(route) => route.matched[0]?.path" />
     </div>
@@ -17,6 +17,13 @@ import UIUtils from '~/core/utils/UIUtils'
 import RouteConstants from '~/core/constants/RouteConstants'
 
 UIUtils.ui = DesktopUI
+
+useHead({
+  link: [
+    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+    { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap' },
+  ],
+})
 
 const profileStore = useProfileStore()
 const portal = Object.assign(document.createElement('div'), { id: 'd-portal' })

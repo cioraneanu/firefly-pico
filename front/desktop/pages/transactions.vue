@@ -1,32 +1,66 @@
 <template>
   <d-page :title="$t('toolbar.transactions')" :description="`${listTotalCount} ${$t('items')}`">
     <template #actions>
-      <d-refresh-button :action="onRefresh" />
       <d-button variant="primary" :icon="IconPlus" :to="RouteConstants.ROUTE_TRANSACTION_ID">{{ $t('new_transaction') }}</d-button>
     </template>
 
     <div class="flex flex-wrap items-center gap-2">
       <d-input v-model="search" :icon="IconSearch" :placeholder="$t('description')" clearable class="w-70" />
-      <div class="w-44">
-        <d-enum-select v-model="transactionType" :options="Transaction.typesList" :placeholder="$t('transaction_type')" clearable />
-      </div>
+      <button
+        ref="typeTrigger"
+        type="button"
+        :aria-expanded="isTypeOpen"
+        :class="[
+          'inline-flex h-8 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-md border border-dashed bg-bg px-2.5 text-[13.5px] font-medium transition-colors hover:bg-soft',
+          isTypeOpen ? 'border-fg/55' : 'border-fg/30',
+        ]"
+        @click="isTypeOpen = !isTypeOpen"
+      >
+        <icon-filter :size="15" class="text-dim" />
+        {{ $t('transaction_type') }}
+        <template v-if="transactionType">
+          <span class="mx-0.5 h-4 w-px bg-line" />
+          <span class="inline-flex h-5 items-center rounded-[5px] bg-soft px-1.5 text-xs font-medium">{{ $t(transactionType.t) }}</span>
+        </template>
+      </button>
+      <d-popover v-model:open="isTypeOpen" :anchor="typeTrigger" width="14.5rem">
+        <button
+          v-for="option in typeOptions"
+          :key="option.value.code"
+          type="button"
+          role="option"
+          :aria-selected="transactionType?.code === option.value.code"
+          class="flex h-8 w-full cursor-default items-center gap-2 rounded-md px-2 text-left text-[13.5px] hover:bg-soft"
+          @click="pickType(option.value)"
+        >
+          <span
+            :class="[
+              'grid size-4 shrink-0 place-items-center rounded-[4px]',
+              transactionType?.code === option.value.code ? 'bg-primary text-on-primary' : 'text-transparent shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--d-fg)_35%,transparent)]',
+            ]"
+          >
+            <icon-check :size="12" :stroke-width="3" />
+          </span>
+          <component :is="option.icon" :size="15" :class="typeColors[option.value.code]" />
+          <span class="flex-1 truncate">{{ option.label }}</span>
+        </button>
+        <template v-if="transactionType">
+          <div class="-mx-1 my-1 h-px bg-line" />
+          <button type="button" class="flex h-8 w-full cursor-default items-center justify-center rounded-md px-2 text-[13.5px] hover:bg-soft" @click="pickType(null)">
+            {{ $t('filters.clear') }}
+          </button>
+        </template>
+      </d-popover>
       <span class="flex-1" />
+      <d-button :icon="IconRefresh" :loading="isRefreshing" @click="refresh">{{ $t('desktop.refresh') }}</d-button>
       <d-button :icon="IconSum" :aria-pressed="showSearchTotal" :class="showSearchTotal && 'bg-soft'" @click="onToggleSearchTotal">{{ $t('filters.total') }}</d-button>
       <d-button :icon="IconFilter" @click="isFiltersOpen = true">
         {{ $t('desktop.filters') }}
-        <d-badge v-if="activeFiltersCount">{{ activeFiltersCount }}</d-badge>
+        <d-badge v-if="activeFiltersCount" class="px-1.5 text-dim tabular-nums">{{ activeFiltersCount }}</d-badge>
       </d-button>
     </div>
 
-    <div v-if="activeFilters.length" class="-mt-2 flex flex-wrap items-center gap-2">
-      <span v-for="filter in activeFilters" :key="filter.bagKey" class="inline-flex h-7 items-center overflow-hidden rounded-md border border-line text-[13px]">
-        <span class="px-2">{{ filter.display }}</span>
-        <button type="button" class="grid h-full cursor-pointer place-items-center border-l border-line px-1.5 text-dim hover:bg-soft hover:text-fg" @click="removeFilter(filter.bagKey)">
-          <icon-x :size="14" />
-        </button>
-      </span>
-      <d-button variant="ghost" size="sm" class="text-dim" @click="onClearFilters">{{ $t('filters.clear') }}</d-button>
-    </div>
+    <d-filter-chips v-if="activeFilters.length" :filters="activeFilters" @remove="removeFilter" @clear="onClearFilters" />
 
     <div v-if="showSearchTotal" class="-mt-2 flex flex-wrap items-center gap-3 rounded-xl px-3 py-2.5 ring-1 ring-fg/10">
       <d-button size="sm" :loading="isComputingSearchTotal" @click="onComputeSearchTotal">{{ $t('filters.compute_total') }}</d-button>
@@ -66,7 +100,7 @@
 </template>
 
 <script setup>
-import { IconCoins, IconFilter, IconLoader2, IconPlus, IconSearch, IconSum, IconX } from '@tabler/icons-vue'
+import { IconCheck, IconCoins, IconFilter, IconLoader2, IconPlus, IconRefresh, IconSearch, IconSum } from '@tabler/icons-vue'
 import { formatTimeAgo, useElementVisibility, watchDebounced } from '@vueuse/core'
 import { capitalize, groupBy, omit } from 'lodash-es'
 import RouteConstants from '~/core/constants/RouteConstants'
@@ -97,6 +131,11 @@ const {
 } = useTransactionList()
 
 const isFiltersOpen = ref(false)
+const isTypeOpen = ref(false)
+const isRefreshing = ref(false)
+const typeTrigger = ref(null)
+const typeOptions = useTransactionTypeOptions()
+const typeColors = { expense: 'text-tx-expense', income: 'text-income', transfer: 'text-transfer' }
 const search = ref('')
 const sentinel = ref(null)
 const isSentinelVisible = useElementVisibility(sentinel)
@@ -107,6 +146,17 @@ const transactionType = computed({
 })
 
 const removeFilter = (bagKey) => (filters.value = omit(filters.value, bagKey))
+
+const pickType = (type) => {
+  transactionType.value = transactionType.value?.code === type?.code ? null : type
+  isTypeOpen.value = false
+}
+
+const refresh = async () => {
+  isRefreshing.value = true
+  await onRefresh()
+  isRefreshing.value = false
+}
 
 watch(filters, (value) => (search.value = value.description ?? ''), { immediate: true })
 watchDebounced(search, (value) => value !== (filters.value.description ?? '') && (filters.value = { ...filters.value, description: value }), { debounce: 400 })

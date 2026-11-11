@@ -586,7 +586,8 @@
       "of_income_saved": "收入的储蓄比例",
       "this_month": "本月",
       "nothing_to_do": "没有待办事项"
-    }
+    },
+    "refresh": "刷新"
   },
   "clear": "清除",
   "done": "完成",

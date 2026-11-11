@@ -643,7 +643,8 @@
       "of_income_saved": "da receita poupada",
       "this_month": "Este mês",
       "nothing_to_do": "Nada a fazer"
-    }
+    },
+    "refresh": "Atualizar"
   },
   "clear": "Limpar",
   "done": "Concluído",

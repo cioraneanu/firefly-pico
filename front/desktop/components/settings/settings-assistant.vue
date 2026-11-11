@@ -1,5 +1,5 @@
 <template>
-  <d-form class="[--label-w:13rem]" @submit="save">
+  <d-form class="[--label-w:13.75rem]" @submit="save">
     <d-settings-group>
       <div class="grid gap-3 sm:grid-cols-2">
         <div v-for="service in services" :key="service.t" class="flex flex-col gap-3 rounded-lg p-4 ring-1 ring-fg/10">

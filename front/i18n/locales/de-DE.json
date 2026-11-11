@@ -644,7 +644,8 @@
       "of_income_saved": "der Einnahmen gespart",
       "this_month": "Dieser Monat",
       "nothing_to_do": "Nichts zu erledigen"
-    }
+    },
+    "refresh": "Aktualisieren"
   },
   "clear": "Leeren",
   "done": "Fertig",

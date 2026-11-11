@@ -1,7 +1,7 @@
 <template>
-  <header class="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 rounded-t-xl border-b border-line bg-bg/90 px-4 backdrop-blur">
+  <header class="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b border-line bg-bg/90 px-4 backdrop-blur">
     <d-button variant="ghost" size="icon-sm" :icon="IconLayoutSidebar" class="-ml-1" :aria-label="$t('desktop.toggle_sidebar')" @click="sidebar = !sidebar" />
-    <span class="mx-2 h-4 w-px bg-line" />
+    <span class="mr-2 h-4 w-px bg-line" />
     <nav class="flex min-w-0 items-center gap-1.5 text-dim">
       <nuxt-link :to="RouteConstants.ROUTE_DASHBOARD" class="truncate transition-colors hover:text-fg">Firefly Pico</nuxt-link>
       <template v-if="active">

@@ -1,7 +1,7 @@
 <template>
   <d-dialog open :title="editor.title" size="xl" @close="close">
     <template #actions>
-      <d-badge v-if="editor.isSplitTransaction" variant="outline">{{ $t('transaction.split_short') }}</d-badge>
+      <d-badge v-if="editor.isSplitTransaction" variant="outline"><icon-arrows-split :size="12" />{{ $t('transaction.split_short') }}</d-badge>
       <d-button
         variant="ghost"
         size="icon-sm"
@@ -25,8 +25,8 @@
     <template #footer>
       <template v-if="editor.itemId && !editor.isSplitTransaction">
         <d-button variant="danger" :icon="IconTrash" @click="editor.onDelete">{{ $t('delete') }}</d-button>
-        <d-button variant="ghost" :icon="IconCopy" :to="editor.cloneRoute">{{ $t('clone') }}</d-button>
-        <d-button variant="ghost" :icon="IconTemplate" :to="editor.templateRoute">{{ $t('transaction.make_template') }}</d-button>
+        <d-button :icon="IconCopy" :to="editor.cloneRoute">{{ $t('clone') }}</d-button>
+        <d-button :icon="IconTemplate" :to="editor.templateRoute">{{ $t('transaction.make_template') }}</d-button>
       </template>
       <span class="flex-1" />
       <d-button @click="close">{{ $t('cancel') }}</d-button>
@@ -36,7 +36,7 @@
 </template>
 
 <script setup>
-import { IconAdjustmentsHorizontal, IconCopy, IconTemplate, IconTrash } from '@tabler/icons-vue'
+import { IconAdjustmentsHorizontal, IconArrowsSplit, IconCopy, IconTemplate, IconTrash } from '@tabler/icons-vue'
 import RouteConstants from '~/core/constants/RouteConstants'
 
 const emit = defineEmits(['changed'])

@@ -643,7 +643,8 @@
       "of_income_saved": "delle entrate risparmiato",
       "this_month": "Questo mese",
       "nothing_to_do": "Niente da fare"
-    }
+    },
+    "refresh": "Aggiorna"
   },
   "clear": "Cancella",
   "done": "Fatto",

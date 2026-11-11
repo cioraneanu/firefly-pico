@@ -644,7 +644,8 @@
       "of_income_saved": "수입 중 저축",
       "this_month": "이번 달",
       "nothing_to_do": "할 일 없음"
-    }
+    },
+    "refresh": "새로고침"
   },
   "clear": "지우기",
   "done": "완료",

@@ -1,5 +1,5 @@
 <template>
-  <d-form class="[--label-w:13rem]" @submit="saveAll">
+  <d-form class="[--label-w:13.75rem]" @submit="saveAll">
     <d-settings-group :title="$t('settings.transactions.configure_form_fields')">
       <d-order-list v-model="formFields" />
       <d-switch v-model="draft.isForeignCurrencyAlwaysVisible">{{ $t('settings.transactions.form_fields.always_show_foreign_currency') }}</d-switch>

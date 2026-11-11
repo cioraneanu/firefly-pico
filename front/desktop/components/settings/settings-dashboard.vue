@@ -1,5 +1,5 @@
 <template>
-  <d-form class="[--label-w:13rem]" @submit="saveAll">
+  <d-form class="[--label-w:13.75rem]" @submit="saveAll">
     <d-settings-group :title="$t('settings.dashboard.config')">
       <d-field :label="$t('settings.formatting.first_day_of_month')">
         <div class="w-40">

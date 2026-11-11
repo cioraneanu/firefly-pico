@@ -1,9 +1,9 @@
 <template>
   <d-card :title="$t('settings.dashboard.cards.todo_transactions')" flush>
     <template #actions>
-      <d-button v-if="tagStore.tagTodo" size="sm" :to="links.todo()">
+      <d-button v-if="tagStore.tagTodo" size="sm" :icon="IconListCheck" :to="links.todo()">
         {{ $t('todo') }}
-        <d-badge class="text-dim tabular-nums">{{ dashboardStore.transactionsWithTodo.length }}</d-badge>
+        <d-badge class="px-1.5 text-dim tabular-nums">{{ dashboardStore.transactionsWithTodo.length }}</d-badge>
       </d-button>
     </template>
     <div class="-mb-4 -mt-1 divide-y divide-line border-t border-line">
@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import { IconChecks, IconCoins } from '@tabler/icons-vue'
+import { IconChecks, IconCoins, IconListCheck } from '@tabler/icons-vue'
 import RouteConstants from '~/core/constants/RouteConstants'
 import Account from '~/core/models/Account'
 import Category from '~/core/models/Category'

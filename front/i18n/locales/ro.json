@@ -643,7 +643,8 @@
       "of_income_saved": "din venit economisit",
       "this_month": "Luna aceasta",
       "nothing_to_do": "Nimic de făcut"
-    }
+    },
+    "refresh": "Reîmprospătează"
   },
   "clear": "Golește",
   "done": "Gata",

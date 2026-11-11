@@ -643,7 +643,8 @@
       "of_income_saved": "des revenus épargnés",
       "this_month": "Ce mois-ci",
       "nothing_to_do": "Rien à faire"
-    }
+    },
+    "refresh": "Actualiser"
   },
   "clear": "Effacer",
   "done": "Terminé",

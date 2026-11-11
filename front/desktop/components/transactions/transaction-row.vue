@@ -4,9 +4,9 @@
     class="relative grid min-h-14 cursor-pointer grid-cols-[3rem_minmax(11rem,1fr)_minmax(13rem,1.15fr)_minmax(12rem,1.25fr)_8rem_2.5rem] items-center gap-3 py-2 pl-4 pr-2 transition-colors hover:bg-soft/60"
     @click="navigateTo(`${RouteConstants.ROUTE_TRANSACTION_ID}/${value.id}`)"
   >
-    <span class="flex items-center gap-1.5">
-      <span :class="['size-2 shrink-0 rounded-full', isTypeExpense ? 'bg-expense' : isTypeIncome ? 'bg-income' : 'bg-transfer']" />
+    <span class="relative w-max">
       <d-tile :icon="icon" />
+      <span :class="['absolute -bottom-0.5 -right-0.5 z-1 size-2.5 rounded-full ring-2 ring-card', isTypeExpense ? 'bg-tx-expense' : isTypeIncome ? 'bg-tx-income' : 'bg-tx-transfer']" />
     </span>
     <div class="flex min-w-0 flex-col">
       <span class="flex min-w-0 items-center gap-1.5">

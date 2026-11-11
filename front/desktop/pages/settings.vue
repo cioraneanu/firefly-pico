@@ -1,21 +1,21 @@
 <template>
   <d-page :title="$t('settings.settings_title')" :description="$t('desktop.settings_description')" narrow>
     <div class="grid min-w-0 grid-cols-[13.75rem_minmax(0,1fr)] rounded-xl bg-card ring-1 ring-fg/10">
-      <nav class="flex flex-col gap-0.5 border-r border-line p-3">
+      <nav class="flex min-w-0 flex-col gap-0.5 border-r border-line p-3">
         <nuxt-link
           v-for="section in sections"
           :key="section.code"
           :to="`/settings/${section.code}`"
-          :class="['flex h-8 items-center gap-2 rounded-md px-2 text-sm transition-colors hover:bg-soft/70', section.code === active.code && 'bg-soft font-medium']"
+          :aria-current="section.code === active.code ? 'page' : undefined"
+          :class="['flex h-9 items-center gap-2 rounded-lg px-2.5 font-medium transition-colors hover:bg-soft hover:text-fg', section.code === active.code ? 'bg-soft text-fg' : 'text-dim']"
         >
-          <component :is="section.icon" :size="16" :class="section.code === active.code ? 'text-fg' : 'text-dim'" />
+          <component :is="section.icon" :size="16" :stroke-width="2" />
           <span class="truncate">{{ $t(section.t) }}</span>
         </nuxt-link>
       </nav>
       <div class="flex min-w-0 flex-col gap-6 p-6">
-        <div>
-          <h2 class="text-base font-semibold">{{ $t(active.t) }}</h2>
-        </div>
+        <h2 class="text-lg font-semibold tracking-[-0.01em]">{{ $t(active.t) }}</h2>
+        <div class="-mt-1 h-px bg-line" />
         <component :is="component" :key="active.code" />
       </div>
     </div>
