@@ -21,6 +21,7 @@ const getInterpretationPrompt = () =>
     'Be conservative with semantic guesses. When there is no lexical match, set a supplied tag or category only when it is the single obvious real-world classification of the stated item or service. Prefer a direct, specific classification over broad labels such as necessities, shopping, or food. For example, an air conditioner clearly fits a supplied home tag better than necessities or food. If more than one candidate is plausible, the relationship is indirect, or confidence is not high, leave tagNames empty and categoryName null. Do not add both a child tag and its parent; the application adds tag ancestors automatically.',
     'Do not invent names that are missing from the supplied context. If the user explicitly says "tag food", put food in tagNames even without a context match.',
     'Prefer type expense unless the user clearly describes income or a transfer.',
+    'context.recentTransactions, when present, lists the user\'s recent transactions newest first, one per description, as "description → type · source → destination · category · [tags]". When the input names the same or a similar merchant, place or item, reuse that transaction\'s accounts, category and tags unless the input says otherwise. Use only names that also appear in the context lists.',
   ].join('\n')
 
 const tryParseJson = (content) => {
@@ -117,8 +118,12 @@ export default class AssistantRepository extends BaseRepository {
     return axios.delete(`${this.getUrl()}/rambles/${id}`)
   }
 
+  // data.config: unsaved connection values from the settings screen ({ use_own, endpoint, model, api_key }).
+  // data.debug: also return what was sent (messages, model, source, duration) for "Try it out".
   async interpretTransactions(data) {
     const requestData = {
+      config: data.config ?? undefined,
+      debug: data.debug ?? undefined,
       context: data.externalContext,
       payload: {
         temperature: 0,
@@ -158,14 +163,24 @@ export default class AssistantRepository extends BaseRepository {
 
     return {
       transactions: normalizeTransactions(json),
+      debug: data.debug ? { ...get(response, 'data.pico_debug', {}), usage: get(response, 'data.usage', null), raw: json } : undefined,
     }
   }
 
-  async testLlm() {
-    return axios.post(`${this.getUrl()}/test-llm`, {}, { timeout: 60000 })
+  // config: unsaved connection values to test before saving; omit to test the saved one.
+  async testLlm(config = null) {
+    return axios.post(`${this.getUrl()}/test-llm`, config ? { config } : {}, { timeout: 60000 })
   }
 
-  async testTranscription() {
-    return axios.post(`${this.getUrl()}/test-transcription`, {}, { timeout: 120000 })
+  async testTranscription(config = null) {
+    return axios.post(`${this.getUrl()}/test-transcription`, config ? { config } : {}, { timeout: 120000 })
+  }
+
+  async getSettings() {
+    return axios.get(`${this.getUrl()}/settings`)
+  }
+
+  async updateSettings(payload) {
+    return axios.put(`${this.getUrl()}/settings`, payload)
   }
 }

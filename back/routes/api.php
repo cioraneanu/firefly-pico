@@ -80,6 +80,8 @@ Route::delete('assistant/rambles/{id}', [AssistantController::class, 'deleteRamb
 Route::post('assistant/interpret-transactions', [AssistantController::class, 'interpretTransactions']);
 Route::post('assistant/test-llm', [AssistantController::class, 'testLlm']);
 Route::post('assistant/test-transcription', [AssistantController::class, 'testTranscription']);
+Route::get('assistant/settings', [AssistantController::class, 'getSettings']);
+Route::put('assistant/settings', [AssistantController::class, 'updateSettings']);
 
 Route::get('/test', function (Request $request) {
     return "Test!";

@@ -3,6 +3,7 @@ import AssistantRepository from '~/core/repository/AssistantRepository'
 import TransactionRepository from '~/core/repository/TransactionRepository'
 import TransactionTransformer from '~/core/transformers/TransactionTransformer'
 import { useRambleTransactionResolver } from '~/core/composables/useRambleTransactionResolver'
+import { getAssistantHistoryLines, invalidateAssistantHistory } from '~/core/composables/useAssistantHistory'
 import { useTransactionAssistantDraft } from '~/core/composables/useTransactionAssistantDraft'
 
 export const rambleStatus = { pending: 'pending', creating: 'creating', success: 'success', error: 'error' }
@@ -138,6 +139,12 @@ export function useRamble({ onCreated } = {}) {
       .filter(Boolean)
       .join('\n')
 
+  // The entity lists plus, when enabled, the user's recent transactions as examples
+  const getRambleRequestContext = async () => {
+    const recentTransactions = await getAssistantHistoryLines(profileStore.assistantHistoryCount)
+    return recentTransactions.length ? { ...getRambleContext(), recentTransactions } : getRambleContext()
+  }
+
   const interpretRambleText = async () => {
     if (!interpretationText()) return
 
@@ -154,7 +161,7 @@ export function useRamble({ onCreated } = {}) {
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         language: profileStore.language,
         externalContext: profileStore.assistantLlmContext,
-        context: getRambleContext(),
+        context: await getRambleRequestContext(),
       })
       if (session !== sessionId.value) return
 
@@ -224,7 +231,10 @@ export function useRamble({ onCreated } = {}) {
         }
       }
 
-      if (successCount > 0) UIUtils.showToastSuccess(t('transaction.assistant_ramble_created_toast', successCount))
+      if (successCount > 0) {
+        invalidateAssistantHistory()
+        UIUtils.showToastSuccess(t('transaction.assistant_ramble_created_toast', successCount))
+      }
       if (failedCount.value > 0) return
 
       if (hasLoadedSavedRambles.value && !(await deleteLoadedSavedRambles({ confirm: false }))) {
@@ -263,6 +273,7 @@ export function useRamble({ onCreated } = {}) {
     deleteSavedRamble,
     reset,
     interpretRambleText,
+    getRambleRequestContext,
     removeRambleTransaction,
     updateRambleTransaction,
     createRambleTransactions,

@@ -8,6 +8,8 @@ use App\Jobs\TranscribeAssistantRamble;
 use App\Models\AssistantRamble;
 use App\Services\AssistantLlmConfigService;
 use App\Services\AssistantTranscriptionService;
+use App\Services\AssistantUserSettingsService;
+use App\Validations\AssistantValidation;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -136,7 +138,8 @@ class AssistantController extends BaseController
             'payload.messages' => ['required', 'array'],
         ]);
 
-        $config = app(AssistantLlmConfigService::class)->getConfig();
+        AssistantValidation::validateConfigOverride($request);
+        $config = app(AssistantLlmConfigService::class)->getConfig(null, $request->input('config'));
 
         if (!$config['isConfigured']) {
             return $this->setStatusCode(self::HTTP_CODE_UNPROCESSABLE_ENTITY)->respond([
@@ -148,13 +151,14 @@ class AssistantController extends BaseController
         $this->appendContext($payload, $config['context'], $request->input('context'));
         $payload['model'] = $config['model'];
 
-        return $this->sendLlmRequest($config, $payload);
+        return $this->sendLlmRequest($config, $payload, $request->boolean('debug'));
     }
 
     public function testLlm(Request $request)
     {
         BaseAuthorization::checkUser();
-        $config = app(AssistantLlmConfigService::class)->getConfig();
+        AssistantValidation::validateConfigOverride($request);
+        $config = app(AssistantLlmConfigService::class)->getConfig(null, $request->input('config'));
 
         if (!$config['isConfigured']) {
             return $this->setStatusCode(self::HTTP_CODE_UNPROCESSABLE_ENTITY)->respond([
@@ -173,7 +177,8 @@ class AssistantController extends BaseController
     public function testTranscription(Request $request)
     {
         BaseAuthorization::checkUser();
-        $result = app(AssistantTranscriptionService::class)->testConfiguration();
+        AssistantValidation::validateConfigOverride($request);
+        $result = app(AssistantTranscriptionService::class)->testConfiguration($request->input('config'));
 
         if (!$result['successful']) {
             return $this->setStatusCode($result['status'])->respond([
@@ -182,6 +187,20 @@ class AssistantController extends BaseController
         }
 
         return $this->respond(['success' => true]);
+    }
+
+    public function getSettings(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        return $this->respond(['data' => app(AssistantUserSettingsService::class)->getForResponse(getUserId())]);
+    }
+
+    public function updateSettings(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        AssistantValidation::validateSettingsUpdate($request);
+        app(AssistantUserSettingsService::class)->save(getUserId(), $request->all());
+        return $this->respond(['data' => app(AssistantUserSettingsService::class)->getForResponse(getUserId())]);
     }
 
     private function appendContext(&$payload, $globalContext, $userContext)
@@ -206,8 +225,13 @@ class AssistantController extends BaseController
         $payload['messages'][] = ['role' => 'system', 'content' => $context];
     }
 
-    private function sendLlmRequest($config, $payload)
+    /**
+     * @param bool $debug Adds pico_debug (the messages actually sent, model, source, duration) so the
+     *                    settings screen can show the exact prompt in "Try it out".
+     */
+    private function sendLlmRequest($config, $payload, $debug = false)
     {
+        $startedAt = microtime(true);
 
         $headers = [
             'Accept' => 'application/json',
@@ -235,6 +259,15 @@ class AssistantController extends BaseController
             return $this->setStatusCode($response->status())->respond([
                 'message' => data_get($responseBody, 'error.message') ?? data_get($responseBody, 'message') ?? 'Assistant LLM request failed.',
             ]);
+        }
+
+        if ($debug && is_array($responseBody)) {
+            $responseBody['pico_debug'] = [
+                'messages' => fget($payload, 'messages'),
+                'model' => $config['model'],
+                'source' => $config['source'],
+                'duration_ms' => (int)round((microtime(true) - $startedAt) * 1000),
+            ];
         }
 
         if (is_array($responseBody)) {

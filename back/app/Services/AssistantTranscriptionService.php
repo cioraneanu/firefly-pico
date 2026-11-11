@@ -27,13 +27,13 @@ class AssistantTranscriptionService
             return;
         }
 
-        $config = $this->configService->getConfig($language);
-        if (!$config['isConfigured']) {
-            return;
-        }
-
+        // Each recording uses its owner's connection (their own one, or the server's).
+        $configs = [];
         foreach ($pending as $ramble) {
-            $this->transcribe($ramble, $config);
+            $config = $configs[$ramble->user_id] ??= $this->configService->getConfig($language, $ramble->user_id);
+            if ($config['isConfigured']) {
+                $this->transcribe($ramble, $config);
+            }
         }
 
         $this->purgeEmpty($pending);
@@ -60,9 +60,12 @@ class AssistantTranscriptionService
         })->values();
     }
 
-    public function testConfiguration(): array
+    /**
+     * @param array|null $override Unsaved values from the settings screen ({ use_own, endpoint, model, api_key, language }).
+     */
+    public function testConfiguration(?array $override = null): array
     {
-        $config = $this->configService->getConfig();
+        $config = $this->configService->getConfig(null, null, $override);
         if (!$config['isConfigured']) {
             return ['successful' => false, 'status' => 422, 'message' => 'Assistant transcription is not configured.'];
         }
