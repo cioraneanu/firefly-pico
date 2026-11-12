@@ -3,6 +3,7 @@ import { get, cloneDeep } from 'lodash-es'
 import UIUtils from '~/core/utils/UIUtils'
 import { next } from 'lodash-es/seq'
 import { getGUID } from '~/core/utils/Utils.js'
+import { deleteWithUndo } from '~/core/utils/DeleteUtils'
 
 export const useFormEvent = {
   postFetch: 'postFetch',
@@ -11,7 +12,8 @@ export const useFormEvent = {
 }
 
 export function useForm(props) {
-  const { routeList, routeForm, shouldFetchOnMount = true } = props
+  // resetOnCreate (ref): whether creating empties the form for the next one; defaults to profileStore.resetFormOnCreate
+  const { routeList, routeForm, shouldFetchOnMount = true, resetOnCreate = null } = props
   const { model, resetFields, onEvent, fetchItem: fetchItem_ } = props
 
   const transformer = model.getTransformer()
@@ -77,7 +79,7 @@ export function useForm(props) {
       onEvent?.(useFormEvent.postSave, response)
 
       // Should reset form
-      if (!itemId.value && profileStore.resetFormOnCreate) {
+      if (!itemId.value && (toValue(resetOnCreate) ?? profileStore.resetFormOnCreate)) {
         item.value = model.getEmpty()
         resetFields ? resetFields() : null
       } else {
@@ -90,14 +92,10 @@ export function useForm(props) {
   }
 
   const onDelete = async () => {
-    let result = await UIUtils.showDeleteConfirmation('Delete confirmation', 'Are you sure you want to delete this?')
-    if (result) {
-      let response = await repository.delete(itemId.value)
-      if (ResponseUtils.isSuccess(response)) {
-        onEvent ? onEvent(useFormEvent.postDelete, response) : null
-        routeList ? await navigateTo(routeList) : null
-        UIUtils.showToastSuccess(`Deleted successfully.`, 1000)
-      }
+    const id = itemId.value
+    const response = await deleteWithUndo(item.value, () => repository.delete(id), { leave: routeList && (() => navigateTo(routeList)), undoable: !!routeList })
+    if (ResponseUtils.isSuccess(response)) {
+      onEvent ? onEvent(useFormEvent.postDelete, response) : null
     }
   }
 

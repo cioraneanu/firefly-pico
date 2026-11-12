@@ -243,6 +243,18 @@ body:has(.van-theme-dark .d-app) {
   transform: translateY(8px);
 }
 
+/* Time left to undo */
+.d-toast-bar {
+  transform-origin: left;
+  animation: d-toast-bar linear forwards;
+}
+
+@keyframes d-toast-bar {
+  to {
+    transform: scaleX(0);
+  }
+}
+
 .d-spin {
   animation: d-spin 0.8s linear infinite;
 }

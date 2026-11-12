@@ -48,7 +48,7 @@
               >
               <span class="mx-tnum mx-money">{{ group.total }}</span>
             </div>
-            <transaction-list-item v-for="item in group.items" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
+            <transaction-list-item v-for="item in group.items" :key="item.id" :value="item" clonable @on-edit="onEdit" @on-delete="onDelete" />
           </template>
         </div>
 

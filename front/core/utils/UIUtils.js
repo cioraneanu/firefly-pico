@@ -9,8 +9,9 @@ export default class UIUtils {
     return UIUtils.showToast(message, 'danger', duration)
   }
 
-  static showToast(message, type, duration) {
-    return UIUtils.ui.toast(message, type, duration)
+  // options: { action: { label, onClick }, onClose } => returns { close }
+  static showToast(message, type, duration, options = {}) {
+    return UIUtils.ui.toast(message, type, duration, options)
   }
 
   static showDeleteConfirmation(title, message) {

@@ -4,6 +4,8 @@
   "new": "Nuovo",
   "save": "Salva",
   "delete": "Elimina",
+  "undo": "Annulla",
+  "deleted": "Eliminato",
   "add": "Aggiungi",
   "search": "Cerca",
   "success": "Successo",
@@ -138,7 +140,8 @@
     "attachment_delete_confirm": "L'allegato verrà eliminato definitivamente.",
     "assistant_ramble_new": "Nuovo ramble",
     "assistant_ramble_saved": "Ramble salvati",
-    "assistant_ramble_no_saved": "Nessun ramble salvato"
+    "assistant_ramble_no_saved": "Nessun ramble salvato",
+    "create_another": "Creane un’altra"
   },
   "settings": {
     "settings_title": "Impostazioni",
@@ -184,6 +187,7 @@
       "title": "Impostazioni UI",
       "show_animations": "Mostra animazioni",
       "reset_forms_after_creation": "Reimposta i moduli dopo la creazione",
+      "undo_delete": "Elimina subito con Annulla (senza conferma)",
       "transaction_list": "Elenco transazioni",
       "select_hero_icons": "Seleziona quali Hero Icons mostrare",
       "hero_icons": "Hero Icons",
@@ -721,7 +725,17 @@
       "this_month": "Questo mese",
       "nothing_to_do": "Niente da fare"
     },
-    "refresh": "Aggiorna"
+    "refresh": "Aggiorna",
+    "edit_inline": "Modifica in linea",
+    "done_editing": "Fine modifica",
+    "command": {
+      "placeholder": "Cerca o vai a…",
+      "pages": "Pagine",
+      "create": "Crea",
+      "actions": "Dal tuo testo",
+      "add_transaction": "Nuova transazione: “{text}”",
+      "search_transactions": "Cerca transazioni per “{text}”"
+    }
   },
   "clear": "Cancella",
   "done": "Fatto",

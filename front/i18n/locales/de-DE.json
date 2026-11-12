@@ -4,6 +4,8 @@
   "new": "Neu",
   "save": "Speichern",
   "delete": "Löschen",
+  "undo": "Rückgängig",
+  "deleted": "Gelöscht",
   "add": "Hinzufügen",
   "search": "Suchen",
   "success": "Erfolg",
@@ -138,7 +140,8 @@
     "attachment_delete_confirm": "Der Anhang wird endgültig gelöscht.",
     "assistant_ramble_new": "Neuer Ramble",
     "assistant_ramble_saved": "Gespeicherte Rambles",
-    "assistant_ramble_no_saved": "Keine gespeicherten Rambles"
+    "assistant_ramble_no_saved": "Keine gespeicherten Rambles",
+    "create_another": "Weitere erstellen"
   },
   "settings": {
     "settings_title": "Einstellungen",
@@ -185,6 +188,7 @@
       "show_animations": "Animationen anzeigen",
       "is_profile_float_visible": "Profil-Button auf Dashboard anzeigen",
       "reset_forms_after_creation": "Formulare nach Erzeugung zurücksetzten",
+      "undo_delete": "Sofort löschen mit Rückgängig (ohne Bestätigung)",
       "transaction_list": "Transaktions-Liste",
       "select_hero_icons": "Auswählen welche Hero Icons angzeig werden",
       "hero_icons": "Hero Icons",
@@ -722,7 +726,17 @@
       "this_month": "Dieser Monat",
       "nothing_to_do": "Nichts zu erledigen"
     },
-    "refresh": "Aktualisieren"
+    "refresh": "Aktualisieren",
+    "edit_inline": "In der Tabelle bearbeiten",
+    "done_editing": "Bearbeiten beenden",
+    "command": {
+      "placeholder": "Suchen oder springen zu…",
+      "pages": "Seiten",
+      "create": "Erstellen",
+      "actions": "Aus deinem Text",
+      "add_transaction": "Neue Transaktion: „{text}“",
+      "search_transactions": "Transaktionen suchen nach „{text}“"
+    }
   },
   "clear": "Leeren",
   "done": "Fertig",

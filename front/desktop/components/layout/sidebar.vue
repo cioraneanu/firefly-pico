@@ -15,6 +15,16 @@
         </d-button>
         <d-button v-if="appStore.llmIsConfigured" variant="ghost" size="icon" :icon="IconMicrophone" :to="RouteConstants.ROUTE_RAMBLE" :aria-label="$t('transaction.assistant_ramble_title')" />
       </div>
+      <button
+        type="button"
+        class="flex h-8 w-full cursor-pointer items-center gap-2 rounded-lg border border-field bg-bg pl-2.5 pr-1.5 text-dim transition-colors hover:bg-soft hover:text-fg dark:bg-field/30"
+        :aria-keyshortcuts="shortcut"
+        @click="isCommandOpen = true"
+      >
+        <icon-search :size="15" />
+        <span class="flex-1 truncate text-left">{{ $t('desktop.command.placeholder') }}</span>
+        <kbd class="grid h-5 place-items-center rounded-sm bg-fg/8 px-1 text-xs font-medium">{{ shortcut }}</kbd>
+      </button>
     </div>
 
     <nav class="flex-1 overflow-y-auto">
@@ -46,12 +56,13 @@
 </template>
 
 <script setup>
-import { IconMicrophone, IconPlus, IconRefresh } from '@tabler/icons-vue'
+import { IconMicrophone, IconPlus, IconRefresh, IconSearch } from '@tabler/icons-vue'
 import { formatTimeAgo } from '@vueuse/core'
 import RouteConstants from '~/core/constants/RouteConstants'
 
 const appStore = useAppStore()
 const { groups, active } = useDesktopNav()
+const { isOpen: isCommandOpen, shortcut } = useCommandPalette()
 const { t } = useI18n()
 
 const isSyncing = ref(false)

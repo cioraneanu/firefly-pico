@@ -4,7 +4,7 @@
 
     <app-form @submit="onSave">
       <main class="mx-body has-save">
-        <app-card :section="$t('desktop.interface')">
+        <app-card v-if="isTablet" :section="$t('desktop.interface')">
           <div class="mx-f">
             <app-tabs v-model="uiMode" :items="uiModes" />
             <div class="mx-d">{{ $t('desktop.interface_hint') }}</div>
@@ -40,6 +40,8 @@
           <div class="mx-hr" />
           <app-boolean v-model="resetFormOnCreate" :label="$t('settings.ui.reset_forms_after_creation')" />
           <div class="mx-hr" />
+          <app-boolean v-model="undoDelete" :label="$t('settings.ui.undo_delete')" />
+          <div class="mx-hr" />
           <app-boolean v-model="isProfileFloatVisible" :label="$t('settings.ui.is_profile_float_visible')" />
         </app-card>
       </main>
@@ -64,6 +66,8 @@ const { t } = useI18n()
 
 const uiModes = computed(() => UI_MODES.map((mode) => ({ value: mode, label: t(`desktop.interface_${mode}`) })))
 const uiMode = useUIMode()
+// Phones only ever get the mobile app; the desktop app is an option from tablet size up
+const isTablet = Math.min(screen.width, screen.height) >= 600
 const profileStore = useProfileStore()
 const themeOptions = computed(() => [
   { value: false, label: t('settings.ui.light'), icon: IconSun },
@@ -74,6 +78,7 @@ const startingPage = ref(null)
 const language = ref(null)
 const showAnimations = ref(true)
 const resetFormOnCreate = ref(false)
+const undoDelete = ref(true)
 const isProfileFloatVisible = ref(true)
 
 const syncedSettings = [
@@ -82,6 +87,7 @@ const syncedSettings = [
   { store: profileStore, path: 'startingPage', ref: startingPage },
   { store: profileStore, path: 'showAnimations', ref: showAnimations },
   { store: profileStore, path: 'resetFormOnCreate', ref: resetFormOnCreate },
+  { store: profileStore, path: 'undoDelete', ref: undoDelete },
   { store: profileStore, path: 'dashboard.isProfileFloatVisible', ref: isProfileFloatVisible },
 ]
 

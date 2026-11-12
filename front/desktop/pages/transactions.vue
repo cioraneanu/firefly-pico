@@ -52,6 +52,9 @@
         </template>
       </d-popover>
       <span class="flex-1" />
+      <d-button :icon="isEditing ? IconCheck : IconPencil" :aria-pressed="isEditing" :class="isEditing && 'bg-soft'" @click="isEditing = !isEditing">
+        {{ $t(isEditing ? 'desktop.done_editing' : 'desktop.edit_inline') }}
+      </d-button>
       <d-button :icon="IconRefresh" :loading="isRefreshing" @click="refresh">{{ $t('desktop.refresh') }}</d-button>
       <d-button :icon="IconSum" :aria-pressed="showSearchTotal" :class="showSearchTotal && 'bg-soft'" @click="onToggleSearchTotal">{{ $t('filters.total') }}</d-button>
       <d-button :icon="IconFilter" @click="isFiltersOpen = true">
@@ -82,7 +85,7 @@
             <span class="tabular-nums">{{ group.total }}</span>
           </div>
           <div class="divide-y divide-line">
-            <d-transaction-row v-for="transaction in group.items" :key="transaction.id" :value="transaction" @delete="onDelete" />
+            <d-transaction-row v-for="transaction in group.items" :key="transaction.id" :value="transaction" :editing="isEditing" @delete="onDelete" @saved="onReplace" />
           </div>
         </template>
       </div>
@@ -95,12 +98,12 @@
     </section>
 
     <d-transaction-filters v-model="filters" v-model:open="isFiltersOpen" />
-    <d-transaction-dialog v-if="isOpen" :key="`${id}-${route.query.transaction_id}`" @changed="onRefresh" />
+    <d-transaction-dialog v-if="isOpen" :key="`${id}-${route.query.transaction_id}-${route.query.assistant}`" @changed="onRefresh" />
   </d-page>
 </template>
 
 <script setup>
-import { IconCheck, IconCoins, IconFilter, IconLoader2, IconPlus, IconRefresh, IconSearch, IconSum } from '@tabler/icons-vue'
+import { IconCheck, IconCoins, IconFilter, IconLoader2, IconPencil, IconPlus, IconRefresh, IconSearch, IconSum } from '@tabler/icons-vue'
 import { useElementVisibility, watchDebounced } from '@vueuse/core'
 import { omit } from 'lodash-es'
 import RouteConstants from '~/core/constants/RouteConstants'
@@ -116,6 +119,7 @@ const {
   onLoadMore,
   onRefresh,
   onDelete,
+  onReplace,
   filters,
   activeFilters,
   activeFiltersCount,
@@ -131,6 +135,8 @@ const {
 const isFiltersOpen = ref(false)
 const isTypeOpen = ref(false)
 const isRefreshing = ref(false)
+// Edit mode: rows turn into inputs that save on change
+const isEditing = ref(false)
 const typeTrigger = ref(null)
 const typeOptions = useTransactionTypeOptions()
 const typeColors = { expense: 'text-tx-expense', income: 'text-income', transfer: 'text-transfer' }

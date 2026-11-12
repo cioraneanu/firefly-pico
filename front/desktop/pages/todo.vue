@@ -146,9 +146,9 @@ const onPutBackAll = async () => {
   isDoneView.value = false
 }
 
-const onChanged = (event, response) => {
+const onChanged = (event, response, id) => {
   if (event === useFormEvent.postSave) todoStore.onSaved(todoStore.fromApi(get(response, 'data.data')))
-  if (event === useFormEvent.postDelete) todoStore.onDeleted(route.params.id)
+  if (event === useFormEvent.postDelete) todoStore.onDeleted(id)
 }
 
 onMounted(todoStore.fetchTodo)

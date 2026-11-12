@@ -4,6 +4,8 @@
   "new": "Nou",
   "save": "Salvează",
   "delete": "Șterge",
+  "undo": "Anulează",
+  "deleted": "Șters",
   "add": "Adaugă",
   "search": "Caută",
   "success": "Sucess",
@@ -138,7 +140,8 @@
     "attachment_delete_confirm": "Atașamentul va fi șters definitiv.",
     "assistant_ramble_new": "Ramble nou",
     "assistant_ramble_saved": "Ramble-uri salvate",
-    "assistant_ramble_no_saved": "Niciun ramble salvat"
+    "assistant_ramble_no_saved": "Niciun ramble salvat",
+    "create_another": "Creează încă una"
   },
   "settings": {
     "settings_title": "Setări",
@@ -184,6 +187,7 @@
       "title": "Setări UI",
       "show_animations": "Arată animații",
       "reset_forms_after_creation": "Resetează formularele după creare",
+      "undo_delete": "Șterge imediat cu Anulare (fără confirmare)",
       "transaction_list": "Lista tranzacțiilor",
       "select_hero_icons": "Selectează ce iconițe Hero să fie afișate",
       "hero_icons": "Iconițe Hero",
@@ -721,7 +725,17 @@
       "this_month": "Luna aceasta",
       "nothing_to_do": "Nimic de făcut"
     },
-    "refresh": "Reîmprospătează"
+    "refresh": "Reîmprospătează",
+    "edit_inline": "Editează în tabel",
+    "done_editing": "Gata",
+    "command": {
+      "placeholder": "Caută sau sari la…",
+      "pages": "Pagini",
+      "create": "Creează",
+      "actions": "Din textul tău",
+      "add_transaction": "Tranzacție nouă: „{text}”",
+      "search_transactions": "Caută tranzacții după „{text}”"
+    }
   },
   "clear": "Golește",
   "done": "Gata",

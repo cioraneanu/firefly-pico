@@ -108,7 +108,7 @@ const isDoneView = ref(false)
 const isRefreshing = ref(false)
 const expanded = reactive({})
 
-const list = computed(() => (isDoneView.value ? todoStore.doneList : todoStore.todoList))
+const list = computed(() => withoutDeleted(isDoneView.value ? todoStore.doneList : todoStore.todoList))
 const todoCount = computed(() => todoStore.todoList.length)
 const doneCount = computed(() => todoStore.doneList.length)
 const progress = computed(() => (todoStore.totalCount ? Math.round((doneCount.value / todoStore.totalCount) * 100) : 0))

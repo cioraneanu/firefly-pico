@@ -4,6 +4,8 @@
   "new": "Nouveau",
   "save": "Enregistrer",
   "delete": "Supprimer",
+  "undo": "Annuler",
+  "deleted": "Supprimé",
   "add": "Ajouter",
   "search": "Rechercher",
   "success": "Succes",
@@ -138,7 +140,8 @@
     "attachment_delete_confirm": "La pièce jointe sera supprimée définitivement.",
     "assistant_ramble_new": "Nouveau ramble",
     "assistant_ramble_saved": "Rambles enregistrés",
-    "assistant_ramble_no_saved": "Aucun ramble enregistré"
+    "assistant_ramble_no_saved": "Aucun ramble enregistré",
+    "create_another": "En créer une autre"
   },
   "settings": {
     "settings_title": "Paramètres",
@@ -184,6 +187,7 @@
       "title": "Paramètres de l'interface utilisateur",
       "show_animations": "Voir les animations",
       "reset_forms_after_creation": "Réinitialiser les formulaires après la création",
+      "undo_delete": "Supprimer tout de suite avec Annuler (sans confirmation)",
       "transaction_list": "Transactions",
       "select_hero_icons": "Sélectionnez les icônes à afficher",
       "hero_icons": "Icône",
@@ -721,7 +725,17 @@
       "this_month": "Ce mois-ci",
       "nothing_to_do": "Rien à faire"
     },
-    "refresh": "Actualiser"
+    "refresh": "Actualiser",
+    "edit_inline": "Modifier dans le tableau",
+    "done_editing": "Terminer",
+    "command": {
+      "placeholder": "Rechercher ou aller à…",
+      "pages": "Pages",
+      "create": "Créer",
+      "actions": "À partir de votre texte",
+      "add_transaction": "Nouvelle transaction : « {text} »",
+      "search_transactions": "Rechercher les transactions « {text} »"
+    }
   },
   "clear": "Effacer",
   "done": "Terminé",

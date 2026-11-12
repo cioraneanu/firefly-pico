@@ -5,11 +5,22 @@ const confirmState = ref(null)
 let seq = 0
 
 export function useMobileFeedback() {
-  const pushToast = (message, type = 'success', duration = 2000) => {
+  const pushToast = (message, type = 'success', duration = 2000, { action = null, onClose = null } = {}) => {
     const id = ++seq
-    const close = () => (toasts.value = toasts.value.filter((item) => item.id !== id))
-    // One toast at a time (design): a new one replaces the current one
-    toasts.value = [{ id, message, type, close }]
+    const close = () => {
+      if (!toasts.value.some((item) => item.id === id)) {
+        return
+      }
+      toasts.value = toasts.value.filter((item) => item.id !== id)
+      onClose?.()
+    }
+    const onAction = () => {
+      action.onClick()
+      close()
+    }
+    // One toast at a time (design): a new one replaces (closes) the current one
+    toasts.value.forEach((toast) => toast.close())
+    toasts.value = [{ id, message, type, action, duration, onAction, close }]
     if (duration > 0) {
       setTimeout(close, duration)
     }

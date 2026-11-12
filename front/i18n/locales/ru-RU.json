@@ -4,6 +4,8 @@
   "new": "Новый",
   "save": "Сохранить",
   "delete": "Удалить",
+  "undo": "Отменить",
+  "deleted": "Удалено",
   "add": "Добавить",
   "search": "Поиск",
   "success": "Успешно",
@@ -138,7 +140,8 @@
     "attachment_delete_confirm": "Вложение будет удалено навсегда.",
     "assistant_ramble_new": "Новая запись",
     "assistant_ramble_saved": "Сохранённые записи",
-    "assistant_ramble_no_saved": "Нет сохранённых записей"
+    "assistant_ramble_no_saved": "Нет сохранённых записей",
+    "create_another": "Создать ещё"
   },
   "settings": {
     "settings_title": "Настройки",
@@ -184,6 +187,7 @@
       "title": "Настройки интерфейса",
       "show_animations": "Показывать анимации",
       "reset_forms_after_creation": "Сбрасывать формы после создания",
+      "undo_delete": "Удалять сразу с отменой (без подтверждения)",
       "transaction_list": "Список транзакций",
       "select_hero_icons": "Выберите, какие иконки Hero показывать",
       "hero_icons": "Иконки Hero",
@@ -721,7 +725,17 @@
       "this_month": "Этот месяц",
       "nothing_to_do": "Нечего делать"
     },
-    "refresh": "Обновить"
+    "refresh": "Обновить",
+    "edit_inline": "Редактировать в таблице",
+    "done_editing": "Готово",
+    "command": {
+      "placeholder": "Поиск или переход…",
+      "pages": "Страницы",
+      "create": "Создать",
+      "actions": "Из вашего текста",
+      "add_transaction": "Новая транзакция: «{text}»",
+      "search_transactions": "Искать транзакции: «{text}»"
+    }
   },
   "clear": "Очистить",
   "done": "Готово",

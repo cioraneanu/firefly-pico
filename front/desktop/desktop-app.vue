@@ -5,6 +5,7 @@
       <d-header v-model:sidebar="isSidebarOpen" />
       <NuxtPage :page-key="(route) => route.matched[0]?.path" />
     </div>
+    <d-command-palette />
     <d-confirm />
     <d-toaster />
   </div>

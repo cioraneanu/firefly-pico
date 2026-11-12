@@ -1,5 +1,5 @@
 <template>
-  <app-list-item row-class="mx-tx" @on-edit="onEdit" @on-delete="onDelete">
+  <app-list-item row-class="mx-tx" :clonable="clonable && !isSplitPayment" @on-edit="onEdit" @on-delete="onDelete" @on-clone="onClone">
     <div class="hd">
       <transaction-list-item-hero-icon v-if="props.isDetailedMode" :value="props.value" />
       <transaction-type-dot v-else :transaction-type="firstTransaction?.type" class="mt-1.5" />
@@ -61,6 +61,7 @@ import Account from '~/core/models/Account.js'
 import Budget from '~/core/models/Budget.js'
 import Category from '~/core/models/Category.js'
 import Tag from '~/core/models/Tag.js'
+import RouteConstants from '~/core/constants/RouteConstants'
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
 import { transactionListField } from '~/core/constants/TransactionConstants.js'
 import { useTransactionListItem } from '~/core/composables/useTransactionListItem.js'
@@ -70,6 +71,8 @@ const props = defineProps({
   isDetailedMode: {
     default: true,
   },
+  // Swipe reveals Clone next to Delete
+  clonable: { type: Boolean, default: false },
 })
 
 const emit = defineEmits(['onEdit', 'onDelete'])
@@ -109,4 +112,5 @@ const amountClass = computed(() => ({ e: isTypeExpense.value, i: isTypeIncome.va
 
 const onEdit = () => emit('onEdit', props.value)
 const onDelete = () => emit('onDelete', props.value)
+const onClone = () => navigateTo(`${RouteConstants.ROUTE_TRANSACTION_ID}?transaction_id=${props.value.id}`)
 </script>

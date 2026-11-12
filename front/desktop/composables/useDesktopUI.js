@@ -6,10 +6,20 @@ const layers = []
 let toastId = 0
 
 export const DesktopUI = {
-  toast(message, type = 'success', duration = 3000) {
+  toast(message, type = 'success', duration = 3000, { action = null, onClose = null } = {}) {
     const id = ++toastId
-    toasts.value.push({ id, message, type })
-    setTimeout(() => (toasts.value = toasts.value.filter((toast) => toast.id !== id)), Math.max(duration, 2500))
+    const close = () => {
+      if (!toasts.value.some((toast) => toast.id === id)) return
+      toasts.value = toasts.value.filter((toast) => toast.id !== id)
+      onClose?.()
+    }
+    const onAction = () => {
+      action.onClick()
+      close()
+    }
+    toasts.value.push({ id, message, type, action, duration: Math.max(duration, 2500), onAction })
+    setTimeout(close, Math.max(duration, 2500))
+    return { close }
   },
 
   confirm: (title, message) => new Promise((resolve) => (confirmState.value = { title, message, resolve })),

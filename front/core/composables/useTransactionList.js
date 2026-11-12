@@ -37,6 +37,12 @@ export function useTransactionList() {
   })
 
   watch(filters, (newValue, oldValue) => !isEqual(newValue, oldValue) && saveToUrl(activeFilters.value))
+  // A link to the open list with ?description= (the desktop ⌘K search) still applies it
+  const route = useRoute()
+  watch(
+    () => route.query.description,
+    (description) => description && description !== filters.value.description && (filters.value = { ...filters.value, description }),
+  )
 
   const onClearFilters = () => (filters.value = {})
 

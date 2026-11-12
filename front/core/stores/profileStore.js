@@ -22,6 +22,8 @@ export const useProfileStore = defineStore('profile', () => {
   const startingPage = useLocalStorage('startingPage', Page.types.transactionNew)
   const showAnimations = useLocalStorage('showAnimations', true)
   const resetFormOnCreate = useLocalStorage('resetFormOnCreate', false)
+  // Deletes happen at once with an Undo toast instead of an "Are you sure?" dialog
+  const undoDelete = useLocalStorage('undoDelete', true)
 
   const assistantTodoTagMatcher = useLocalStorage('assistantTodoTagMatcher', '!!')
   const assistantCurrency = useLocalStorage('assistantCurrency', null, { serializer: StorageSerializers.object })
@@ -183,6 +185,7 @@ export const useProfileStore = defineStore('profile', () => {
     startingPage,
     showAnimations,
     resetFormOnCreate,
+    undoDelete,
     assistantTodoTagMatcher,
     assistantCurrency,
     autoFocusAssistant,

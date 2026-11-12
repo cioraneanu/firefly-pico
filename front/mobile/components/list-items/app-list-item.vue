@@ -3,6 +3,10 @@
     <div class="mx-row" :class="rowClass" role="button" tabindex="0" @touchstart.passive="onTouchStart" @touchmove.passive="onTouchMove" @click="onEdit" @keydown.enter="onEdit">
       <slot />
     </div>
+    <button v-if="clonable" type="button" class="mx-swipe__del mx-swipe__clone" :aria-label="$t('clone')" @click.stop="onClone">
+      <app-icon :icon="IconCopy" :size="18" :stroke="2" />
+      <span>{{ $t('clone') }}</span>
+    </button>
     <button v-if="deletable" type="button" class="mx-swipe__del" :aria-label="$t('delete')" @click.stop="onDelete">
       <app-icon :icon="IconTrash" :size="18" :stroke="2" />
       <span>{{ $t('delete') }}</span>
@@ -11,16 +15,17 @@
 </template>
 
 <script setup>
-import { IconTrash } from '@tabler/icons-vue'
+import { IconCopy, IconTrash } from '@tabler/icons-vue'
 
-// List row of the mobile kit: swipe left to reveal Delete (native horizontal scroll + snap, as in the design).
+// List row of the mobile kit: swipe left to reveal Delete, and Clone before it when clonable (native horizontal scroll + snap, as in the design).
 // Like iOS, an open row closes on the next touch anywhere else, and a tap that only closes it opens nothing.
 defineProps({
   rowClass: { default: 'mid' },
   deletable: { type: Boolean, default: true },
+  clonable: { type: Boolean, default: false },
 })
 
-const emit = defineEmits(['onEdit', 'onDelete'])
+const emit = defineEmits(['onEdit', 'onDelete', 'onClone'])
 const swipeRef = ref(null)
 
 const close = () => swipeRef.value?.scrollTo({ left: 0, behavior: 'smooth' })
@@ -77,5 +82,10 @@ const onEdit = () => {
 const onDelete = () => {
   swipeRef.value?.scrollTo({ left: 0 })
   emit('onDelete')
+}
+
+const onClone = () => {
+  swipeRef.value?.scrollTo({ left: 0 })
+  emit('onClone')
 }
 </script>

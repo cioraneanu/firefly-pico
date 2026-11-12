@@ -4,6 +4,8 @@
   "new": "New",
   "save": "Save",
   "delete": "Delete",
+  "undo": "Undo",
+  "deleted": "Deleted",
   "add": "Add",
   "search": "Search",
   "success": "Success",
@@ -138,7 +140,8 @@
     "attachment_delete_confirm": "This permanently deletes the attachment.",
     "assistant_ramble_new": "New ramble",
     "assistant_ramble_saved": "Saved rambles",
-    "assistant_ramble_no_saved": "No saved rambles"
+    "assistant_ramble_no_saved": "No saved rambles",
+    "create_another": "Create another"
   },
   "settings": {
     "settings_title": "Settings",
@@ -185,6 +188,7 @@
       "show_animations": "Show animations",
       "is_profile_float_visible": "Show profile floating button on dashboard",
       "reset_forms_after_creation": "Reset forms after creation",
+      "undo_delete": "Delete at once with Undo (no confirmation)",
       "transaction_list": "Transaction list",
       "select_hero_icons": "Select what Hero Icons to show",
       "hero_icons": "Hero Icons",
@@ -722,7 +726,17 @@
       "this_month": "This month",
       "nothing_to_do": "Nothing left to do"
     },
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "edit_inline": "Edit inline",
+    "done_editing": "Done editing",
+    "command": {
+      "placeholder": "Search or jump to…",
+      "pages": "Pages",
+      "create": "Create",
+      "actions": "From your text",
+      "add_transaction": "New transaction: “{text}”",
+      "search_transactions": "Search transactions for “{text}”"
+    }
   },
   "clear": "Clear",
   "done": "Done",

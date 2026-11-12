@@ -23,6 +23,9 @@
       <d-field :label="$t('settings.ui.reset_forms_after_creation')">
         <d-switch v-model="draft.resetFormOnCreate" />
       </d-field>
+      <d-field :label="$t('settings.ui.undo_delete')">
+        <d-switch v-model="draft.undoDelete" />
+      </d-field>
     </d-settings-group>
 
     <d-settings-group :title="$t('settings.formatting_entry')">
@@ -77,6 +80,7 @@ const { draft, save, reset, isSaving } = useSettingsDraft([
   'startingPage',
   'showAnimations',
   'resetFormOnCreate',
+  'undoDelete',
   'numberFormat',
   'dateFormat',
   'weekStartsOn',

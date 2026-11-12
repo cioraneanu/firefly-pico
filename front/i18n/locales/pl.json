@@ -4,6 +4,8 @@
   "new": "Nowy",
   "save": "Zapisz",
   "delete": "Usuń",
+  "undo": "Cofnij",
+  "deleted": "Usunięto",
   "add": "Dodaj",
   "search": "Szukaj",
   "success": "Sukces",
@@ -138,7 +140,8 @@
     "attachment_delete_confirm": "Załącznik zostanie trwale usunięty.",
     "assistant_ramble_new": "Nowy ramble",
     "assistant_ramble_saved": "Zapisane rambles",
-    "assistant_ramble_no_saved": "Brak zapisanych rambles"
+    "assistant_ramble_no_saved": "Brak zapisanych rambles",
+    "create_another": "Utwórz kolejną"
   },
   "settings": {
     "settings_title": "Ustawienia",
@@ -184,6 +187,7 @@
       "title": "Ustawienia UI",
       "show_animations": "Pokaż animacje",
       "reset_forms_after_creation": "Resetuj formularze po utworzeniu",
+      "undo_delete": "Usuwaj od razu z opcją Cofnij (bez potwierdzenia)",
       "transaction_list": "Lista transakcji",
       "select_hero_icons": "Wybierz ikony Bohaterów",
       "hero_icons": "Ikony Bohaterów",
@@ -721,7 +725,17 @@
       "this_month": "Ten miesiąc",
       "nothing_to_do": "Nic do zrobienia"
     },
-    "refresh": "Odśwież"
+    "refresh": "Odśwież",
+    "edit_inline": "Edytuj w tabeli",
+    "done_editing": "Zakończ edycję",
+    "command": {
+      "placeholder": "Szukaj lub przejdź do…",
+      "pages": "Strony",
+      "create": "Utwórz",
+      "actions": "Z twojego tekstu",
+      "add_transaction": "Nowa transakcja: „{text}”",
+      "search_transactions": "Szukaj transakcji: „{text}”"
+    }
   },
   "clear": "Wyczyść",
   "done": "Gotowe",

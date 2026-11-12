@@ -2,6 +2,8 @@
   "new": "新建",
   "save": "保存",
   "delete": "删除",
+  "undo": "撤销",
+  "deleted": "已删除",
   "add": "添加",
   "search": "搜索",
   "success": "成功",
@@ -131,7 +133,8 @@
     "attachment_delete_confirm": "这将永久删除该附件。",
     "assistant_ramble_new": "新的口述",
     "assistant_ramble_saved": "已保存的口述",
-    "assistant_ramble_no_saved": "没有已保存的口述"
+    "assistant_ramble_no_saved": "没有已保存的口述",
+    "create_another": "继续创建"
   },
   "settings": {
     "settings_title": "设置",
@@ -169,6 +172,7 @@
       "title": "UI 设置",
       "show_animations": "显示动画",
       "reset_forms_after_creation": "创建后重置表单",
+      "undo_delete": "立即删除并可撤销（无需确认）",
       "transaction_list": "交易列表",
       "select_hero_icons": "选择要显示的 Hero 图标",
       "hero_icons": "Hero 图标",
@@ -656,7 +660,17 @@
       "this_month": "本月",
       "nothing_to_do": "没有待办事项"
     },
-    "refresh": "刷新"
+    "refresh": "刷新",
+    "edit_inline": "行内编辑",
+    "done_editing": "完成编辑",
+    "command": {
+      "placeholder": "搜索或跳转到…",
+      "pages": "页面",
+      "create": "新建",
+      "actions": "根据你的输入",
+      "add_transaction": "新交易：“{text}”",
+      "search_transactions": "搜索交易：“{text}”"
+    }
   },
   "clear": "清除",
   "done": "完成",

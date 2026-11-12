@@ -311,8 +311,6 @@
 .mx-stat span { font-size: 11.5px; color: var(--muted-foreground); }
 .mx-stat b { font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
 .mx-ver { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 12px 0 4px; font-size: 12.5px; color: var(--muted-foreground); }
-.mx-ver .logo { display: grid; place-items: center; width: 48px; height: 48px; border-radius: 14px; background: var(--primary); color: var(--primary-foreground); }
-.mx-ver .logo svg { width: 24px; height: 24px; }
 .mx-pill-ok { display: inline-flex; align-items: center; gap: 6px; height: 24px; padding: 0 9px; border-radius: 999px; background: color-mix(in oklch, var(--in) 12%, transparent); color: var(--in); font-size: 12px; font-weight: 500; }
 .mx-pill-ok::before { content: ""; width: 6px; height: 6px; border-radius: 999px; background: currentColor; }
 
@@ -482,6 +480,7 @@ a.mx-tile, a.mx-bar { color: inherit; }
 .mx-swipe > .mx-row { flex: 0 0 100%; scroll-snap-align: start; background: var(--card); box-shadow: none !important; }
 .mx-swipe__del { flex: 0 0 84px; scroll-snap-align: end; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; background: var(--destructive); color: #fff; font-size: 12px; font-weight: 600; }
 .mx-swipe__del svg { width: 18px; height: 18px; }
+.mx-swipe__clone { scroll-snap-align: none; background: #0284c7; }
 .mx-list .mx-swipe { box-shadow: inset 0 1px 0 var(--border); }
 .mx-list .mx-swipe > .mx-row { margin-top: 1px; }
 .mx-sh::before { cursor: grab; }
@@ -913,6 +912,11 @@ body:has(> #__nuxt .mx-app) { background: var(--mx-page-bg, #fafafa); }
 .mx-app .mx-toast.err .ok { background: var(--destructive); }
 .mx-app .mx-toast.warn .ok { background: #f59e0b; }
 .mx-app .mx-toast .x { margin-left: auto; color: var(--muted-foreground); }
+/* Undo toast: the action sits on the right and a bar runs out with the time left to undo */
+.mx-app .mx-toast:has(.mx-toast__bar) { overflow: hidden; padding-block: 8px; }
+.mx-app .mx-toast__act { margin-right: -6px; color: var(--primary); font-weight: 600; }
+.mx-app .mx-toast__bar { position: absolute; left: 0; bottom: 0; height: 2px; width: 100%; background: var(--primary); opacity: .35; transform-origin: left; animation: mx-toast-bar linear forwards; }
+@keyframes mx-toast-bar { to { transform: scaleX(0); } }
 .mx-app .mx-f.bad .mx-in, .mx-app .mx-f.bad .mx-sel { box-shadow: inset 0 0 0 1px var(--destructive); }
 .mx-app .mx-ferr { font-size: 12px; line-height: 16px; color: var(--destructive); }
 .mx-app .mx-sel.dis, .mx-app .mx-in.dis { opacity: .55; pointer-events: none; }

@@ -4,6 +4,8 @@
   "new": "새로 만들기",
   "save": "저장",
   "delete": "삭제",
+  "undo": "실행 취소",
+  "deleted": "삭제됨",
   "add": "추가",
   "search": "검색",
   "success": "성공",
@@ -138,7 +140,8 @@
     "attachment_delete_confirm": "첨부 파일이 영구적으로 삭제됩니다.",
     "assistant_ramble_new": "새 기록",
     "assistant_ramble_saved": "저장된 기록",
-    "assistant_ramble_no_saved": "저장된 기록 없음"
+    "assistant_ramble_no_saved": "저장된 기록 없음",
+    "create_another": "계속 만들기"
   },
   "settings": {
     "settings_title": "설정",
@@ -185,6 +188,7 @@
       "show_animations": "애니메이션 표시",
       "is_profile_float_visible": "대시보드에 프로필 플로팅 버튼 표시",
       "reset_forms_after_creation": "생성 후 양식 초기화",
+      "undo_delete": "확인 없이 바로 삭제하고 실행 취소 제공",
       "transaction_list": "거래 목록",
       "select_hero_icons": "표시할 히어로 아이콘 선택",
       "hero_icons": "히어로 아이콘",
@@ -722,7 +726,17 @@
       "this_month": "이번 달",
       "nothing_to_do": "할 일 없음"
     },
-    "refresh": "새로고침"
+    "refresh": "새로고침",
+    "edit_inline": "표에서 편집",
+    "done_editing": "편집 완료",
+    "command": {
+      "placeholder": "검색 또는 이동…",
+      "pages": "페이지",
+      "create": "만들기",
+      "actions": "입력한 텍스트로",
+      "add_transaction": "새 거래: “{text}”",
+      "search_transactions": "“{text}” 거래 검색"
+    }
   },
   "clear": "지우기",
   "done": "완료",

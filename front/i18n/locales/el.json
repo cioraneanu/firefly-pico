@@ -4,6 +4,8 @@
   "new": "Νέο",
   "save": "Αποθήκευση",
   "delete": "Διαγραφή",
+  "undo": "Αναίρεση",
+  "deleted": "Διαγράφηκε",
   "add": "Προσθήκη",
   "search": "Αναζήτηση",
   "success": "Επιτυχία",
@@ -138,7 +140,8 @@
     "attachment_delete_confirm": "Το συνημμένο θα διαγραφεί οριστικά.",
     "assistant_ramble_new": "Νέο ramble",
     "assistant_ramble_saved": "Αποθηκευμένα ramble",
-    "assistant_ramble_no_saved": "Κανένα αποθηκευμένο ramble"
+    "assistant_ramble_no_saved": "Κανένα αποθηκευμένο ramble",
+    "create_another": "Δημιουργία κι άλλης"
   },
   "settings": {
     "settings_title": "Ρυθμίσεις",
@@ -185,6 +188,7 @@
       "show_animations": "Εμφάνιση κινούμενων εφέ",
       "is_profile_float_visible": "Εμφάνιση αιωρούμενου κουμπιού προφίλ στον πίνακα ελέγχου",
       "reset_forms_after_creation": "Επαναφορά φορμών μετά τη δημιουργία",
+      "undo_delete": "Άμεση διαγραφή με Αναίρεση (χωρίς επιβεβαίωση)",
       "transaction_list": "Λίστα συναλλαγών",
       "select_hero_icons": "Επιλέξτε ποια Hero Icons θα εμφανίζονται",
       "hero_icons": "Hero Icons",
@@ -722,7 +726,17 @@
       "this_month": "Αυτός ο μήνας",
       "nothing_to_do": "Τίποτα για να κάνεις"
     },
-    "refresh": "Ανανέωση"
+    "refresh": "Ανανέωση",
+    "edit_inline": "Επεξεργασία στον πίνακα",
+    "done_editing": "Τέλος επεξεργασίας",
+    "command": {
+      "placeholder": "Αναζήτηση ή μετάβαση…",
+      "pages": "Σελίδες",
+      "create": "Δημιουργία",
+      "actions": "Από το κείμενό σας",
+      "add_transaction": "Νέα συναλλαγή: «{text}»",
+      "search_transactions": "Αναζήτηση συναλλαγών για «{text}»"
+    }
   },
   "clear": "Εκκαθάριση",
   "done": "Τέλος",
