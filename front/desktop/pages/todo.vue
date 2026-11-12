@@ -37,7 +37,7 @@
               <b class="mr-2 font-medium text-fg">{{ group.label }}</b>
               {{ group.relative }}
             </span>
-            <span class="tabular-nums">{{ group.total }}</span>
+            <app-count-up :value="group.total" class="tabular-nums" />
           </div>
           <div class="divide-y divide-line">
             <d-todo-row

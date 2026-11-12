@@ -2,7 +2,7 @@
   <app-card :title="$t('dashboard.account_total')" :form="false">
     <template #actions>
       <div class="mx-total">
-        <b class="mx-money">~{{ accountTotal }} {{ dashboardStore.dashboardCurrencyCode }}</b>
+        <b class="mx-money"><app-count-up :value="`~${accountTotal} ${dashboardStore.dashboardCurrencyCode}`" /></b>
       </div>
     </template>
 

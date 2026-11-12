@@ -4,7 +4,7 @@
       <div class="mx-trend__hd">
         <div class="mx-kpi">
           <small>{{ $t('desktop.dashboard.spent_last_days', { count: points.length }) }}</small>
-          <b class="mx-money">{{ totalFormatted }} {{ currencyCode }}</b>
+          <b class="mx-money"><app-count-up :value="`${totalFormatted} ${currencyCode}`" /></b>
         </div>
         <span v-if="peak" class="mx-badge mx-money">{{ $t('dash_page.peak', { amount: peak.value, date: format(peak.date, 'd MMM') }) }}</span>
       </div>

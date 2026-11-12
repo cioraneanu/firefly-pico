@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-page">
+  <div class="mx-page" :style="heroStyle(route.params.id)">
     <app-top-toolbar>
       <template #right>
         <app-button-list-add v-if="itemId" @click="onNew" />
@@ -41,6 +41,10 @@ import TransactionForm from '~/mobile/components/transaction/TransactionForm.vue
 
 const assistantText = ref('')
 const transactionFormRef = ref(null)
+
+const route = useRoute()
+const { heroStyle } = useHeroTransition()
+definePageMeta({ viewTransition: true })
 
 const { isReady, itemId, item, saveItem, onDelete, onNew, onValidationError, formName, isCloning, isSplitTransaction, cloneRoute, templateRoute, title } = useTransactionEditor({
   resetFields: () => (assistantText.value = ''),

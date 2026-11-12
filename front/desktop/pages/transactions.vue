@@ -67,7 +67,7 @@
 
     <div v-if="showSearchTotal" class="-mt-2 flex flex-wrap items-center gap-3 rounded-xl px-3 py-2.5 ring-1 ring-fg/10">
       <d-button size="sm" :loading="isComputingSearchTotal" @click="onComputeSearchTotal">{{ $t('filters.compute_total') }}</d-button>
-      <b class="font-semibold tabular-nums">{{ searchTotalFormatted ?? '—' }}</b>
+      <b class="font-semibold tabular-nums"><app-count-up :value="searchTotalFormatted ?? '—'" /></b>
       <span class="flex-1" />
       <div class="w-36">
         <d-currency-select v-model="searchTotalCurrency" />
@@ -82,7 +82,7 @@
               <b class="mr-2 font-medium text-fg">{{ group.label }}</b>
               {{ group.relative }}
             </span>
-            <span class="tabular-nums">{{ group.total }}</span>
+            <app-count-up :value="group.total" class="tabular-nums" />
           </div>
           <div class="divide-y divide-line">
             <d-transaction-row v-for="transaction in group.items" :key="transaction.id" :value="transaction" :editing="isEditing" @delete="onDelete" @saved="onReplace" />

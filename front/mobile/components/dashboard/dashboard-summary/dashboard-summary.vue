@@ -5,7 +5,7 @@
         <span class="h"
           ><span>{{ tile.title }}</span></span
         >
-        <b class="mx-money" :class="tile.class">{{ tile.value }}</b>
+        <b class="mx-money" :class="tile.class"><app-count-up :value="tile.value" /></b>
       </component>
     </div>
   </app-card>
@@ -16,7 +16,7 @@
         <span class="h"
           ><span>{{ tile.title }}</span></span
         >
-        <b class="mx-money" :class="tile.class">{{ tile.value }}</b>
+        <b class="mx-money" :class="tile.class"><app-count-up :value="tile.value" /></b>
       </button>
     </div>
   </app-card>

@@ -4,7 +4,7 @@
       <h2 class="mx-card__t">{{ monthTitle }}</h2>
     </template>
     <template #actions>
-      <span class="mx-badge mx-money">{{ totalSurplusFormatted }} {{ dashboardStore.dashboardCurrencyCode }}</span>
+      <span class="mx-badge mx-money"><app-count-up :value="`${totalSurplusFormatted} ${dashboardStore.dashboardCurrencyCode}`" /></span>
     </template>
 
     <dashboard-calendar-month :start="startDate" :end="endDate" />

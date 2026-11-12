@@ -36,7 +36,7 @@
             <span>{{ $t('filters.compute_total') }}</span>
           </button>
           <div class="flex-1" />
-          <b class="mx-tnum mx-money text-14">{{ searchTotalFormatted }}</b>
+          <b class="mx-tnum mx-money text-14"><app-count-up :value="searchTotalFormatted" /></b>
           <currency-dropdown v-model="searchTotalCurrency" />
         </div>
 
@@ -46,9 +46,17 @@
               <span
                 ><b>{{ group.dayOfWeek }}</b> · {{ group.label }}</span
               >
-              <span class="mx-tnum mx-money">{{ group.total }}</span>
+              <app-count-up :value="group.total" class="mx-tnum mx-money" />
             </div>
-            <transaction-list-item v-for="item in group.items" :key="item.id" :value="item" clonable @on-edit="onEdit" @on-delete="onDelete" />
+            <transaction-list-item
+              v-for="item in group.items"
+              :key="item.id"
+              :value="item"
+              :style="heroStyle(item.id)"
+              clonable
+              @on-edit="(transaction) => openWithHero(transaction.id, () => onEdit(transaction))"
+              @on-delete="onDelete"
+            />
           </template>
         </div>
 
@@ -97,6 +105,8 @@ import { useToolbar } from '~/mobile/composables/useToolbar'
 import { animateSwipeList } from '~/core/utils/AnimationUtils.js'
 
 const { t } = useI18n()
+const { heroStyle, openWithHero } = useHeroTransition()
+definePageMeta({ viewTransition: true })
 
 const {
   isLoading,
