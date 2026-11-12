@@ -31,7 +31,7 @@
     </span>
     <span class="flex flex-col items-end">
       <span :class="['whitespace-nowrap font-medium tabular-nums', isTypeIncome ? 'text-income' : isTypeTransfer ? 'text-dim' : '']">{{ transactionAmount }} {{ transactionCurrency }}</span>
-      <span class="text-xs text-dim">{{ timeAgo }}</span>
+      <span class="text-xs text-dim">{{ profileStore.transactionListGroupByDay ? timeAgo : dateOrTimeAgo }}</span>
     </span>
     <span @click.stop>
       <d-menu :items="menu" />
@@ -54,6 +54,7 @@ const emit = defineEmits(['delete'])
 const { t } = useI18n()
 
 const {
+  profileStore,
   isTypeExpense,
   isTypeIncome,
   isTypeTransfer,
@@ -68,6 +69,7 @@ const {
   transactionAmount,
   transactionCurrency,
   timeAgo,
+  dateOrTimeAgo,
   getStyleForField,
 } = useTransactionListItem(props)
 

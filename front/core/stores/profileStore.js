@@ -51,6 +51,7 @@ export const useProfileStore = defineStore('profile', () => {
 
   const transactionFormFieldsConfig = useLocalStorage('transactionFormFieldsConfig', transactionFormFieldList)
   const transactionListFieldsConfig = useLocalStorage('transactionListFieldsConfig', transactionListFieldList)
+  const transactionListGroupByDay = useLocalStorage('transactionListGroupByDay', true)
   const dashboardWidgetsConfig = useLocalStorage('dashboardWidgetsConfig', dashboardCardList)
 
   const dateFormat = useLocalStorage('dateFormat', DateUtils.FORMAT_ENGLISH_DATE)
@@ -202,6 +203,7 @@ export const useProfileStore = defineStore('profile', () => {
     quickValueButtons,
     transactionFormFieldsConfig,
     transactionListFieldsConfig,
+    transactionListGroupByDay,
     dashboardWidgetsConfig,
     dateFormat,
     copyCategoryToDescription,

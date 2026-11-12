@@ -331,7 +331,8 @@
         "fields": "Campos",
         "select_hero_icons": "Selecciona qué Hero Icons mostrar",
         "hero_icons": "Hero Icons",
-        "right_side_card": "(Tarjeta derecha en la lista)"
+        "right_side_card": "(Tarjeta derecha en la lista)",
+        "group_by_day": "Agrupar transacciones por día"
       },
       "form_fields": {
         "title": "Configurar campos del formulario",

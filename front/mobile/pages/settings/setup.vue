@@ -81,7 +81,7 @@
             <app-icon :icon="IconTrash" :size="16" :stroke="2" />
           </button>
         </div>
-        <button type="button" class="mx-btn dash block" @click="picoBackendHeaders.push({ key: '', value: '' })">
+        <button type="button" class="mx-btn dash mx-btn-block" @click="picoBackendHeaders.push({ key: '', value: '' })">
           <app-icon :icon="IconPlus" :size="16" :stroke="2" />
           <span>{{ $t('settings.setup.add_http_header') }}</span>
         </button>

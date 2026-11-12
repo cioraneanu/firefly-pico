@@ -332,7 +332,8 @@
         "fields": "Felder",
         "select_hero_icons": "Auswählen welche Hero Icons angzeig werden",
         "hero_icons": "Hero Icons",
-        "right_side_card": "(Karte auf der rechten Seite in der Liste)"
+        "right_side_card": "(Karte auf der rechten Seite in der Liste)",
+        "group_by_day": "Transaktionen nach Tag gruppieren"
       },
       "form_fields": {
         "title": "Formular-Feld setzen",

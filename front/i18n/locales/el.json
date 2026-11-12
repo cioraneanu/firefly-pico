@@ -332,7 +332,8 @@
         "fields": "Πεδία",
         "select_hero_icons": "Επιλέξτε ποια Hero Icons θα εμφανίζονται",
         "hero_icons": "Hero Icons",
-        "right_side_card": "(Κάρτα στη δεξιά πλευρά της λίστας)"
+        "right_side_card": "(Κάρτα στη δεξιά πλευρά της λίστας)",
+        "group_by_day": "Ομαδοποίηση συναλλαγών ανά ημέρα"
       },
       "form_fields": {
         "title": "Ορισμός πεδίων φόρμας",

@@ -32,7 +32,7 @@
     <section v-if="filtered.length" class="overflow-x-auto rounded-xl bg-card ring-1 ring-fg/10">
       <div role="table" class="min-w-265">
         <template v-for="group in groups" :key="group.label">
-          <div role="row" class="flex h-9 items-center justify-between border-y border-line bg-soft/55 px-4 text-xs font-medium text-dim first:border-t-0">
+          <div v-if="group.label" role="row" class="flex h-9 items-center justify-between border-y border-line bg-soft/55 px-4 text-xs font-medium text-dim first:border-t-0">
             <span>
               <b class="mr-2 font-medium text-fg">{{ group.label }}</b>
               {{ group.relative }}

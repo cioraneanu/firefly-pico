@@ -42,7 +42,7 @@
 
         <div v-if="list.length > 0" class="mx-list">
           <template v-for="group in groups" :key="group.label">
-            <div class="mx-grp">
+            <div v-if="group.label" class="mx-grp">
               <span
                 ><b>{{ group.dayOfWeek }}</b> · {{ group.label }}</span
               >
@@ -90,14 +90,9 @@
 </template>
 
 <script setup>
-import { capitalize, groupBy } from 'lodash-es'
-import { format } from 'date-fns'
 import { watchDebounced } from '@vueuse/core'
 import { IconAdjustmentsHorizontal, IconAdjustmentsOff, IconPlus, IconSum, IconX } from '@tabler/icons-vue'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
-import Transaction from '~/core/models/Transaction.js'
-import DateUtils from '~/core/utils/DateUtils'
-import { formatNumber } from '~/core/utils/NumberUtils'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import { animateSwipeList } from '~/core/utils/AnimationUtils.js'
 
@@ -137,19 +132,7 @@ watch(
 watchDebounced(search, (value) => (filters.value.description ?? '') !== value && (filters.value = { ...filters.value, description: value || null }), { debounce: 500 })
 
 // Rows grouped by day, each with its expenses total (same as the desktop list)
-const groups = computed(() =>
-  Object.entries(groupBy(list.value, (transaction) => DateUtils.dateToUI(Transaction.getDate(transaction)))).map(([label, items]) => {
-    const date = DateUtils.autoToDate(Transaction.getDate(items[0]))
-    const expenses = items.filter((transaction) => Transaction.getTypeCode(transaction) === Transaction.types.expense.code)
-    const total = expenses.reduce((sum, transaction) => sum + parseFloat(Transaction.getAmount(transaction) || 0), 0)
-    return {
-      label,
-      items,
-      dayOfWeek: date ? capitalize(format(date, 'EEE')) : '',
-      total: total ? `−${formatNumber(total, 2)} ${Transaction.getFirstSplit(items[0])?.currency_symbol ?? ''}` : '',
-    }
-  }),
-)
+const groups = useTransactionGroups(list)
 
 const transactionFiltersRef = useTemplateRef('transactionFiltersRef')
 const onShowFilters = () => transactionFiltersRef.value.show()

@@ -331,7 +331,8 @@
         "fields": "Campi",
         "select_hero_icons": "Seleziona quali Hero Icons mostrare",
         "hero_icons": "Hero Icons",
-        "right_side_card": "(Scheda a destra nell'elenco)"
+        "right_side_card": "(Scheda a destra nell'elenco)",
+        "group_by_day": "Raggruppa le transazioni per giorno"
       },
       "form_fields": {
         "title": "Imposta i campi del modulo",

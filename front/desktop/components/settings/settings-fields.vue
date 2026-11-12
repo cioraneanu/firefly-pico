@@ -7,6 +7,7 @@
 
     <d-settings-group :title="$t('settings.transactions.configure_list_fields')">
       <d-order-list v-model="listFields" />
+      <d-switch v-model="draft.transactionListGroupByDay">{{ $t('settings.transactions.list_fields.group_by_day') }}</d-switch>
       <d-field :label="$t('settings.transactions.list_fields.hero_icons')" :hint="$t('settings.transactions.list_fields.right_side_card')">
         <d-select v-model="draft.heroIcons" :options="transactionListHeroIconList" :get-label="(option) => $t(option.t)" multiple :searchable="false" />
       </d-field>
@@ -22,7 +23,7 @@ import { transactionFormFieldList, transactionListFieldList, transactionListHero
 import { migrateTypeList } from '~/core/utils/MigrateUtils'
 
 const profileStore = useProfileStore()
-const { draft, save, reset, isSaving } = useSettingsDraft(['isForeignCurrencyAlwaysVisible', 'heroIcons'])
+const { draft, save, reset, isSaving } = useSettingsDraft(['isForeignCurrencyAlwaysVisible', 'heroIcons', 'transactionListGroupByDay'])
 
 const formFields = ref([])
 const listFields = ref([])

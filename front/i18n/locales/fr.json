@@ -331,7 +331,8 @@
         "fields": "Champs",
         "select_hero_icons": "Sélectionner les icônes héros à afficher",
         "hero_icons": "Icônes héros",
-        "right_side_card": "(Carte du côté droit dans la liste)"
+        "right_side_card": "(Carte du côté droit dans la liste)",
+        "group_by_day": "Regrouper les transactions par jour"
       },
       "form_fields": {
         "title": "Définir les champs du formulaire",

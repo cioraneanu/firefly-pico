@@ -332,7 +332,8 @@
         "fields": "Fields",
         "select_hero_icons": "Select what Hero Icons to show",
         "hero_icons": "Hero Icons",
-        "right_side_card": "(Right side card in the list)"
+        "right_side_card": "(Right side card in the list)",
+        "group_by_day": "Group transactions by day"
       },
       "form_fields": {
         "title": "Set form fields",

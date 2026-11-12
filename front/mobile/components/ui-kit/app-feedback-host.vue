@@ -1,6 +1,6 @@
 <template>
   <Teleport to="#mx-portal" defer>
-    <transition name="mx-fd" mode="out-in">
+    <transition name="mx-toast">
       <div v-if="toast" :key="toast.id" class="mx-toast" :class="toastClass(toast)" role="status" @click="toast.close">
         <span class="ok"><app-icon :icon="toastIcon(toast)" :size="13" :stroke="3" /></span>
         <span class="flex-1 min-w-0">{{ toast.message }}</span>

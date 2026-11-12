@@ -24,6 +24,8 @@
               <p class="mx-d">{{ $t('settings.transactions.list_fields.right_side_card') }}</p>
             </template>
           </app-select>
+          <div class="mx-hr" />
+          <app-boolean v-model="transactionListGroupByDay" :label="$t('settings.transactions.list_fields.group_by_day')" />
         </app-card>
       </main>
 
@@ -64,7 +66,12 @@ const isHeroIconsDropdownVisible = ref(false)
 const heroIcons = ref([])
 const getDisplayValueHero = (item) => (item.t ? t(item.t) : item.name)
 
-const syncedSettings = [{ store: profileStore, path: 'heroIcons', ref: heroIcons }]
+const transactionListGroupByDay = ref(true)
+
+const syncedSettings = [
+  { store: profileStore, path: 'heroIcons', ref: heroIcons },
+  { store: profileStore, path: 'transactionListGroupByDay', ref: transactionListGroupByDay },
+]
 
 watchSettingsStore(syncedSettings)
 // -----

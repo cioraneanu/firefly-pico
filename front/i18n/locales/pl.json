@@ -331,7 +331,8 @@
         "fields": "Pola",
         "select_hero_icons": "Wybierz, które ikony Bohaterów wyświetlać",
         "hero_icons": "Ikony Bohaterów",
-        "right_side_card": "(Karta po prawej stronie na liście)"
+        "right_side_card": "(Karta po prawej stronie na liście)",
+        "group_by_day": "Grupuj transakcje według dnia"
       },
       "form_fields": {
         "title": "Ustaw pola formularza",

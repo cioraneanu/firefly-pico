@@ -105,12 +105,12 @@
           </div>
 
           <template v-if="llmSource !== 'none'">
-            <button type="button" class="mx-btn out block mt-3" :disabled="testing.llm" @click="testLlm">
+            <button type="button" class="mx-btn out mx-btn-block mt-3" :disabled="testing.llm" @click="testLlm">
               <span v-if="testing.llm" class="mx-spin" />
               <app-icon v-else :icon="IconPlugConnected" :size="16" :stroke="2" />
               <span>{{ $t('settings.assistant.llm_test') }}</span>
             </button>
-            <button type="button" class="mx-btn out block mt-2" @click="isTryOpen = true">
+            <button type="button" class="mx-btn out mx-btn-block mt-2" @click="isTryOpen = true">
               <app-icon :icon="IconFlask" :size="16" :stroke="2" />
               <span>{{ $t('settings.assistant.try_open') }}</span>
             </button>
@@ -203,7 +203,7 @@
             </div>
           </template>
 
-          <button v-if="transcriptionSource !== 'none'" type="button" class="mx-btn out block mt-3" :disabled="testing.transcription" @click="testTranscription">
+          <button v-if="transcriptionSource !== 'none'" type="button" class="mx-btn out mx-btn-block mt-3" :disabled="testing.transcription" @click="testTranscription">
             <span v-if="testing.transcription" class="mx-spin" />
             <app-icon v-else :icon="IconMicrophone" :size="16" :stroke="2" />
             <span>{{ $t('settings.assistant.transcription_test') }}</span>

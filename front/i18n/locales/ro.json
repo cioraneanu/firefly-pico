@@ -331,7 +331,8 @@
         "fields": "Câmpuri",
         "select_hero_icons": "Selectează ce iconițe Hero să fie afișate",
         "hero_icons": "Iconițe Hero",
-        "right_side_card": "(Card în partea dreaptă a listei)"
+        "right_side_card": "(Card în partea dreaptă a listei)",
+        "group_by_day": "Grupează tranzacțiile pe zile"
       },
       "form_fields": {
         "title": "Setează câmpuri formular",

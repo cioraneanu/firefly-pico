@@ -332,7 +332,8 @@
         "fields": "필드",
         "select_hero_icons": "표시할 히어로 아이콘 선택",
         "hero_icons": "히어로 아이콘",
-        "right_side_card": "(목록의 오른쪽 카드)"
+        "right_side_card": "(목록의 오른쪽 카드)",
+        "group_by_day": "거래를 날짜별로 그룹화"
       },
       "form_fields": {
         "title": "입력 필드 설정",

@@ -23,6 +23,7 @@
 .mx-app .mx-ov.td-esh-ov { z-index: 15; }
 .mx-app .td-esh { z-index: 16; }
 .mx-app .td-esh.back { transition: transform .2s ease; }
+.mx-app .td-esh.mx-sh-leave-active { transition: transform .35s cubic-bezier(.32, .72, 0, 1); }
 .mx-app .td-esh .mx-top { height: 48px; padding: 0 12px 0 16px; box-shadow: none; }
 .mx-app .mx-portal > .td-esh > .td-esh__b .mx-page .mx-body { overflow-y: auto; padding-bottom: 24px; }
 .mx-app .mx-portal > .td-esh > .td-esh__b .mx-page .mx-body.has-save { padding-bottom: 88px; }

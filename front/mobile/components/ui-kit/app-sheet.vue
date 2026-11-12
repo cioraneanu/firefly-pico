@@ -99,7 +99,8 @@ watch(show, () => (searchHeight.value = null))
 watch(search, (value) => value && !searchHeight.value && (searchHeight.value = sheetRef.value?.offsetHeight ?? null))
 
 const sheetStyle = computed(() => ({ '--dy': offset.value ? `${offset.value}px` : null, minHeight: searchHeight.value ? `min(${searchHeight.value}px, 100%)` : null }))
-const overlayStyle = computed(() => (offset.value > 0 ? { opacity: Math.max(0, 1 - offset.value / 400) } : null))
+// Dims through --ov (not opacity), so the leave fade still runs after a drag-to-close
+const overlayStyle = computed(() => (offset.value > 0 ? { '--ov': Math.max(0, 1 - offset.value / 400) } : null))
 
 let touch = null
 const canScroll = (element) => !!element && element.scrollHeight > element.clientHeight + 1
@@ -145,16 +146,17 @@ const onTouchMove = (event) => {
   offset.value = dy > 0 ? dy : -Math.sqrt(-dy) * 2.5
 }
 
-const onTouchEnd = () => {
+const onTouchEnd = async () => {
+  const isClosing = touch?.axis === 'drag' && (offset.value > 140 || (offset.value > 24 && touch.velocity > 0.45))
   if (touch?.axis === 'drag') {
     isDragging.value = false
-    // A downward flick closes it, and so does a slow drag past 140px
-    if (offset.value > 140 || (offset.value > 24 && touch.velocity > 0.45)) {
-      close()
-    } else {
-      offset.value = 0
-    }
+    offset.value = isClosing ? offset.value : 0
   }
   touch = null
+  // A downward flick closes it, and so does a slow drag past 140px. After the render that drops .dragging: a leaving element is not patched, so it would keep `transition: none` and vanish
+  if (isClosing) {
+    await nextTick()
+    close()
+  }
 }
 </script>

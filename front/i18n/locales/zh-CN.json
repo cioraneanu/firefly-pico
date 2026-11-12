@@ -316,7 +316,8 @@
         "fields": "字段",
         "select_hero_icons": "选择要显示的 Hero 图标",
         "hero_icons": "Hero 图标",
-        "right_side_card": "（列表右侧卡片）"
+        "right_side_card": "（列表右侧卡片）",
+        "group_by_day": "按天分组交易"
       },
       "form_fields": {
         "title": "设置表单字段",
