@@ -251,6 +251,7 @@
       "language_auto": "Rilevamento automatico",
       "key_hint": "Salvata sul server e mai più mostrata dopo il salvataggio. Scrivi una nuova chiave per sostituire quella salvata.",
       "key_saved_placeholder": "•••••••• salvata · scrivi una nuova chiave per sostituirla",
+      "remove_key": "Rimuovi chiave salvata",
       "own_note_title": "Solo per il tuo account",
       "own_note_llm": "Endpoint, chiave e modello sono usati insieme. Le impostazioni LLM del server vengono ignorate finché è selezionato «Il mio».",
       "own_note_transcription": "Endpoint, chiave e modello sono usati insieme. Le impostazioni di trascrizione del server vengono ignorate finché è selezionato «Il mio».",

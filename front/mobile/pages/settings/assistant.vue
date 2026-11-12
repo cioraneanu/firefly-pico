@@ -65,7 +65,11 @@
                 :label="$t('settings.assistant.api_key')"
                 :placeholder="draft.llmHasApiKey ? $t('settings.assistant.key_saved_placeholder') : 'sk-…'"
                 :description="$t('settings.assistant.key_hint')"
-              />
+              >
+                <template #right>
+                  <button v-if="draft.llmHasApiKey" type="button" class="mx-btn xs ghost" @click.prevent="clearApiKey('llm')">{{ $t('settings.assistant.remove_key') }}</button>
+                </template>
+              </app-field>
               <app-field v-model="draft.llmModel" name="llmModel" :label="$t('settings.assistant.model')" :placeholder="$t('settings.assistant.model_default', { model: 'gpt-4o-mini' })" />
             </div>
             <div class="mx-note mt-3">
@@ -179,7 +183,11 @@
                 :label="$t('settings.assistant.api_key')"
                 :placeholder="draft.transcriptionHasApiKey ? $t('settings.assistant.key_saved_placeholder') : 'sk-…'"
                 :description="$t('settings.assistant.key_hint')"
-              />
+              >
+                <template #right>
+                  <button v-if="draft.transcriptionHasApiKey" type="button" class="mx-btn xs ghost" @click.prevent="clearApiKey('transcription')">{{ $t('settings.assistant.remove_key') }}</button>
+                </template>
+              </app-field>
               <app-field
                 v-model="draft.transcriptionModel"
                 name="transcriptionModel"
@@ -346,7 +354,7 @@ const syncedSettings = [
 ]
 watchSettingsStore(syncedSettings)
 
-const { draft, server, isSaving, testing, load, save, llmOverride, llmSource, transcriptionSource, llmModelInUse, testLlm, testTranscription } = useAssistantSettings()
+const { draft, server, isSaving, testing, load, save, clearApiKey, llmOverride, llmSource, transcriptionSource, llmModelInUse, testLlm, testTranscription } = useAssistantSettings()
 
 const badge = (source) =>
   ({

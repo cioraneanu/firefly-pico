@@ -1,6 +1,7 @@
 import { cloneDeep, get, set } from 'lodash-es'
 import RouteConstants from '~/core/constants/RouteConstants'
 import Account from '~/core/models/Account'
+import Currency from '~/core/models/Currency'
 import PiggyBank from '~/core/models/PiggyBank'
 import PiggyBankRepository from '~/core/repository/PiggyBankRepository'
 import PiggyBankTransformer from '~/core/transformers/PiggyBankTransformer'
@@ -47,14 +48,15 @@ export function usePiggyBankForm(options = {}) {
   const savedPiggyBank = computed(() => piggyBankStore.piggyBankDictionary[form.itemId.value])
   const money = reactive({ isOpen: false, isAdd: true, amount: '' })
   const moneyAmount = computed(() => Math.abs(parseFloat(money.amount) || 0))
+  const moneyDecimals = computed(() => Number(Currency.getDecimalPlaces(get(savedPiggyBank.value, 'attributes.currency')) ?? 2))
   const moneySavedBefore = computed(() => PiggyBank.getCurrentAmount(savedPiggyBank.value))
-  const moneySavedAfter = computed(() => +(moneySavedBefore.value + (money.isAdd ? moneyAmount.value : -moneyAmount.value)).toFixed(2))
+  const moneySavedAfter = computed(() => +(moneySavedBefore.value + (money.isAdd ? moneyAmount.value : -moneyAmount.value)).toFixed(moneyDecimals.value))
   const moneyAccountBalance = computed(() => Account.getBalance(PiggyBank.getAccount(savedPiggyBank.value)))
   const isMoneyTooMuch = computed(() => !money.isAdd && moneySavedAfter.value < 0)
   const canApplyMoney = computed(() => moneyAmount.value > 0 && !isMoneyTooMuch.value)
 
   const openMoney = (isAdd) => Object.assign(money, { isOpen: true, isAdd, amount: '' })
-  const addToMoneyAmount = (value) => (money.amount = String(+(moneyAmount.value + value).toFixed(2)))
+  const addToMoneyAmount = (value) => (money.amount = String(+(moneyAmount.value + value).toFixed(moneyDecimals.value)))
 
   const applyMoney = async () => {
     const piggyBank = cloneDeep(savedPiggyBank.value)

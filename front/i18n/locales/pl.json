@@ -251,6 +251,7 @@
       "language_auto": "Wykryj automatycznie",
       "key_hint": "Przechowywany na serwerze i po zapisaniu już nie jest pokazywany. Wpisz nowy klucz, aby zastąpić zapisany.",
       "key_saved_placeholder": "•••••••• zapisany · wpisz nowy klucz, aby go zastąpić",
+      "remove_key": "Usuń zapisany klucz",
       "own_note_title": "Tylko dla Twojego konta",
       "own_note_llm": "Endpoint, klucz i model są używane razem. Ustawienia LLM serwera są ignorowane, dopóki wybrany jest „Własny”.",
       "own_note_transcription": "Endpoint, klucz i model są używane razem. Ustawienia transkrypcji serwera są ignorowane, dopóki wybrany jest „Własny”.",

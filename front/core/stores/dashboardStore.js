@@ -25,7 +25,6 @@ import Tag from '~/core/models/Tag.js'
 import DateUtils from '~/core/utils/DateUtils.js'
 import { getExcludedTransactionFilters } from '~/core/utils/DashboardUtils.js'
 import TransactionFilterUtils from '~/core/utils/TransactionFilterUtils.js'
-import { useListFilters } from '~/core/composables/useListFilters.js'
 
 export const useDashboardStore = defineStore('dashboard', () => {
   const accountStore = useAccountStore()
@@ -114,18 +113,10 @@ export const useDashboardStore = defineStore('dashboard', () => {
       return
     }
 
-    const { filters, filtersBackendList } = useListFilters({
-      filterDefinitions: Object.values(TransactionFilterUtils.filters),
-    })
-
-    filters.value = {
-      ...TransactionFilterUtils.getPredefinedFilters(),
-      tag: tagTodo,
-    }
-    const requestFilters = [{ field: 'query', value: filtersBackendList.value.join(' ') }]
-
-    let list = await new TransactionRepository().searchTransaction({ filters: requestFilters })
-    transactionsWithTodo.value = TransactionTransformer.transformFromApiList(list?.data ?? [])
+    // Same query as the TODO inbox (todoStore.fetchTodo), so the badges count what the inbox lists
+    const filters = [{ field: 'query', value: TransactionFilterUtils.filters.tag.filter(tagTodo) }]
+    let list = await new TransactionRepository().getAllWithMerge({ filters, getAll: new TransactionRepository().searchTransaction })
+    transactionsWithTodo.value = TransactionTransformer.transformFromApiList(list)
   }
 
   async function fetchDashboard() {

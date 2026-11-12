@@ -252,6 +252,7 @@
       "language_auto": "Automatisch erkennen",
       "key_hint": "Wird auf dem Server gespeichert und danach nie wieder angezeigt. Gib einen neuen Schlüssel ein, um den gespeicherten zu ersetzen.",
       "key_saved_placeholder": "•••••••• gespeichert · neuen Schlüssel eingeben, um ihn zu ersetzen",
+      "remove_key": "Gespeicherten Schlüssel entfernen",
       "own_note_title": "Nur für dein Konto",
       "own_note_llm": "Endpunkt, Schlüssel und Modell werden zusammen verwendet. Die LLM-Einstellungen des Servers werden ignoriert, solange „Eigene“ gewählt ist.",
       "own_note_transcription": "Endpunkt, Schlüssel und Modell werden zusammen verwendet. Die Transkriptionseinstellungen des Servers werden ignoriert, solange „Eigene“ gewählt ist.",

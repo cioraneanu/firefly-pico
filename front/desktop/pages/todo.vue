@@ -19,7 +19,7 @@
           {{ isDoneView ? $t('todo_page.to_review_count', { count: todoCount }) : $t('todo_page.done_count', { count: doneCount }) }}
         </d-button>
         <d-button v-if="isDoneView" size="sm" :icon="IconArrowBackUp" @click="onPutBackAll">{{ $t('todo_page.put_all_back') }}</d-button>
-        <d-button v-else variant="primary" size="sm" :icon="IconChecks" @click="todoStore.markDone(todoStore.todoList)">{{ $t('todo_page.mark_all_done') }}</d-button>
+        <d-button v-else variant="primary" size="sm" :icon="IconChecks" @click="todoStore.markDone(filtered)">{{ $t('todo_page.mark_all_done') }}</d-button>
       </div>
     </section>
 
@@ -142,7 +142,7 @@ const onBulk = async (action) => {
   await action(transactions)
 }
 const onPutBackAll = async () => {
-  await todoStore.putBack(todoStore.doneList)
+  await todoStore.putBack(filtered.value)
   isDoneView.value = false
 }
 

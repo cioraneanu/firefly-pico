@@ -251,6 +251,7 @@
       "language_auto": "Detetar automaticamente",
       "key_hint": "Guardada no servidor e nunca mais mostrada depois de guardar. Escreva uma nova chave para substituir a guardada.",
       "key_saved_placeholder": "•••••••• guardada · escreva uma nova chave para a substituir",
+      "remove_key": "Remover chave salva",
       "own_note_title": "Apenas para a sua conta",
       "own_note_llm": "Endpoint, chave e modelo são usados em conjunto. As definições de LLM do servidor são ignoradas enquanto «O meu» estiver selecionado.",
       "own_note_transcription": "Endpoint, chave e modelo são usados em conjunto. As definições de transcrição do servidor são ignoradas enquanto «O meu» estiver selecionado.",

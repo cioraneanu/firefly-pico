@@ -48,7 +48,10 @@
           <d-input v-model="connection[group.endpoint]" type="url" class="font-mono" :placeholder="group.endpointPlaceholder" />
         </d-field>
         <d-field :label="$t('settings.assistant.api_key')" :hint="$t('settings.assistant.key_hint')">
-          <d-input v-model="connection[group.apiKey]" type="password" class="font-mono" :placeholder="connection[group.hasApiKey] ? $t('settings.assistant.key_saved_placeholder') : 'sk-…'" />
+          <div class="flex items-center gap-2">
+            <d-input v-model="connection[group.apiKey]" type="password" class="flex-1 font-mono" :placeholder="connection[group.hasApiKey] ? $t('settings.assistant.key_saved_placeholder') : 'sk-…'" />
+            <d-button v-if="connection[group.hasApiKey]" variant="ghost" size="sm" @click="clearApiKey(group.key)">{{ $t('settings.assistant.remove_key') }}</d-button>
+          </div>
         </d-field>
         <d-field :label="$t('settings.assistant.model')">
           <d-input v-model="connection[group.model]" class="max-w-80 font-mono" :placeholder="$t('settings.assistant.model_default', { model: group.defaultModel })" />
@@ -182,6 +185,7 @@ const {
   testing,
   load,
   save: saveConnection,
+  clearApiKey,
   llmOverride,
   llmSource,
   transcriptionSource,

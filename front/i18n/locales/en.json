@@ -252,6 +252,7 @@
       "language_auto": "Auto-detect",
       "key_hint": "Stored on the server and never shown again after saving. Type a new key to replace the saved one.",
       "key_saved_placeholder": "•••••••• saved · type a new key to replace it",
+      "remove_key": "Remove saved key",
       "own_note_title": "Only for your account",
       "own_note_llm": "Endpoint, key and model are used together. The server's LLM settings are ignored while My own is selected.",
       "own_note_transcription": "Endpoint, key and model are used together. The server's transcription settings are ignored while My own is selected.",

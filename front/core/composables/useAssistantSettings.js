@@ -3,7 +3,7 @@ import AssistantRepository from '~/core/repository/AssistantRepository'
 
 // The user's assistant connections (Settings · Assistant, both apps). Each group — llm and transcription — either
 // uses the server's ASSISTANT_* environment variables or the user's own endpoint + key + model, all together.
-// API keys are write-only: the server only says whether one is saved; typing a new key replaces it.
+// API keys are write-only: the server only says whether one is saved; typing a new key replaces it, clearApiKey removes it on save.
 const emptyDraft = () => ({
   llmUseOwn: false,
   llmEndpoint: '',
@@ -55,15 +55,21 @@ export function useAssistantSettings() {
     }
   }
 
+  // A group whose draft shows no saved key and no typed key has no key: clearApiKey got it there
+  const isKeyCleared = (group) => !draft.value[`${group}HasApiKey`] && !draft.value[`${group}ApiKey`]
+  const clearApiKey = (group) => Object.assign(draft.value, { [`${group}ApiKey`]: '', [`${group}HasApiKey`]: false })
+
   const toPayload = () => ({
     llm_use_own: draft.value.llmUseOwn,
     llm_endpoint: draft.value.llmEndpoint || null,
     llm_model: draft.value.llmModel || null,
     llm_api_key: draft.value.llmApiKey || null,
+    llm_api_key_clear: isKeyCleared('llm'),
     transcription_use_own: draft.value.transcriptionUseOwn,
     transcription_endpoint: draft.value.transcriptionEndpoint || null,
     transcription_model: draft.value.transcriptionModel || null,
     transcription_api_key: draft.value.transcriptionApiKey || null,
+    transcription_api_key_clear: isKeyCleared('transcription'),
     transcription_language: draft.value.transcriptionLanguage || null,
   })
 
@@ -118,6 +124,7 @@ export function useAssistantSettings() {
     testing,
     load,
     save,
+    clearApiKey,
     llmOverride,
     transcriptionOverride,
     llmSource,

@@ -251,6 +251,7 @@
       "language_auto": "Detectar automáticamente",
       "key_hint": "Se guarda en el servidor y no se vuelve a mostrar. Escribe una clave nueva para reemplazar la guardada.",
       "key_saved_placeholder": "•••••••• guardada · escribe una clave nueva para reemplazarla",
+      "remove_key": "Eliminar clave guardada",
       "own_note_title": "Solo para tu cuenta",
       "own_note_llm": "El endpoint, la clave y el modelo se usan juntos. La configuración de LLM del servidor se ignora mientras esté seleccionado «El mío».",
       "own_note_transcription": "El endpoint, la clave y el modelo se usan juntos. La configuración de transcripción del servidor se ignora mientras esté seleccionado «El mío».",

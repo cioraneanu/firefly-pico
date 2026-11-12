@@ -251,6 +251,7 @@
       "language_auto": "Détection automatique",
       "key_hint": "Stockée sur le serveur et jamais réaffichée après l'enregistrement. Saisissez une nouvelle clé pour remplacer celle enregistrée.",
       "key_saved_placeholder": "•••••••• enregistrée · saisissez une nouvelle clé pour la remplacer",
+      "remove_key": "Supprimer la clé enregistrée",
       "own_note_title": "Uniquement pour votre compte",
       "own_note_llm": "L'endpoint, la clé et le modèle sont utilisés ensemble. Les réglages LLM du serveur sont ignorés tant que « Le mien » est sélectionné.",
       "own_note_transcription": "L'endpoint, la clé et le modèle sont utilisés ensemble. Les réglages de transcription du serveur sont ignorés tant que « Le mien » est sélectionné.",

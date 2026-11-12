@@ -251,6 +251,7 @@
       "language_auto": "Detectare automată",
       "key_hint": "Stocată pe server și nu mai este afișată după salvare. Scrie o cheie nouă pentru a o înlocui pe cea salvată.",
       "key_saved_placeholder": "•••••••• salvată · scrie o cheie nouă pentru a o înlocui",
+      "remove_key": "Șterge cheia salvată",
       "own_note_title": "Doar pentru contul tău",
       "own_note_llm": "Endpoint-ul, cheia și modelul sunt folosite împreună. Setările LLM ale serverului sunt ignorate cât timp e selectat „Al meu”.",
       "own_note_transcription": "Endpoint-ul, cheia și modelul sunt folosite împreună. Setările de transcriere ale serverului sunt ignorate cât timp e selectat „Al meu”.",
