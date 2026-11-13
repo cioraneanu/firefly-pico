@@ -860,6 +860,7 @@
     "no_match": "Nicio tranzacție #todo nu se potrivește căutării.",
     "select_all": "Selectează tot",
     "selected": "{count} selectate",
-    "clear": "Golește"
+    "clear": "Golește",
+    "some_failed": "{count} nu au putut fi actualizate. Încearcă din nou."
   }
 }

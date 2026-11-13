@@ -1,20 +1,34 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { cloneDeep, get } from 'lodash-es'
+import { chunk, cloneDeep, get } from 'lodash-es'
+import { useLocalStorage } from '@vueuse/core'
 import Tag from '~/core/models/Tag'
 import Transaction from '~/core/models/Transaction'
 import TransactionRepository from '~/core/repository/TransactionRepository'
 import TransactionTransformer from '~/core/transformers/TransactionTransformer'
 import TransactionFilterUtils from '~/core/utils/TransactionFilterUtils'
 import { areIntEqual } from '~/core/utils/DataUtils'
+import { getActiveFilters } from '~/core/utils/FilterUtils'
+import { withoutDeleted } from '~/core/utils/DeleteUtils'
+import UIUtils from '~/core/utils/UIUtils'
 
 // TODO Inbox: transactions tagged with the todo tag, reviewed one by one.
 // "Mark as done" only removes the todo tag. What was marked as done stays listed for this session (not persisted),
 // so it can be edited again or get its todo tag back.
+// The one source for the inbox, its badges (sidebar, Extras) and the dashboard cards.
+// Extra list filters (the transaction filters bag) narrow the inbox and are kept in localStorage.
 export const useTodoStore = defineStore('todo', () => {
   const todoList = ref([])
   const doneList = ref([])
   const isLoading = ref(false)
+
+  const reviveDates = (bag) => ({ ...bag, dateStart: bag.dateStart && new Date(bag.dateStart), dateEnd: bag.dateEnd && new Date(bag.dateEnd) })
+  const filters = useLocalStorage('todoInboxFilters', {}, { serializer: { read: (value) => reviveDates(JSON.parse(value)), write: JSON.stringify } })
+  const activeFilters = computed(() => getActiveFilters(Object.values(TransactionFilterUtils.filters), filters.value))
+  const setFilters = (value) => {
+    filters.value = value ?? {}
+    return fetchTodo()
+  }
 
   const isTodoTag = (name) => LanguageUtils.removeAccentsAndLowerCase(name) === LanguageUtils.removeAccentsAndLowerCase(Tag.getDisplayName(useTagStore().tagTodo))
 
@@ -28,23 +42,35 @@ export const useTodoStore = defineStore('todo', () => {
   const without = (list, ids) => list.filter((item) => !ids.some((id) => areIntEqual(id, item.id)))
   const byDateDesc = (a, b) => Transaction.getDate(b) - Transaction.getDate(a)
 
-  const totalCount = computed(() => todoList.value.length + doneList.value.length)
+  // Rows hidden behind a pending Undo delete are not shown or counted
+  const visibleTodoList = computed(() => withoutDeleted(todoList.value))
+  const visibleDoneList = computed(() => withoutDeleted(doneList.value))
+  const totalCount = computed(() => visibleTodoList.value.length + visibleDoneList.value.length)
 
+  // Loaded once at app start for the badges; the dashboard, the inbox page and its actions refresh it
+  let isFetched = false
+  const fetchTodoOnce = () => isFetched || fetchTodo()
+
+  const getQuery = () => [TransactionFilterUtils.filters.tag.filter(useTagStore().tagTodo), ...activeFilters.value.map((filter) => filter.filter)].join(' ')
+
+  // A load already running (app start + dashboard) is not fired twice; filters changed meanwhile load again right after
   async function fetchTodo() {
-    const tagTodo = useTagStore().tagTodo
-    if (!tagTodo) {
+    if (isLoading.value) return
+    if (!useTagStore().tagTodo) {
       todoList.value = []
       return
     }
+    isFetched = true
     isLoading.value = true
-    const filters = [{ field: 'query', value: TransactionFilterUtils.filters.tag.filter(tagTodo) }]
-    const list = await new TransactionRepository().getAllWithMerge({ filters, getAll: new TransactionRepository().searchTransaction })
+    const query = getQuery()
+    const list = await new TransactionRepository().getAllWithMerge({ filters: [{ field: 'query', value: query }], getAll: new TransactionRepository().searchTransaction })
     todoList.value = list.map(fromApi)
     doneList.value = without(
       doneList.value,
       todoList.value.map((item) => item.id),
     )
     isLoading.value = false
+    if (query !== getQuery()) return fetchTodo()
   }
 
   // Only the tags change: each split is sent with its journal id and its new tag list, nothing else
@@ -58,10 +84,15 @@ export const useTodoStore = defineStore('todo', () => {
     return ResponseUtils.isSuccess(response) ? fromApi(get(response, 'data.data')) : null
   }
 
+  // A few requests at a time; the user hears about the ones that failed
   async function setTodo(transactions, isTodo) {
-    const results = await Promise.all(transactions.map((transaction) => updateTags(transaction, isTodo)))
-    results.filter(Boolean).forEach(onSaved)
-    useDashboardStore().fetchTransactionsWithTodos()
+    let failedCount = 0
+    for (const batch of chunk(transactions, 5)) {
+      const results = await Promise.all(batch.map((transaction) => updateTags(transaction, isTodo)))
+      results.filter(Boolean).forEach(onSaved)
+      failedCount += results.filter((result) => !result).length
+    }
+    if (failedCount) UIUtils.showToastError(useNuxtApp().$i18n.t('todo_page.some_failed', { count: failedCount }))
   }
 
   const markDone = (transactions) => setTodo(transactions, false)
@@ -87,5 +118,23 @@ export const useTodoStore = defineStore('todo', () => {
     return result
   }
 
-  return { todoList, doneList, isLoading, totalCount, fetchTodo, markDone, putBack, onSaved, onDeleted, fromApi, withoutTodoTag }
+  return {
+    todoList,
+    doneList,
+    visibleTodoList,
+    visibleDoneList,
+    isLoading,
+    totalCount,
+    filters,
+    activeFilters,
+    setFilters,
+    fetchTodo,
+    fetchTodoOnce,
+    markDone,
+    putBack,
+    onSaved,
+    onDeleted,
+    fromApi,
+    withoutTodoTag,
+  }
 })

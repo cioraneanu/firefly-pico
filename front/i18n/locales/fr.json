@@ -860,6 +860,7 @@
     "no_match": "Aucune transaction #todo ne correspond à cette recherche.",
     "select_all": "Tout sélectionner",
     "selected": "{count} sélectionnées",
-    "clear": "Effacer"
+    "clear": "Effacer",
+    "some_failed": "{count} n’ont pas pu être mises à jour. Réessayez."
   }
 }

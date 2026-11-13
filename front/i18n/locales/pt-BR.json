@@ -860,6 +860,7 @@
     "no_match": "Nenhuma transação #todo corresponde à busca.",
     "select_all": "Selecionar tudo",
     "selected": "{count} selecionadas",
-    "clear": "Limpar"
+    "clear": "Limpar",
+    "some_failed": "Não foi possível atualizar {count}. Tente novamente."
   }
 }

@@ -860,6 +860,7 @@
     "no_match": "Żadna transakcja #todo nie pasuje do wyszukiwania.",
     "select_all": "Zaznacz wszystko",
     "selected": "Zaznaczono {count}",
-    "clear": "Wyczyść"
+    "clear": "Wyczyść",
+    "some_failed": "Nie udało się zaktualizować {count}. Spróbuj ponownie."
   }
 }

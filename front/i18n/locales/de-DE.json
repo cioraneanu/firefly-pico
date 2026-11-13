@@ -861,6 +861,7 @@
     "no_match": "Keine #todo-Buchung passt zu dieser Suche.",
     "select_all": "Alle auswählen",
     "selected": "{count} ausgewählt",
-    "clear": "Leeren"
+    "clear": "Leeren",
+    "some_failed": "{count} konnten nicht aktualisiert werden. Versuche es erneut."
   }
 }

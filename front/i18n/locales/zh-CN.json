@@ -812,6 +812,7 @@
     "no_match": "没有符合搜索的 #todo 交易。",
     "select_all": "全选",
     "selected": "已选 {count} 条",
-    "clear": "清除"
+    "clear": "清除",
+    "some_failed": "{count} 项无法更新。请重试。"
   }
 }

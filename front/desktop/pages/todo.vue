@@ -1,6 +1,10 @@
 <template>
-  <d-page :title="$t('todo_page.title')" :description="$t('todo_page.description', { tag: todoTagName })">
+  <d-page :title="$t('todo_page.title')" :description="$t('todo_page.description', { tag: Tag.getDisplayName(tagStore.tagTodo) || $t('todo') })">
     <template #actions>
+      <d-button :icon="IconFilter" @click="isFiltersOpen = true">
+        {{ $t('desktop.filters') }}
+        <d-badge v-if="todoStore.activeFilters.length" class="px-1.5 text-dim tabular-nums">{{ todoStore.activeFilters.length }}</d-badge>
+      </d-button>
       <d-button :icon="IconRefresh" :loading="todoStore.isLoading" @click="todoStore.fetchTodo">{{ $t('desktop.refresh') }}</d-button>
     </template>
 
@@ -18,8 +22,8 @@
         <d-button size="sm" :icon="isDoneView ? IconListCheck : IconHistory" :aria-pressed="isDoneView" :disabled="!isDoneView && doneCount === 0" @click="toggleView">
           {{ isDoneView ? $t('todo_page.to_review_count', { count: todoCount }) : $t('todo_page.done_count', { count: doneCount }) }}
         </d-button>
-        <d-button v-if="isDoneView" size="sm" :icon="IconArrowBackUp" @click="onPutBackAll">{{ $t('todo_page.put_all_back') }}</d-button>
-        <d-button v-else variant="primary" size="sm" :icon="IconChecks" @click="todoStore.markDone(filtered)">{{ $t('todo_page.mark_all_done') }}</d-button>
+        <d-button v-if="isDoneView" size="sm" :icon="IconArrowBackUp" :disabled="isBusy" @click="onPutBackAllShown">{{ $t('todo_page.put_all_back') }}</d-button>
+        <d-button v-else variant="primary" size="sm" :icon="IconChecks" :disabled="isBusy" @click="onMarkAllDone(filtered)">{{ $t('todo_page.mark_all_done') }}</d-button>
       </div>
     </section>
 
@@ -28,6 +32,8 @@
       <span class="flex-1" />
       <d-checkbox v-if="filtered.length" v-model="isAllSelected" class="px-1 text-dim">{{ $t('todo_page.select_all') }}</d-checkbox>
     </div>
+
+    <d-filter-chips v-if="todoStore.activeFilters.length" :filters="todoStore.activeFilters" @remove="removeFilter" @clear="clearFilters" />
 
     <section v-if="filtered.length" class="overflow-x-auto rounded-xl bg-card ring-1 ring-fg/10">
       <div role="table" class="min-w-265">
@@ -55,9 +61,9 @@
       </div>
     </section>
 
-    <section v-else-if="list.length" class="rounded-xl bg-card ring-1 ring-fg/10">
+    <section v-else-if="list.length || (todoStore.activeFilters.length && !isDoneView)" class="rounded-xl bg-card ring-1 ring-fg/10">
       <d-empty :icon="IconSearchOff" :title="$t('general.list_no_results')" :text="$t('todo_page.no_match')">
-        <d-button size="sm" @click="search = ''">{{ $t('general.clear_filters') }}</d-button>
+        <d-button size="sm" @click="clearSearchAndFilters">{{ $t('general.clear_filters') }}</d-button>
       </d-empty>
     </section>
 
@@ -90,13 +96,15 @@
       <d-button v-else size="sm" variant="primary" :icon="IconChecks" @click="onBulk(todoStore.markDone)">{{ $t('todo_page.mark_done') }}</d-button>
     </div>
 
+    <d-transaction-filters v-model="filters" v-model:open="isFiltersOpen" />
+
     <d-transaction-dialog v-if="route.params.id" :key="route.params.id" :list-route="RouteConstants.ROUTE_TODO" @changed="onChanged" />
   </d-page>
 </template>
 
 <script setup>
 import { get } from 'lodash-es'
-import { IconArrowBackUp, IconChecks, IconHistory, IconListCheck, IconRefresh, IconSearch, IconSearchOff, IconSparkles, IconTag } from '@tabler/icons-vue'
+import { IconArrowBackUp, IconChecks, IconFilter, IconHistory, IconListCheck, IconRefresh, IconSearch, IconSearchOff, IconSparkles, IconTag } from '@tabler/icons-vue'
 import RouteConstants from '~/core/constants/RouteConstants'
 import Account from '~/core/models/Account'
 import Tag from '~/core/models/Tag'
@@ -106,15 +114,9 @@ const route = useRoute()
 const todoStore = useTodoStore()
 const tagStore = useTagStore()
 
-const isDoneView = ref(false)
+const { isDoneView, isBusy, list, todoCount, doneCount, progress, isPanelVisible, onMarkAllDone, onPutBackAll, filters, removeFilter, clearFilters } = useTodoInbox()
 const selected = reactive({})
-
-const list = computed(() => (isDoneView.value ? todoStore.doneList : todoStore.todoList))
-const todoCount = computed(() => todoStore.todoList.length)
-const doneCount = computed(() => todoStore.doneList.length)
-const progress = computed(() => (todoStore.totalCount ? Math.round((doneCount.value / todoStore.totalCount) * 100) : 0))
-const isPanelVisible = computed(() => (isDoneView.value ? doneCount.value : todoCount.value) > 0)
-const todoTagName = computed(() => Tag.getDisplayName(tagStore.tagTodo) ?? 'todo')
+const isFiltersOpen = ref(false)
 
 const { search, filtered } = useSearch(
   list,
@@ -136,14 +138,18 @@ const toggleView = () => {
   clearSelection()
   isDoneView.value = !isDoneView.value
 }
+const clearSearchAndFilters = () => {
+  search.value = ''
+  if (todoStore.activeFilters.length) clearFilters()
+}
 const onBulk = async (action) => {
   const transactions = selectedList.value
   clearSelection()
   await action(transactions)
 }
-const onPutBackAll = async () => {
-  await todoStore.putBack(filtered.value)
-  isDoneView.value = false
+const onPutBackAllShown = () => {
+  clearSelection()
+  onPutBackAll(filtered.value)
 }
 
 const onChanged = (event, response, id) => {

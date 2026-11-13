@@ -861,6 +861,7 @@
     "no_match": "No #todo transaction matches this search.",
     "select_all": "Select all",
     "selected": "{count} selected",
-    "clear": "Clear"
+    "clear": "Clear",
+    "some_failed": "{count} could not be updated. Try again."
   }
 }
