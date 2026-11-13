@@ -1,4 +1,4 @@
-import { useLocalStorage } from '@vueuse/core'
+import { useLocalStorage, useNow } from '@vueuse/core'
 import * as LanguageConstants from '~/core/constants/LanguageConstants'
 import AssistantRepository from '~/core/repository/AssistantRepository'
 
@@ -39,6 +39,15 @@ export function useRambleDictation(rambleText) {
 
   const toggleRecording = () => (isRecording.value ? stopRecording() : startRecording())
 
+  // Elapsed recording time as m:ss
+  const now = useNow({ interval: 1000 })
+  const recordingStartedAt = ref(0)
+  watch(isRecording, (value) => (recordingStartedAt.value = value ? Date.now() : 0))
+  const recordingTime = computed(() => {
+    const seconds = recordingStartedAt.value ? Math.max(0, Math.floor((now.value - recordingStartedAt.value) / 1000)) : 0
+    return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`
+  })
+
   const playingVoiceRambleId = ref(null)
   const loadingVoiceRambleId = ref(null)
   let voiceAudio = null
@@ -77,5 +86,5 @@ export function useRambleDictation(rambleText) {
     stopRecording()
   })
 
-  return { speechTemporary, speechLanguageCode, isRecording, startRecording, stopRecording, toggleRecording, playingVoiceRambleId, loadingVoiceRambleId, toggleSavedRambleVoice }
+  return { speechTemporary, speechLanguageCode, isRecording, recordingTime, startRecording, stopRecording, toggleRecording, playingVoiceRambleId, loadingVoiceRambleId, toggleSavedRambleVoice }
 }

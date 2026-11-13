@@ -94,6 +94,16 @@ class AssistantController extends BaseController
         return $disk->response($ramble->voice_path);
     }
 
+    // Fixing the text of a voice ramble also marks it transcribed, so a later transcription does not append to it
+    public function updateRamble(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        AssistantValidation::validateRambleUpdate($request);
+        $ramble = AssistantRamble::query()->allowed()->findOrFail($request->id);
+        $ramble->update(['text' => trim($request->input('text')), 'is_transcribed' => true]);
+        return $this->respond(['data' => $ramble]);
+    }
+
     public function deleteRamble(Request $request)
     {
         BaseAuthorization::checkUser();

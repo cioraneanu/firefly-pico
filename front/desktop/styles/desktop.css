@@ -264,3 +264,46 @@ body:has(.van-theme-dark .d-app) {
     transform: rotate(360deg);
   }
 }
+
+/* Dictate transactions: the record button pulses and the waveform moves while listening */
+.d-ramble-mic {
+  box-shadow: 0 0 0 8px color-mix(in oklch, var(--d-fg) 6%, transparent);
+  transition:
+    background-color 0.2s,
+    box-shadow 0.2s;
+}
+.d-ramble-mic.on {
+  animation: d-ramble-pulse 1.6s ease-out infinite;
+}
+.d-ramble-wave i {
+  flex: 1 1 0;
+  min-width: 2px;
+  max-width: 6px;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--d-fg) 18%, transparent);
+  transform: scaleY(0.18);
+  transition: background-color 0.2s;
+}
+.d-ramble-wave.on i {
+  background: var(--d-danger);
+  animation: d-ramble-eq 0.9s ease-in-out infinite;
+}
+
+@keyframes d-ramble-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in oklch, var(--d-danger) 35%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 14px transparent;
+  }
+}
+
+@keyframes d-ramble-eq {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}

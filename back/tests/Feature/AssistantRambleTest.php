@@ -313,6 +313,24 @@ class AssistantRambleTest extends TestCase
         $this->assertDatabaseHas('assistant_rambles', ['id' => $other->id]);
     }
 
+    public function test_update_ramble_text_marks_it_transcribed()
+    {
+        $ramble = $this->createVoiceRamble('1', 'cofee 5');
+
+        $this->putJson("api/assistant/rambles/{$ramble->id}", ['text' => ' coffee 5 '], $this->headers())->assertOk()->assertJsonPath('data.text', 'coffee 5');
+
+        $this->assertDatabaseHas('assistant_rambles', ['id' => $ramble->id, 'text' => 'coffee 5', 'is_transcribed' => true]);
+    }
+
+    public function test_update_ramble_requires_text_and_is_scoped_to_user()
+    {
+        $ramble = AssistantRamble::create(['text' => 'coffee 5', 'user_id' => '2']);
+
+        $this->putJson("api/assistant/rambles/{$ramble->id}", ['text' => ''], $this->headers())->assertStatus(422);
+        $this->putJson("api/assistant/rambles/{$ramble->id}", ['text' => 'tea 3'], $this->headers())->assertNotFound();
+        $this->assertDatabaseHas('assistant_rambles', ['id' => $ramble->id, 'text' => 'coffee 5']);
+    }
+
     public function test_delete_single_ramble_of_other_user_fails()
     {
         $other = AssistantRamble::create(['text' => 'other', 'user_id' => '2']);

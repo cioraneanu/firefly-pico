@@ -6,6 +6,13 @@ use Illuminate\Http\Request;
 
 class AssistantValidation
 {
+    public static function validateRambleUpdate(Request $request)
+    {
+        $request->validate([
+            'text' => 'required|string|max:10000',
+        ]);
+    }
+
     // A group switched to "own" needs at least its endpoint; the key may be empty (local models) and the model falls back to the default.
     public static function validateSettingsUpdate(Request $request)
     {

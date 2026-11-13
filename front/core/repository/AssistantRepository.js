@@ -97,8 +97,16 @@ export default class AssistantRepository extends BaseRepository {
   }
 
   async getSavedRambles() {
-    const response = await axios.get(`${this.getUrl()}/rambles`)
+    const response = await axios.get(`${this.getUrl()}/rambles`, { showLoading: false })
     return get(response, 'data', {})
+  }
+
+  async createSavedRamble(text) {
+    return axios.post(`${this.getUrl()}/rambles`, { text })
+  }
+
+  async updateSavedRamble(id, text) {
+    return axios.put(`${this.getUrl()}/rambles/${id}`, { text })
   }
 
   async getSavedRambleVoice(id) {

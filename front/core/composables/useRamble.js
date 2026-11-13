@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash-es'
+import { cloneDeep, get } from 'lodash-es'
 import AssistantRepository from '~/core/repository/AssistantRepository'
 import TransactionRepository from '~/core/repository/TransactionRepository'
 import TransactionTransformer from '~/core/transformers/TransactionTransformer'
@@ -19,6 +19,8 @@ const getCreateErrorMessage = (error) =>
   error?.message ??
   'Failed to create transaction.'
 
+// Dictate transactions: saved rambles (typed or recorded, newest first) → interpret the picked ones plus the composer text → drafts → create.
+// Once every draft is created, the interpreted rambles are deleted; the others stay saved for later.
 export function useRamble({ onCreated } = {}) {
   const { t } = useI18n()
   const profileStore = useProfileStore()
@@ -30,10 +32,11 @@ export function useRamble({ onCreated } = {}) {
 
   const rambleText = ref('')
   const savedRambles = ref([])
-  const loadedSavedRambleIds = ref([])
   const savedRamblesCount = ref(0)
   const isLoadingSavedRambles = ref(false)
-  const isDeletingLoadedSavedRambles = ref(false)
+  const isAddingRamble = ref(false)
+  const pickedRambleIds = ref([])
+  const interpretedRambleIds = ref([])
   const rambleTransactions = ref([])
   const isInterpreting = ref(false)
   const isCreatingRambleTransactions = ref(false)
@@ -42,12 +45,15 @@ export function useRamble({ onCreated } = {}) {
   const currentCreateIndex = ref(0)
   const sessionId = ref(0)
 
+  const pickedRambles = computed(() => savedRambles.value.filter((ramble) => pickedRambleIds.value.includes(ramble.id)))
+  const isAllPicked = computed(() => savedRambles.value.length > 0 && pickedRambles.value.length === savedRambles.value.length)
   const countByStatus = (status) => rambleTransactions.value.filter((transaction) => transaction.status === status).length
-  const hasLoadedSavedRambles = computed(() => loadedSavedRambleIds.value.length > 0)
-  const createdCount = computed(() => countByStatus(rambleStatus.success))
+  const createdTransactions = computed(() => rambleTransactions.value.filter((transaction) => transaction.status === rambleStatus.success))
+  const createdCount = computed(() => createdTransactions.value.length)
   const failedCount = computed(() => countByStatus(rambleStatus.error))
+  const createQueue = computed(() => rambleTransactions.value.filter((transaction) => transaction.status !== rambleStatus.success && transaction.isIncluded))
+  const createButtonCount = computed(() => createQueue.value.length)
   const processedCount = computed(() => createdCount.value + failedCount.value)
-  const createButtonCount = computed(() => rambleTransactions.value.length - createdCount.value)
   const hasCreateProgress = computed(() => isCreatingRambleTransactions.value || processedCount.value > 0)
   const createProgressPercentage = computed(() => (rambleTransactions.value.length ? Math.round((processedCount.value / rambleTransactions.value.length) * 100) : 0))
 
@@ -62,82 +68,99 @@ export function useRamble({ onCreated } = {}) {
     failedCount.value > 0 ? t('transaction.assistant_ramble_retry_failed', { count: createButtonCount.value }) : t('transaction.assistant_ramble_create', { count: createButtonCount.value }),
   )
 
+  const setSavedRambles = (list) => {
+    savedRambles.value = list
+    savedRamblesCount.value = list.length
+    pickedRambleIds.value = pickedRambleIds.value.filter((id) => list.some((ramble) => ramble.id === id))
+  }
+
   const refreshSavedRambleCount = async ({ showLoading = false } = {}) => {
     if (!appStore.llmIsConfigured) return
     const response = await assistantRepository.getSavedRambleCount({ showLoading })
     savedRamblesCount.value = response.count ?? savedRambles.value.length
   }
 
+  // Every saved ramble starts picked
   const fetchSavedRambles = async () => {
     const session = sessionId.value
     isLoadingSavedRambles.value = true
     try {
       const response = await assistantRepository.getSavedRambles()
       if (session !== sessionId.value) return
-      savedRambles.value = response.data ?? []
-      loadedSavedRambleIds.value = savedRambles.value.map((ramble) => ramble.id).filter(Boolean)
-      savedRamblesCount.value = savedRambles.value.length
+      setSavedRambles([...(response.data ?? [])].reverse())
+      pickedRambleIds.value = savedRambles.value.map((ramble) => ramble.id)
     } finally {
       if (session === sessionId.value) isLoadingSavedRambles.value = false
     }
   }
 
-  const deleteLoadedSavedRambles = async ({ confirm = true } = {}) => {
-    const session = sessionId.value
-    const loadedIds = [...loadedSavedRambleIds.value]
-    if (loadedIds.length === 0) return true
-    if (confirm && !(await UIUtils.showDeleteConfirmation(t('transaction.assistant_ramble_delete_confirm_title'), t('transaction.assistant_ramble_delete_confirm_message')))) return false
-
-    isDeletingLoadedSavedRambles.value = true
+  // The composer text becomes a saved ramble (picked)
+  const addRamble = async () => {
+    const text = rambleText.value.trim()
+    if (!text || isAddingRamble.value) return
+    isAddingRamble.value = true
     try {
-      const response = await assistantRepository.deleteSavedRambles(loadedIds)
-      if (session !== sessionId.value) return false
-      if (isResponseSuccessful(response)) {
-        savedRambles.value = savedRambles.value.filter((savedRamble) => !loadedIds.includes(savedRamble.id))
-        loadedSavedRambleIds.value = []
-        await refreshSavedRambleCount()
-        return true
-      }
+      const response = await assistantRepository.createSavedRamble(text)
+      if (!isResponseSuccessful(response)) return
+      const ramble = get(response, 'data.data')
+      setSavedRambles([ramble, ...savedRambles.value])
+      pickedRambleIds.value = [...pickedRambleIds.value, ramble.id]
+      rambleText.value = ''
+      UIUtils.showToastSuccess(t('transaction.assistant_ramble_added'))
     } finally {
-      if (session === sessionId.value) isDeletingLoadedSavedRambles.value = false
+      isAddingRamble.value = false
     }
-    return false
+  }
+
+  const updateSavedRamble = async (ramble, text) => {
+    text = text.trim()
+    if (!text || text === ramble.text) return true
+    const response = await assistantRepository.updateSavedRamble(ramble.id, text)
+    if (!isResponseSuccessful(response)) return false
+    setSavedRambles(savedRambles.value.map((item) => (item.id === ramble.id ? { ...item, ...get(response, 'data.data'), is_edited: true } : item)))
+    return true
   }
 
   const deleteSavedRamble = async (ramble) => {
     if (!(await UIUtils.showDeleteConfirmation(t('transaction.assistant_ramble_delete_confirm_title'), t('transaction.assistant_ramble_delete_one_confirm_message')))) return
     const response = await assistantRepository.deleteSavedRamble(ramble.id)
-    if (!isResponseSuccessful(response)) return
-    savedRambles.value = savedRambles.value.filter((savedRamble) => savedRamble.id !== ramble.id)
-    loadedSavedRambleIds.value = loadedSavedRambleIds.value.filter((id) => id !== ramble.id)
-    await refreshSavedRambleCount()
+    if (isResponseSuccessful(response)) setSavedRambles(savedRambles.value.filter((item) => item.id !== ramble.id))
+  }
+
+  const deleteSavedRambles = async (ids) => {
+    if (ids.length === 0) return true
+    const response = await assistantRepository.deleteSavedRambles(ids)
+    if (!isResponseSuccessful(response)) return false
+    setSavedRambles(savedRambles.value.filter((ramble) => !ids.includes(ramble.id)))
+    return true
+  }
+
+  const deleteAllSavedRambles = async () => {
+    if (!(await UIUtils.showDeleteConfirmation(t('transaction.assistant_ramble_delete_confirm_title'), t('transaction.assistant_ramble_delete_confirm_message')))) return
+    await deleteSavedRambles(savedRambles.value.map((ramble) => ramble.id))
+  }
+
+  const togglePickedRamble = (ramble) =>
+    (pickedRambleIds.value = pickedRambleIds.value.includes(ramble.id) ? pickedRambleIds.value.filter((id) => id !== ramble.id) : [...pickedRambleIds.value, ramble.id])
+  const toggleAllPickedRambles = () => (pickedRambleIds.value = isAllPicked.value ? [] : savedRambles.value.map((ramble) => ramble.id))
+
+  const resetDrafts = () => {
+    rambleTransactions.value = []
+    interpretedRambleIds.value = []
+    hasInterpreted.value = false
+    rambleError.value = ''
   }
 
   const reset = () => {
     sessionId.value += 1
     rambleText.value = ''
-    savedRambles.value = []
-    loadedSavedRambleIds.value = []
-    rambleTransactions.value = []
+    setSavedRambles([])
+    resetDrafts()
     isLoadingSavedRambles.value = false
-    isDeletingLoadedSavedRambles.value = false
     isInterpreting.value = false
     isCreatingRambleTransactions.value = false
-    hasInterpreted.value = false
-    rambleError.value = ''
     currentCreateIndex.value = 0
   }
-
-  const interpretationText = () =>
-    [
-      rambleText.value.trim(),
-      savedRambles.value
-        .map((ramble) => ramble.text?.trim())
-        .filter(Boolean)
-        .join('\n'),
-    ]
-      .filter(Boolean)
-      .join('\n')
 
   // The entity lists plus, when enabled, the user's recent transactions as examples
   const getRambleRequestContext = async () => {
@@ -145,45 +168,51 @@ export function useRamble({ onCreated } = {}) {
     return recentTransactions.length ? { ...getRambleContext(), recentTransactions } : getRambleContext()
   }
 
-  const interpretRambleText = async () => {
-    if (!interpretationText()) return
+  // The picked saved rambles plus the composer text. Resolves true when the assistant answered.
+  const interpretRambleText = async ({ rambles = pickedRambles.value } = {}) => {
+    const text = rambleText.value.trim()
+    if (!text && rambles.length === 0) return false
 
     const session = sessionId.value
     isInterpreting.value = true
-    hasInterpreted.value = false
     rambleError.value = ''
 
     try {
       const response = await assistantRepository.interpretTransactions({
-        text: rambleText.value.trim(),
-        savedRambles: savedRambles.value.map((ramble) => ({ text: ramble.text, createdAt: ramble.created_at })),
+        text,
+        savedRambles: rambles.map((ramble) => ({ text: ramble.text, createdAt: ramble.created_at })),
         now: new Date().toISOString(),
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         language: profileStore.language,
         externalContext: profileStore.assistantLlmContext,
         context: await getRambleRequestContext(),
       })
-      if (session !== sessionId.value) return
+      if (session !== sessionId.value) return false
 
       const drafts = []
       for (const transaction of (response.transactions ?? []).map(resolveRambleTransaction)) {
-        if (session !== sessionId.value) return
-        drafts.push({ id: transaction.id, assistant: transaction, item: await buildTransactionItemFromAssistant(transaction), status: rambleStatus.pending, error: null, response: null })
+        if (session !== sessionId.value) return false
+        const item = await buildTransactionItemFromAssistant(transaction)
+        drafts.push({ id: transaction.id, assistant: transaction, item, status: rambleStatus.pending, isIncluded: true, error: null, response: null })
       }
 
       rambleTransactions.value = drafts
+      interpretedRambleIds.value = rambles.map((ramble) => ramble.id)
       hasInterpreted.value = true
+      return true
     } catch (error) {
-      if (session !== sessionId.value) return
-      rambleTransactions.value = []
+      if (session !== sessionId.value) return false
+      resetDrafts()
       rambleError.value = getRambleErrorMessage(error)
       hasInterpreted.value = true
+      return false
     } finally {
       if (session === sessionId.value) isInterpreting.value = false
     }
   }
 
   const removeRambleTransaction = (transaction) => (rambleTransactions.value = rambleTransactions.value.filter((item) => item.id !== transaction.id))
+  const toggleRambleTransaction = (transaction) => (transaction.isIncluded = !transaction.isIncluded)
 
   const updateRambleTransaction = (edited) => {
     const index = rambleTransactions.value.findIndex((transaction) => transaction.id === edited.id)
@@ -195,7 +224,7 @@ export function useRamble({ onCreated } = {}) {
 
   const createRambleTransactions = async () => {
     const session = sessionId.value
-    const toCreate = rambleTransactions.value.filter((transaction) => transaction.status !== rambleStatus.success)
+    const toCreate = [...createQueue.value]
     if (toCreate.length === 0) return
 
     isCreatingRambleTransactions.value = true
@@ -203,13 +232,9 @@ export function useRamble({ onCreated } = {}) {
     let successCount = 0
 
     try {
-      for (const transaction of toCreate) {
+      for (const draft of toCreate) {
         if (session !== sessionId.value) return
-        const index = rambleTransactions.value.findIndex((item) => item.id === transaction.id)
-        if (index < 0) continue
-
-        const draft = rambleTransactions.value[index]
-        currentCreateIndex.value = index + 1
+        currentCreateIndex.value = rambleTransactions.value.indexOf(draft) + 1
         draft.status = rambleStatus.creating
         draft.error = null
 
@@ -237,11 +262,12 @@ export function useRamble({ onCreated } = {}) {
       }
       if (failedCount.value > 0) return
 
-      if (hasLoadedSavedRambles.value && !(await deleteLoadedSavedRambles({ confirm: false }))) {
+      if (!(await deleteSavedRambles(interpretedRambleIds.value))) {
         rambleError.value = 'Transactions were created, but saved rambles could not be deleted.'
         return
       }
-
+      interpretedRambleIds.value = []
+      rambleText.value = ''
       await onCreated?.()
     } finally {
       if (session === sessionId.value) {
@@ -256,8 +282,12 @@ export function useRamble({ onCreated } = {}) {
     savedRambles,
     savedRamblesCount,
     isLoadingSavedRambles,
-    isDeletingLoadedSavedRambles,
+    isAddingRamble,
+    pickedRambleIds,
+    pickedRambles,
+    isAllPicked,
     rambleTransactions,
+    createdTransactions,
     isInterpreting,
     isCreatingRambleTransactions,
     hasInterpreted,
@@ -269,12 +299,17 @@ export function useRamble({ onCreated } = {}) {
     createButtonLabel,
     refreshSavedRambleCount,
     fetchSavedRambles,
-    deleteLoadedSavedRambles,
+    addRamble,
+    updateSavedRamble,
     deleteSavedRamble,
+    deleteAllSavedRambles,
+    togglePickedRamble,
+    toggleAllPickedRambles,
     reset,
+    resetDrafts,
     interpretRambleText,
-    getRambleRequestContext,
     removeRambleTransaction,
+    toggleRambleTransaction,
     updateRambleTransaction,
     createRambleTransactions,
   }
