@@ -1,7 +1,6 @@
 <template>
   <h2 v-if="section" class="mx-sec">
     <span>{{ section }}</span>
-    <slot name="section-right" />
   </h2>
   <section class="mx-card" :class="{ pad }">
     <div v-if="title || $slots.title || $slots.actions" class="mx-card__h">

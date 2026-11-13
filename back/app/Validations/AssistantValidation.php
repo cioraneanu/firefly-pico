@@ -18,12 +18,12 @@ class AssistantValidation
     {
         $request->validate([
             'llm_use_own' => 'required|boolean',
-            'llm_endpoint' => 'nullable|required_if:llm_use_own,true|url|max:500',
+            'llm_endpoint' => 'nullable|required_if_accepted:llm_use_own|url:http,https|max:500',
             'llm_model' => 'nullable|string|max:255',
             'llm_api_key' => 'nullable|string|max:2000',
             'llm_api_key_clear' => 'nullable|boolean',
             'transcription_use_own' => 'required|boolean',
-            'transcription_endpoint' => 'nullable|required_if:transcription_use_own,true|url|max:500',
+            'transcription_endpoint' => 'nullable|required_if_accepted:transcription_use_own|url:http,https|max:500',
             'transcription_model' => 'nullable|string|max:255',
             'transcription_api_key' => 'nullable|string|max:2000',
             'transcription_api_key_clear' => 'nullable|boolean',
@@ -32,15 +32,27 @@ class AssistantValidation
     }
 
     // Unsaved connection values sent by the settings screen to test or try them before saving.
+    private const CONFIG_OVERRIDE_RULES = [
+        'config' => 'nullable|array',
+        'config.use_own' => 'required_with:config|boolean',
+        'config.endpoint' => 'nullable|url:http,https|max:500',
+        'config.model' => 'nullable|string|max:255',
+        'config.api_key' => 'nullable|string|max:2000',
+        'config.api_key_clear' => 'nullable|boolean',
+        'config.language' => 'nullable|string|max:20',
+    ];
+
     public static function validateConfigOverride(Request $request)
     {
+        $request->validate(self::CONFIG_OVERRIDE_RULES);
+    }
+
+    public static function validateInterpretTransactions(Request $request)
+    {
         $request->validate([
-            'config' => 'nullable|array',
-            'config.use_own' => 'required_with:config|boolean',
-            'config.endpoint' => 'nullable|url|max:500',
-            'config.model' => 'nullable|string|max:255',
-            'config.api_key' => 'nullable|string|max:2000',
-            'config.language' => 'nullable|string|max:20',
+            'payload' => 'required|array',
+            'payload.messages' => 'required|array',
+            ...self::CONFIG_OVERRIDE_RULES,
         ]);
     }
 }

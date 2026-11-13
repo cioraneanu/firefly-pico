@@ -9,10 +9,7 @@
     :get-meta-value="(value) => Currency.getCode(value)"
   >
     <template #top-right>
-      <button type="button" class="mx-ib sm" :aria-label="$t('kit.refresh')" @click="onRefresh">
-        <span v-if="isLoading" class="mx-spin" />
-        <app-icon v-else :icon="IconRefresh" :size="16" :stroke="2" />
-      </button>
+      <app-refresh-button :refresh="currencyStore.fetchCurrencies" />
     </template>
 
     <template v-if="info" #extra>
@@ -22,7 +19,6 @@
 </template>
 
 <script setup>
-import { IconRefresh } from '@tabler/icons-vue'
 import { get } from 'lodash-es'
 import { useCurrencyStore } from '~/core/stores/currencyStore'
 import Currency from '~/core/models/Currency'
@@ -39,11 +35,4 @@ const modelValue = defineModel()
 const list = computed(() => currencyStore.currenciesList.filter((item) => get(item, 'attributes.enabled')))
 
 const getDisplayValue = (value) => Currency.getDisplayName(value)
-
-const isLoading = ref(false)
-const onRefresh = async () => {
-  isLoading.value = true
-  await currencyStore.fetchCurrencies()
-  isLoading.value = false
-}
 </script>

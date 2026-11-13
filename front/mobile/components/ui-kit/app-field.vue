@@ -40,6 +40,7 @@
           :disabled="disabled"
           :maxlength="maxlength"
           :aria-label="label"
+          @input="filterNumeric"
           @focus="emit('focus', $event)"
           @blur="emit('blur', $event)"
         />
@@ -88,12 +89,28 @@ const props = defineProps({
 const emit = defineEmits(['click', 'focus', 'blur'])
 
 const inputRef = ref(null)
-const fieldRoot = computed(() => inputRef.value)
-const { error, isRequired } = useFormField({ name: () => props.name, rules: () => props.rules, value: modelValue, el: () => fieldRoot.value })
+const { error, isRequired } = useFormField({ name: () => props.name, rules: () => props.rules, value: modelValue })
 
 const isTextarea = computed(() => props.type === 'textarea')
 const inputType = computed(() => ({ digit: 'text', number: 'text' })[props.type] ?? props.type)
 const defaultInputMode = computed(() => ({ digit: 'numeric', number: 'decimal' })[props.type] ?? null)
+// digit: digits only. number: digits and one decimal point ("," is typed as "." since the value goes to the API)
+const numericFilters = {
+  digit: (value) => value.replace(/\D/g, ''),
+  number: (value) => {
+    const [whole, ...decimals] = value
+      .replaceAll(',', '.')
+      .replace(/[^\d.]/g, '')
+      .split('.')
+    return decimals.length ? `${whole}.${decimals.join('')}` : whole
+  },
+}
+const filterNumeric = (event) => {
+  const value = numericFilters[props.type]?.(event.target.value) ?? event.target.value
+  if (value !== event.target.value) {
+    event.target.value = modelValue.value = value
+  }
+}
 const isClearVisible = computed(
   () => props.clearable && !props.readonly && !props.disabled && !isTextarea.value && modelValue.value !== null && modelValue.value !== undefined && modelValue.value !== '',
 )

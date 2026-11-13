@@ -1,6 +1,6 @@
 import { get } from 'lodash-es'
 import AssistantRepository from '~/core/repository/AssistantRepository'
-import { getAssistantHistoryLines } from '~/core/composables/useAssistantHistory'
+import { withAssistantHistory } from '~/core/composables/useAssistantHistory'
 import { useRambleTransactionResolver } from '~/core/composables/useRambleTransactionResolver'
 
 // "Try it out" on Settings · Assistant: runs a sample through the LLM with the settings on the screen (saved or not),
@@ -15,7 +15,8 @@ const splitSystemPrompt = (content) => {
   return { base, server: serverMatch?.[1] ?? '', user: userMatch?.[1] ?? '' }
 }
 
-export function useAssistantTryIt({ llmOverride, llmContext, historyCount, modelInUse }) {
+export function useAssistantTryIt({ llmOverride, llmContext, historyCount, modelInUse, source }) {
+  const { t } = useI18n()
   const profileStore = useProfileStore()
   const repository = new AssistantRepository()
   const { getRambleContext, resolveRambleTransaction } = useRambleTransactionResolver()
@@ -24,12 +25,18 @@ export function useAssistantTryIt({ llmOverride, llmContext, historyCount, model
   const runs = ref([])
   const activeIndex = ref(-1)
   const isRunning = ref(false)
-  const error = ref('')
   let sequence = 0
 
   const activeRun = computed(() => runs.value[activeIndex.value] ?? null)
+  const uses = computed(() =>
+    t('settings.assistant.try_uses', {
+      model: toValue(modelInUse),
+      source: t(toValue(source) === 'own' ? 'settings.assistant.try_source_own' : 'settings.assistant.try_source_server'),
+      history: toValue(historyCount) || t('settings.assistant.history_off'),
+    }),
+  )
 
-  const field = (key, icon, value, status) => ({ key, icon, value: value || '—', status: value ? status : 'none' })
+  const field = (key, value, status) => ({ key, value: value || '—', status: value ? status : 'none' })
 
   const toResult = (transaction) => {
     const raw = transaction.raw
@@ -40,12 +47,12 @@ export function useAssistantTryIt({ llmOverride, llmContext, historyCount, model
       amount: transaction.amount,
       currency: transaction.currencyCode,
       fields: [
-        field('date', 'calendar', transaction.date ? DateUtils.dateToUI(transaction.date) : null, 'matched'),
-        field('source', 'wallet', name(transaction.accountSource) ?? raw.sourceAccountName, transaction.accountSource ? 'matched' : 'new'),
-        field('destination', 'building-store', name(transaction.accountDestination) ?? raw.destinationAccountName, transaction.accountDestination ? 'matched' : 'new'),
-        field('category', 'category', name(transaction.category) ?? raw.categoryName, transaction.category ? 'matched' : 'unmatched'),
-        field('budget', 'cash', name(transaction.budget) ?? raw.budgetName, transaction.budget ? 'matched' : 'unmatched'),
-        field('tags', 'tag', (transaction.tags ?? []).map((tag) => get(tag, 'attributes.tag')).join(', ') || raw.tagNames.join(', '), transaction.tags?.length ? 'matched' : 'unmatched'),
+        field('date', transaction.date ? DateUtils.dateToUI(transaction.date) : null, 'matched'),
+        field('source', name(transaction.accountSource) ?? raw.sourceAccountName, transaction.accountSource ? 'matched' : 'new'),
+        field('destination', name(transaction.accountDestination) ?? raw.destinationAccountName, transaction.accountDestination ? 'matched' : 'new'),
+        field('category', name(transaction.category) ?? raw.categoryName, transaction.category ? 'matched' : 'unmatched'),
+        field('budget', name(transaction.budget) ?? raw.budgetName, transaction.budget ? 'matched' : 'unmatched'),
+        field('tags', (transaction.tags ?? []).map((tag) => get(tag, 'attributes.tag')).join(', ') || raw.tagNames.join(', '), transaction.tags?.length ? 'matched' : 'unmatched'),
       ],
     }
   }
@@ -84,9 +91,7 @@ export function useAssistantTryIt({ llmOverride, llmContext, historyCount, model
       return
     }
     isRunning.value = true
-    error.value = ''
-    const recentTransactions = await getAssistantHistoryLines(toValue(historyCount))
-    const context = recentTransactions.length ? { ...getRambleContext(), recentTransactions } : getRambleContext()
+    const context = await withAssistantHistory(getRambleContext(), toValue(historyCount))
     try {
       const response = await repository.interpretTransactions({
         text: text.value.trim(),
@@ -121,12 +126,11 @@ export function useAssistantTryIt({ llmOverride, llmContext, historyCount, model
       ].slice(-3)
       activeIndex.value = runs.value.length - 1
     } catch (exception) {
-      error.value = exception?.message ?? String(exception)
-      UIUtils.showToastError(error.value)
+      UIUtils.showToastError(exception?.message ?? String(exception))
     } finally {
       isRunning.value = false
     }
   }
 
-  return { text, runs, activeIndex, activeRun, isRunning, error, run }
+  return { text, runs, activeIndex, activeRun, isRunning, uses, run }
 }

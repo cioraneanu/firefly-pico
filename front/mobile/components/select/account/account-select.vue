@@ -12,10 +12,7 @@
     :get-meta-value="getMeta"
   >
     <template #top-right>
-      <button type="button" class="mx-ib sm" :aria-label="$t('kit.refresh')" @click="onRefresh">
-        <span v-if="isLoading" class="mx-spin" />
-        <app-icon v-else :icon="IconRefresh" :size="16" :stroke="2" />
-      </button>
+      <app-refresh-button :refresh="accountStore.fetchAccounts" />
     </template>
 
     <template #popup="{ onSelectCell, list, isItemSelected }">
@@ -39,7 +36,7 @@
 </template>
 
 <script setup>
-import { IconCheck, IconRefresh } from '@tabler/icons-vue'
+import { IconCheck } from '@tabler/icons-vue'
 import { isEqual } from 'lodash-es'
 import { useAccountStore } from '~/core/stores/accountStore'
 import Account from '~/core/models/Account.js'
@@ -74,11 +71,4 @@ const getGroups = (list) =>
 const getDisplayValue = (value) => Account.getDisplayName(value)
 const getIcon = (value) => Account.getIcon(value) ?? TablerIconConstants.account
 const getMeta = (value) => Account.getBalanceWithCurrency(value)
-
-const isLoading = ref(false)
-const onRefresh = async () => {
-  isLoading.value = true
-  await accountStore.fetchAccounts()
-  isLoading.value = false
-}
 </script>

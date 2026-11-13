@@ -37,8 +37,6 @@ const props = defineProps({
   disabled: { type: Boolean, default: false },
   minDate: { type: Date, default: () => subYears(new Date(), 5) },
   maxDate: { type: Date, default: undefined },
-  // Fields carry no leading icon in the design; accepted for older call sites
-  icon: { default: null },
 })
 
 const { error, isRequired } = useFormField({ name: () => props.name, rules: () => props.rules, value: modelValue })

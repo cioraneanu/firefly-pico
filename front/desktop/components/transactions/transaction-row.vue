@@ -61,7 +61,21 @@
 </template>
 
 <script setup>
-import { IconArrowRight, IconBasket, IconCategory, IconCoins, IconCopy, IconCreditCard, IconLoader2, IconPencil, IconTag, IconTemplate, IconTrash } from '@tabler/icons-vue'
+import {
+  IconArrowRight,
+  IconArrowsSplit,
+  IconBasket,
+  IconCategory,
+  IconCoins,
+  IconCopy,
+  IconCreditCard,
+  IconLoader2,
+  IconPaperclip,
+  IconPencil,
+  IconTag,
+  IconTemplate,
+  IconTrash,
+} from '@tabler/icons-vue'
 import RouteConstants from '~/core/constants/RouteConstants'
 import { transactionListField } from '~/core/constants/TransactionConstants'
 import Account from '~/core/models/Account'

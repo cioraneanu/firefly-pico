@@ -2,67 +2,30 @@
 
 namespace App\Services;
 
-class AssistantTranscriptionConfigService
+class AssistantTranscriptionConfigService extends AssistantConfigService
 {
-    public function __construct(private AssistantUserSettingsService $userSettingsService)
+    protected string $group = 'transcription';
+
+    // $language: per-request language, winning over the configured one.
+    public function getConfig(?array $override = null, $userId = null, $language = null): array
     {
+        $config = $this->getConnection($override, $userId);
+
+        return [...$config, 'language' => $this->normalizeLanguage(trim((string)$language) ?: $config['language'])];
     }
 
-    /**
-     * The connection a transcription uses: the user's own one when they switched to it, else the server's
-     * ASSISTANT_TRANSCRIPTION_* values.
-     *
-     * @param string|null $language Per-request language, winning over the configured one.
-     * @param string|null $userId Owner of the recording (jobs run without a request, so they pass it).
-     * @param array|null $override Unsaved values from the settings screen ({ use_own, endpoint, model, api_key, language }).
-     */
-    public function getConfig($language = null, $userId = null, ?array $override = null)
+    public function getServerConfig(): array
     {
-        $server = $this->getServerConfig($language);
-        $own = $this->userSettingsService->getOwnConfig('transcription', $userId ?? getUserId(), $override);
-        if (!$own) {
-            return $server;
-        }
-
-        return [
-            'source' => 'own',
-            'isConfigured' => $own['endpoint'] !== '' || $own['apiKey'] !== '',
-            'endpoint' => $own['endpoint'] ?: config('services.assistant_transcription.defaults.endpoint'),
-            'model' => $own['model'] ?: config('services.assistant_transcription.defaults.model'),
-            'apiKey' => $own['apiKey'],
-            'language' => $this->normalizeLanguage($this->trimValue($language) ?: $own['language']),
-        ];
-    }
-
-    public function getServerConfig($language = null)
-    {
-        $endpoint = $this->trimValue(config('services.assistant_transcription.endpoint'));
-        $model = $this->trimValue(config('services.assistant_transcription.model'));
-        $apiKey = $this->trimValue(config('services.assistant_transcription.api_key'));
         // Read this at runtime as well so a container-provided language is not
         // lost when Laravel's configuration was cached before startup.
-        $language = $this->trimValue($language) ?: $this->trimValue(getenv('ASSISTANT_TRANSCRIPTION_LANGUAGE') ?: config('services.assistant_transcription.language'));
+        $language = trim((string)(getenv('ASSISTANT_TRANSCRIPTION_LANGUAGE') ?: config('services.assistant_transcription.language')));
 
-        return [
-            'source' => 'server',
-            'isConfigured' => $endpoint !== '' || $apiKey !== '',
-            'endpoint' => $endpoint ?: config('services.assistant_transcription.defaults.endpoint'),
-            'model' => $model ?: config('services.assistant_transcription.defaults.model'),
-            'apiKey' => $apiKey,
-            'language' => $this->normalizeLanguage($language),
-        ];
+        return [...parent::getServerConfig(), 'language' => $this->normalizeLanguage($language)];
     }
 
-    public function getPublicConfig()
+    public function getPublicConfig(): array
     {
-        $config = $this->getServerConfig();
-
-        return [
-            'is_configured' => $config['isConfigured'],
-            'endpoint' => $config['endpoint'],
-            'model' => $config['model'],
-            'language' => $config['language'],
-        ];
+        return [...parent::getPublicConfig(), 'language' => $this->getServerConfig()['language']];
     }
 
     // Transcription APIs expect an ISO-639-1 code, so "ro-RO" or "ro_RO" becomes "ro".
@@ -73,10 +36,5 @@ class AssistantTranscriptionConfigService
         }
 
         return strtolower($matches[1]);
-    }
-
-    private function trimValue($value)
-    {
-        return trim((string)($value ?? ''));
     }
 }

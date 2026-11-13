@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Casts\EncryptedOrNull;
-use Illuminate\Database\Eloquent\Builder;
 
 class AssistantUserSetting extends BaseModel
 {
@@ -16,10 +15,6 @@ class AssistantUserSetting extends BaseModel
     // API keys are write-only: stored encrypted with APP_KEY and never sent back to the app.
     protected $hidden = [
         'llm_api_key', 'transcription_api_key',
-    ];
-
-    protected $appends = [
-        'llm_has_api_key', 'transcription_has_api_key',
     ];
 
     protected $casts = [
@@ -39,8 +34,9 @@ class AssistantUserSetting extends BaseModel
         return !empty($this->transcription_api_key);
     }
 
-    public function scopeForUser(Builder $query, $userId)
+    // A key is saved but no longer decrypts (APP_KEY changed): it has to be entered again.
+    public function isApiKeyLost($group)
     {
-        return $query->where('user_id', $userId);
+        return $this->getRawOriginal("{$group}_api_key") !== null && $this->{"{$group}_api_key"} === null;
     }
 }

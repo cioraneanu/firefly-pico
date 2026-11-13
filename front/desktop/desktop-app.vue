@@ -19,17 +19,10 @@ import RouteConstants from '~/core/constants/RouteConstants'
 
 UIUtils.ui = DesktopUI
 
-useHead({
-  link: [
-    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-    { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap' },
-  ],
-})
-
 const profileStore = useProfileStore()
 const portal = Object.assign(document.createElement('div'), { id: 'd-portal' })
 document.body.append(portal)
-watchEffect(() => (portal.className = profileStore.darkTheme ? 'd-portal van-theme-dark' : 'd-portal'))
+watchEffect(() => (portal.className = profileStore.darkTheme ? 'd-portal theme-dark' : 'd-portal'))
 onBeforeUnmount(() => portal.remove())
 
 const isSidebarOpen = useLocalStorage('desktopSidebarOpen', true)

@@ -1,20 +1,25 @@
-import { get } from 'lodash-es'
+import { get, isEqual, pickBy } from 'lodash-es'
 import AssistantRepository from '~/core/repository/AssistantRepository'
 
 // The user's assistant connections (Settings · Assistant, both apps). Each group — llm and transcription — either
 // uses the server's ASSISTANT_* environment variables or the user's own endpoint + key + model, all together.
 // API keys are write-only: the server only says whether one is saved; typing a new key replaces it, clearApiKey removes it on save.
+export const DEFAULT_LLM_MODEL = 'gpt-4o-mini'
+export const DEFAULT_TRANSCRIPTION_MODEL = 'gpt-4o-mini-transcribe'
+
 const emptyDraft = () => ({
   llmUseOwn: false,
   llmEndpoint: '',
   llmModel: '',
   llmApiKey: '',
   llmHasApiKey: false,
+  llmClearApiKey: false,
   transcriptionUseOwn: false,
   transcriptionEndpoint: '',
   transcriptionModel: '',
   transcriptionApiKey: '',
   transcriptionHasApiKey: false,
+  transcriptionClearApiKey: false,
   transcriptionLanguage: '',
 })
 
@@ -25,12 +30,14 @@ export function useAssistantSettings() {
 
   const draft = ref(emptyDraft())
   const server = ref({ llm: appStore.llm ?? null, transcription: appStore.transcription ?? null })
-  const isLoading = ref(false)
+  // Saving before the saved connection is loaded would wipe it, so save() skips it until then
+  const isLoaded = ref(false)
   const isSaving = ref(false)
   const testing = reactive({ llm: false, transcription: false })
 
   const apply = (data) => {
     draft.value = {
+      ...emptyDraft(),
       llmUseOwn: !!get(data, 'llm_use_own'),
       llmEndpoint: get(data, 'llm_endpoint') ?? '',
       llmModel: get(data, 'llm_model') ?? '',
@@ -47,17 +54,20 @@ export function useAssistantSettings() {
   }
 
   const load = async () => {
-    isLoading.value = true
+    const before = { ...draft.value }
     const response = await repository.getSettings()
-    isLoading.value = false
     if (ResponseUtils.isSuccess(response)) {
+      // Keep what the user changed while the request was running
+      const edited = pickBy(draft.value, (value, key) => value !== before[key])
       apply(get(response, 'data.data'))
+      Object.assign(draft.value, edited)
+      isLoaded.value = true
     }
   }
 
-  // A group whose draft shows no saved key and no typed key has no key: clearApiKey got it there
-  const isKeyCleared = (group) => !draft.value[`${group}HasApiKey`] && !draft.value[`${group}ApiKey`]
-  const clearApiKey = (group) => Object.assign(draft.value, { [`${group}ApiKey`]: '', [`${group}HasApiKey`]: false })
+  const clearApiKey = (group) => Object.assign(draft.value, { [`${group}ApiKey`]: '', [`${group}HasApiKey`]: false, [`${group}ClearApiKey`]: true })
+  // A key typed after "Remove saved key" replaces it instead
+  const isKeyCleared = (group) => draft.value[`${group}ClearApiKey`] && !draft.value[`${group}ApiKey`]
 
   const toPayload = () => ({
     llm_use_own: draft.value.llmUseOwn,
@@ -74,6 +84,12 @@ export function useAssistantSettings() {
   })
 
   const save = async () => {
+    // Not loaded: skip an untouched draft, refuse an edited one (saving it could wipe the stored connection)
+    if (!isLoaded.value) {
+      const isUntouched = isEqual(draft.value, emptyDraft())
+      isUntouched || UIUtils.showToastError(t('settings.assistant.connection_save_failed'))
+      return isUntouched
+    }
     isSaving.value = true
     const response = await repository.updateSettings(toPayload())
     isSaving.value = false
@@ -86,12 +102,19 @@ export function useAssistantSettings() {
   }
 
   // Unsaved values, so tests and "Try it out" use what is on the screen
-  const llmOverride = computed(() => ({ use_own: draft.value.llmUseOwn, endpoint: draft.value.llmEndpoint, model: draft.value.llmModel, api_key: draft.value.llmApiKey }))
+  const llmOverride = computed(() => ({
+    use_own: draft.value.llmUseOwn,
+    endpoint: draft.value.llmEndpoint,
+    model: draft.value.llmModel,
+    api_key: draft.value.llmApiKey,
+    api_key_clear: isKeyCleared('llm'),
+  }))
   const transcriptionOverride = computed(() => ({
     use_own: draft.value.transcriptionUseOwn,
     endpoint: draft.value.transcriptionEndpoint,
     model: draft.value.transcriptionModel,
     api_key: draft.value.transcriptionApiKey,
+    api_key_clear: isKeyCleared('transcription'),
     language: draft.value.transcriptionLanguage,
   }))
 
@@ -99,7 +122,7 @@ export function useAssistantSettings() {
   const sourceOf = (useOwn, serverConfig) => (useOwn ? 'own' : get(serverConfig, 'is_configured') ? 'server' : 'none')
   const llmSource = computed(() => sourceOf(draft.value.llmUseOwn, server.value.llm))
   const transcriptionSource = computed(() => sourceOf(draft.value.transcriptionUseOwn, server.value.transcription))
-  const llmModelInUse = computed(() => (draft.value.llmUseOwn ? draft.value.llmModel || 'gpt-4o-mini' : get(server.value.llm, 'model')))
+  const llmModelInUse = computed(() => (draft.value.llmUseOwn ? draft.value.llmModel || DEFAULT_LLM_MODEL : get(server.value.llm, 'model')))
 
   const runTest = async (key, request, success, failure) => {
     testing[key] = true
@@ -119,14 +142,12 @@ export function useAssistantSettings() {
   return {
     draft,
     server,
-    isLoading,
     isSaving,
     testing,
     load,
     save,
     clearApiKey,
     llmOverride,
-    transcriptionOverride,
     llmSource,
     transcriptionSource,
     llmModelInUse,

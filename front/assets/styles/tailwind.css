@@ -1,7 +1,22 @@
-/* important: utilities must win over Vant's unlayered component styles */
+/* important: utilities must win over the kits' unlayered component styles (mobile/styles/mx*.css, desktop.css) */
 @import 'tailwindcss' important;
 
-@custom-variant dark (&:where(.van-theme-dark, .van-theme-dark *));
+@custom-variant dark (&:where(.theme-dark, .theme-dark *));
+
+/* Self-hosted Geist variable fonts (public/fonts, OFL), shared by both apps and precached by the service worker */
+@font-face {
+  font-family: 'Geist';
+  src: url('/fonts/Geist-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Geist Mono';
+  src: url('/fonts/GeistMono-Variable.woff2') format('woff2');
+  font-weight: 100 900;
+  font-display: swap;
+}
 
 /* Defaults the app relied on from Bootstrap's reboot, which Tailwind's preflight resets */
 @layer base {
@@ -14,7 +29,7 @@
     display: inline-block;
   }
 
-  /* Rendered markdown (notes, tutorial). Lists are already reset by Vant's base.css */
+  /* Rendered markdown (notes, tutorial). Lists are already reset by Tailwind's preflight */
   h1,
   h2,
   h3,
@@ -90,6 +105,7 @@
   --shadow-depth4: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   --shadow-depth5: 0 19px 38px rgba(0, 0, 0, 0.3), 0 15px 12px rgba(0, 0, 0, 0.22);
   --shadow-soft-1: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  --shadow-overlay: 0 4px 12px -2px rgb(0 0 0 / 0.08);
 }
 
 @theme inline {

@@ -8,7 +8,7 @@
             ref="panel"
             role="dialog"
             aria-modal="true"
-            :class="['d-dialog-panel pointer-events-auto relative flex w-full flex-col rounded-xl bg-pop shadow-[0_4px_12px_-2px_rgb(0_0_0/0.08)] ring-1 ring-fg/10', sizes[size]]"
+            :class="['d-dialog-panel pointer-events-auto relative flex w-full flex-col rounded-xl bg-pop shadow-overlay ring-1 ring-fg/10', sizes[size]]"
           >
             <div class="absolute right-3 top-3 flex items-center gap-1">
               <slot name="actions" />

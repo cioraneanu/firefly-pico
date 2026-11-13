@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-// Replaces van-form: fields register through useFormField(); submit validates them in order
+// The form element of the kit: fields register through useFormField(); submit validates them in order
 // and emits `submit`, or `failed` with { errors: [{ name, message }] } (the shape useForm expects).
 defineProps({
   name: { type: String, default: null },

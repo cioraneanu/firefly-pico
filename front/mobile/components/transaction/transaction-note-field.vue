@@ -1,14 +1,7 @@
 <template>
   <app-field v-model="modelValueCustom" :label="$t('notes')" :placeholder="$t('notes')" type="textarea" rows="1" autosize @focus="onFocus" @blur="onBlur">
     <template #right>
-      <button
-        v-if="isMarkdown && !isFocused"
-        type="button"
-        class="mx-ib sm"
-        style="margin-right: -8px"
-        :aria-label="$t('transaction.assistant_ramble_preview')"
-        @click.prevent.stop="isPreviewVisible = true"
-      >
+      <button v-if="isMarkdown && !isFocused" type="button" class="mx-ib sm -mr-2" :aria-label="$t('transaction.assistant_ramble_preview')" @click.prevent.stop="isPreviewVisible = true">
         <app-icon :icon="IconEye" :size="16" :stroke="2" />
       </button>
 

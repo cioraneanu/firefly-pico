@@ -2,7 +2,7 @@
   <nav class="mx-nav" :class="{ hidden: isKeyboardVisible }" :aria-label="$t('toolbar.home')">
     <app-bottom-toolbar-item :route="RouteConstants.ROUTE_DASHBOARD" :icon="IconHome" :label="$t('toolbar.home')" />
     <app-bottom-toolbar-item :route="RouteConstants.ROUTE_TRANSACTION_LIST" :icon="IconListDetails" :label="$t('toolbar.transactions')" />
-    <a class="mx-nav__add" :href="RouteConstants.ROUTE_TRANSACTION_ID" :aria-label="$t('transaction_page.title_add')" @click.prevent="navigateTo(RouteConstants.ROUTE_TRANSACTION_ID)">
+    <a class="mx-nav__add" :href="RouteConstants.ROUTE_TRANSACTION_ID" :aria-label="$t('transaction.title_add_transaction')" @click.prevent="navigateTo(RouteConstants.ROUTE_TRANSACTION_ID)">
       <span class="add"><app-icon :icon="IconPlus" :size="22" :stroke="2.25" /></span>
     </a>
     <app-bottom-toolbar-item :route="RouteConstants.ROUTE_EXTRAS" :icon="IconLayoutGrid" :label="$t('toolbar.extras')" />

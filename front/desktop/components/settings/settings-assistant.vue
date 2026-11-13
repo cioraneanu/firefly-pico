@@ -86,12 +86,12 @@
     <d-dialog :open="isTryOpen" :title="$t('settings.assistant.try_open')" :description="$t('settings.assistant.try_desc')" size="xl" @close="isTryOpen = false">
       <div class="flex flex-col gap-4">
         <div class="flex flex-col gap-2">
-          <d-textarea v-model="tryIt.text.value" :rows="2" :placeholder="$t('settings.assistant.try_placeholder')" />
+          <d-textarea v-model="tryIt.text" :rows="2" :placeholder="$t('settings.assistant.try_placeholder')" />
           <div class="flex flex-wrap items-center gap-2">
-            <d-button variant="primary" size="sm" :icon="IconPlayerPlay" :loading="tryIt.isRunning.value" :disabled="!tryIt.text.value.trim()" @click="tryIt.run">
-              {{ tryIt.isRunning.value ? $t('settings.assistant.try_running') : $t('settings.assistant.try_run') }}
+            <d-button variant="primary" size="sm" :icon="IconPlayerPlay" :loading="tryIt.isRunning" :disabled="!tryIt.text.trim()" @click="tryIt.run">
+              {{ tryIt.isRunning ? $t('settings.assistant.try_running') : $t('settings.assistant.try_run') }}
             </d-button>
-            <span class="text-[13px] text-dim">{{ tryUses }}</span>
+            <span class="text-[13px] text-dim">{{ tryIt.uses }}</span>
           </div>
         </div>
 
@@ -103,19 +103,13 @@
         <template v-else>
           <div class="flex flex-wrap items-center justify-between gap-2">
             <div class="flex flex-wrap gap-1.5">
-              <d-button
-                v-for="(item, index) in tryIt.runs.value"
-                :key="item.id"
-                size="xs"
-                :variant="index === tryIt.activeIndex.value ? 'secondary' : 'ghost'"
-                @click="tryIt.activeIndex.value = index"
-              >
+              <d-button v-for="(item, index) in tryIt.runs" :key="item.id" size="xs" :variant="index === tryIt.activeIndex ? 'secondary' : 'ghost'" @click="tryIt.activeIndex = index">
                 {{ $t('settings.assistant.try_run_label', { n: item.id, history: item.historyCount || $t('settings.assistant.history_off') }) }}
               </d-button>
             </div>
             <div class="flex flex-wrap gap-1.5">
               <d-badge :variant="run.matched === run.total ? 'success' : 'warning'">{{ $t('settings.assistant.try_matched', { matched: run.matched, total: run.total }) }}</d-badge>
-              <d-badge v-if="run.durationMs" variant="outline">{{ (run.durationMs / 1000).toFixed(2) }} s</d-badge>
+              <d-badge v-if="run.durationMs" variant="outline">{{ $t('settings.assistant.try_seconds', { seconds: (run.durationMs / 1000).toFixed(2) }) }}</d-badge>
               <d-badge variant="outline">{{ $t('settings.assistant.try_tokens', { in: run.tokensIn, out: run.tokensOut ?? '—' }) }}</d-badge>
               <d-badge variant="outline" class="font-mono">{{ run.model }}</d-badge>
             </div>
@@ -149,7 +143,7 @@
                 >
                   <component :is="openSections[section.key] ? IconChevronDown : IconChevronRight" :size="14" class="text-dim" />
                   <span class="font-medium">{{ $t(`settings.assistant.try_section_${section.key}`) }}</span>
-                  <d-badge class="ml-auto">{{ section.tokens ? `${section.tokens} tok` : '—' }}</d-badge>
+                  <d-badge class="ml-auto">{{ section.tokens ? $t('settings.assistant.try_section_tokens', { tokens: section.tokens }) : '—' }}</d-badge>
                 </button>
                 <pre v-if="openSections[section.key]" class="max-h-72 overflow-auto bg-soft/40 px-3 py-2.5 font-mono text-[12.5px] leading-[18px] whitespace-pre-wrap">{{
                   section.body || $t('settings.assistant.try_section_empty')
@@ -173,8 +167,9 @@
 <script setup>
 import { IconChevronDown, IconChevronRight, IconFlask, IconMicrophone, IconPlayerPlay, IconReceipt, IconWand } from '@tabler/icons-vue'
 import { rule } from '~/core/utils/ValidationUtils.js'
-import { useAssistantSettings } from '~/core/composables/useAssistantSettings'
+import { DEFAULT_LLM_MODEL, DEFAULT_TRANSCRIPTION_MODEL, useAssistantSettings } from '~/core/composables/useAssistantSettings'
 import { useAssistantTryIt } from '~/core/composables/useAssistantTryIt'
+import { useAssistantHistoryOptions } from '~/core/composables/useAssistantHistory'
 
 const { t } = useI18n()
 
@@ -224,7 +219,7 @@ const groups = computed(() => [
     apiKey: 'llmApiKey',
     hasApiKey: 'llmHasApiKey',
     model: 'llmModel',
-    defaultModel: 'gpt-4o-mini',
+    defaultModel: DEFAULT_LLM_MODEL,
     endpointPlaceholder: 'https://api.openai.com/v1/chat/completions',
     serverDetails: [
       { t: 'settings.assistant.endpoint', value: server.value.llm?.endpoint, mono: true },
@@ -249,7 +244,7 @@ const groups = computed(() => [
     hasApiKey: 'transcriptionHasApiKey',
     model: 'transcriptionModel',
     language: 'transcriptionLanguage',
-    defaultModel: 'gpt-4o-mini-transcribe',
+    defaultModel: DEFAULT_TRANSCRIPTION_MODEL,
     endpointPlaceholder: 'https://api.openai.com/v1/audio/transcriptions',
     serverDetails: [
       { t: 'settings.assistant.endpoint', value: server.value.transcription?.endpoint, mono: true },
@@ -266,11 +261,7 @@ const groups = computed(() => [
   },
 ])
 
-const historyOptions = computed(() => [{ label: t('settings.assistant.history_off'), value: 0 }, ...[25, 50, 100].map((value) => ({ label: String(value), value }))])
-// ~28 tokens per history line
-const historyHelp = computed(() =>
-  draft.assistantHistoryCount ? t('settings.assistant.history_help_on', { count: draft.assistantHistoryCount, tokens: draft.assistantHistoryCount * 28 }) : t('settings.assistant.history_help_off'),
-)
+const { historyOptions, historyHelp } = useAssistantHistoryOptions(() => draft.assistantHistoryCount)
 
 // ----- Try it out -----
 const isTryOpen = ref(false)
@@ -278,20 +269,16 @@ const tryView = ref('result')
 const tryViewOptions = computed(() => ['result', 'prompt', 'raw'].map((value) => ({ label: t(`settings.assistant.try_tab_${value}`), value })))
 const openSections = ref({})
 const statusVariant = { matched: 'success', new: 'info', unmatched: 'warning', none: 'secondary' }
-const tryIt = useAssistantTryIt({
-  llmOverride,
-  llmContext: () => draft.assistantLlmContext,
-  historyCount: () => draft.assistantHistoryCount,
-  modelInUse: llmModelInUse,
-})
-const run = computed(() => tryIt.activeRun.value)
-const tryUses = computed(() =>
-  t('settings.assistant.try_uses', {
-    model: llmModelInUse.value,
-    source: t(llmSource.value === 'own' ? 'settings.assistant.try_source_own' : 'settings.assistant.try_source_server'),
-    history: draft.assistantHistoryCount || t('settings.assistant.history_off'),
+const tryIt = reactive(
+  useAssistantTryIt({
+    llmOverride,
+    llmContext: () => draft.assistantLlmContext,
+    historyCount: () => draft.assistantHistoryCount,
+    modelInUse: llmModelInUse,
+    source: llmSource,
   }),
 )
+const run = computed(() => tryIt.activeRun)
 
 onMounted(load)
 </script>

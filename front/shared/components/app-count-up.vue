@@ -28,9 +28,9 @@ const parse = (text) => {
 let frame = null
 watch(
   () => String(props.value ?? ''),
-  (text, oldText) => {
+  (text) => {
     cancelAnimationFrame(frame)
-    const [from, to] = [parse(oldText), parse(text)]
+    const [from, to] = [parse(display.value), parse(text)]
     const canCount = profileStore.showAnimations && !matchMedia('(prefers-reduced-motion: reduce)').matches
     if (!canCount || !from || !to || from.before !== to.before || from.after !== to.after || from.number === to.number) {
       display.value = text

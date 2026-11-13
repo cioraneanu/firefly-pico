@@ -41,6 +41,17 @@ else
     done
 fi
 
+# APP_KEY encrypts the API keys users save for the assistant. An APP_KEY given to the container always wins;
+# otherwise one is generated on the first start and kept in the data folder (the SQLite volume) so upgrades keep it.
+if [ -z "$APP_KEY" ]; then
+    APP_KEY_FILE=/var/www/html/database/data/app_key
+    if [ ! -s "$APP_KEY_FILE" ]; then
+        mkdir -p "$(dirname "$APP_KEY_FILE")"
+        php -r 'echo "base64:" . base64_encode(random_bytes(32));' > "$APP_KEY_FILE" && chmod 600 "$APP_KEY_FILE"
+    fi
+    export APP_KEY="$(cat "$APP_KEY_FILE")"
+fi
+
 php /var/www/html/artisan migrate --isolated --force
 php /var/www/html/artisan config:clear
 php /var/www/html/artisan config:cache

@@ -21,7 +21,6 @@ defineProps({
   description: { type: String, default: null },
   icon: { default: null },
   isLink: { type: Boolean, default: true },
-  size: { default: null },
 })
 const emit = defineEmits(['click'])
 </script>

@@ -79,10 +79,6 @@ export default defineNuxtConfig({
       path: '~/mobile/components',
       pathPrefix: false,
     },
-    {
-      path: '~/mobile/components/global',
-      global: true,
-    },
   ],
 
   css: [
@@ -152,6 +148,7 @@ export default defineNuxtConfig({
     },
     workbox: {
       navigateFallback: '/',
+      globPatterns: ['fonts/*.woff2'],
       runtimeCaching: [
         {
           // Admin custom icons. The backend may be on another origin => also cache opaque responses (status 0)

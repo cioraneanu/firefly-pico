@@ -42,8 +42,11 @@ const isLoadingMore = ref(false)
 
 const { search, activeTab, tabs, visibleList, isFinished, loadMore, onOpen } = useIconPicker(modelValue, props.defaultTab)
 
-const onLoadMore = () => {
+// loading flips true → false around each page so app-list observes again (the next page loads while the end is still in view)
+const onLoadMore = async () => {
+  isLoadingMore.value = true
   loadMore()
+  await nextTick()
   isLoadingMore.value = false
 }
 

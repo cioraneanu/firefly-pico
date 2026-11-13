@@ -15,7 +15,7 @@
         :aria-label="$t('search_placeholder')"
         @keydown.enter="$event.target.blur()"
       />
-      <button v-if="modelValue" type="button" class="mx-ib sm" style="margin-right: -8px" :aria-label="$t('clear')" @click="modelValue = ''">
+      <button v-if="modelValue" type="button" class="mx-ib sm -mr-2" :aria-label="$t('clear')" @click="modelValue = ''">
         <app-icon :icon="IconX" :size="14" :stroke="2" />
       </button>
     </label>

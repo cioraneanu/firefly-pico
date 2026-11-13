@@ -113,6 +113,10 @@ export const useProfileStore = defineStore('profile', () => {
   function setProfile(profile) {
     profileActiveId.value = profile ? parseInt(profile?.id) : null
     useProfileStore().$patch(profile?.settings ?? {})
+    // $patch deep-merges objects and never drops keys: the profile's overrides replace the current ones
+    if (profile) {
+      exchangeRateOverrides.value = profile.settings?.exchangeRateOverrides ?? {}
+    }
   }
 
   function getProfileSettings() {

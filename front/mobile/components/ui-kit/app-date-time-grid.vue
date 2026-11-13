@@ -43,18 +43,6 @@
       </div>
     </div>
 
-    <div v-if="quick && !disabled" class="mx-quick" role="group" :aria-label="label ?? $t('date')">
-      <button type="button" class="mx-quick__b" @click="onShift(-1)">
-        <app-icon :icon="IconChevronLeft" :size="13" :stroke="2" />
-        <span>{{ $t('desktop.one_day') }}</span>
-      </button>
-      <button type="button" class="mx-quick__b" :class="{ on: isToday }" :aria-pressed="isToday" @click="onToday">{{ $t('today') }}</button>
-      <button type="button" class="mx-quick__b" @click="onShift(1)">
-        <span>{{ $t('desktop.one_day') }}</span>
-        <app-icon :icon="IconChevronRight" :size="13" :stroke="2" />
-      </button>
-    </div>
-
     <div v-if="error" class="mx-ferr">{{ error }}</div>
 
     <app-date-sheet
@@ -71,12 +59,11 @@
 </template>
 
 <script setup>
-import { IconCalendar, IconChevronLeft, IconChevronRight, IconClock } from '@tabler/icons-vue'
-import { addDays, addYears, isToday as isDateToday, subYears } from 'date-fns'
+import { IconCalendar, IconClock } from '@tabler/icons-vue'
+import { addYears, subYears } from 'date-fns'
 import DateUtils from '~/core/utils/DateUtils'
 
-// Date + time of a transaction (design: MX-TransactionNew): date and time pickers side by side,
-// optional -1 day / Today / +1 day shortcuts below (`quick`).
+// Date + time of a transaction: date and time pickers side by side
 const modelValue = defineModel()
 
 const props = defineProps({
@@ -85,7 +72,6 @@ const props = defineProps({
   rules: { type: Array, default: () => [] },
   required: { type: Boolean, default: false },
   disabled: { type: Boolean, default: false },
-  quick: { type: Boolean, default: false },
 })
 
 const { error, isRequired } = useFormField({ name: () => props.name, rules: () => props.rules, value: modelValue })
@@ -97,7 +83,6 @@ const minDate = subYears(new Date(), 1)
 const maxDate = addYears(new Date(), 1)
 
 const dayOfWeek = computed(() => DateUtils.dateToString(modelValue.value, 'EEEEEE'))
-const isToday = computed(() => !!modelValue.value && isDateToday(modelValue.value))
 
 // Keep the time when the day changes
 const setDay = (day) => {
@@ -107,8 +92,6 @@ const setDay = (day) => {
 }
 
 const onConfirmDate = (value) => value && setDay(value)
-const onShift = (days) => modelValue.value && (modelValue.value = addDays(modelValue.value, days))
-const onToday = () => setDay(new Date())
 
 const onShowDate = () => !props.disabled && (showDatePicker.value = true)
 const onShowTime = () => !props.disabled && modelValue.value && (showTimePicker.value = true)

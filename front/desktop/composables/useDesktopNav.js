@@ -19,7 +19,7 @@ export function useDesktopNav() {
   const { t } = useI18n()
   const route = useRoute()
   const profileStore = useProfileStore()
-  const dashboardStore = useDashboardStore()
+  const todoStore = useTodoStore()
 
   const groups = computed(() =>
     [
@@ -29,7 +29,7 @@ export function useDesktopNav() {
           { label: t('dashboard.title'), icon: IconLayoutDashboard, to: RouteConstants.ROUTE_DASHBOARD },
           { label: t('toolbar.transactions'), icon: IconCoins, to: RouteConstants.ROUTE_TRANSACTION_LIST },
           { label: t('accounts'), icon: IconBuildingBank, to: RouteConstants.ROUTE_ACCOUNT_LIST },
-          { label: t('todo_page.title'), icon: IconListCheck, to: RouteConstants.ROUTE_TODO, count: dashboardStore.transactionsWithTodo.length, hidden: !profileStore.tagsEnabled },
+          { label: t('todo_page.title'), icon: IconListCheck, to: RouteConstants.ROUTE_TODO, count: todoStore.visibleTodoList.length, hidden: !profileStore.tagsEnabled },
         ],
       },
       {

@@ -44,8 +44,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.van-theme-dark .d-app,
-.d-portal.van-theme-dark {
+.theme-dark .d-app,
+.d-portal.theme-dark {
   --d-bg: #0a0a0a;
   --d-fg: #fafafa;
   --d-card: #0a0a0a;
@@ -77,7 +77,7 @@ body:has(.d-app) {
   scrollbar-width: thin;
 }
 
-body:has(.van-theme-dark .d-app) {
+body:has(.theme-dark .d-app) {
   background: #0a0a0a;
 }
 
@@ -133,12 +133,12 @@ body:has(.van-theme-dark .d-app) {
   background-clip: padding-box;
 }
 
-:is(.van-theme-dark .d-app, .d-portal.van-theme-dark) .svg-icon[color-invertable='true'] {
+:is(.theme-dark .d-app, .d-portal.theme-dark) .svg-icon[color-invertable='true'] {
   filter: invert(100%);
   opacity: 0.9;
 }
 
-:is(.van-theme-dark .d-app, .d-portal.van-theme-dark) img.svg-icon[color-invertable='true'] {
+:is(.theme-dark .d-app, .d-portal.theme-dark) img.svg-icon[color-invertable='true'] {
   filter: invert(100%) hue-rotate(180deg);
 }
 

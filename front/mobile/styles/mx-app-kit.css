@@ -1,21 +1,68 @@
 /* Mobile app styles for the kit area (on top of mx.css). Only add rules the design boards need that mx.css lacks. */
 
 /* Calendar sheet: days outside the allowed range */
-.mx-cp__g button.off { opacity: .3; pointer-events: none; }
+.mx-cp__g button.off {
+  opacity: 0.3;
+  pointer-events: none;
+}
 
 /* Tag picker, compact mode: wrapped chip buttons instead of rows */
-.mx-pickchips { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px; }
-.mx-pickchips .mx-chip { height: 32px; padding: 0 10px; border-radius: 8px; font-size: 13.5px; }
-.mx-pickchips .mx-chip svg { width: 14px; height: 14px; }
-.mx-pickchips .mx-chip.on { background: var(--primary); color: var(--primary-foreground); box-shadow: none; font-weight: 500; }
-.mx-pickchips .mx-chip.on svg { color: currentColor; }
+.mx-pickchips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px;
+}
+.mx-pickchips .mx-chip {
+  height: 32px;
+  padding: 0 10px;
+  border-radius: 8px;
+  font-size: 13.5px;
+}
+.mx-pickchips .mx-chip svg {
+  width: 14px;
+  height: 14px;
+}
+.mx-pickchips .mx-chip.on {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  box-shadow: none;
+  font-weight: 500;
+}
+.mx-pickchips .mx-chip.on svg {
+  color: currentColor;
+}
 
 /* Action sheet options */
-.mx-opt.dng { color: var(--destructive); }
-.mx-opt:disabled { opacity: .45; pointer-events: none; }
+.mx-opt.dng {
+  color: var(--destructive);
+}
+.mx-opt:disabled {
+  opacity: 0.45;
+  pointer-events: none;
+}
 
 /* Compact currency / language switch; `borderless` = the pill used inside an input (design .fx-curpill) */
-.mx-cdd { display: inline-flex; align-items: center; gap: 2px; flex: none; }
-.mx-cdd.borderless > .mx-btn { height: 26px; padding: 0 8px; gap: 4px; border-radius: 999px; background: var(--muted); box-shadow: none; font-size: 12.5px; font-weight: 600; }
-.mx-cdd.borderless > .mx-btn svg { width: 14px; height: 14px; }
-.mx-cdd.borderless > .mx-btn svg:last-child { color: var(--muted-foreground); }
+.mx-cdd {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  flex: none;
+}
+.mx-cdd.borderless > .mx-btn {
+  height: 26px;
+  padding: 0 8px;
+  gap: 4px;
+  border-radius: 999px;
+  background: var(--muted);
+  box-shadow: none;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.mx-cdd.borderless > .mx-btn svg {
+  width: 14px;
+  height: 14px;
+}
+.mx-cdd.borderless > .mx-btn svg:last-child {
+  color: var(--muted-foreground);
+}

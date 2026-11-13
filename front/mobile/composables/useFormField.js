@@ -2,7 +2,7 @@ import { computed, inject, isRef, onBeforeUnmount, ref, toValue, watch } from 'v
 
 // Registers a control with the surrounding <app-form> and validates it with the same `rule` objects
 // the pages already pass (required / validator / message), so ValidationUtils stays unchanged.
-export function useFormField({ name, rules, value, el }) {
+export function useFormField({ name, rules, value }) {
   const form = inject('appForm', null)
   const error = ref('')
 
@@ -30,7 +30,7 @@ export function useFormField({ name, rules, value, el }) {
   const isRequired = computed(() => (toValue(rules) ?? []).some((rule) => rule.required))
 
   if (form) {
-    const unregister = form.register({ name: () => toValue(name), validate, el })
+    const unregister = form.register({ name: () => toValue(name), validate })
     onBeforeUnmount(unregister)
   }
 

@@ -50,15 +50,18 @@ const fields = ref(null)
 const assistantText = ref('')
 
 // Create another: after saving a new transaction the dialog stays open on an empty form. Only for this dialog, not saved anywhere.
+// Unchecked, the "Reset forms after creation" setting decides, as before.
+const profileStore = useProfileStore()
 const createAnother = ref(false)
+const resetOnCreate = computed(() => createAnother.value || profileStore.resetFormOnCreate)
 
 const onEvent = (event, response) => {
   if ([useFormEvent.postSave, useFormEvent.postDelete].includes(event)) props.onChanged?.(event, response, editor.itemId)
-  const keepOpen = event === useFormEvent.postSave && !editor.itemId && createAnother.value
+  const keepOpen = event === useFormEvent.postSave && !editor.itemId && resetOnCreate.value
   if (event === useFormEvent.postSave && !keepOpen) close()
 }
 
-const editor = reactive(useTransactionEditor({ routeForm: null, routeList: props.listRoute, onEvent, resetOnCreate: createAnother, resetFields: () => (assistantText.value = '') }))
+const editor = reactive(useTransactionEditor({ routeForm: null, routeList: props.listRoute, onEvent, resetOnCreate, resetFields: () => (assistantText.value = '') }))
 
 // The ⌘K palette opens it with the text typed there (?assistant=…)
 onMounted(() => (assistantText.value = route.query.assistant ?? ''))

@@ -59,10 +59,10 @@
 import { IconMicrophone, IconPlus, IconRefresh, IconSearch } from '@tabler/icons-vue'
 import { formatTimeAgo } from '@vueuse/core'
 import RouteConstants from '~/core/constants/RouteConstants'
+import { commandPaletteShortcut as shortcut, isCommandPaletteOpen as isCommandOpen } from '~/desktop/composables/useCommandPalette'
 
 const appStore = useAppStore()
 const { groups, active } = useDesktopNav()
-const { isOpen: isCommandOpen, shortcut } = useCommandPalette()
 const { t } = useI18n()
 
 const isSyncing = ref(false)

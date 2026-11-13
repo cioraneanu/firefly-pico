@@ -22,11 +22,4 @@ const keyboardStyle = computed(() => (isKeyboardVisible.value ? { '--app-h': `${
 
 // iOS Safari only shows :active press states when the page listens to touches
 onMounted(() => document.addEventListener('touchstart', () => {}, { passive: true }))
-
-useHead({
-  link: [
-    { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
-    { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap' },
-  ],
-})
 </script>

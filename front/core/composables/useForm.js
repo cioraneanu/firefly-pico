@@ -1,7 +1,6 @@
 import { onMounted, ref } from 'vue'
 import { get, cloneDeep } from 'lodash-es'
 import UIUtils from '~/core/utils/UIUtils'
-import { next } from 'lodash-es/seq'
 import { getGUID } from '~/core/utils/Utils.js'
 import { deleteWithUndo } from '~/core/utils/DeleteUtils'
 
@@ -20,6 +19,7 @@ export function useForm(props) {
   const repository = model.getRepository()
 
   let profileStore = useProfileStore()
+  const { t } = useI18n()
 
   let formName = ref(`form-${getGUID()}`)
 
@@ -60,7 +60,12 @@ export function useForm(props) {
     onEvent?.(useFormEvent.postFetch)
   }
 
+  // Enter, key repeat or a double click can submit again while a save runs: ignore those
+  let isSaving = false
+
   async function saveItem() {
+    if (isSaving) return
+    isSaving = true
     isLoading.value = true
 
     let newItem = item.value
@@ -75,7 +80,7 @@ export function useForm(props) {
     isLoading.value = false
 
     if (ResponseUtils.isSuccess(response)) {
-      UIUtils.showToastSuccess('Success')
+      UIUtils.showToastSuccess(t('success'))
       onEvent?.(useFormEvent.postSave, response)
 
       // Should reset form
@@ -88,6 +93,7 @@ export function useForm(props) {
       }
     }
 
+    isSaving = false
     return response
   }
 
@@ -110,7 +116,7 @@ export function useForm(props) {
   }
 
   const onValidationError = (errorInfo) => {
-    UIUtils.showToastError('Form has invalid values. Check the red fields :)')
+    UIUtils.showToastError(t('validation.form_invalid'))
     scrollToError(errorInfo)
   }
 

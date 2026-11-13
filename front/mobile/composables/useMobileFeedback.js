@@ -18,9 +18,10 @@ export function useMobileFeedback() {
       action.onClick()
       close()
     }
-    // One toast at a time (design): a new one replaces (closes) the current one
-    toasts.value.forEach((toast) => toast.close())
-    toasts.value = [{ id, message, type, action, duration, onAction, close }]
+    // One toast at a time (design): a new one replaces (closes) the current one, but an Undo toast only goes behind it
+    // and keeps its full time, so another toast never runs (or drops) a waiting delete
+    toasts.value.filter((toast) => !toast.action).forEach((toast) => toast.close())
+    toasts.value = [{ id, message, type, action, duration, onAction, close }, ...toasts.value]
     if (duration > 0) {
       setTimeout(close, duration)
     }
@@ -29,7 +30,18 @@ export function useMobileFeedback() {
 
   const askConfirm = (title, message, { confirmText = null, danger = true } = {}) =>
     new Promise((resolve) => {
-      confirmState.value = { title, message, confirmText, danger, resolve }
+      // Leaving the page (Back) cancels the alert
+      const stop = useRouter().beforeEach(() => answerConfirm(false))
+      confirmState.value = {
+        title,
+        message,
+        confirmText,
+        danger,
+        resolve: (value) => {
+          stop()
+          resolve(value)
+        },
+      }
     })
 
   const answerConfirm = (value) => {

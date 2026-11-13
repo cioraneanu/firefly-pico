@@ -3,7 +3,7 @@
     <draggable v-model="modelValue" handle=".grip" class="mx-repeat" item-key="id">
       <template #item="{ element, index }">
         <div class="mx-rep">
-          <span v-if="!disabled && isDraggable" class="grip mx-grip"><app-icon :icon="IconGripVertical" :size="16" :stroke="2" /></span>
+          <span v-if="!disabled" class="grip mx-grip"><app-icon :icon="IconGripVertical" :size="16" :stroke="2" /></span>
           <div class="flex-1 min-w-0">
             <slot name="content" v-bind="{ index, element, removeItemAtIndex }" />
           </div>
@@ -31,7 +31,6 @@ import draggable from 'vuedraggable'
 // and Add below. `isListDynamic: false` keeps the rows fixed (reorder only).
 const props = defineProps({
   emptyItem: {},
-  isDraggable: { type: Boolean, default: true },
   disabled: { type: Boolean, default: false },
   isListDynamic: { type: Boolean, default: true },
 })

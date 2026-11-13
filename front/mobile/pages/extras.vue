@@ -36,7 +36,7 @@ const recurringTransactionStore = useRecurringTransactionStore()
 const tagStore = useTagStore()
 const categoryStore = useCategoryStore()
 const currencyStore = useCurrencyStore()
-const dashboardStore = useDashboardStore()
+const todoStore = useTodoStore()
 
 // Feature toggles from the profile hide the links of disabled resources
 const sections = computed(() => [
@@ -65,7 +65,7 @@ const sections = computed(() => [
   {
     title: t('extra'),
     links: [
-      profileStore.tagsEnabled && { label: t('todo_page.title'), icon: TablerIconConstants.todoInbox, route: RouteConstants.ROUTE_TODO, count: dashboardStore.transactionsWithTodo.length },
+      profileStore.tagsEnabled && { label: t('todo_page.title'), icon: TablerIconConstants.todoInbox, route: RouteConstants.ROUTE_TODO, count: todoStore.visibleTodoList.length },
       { label: t('exchange_rates'), icon: TablerIconConstants.exchangeRates, route: RouteConstants.ROUTE_EXCHANGE_RATES },
       { label: t('currencies'), icon: TablerIconConstants.currency, route: RouteConstants.ROUTE_CURRENCY_LIST, count: currencyStore.currenciesList.length },
     ].filter(Boolean),

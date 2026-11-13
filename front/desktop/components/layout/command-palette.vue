@@ -1,8 +1,8 @@
 <template>
   <Teleport to="#d-portal">
     <Transition name="d-dialog">
-      <div v-if="isOpen" class="fixed inset-0 z-[70]">
-        <div class="d-backdrop fixed inset-0 bg-black/10 backdrop-blur-xs dark:bg-black/50" @click="isOpen = false" />
+      <div v-if="isCommandPaletteOpen" class="fixed inset-0 z-[70]">
+        <div class="d-backdrop fixed inset-0 bg-black/10 backdrop-blur-xs dark:bg-black/50" @click="isCommandPaletteOpen = false" />
         <div class="pointer-events-none relative flex justify-center px-4 pt-[12vh]">
           <div
             ref="panel"
@@ -24,7 +24,7 @@
                 class="h-full min-w-0 flex-1 bg-transparent text-sm outline-none placeholder:text-dim"
                 @keydown.down.prevent="move(1)"
                 @keydown.up.prevent="move(-1)"
-                @keydown.enter.prevent="run(items[active])"
+                @keydown.enter="onEnter"
               />
               <kbd class="grid h-5 place-items-center rounded-sm bg-soft px-1.5 text-[11px] font-medium text-dim">Esc</kbd>
             </label>
@@ -58,24 +58,28 @@
 <script setup>
 import { IconCornerDownLeft, IconSearch } from '@tabler/icons-vue'
 import { useEventListener } from '@vueuse/core'
+import { isCommandPaletteKey, isCommandPaletteOpen, useCommandPalette } from '~/desktop/composables/useCommandPalette'
 
 const query = ref('')
 const active = ref(0)
 const panel = ref(null)
 const listbox = ref(null)
-const { isOpen, items } = useCommandPalette(query)
+const { items } = useCommandPalette(query)
 
-useLayer(isOpen, () => (isOpen.value = false), panel)
+useLayer(isCommandPaletteOpen, () => (isCommandPaletteOpen.value = false), panel)
 
 // ⌘K / Ctrl K toggles it from anywhere (the browser would focus its own search bar)
 useEventListener(window, 'keydown', (event) => {
-  if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+  if (isCommandPaletteKey(event)) {
     event.preventDefault()
-    isOpen.value = !isOpen.value
+    isCommandPaletteOpen.value = !isCommandPaletteOpen.value
   }
 })
 
-watch(isOpen, () => (query.value = ''))
+watch(isCommandPaletteOpen, () => {
+  query.value = ''
+  active.value = 0
+})
 watch(query, () => (active.value = 0))
 watch(active, async () => {
   await nextTick()
@@ -84,9 +88,16 @@ watch(active, async () => {
 
 const move = (step) => (active.value = Math.min(Math.max(active.value + step, 0), items.value.length - 1))
 
+// Enter that commits an IME composition only confirms the typed text
+const onEnter = (event) => {
+  if (event.isComposing) return
+  event.preventDefault()
+  run(items.value[active.value])
+}
+
 const run = (item) => {
   if (!item) return
-  isOpen.value = false
+  isCommandPaletteOpen.value = false
   navigateTo(item.to)
 }
 </script>

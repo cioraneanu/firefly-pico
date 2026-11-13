@@ -143,13 +143,8 @@ class AssistantController extends BaseController
     public function interpretTransactions(Request $request)
     {
         BaseAuthorization::checkUser();
-        $request->validate([
-            'payload' => ['required', 'array'],
-            'payload.messages' => ['required', 'array'],
-        ]);
-
-        AssistantValidation::validateConfigOverride($request);
-        $config = app(AssistantLlmConfigService::class)->getConfig(null, $request->input('config'));
+        AssistantValidation::validateInterpretTransactions($request);
+        $config = app(AssistantLlmConfigService::class)->getConfig($request->input('config'));
 
         if (!$config['isConfigured']) {
             return $this->setStatusCode(self::HTTP_CODE_UNPROCESSABLE_ENTITY)->respond([
@@ -168,7 +163,7 @@ class AssistantController extends BaseController
     {
         BaseAuthorization::checkUser();
         AssistantValidation::validateConfigOverride($request);
-        $config = app(AssistantLlmConfigService::class)->getConfig(null, $request->input('config'));
+        $config = app(AssistantLlmConfigService::class)->getConfig($request->input('config'));
 
         if (!$config['isConfigured']) {
             return $this->setStatusCode(self::HTTP_CODE_UNPROCESSABLE_ENTITY)->respond([
@@ -209,8 +204,8 @@ class AssistantController extends BaseController
     {
         BaseAuthorization::checkUser();
         AssistantValidation::validateSettingsUpdate($request);
-        app(AssistantUserSettingsService::class)->save(getUserId(), $request->all());
-        return $this->respond(['data' => app(AssistantUserSettingsService::class)->getForResponse(getUserId())]);
+        $settings = app(AssistantUserSettingsService::class)->save(getUserId(), $request->all());
+        return $this->respond(['data' => $settings]);
     }
 
     private function appendContext(&$payload, $globalContext, $userContext)
@@ -266,15 +261,16 @@ class AssistantController extends BaseController
 
         $responseBody = $response->json();
 
+        // A user's own endpoint can point anywhere the server reaches, so only the answer goes back: never its raw body, error or status.
+        $isOwn = $config['source'] === 'own';
         if (!$response->successful()) {
-            return $this->setStatusCode($response->status())->respond([
-                'message' => data_get($responseBody, 'error.message') ?? data_get($responseBody, 'message') ?? 'Assistant LLM request failed.',
+            return $this->setStatusCode($isOwn ? 502 : $response->status())->respond([
+                'message' => ($isOwn ? null : fget($responseBody, 'error.message') ?? fget($responseBody, 'message')) ?? 'Assistant LLM request failed.',
             ]);
         }
 
-        // Only the answer goes back, never the raw body: a user's own endpoint can point anywhere the server reaches.
         $result = [
-            'content' => fget($responseBody, 'choices.0.message.content') ?? ($config['source'] === 'server' && !is_array($responseBody) ? $response->body() : null),
+            'content' => fget($responseBody, 'choices.0.message.content') ?? (!$isOwn && !is_array($responseBody) ? $response->body() : null),
             'usage' => fget($responseBody, 'usage'),
         ];
 

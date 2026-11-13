@@ -15,12 +15,12 @@
     </div>
 
     <div class="flex flex-col gap-1">
-      <tag-select v-model="tag" :disabled="!!withoutTag" :is-multi-select="false" :auto-select-parents="false" />
+      <tag-select v-model="tag" :disabled="!!withoutTag" />
       <app-checkbox v-model="withoutTag" :label="$t('transaction_list_page.without_tag')" />
     </div>
 
     <div class="flex flex-col gap-1">
-      <budget-select v-model="budget" :disabled="!!withoutBudget" :is-multi-select="false" :auto-select-parents="false" />
+      <budget-select v-model="budget" :disabled="!!withoutBudget" />
       <app-checkbox v-model="withoutBudget" :label="$t('transaction_list_page.without_budget')" />
     </div>
 

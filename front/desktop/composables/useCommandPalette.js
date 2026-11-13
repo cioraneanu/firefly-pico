@@ -6,9 +6,14 @@ import Category from '~/core/models/Category'
 import PiggyBank from '~/core/models/PiggyBank'
 import Tag from '~/core/models/Tag'
 import TransactionTemplate from '~/core/models/TransactionTemplate'
+import { withoutDeleted } from '~/core/utils/DeleteUtils'
 
-const isOpen = ref(false)
-const shortcut = /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘K' : 'Ctrl K'
+// Module-level so the sidebar can open it without building the item list.
+// ⌘K on macOS (Ctrl K is "kill line" in its inputs), Ctrl K elsewhere.
+const isMac = /Mac|iPhone|iPad/.test(navigator.platform)
+export const isCommandPaletteOpen = ref(false)
+export const commandPaletteShortcut = isMac ? '⌘K' : 'Ctrl K'
+export const isCommandPaletteKey = (event) => (isMac ? event.metaKey : event.ctrlKey) && event.key?.toLowerCase() === 'k'
 
 // ⌘K palette: jump to a page, create something, open an account / category / tag / ... by name,
 // or turn the typed text into a new transaction (through the assistant) or a transactions search
@@ -19,7 +24,7 @@ export function useCommandPalette(query = ref('')) {
 
   const resource = (isEnabled, label, list, model, route, icon) =>
     isEnabled
-      ? list
+      ? withoutDeleted(list)
           .map((item) => ({ group: label, label: model.getDisplayName(item), icon: model.getIcon(item) ?? icon, to: `${route}/${item.id}` }))
           .filter((item) => LanguageUtils.includesSearch(item.label, query.value.trim()))
           .slice(0, 4)
@@ -63,5 +68,5 @@ export function useCommandPalette(query = ref('')) {
     return [...[...pages, ...create].filter(matches), ...entities, ...fromText]
   })
 
-  return { isOpen, shortcut, items }
+  return { items }
 }

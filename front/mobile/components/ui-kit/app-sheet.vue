@@ -8,7 +8,7 @@
         v-if="show"
         ref="sheetRef"
         class="mx-sh"
-        :class="[{ 'mx-sh--f': full, 'mx-sh--s': searchable, dragging: isDragging }, sheetClass]"
+        :class="{ 'mx-sh--f': full, 'mx-sh--s': searchable, dragging: isDragging }"
         :style="sheetStyle"
         role="dialog"
         aria-modal="true"
@@ -38,11 +38,11 @@
               autocapitalize="off"
               spellcheck="false"
               enterkeyhint="search"
-              :placeholder="searchPlaceholder ?? $t('search_placeholder')"
+              :placeholder="$t('search_placeholder')"
               :aria-label="$t('search_placeholder')"
               @keydown.enter="$event.target.blur()"
             />
-            <button v-if="search" type="button" class="mx-ib sm" style="margin-right: -8px" :aria-label="$t('clear')" @click="search = ''">
+            <button v-if="search" type="button" class="mx-ib sm -mr-2" :aria-label="$t('clear')" @click="search = ''">
               <app-icon :icon="IconX" :size="14" :stroke="2" />
             </button>
           </label>
@@ -50,7 +50,7 @@
 
         <slot name="top" />
 
-        <div class="mx-sh__b" :class="bodyClass">
+        <div class="mx-sh__b">
           <slot />
         </div>
 
@@ -75,9 +75,6 @@ defineProps({
   description: { type: String, default: null },
   full: { type: Boolean, default: false },
   searchable: { type: Boolean, default: false },
-  searchPlaceholder: { type: String, default: null },
-  sheetClass: { default: null },
-  bodyClass: { default: null },
 })
 
 const emit = defineEmits(['close'])

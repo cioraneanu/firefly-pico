@@ -83,7 +83,6 @@
           :key="extraDateField.code"
           v-model="extraDates[extraDateField.code].value"
           :label="$t(extraDateField.t)"
-          :icon="extraDateField.icon"
           :style="getStyleForField(extraDateField)"
         />
 

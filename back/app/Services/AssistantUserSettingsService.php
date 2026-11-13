@@ -13,7 +13,7 @@ class AssistantUserSettingsService
 {
     public function find($userId): ?AssistantUserSetting
     {
-        return $userId ? AssistantUserSetting::query()->forUser($userId)->first() : null;
+        return $userId ? AssistantUserSetting::query()->where('user_id', $userId)->first() : null;
     }
 
     // What the settings screen shows: the user's saved values (keys only as has_api_key) plus the server's connections.
@@ -22,7 +22,10 @@ class AssistantUserSettingsService
         $settings = $this->find($userId) ?? new AssistantUserSetting(['llm_use_own' => false, 'transcription_use_own' => false]);
 
         return [
-            ...$settings->toArray(),
+            ...$settings->only([
+                'llm_use_own', 'llm_endpoint', 'llm_model', 'llm_has_api_key',
+                'transcription_use_own', 'transcription_endpoint', 'transcription_model', 'transcription_has_api_key', 'transcription_language',
+            ]),
             'server' => [
                 'llm' => app(AssistantLlmConfigService::class)->getPublicConfig(),
                 'transcription' => app(AssistantTranscriptionConfigService::class)->getPublicConfig(),
@@ -30,30 +33,31 @@ class AssistantUserSettingsService
         ];
     }
 
-    public function save($userId, array $data): AssistantUserSetting
+    // Saves the user's settings and returns them as getForResponse() does.
+    public function save($userId, array $data): array
     {
-        $settings = AssistantUserSetting::query()->firstOrNew(['user_id' => $userId]);
-        $settings->fill(array_intersect_key($data, array_flip([
+        $values = array_intersect_key($data, array_flip([
             'llm_use_own', 'llm_endpoint', 'llm_model',
             'transcription_use_own', 'transcription_endpoint', 'transcription_model', 'transcription_language',
-        ])));
+        ]));
 
         // Keys are write-only: a new one replaces the stored key, an empty value keeps it, *_clear removes it.
         foreach (['llm', 'transcription'] as $group) {
+            $apiKey = trim((string)fget($data, "{$group}_api_key"));
             if (fget($data, "{$group}_api_key_clear")) {
-                $settings->{"{$group}_api_key"} = null;
-            } elseif (trim((string)fget($data, "{$group}_api_key")) !== '') {
-                $settings->{"{$group}_api_key"} = trim((string)fget($data, "{$group}_api_key"));
+                $values["{$group}_api_key"] = null;
+            } elseif ($apiKey !== '') {
+                $values["{$group}_api_key"] = $apiKey;
             }
         }
 
-        $settings->save();
-        return $settings->refresh();
+        AssistantUserSetting::query()->updateOrCreate(['user_id' => $userId], $values);
+        return $this->getForResponse($userId);
     }
 
     /**
-     * The user's own connection for one group, or null when the group uses the server's.
-     * $override lets the settings screen try unsaved values: { use_own, endpoint, model, api_key, language }.
+     * The user's own connection values for one group, or null when the group uses the server's.
+     * $override lets the settings screen try unsaved values: { use_own, endpoint, model, api_key, api_key_clear, language }.
      */
     public function getOwnConfig($group, $userId, ?array $override = null): ?array
     {
@@ -63,14 +67,16 @@ class AssistantUserSettingsService
             return null;
         }
 
-        $value = fn($field) => trim((string)($override !== null && array_key_exists($field, $override) ? $override[$field] : $settings?->{"{$group}_{$field}"}));
-        // A key typed on the screen wins; otherwise the user's saved key (it is theirs, whatever endpoint they test).
-        $apiKey = trim((string)fget($override, 'api_key')) ?: trim((string)$settings?->{"{$group}_api_key"});
+        $value = fn($field) => $override !== null && array_key_exists($field, $override) ? $override[$field] : $settings?->{"{$group}_{$field}"};
+        // A key typed on the screen wins; otherwise the user's saved key (it is theirs, whatever endpoint they test), unless they removed it.
+        $typedApiKey = trim((string)fget($override, 'api_key'));
+        $isApiKeyCleared = (bool)fget($override, 'api_key_clear');
 
         return [
             'endpoint' => $value('endpoint'),
             'model' => $value('model'),
-            'apiKey' => $apiKey,
+            'apiKey' => $typedApiKey ?: ($isApiKeyCleared ? null : $settings?->{"{$group}_api_key"}),
+            'isApiKeyLost' => !$typedApiKey && !$isApiKeyCleared && $settings?->isApiKeyLost($group),
             'language' => $group === 'transcription' ? $value('language') : null,
         ];
     }

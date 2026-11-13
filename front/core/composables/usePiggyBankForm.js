@@ -6,6 +6,7 @@ import PiggyBank from '~/core/models/PiggyBank'
 import PiggyBankRepository from '~/core/repository/PiggyBankRepository'
 import PiggyBankTransformer from '~/core/transformers/PiggyBankTransformer'
 import { areIntEqual } from '~/core/utils/DataUtils'
+import { sanitizeAmount } from '~/core/utils/MathUtils'
 import { generateChildren } from '~/core/utils/VueUtils'
 
 export function usePiggyBankForm(options = {}) {
@@ -47,7 +48,7 @@ export function usePiggyBankForm(options = {}) {
   // Add / remove money: a small form of its own, saved on the stored piggy bank right away (unsaved edits above stay as they are)
   const savedPiggyBank = computed(() => piggyBankStore.piggyBankDictionary[form.itemId.value])
   const money = reactive({ isOpen: false, isAdd: true, amount: '' })
-  const moneyAmount = computed(() => Math.abs(parseFloat(money.amount) || 0))
+  const moneyAmount = computed(() => Math.abs(parseFloat(sanitizeAmount(String(money.amount))) || 0))
   const moneyDecimals = computed(() => Number(Currency.getDecimalPlaces(get(savedPiggyBank.value, 'attributes.currency')) ?? 2))
   const moneySavedBefore = computed(() => PiggyBank.getCurrentAmount(savedPiggyBank.value))
   const moneySavedAfter = computed(() => +(moneySavedBefore.value + (money.isAdd ? moneyAmount.value : -moneyAmount.value)).toFixed(moneyDecimals.value))

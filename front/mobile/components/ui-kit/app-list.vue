@@ -22,7 +22,7 @@
 </template>
 
 <script setup>
-// Replaces van-pull-refresh + van-list: pull down at the top of .mx-body to refresh,
+// Infinite list with pull to refresh: pull down at the top of .mx-body to refresh,
 // and `load` fires whenever the end of the list scrolls into view until `finished`.
 const refreshing = defineModel('refreshing', { type: Boolean, default: false })
 
@@ -50,7 +50,7 @@ const observe = () => {
   })
   observer.observe(sentinelRef.value)
 }
-// Like van-list's immediate check: load the first page on mount, without waiting for the observer
+// Load the first page on mount, without waiting for the observer
 // (it does not fire while the page is hidden, e.g. a PWA resumed in the background)
 onMounted(() => {
   observe()

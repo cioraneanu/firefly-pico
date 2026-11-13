@@ -111,12 +111,11 @@ const foreignAmountRules = computed(() => [...(props.isForeignAmountRequired ? [
 const inputAmount = ref(null)
 const inputAmountForeign = ref(null)
 
-const { error } = useFormField({ name: () => attrs.name ?? 'amount', rules: amountRules, value: amount, el: () => inputAmount.value })
+const { error } = useFormField({ name: () => attrs.name ?? 'amount', rules: amountRules, value: amount })
 const { error: errorForeign } = useFormField({
   name: () => 'amountForeign',
   rules: () => (props.isForeignAmountVisible ? foreignAmountRules.value : []),
   value: amountForeign,
-  el: () => inputAmountForeign.value,
 })
 
 const currencySymbol = computed(() => Currency.getSymbol(props.currency))

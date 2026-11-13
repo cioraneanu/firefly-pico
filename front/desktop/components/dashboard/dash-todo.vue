@@ -3,12 +3,12 @@
     <template #actions>
       <d-button v-if="tagStore.tagTodo" size="sm" :icon="IconListCheck" :to="links.todo()">
         {{ $t('todo') }}
-        <d-badge class="px-1.5 text-dim tabular-nums">{{ dashboardStore.transactionsWithTodo.length }}</d-badge>
+        <d-badge class="px-1.5 text-dim tabular-nums">{{ todoStore.visibleTodoList.length }}</d-badge>
       </d-button>
     </template>
     <div class="-mb-4 -mt-1 divide-y divide-line border-t border-line">
       <nuxt-link
-        v-for="transaction in dashboardStore.transactionsWithTodo"
+        v-for="transaction in todoStore.visibleTodoList.slice(0, 5)"
         :key="transaction.id"
         :to="`${RouteConstants.ROUTE_TRANSACTION_ID}/${transaction.id}`"
         class="flex items-center gap-3 px-4 py-2.5 transition-colors last:rounded-b-xl hover:bg-soft/40"
@@ -22,7 +22,7 @@
           >{{ signs[Transaction.getFirstSplit(transaction)?.type?.code] ?? '' }}{{ Transaction.getAmountFormatted(transaction) }} {{ Transaction.getFirstSplit(transaction)?.currency_symbol }}</span
         >
       </nuxt-link>
-      <d-empty v-if="!dashboardStore.transactionsWithTodo.length" :icon="IconChecks" :title="tagStore.tagTodo ? $t('desktop.dashboard.nothing_to_do') : $t('desktop.no_todo_tag')" />
+      <d-empty v-if="!todoStore.visibleTodoList.length" :icon="IconChecks" :title="tagStore.tagTodo ? $t('desktop.dashboard.nothing_to_do') : $t('desktop.no_todo_tag')" />
     </div>
   </d-card>
 </template>
@@ -35,7 +35,7 @@ import Category from '~/core/models/Category'
 import Tag from '~/core/models/Tag'
 import Transaction from '~/core/models/Transaction'
 
-const dashboardStore = useDashboardStore()
+const todoStore = useTodoStore()
 const tagStore = useTagStore()
 const links = useDashboardLinks()
 

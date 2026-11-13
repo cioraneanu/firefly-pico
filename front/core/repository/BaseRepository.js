@@ -31,7 +31,7 @@ export default class BaseRepository {
 
   async getAllWithMerge({ filters = [], getAll = null } = {}) {
     let list = []
-    let getMethod = (getAll ?? this.getAll)
+    let getMethod = getAll ?? this.getAll
     const firstPageResponseBody = await getMethod({ filters, page: 1 })
     let responseList = get(firstPageResponseBody, 'data', [])
     list = [...list, ...responseList]

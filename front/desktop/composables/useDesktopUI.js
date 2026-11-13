@@ -8,6 +8,7 @@ let toastId = 0
 export const DesktopUI = {
   toast(message, type = 'success', duration = 3000, { action = null, onClose = null } = {}) {
     const id = ++toastId
+    duration = Math.max(duration, 2500)
     const close = () => {
       if (!toasts.value.some((toast) => toast.id === id)) return
       toasts.value = toasts.value.filter((toast) => toast.id !== id)
@@ -17,8 +18,8 @@ export const DesktopUI = {
       action.onClick()
       close()
     }
-    toasts.value.push({ id, message, type, action, duration: Math.max(duration, 2500), onAction })
-    setTimeout(close, Math.max(duration, 2500))
+    toasts.value.push({ id, message, type, action, duration, onAction })
+    setTimeout(close, duration)
     return { close }
   },
 

@@ -1,15 +1,7 @@
 <template>
   <div class="flex flex-col gap-2">
     <div class="flex items-center gap-2">
-      <d-input
-        v-model="text"
-        :icon="IconSparkles"
-        :placeholder="`${$t('transaction.assistant')}…`"
-        :autofocus="profileStore.autoFocusAssistant"
-        clearable
-        class="flex-1"
-        @keydown.enter.prevent="onEnter"
-      />
+      <d-input v-model="text" :icon="IconSparkles" :placeholder="`${$t('transaction.assistant')}…`" :autofocus="profileStore.autoFocusAssistant" clearable class="flex-1" @keydown.enter="onEnter" />
       <div class="w-32">
         <d-currency-select v-model="profileStore.assistantCurrency" clearable />
       </div>
@@ -36,8 +28,10 @@ const emit = defineEmits(['change', 'submit'])
 const profileStore = useProfileStore()
 const { parsed, previewTags, flush } = useTransactionAssistant(text, (change) => emit('change', change))
 
-// Enter: apply what was typed now, then ask to save
-const onEnter = async () => {
+// Enter: apply what was typed now, then ask to save (not while an IME composition is open)
+const onEnter = async (event) => {
+  if (event.isComposing) return
+  event.preventDefault()
   if (!text.value) return
   flush()
   await nextTick()

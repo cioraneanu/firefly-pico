@@ -30,7 +30,7 @@ class AssistantTranscriptionService
         // Each recording uses its owner's connection (their own one, or the server's).
         $configs = [];
         foreach ($pending as $ramble) {
-            $config = $configs[$ramble->user_id] ??= $this->configService->getConfig($language, $ramble->user_id);
+            $config = $configs[$ramble->user_id] ??= $this->configService->getConfig(userId: $ramble->user_id, language: $language);
             if ($config['isConfigured']) {
                 $this->transcribe($ramble, $config);
             }
@@ -65,7 +65,7 @@ class AssistantTranscriptionService
      */
     public function testConfiguration(?array $override = null): array
     {
-        $config = $this->configService->getConfig(null, null, $override);
+        $config = $this->configService->getConfig($override);
         if (!$config['isConfigured']) {
             return ['successful' => false, 'status' => 422, 'message' => 'Assistant transcription is not configured.'];
         }
@@ -84,10 +84,16 @@ class AssistantTranscriptionService
             return ['successful' => false, 'status' => 502, 'message' => 'Assistant transcription request failed.'];
         }
 
+        if ($response->successful()) {
+            return ['successful' => true, 'status' => 200, 'message' => null];
+        }
+
+        // A user's own endpoint can point anywhere the server reaches, so its error and status are not passed on.
+        $isOwn = $config['source'] === 'own';
         return [
-            'successful' => $response->successful(),
-            'status' => $response->successful() ? 200 : $response->status(),
-            'message' => fget($response->json(), 'error.message') ?? fget($response->json(), 'message') ?? 'Assistant transcription request failed.',
+            'successful' => false,
+            'status' => $isOwn ? 502 : $response->status(),
+            'message' => ($isOwn ? null : fget($response->json(), 'error.message') ?? fget($response->json(), 'message')) ?? 'Assistant transcription request failed.',
         ];
     }
 
@@ -140,7 +146,7 @@ class AssistantTranscriptionService
             return null;
         }
 
-        return trim((string)data_get($response->json(), 'text'));
+        return trim((string)fget($response->json(), 'text'));
     }
 
     /**

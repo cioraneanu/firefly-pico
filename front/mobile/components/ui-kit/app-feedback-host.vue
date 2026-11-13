@@ -25,17 +25,13 @@
       </div>
     </transition>
   </Teleport>
-
-  <app-action-sheet v-model:show="isActionSheetVisible" :actions="actionSheetActions" :title="actionSheetTitle" />
 </template>
 
 <script setup>
 import { IconArrowBackUp, IconCheck, IconExclamationMark, IconX } from '@tabler/icons-vue'
 import { useMobileFeedback } from '~/mobile/composables/useMobileFeedback'
-import { useActionSheet } from '~/mobile/composables/useActionSheet'
 
 const { toasts, confirmState, answerConfirm } = useMobileFeedback()
-const { isVisible: isActionSheetVisible, actions: actionSheetActions, title: actionSheetTitle } = useActionSheet()
 
 const toast = computed(() => toasts.value[0] ?? null)
 

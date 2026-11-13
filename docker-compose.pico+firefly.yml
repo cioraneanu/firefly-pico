@@ -14,6 +14,8 @@ services:
       # Optional: on hosts that don't let non-root processes bind port 80 (e.g. Synology
       # Container Manager), change the mapping above to 6976:8080 and uncomment this:
       # - NGINX_PORT=8080
+      # Encrypts the API keys users save for the assistant. Keep it the same across upgrades or the saved keys become unreadable
+      - APP_KEY=<add unique 32-char key>
       - DB_CONNECTION=pgsql
       - DB_HOST=firefly-pico-postgresql
       - DB_PORT=5432

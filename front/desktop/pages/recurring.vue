@@ -33,7 +33,7 @@
                 </span>
                 <span :class="['flex min-w-0 flex-col', !RecurringTransaction.isActive(recurring) && 'text-dim']">
                   <span class="truncate font-medium">{{ RecurringTransaction.getDisplayName(recurring) }}</span>
-                  <span class="truncate text-xs text-dim">{{ $t(RecurringTransaction.getType(recurring)?.t ?? '') }}</span>
+                  <span v-if="RecurringTransaction.getType(recurring)" class="truncate text-xs text-dim">{{ $t(RecurringTransaction.getType(recurring).t) }}</span>
                 </span>
                 <d-badge v-if="!RecurringTransaction.isActive(recurring)">{{ $t('recurring_transaction_page.inactive') }}</d-badge>
               </span>
@@ -55,7 +55,16 @@
             <td class="text-right">
               <d-amount :value="RecurringTransaction.getAmountFormatted(recurring)" :currency="RecurringTransaction.getCurrencySymbol(recurring)" :type="RecurringTransaction.getType(recurring)" />
             </td>
-            <td class="text-dim"><icon-chevron-right :size="16" /></td>
+            <td @click.stop>
+              <d-button
+                variant="ghost"
+                size="icon-sm"
+                :icon="IconChevronRight"
+                class="text-dim"
+                :to="`${RouteConstants.ROUTE_RECURRING_TRANSACTION_ID}/${recurring.id}`"
+                :aria-label="$t('recurring_transaction_page.title_edit')"
+              />
+            </td>
           </tr>
         </tbody>
       </table>

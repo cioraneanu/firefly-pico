@@ -3,7 +3,7 @@ import AssistantRepository from '~/core/repository/AssistantRepository'
 import TransactionRepository from '~/core/repository/TransactionRepository'
 import TransactionTransformer from '~/core/transformers/TransactionTransformer'
 import { useRambleTransactionResolver } from '~/core/composables/useRambleTransactionResolver'
-import { getAssistantHistoryLines, invalidateAssistantHistory } from '~/core/composables/useAssistantHistory'
+import { invalidateAssistantHistory, withAssistantHistory } from '~/core/composables/useAssistantHistory'
 import { useTransactionAssistantDraft } from '~/core/composables/useTransactionAssistantDraft'
 
 export const rambleStatus = { pending: 'pending', creating: 'creating', success: 'success', error: 'error' }
@@ -162,12 +162,6 @@ export function useRamble({ onCreated } = {}) {
     currentCreateIndex.value = 0
   }
 
-  // The entity lists plus, when enabled, the user's recent transactions as examples
-  const getRambleRequestContext = async () => {
-    const recentTransactions = await getAssistantHistoryLines(profileStore.assistantHistoryCount)
-    return recentTransactions.length ? { ...getRambleContext(), recentTransactions } : getRambleContext()
-  }
-
   // The picked saved rambles plus the composer text. Resolves true when the assistant answered.
   const interpretRambleText = async ({ rambles = pickedRambles.value } = {}) => {
     const text = rambleText.value.trim()
@@ -185,7 +179,8 @@ export function useRamble({ onCreated } = {}) {
         timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
         language: profileStore.language,
         externalContext: profileStore.assistantLlmContext,
-        context: await getRambleRequestContext(),
+        // The entity lists plus, when enabled, the user's recent transactions as examples
+        context: await withAssistantHistory(getRambleContext(), profileStore.assistantHistoryCount),
       })
       if (session !== sessionId.value) return false
 

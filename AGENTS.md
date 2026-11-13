@@ -4,15 +4,15 @@ Guidance for AI coding agents working in this repository.
 
 ## Project Snapshot
 
-Firefly Pico is a Firefly III companion app with two separate front ends: a Vant mobile app and a dedicated desktop app, for fast transaction entry, dashboards, icons, tags, templates, profiles, piggy banks, recurring transactions, and assistant-assisted expense logging.
+Firefly Pico is a Firefly III companion app with two separate front ends: a mobile app built on a home-grown "mx" kit and a dedicated desktop app, for fast transaction entry, dashboards, icons, tags, templates, profiles, piggy banks, recurring transactions, and assistant-assisted expense logging.
 
 **Environment Requirements:** Node.js 18+ and PHP 8.2+.
 
-**Key versions:** Nuxt 4 (SSR disabled), Vue 3.4+ (`defineModel()`), Vant 4 (mobile UI), Tailwind v4 (utility classes), Laravel 12, Pinia 3 (composition API stores). All source files are `.js`/`.vue` — NOT TypeScript despite `tsconfig.json` existing.
+**Key versions:** Nuxt 4 (SSR disabled), Vue 3.4+ (`defineModel()`), Tailwind v4 (utility classes), no component library (the mobile `mx` kit and the desktop `d-*` kit are local), Laravel 12, Pinia 3 (composition API stores). All source files are `.js`/`.vue` — NOT TypeScript despite `tsconfig.json` existing.
 
 The repo is split into:
 
-- `front/`: Nuxt/Vue single-page PWA. Uses Vue 3 script setup, Pinia, Vant (mobile), Tailwind (desktop kit), Tabler icons, VueUse, i18n, SVGO, and local UI-kit components.
+- `front/`: Nuxt/Vue single-page PWA. Uses Vue 3 script setup, Pinia, Tailwind, the local mobile (`mx`) and desktop (`d-*`) UI kits, Tabler icons, VueUse, i18n, SVGO, and local UI-kit components.
 - `back/`: Laravel API. Mostly proxies Firefly III endpoints, while storing Pico-only extra fields and resources in its own database (SQLite by default).
 - `docker/` and `docker-compose*.yml`: production/container runtime setup for Pico alone or Pico plus Firefly III.
 - `docs/`: images and public-facing documentation assets.
@@ -22,28 +22,30 @@ The repo is split into:
 ```
 front/
 ├── core/               # UI-agnostic logic shared by the mobile and desktop apps
-│   ├── composables/    # useForm, useList, useTransactionForm, ... (no Vant, no DOM)
+│   ├── composables/    # useForm, useList, useTransactionForm, ... (no UI components, no DOM)
 │   ├── repository/     # API data access classes (extend BaseRepository)
 │   ├── models/         # Domain object shapes (extend BaseModel)
 │   ├── transformers/   # API ↔ form data conversion (extend ApiTransformer)
 │   ├── stores/         # Pinia state (useLocalStorage for persistence)
 │   ├── constants/      # RouteConstants, TablerIconConstants, enums
 │   └── utils/          # Pure utilities (VueUtils.js has generateChildren)
-├── mobile/             # The Vant mobile app
+├── mobile/             # The mobile app (home-grown "mx" kit)
+│   ├── mobile-app.vue  # Shell: .mx root (data-theme), layout, #mx-portal, toast/confirm host, loading overlay
 │   ├── pages/          # File-based routing (Nuxt `dir.pages`)
 │   │   └── {entity}/
 │   │       ├── list.vue    # List page using useList() composable
-│   │       └── [[id]].vue  # Form page using useForm() composable (create + edit)
+│   │       └── [[id]].vue  # Form page using the core use{Entity}Form() composable (create + edit)
 │   ├── components/
-│   │   ├── ui-kit/     # Reusable primitives (wrap Vant components)
-│   │   │   └── theme/  # Themed wrappers (toolbars, save/delete buttons)
-│   │   └── global/     # Auto-registered global components
-│   ├── composables/    # Mobile-only hooks (useToolbar, useActionSheet, swipe/tap helpers)
-│   ├── layouts/
+│   │   ├── ui-kit/     # Kit primitives: app-form, app-field, app-select, app-date, app-card, app-list, app-sheet, app-tabs, ...
+│   │   │   └── theme/  # Top toolbar, bottom nav, save/delete/add buttons, list search, sync notice
+│   │   ├── list-items/ # app-list-item (swipe row) + one {entity}-list-item per entity
+│   │   └── general/    # empty-list
+│   ├── composables/    # Mobile-only hooks (useToolbar, useFormField, useMobileFeedback, useKeyboard)
+│   ├── utils/          # MobileUI.js (UIUtils toasts/confirm for mobile)
+│   ├── layouts/        # default.vue: page + bottom nav + profile float + sync notice
 │   └── styles/
-│       ├── variables.css   # :root and .van-theme-dark custom properties
-│       ├── theme-white.css # Main theme + Vant overrides
-│       └── theme-dark.css  # Dark mode overrides
+│       ├── mx.css      # Tokens (.mx, .mx[data-theme='dark']) + all kit classes (mx-card, mx-f, mx-row, mx-sh, ...)
+│       └── mx-app-*.css # Screen-specific additions (kit, tx, dash, entities)
 ├── desktop/            # The desktop app (own routes, shell, d-* UI kit)
 │   ├── routes.js       # Desktop route table, swapped in by router.options.js
 │   ├── settings-sections.js # Settings sections (code, i18n key, icon, component)
@@ -100,7 +102,7 @@ Prettier is the source of truth (`front/.prettierrc`). Write code that already m
 - Do NOT access entity data as `item.name` — use `get(item, 'attributes.name')`. All entities follow JSON:API shape: `{ id, type, attributes: { ... } }`.
 - Do NOT create Nuxt `server/api/` routes — this is `ssr: false`, all data goes through the Laravel API.
 - Do NOT use Options API — always `<script setup>`.
-- Do NOT add `<style scoped>` to components. Prioritize Tailwind utility classes or adding CSS to `theme-white.css`.
+- Do NOT add `<style scoped>` to components. Prioritize Tailwind utility classes or adding CSS to `mobile/styles/mx*.css` (mobile) / `desktop/styles/desktop.css` (desktop).
 - Do NOT use `modelValue` prop + emit — use `defineModel()`.
 - Do NOT use standard Laravel controller method names — use `getOne`/`getAll`/`create`/`update`/`delete` (NOT `index`/`show`/`store`/`destroy`).
 - Do NOT create FormRequest classes — use static Validation classes in `App\Validations\`.
@@ -121,7 +123,7 @@ Prettier is the source of truth (`front/.prettierrc`). Write code that already m
 - `app.vue` renders `mobile/mobile-app.vue` or `desktop/desktop-app.vue`; `router.options.js` swaps in `desktop/routes.js`. Both apps keep the same URLs and `RouteConstants`, so links, drill-downs and redirects work in both.
 - Business logic lives in `core/`. Each mobile page and its desktop counterpart wire the same core composable (`useTagForm`, `useAccountForm`, `useTransactionList`, `useTransactionEditor`, `useDashboardBars`, ...). When a screen needs new logic, add it to the core composable, never to only one UI.
 - `UIUtils` toasts and confirms delegate to the active app (`mobile/utils/MobileUI.js` or `DesktopUI` in `desktop/composables/useDesktopUI.js`).
-- The mobile theme CSS stays global (`nuxt.config` `css`) so Vant's component CSS keeps its load order; `desktop/styles/desktop.css` resets the few global rules it needs under `.d-app` / `.d-portal`.
+- The mobile kit CSS (`mobile/styles/mx*.css`) is global (`nuxt.config` `css`) but every rule is scoped under the `.mx` root; `desktop/styles/desktop.css` (imported by `desktop-app.vue`) resets the few global rules it needs under `.d-app` / `.d-portal`.
 
 ## Page Recipes
 
@@ -129,19 +131,19 @@ Every mobile entity screen follows the same two-page shape. Copy an existing ent
 
 **Form page (`mobile/pages/{entity}/[[id]].vue`)** — handles both create and edit:
 
-- Root `<div class="app-form">` containing `<app-top-toolbar>`, then `<van-form :name="formName" @submit="saveItem" @failed="onValidationError">` with fields inside `<van-cell-group inset>`.
-- Wire everything through `useForm({ routeList, routeForm, model, resetFields, fetchItem, onEvent })` — it provides `item`, `itemId`, `saveItem`, `onDelete`, `onNew`, `onValidationError`, `formName`.
-- Bind fields to `item` sub-paths with `generateChildren(item, [{ computed: 'name', parentKey: 'attributes.name' }])` from `VueUtils` — never hand-write per-field computeds.
-- Validation rules come from `rule` in `core/utils/ValidationUtils.js` (e.g. `:rules="[rule.required()]"`).
-- Buttons: `<app-button-form-save />` and `<app-button-form-delete v-if="itemId" @click="onDelete" />`.
-- Finish with `useToolbar().init({ title: itemId.value ? t('..._page.title_edit') : t('..._page.title_add'), backRoute })`.
-- Sync the entity store in `onEvent` on `onPostSave` / `onPostDelete`.
+- Root `<div class="mx-page">` with `<app-top-toolbar>` (its `#right` slot holds actions, e.g. `<app-button-list-add v-if="itemId" @click="onNew" />`), then `<app-form :name="formName" @submit="saveItem" @failed="onValidationError">` wrapping `<main class="mx-body has-save">` (fields grouped in `<app-card>`) and, after `main`, `<app-button-form-save />`.
+- Wire everything through the core `use{Entity}Form()` composable (built on `useEntityForm` → `useForm`): it returns `item`, `itemId`, `saveItem`, `onDelete`, `onNew`, `onValidationError`, `formName` plus the field refs, and syncs the entity store on save/delete.
+- The field refs come from `generateChildren(item, [{ computed: 'name', parentKey: 'attributes.name' }])` (`VueUtils`) inside that composable — never hand-write per-field computeds.
+- Fields are kit components (`app-field`, `app-select`, `app-date`, `app-boolean`, ...) that register with `<app-form>` through `useFormField()`; rules come from `rule` in `core/utils/ValidationUtils.js` (e.g. `:rules="[rule.required()]"`).
+- Delete: `<app-button-form-delete v-if="itemId" @click="onDelete" />` as the last item of `main`.
+- Finish with `useToolbar().init({ title: computed(() => (itemId.value ? t('..._page.title_edit') : t('..._page.title_add'))), backRoute })`.
 
 **List page (`mobile/pages/{entity}/list.vue`)**:
 
-- Root `<div :class="formClass">` (adds `empty` when list is empty) with `<app-top-toolbar>` + `<app-button-list-add @click="onAdd" />`, `<empty-list v-if="isEmpty" />`, then `<van-pull-refresh>` wrapping `<van-list>` with a `{entity}-list-item` per row.
+- Root `<div class="mx-page">` with `<app-top-toolbar>` (`#right`: `<app-button-list-add @click="onAdd" />`), then `<main class="mx-body">` wrapping `<app-list v-model:refreshing="isRefreshing" :loading="isLoading" :finished="isFinished" @load="onLoadMore" @refresh="onRefresh">` (pull to refresh + infinite load).
+- Rows go in `<div class="mx-list">`, one `{entity}-list-item` each, built on `app-list-item` (tap edits, swipe left reveals Delete, and Clone when `clonable`). Empty states use `<empty-list>` (`filtered` when a search hides everything, `#action` slot for a button).
 - Wire through `useList({ routeList, routeForm, model, onEvent })`.
-- Store-backed lists set `isFinished.value = true` in `onLoadMore` and refresh via the store's `fetch{Entity}()`.
+- Store-backed lists fill `list` from the store and set `isFinished.value = true` in `onLoadMore`, and refresh via the store's `fetch{Entity}()` in `onRefresh`.
 - Optional client-side search: `<app-list-search v-model="search" />` + a `filteredList` computed.
 - Call `animateSwipeList(list)` and `useToolbar().init(...)` at the end.
 
@@ -202,76 +204,74 @@ Use the command that matches the scope of the change. Do not run expensive Docke
 ### Component and Import Conventions
 
 - Components are auto-imported with `pathPrefix: false` — use `<category-list-item>`, not `<list-items-category-list-item>`. Desktop components get the `D` prefix: `desktop/components/ui/button.vue` is `<d-button>`.
-- Mobile UI-kit components (`app-field`, `app-select`, etc.) wrap Vant components. Desktop never uses Vant components or mobile components; it composes `d-*` components.
+- Mobile UI-kit components (`app-field`, `app-select`, `app-sheet`, ...) are plain Vue over the `mx-*` classes in `mobile/styles/mx.css`; overlays teleport to `#mx-portal`. Desktop never uses mobile components; it composes `d-*` components.
 - Components use `defineModel()` for v-model binding.
 - Nuxt is configured as `ssr: false`; treat the app as a purely client-side PWA. Do not create or use Nuxt `server/api/` routes.
 - Data access goes through classes in `front/core/repository`, usually extending `BaseRepository`.
-- Domain shape lives in `front/core/models`, transformation in `front/core/transformers`, app-wide state in `front/core/stores`, and reusable behavior in `front/core/composables`. Nothing in `core/` may import Vant or a component.
-- Mobile: use CSS variables and theme files in `front/mobile/styles`. Desktop: use the token utilities (`bg-bg`, `bg-card`, `bg-pop`, `bg-soft`, `text-fg`, `text-dim`, `border-line`, `border-field`, `ring-ring`, `bg-primary`/`text-on-primary`, `text-danger`, `text-income`/`text-expense`/`text-transfer`). Check both light and dark theme impact.
+- Domain shape lives in `front/core/models`, transformation in `front/core/transformers`, app-wide state in `front/core/stores`, and reusable behavior in `front/core/composables`. Nothing in `core/` may import a UI component.
+- Mobile: use the `.mx` tokens (`--card`, `--foreground`, `--muted-foreground`, `--border`, `--t-exp`/`--t-inc`/`--t-tr`, ...) and kit classes from `front/mobile/styles/mx*.css`. Desktop: use the token utilities (`bg-bg`, `bg-card`, `bg-pop`, `bg-soft`, `text-fg`, `text-dim`, `border-line`, `border-field`, `ring-ring`, `bg-primary`/`text-on-primary`, `text-danger`, `text-income`/`text-expense`/`text-transfer`). Check both light and dark theme impact.
 - Never hard code labels in HTML. Use i18n from `front/i18n/locales`. When adding a key, update ALL 12 locale files: `en.json`, `ro.json`, `zh-CN.json`, `it.json`, `pt-BR.json`, `de-DE.json`, `fr.json`, `pl.json`, `ru-RU.json`, `es-MX.json`, `ko.json`, `el.json`. Keys use **underscores** for word separation and **dots** for nesting (e.g., `category_page.title_edit`).
-- Icons come from Tabler constants (`TablerIconConstants.js`), SVG components (via nuxt-svgo from `assets/icons/`), or Vant built-in icons. Use `TablerIconConstants` for new icons. Avoid adding a new icon system.
+- Icons come from Tabler constants (`TablerIconConstants.js`), or SVG components (via nuxt-svgo from `assets/icons/`). Use `TablerIconConstants` for new icons. Avoid adding a new icon system.
 - Routes should be mirrored through `front/core/constants/RouteConstants.js` where app navigation depends on constants.
 
 ### UI Feedback and Interaction
 
-- Toasts and dialogs go through `UIUtils` (`showToastSuccess`, `showToastError`, `showDeleteConfirmation`) — never call Vant's `showToast`/`showDialog` directly from pages.
-- Deletes always require `UIUtils.showDeleteConfirmation(...)` first.
-- Use Tailwind v4 utilities (`flex items-center`, `gap-2`, `mt-2.5`, `text-12`, `font-semibold`, `truncate`) before writing new CSS. Tailwind runs in `important` mode so utilities beat Vant's own styles. Spacing is the default 4px scale (`mt-2.5` = 10px); font sizes use the px tokens `text-10`…`text-20` from `assets/styles/tailwind.css`; `dark:` targets `.van-theme-dark`. Bootstrap and `helper.css` were removed — don't reintroduce their class names (`display-flex`, `mt-10`, `text-size-12`, …).
+- Toasts and dialogs go through `UIUtils` (`showToastSuccess`, `showToastError`, `showDeleteConfirmation`) — never push to `useMobileFeedback()` / `DesktopUI` directly from pages.
+- Deletes go through `deleteWithUndo(item, request, { leave })` in `core/utils/DeleteUtils.js` (`useForm` and `useList` already use it): by default (`profileStore.undoDelete`) the item hides at once (lists filter with `withoutDeleted`) and the request runs when the Undo toast is gone; with the setting off, or `undoable: false`, it asks `UIUtils.showDeleteConfirmation(...)` first.
+- Use Tailwind v4 utilities (`flex items-center`, `gap-2`, `mt-2.5`, `text-12`, `font-semibold`, `truncate`) before writing new CSS. Tailwind runs in `important` mode so utilities beat the kits' own classes. Spacing is the default 4px scale (`mt-2.5` = 10px); font sizes use the px tokens `text-10`…`text-20` from `assets/styles/tailwind.css`; `dark:` targets `.theme-dark`. Bootstrap and `helper.css` were removed — don't reintroduce their class names (`display-flex`, `mt-10`, `text-size-12`, …).
 - Navigation uses `navigateTo(RouteConstants.ROUTE_...)`, not raw path strings or `router.push`.
 
 ### UI Design Language
 
-Read this before generating any UI so new screens look like they belong. The mobile app feels like a polished native mobile finance app (Vant-based); the desktop app follows the shadcn "nova" look (see **Desktop design language** below).
+Read this before generating any UI so new screens look like they belong. The mobile app feels like a polished native finance app built on the local `mx` kit (shadcn-like neutral tokens, `mobile/styles/mx.css`); the desktop app follows the shadcn "nova" look (see **Desktop design language** below).
 
 **Overall feel**
 
-- Compact, information-dense, small type: titles 14px/600–700, subtitles 12–13px/400, section headers 14px 600 UPPERCASE, micro-badges 10–11px. Body font is the system stack (`ui-sans-serif, system-ui, ...`) — no custom fonts.
-- Everything is a soft rounded rectangle: cells/cards 6–10px radius, buttons and inputs 5–10px, amount pills 25px. No sharp corners anywhere.
-- Depth comes from soft layered shadows, not borders: signature shadows are `rgba(149,157,165,0.2) 0 8px 24px` (toolbars/sidebar), `rgba(0,0,0,0.24) 0 3px 8px` (buttons/floating elements), and hairline `0 0 0 1px` rings on bars/tabs. Tailwind shadow tokens `shadow-depth1..5`, `shadow-soft-1` exist in `tailwind.css`.
-- Dashed 1px borders are the visual code for "add / optional / informational" affordances (`.app-card-info`, `.add-attachment`, `.suggestion-button`, `.currency-dropdown`, `.badge`).
-- Scrollbars are hidden globally. Interactive cards use `user-select: none`. Almost every icon is a Tabler icon at 14–20px with stroke ~1.5–2, including a leading icon on nearly every form field and list-item subtitle row.
+- Compact, information-dense, small type in Geist, self-hosted from `front/public/fonts` (`@font-face` in `assets/styles/tailwind.css`) with a system-stack fallback (`--font` in `mx.css`): body 14px/20px, top-bar title 17px/600 with a 12px grey subtitle, card titles 15px/600, section headings (`.mx-sec`) 13px/600 grey, chips and badges 11–12px.
+- Everything is a soft rounded rectangle: cards and lists 14px (`.mx-card`, `.mx-list`), inputs and buttons 10px (`.mx-in`, `.mx-btn`; `.sm` 8px, `.xs` 7px), toasts 12px, chips and pills fully rounded.
+- Depth comes from hairline rings, not borders: `box-shadow: 0 0 0 1px var(--ring-10)` on cards/lists, `inset 0 1px 0 var(--border)` between rows; `--shadow-md` / `--shadow-lg` only for floating elements.
+- Icons are Tabler at 14–20px with stroke 2: a leading icon on fields (`app-field :icon`) and list rows (`.mx-lead`).
 
 **Layout**
 
-- **Mobile** (`mobile/layouts/default.vue`): fixed top `van-nav-bar` (centered bold 14px title, optional grey 12px subtitle, left back-arrow), scrollable content, fixed bottom `van-tabbar` with 5 items — Dashboard, Transactions, a center red rounded-square "+" button that pokes above the bar, Extras, Settings (11px labels, selected item blue `#1565C0`). Safe-area insets (`env(safe-area-inset-*)`) are respected top and bottom. A blue (`#1E88E5`) profile-picker floating button hugs the right edge (rounded on the left side only). The tabbar hides when the on-screen keyboard is up.
-- Content max widths: forms/cards use Vant inset groups (16px side margins); the dashboard uses CSS-columns masonry (`.dynamic-masonry`, `column-width: 500px`) so cards flow into 1 column on mobile.
+- `mobile-app.vue` renders the `.mx.mx-app` root, the layout, `#mx-portal` (sheets, overlays), `app-feedback-host` (toasts + confirm) and `app-loading`. `useKeyboard()` pins the app to the visible viewport while the keyboard is up and hides the bottom nav.
+- A page is `.mx-page` → `app-top-toolbar` (`.mx-top`, 56px: back arrow, title/subtitle from `useToolbar()`, `#right` actions) → scrollable `main.mx-body`.
+- `layouts/default.vue` adds the bottom nav `.mx-nav` (Dashboard, Transactions, a center "+" new transaction button, Extras, Settings with an update dot), the optional `profile-picker-float` and the `app-bottom-loading` sync notice (`.mx-sync`).
 
 **Color**
 
-- All colors live as CSS custom properties in `mobile/styles/variables.css` with light values on `:root` and dark overrides on `.van-theme-dark`. `--white`/`--black` intentionally invert in dark mode — use them for "surface" and "ink", not literal colors.
-- Transaction-type semantics (used consistently in dots, pills, borders, charts): expense = pink `#ec407a` (`--expense1..3`), income = green `#66bb6a` (`--income1..3`), transfer = light blue `#4fc3f7` (`--transfer1..3`). Amounts render as white-text pills: `.amount-expense` (`#ef5350`) / `.amount-income` (`#66bb6a`).
-- Primary action green `#00a261` (`--primary-action`) for add/confirm accents; Vant primary buttons are solid black in light mode and green in dark mode. General accent blue `#1E88E5`/`#1976D2`/`#42a5f5` marks profile UI, attachments, "today", links.
-- Neutral surfaces: page bg `--van-background`, input/field bg `--van-background-2-5` (`#f7f8fa` light / `#2f2f2f` dark), muted text `#999`/`#aaa` or `--van-text-color-3`.
-- Filter chips and "applied" states are near-black `#333` pills with white 12px text.
+- All colors are tokens on `.mx` in `mx.css` (oklch neutrals: `--page`, `--background`, `--card`, `--foreground`, `--muted-foreground`, `--primary`, `--border`, `--input`, `--ring`, `--destructive`), with dark values on `.mx[data-theme='dark']`. New CSS uses the tokens, not hex values.
+- Transaction types: `--t-exp` pink `#ec407a`, `--t-inc` green `#43a047`, `--t-tr` blue `#0288d1` (type dots, `.mx-chip.ty.exp/.inc/.tr`). Amounts are `.mx-amt` text: `.i` income (`--in` green), `.t` transfer (`--tr` blue), `.e` expense in the foreground color.
+- Primary buttons `.mx-btn.pri` are near-black in light mode and near-white in dark mode; other variants are `out`, `ghost`, `dng`, `dng-solid` and `dash` (dashed, for "add" affordances).
 
 **Recurring component patterns**
 
-- **Forms** (`useForm()` pages): root `div.app-form` (large bottom padding for the floating button), `van-form` > `van-cell-group inset`. Every input is a ui-kit wrapper (`app-field`, `app-select`, `app-date`, `app-boolean`, ...) rendering a Vant cell: label on the left (shared `10.5em` label column), a leading Tabler icon, and the input body as a grey rounded box (bg `--van-background-2-5`, radius 5px, padding 8px 12px). Save is `app-button-form-save`: a floating round black pill button — full-width fixed above the tabbar (rides up with the keyboard). Delete is a secondary button below the save, never beside it.
-- **Lists** (`useList()` pages): `van-pull-refresh` + `van-list` infinite scroll. Each row is a `van-swipe-cell` — tap to edit, swipe left to reveal a full-height red Delete button. Row anatomy: optional 30px icon column, middle column with `.list-item-title` (14px/700) and icon-prefixed `.list-item-subtitle` lines (13px, grey), right column right-aligned with amount pill, date, and muted relative time. Small outlined `.tag` chips wrap in a 5px-gap flex row. Empty states are a centered faded icon + 12px grey text (`.empty-list`). Filtering opens from a toolbar search icon; active filters appear as dark chips in a white sticky `.applied-filters-container` bar.
-- **Dashboard**: masonry of cards, each a `van-cell-group inset` with an uppercase `.van-cell-group-title`; stat tiles are `van-grid` cells (icon above 12px title above bold value, value colored by semantic type). Month is changed by horizontal swipe (animated slide) or the sticky date control; pull-to-refresh reloads. Users can reorder/hide cards, and cards respect feature toggles from `profileStore` (`tagsEnabled`, `budgetsEnabled`, ...) — new UI for an optional feature must check those.
-- **Feedback**: toasts via `van-notify` (`.app-toast`) — full-width top banner. Blocking loads use `app-loading` (centered white rounded card + spinner over a dim overlay); background syncs use `app-bottom-loading` (small bordered pill, bottom-left, above the tabbar).
-- **Motion**: subtle and short. Page transitions 0.15s fade+blur (`app.vue`), transition classes in `animations.css` (`zoom-fade`, `fade`), anime.js helpers in `core/utils/AnimationUtils.js` (save button pop, list stagger, dashboard month slide). Gate non-trivial animation behind `profileStore.showAnimations`.
+- **Forms**: `app-form` + `app-card`s (a card stacks its fields in `.mx-form`). Each field is `.mx-f`: label `.mx-l` (red `*` when required), input box `.mx-in`, then the error `.mx-ferr` or description `.mx-d`. Pickers (`app-select`, dates) open an `app-sheet` bottom sheet (`.mx-sh`, swipe down to close, optional search). Save is `app-button-form-save`, a sticky full-width `.mx-save` bar above the nav (the page's `.mx-body` needs `has-save`); Delete is `app-button-form-delete` at the end of the content, never beside Save.
+- **Lists**: `app-list` (pull to refresh + infinite load) around a `.mx-list` card of `.mx-row`s rendered by `app-list-item` (tap to edit, swipe left for Delete and optional Clone). Row anatomy: `.mx-lead` icon, `.mx-row__m` with `.mx-row__t` title and subtitle lines, right side `.mx-amt` / date / `.mx-chev`. Chips are `.mx-chip` in `.mx-chips`, badges `.mx-badge`. Empty states are `empty-list` (ghost skeleton rows, title, subtitle, optional action). Segmented controls are `app-tabs` (`.mx-seg`).
+- **Dashboard**: `.mx-dash-cards` of `app-card`s from `useDashboardCards()`; the month changes by horizontal swipe (`mx-dash-slide` transition) or the date control; pull to refresh reloads. Users can reorder/hide cards, and cards respect feature toggles from `profileStore` (`tagsEnabled`, `budgetsEnabled`, ...) — new UI for an optional feature must check those.
+- **Feedback**: `app-feedback-host` shows one `.mx-toast` at a time near the top (an Undo toast carries an action button and a progress bar) and the `.mx-alert` confirm. Blocking loads use `app-loading` (`.mx-loading`, shown only when the request takes a while); background syncs use the `.mx-sync` pill.
+- **Motion**: subtle and short. Page transitions in `app.vue`, sheet transitions `mx-fd` / `mx-sh`, anime.js helpers in `core/utils/AnimationUtils.js` (save button, list stagger, dashboard). Gate non-trivial animation behind `profileStore.showAnimations`.
 
 **Dark theme**
 
-- Toggled at runtime via `<van-config-provider :theme>` adding `.van-theme-dark` — not `prefers-color-scheme`. Any new class with hardcoded light colors needs a matching `.van-theme-dark` override in `theme-dark.css` (this is the established pattern; check both themes for every UI change).
-- Dark surfaces: cells `#1c1c1e`–`#2a2a2a`, borders `#444`/`#666`, links light blue `#03a9f4`. Semantic pink/green/blue stay the same but text on colored pills flips to black; primary buttons turn green `#00a261`.
+- `profileStore.darkTheme` sets `data-theme="dark"` on the `.mx` root (mobile tokens) and the `theme-dark` class on the app root in `app.vue` (desktop tokens and Tailwind's `dark:` variant) — not `prefers-color-scheme`.
+- CSS written with the tokens needs no dark override; add a `.mx[data-theme='dark'] ...` rule in `mx.css` only where the design differs. Check both themes for every UI change.
 
-**Mobile cohesion checklist**: compose from Vant + existing ui-kit wrappers; put styles in `theme-white.css` (+ dark override) using the CSS variables and Tailwind utilities (`flex items-center`, `gap-*`, `text-12`, `font-semibold`) rather than scoped styles; 6–10px radius + soft shadow; a Tabler icon on every field/row; small text; i18n every label.
+**Mobile cohesion checklist**: compose from the `mx` kit components (`app-*`) and existing `mx-*` classes; put new styles in `mobile/styles/mx*.css` with the tokens, and use Tailwind utilities (`flex items-center`, `gap-*`, `text-12`, `font-semibold`) for layout; no `<style>` blocks; 10–14px radius + hairline ring; a Tabler icon on every field/row; small text; i18n every label; check light and dark.
 
 
 ### Desktop design language
 
-- shadcn/ui "nova" look: neutral oklch tokens (`--d-*` in `desktop/styles/desktop.css`, mapped to Tailwind colors in `assets/styles/tailwind.css`), 14px/20px system font, `text-xl font-semibold` page titles with a `text-sm text-dim` description, `text-base font-medium` card/dialog titles.
+- shadcn/ui "nova" look: neutral oklch tokens (`--d-*` in `desktop/styles/desktop.css`, mapped to Tailwind colors in `assets/styles/tailwind.css`), 14px/20px Geist (self-hosted from `front/public/fonts`, system-stack fallback), `text-xl font-semibold` page titles with a `text-sm text-dim` description, `text-base font-medium` card/dialog titles.
 - Shell: 16rem sidebar on `bg-side` (brand, black "New transaction" button with `N` shortcut, grouped nav from `useDesktopNav`, sync row, profile menu) + an inset `bg-bg rounded-xl shadow-sm` content panel with a sticky breadcrumb header (sidebar toggle, `route.meta.crumb`, theme toggle).
 - Surfaces are `rounded-xl bg-card ring-1 ring-fg/10` (cards, lists, tables); controls are `h-8 rounded-lg border-field`; popovers `bg-pop rounded-lg shadow-md ring-1 ring-fg/10`; dashed `d-info` boxes for "info / quick links" inside dialogs.
 - Editing happens in dialogs over the list (`d-dialog`/`d-form-dialog`, footer `bg-soft/50` with Delete on the left, Cancel + primary Save on the right); bulk filters live in a right `d-sheet`; destructive actions go through `UIUtils.showDeleteConfirmation` (alert dialog); feedback is a bottom-right toast.
 - Forms are horizontal rows: `d-field` (label column `--label-w`, default 9rem) wrapping one control; validation via `:rules` + `:value` on `d-field` inside `d-form` (same `rule` helpers as mobile).
 - Transaction types: dots/pills/amounts use `expense` / `income` / `transfer` colors; income amounts are green with `+`, transfers dim, expenses `−`.
 - Overlays teleport to `#d-portal` (created by the shell, carries the tokens and dark class). Tailwind runs in `important` mode, so inline `display: none` loses to utilities: use `v-if`/`v-show` wrappers, and never stack two conflicting utilities for one property (give the component a prop instead).
-- Dark mode: tokens switch under `.van-theme-dark .d-app` / `.d-portal.van-theme-dark`; only add `dark:` variants where the design differs (outline buttons, inputs `dark:bg-field/30`).
+- Dark mode: tokens switch under `.theme-dark .d-app` / `.d-portal.theme-dark`; only add `dark:` variants where the design differs (outline buttons, inputs `dark:bg-field/30`).
 
-**Desktop cohesion checklist**: build from `d-*` components and core composables; no Vant, no mobile components, no `<style>`; tokens over hex values; `d-page` + card/list/table surfaces; edit in route-driven dialogs; a Tabler icon on rows and actions; i18n every label; check light and dark.
+**Desktop cohesion checklist**: build from `d-*` components and core composables; no mobile components, no `<style>`; tokens over hex values; `d-page` + card/list/table surfaces; edit in route-driven dialogs; a Tabler icon on rows and actions; i18n every label; check light and dark.
 
 ## Back-End Notes
 

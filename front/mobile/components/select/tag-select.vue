@@ -10,10 +10,7 @@
     :get-icon-value="getIcon"
   >
     <template #top-right>
-      <button type="button" class="mx-ib sm" :aria-label="$t('kit.refresh')" @click="onRefresh">
-        <span v-if="isLoading" class="mx-spin" />
-        <app-icon v-else :icon="IconRefresh" :size="16" :stroke="2" />
-      </button>
+      <app-refresh-button :refresh="tagStore.fetchTags" />
       <button type="button" class="mx-ib sm" :aria-label="$t('kit.toggle_layout')" :aria-pressed="showTagSelectAsGrid" @click="showTagSelectAsGrid = !showTagSelectAsGrid">
         <app-icon :icon="showTagSelectAsGrid ? IconList : IconTags" :size="16" :stroke="2" />
       </button>
@@ -49,7 +46,7 @@
 </template>
 
 <script setup>
-import { IconCheck, IconList, IconRefresh, IconTags } from '@tabler/icons-vue'
+import { IconCheck, IconList, IconTags } from '@tabler/icons-vue'
 import { get, isEqual, uniqBy } from 'lodash-es'
 import { useTagStore } from '~/core/stores/tagStore'
 import Tag from '~/core/models/Tag'
@@ -94,12 +91,5 @@ const onSelectCell = (item) => {
     const targetTags = props.autoSelectParents ? Tag.getTagWithParents(item) : [item]
     modelValue.value = uniqBy([...newValue, ...targetTags], 'id')
   }
-}
-
-const isLoading = ref(false)
-const onRefresh = async () => {
-  isLoading.value = true
-  await tagStore.fetchTags()
-  isLoading.value = false
 }
 </script>

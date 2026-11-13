@@ -10,51 +10,9 @@
 
     <div class="flex flex-wrap items-center gap-2">
       <d-input v-model="search" :icon="IconSearch" :placeholder="$t('description')" clearable class="w-70" />
-      <button
-        ref="typeTrigger"
-        type="button"
-        :aria-expanded="isTypeOpen"
-        :class="[
-          'inline-flex h-8 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-md border border-dashed bg-bg px-2.5 text-[13.5px] font-medium transition-colors hover:bg-soft',
-          isTypeOpen ? 'border-fg/55' : 'border-fg/30',
-        ]"
-        @click="isTypeOpen = !isTypeOpen"
-      >
-        <icon-filter :size="15" class="text-dim" />
-        {{ $t('transaction_type') }}
-        <template v-if="transactionType">
-          <span class="mx-0.5 h-4 w-px bg-line" />
-          <span class="inline-flex h-5 items-center rounded-[5px] bg-soft px-1.5 text-xs font-medium">{{ $t(transactionType.t) }}</span>
-        </template>
-      </button>
-      <d-popover v-model:open="isTypeOpen" :anchor="typeTrigger" width="14.5rem">
-        <button
-          v-for="option in typeOptions"
-          :key="option.value.code"
-          type="button"
-          role="option"
-          :aria-selected="transactionType?.code === option.value.code"
-          class="flex h-8 w-full cursor-default items-center gap-2 rounded-md px-2 text-left text-[13.5px] hover:bg-soft"
-          @click="pickType(option.value)"
-        >
-          <span
-            :class="[
-              'grid size-4 shrink-0 place-items-center rounded-[4px]',
-              transactionType?.code === option.value.code ? 'bg-primary text-on-primary' : 'text-transparent shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--d-fg)_35%,transparent)]',
-            ]"
-          >
-            <icon-check :size="12" :stroke-width="3" />
-          </span>
-          <component :is="option.icon" :size="15" :class="typeColors[option.value.code]" />
-          <span class="flex-1 truncate">{{ option.label }}</span>
-        </button>
-        <template v-if="transactionType">
-          <div class="-mx-1 my-1 h-px bg-line" />
-          <button type="button" class="flex h-8 w-full cursor-default items-center justify-center rounded-md px-2 text-[13.5px] hover:bg-soft" @click="pickType(null)">
-            {{ $t('filters.clear') }}
-          </button>
-        </template>
-      </d-popover>
+      <div class="w-40">
+        <d-enum-select v-model="transactionType" :options="Transaction.typesList" :icon="IconFilter" :placeholder="$t('transaction_type')" clearable />
+      </div>
       <span class="flex-1" />
       <d-button :icon="IconRefresh" :loading="isRefreshing" @click="refresh">{{ $t('desktop.refresh') }}</d-button>
       <d-button :icon="IconFilter" @click="isFiltersOpen = true">
@@ -110,6 +68,7 @@ import { IconCheck, IconCoins, IconFilter, IconLoader2, IconPencil, IconPlus, Ic
 import { useElementVisibility, watchDebounced } from '@vueuse/core'
 import { omit } from 'lodash-es'
 import RouteConstants from '~/core/constants/RouteConstants'
+import Transaction from '~/core/models/Transaction'
 
 const route = useRoute()
 const { id, isOpen } = useRouteDialog(RouteConstants.ROUTE_TRANSACTION_LIST)
@@ -135,13 +94,9 @@ const {
 } = useTransactionList()
 
 const isFiltersOpen = ref(false)
-const isTypeOpen = ref(false)
 const isRefreshing = ref(false)
 // Edit mode: rows turn into inputs that save on change
 const isEditing = ref(false)
-const typeTrigger = ref(null)
-const typeOptions = useTransactionTypeOptions()
-const typeColors = { expense: 'text-tx-expense', income: 'text-income', transfer: 'text-transfer' }
 const search = ref('')
 const sentinel = ref(null)
 const isSentinelVisible = useElementVisibility(sentinel)
@@ -152,11 +107,6 @@ const transactionType = computed({
 })
 
 const removeFilter = (bagKey) => (filters.value = omit(filters.value, bagKey))
-
-const pickType = (type) => {
-  transactionType.value = transactionType.value?.code === type?.code ? null : type
-  isTypeOpen.value = false
-}
 
 const refresh = async () => {
   isRefreshing.value = true

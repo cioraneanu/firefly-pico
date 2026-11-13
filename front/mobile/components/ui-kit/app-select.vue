@@ -114,10 +114,6 @@ const props = defineProps({
   disabled: { type: Boolean, default: false },
   required: { type: Boolean, default: false },
   rules: { type: Array, default: () => [] },
-  // Accepted for older call sites (the Vant grid layout); the sheet now picks its own layout
-  columns: { default: null },
-  teleport: { default: null },
-  zIndex: { default: null },
 })
 
 const { error, isRequired } = useFormField({ name: () => props.name, rules: () => props.rules, value: modelValue })

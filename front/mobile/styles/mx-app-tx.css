@@ -2,14 +2,34 @@
 
 /* ----- transactions list ----- */
 /* first load: the skeleton list replaces the "Loading…" row */
-.mx-tx-sk ~ .mx-more { display: none; }
+.mx-tx-sk ~ .mx-more {
+  display: none;
+}
 /* notes are rendered markdown */
-.mx-tx-notes p, .mx-tx-notes ul, .mx-tx-notes ol, .mx-tx-notes pre { margin: 0; }
-.mx-tx-notes ul, .mx-tx-notes ol { padding-left: 16px; }
-.mx-tx-notes a { text-decoration: underline; }
+.mx-tx-notes p,
+.mx-tx-notes ul,
+.mx-tx-notes ol,
+.mx-tx-notes pre {
+  margin: 0;
+}
+.mx-tx-notes ul,
+.mx-tx-notes ol {
+  padding-left: 16px;
+}
+.mx-tx-notes a {
+  text-decoration: underline;
+}
+
+/* Calculate total toggle in the top bar */
+.mx-ib.out[aria-pressed='true'] {
+  background: var(--muted);
+}
 
 /* ----- transaction form ----- */
-.mx-l .hint.mx-spin { width: 14px; height: 14px; }
+.mx-l .hint.mx-spin {
+  width: 14px;
+  height: 14px;
+}
 /* ramble page (design: MX-Ramble) */
 .mxr-error {
   color: var(--destructive);
@@ -20,11 +40,6 @@
 }
 .mx-tx .acts {
   display: flex;
-/* Calculate total toggle in the top bar */
-.mx-ib.out[aria-pressed='true'] {
-  background: var(--muted);
-}
-
   align-items: center;
   gap: 6px;
 }
@@ -81,15 +96,40 @@
 
 /* TODO Inbox editor: the transaction form in a 90% sheet (design: td-esh embedding MX-TransactionEdit).
    It sits under the pickers and alerts it opens (they teleport into the same portal). */
-.mx-app .mx-ov.td-esh-ov { z-index: 15; }
-.mx-app .td-esh { z-index: 16; }
-.mx-app .td-esh.back { transition: transform .2s ease; }
-.mx-app .td-esh.mx-sh-leave-active { transition: transform .35s cubic-bezier(.32, .72, 0, 1); }
-.mx-app .td-esh .mx-top { height: 48px; padding: 0 12px 0 16px; box-shadow: none; }
-.mx-app .mx-portal > .td-esh > .td-esh__b .mx-page .mx-body { overflow-y: auto; padding-bottom: 24px; }
-.mx-app .mx-portal > .td-esh > .td-esh__b .mx-page .mx-body.has-save { padding-bottom: 88px; }
-.mx-app .td-esh .mx-save { padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px)); }
-.mx-app .td-esh .mx-save .mx-btn.out { background: var(--card); }
-.mx-app .td-row .td-open { color: inherit; }
+.mx-app .mx-ov.td-esh-ov {
+  z-index: 15;
+}
+.mx-app .td-esh {
+  z-index: 16;
+}
+.mx-app .td-esh.back {
+  transition: transform 0.2s ease;
+}
+.mx-app .td-esh.mx-sh-leave-active {
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.mx-app .td-esh .mx-top {
+  height: 48px;
+  padding: 0 12px 0 16px;
+  box-shadow: none;
+}
+.mx-app .mx-portal > .td-esh > .td-esh__b .mx-page .mx-body {
+  overflow-y: auto;
+  padding-bottom: 24px;
+}
+.mx-app .mx-portal > .td-esh > .td-esh__b .mx-page .mx-body.has-save {
+  padding-bottom: 88px;
+}
+.mx-app .td-esh .mx-save {
+  padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+}
+.mx-app .td-esh .mx-save .mx-btn.out {
+  background: var(--card);
+}
+.mx-app .td-row .td-open {
+  color: inherit;
+}
 /* the todo tag chip keeps its dark fill inside a row's tray */
-.mx-tx .tray .mx-chip.todo { background: var(--primary); }
+.mx-tx .tray .mx-chip.todo {
+  background: var(--primary);
+}

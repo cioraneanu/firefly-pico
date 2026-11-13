@@ -70,7 +70,7 @@
                   <button v-if="draft.llmHasApiKey" type="button" class="mx-btn xs ghost" @click.prevent="clearApiKey('llm')">{{ $t('settings.assistant.remove_key') }}</button>
                 </template>
               </app-field>
-              <app-field v-model="draft.llmModel" name="llmModel" :label="$t('settings.assistant.model')" :placeholder="$t('settings.assistant.model_default', { model: 'gpt-4o-mini' })" />
+              <app-field v-model="draft.llmModel" name="llmModel" :label="$t('settings.assistant.model')" :placeholder="$t('settings.assistant.model_default', { model: DEFAULT_LLM_MODEL })" />
             </div>
             <div class="mx-note mt-3">
               <app-icon :icon="IconLock" :size="16" :stroke="2" />
@@ -192,7 +192,7 @@
                 v-model="draft.transcriptionModel"
                 name="transcriptionModel"
                 :label="$t('settings.assistant.model')"
-                :placeholder="$t('settings.assistant.model_default', { model: 'gpt-4o-mini-transcribe' })"
+                :placeholder="$t('settings.assistant.model_default', { model: DEFAULT_TRANSCRIPTION_MODEL })"
               />
               <app-field
                 v-model="draft.transcriptionLanguage"
@@ -226,9 +226,9 @@
     <app-sheet v-model:show="isTryOpen" :title="$t('settings.assistant.try_open')" full>
       <div class="mx-try">
         <p class="mx-d">{{ $t('settings.assistant.try_desc') }}</p>
-        <app-text-area v-model="tryIt.text.value" :label="$t('settings.assistant.try_sample')" :placeholder="$t('settings.assistant.try_placeholder')" :visible-lines="2" :description="tryUses" />
+        <app-text-area v-model="tryIt.text" :label="$t('settings.assistant.try_sample')" :placeholder="$t('settings.assistant.try_placeholder')" :visible-lines="2" :description="tryIt.uses" />
 
-        <div v-if="!tryIt.activeRun.value" class="mx-note">
+        <div v-if="!tryIt.activeRun" class="mx-note">
           <app-icon :icon="IconFlask" :size="16" :stroke="2" />
           <span>{{ $t('settings.assistant.try_empty') }}</span>
         </div>
@@ -236,22 +236,22 @@
         <template v-else>
           <div class="mx-try__runs">
             <button
-              v-for="(run, index) in tryIt.runs.value"
-              :key="run.id"
+              v-for="(item, index) in tryIt.runs"
+              :key="item.id"
               type="button"
               class="mx-chip"
-              :class="{ 'fill on': index === tryIt.activeIndex.value }"
-              :aria-pressed="index === tryIt.activeIndex.value"
-              @click="tryIt.activeIndex.value = index"
+              :class="{ 'fill on': index === tryIt.activeIndex }"
+              :aria-pressed="index === tryIt.activeIndex"
+              @click="tryIt.activeIndex = index"
             >
-              {{ $t('settings.assistant.try_run_label', { n: run.id, history: run.historyCount || $t('settings.assistant.history_off') }) }}
+              {{ $t('settings.assistant.try_run_label', { n: item.id, history: item.historyCount || $t('settings.assistant.history_off') }) }}
             </button>
           </div>
 
           <div class="mx-chips">
             <span class="mx-chip" :class="run.matched === run.total ? 'mx-try__ok' : 'warn'">{{ $t('settings.assistant.try_matched', { matched: run.matched, total: run.total }) }}</span>
             <span v-if="run.durationMs" class="mx-chip"
-              ><app-icon :icon="IconClock" :size="12" :stroke="2" /><span>{{ (run.durationMs / 1000).toFixed(2) }} s</span></span
+              ><app-icon :icon="IconClock" :size="12" :stroke="2" /><span>{{ $t('settings.assistant.try_seconds', { seconds: (run.durationMs / 1000).toFixed(2) }) }}</span></span
             >
             <span class="mx-chip">
               <app-icon :icon="IconArrowsExchange" :size="12" :stroke="2" /><span>{{ $t('settings.assistant.try_tokens', { in: run.tokensIn, out: run.tokensOut ?? '—' }) }}</span>
@@ -288,7 +288,7 @@
                 <button type="button" class="mx-try__sh" :aria-expanded="!!openSections[section.key]" @click="openSections[section.key] = !openSections[section.key]">
                   <app-icon :icon="openSections[section.key] ? IconChevronDown : IconChevronRight" :size="14" :stroke="2" />
                   <span class="n">{{ $t(`settings.assistant.try_section_${section.key}`) }}</span>
-                  <span class="mx-badge">{{ section.tokens ? `${section.tokens} tok` : '—' }}</span>
+                  <span class="mx-badge">{{ section.tokens ? $t('settings.assistant.try_section_tokens', { tokens: section.tokens }) : '—' }}</span>
                 </button>
                 <pre v-if="openSections[section.key]" class="mx-try__pre">{{ section.body || $t('settings.assistant.try_section_empty') }}</pre>
               </div>
@@ -302,10 +302,10 @@
 
       <template #footer>
         <button type="button" class="mx-btn out" @click="isTryOpen = false">{{ $t('close') }}</button>
-        <button type="button" class="mx-btn pri" :disabled="tryIt.isRunning.value || !tryIt.text.value.trim()" @click="tryIt.run">
-          <span v-if="tryIt.isRunning.value" class="mx-spin" />
+        <button type="button" class="mx-btn pri" :disabled="tryIt.isRunning || !tryIt.text.trim()" @click="tryIt.run">
+          <span v-if="tryIt.isRunning" class="mx-spin" />
           <app-icon v-else :icon="IconPlayerPlay" :size="16" :stroke="2" />
-          <span>{{ tryIt.isRunning.value ? $t('settings.assistant.try_running') : $t('settings.assistant.try_run') }}</span>
+          <span>{{ tryIt.isRunning ? $t('settings.assistant.try_running') : $t('settings.assistant.try_run') }}</span>
         </button>
       </template>
     </app-sheet>
@@ -313,7 +313,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue'
+import { onMounted, reactive, ref } from 'vue'
 import { useProfileStore } from '~/core/stores/profileStore'
 import UIUtils from '~/core/utils/UIUtils'
 import { useToolbar } from '~/mobile/composables/useToolbar'
@@ -333,8 +333,9 @@ import {
 } from '@tabler/icons-vue'
 import { saveSettingsToStore, watchSettingsStore } from '~/core/utils/SettingUtils.js'
 import { rule } from '~/core/utils/ValidationUtils.js'
-import { useAssistantSettings } from '~/core/composables/useAssistantSettings'
+import { DEFAULT_LLM_MODEL, DEFAULT_TRANSCRIPTION_MODEL, useAssistantSettings } from '~/core/composables/useAssistantSettings'
 import { useAssistantTryIt } from '~/core/composables/useAssistantTryIt'
+import { useAssistantHistoryOptions } from '~/core/composables/useAssistantHistory'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
@@ -363,11 +364,7 @@ const badge = (source) =>
     none: { cls: 'mx-chip warn', text: t('settings.assistant.llm_not_configured') },
   })[source]
 
-const historyOptions = computed(() => [{ value: 0, label: t('settings.assistant.history_off') }, ...[25, 50, 100].map((value) => ({ value, label: String(value) }))])
-// ~28 tokens per history line
-const historyHelp = computed(() =>
-  assistantHistoryCount.value ? t('settings.assistant.history_help_on', { count: assistantHistoryCount.value, tokens: assistantHistoryCount.value * 28 }) : t('settings.assistant.history_help_off'),
-)
+const { historyOptions, historyHelp } = useAssistantHistoryOptions(assistantHistoryCount)
 
 // Saves the profile settings and the assistant connections together
 const onSave = async () => {
@@ -383,15 +380,8 @@ const isTryOpen = ref(false)
 const tryViews = ['result', 'prompt', 'raw']
 const tryView = ref('result')
 const openSections = ref({})
-const tryIt = useAssistantTryIt({ llmOverride, llmContext: assistantLlmContext, historyCount: assistantHistoryCount, modelInUse: llmModelInUse })
-const run = computed(() => tryIt.activeRun.value)
-const tryUses = computed(() =>
-  t('settings.assistant.try_uses', {
-    model: llmModelInUse.value,
-    source: t(llmSource.value === 'own' ? 'settings.assistant.try_source_own' : 'settings.assistant.try_source_server'),
-    history: assistantHistoryCount.value || t('settings.assistant.history_off'),
-  }),
-)
+const tryIt = reactive(useAssistantTryIt({ llmOverride, llmContext: assistantLlmContext, historyCount: assistantHistoryCount, modelInUse: llmModelInUse, source: llmSource }))
+const run = computed(() => tryIt.activeRun)
 const statusClass = (status) => ({ matched: 'mx-try__ok', new: 'fill', unmatched: 'warn', none: '' })[status]
 
 const toolbar = useToolbar()
