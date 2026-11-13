@@ -15,8 +15,8 @@ class VersionController extends BaseController
     {
         return $this->respond([
             'latest_version' => $this->resolveLatestVersion(),
-            'assistant_llm' => $assistantLlmConfigService->getPublicConfig(),
-            'assistant_transcription' => $assistantTranscriptionConfigService->getPublicConfig(),
+            'assistant_llm' => $assistantLlmConfigService->getPublicConfig(forUser: true),
+            'assistant_transcription' => $assistantTranscriptionConfigService->getPublicConfig(forUser: true),
         ]);
     }
 

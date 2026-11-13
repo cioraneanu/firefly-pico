@@ -15,7 +15,7 @@
     </div>
 
     <div class="flex flex-col gap-1">
-      <tag-select v-model="tag" :disabled="!!withoutTag" />
+      <tag-select v-model="tag" :disabled="!!withoutTag" :is-multi-select="false" :auto-select-parents="false" />
       <app-checkbox v-model="withoutTag" :label="$t('transaction_list_page.without_tag')" />
     </div>
 

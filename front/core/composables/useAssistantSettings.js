@@ -98,6 +98,8 @@ export function useAssistantSettings() {
       return false
     }
     apply(get(response, 'data.data'))
+    // Ramble shows when the user's own connection is configured too
+    appStore.fetchInfo()
     return true
   }
 

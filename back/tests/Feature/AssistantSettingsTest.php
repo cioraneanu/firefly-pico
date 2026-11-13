@@ -117,6 +117,16 @@ class AssistantSettingsTest extends TestCase
         $this->assertDatabaseCount('assistant_user_settings', 1);
     }
 
+    public function test_info_reports_the_users_own_llm_as_configured()
+    {
+        config(['services.assistant_llm.endpoint' => null, 'services.assistant_llm.api_key' => null]);
+        $this->saveSettings()->assertOk();
+
+        $this->getJson('api/info', $this->headers())->assertOk()->assertJsonPath('assistant_llm.is_configured', true);
+        Cache::driver('array')->flush(); // getUser() caches the user for the whole app
+        $this->getJson('api/info', $this->headers('other-token'))->assertOk()->assertJsonPath('assistant_llm.is_configured', false);
+    }
+
     public function test_own_connection_requires_an_http_endpoint()
     {
         $this->saveSettings(['llm_endpoint' => null])->assertStatus(422);

@@ -31,12 +31,13 @@ abstract class AssistantConfigService
         ]);
     }
 
-    public function getPublicConfig(): array
+    // $forUser: is_configured follows the request's user (their own connection when they switched to it), not only the server's.
+    public function getPublicConfig(bool $forUser = false): array
     {
         $config = $this->getServerConfig();
 
         return [
-            'is_configured' => $config['isConfigured'],
+            'is_configured' => $forUser ? $this->getConnection()['isConfigured'] : $config['isConfigured'],
             'endpoint' => $config['endpoint'],
             'model' => $config['model'],
         ];

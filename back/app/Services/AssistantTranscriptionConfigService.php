@@ -23,9 +23,9 @@ class AssistantTranscriptionConfigService extends AssistantConfigService
         return [...parent::getServerConfig(), 'language' => $this->normalizeLanguage($language)];
     }
 
-    public function getPublicConfig(): array
+    public function getPublicConfig(bool $forUser = false): array
     {
-        return [...parent::getPublicConfig(), 'language' => $this->getServerConfig()['language']];
+        return [...parent::getPublicConfig($forUser), 'language' => $this->getServerConfig()['language']];
     }
 
     // Transcription APIs expect an ISO-639-1 code, so "ro-RO" or "ro_RO" becomes "ro".
