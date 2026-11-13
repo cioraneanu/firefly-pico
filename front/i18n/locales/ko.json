@@ -77,8 +77,8 @@
     "applied_filters": "적용된 필터",
     "apply_filters": "필터 적용",
     "transaction_filters": "거래 필터",
-    "total": "합계",
-    "compute_total": "합계 계산"
+    "compute_total": "합계 계산",
+    "total_hint": "현재 필터의 합계"
   },
   "transaction": {
     "title_list": "거래 목록",

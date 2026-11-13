@@ -20,6 +20,11 @@
 }
 .mx-tx .acts {
   display: flex;
+/* Calculate total toggle in the top bar */
+.mx-ib.out[aria-pressed='true'] {
+  background: var(--muted);
+}
+
   align-items: center;
   gap: 6px;
 }

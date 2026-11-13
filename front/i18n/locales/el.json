@@ -77,8 +77,8 @@
     "applied_filters": "Ενεργά φίλτρα",
     "apply_filters": "Εφαρμογή φίλτρων",
     "transaction_filters": "Φίλτρα συναλλαγών",
-    "total": "Σύνολο",
-    "compute_total": "Υπολογισμός συνόλου"
+    "compute_total": "Υπολογισμός συνόλου",
+    "total_hint": "Σύνολο για τα τρέχοντα φίλτρα"
   },
   "transaction": {
     "title_list": "Λίστα συναλλαγών",

@@ -2,6 +2,9 @@
   <div class="mx-page">
     <app-top-toolbar>
       <template #right>
+        <button type="button" class="mx-ib out" :aria-pressed="showSearchTotal" :aria-label="$t('filters.compute_total')" @click="onToggleSearchTotal">
+          <app-icon :icon="IconSum" :size="18" :stroke="2" />
+        </button>
         <app-button-list-add @click="onAdd" />
       </template>
     </app-top-toolbar>
@@ -25,18 +28,13 @@
             </button>
           </span>
           <button type="button" class="mx-btn xs ghost" @click="onClearFilters">{{ $t('general.clear_filters') }}</button>
-          <button type="button" class="mx-ib sm ml-auto" :class="{ out: showSearchTotal }" :aria-label="$t('filters.total')" @click="onToggleSearchTotal">
-            <app-icon :icon="IconSum" :size="16" :stroke="2" />
-          </button>
         </div>
 
-        <div v-if="activeFilters.length > 0 && showSearchTotal" class="mx-list flex items-center gap-2 px-3 py-2">
-          <button type="button" class="mx-btn out sm" :disabled="isComputingSearchTotal" @click="onComputeSearchTotal">
-            <span v-if="isComputingSearchTotal" class="mx-spin" />
-            <span>{{ $t('filters.compute_total') }}</span>
-          </button>
+        <div v-if="showSearchTotal" class="mx-list flex items-center gap-2 px-3 py-2">
+          <span class="mx-row__s">{{ $t('filters.total_hint') }}</span>
           <div class="flex-1" />
-          <b class="mx-tnum mx-money text-14"><app-count-up :value="searchTotalFormatted" /></b>
+          <span v-if="isComputingSearchTotal" class="mx-spin" />
+          <b class="mx-tnum mx-money text-14"><app-count-up :value="searchTotalFormatted ?? '—'" /></b>
           <currency-dropdown v-model="searchTotalCurrency" />
         </div>
 
@@ -118,7 +116,6 @@ const {
   isComputingSearchTotal,
   searchTotalFormatted,
   onToggleSearchTotal,
-  onComputeSearchTotal,
 } = useTransactionList()
 
 const onRemoveFilter = (bagKey) => (filters.value = { ...filters.value, [bagKey]: null })

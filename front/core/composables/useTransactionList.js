@@ -35,6 +35,7 @@ export function useTransactionList() {
     searchTotal.value = null
     listState.onRefresh()
   })
+    if (showSearchTotal.value) onComputeSearchTotal()
 
   watch(filters, (newValue, oldValue) => !isEqual(newValue, oldValue) && saveToUrl(activeFilters.value))
   // A link to the open list with ?description= (the desktop ⌘K search) still applies it
@@ -47,8 +48,11 @@ export function useTransactionList() {
   const onClearFilters = () => (filters.value = {})
 
   const onToggleSearchTotal = () => {
+  // "Calculate total" computes right away, and again whenever the filters change while it is shown
     showSearchTotal.value = !showSearchTotal.value
-    if (showSearchTotal.value && !get(currencyStore.exchangeRates, 'rates')) currencyStore.fetchExchangeRate()
+    if (!showSearchTotal.value) return
+    if (!get(currencyStore.exchangeRates, 'rates')) currencyStore.fetchExchangeRate()
+    onComputeSearchTotal()
   }
 
   const searchTotalFormatted = computed(() => {
@@ -60,11 +64,14 @@ export function useTransactionList() {
   })
 
   const onComputeSearchTotal = async () => {
+  // Filters changed while it ran: computes again for the new ones
     if (isComputingSearchTotal.value) return
     isComputingSearchTotal.value = true
-    const response = await transactionRepository.searchTransactionsTotal({ filters: [{ field: 'query', value: filtersBackendList.value.join(' ') }] })
+    const query = filtersBackendList.value.join(' ')
+    const response = await transactionRepository.searchTransactionsTotal({ filters: [{ field: 'query', value: query }] })
     isComputingSearchTotal.value = false
     if (!ResponseUtils.isSuccess(response)) return
+    if (query !== filtersBackendList.value.join(' ')) return showSearchTotal.value && onComputeSearchTotal()
 
     searchTotal.value = get(response, 'data.data')
     if (!searchTotalCurrency.value) {
@@ -90,6 +97,5 @@ export function useTransactionList() {
     isComputingSearchTotal,
     searchTotalFormatted,
     onToggleSearchTotal,
-    onComputeSearchTotal,
   }
 }

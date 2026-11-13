@@ -77,8 +77,8 @@
     "applied_filters": "Filtre aplicate",
     "apply_filters": "Aplică filtre",
     "transaction_filters": "Filtre tranzacții",
-    "total": "Total",
-    "compute_total": "Calculează totalul"
+    "compute_total": "Calculează totalul",
+    "total_hint": "Totalul pentru filtrele curente"
   },
   "transaction": {
     "title_list": "Lista tranzacțiilor",

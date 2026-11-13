@@ -1,6 +1,10 @@
 <template>
   <d-page :title="$t('toolbar.transactions')" :description="`${listTotalCount} ${$t('items')}`">
     <template #actions>
+      <d-button :icon="isEditing ? IconCheck : IconPencil" :aria-pressed="isEditing" :class="isEditing && 'bg-soft'" @click="isEditing = !isEditing">
+        {{ $t(isEditing ? 'desktop.done_editing' : 'desktop.edit_inline') }}
+      </d-button>
+      <d-button :icon="IconSum" :aria-pressed="showSearchTotal" :class="showSearchTotal && 'bg-soft'" @click="onToggleSearchTotal">{{ $t('filters.compute_total') }}</d-button>
       <d-button variant="primary" :icon="IconPlus" :to="RouteConstants.ROUTE_TRANSACTION_ID">{{ $t('new_transaction') }}</d-button>
     </template>
 
@@ -52,11 +56,7 @@
         </template>
       </d-popover>
       <span class="flex-1" />
-      <d-button :icon="isEditing ? IconCheck : IconPencil" :aria-pressed="isEditing" :class="isEditing && 'bg-soft'" @click="isEditing = !isEditing">
-        {{ $t(isEditing ? 'desktop.done_editing' : 'desktop.edit_inline') }}
-      </d-button>
       <d-button :icon="IconRefresh" :loading="isRefreshing" @click="refresh">{{ $t('desktop.refresh') }}</d-button>
-      <d-button :icon="IconSum" :aria-pressed="showSearchTotal" :class="showSearchTotal && 'bg-soft'" @click="onToggleSearchTotal">{{ $t('filters.total') }}</d-button>
       <d-button :icon="IconFilter" @click="isFiltersOpen = true">
         {{ $t('desktop.filters') }}
         <d-badge v-if="activeFiltersCount" class="px-1.5 text-dim tabular-nums">{{ activeFiltersCount }}</d-badge>
@@ -66,8 +66,11 @@
     <d-filter-chips v-if="activeFilters.length" :filters="activeFilters" @remove="removeFilter" @clear="onClearFilters" />
 
     <div v-if="showSearchTotal" class="-mt-2 flex flex-wrap items-center gap-3 rounded-xl px-3 py-2.5 ring-1 ring-fg/10">
-      <d-button size="sm" :loading="isComputingSearchTotal" @click="onComputeSearchTotal">{{ $t('filters.compute_total') }}</d-button>
-      <b class="font-semibold tabular-nums"><app-count-up :value="searchTotalFormatted ?? '—'" /></b>
+      <span class="text-sm text-dim">{{ $t('filters.total_hint') }}</span>
+      <b class="inline-flex items-center gap-1.5 font-semibold tabular-nums">
+        <icon-loader-2 v-if="isComputingSearchTotal" :size="14" class="d-spin text-dim" />
+        <app-count-up :value="searchTotalFormatted ?? '—'" />
+      </b>
       <span class="flex-1" />
       <div class="w-36">
         <d-currency-select v-model="searchTotalCurrency" />
@@ -129,7 +132,6 @@ const {
   isComputingSearchTotal,
   searchTotalFormatted,
   onToggleSearchTotal,
-  onComputeSearchTotal,
 } = useTransactionList()
 
 const isFiltersOpen = ref(false)

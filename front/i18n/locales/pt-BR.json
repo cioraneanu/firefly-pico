@@ -77,8 +77,8 @@
     "applied_filters": "Filtros aplicados",
     "apply_filters": "Aplicar filtros",
     "transaction_filters": "Filtros de transação",
-    "total": "Total",
-    "compute_total": "Calcular total"
+    "compute_total": "Calcular total",
+    "total_hint": "Total para os filtros atuais"
   },
   "transaction": {
     "title_list": "Lista de transações",
