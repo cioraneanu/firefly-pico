@@ -20,9 +20,6 @@ const { isKeyboardVisible, visualViewportHeight, visualViewportOffsetTop } = use
 // iOS does not resize the page for the keyboard, it pans it: pin the app to the visible area so sheets and the save button sit above the keyboard
 const keyboardStyle = computed(() => (isKeyboardVisible.value ? { '--app-h': `${visualViewportHeight.value}px`, '--app-y': `${visualViewportOffsetTop.value}px` } : null))
 
-// The row → page morph (View Transitions) follows the animations setting too
-useNuxtApp().hook('page:view-transition:start', (transition) => !profileStore.showAnimations && transition.skipTransition())
-
 // iOS Safari only shows :active press states when the page listens to touches
 onMounted(() => document.addEventListener('touchstart', () => {}, { passive: true }))
 

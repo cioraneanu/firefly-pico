@@ -926,11 +926,3 @@ body:has(> #__nuxt .mx-app) { background: var(--mx-page-bg, #fafafa); }
 .mx-app .mx-fd-enter-from, .mx-app .mx-fd-leave-to { opacity: 0; }
 .mx-app .mx-page > form { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
 .mx-app .mx-sel .val > .mx-lead.sm { margin: -2px 0 -2px -6px; }
-
-/* ---------- transaction row → transaction page (View Transitions, see useHeroTransition) ---------- */
-/* The rest of the old page fades out while the tapped row grows into the new page */
-::view-transition-old(root) { animation: .2s ease both mx-vt-out; }
-::view-transition-new(root) { animation: none; }
-::view-transition-group(mx-hero) { animation-duration: .42s; animation-timing-function: cubic-bezier(.32, .72, 0, 1); overflow: hidden; border-radius: 12px; }
-::view-transition-old(mx-hero), ::view-transition-new(mx-hero) { height: 100%; object-fit: cover; object-position: top; animation-duration: .28s; }
-@keyframes mx-vt-out { to { opacity: 0; } }

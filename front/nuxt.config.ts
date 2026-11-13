@@ -51,9 +51,6 @@ export default defineNuxtConfig({
 
   ssr: false,
 
-  // View Transitions only where a page opts in (definePageMeta({ viewTransition: true })): the mobile transaction row → page morph
-  experimental: { viewTransition: true },
-
   dir: {
     app: '.',
     pages: 'mobile/pages',
@@ -112,7 +109,6 @@ export default defineNuxtConfig({
   },
   app: {
     // pageTransition: { name: 'page', mode: 'out-in' },
-    viewTransition: false,
     head: {
       title: 'Pico',
       charset: 'utf-8',

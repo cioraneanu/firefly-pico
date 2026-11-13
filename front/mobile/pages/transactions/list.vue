@@ -48,15 +48,7 @@
               >
               <app-count-up :value="group.total" class="mx-tnum mx-money" />
             </div>
-            <transaction-list-item
-              v-for="item in group.items"
-              :key="item.id"
-              :value="item"
-              :style="heroStyle(item.id)"
-              clonable
-              @on-edit="(transaction) => openWithHero(transaction.id, () => onEdit(transaction))"
-              @on-delete="onDelete"
-            />
+            <transaction-list-item v-for="item in group.items" :key="item.id" :value="item" clonable @on-edit="onEdit" @on-delete="onDelete" />
           </template>
         </div>
 
@@ -105,8 +97,6 @@ import { useToolbar } from '~/mobile/composables/useToolbar'
 import { animateSwipeList } from '~/core/utils/AnimationUtils.js'
 
 const { t } = useI18n()
-const { heroStyle, openWithHero } = useHeroTransition()
-definePageMeta({ viewTransition: true })
 
 const {
   isLoading,
