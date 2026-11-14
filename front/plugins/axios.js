@@ -80,11 +80,13 @@ axios.interceptors.response.use(
     let showErrorToast = error.config?.showErrorToast !== false
     errorMessage && showErrorToast && UIUtils.showToastError(`Error: ${errorMessage}`, 4000)
 
-    await retryRequest(error)
+    // The retry gets its own requestId on the same config: remember this one first
+    const requestId = error.config?.requestId
+    const retryResponse = await retryRequest(error)
 
     const loadingStore = useLoadingStore()
-    error.config?.showLoading && loadingStore.removeActiveRequest(error.config?.requestId)
-    return Promise.resolve(error.response)
+    error.config?.showLoading && loadingStore.removeActiveRequest(requestId)
+    return Promise.resolve(retryResponse ?? error.response)
   },
 )
 
