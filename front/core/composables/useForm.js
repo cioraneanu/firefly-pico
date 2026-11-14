@@ -99,7 +99,7 @@ export function useForm(props) {
 
   const onDelete = async () => {
     const id = itemId.value
-    const response = await deleteWithUndo(item.value, () => repository.delete(id), { leave: routeList && (() => navigateTo(routeList)), undoable: !!routeList })
+    const response = await deleteWithUndo(item.value, () => repository.delete(id), { leave: routeList && (() => navigateTo(routeList, { replace: true })), undoable: !!routeList })
     if (ResponseUtils.isSuccess(response)) {
       onEvent ? onEvent(useFormEvent.postDelete, response) : null
     }

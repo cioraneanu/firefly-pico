@@ -3,7 +3,7 @@
     <transition name="mx-fd" appear>
       <button v-if="isOpen" type="button" class="mx-ov td-esh-ov" tabindex="-1" :aria-label="$t('close')" @click="close" />
     </transition>
-    <transition name="mx-sh" @after-leave="navigateTo(RouteConstants.ROUTE_TODO)">
+    <transition name="mx-sh" @after-leave="leave">
       <div v-if="isOpen" class="td-esh" :class="{ drag: isDragging, back: !isDragging }" :style="dragY ? { '--dy': `${dragY}px` } : null" role="dialog" aria-modal="true" :aria-label="title">
         <div class="td-grab" aria-hidden="true" @pointerdown="onGrabDown" @pointermove="onGrabMove" @pointerup="onGrabUp" @pointercancel="onGrabUp"><span /></div>
         <div class="td-esh__b">
@@ -62,6 +62,9 @@ const todoStore = useTodoStore()
 // Slides out first, then leaves the route (after-leave)
 const isOpen = ref(true)
 const close = () => (isOpen.value = false)
+// Opened from the inbox: step back, so the inbox's back arrow does not reopen the editor
+const router = useRouter()
+const leave = () => (router.options.history.state.back === RouteConstants.ROUTE_TODO ? router.back() : navigateTo(RouteConstants.ROUTE_TODO, { replace: true }))
 
 const onEvent = (event, response) => {
   if (event === useFormEvent.postSave) {
@@ -78,9 +81,12 @@ const { isReady, itemId, item, saveItem, onDelete, onValidationError, formName, 
 })
 
 const isSavingDone = ref(false)
+// A failed "Save & done" gives the form its #todo tag back, so a later Save keeps it
 const onSubmit = async () => {
-  if (isSavingDone.value) item.value = todoStore.withoutTodoTag(item.value)
-  await saveItem()
+  const original = item.value
+  if (isSavingDone.value) item.value = todoStore.withoutTodoTag(original)
+  const response = await saveItem()
+  if (!ResponseUtils.isSuccess(response)) item.value = original
 }
 
 const dragY = ref(0)
