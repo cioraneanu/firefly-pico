@@ -25,14 +25,17 @@
 
     <div v-if="showSearchTotal" class="-mt-2 flex flex-wrap items-center gap-3 rounded-xl px-3 py-2.5 ring-1 ring-fg/10">
       <span class="text-sm text-dim">{{ $t('filters.total_hint') }}</span>
-      <b class="inline-flex items-center gap-1.5 font-semibold tabular-nums">
-        <icon-loader-2 v-if="isComputingSearchTotal" :size="14" class="d-spin text-dim" />
-        <app-count-up :value="searchTotalFormatted ?? '—'" />
-      </b>
       <span class="flex-1" />
-      <div class="w-36">
-        <d-currency-select v-model="searchTotalCurrency" />
-      </div>
+      <span v-if="isSearchTotalTooBig" class="text-sm text-dim">{{ $t('filters.total_too_many') }}</span>
+      <template v-else>
+        <b class="inline-flex items-center gap-1.5 font-semibold tabular-nums">
+          <icon-loader-2 v-if="isComputingSearchTotal" :size="14" class="d-spin text-dim" />
+          <app-count-up :value="searchTotalFormatted ?? '—'" />
+        </b>
+        <div class="w-28">
+          <d-currency-select v-model="searchTotalCurrency" />
+        </div>
+      </template>
     </div>
 
     <section class="overflow-x-auto rounded-xl bg-card ring-1 ring-fg/10">
@@ -89,6 +92,7 @@ const {
   showSearchTotal,
   searchTotalCurrency,
   isComputingSearchTotal,
+  isSearchTotalTooBig,
   searchTotalFormatted,
   onToggleSearchTotal,
 } = useTransactionList()

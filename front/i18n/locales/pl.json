@@ -80,6 +80,7 @@
     "apply_filters": "Zastosuj filtry",
     "transaction_filters": "Filtry transakcji",
     "compute_total": "Oblicz sumę",
+    "total_too_many": "Pasuje ponad 500 transakcji. Zawęź filtry, aby zobaczyć sumę.",
     "total_hint": "Suma dla bieżących filtrów"
   },
   "transaction": {

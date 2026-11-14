@@ -133,3 +133,36 @@
 .mx-tx .tray .mx-chip.todo {
   background: var(--primary);
 }
+
+/* Σ total for the current filters (transactions list) */
+.mx-stot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 6px 6px 12px;
+}
+.mx-stot__l {
+  flex: none;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.mx-stot__v,
+.mx-stot__m {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+}
+.mx-stot__v {
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mx-stot__m {
+  font-size: 12.5px;
+  color: var(--muted-foreground);
+}

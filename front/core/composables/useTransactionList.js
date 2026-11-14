@@ -30,6 +30,8 @@ export function useTransactionList() {
   const searchTotal = ref(null)
   const searchTotalCurrency = ref(null)
   const isComputingSearchTotal = ref(false)
+  // The backend refuses to sum more than 500 transactions (422)
+  const isSearchTotalTooBig = ref(false)
 
   watch(filtersBackendList, (newValue, oldValue) => {
     if (isEqual(newValue, oldValue)) return
@@ -68,10 +70,12 @@ export function useTransactionList() {
   const onComputeSearchTotal = async () => {
     if (isComputingSearchTotal.value) return
     isComputingSearchTotal.value = true
+    isSearchTotalTooBig.value = false
     const query = filtersBackendList.value.join(' ')
     const response = await transactionRepository.searchTransactionsTotal({ filters: [{ field: 'query', value: query }] })
     isComputingSearchTotal.value = false
     if (query !== filtersBackendList.value.join(' ')) return showSearchTotal.value && onComputeSearchTotal()
+    isSearchTotalTooBig.value = get(response, 'status') === 422
     if (!ResponseUtils.isSuccess(response)) return
 
     searchTotal.value = get(response, 'data.data')
@@ -96,6 +100,7 @@ export function useTransactionList() {
     showSearchTotal,
     searchTotalCurrency,
     isComputingSearchTotal,
+    isSearchTotalTooBig,
     searchTotalFormatted,
     onToggleSearchTotal,
   }

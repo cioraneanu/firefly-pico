@@ -80,6 +80,7 @@
     "apply_filters": "Aplică filtre",
     "transaction_filters": "Filtre tranzacții",
     "compute_total": "Calculează totalul",
+    "total_too_many": "Peste 500 de tranzacții se potrivesc. Restrânge filtrele ca să vezi totalul.",
     "total_hint": "Totalul pentru filtrele curente"
   },
   "transaction": {

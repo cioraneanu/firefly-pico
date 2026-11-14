@@ -80,6 +80,7 @@
     "apply_filters": "Filter anwenden",
     "transaction_filters": "Transaktions-Filter",
     "compute_total": "Summe berechnen",
+    "total_too_many": "Über 500 Buchungen passen. Grenze die Filter ein, um eine Summe zu sehen.",
     "total_hint": "Summe für die aktuellen Filter"
   },
   "transaction": {

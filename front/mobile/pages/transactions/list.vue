@@ -30,12 +30,12 @@
           <button type="button" class="mx-btn xs ghost" @click="onClearFilters">{{ $t('general.clear_filters') }}</button>
         </div>
 
-        <div v-if="showSearchTotal" class="mx-list flex items-center gap-2 px-3 py-2">
-          <span class="mx-row__s">{{ $t('filters.total_hint') }}</span>
-          <div class="flex-1" />
+        <div v-if="showSearchTotal" class="mx-list mx-stot">
+          <span class="mx-stot__l" :title="$t('filters.total_hint')">{{ $t('total') }}</span>
           <span v-if="isComputingSearchTotal" class="mx-spin" />
-          <b class="mx-tnum mx-money text-14"><app-count-up :value="searchTotalFormatted ?? '—'" /></b>
-          <currency-dropdown v-model="searchTotalCurrency" />
+          <span v-if="isSearchTotalTooBig" class="mx-stot__m">{{ $t('filters.total_too_many') }}</span>
+          <b v-else class="mx-tnum mx-money mx-stot__v"><app-count-up :value="searchTotalFormatted ?? '—'" /></b>
+          <currency-dropdown v-if="!isSearchTotalTooBig" v-model="searchTotalCurrency" />
         </div>
 
         <div v-if="list.length > 0" class="mx-list">
@@ -114,6 +114,7 @@ const {
   showSearchTotal,
   searchTotalCurrency,
   isComputingSearchTotal,
+  isSearchTotalTooBig,
   searchTotalFormatted,
   onToggleSearchTotal,
 } = useTransactionList()

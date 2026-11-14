@@ -80,6 +80,7 @@
     "apply_filters": "Aplicar filtros",
     "transaction_filters": "Filtros de transacción",
     "compute_total": "Calcular total",
+    "total_too_many": "Coinciden más de 500 transacciones. Acota los filtros para ver el total.",
     "total_hint": "Total para los filtros actuales"
   },
   "transaction": {

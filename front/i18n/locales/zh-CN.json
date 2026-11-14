@@ -80,6 +80,7 @@
     "apply_filters": "应用过滤器",
     "transaction_filters": "交易过滤器",
     "compute_total": "计算总计",
+    "total_too_many": "匹配的交易超过 500 笔。请缩小筛选范围以查看总计。",
     "total_hint": "当前筛选条件的合计"
   },
   "transaction": {

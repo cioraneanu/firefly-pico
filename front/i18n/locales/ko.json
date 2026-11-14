@@ -80,6 +80,7 @@
     "apply_filters": "필터 적용",
     "transaction_filters": "거래 필터",
     "compute_total": "합계 계산",
+    "total_too_many": "500건이 넘는 거래가 일치합니다. 합계를 보려면 필터를 좁히세요.",
     "total_hint": "현재 필터의 합계"
   },
   "transaction": {
