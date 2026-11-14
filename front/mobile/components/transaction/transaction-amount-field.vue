@@ -1,5 +1,5 @@
 <template>
-  <div class="mx-f" :class="[attrs.class, { bad: !!error }]" :style="attrs.style">
+  <div ref="amountField" class="mx-f scroll-mt-3" :class="[attrs.class, { bad: !!error }]" :style="attrs.style">
     <div class="mx-l">{{ $t('amount') }}<span v-if="isAmountRequired" class="req">*</span></div>
     <label class="mx-in mx-amt-in" :class="{ dis: disabled }">
       <app-icon :icon="IconCoins" :size="16" :stroke="2" />
@@ -110,6 +110,13 @@ const foreignAmountRules = computed(() => [...(props.isForeignAmountRequired ? [
 
 const inputAmount = ref(null)
 const inputAmountForeign = ref(null)
+const amountField = ref(null)
+
+// Once the keyboard is up, the field moves to the top of what is left, clear of the save and calculator bars
+const { isKeyboardVisible } = useKeyboard()
+watch([isFocused, isKeyboardVisible], ([focused, keyboardVisible]) => focused && keyboardVisible && amountField.value?.scrollIntoView({ block: 'start', behavior: 'smooth' }), {
+  flush: 'post',
+})
 
 const { error } = useFormField({ name: () => attrs.name ?? 'amount', rules: amountRules, value: amount })
 const { error: errorForeign } = useFormField({

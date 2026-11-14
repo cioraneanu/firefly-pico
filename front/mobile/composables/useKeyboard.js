@@ -25,6 +25,8 @@ export function useKeyboard() {
   }
 
   onMounted(() => {
+    // A keyboard already open when this mounts counts right away
+    onVisualViewportChange()
     visualViewport.addEventListener('resize', onVisualViewportChange)
     visualViewport.addEventListener('scroll', onVisualViewportChange)
   })

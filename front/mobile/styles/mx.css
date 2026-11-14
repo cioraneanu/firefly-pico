@@ -3182,9 +3182,9 @@ button.mx-help:active {
   position: absolute;
   left: 12px;
   right: 12px;
-  bottom: calc(132px + env(safe-area-inset-bottom, 0px));
+  bottom: 70px;
   z-index: 17;
-  display: grid;
+  display: none;
   grid-auto-flow: column;
   grid-auto-columns: minmax(0, 1fr);
   gap: 6px;
@@ -3195,8 +3195,9 @@ button.mx-help:active {
     0 0 0 1px var(--ring-10),
     var(--shadow-lg);
 }
+/* only while the keyboard is up (iOS focuses the assistant without opening it) */
 .mx-app.kb .mx-ops {
-  bottom: 70px;
+  display: grid;
 }
 .mx-app:has(.td-esh) .mx-ops {
   bottom: calc(74px + env(safe-area-inset-bottom, 0px));
