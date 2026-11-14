@@ -30,10 +30,10 @@
         <app-date v-model="dateEnd" :label="$t('date_before')" />
       </div>
 
-      <div class="grid grid-cols-3 gap-2 -mt-2">
-        <button type="button" class="mx-btn out sm" @click="onSubMonth">{{ $t('sub_month') }}</button>
-        <button type="button" class="mx-btn out sm" @click="onCurrentMonth">{{ $t('this_month') }}</button>
-        <button type="button" class="mx-btn out sm" @click="onAddMonth">{{ $t('add_month') }}</button>
+      <div class="mx-quick -mt-2.5" role="group">
+        <button type="button" class="mx-quick__b" @click="onSubMonth">{{ $t('sub_month') }}</button>
+        <button type="button" class="mx-quick__b" @click="onCurrentMonth">{{ $t('this_month') }}</button>
+        <button type="button" class="mx-quick__b" @click="onAddMonth">{{ $t('add_month') }}</button>
       </div>
     </template>
 
