@@ -25,17 +25,17 @@
         </div>
 
         <section v-if="isPanelVisible" class="mx-card td-sum td-cp" :aria-label="$t('todo_page.review_controls')">
-          <div class="td-sum__t">
-            <b>{{ isDoneView ? $t('todo_page.done_this_session', { count: doneCount }) : $t('todo_page.left_to_review', { count: todoCount }) }}</b>
-            <span>{{ $t('todo_page.done_of', { done: doneCount, total: todoStore.totalCount }) }}</span>
-          </div>
-          <div class="td-cp__r">
-            <div class="td-trk" role="progressbar" :aria-valuemax="todoStore.totalCount" :aria-valuenow="doneCount"><span :style="{ width: `${progress}%` }" /></div>
-            <button type="button" class="mx-btn xs out" :aria-pressed="isDoneView" :disabled="!isDoneView && doneCount === 0" @click="isDoneView = !isDoneView">
-              <app-icon :icon="isDoneView ? IconListCheck : IconHistory" :size="14" :stroke="2" />
-              <span>{{ isDoneView ? $t('todo_page.to_review_count', { count: todoCount }) : $t('todo_page.done_count', { count: doneCount }) }}</span>
+          <div class="td-cp__h">
+            <div class="td-cp__ht">
+              <b>{{ isDoneView ? $t('todo_page.done_this_session', { count: doneCount }) : $t('todo_page.left_to_review', { count: todoCount }) }}</b>
+              <span>{{ $t('todo_page.done_of', { done: doneCount, total: todoStore.totalCount }) }}</span>
+            </div>
+            <button type="button" class="mx-btn sm out" :aria-pressed="isDoneView" :disabled="!isDoneView && doneCount === 0" @click="isDoneView = !isDoneView">
+              <app-icon :icon="isDoneView ? IconListCheck : IconHistory" :size="16" :stroke="2" />
+              <span>{{ $t(isDoneView ? 'todo_page.show_todo' : 'todo_page.show_done') }}</span>
             </button>
           </div>
+          <div class="td-trk" role="progressbar" :aria-valuemax="todoStore.totalCount" :aria-valuenow="doneCount"><span :style="{ width: `${progress}%` }" /></div>
           <div class="td-cp__a">
             <button type="button" class="mx-btn sm out" :disabled="expandableIds.length === 0" @click="toggleExpandAll">
               <app-icon :icon="isAnyCollapsed ? IconChevronsDown : IconChevronsUp" :size="16" :stroke="2" />

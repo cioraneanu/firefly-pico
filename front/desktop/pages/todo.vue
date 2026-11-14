@@ -20,7 +20,7 @@
       </div>
       <div class="flex shrink-0 items-center gap-2">
         <d-button size="sm" :icon="isDoneView ? IconListCheck : IconHistory" :aria-pressed="isDoneView" :disabled="!isDoneView && doneCount === 0" @click="toggleView">
-          {{ isDoneView ? $t('todo_page.to_review_count', { count: todoCount }) : $t('todo_page.done_count', { count: doneCount }) }}
+          {{ $t(isDoneView ? 'todo_page.show_todo' : 'todo_page.show_done') }}
         </d-button>
         <d-button v-if="isDoneView" size="sm" :icon="IconArrowBackUp" :disabled="isBusy" @click="onPutBackAllShown">{{ $t('todo_page.put_all_back') }}</d-button>
         <d-button v-else variant="primary" size="sm" :icon="IconChecks" :disabled="isBusy" @click="onMarkAllDone(filtered)">{{ $t('todo_page.mark_all_done') }}</d-button>

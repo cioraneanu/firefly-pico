@@ -52,15 +52,11 @@
         <span>{{ $t(isExpanded ? 'todo_page.less' : 'todo_page.more') }}</span>
       </button>
       <span class="sp" />
-      <button type="button" class="mx-btn xs out" aria-haspopup="dialog" @click="emit('edit')">
-        <app-icon :icon="IconPencil" :size="14" :stroke="2" />
-        <span>{{ $t('todo_page.edit') }}</span>
-      </button>
       <button v-if="isDone" type="button" class="mx-btn xs out" @click="emit('putBack')">
         <app-icon :icon="IconArrowBackUp" :size="14" :stroke="2" />
         <span>{{ $t('todo_page.put_back') }}</span>
       </button>
-      <button v-else type="button" class="mx-btn xs pri" @click="emit('done')">
+      <button v-else type="button" class="mx-btn xs out" @click="emit('done')">
         <app-icon :icon="IconCheck" :size="14" :stroke="2" />
         <span>{{ $t('todo_page.mark_done') }}</span>
       </button>
@@ -69,7 +65,7 @@
 </template>
 
 <script setup>
-import { IconArrowBackUp, IconBlockquote, IconCheck, IconChevronDown, IconChevronUp, IconPencil, IconTags } from '@tabler/icons-vue'
+import { IconArrowBackUp, IconBlockquote, IconCheck, IconChevronDown, IconChevronUp, IconTags } from '@tabler/icons-vue'
 import Account from '~/core/models/Account'
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
 import { useTodoListItem } from '~/core/composables/useTodoListItem'

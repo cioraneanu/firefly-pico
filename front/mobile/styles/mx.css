@@ -3796,21 +3796,30 @@ button.mx-bar {
   gap: 10px;
   padding: 14px;
 }
-.mx .td-sum__t {
+.mx .td-cp__h {
   display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 8px;
+  align-items: center;
+  gap: 10px;
 }
-.mx .td-sum__t b {
+.mx .td-cp__ht {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+.mx .td-cp__ht b {
   font-size: 15px;
-  line-height: 20px;
+  line-height: 1.3;
   font-weight: 600;
 }
-.mx .td-sum__t span {
+.mx .td-cp__ht span {
   font-size: 12.5px;
   color: var(--muted-foreground);
   font-variant-numeric: tabular-nums;
+}
+.mx .td-cp__h .mx-btn {
+  flex: none;
 }
 .mx .td-trk {
   height: 6px;
@@ -3984,21 +3993,6 @@ button.mx-bar {
 }
 .td-esh__b > * {
   height: 100%;
-}
-.td-cp__r {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.td-cp__r .td-trk {
-  flex: 1;
-}
-.td-cp__r .mx-btn {
-  flex: none;
-  height: 26px;
-}
-.td-cp .td-sum__t + .td-cp__r {
-  margin-top: -8px;
 }
 .td-cp__a {
   display: grid;
