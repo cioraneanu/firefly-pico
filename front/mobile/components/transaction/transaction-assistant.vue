@@ -17,7 +17,8 @@
 
     <div class="mx-card__c flex flex-col gap-2.5">
       <div class="mx-tools">
-        <app-field ref="assistantFieldRef" v-model="assistantText" class="flex-1" :placeholder="`${$t('transaction.assistant')} ...`" :icon="IconSparkles" show-icon clearable />
+        <app-field ref="assistantFieldRef" v-model="assistantText" class="flex-1" :placeholder="`${$t('transaction.assistant')} ...`" :icon="IconSparkles" show-icon clearable @focus="isFocused = true" @blur="isFocused = false" />
+        <transaction-amount-field-operations v-if="isFocused" basic @result="onOperation" />
         <ramble :assistant-text="assistantText" />
       </div>
 
@@ -49,6 +50,8 @@ const emit = defineEmits(['change'])
 const assistantText = defineModel({ type: String })
 const assistantFieldRef = ref(null)
 const isHelpVisible = ref(false)
+const isFocused = ref(false)
+const onOperation = ({ value }) => (assistantText.value = `${assistantText.value ?? ''}${value}`)
 
 const { parsed, previewTags } = useTransactionAssistant(assistantText, (change) => emit('change', change))
 

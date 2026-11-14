@@ -3179,9 +3179,27 @@ button.mx-help:active {
 
 /* ---------- amount field: calculator + foreign currency ---------- */
 .mx-ops {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: calc(132px + env(safe-area-inset-bottom, 0px));
+  z-index: 17;
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
   gap: 6px;
+  padding: 6px;
+  border-radius: 12px;
+  background: var(--popover);
+  box-shadow:
+    0 0 0 1px var(--ring-10),
+    var(--shadow-lg);
+}
+.mx-app.kb .mx-ops {
+  bottom: 70px;
+}
+.mx-app:has(.td-esh) .mx-ops {
+  bottom: calc(74px + env(safe-area-inset-bottom, 0px));
 }
 .mx-ops button {
   height: 36px;
