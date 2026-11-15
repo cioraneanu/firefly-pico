@@ -1,6 +1,7 @@
 <template>
   <button v-if="appStore.llmIsConfigured" type="button" class="mx-btn out mx-btn40 relative" :aria-label="$t('transaction.assistant_ramble_title')" @click="openRamble">
-    <app-icon :icon="IconMicrophone" :size="16" :stroke="2" />
+    <span v-if="isCounting" class="mx-spin size-4" />
+    <app-icon v-else :icon="IconMicrophone" :size="16" :stroke="2" />
     <span v-if="savedRamblesCount > 0" class="mx-badge pri">{{ savedRamblesCount > 99 ? '99+' : savedRamblesCount }}</span>
   </button>
 </template>
@@ -19,8 +20,9 @@ const props = defineProps({
 
 const appStore = useAppStore()
 const { savedRamblesCount, refreshSavedRambleCount } = useRamble()
+const isCounting = ref(true)
 
 const openRamble = () => navigateTo({ path: RouteConstants.ROUTE_RAMBLE, query: props.assistantText ? { text: props.assistantText } : {} })
 
-onMounted(refreshSavedRambleCount)
+onMounted(() => refreshSavedRambleCount().finally(() => (isCounting.value = false)))
 </script>
