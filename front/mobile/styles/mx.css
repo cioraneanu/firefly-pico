@@ -4172,6 +4172,10 @@ body:has(> #__nuxt .mx-app) {
 .mx-app .mx-plist.dragging {
   transition: none;
 }
+/* the dashboard's sticky date bar shows the refresh spinner itself, so the list stays in place and the bar stays at the top */
+.mx-app .mx-plist:not(.dragging):has(> .mx-range--sticky) {
+  transform: none !important;
+}
 .mx-app .mx-pull {
   position: absolute;
   left: 0;
