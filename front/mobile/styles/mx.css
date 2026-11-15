@@ -3209,15 +3209,14 @@ button.mx-help:active {
 /* ---------- amount field: calculator + foreign currency ---------- */
 .mx-ops {
   position: absolute;
-  left: 12px;
   right: 12px;
-  bottom: 70px;
+  bottom: 60px;
   z-index: 17;
   display: none;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(0, 1fr);
-  gap: 6px;
-  padding: 6px;
+  grid-auto-columns: 40px;
+  gap: 4px;
+  padding: 4px;
   border-radius: 12px;
   background: var(--popover);
   box-shadow:
@@ -3229,10 +3228,10 @@ button.mx-help:active {
   display: grid;
 }
 .mx-app:has(.td-esh) .mx-ops {
-  bottom: calc(74px + env(safe-area-inset-bottom, 0px));
+  bottom: calc(64px + env(safe-area-inset-bottom, 0px));
 }
 .mx-ops button {
-  height: 36px;
+  height: 32px;
   border-radius: 8px;
   background: var(--muted);
   font-size: 17px;
