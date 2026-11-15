@@ -63,7 +63,10 @@ export const useTodoStore = defineStore('todo', () => {
     isFetched = true
     isLoading.value = true
     const query = getQuery()
-    const list = await new TransactionRepository().getAllWithMerge({ filters: [{ field: 'query', value: query }], getAll: new TransactionRepository().searchTransaction })
+    const list = await new TransactionRepository().getAllWithMerge({
+      filters: [{ field: 'query', value: query }],
+      getAll: (params) => new TransactionRepository().searchTransaction({ ...params, showLoading: false }),
+    })
     todoList.value = list.map(fromApi)
     doneList.value = without(
       doneList.value,
