@@ -22,6 +22,22 @@
         <ramble :assistant-text="assistantText" />
       </div>
 
+      <div v-if="isFocused" class="mx-aqt">
+        <button
+          v-for="action in quickActions"
+          :key="action.label"
+          type="button"
+          class="mx-aqt__c"
+          :class="{ on: quickState[action.key] === action.value, todo: action.key === 'isTodo' }"
+          :aria-pressed="quickState[action.key] === action.value"
+          @mousedown.prevent
+          @click="toggleQuickAction(action)"
+        >
+          <app-icon :icon="action.icon" :size="14" :stroke="2" />
+          <span>{{ $t(action.label) }}</span>
+        </button>
+      </div>
+
       <div v-if="previewTags.length > 0 || parsed.isTodo" class="mx-chips" style="margin-top: 0">
         <span v-for="previewTag in previewTags" :key="previewTag.label" class="mx-chip fill">
           <span class="mx-muted">{{ previewTag.label }}</span>
@@ -41,7 +57,7 @@
 </template>
 
 <script setup>
-import { IconHelpCircle, IconSparkles } from '@tabler/icons-vue'
+import { IconCalendar, IconCheckbox, IconHelpCircle, IconSparkles } from '@tabler/icons-vue'
 import Ramble from '~/mobile/components/transaction/ramble.vue'
 
 // Assistant card on the new-transaction page (design: MX-TransactionNew top card, help in a sheet as MX-HelpSheet).
@@ -52,6 +68,26 @@ const assistantFieldRef = ref(null)
 const isHelpVisible = ref(false)
 const isFocused = ref(false)
 const onOperation = ({ value }) => (assistantText.value = `${assistantText.value ?? ''}${value}`)
+
+const DAYS_REGEX = /(?:^|\s)([+-]\d+d)(?=\s|$)/i
+const quickActions = [
+  { key: 'isTodo', value: true, label: 'todo', icon: IconCheckbox },
+  { key: 'days', value: '-1d', label: 'yesterday', icon: IconCalendar },
+  { key: 'days', value: '-2d', label: 'two_days_ago', icon: IconCalendar },
+]
+
+const quickState = computed(() => {
+  const matcher = profileStore.assistantTodoTagMatcher
+  let rest = (assistantText.value ?? '').trim()
+  const isTodo = !!matcher && rest.endsWith(matcher)
+  if (isTodo) rest = rest.slice(0, -matcher.length)
+  return { rest: rest.replace(DAYS_REGEX, '').trim(), days: rest.match(DAYS_REGEX)?.[1].toLowerCase(), isTodo }
+})
+
+const toggleQuickAction = ({ key, value }) => {
+  const { rest, days, isTodo } = { ...quickState.value, [key]: quickState.value[key] === value ? null : value }
+  assistantText.value = `${[rest, days].filter(Boolean).join(' ')} ${isTodo ? profileStore.assistantTodoTagMatcher : ''}`.trimStart()
+}
 
 const { parsed, previewTags } = useTransactionAssistant(assistantText, (change) => emit('change', change))
 

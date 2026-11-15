@@ -63,6 +63,8 @@
   "add_month": "+1 miesiąc",
   "sub_day": "-1 dzień",
   "today": "Dziś",
+  "yesterday": "Wczoraj",
+  "two_days_ago": "2 dni temu",
   "add_day": "+1 dzień",
   "day_of_week": "Dzień tygodnia",
   "amount": "Kwota",

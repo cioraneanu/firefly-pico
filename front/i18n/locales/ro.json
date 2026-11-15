@@ -63,6 +63,8 @@
   "add_month": "-1 lună",
   "sub_day": "-1 zi",
   "today": "Astăzi",
+  "yesterday": "Ieri",
+  "two_days_ago": "Acum 2 zile",
   "add_day": "+1 zi",
   "day_of_week": "Ziua săptămânii",
   "amount": "Sumă",

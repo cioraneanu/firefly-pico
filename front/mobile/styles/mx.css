@@ -2749,6 +2749,35 @@ a.mx-bar {
 .mx-card__h--asst .mx-card__d {
   margin-top: 2px;
 }
+/* assistant quick actions: only while the keyboard is up */
+.mx-aqt {
+  display: none;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.mx-app.kb .mx-aqt {
+  display: flex;
+}
+.mx-aqt__c {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 30px;
+  padding: 0 11px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  background: var(--muted);
+  color: var(--foreground);
+}
+.mx-aqt__c.on {
+  background: var(--primary);
+  color: var(--primary-foreground);
+}
+.mx-aqt__c.todo.on {
+  background: #f59e0b;
+  color: #1c1300;
+}
 
 .mx-card .mx-card__h .mx-badge {
   flex: none;

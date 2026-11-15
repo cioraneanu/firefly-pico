@@ -63,6 +63,8 @@
   "add_month": "+1 месяц",
   "sub_day": "-1 день",
   "today": "Сегодня",
+  "yesterday": "Вчера",
+  "two_days_ago": "2 дня назад",
   "add_day": "+1 день",
   "day_of_week": "День недели",
   "amount": "Сумма",

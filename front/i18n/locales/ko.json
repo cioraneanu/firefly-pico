@@ -63,6 +63,8 @@
   "add_month": "+1개월",
   "sub_day": "-1일",
   "today": "오늘",
+  "yesterday": "어제",
+  "two_days_ago": "2일 전",
   "add_day": "+1일",
   "day_of_week": "요일",
   "amount": "금액",

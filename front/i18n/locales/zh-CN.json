@@ -63,6 +63,8 @@
   "add_month": "+1 个月",
   "sub_day": "-1 天",
   "today": "今天",
+  "yesterday": "昨天",
+  "two_days_ago": "2天前",
   "add_day": "+1 天",
   "day_of_week": "星期几",
   "amount": "金额",
