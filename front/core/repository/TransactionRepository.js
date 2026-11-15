@@ -20,7 +20,7 @@ export default class TransactionRepository extends BaseRepository {
     const appStore = useAppStore()
     const url = `${appStore.picoBackendURL}/api/search/transactions/total`
     let searchUrl = this.getUrlForRequest({ filters, page: null, pageSize: null, url })
-    // 422 = more transactions match than the backend sums: a normal answer (no error toast), shown next to the total
-    return await axios.get(searchUrl, { validateStatus: (status) => status === 200 || status === 422 })
+    // A failure (422 = more transactions match than the backend sums, or a timeout) is shown next to the total, not as an error toast
+    return await axios.get(searchUrl, { showErrorToast: false })
   }
 }

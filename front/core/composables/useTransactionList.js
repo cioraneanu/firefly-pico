@@ -30,7 +30,7 @@ export function useTransactionList() {
   const searchTotal = ref(null)
   const searchTotalCurrency = ref(null)
   const isComputingSearchTotal = ref(false)
-  // The backend refuses to sum more than 500 transactions (422)
+  // The backend refuses to sum more than 500 transactions (422), and wide filters can time out first
   const isSearchTotalTooBig = ref(false)
 
   watch(filtersBackendList, (newValue, oldValue) => {
@@ -75,8 +75,8 @@ export function useTransactionList() {
     const response = await transactionRepository.searchTransactionsTotal({ filters: [{ field: 'query', value: query }] })
     isComputingSearchTotal.value = false
     if (query !== filtersBackendList.value.join(' ')) return showSearchTotal.value && onComputeSearchTotal()
-    isSearchTotalTooBig.value = get(response, 'status') === 422
-    if (!ResponseUtils.isSuccess(response)) return
+    isSearchTotalTooBig.value = !ResponseUtils.isSuccess(response)
+    if (isSearchTotalTooBig.value) return
 
     searchTotal.value = get(response, 'data.data')
     if (!searchTotalCurrency.value) {
