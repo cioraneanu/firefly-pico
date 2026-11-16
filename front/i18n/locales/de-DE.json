@@ -186,6 +186,7 @@
     "required_field": "Dieses Feld ist erforderlich",
     "settings_saved": "Einstellungen gespeichert",
     "setup_entry": "Einrichtung",
+    "native_recorder_entry": "Sprachaufnahme",
     "setup": {
       "title": "Einrichtung",
       "pico_backend_url": "Pico backend URL",

@@ -2802,6 +2802,52 @@ a.mx-bar {
   font-weight: 600;
   color: var(--foreground);
 }
+.mx-prof-fab__p {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+/* iOS app: voice recorder under the profile (design: recorder dock "Stacked mic") */
+.mx-prof-fab__sep {
+  width: 20px;
+  height: 1px;
+  margin: 3px 0 1px;
+  background: var(--border);
+}
+.mx-prof-fab__mic {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--muted);
+  color: var(--foreground);
+}
+.mx-prof-fab__mic svg {
+  width: 16px;
+  height: 16px;
+}
+.mx-prof-fab__mic.recording {
+  background: #ef4444;
+  color: #fff;
+  box-shadow: 0 0 0 3px color-mix(in srgb, #ef4444 22%, transparent);
+}
+.mx-prof-fab__mic.saved {
+  background: #22c55e;
+  color: #fff;
+}
+.mx-prof-fab__mic .sq {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: currentColor;
+}
+.mx-prof-fab__time {
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  color: #dc2626;
+}
 .mx-prof-fab .av {
   display: grid;
   place-items: center;
@@ -2821,8 +2867,9 @@ a.mx-bar {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.mx-prof-fab:active {
-  background: var(--accent);
+.mx-prof-fab__p:active,
+.mx-prof-fab__mic:active {
+  opacity: 0.7;
 }
 
 .mxe.top {

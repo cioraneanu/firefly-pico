@@ -186,6 +186,7 @@
     "required_field": "Pole jest obowiązkowe",
     "settings_saved": "Ustawienia zapisane",
     "setup_entry": "Konfiguracja",
+    "native_recorder_entry": "Dyktafon",
     "setup": {
       "title": "Konfiguracja",
       "pico_backend_url": "Pico backend URL",

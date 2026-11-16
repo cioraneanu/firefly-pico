@@ -186,6 +186,7 @@
     "required_field": "This field is required",
     "settings_saved": "Settings saved",
     "setup_entry": "Setup",
+    "native_recorder_entry": "Voice recorder",
     "setup": {
       "title": "Setup",
       "pico_backend_url": "Pico backend URL",

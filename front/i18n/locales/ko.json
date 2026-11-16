@@ -186,6 +186,7 @@
     "required_field": "이 필드는 필수입니다",
     "settings_saved": "설정이 저장되었습니다",
     "setup_entry": "설정",
+    "native_recorder_entry": "음성 녹음",
     "setup": {
       "title": "설정",
       "pico_backend_url": "Pico 백엔드 URL",

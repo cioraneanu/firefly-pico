@@ -186,6 +186,7 @@
     "required_field": "此字段为必填项",
     "settings_saved": "设置已保存",
     "setup_entry": "设置",
+    "native_recorder_entry": "语音录制",
     "setup": {
       "title": "设置",
       "pico_backend_url": "Pico 后端 URL",

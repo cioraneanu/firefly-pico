@@ -186,6 +186,7 @@
     "required_field": "Acest câmp este obligatoriu",
     "settings_saved": "Setări salvate",
     "setup_entry": "Configurare",
+    "native_recorder_entry": "Înregistrare vocală",
     "setup": {
       "title": "Configurare",
       "pico_backend_url": "URL backend Pico",

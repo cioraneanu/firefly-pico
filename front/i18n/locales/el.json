@@ -186,6 +186,7 @@
     "required_field": "Αυτό το πεδίο είναι υποχρεωτικό",
     "settings_saved": "Οι ρυθμίσεις αποθηκεύτηκαν",
     "setup_entry": "Αρχική ρύθμιση",
+    "native_recorder_entry": "Φωνητική εγγραφή",
     "setup": {
       "title": "Αρχική ρύθμιση",
       "pico_backend_url": "URL του Pico backend",

@@ -186,6 +186,7 @@
     "required_field": "Este campo é obrigatório",
     "settings_saved": "Configurações salvas",
     "setup_entry": "Configuração",
+    "native_recorder_entry": "Gravador de voz",
     "setup": {
       "title": "Configuração",
       "pico_backend_url": "URL do backend do Pico",

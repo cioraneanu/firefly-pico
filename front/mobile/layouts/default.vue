@@ -2,7 +2,7 @@
   <div class="mx-layout">
     <slot />
     <app-bottom-toolbar />
-    <profile-picker-float v-if="profileStore.dashboard.isProfileFloatVisible" />
+    <profile-picker-float v-if="profileStore.dashboard.isProfileFloatVisible || isNativeApp" />
     <app-bottom-loading />
   </div>
 </template>

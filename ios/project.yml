@@ -1,0 +1,88 @@
+name: PicoVoice
+
+options:
+  deploymentTarget:
+    iOS: "18.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+
+configFiles:
+  Debug: Config/Base.xcconfig
+  Release: Config/Base.xcconfig
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Automatic
+    TARGETED_DEVICE_FAMILY: "1"
+
+targets:
+  PicoVoice:
+    type: application
+    platform: iOS
+    sources:
+      - PicoVoice
+      - Shared
+      # The built web app (scripts/build-web.sh), served at pico://localhost
+      - path: WebApp
+        type: folder
+        buildPhase: resources
+        optional: true
+    dependencies:
+      - target: PicoVoiceWidgets
+    entitlements:
+      path: PicoVoice/PicoVoice.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - $(APP_GROUP_ID)
+    info:
+      path: PicoVoice/Info.plist
+      properties:
+        CFBundleDisplayName: Pico Voice
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIBackgroundModes:
+          - audio
+        NSMicrophoneUsageDescription: Pico Voice records what you say so Firefly Pico can turn it into transactions.
+        NSSupportsLiveActivities: true
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+        PicoAppGroup: $(APP_GROUP_ID)
+        PicoDevServer: $(PICO_DEV_SERVER)
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID)
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+
+  PicoVoiceWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - PicoVoiceWidgets
+      - Shared
+    entitlements:
+      path: PicoVoiceWidgets/PicoVoiceWidgets.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - $(APP_GROUP_ID)
+    info:
+      path: PicoVoiceWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: Pico Voice
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+        PicoAppGroup: $(APP_GROUP_ID)
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID).Widgets
+        # Shared intents compile here too, but only the app process records and uploads.
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) WIDGET_EXTENSION

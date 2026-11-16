@@ -11,6 +11,7 @@
         <app-field-link :label="$t('settings.dashboard_entry')" :icon="IconLayoutDashboard" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_DASHBOARD)" />
         <app-field-link :label="$t('settings.transactions_entry')" :icon="IconListDetails" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_TRANSACTION)" />
         <app-field-link :label="$t('settings.about_entry')" :icon="IconInfoCircle" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_ABOUT)" />
+        <app-field-link v-if="isNativeApp" :label="$t('settings.native_recorder_entry')" :icon="IconMicrophone" :is-link="false" @click="openRecorder" />
       </app-card-info>
 
       <app-card-info>
@@ -30,10 +31,11 @@
 import RouteConstants from '~/core/constants/RouteConstants'
 import { useToolbar } from '~/mobile/composables/useToolbar'
 import { REPO_URL } from '~/core/constants/Constants'
-import { IconInfoCircle, IconLayoutDashboard, IconListDetails, IconPalette, IconPlugConnected, IconRefresh, IconSparkles, IconTypography } from '@tabler/icons-vue'
+import { IconInfoCircle, IconLayoutDashboard, IconListDetails, IconMicrophone, IconPalette, IconPlugConnected, IconRefresh, IconSparkles, IconTypography } from '@tabler/icons-vue'
 
 const appStore = useAppStore()
 const toolbar = useToolbar()
+const { isNativeApp, openRecorder } = useNativeApp()
 
 const { t } = useI18n()
 toolbar.init({ title: t('settings.settings_title') })

@@ -186,6 +186,7 @@
     "required_field": "Это поле обязательно",
     "settings_saved": "Настройки сохранены",
     "setup_entry": "Установка",
+    "native_recorder_entry": "Диктофон",
     "setup": {
       "title": "Установка",
       "pico_backend_url": "URL бэкенда Pico",

@@ -14,6 +14,7 @@ The repo is split into:
 
 - `front/`: Nuxt/Vue single-page PWA. Uses Vue 3 script setup, Pinia, Tailwind, the local mobile (`mx`) and desktop (`d-*`) UI kits, Tabler icons, VueUse, i18n, SVGO, and local UI-kit components.
 - `back/`: Laravel API. Mostly proxies Firefly III endpoints, while storing Pico-only extra fields and resources in its own database (SQLite by default).
+- `ios/`: native iOS app (Swift, XcodeGen) that bundles the built `front/` in a WKWebView and adds native voice recording; the web app talks to it through `core/composables/useNativeApp.js`. See `ios/README.md`.
 - `docker/` and `docker-compose*.yml`: production/container runtime setup for Pico alone or Pico plus Firefly III.
 - `docs/`: images and public-facing documentation assets.
 

@@ -186,6 +186,7 @@
     "required_field": "Ce champ est obligatoire",
     "settings_saved": "Paramètres enregistrés",
     "setup_entry": "Initialisation",
+    "native_recorder_entry": "Enregistreur vocal",
     "setup": {
       "title": "Initialisation",
       "pico_backend_url": "Pico URL",
