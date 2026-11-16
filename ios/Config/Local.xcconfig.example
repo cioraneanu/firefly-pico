@@ -6,7 +6,7 @@ DEVELOPMENT_TEAM = ABCDE12345
 // Bundle IDs must be unique to your team. The app becomes $(BUNDLE_ID_PREFIX).PicoVoice.
 // BUNDLE_ID_PREFIX = com.yourname
 
-// Load the web app from `npm run dev` in ../front instead of the bundled WebApp/, with hot reload.
+// Debug builds only: load the web app from `npm run dev` in ../front instead of the bundled WebApp/, with hot reload.
 // host:port only, no scheme (xcconfig treats // as a comment). The simulator reaches the Mac at localhost;
 // for a phone use the Mac's IP and start the dev server with `npm run dev -- --host`.
 // PICO_DEV_SERVER = localhost:3000

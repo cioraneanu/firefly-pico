@@ -51,6 +51,8 @@ targets:
         UIBackgroundModes:
           - audio
         NSMicrophoneUsageDescription: Pico Voice records what you say so Firefly Pico can turn it into transactions.
+        # The web app's dictation (Web Speech API) runs on iOS speech recognition
+        NSSpeechRecognitionUsageDescription: Pico turns what you dictate into text so it can fill in transactions.
         NSSupportsLiveActivities: true
         NSAppTransportSecurity:
           NSAllowsLocalNetworking: true

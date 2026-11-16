@@ -26,7 +26,7 @@ xcodegen generate
 open PicoVoice.xcodeproj
 ```
 
-Run `scripts/build-web.sh` again after changing the web app. While working on the web app, set `PICO_DEV_SERVER = localhost:3000` in `Config/Local.xcconfig` instead: the app then loads `npm run dev` from `../front`, with hot reload (on a phone, use the Mac's IP and `npm run dev -- --host`).
+Run `scripts/build-web.sh` again after changing the web app. While working on the web app, set `PICO_DEV_SERVER = localhost:3000` in `Config/Local.xcconfig` instead: Debug builds then load `npm run dev` from `../front`, with hot reload; Release builds always use the bundled web app (on a phone, use the Mac's IP and `npm run dev -- --host`).
 
 Choose your iPhone as the run destination and press Run. With automatic signing, Xcode registers the bundle IDs and the App Group (`group.<prefix>.PicoVoice`).
 

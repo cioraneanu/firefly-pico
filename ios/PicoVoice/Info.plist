@@ -27,6 +27,8 @@
 	</dict>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Pico Voice records what you say so Firefly Pico can turn it into transactions.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Pico turns what you dictate into text so it can fill in transactions.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>PicoAppGroup</key>

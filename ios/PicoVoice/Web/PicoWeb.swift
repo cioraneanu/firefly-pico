@@ -7,7 +7,7 @@ import os
 private let log = Logger(subsystem: "PicoVoice", category: "web")
 
 /// The Firefly Pico web app (../front), bundled with the app and served from `pico://localhost`.
-/// With `PICO_DEV_SERVER` set (Config/Local.xcconfig) it loads `npm run dev` instead, with hot reload.
+/// In Debug builds with `PICO_DEV_SERVER` set (Config/Local.xcconfig) it loads `npm run dev` instead, with hot reload.
 ///
 /// The web app is the only place to sign in. It talks to the app through `window.webkit.messageHandlers.pico`
 /// (see front/core/composables/useNativeApp.js):
@@ -35,7 +35,12 @@ final class PicoWeb: NSObject, ObservableObject {
     private var cancellables = Set<AnyCancellable>()
 
     override private init() {
+        // Debug builds only: a release build always runs the web app it shipped with (App Review guideline 2.5.2).
+        #if DEBUG
         let devServer = (Bundle.main.object(forInfoDictionaryKey: "PicoDevServer") as? String ?? "").trimmingCharacters(in: .whitespaces)
+        #else
+        let devServer = ""
+        #endif
         startURL = devServer.isEmpty ? URL(string: "\(BundledWebApp.scheme)://localhost/")! : URL(string: "http://\(devServer)/")!
 
         let configuration = WKWebViewConfiguration()
@@ -159,7 +164,7 @@ extension PicoWeb: WKUIDelegate {
     }
 
     /// The web app's dictation uses the microphone. iOS already asked for it on behalf of the app.
-    func webView(_ webView: WKWebView, requestMediaCapturePermissionFor origin: WKSecurityOrigin, initiatedByFrame frame: WKFrameInfo, type: WKMediaCaptureType) async -> WKPermissionDecision {
+    func webView(_ webView: WKWebView, decideMediaCapturePermissionsFor origin: WKSecurityOrigin, initiatedBy frame: WKFrameInfo, type: WKMediaCaptureType) async -> WKPermissionDecision {
         isApp(origin) ? .grant : .prompt
     }
 }
@@ -203,12 +208,14 @@ extension PicoWeb: WKScriptMessageHandler {
 /// Unknown paths get index.html, so the web app's own router handles them.
 private final class BundledWebApp: NSObject, WKURLSchemeHandler {
     static let scheme = "pico"
-    private let root = Bundle.main.resourceURL!.appending(path: "WebApp", directoryHint: .isDirectory)
+    // Standardized like the requested files below: on a device that drops the bundle path's /private prefix.
+    private let root = Bundle.main.resourceURL!.appending(path: "WebApp", directoryHint: .isDirectory).standardizedFileURL
 
     func webView(_ webView: WKWebView, start task: any WKURLSchemeTask) {
         let path = task.request.url?.path(percentEncoded: false) ?? "/"
         var file = root.appending(path: path).standardizedFileURL
         if path.hasSuffix("/") || !file.path.hasPrefix(root.path) || !FileManager.default.fileExists(atPath: file.path) {
+            if path.contains(".") { log.error("not in WebApp/: \(path, privacy: .public)") }
             file = root.appending(path: "index.html")
         }
         guard let data = try? Data(contentsOf: file) else {
