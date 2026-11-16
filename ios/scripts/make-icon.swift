@@ -1,5 +1,5 @@
 // Renders the 1024×1024 app icon: a white squiggle of speech running into a gold coin, on indigo.
-// Usage: swift scripts/make-icon.swift PicoVoice/Assets.xcassets/AppIcon.appiconset/AppIcon.png
+// Usage: swift scripts/make-icon.swift FireflyPico/Assets.xcassets/AppIcon.appiconset/AppIcon.png
 import AppKit
 
 let size = 1024

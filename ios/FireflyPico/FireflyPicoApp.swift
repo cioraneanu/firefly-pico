@@ -3,7 +3,7 @@ import SwiftUI
 import UserNotifications
 
 @main
-struct PicoVoiceApp: App {
+struct FireflyPicoApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     @Environment(\.scenePhase) private var scenePhase
 

@@ -3,7 +3,7 @@ import WidgetKit
 
 /// State the app and the widget extension both read, kept in the App Group's defaults.
 enum SharedState {
-    static let recordControlKind = "PicoVoice.RecordControl"
+    static let recordControlKind = "FireflyPico.RecordControl"
 
     private static let isRecordingKey = "isRecording"
 

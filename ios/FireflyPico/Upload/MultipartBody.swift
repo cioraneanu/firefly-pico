@@ -5,7 +5,7 @@ import Foundation
 enum MultipartBody {
     /// Returns the Content-Type header value, including the boundary.
     static func write(audioAt audioURL: URL, language: String?, to bodyURL: URL) throws -> String {
-        let boundary = "PicoVoice-\(UUID().uuidString)"
+        let boundary = "FireflyPico-\(UUID().uuidString)"
         var body = Data()
 
         if let language {

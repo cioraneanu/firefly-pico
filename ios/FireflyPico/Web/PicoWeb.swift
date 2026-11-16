@@ -4,7 +4,7 @@ import UniformTypeIdentifiers
 import WebKit
 import os
 
-private let log = Logger(subsystem: "PicoVoice", category: "web")
+private let log = Logger(subsystem: "FireflyPico", category: "web")
 
 /// The Firefly Pico web app (../front), bundled with the app and served from `pico://localhost`.
 /// In Debug builds with `PICO_DEV_SERVER` set (Config/Local.xcconfig) it loads `npm run dev` instead, with hot reload.
@@ -47,7 +47,7 @@ final class PicoWeb: NSObject, ObservableObject {
         configuration.setURLSchemeHandler(BundledWebApp(), forURLScheme: BundledWebApp.scheme)
         configuration.allowsInlineMediaPlayback = true
         // Keeps "Mobile" in the user agent, as Safari has it, and adds the app's name.
-        configuration.applicationNameForUserAgent = "Mobile/15E148 PicoVoice"
+        configuration.applicationNameForUserAgent = "Mobile/15E148 FireflyPico"
         webView = WKWebView(frame: .zero, configuration: configuration)
         super.init()
 

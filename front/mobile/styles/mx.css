@@ -2792,7 +2792,7 @@ a.mx-bar {
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  padding: 7px 6px 6px 8px;
+  padding: 7px 6px 6px 14px;
   border-radius: 12px 0 0 12px;
   background: var(--card);
   box-shadow:
@@ -2801,6 +2801,45 @@ a.mx-bar {
   font-size: 10.5px;
   font-weight: 600;
   color: var(--foreground);
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+/* drag up/down to move it, sideways to tuck it into the edge; the grip stays visible to pull it back (design: MX-Transactions) */
+.mx-prof-fab.is-drag {
+  transition: none;
+  box-shadow:
+    0 0 0 1px var(--ring-10),
+    0 14px 28px -8px rgb(0 0 0 / 0.4);
+}
+.mx-prof-fab.is-hid {
+  transform: translateX(calc(100% - 14px));
+}
+.mx-prof-fab > :not(.mx-prof-fab__grip) {
+  transition: opacity 0.2s;
+}
+.mx-prof-fab.is-hid > :not(.mx-prof-fab__grip) {
+  opacity: 0;
+  pointer-events: none;
+}
+.mx-prof-fab__grip {
+  position: absolute;
+  left: 5px;
+  top: 50%;
+  width: 4px;
+  height: 30px;
+  margin-top: -15px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--foreground) 30%, transparent);
+}
+.mx-prof-fab.rec .mx-prof-fab__grip {
+  background: #ef4444;
+  animation: mx-prof-blink 1.2s ease-in-out infinite;
+}
+@keyframes mx-prof-blink {
+  50% {
+    opacity: 0.35;
+  }
 }
 .mx-prof-fab__p {
   display: flex;
@@ -3312,6 +3351,63 @@ button.mx-help:active {
 }
 .mx-amt-in input {
   font-variant-numeric: tabular-nums;
+}
+/* "=" or leaving the field: the expression rolls up and out while the total rolls in from below (design: MX-TransactionNew, result animation 1) */
+.mx-an-box {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  align-self: stretch;
+}
+.mx-an-box input {
+  width: 100%;
+}
+.mx-amt-in.an-run input {
+  color: transparent;
+  caret-color: transparent;
+}
+.mx-an {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--foreground);
+}
+.mx-an > span {
+  position: absolute;
+  inset: 0 auto 0 2px;
+  display: flex;
+  align-items: center;
+  white-space: pre;
+}
+.mx-an .o {
+  animation: mx-an-out 0.32s ease-in forwards;
+}
+.mx-an .n {
+  animation: mx-an-in 0.38s 0.12s cubic-bezier(0.2, 0.9, 0.3, 1.2) both;
+}
+@keyframes mx-an-out {
+  to {
+    transform: translateY(-110%);
+    opacity: 0;
+  }
+}
+@keyframes mx-an-in {
+  from {
+    transform: translateY(110%);
+    opacity: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mx-an span {
+    animation-duration: 0.01ms;
+    animation-delay: 0s;
+  }
 }
 .mx-amt-in.ok {
   box-shadow:

@@ -161,21 +161,6 @@ export async function animateOnPrevious() {
   })
 }
 
-export async function animateShakeAmountInput() {
-  if (!useProfileStore().showAnimations) {
-    return
-  }
-
-  await nextTick()
-
-  animate('.transaction-amount-field-input', {
-    translateY: [0, -13, 0],
-    opacity: [1, 0, 1],
-    duration: 450,
-    ease: 'outCubic',
-  })
-}
-
 export async function animateTransactionAmountOperatorButtons() {
   if (!useProfileStore().showAnimations) {
     return

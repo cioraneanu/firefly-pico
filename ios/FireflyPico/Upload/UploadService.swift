@@ -1,7 +1,7 @@
 import Foundation
 import os
 
-private let log = Logger(subsystem: "PicoVoice", category: "upload")
+private let log = Logger(subsystem: "FireflyPico", category: "upload")
 
 /// Sends finished recordings to POST /api/assistant/rambles through a background URLSession,
 /// so uploads finish even after the app is suspended and wait out lost connectivity.
@@ -16,7 +16,7 @@ final class UploadService: NSObject {
     var backgroundCompletionHandler: (() -> Void)?
 
     private lazy var session: URLSession = {
-        let identifier = (Bundle.main.bundleIdentifier ?? "PicoVoice") + ".uploads"
+        let identifier = (Bundle.main.bundleIdentifier ?? "FireflyPico") + ".uploads"
         let configuration = URLSessionConfiguration.background(withIdentifier: identifier)
         configuration.isDiscretionary = false
         configuration.sessionSendsLaunchEvents = true

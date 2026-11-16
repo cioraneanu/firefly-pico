@@ -2,7 +2,7 @@ import SwiftUI
 import WidgetKit
 
 @main
-struct PicoVoiceWidgetsBundle: WidgetBundle {
+struct FireflyPicoWidgetsBundle: WidgetBundle {
     var body: some Widget {
         RecordingLiveActivity()
         RecordControl()

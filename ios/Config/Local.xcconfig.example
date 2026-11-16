@@ -3,7 +3,7 @@
 // Your Apple Developer Team ID (Xcode → Settings → Accounts, or developer.apple.com → Membership).
 DEVELOPMENT_TEAM = ABCDE12345
 
-// Bundle IDs must be unique to your team. The app becomes $(BUNDLE_ID_PREFIX).PicoVoice.
+// Bundle IDs must be unique to your team. The app becomes $(BUNDLE_ID_PREFIX).FireflyPico.
 // BUNDLE_ID_PREFIX = com.yourname
 
 // Debug builds only: load the web app from `npm run dev` in ../front instead of the bundled WebApp/, with hot reload.

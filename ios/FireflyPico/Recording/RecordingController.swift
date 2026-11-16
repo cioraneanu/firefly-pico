@@ -3,7 +3,7 @@ import Combine
 import UIKit
 import os
 
-private let log = Logger(subsystem: "PicoVoice", category: "recording")
+private let log = Logger(subsystem: "FireflyPico", category: "recording")
 
 enum RecordingError: LocalizedError {
     case microphonePermission
@@ -12,7 +12,7 @@ enum RecordingError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .microphonePermission:
-            "Open Pico Voice once and allow microphone access."
+            "Open Firefly Pico once and allow microphone access."
         case .couldNotStart:
             "The microphone couldn't start. Another app may be using it."
         }

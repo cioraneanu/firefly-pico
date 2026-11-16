@@ -1,7 +1,7 @@
 import AppIntents
 import os
 
-private let log = Logger(subsystem: "PicoVoice", category: "intents")
+private let log = Logger(subsystem: "FireflyPico", category: "intents")
 
 // These intents compile into the widget extension too, so the control and the Live Activity
 // buttons can reference them. Because they are Live Activity / audio recording intents that

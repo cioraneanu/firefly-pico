@@ -1,5 +1,4 @@
 import { evalMath, removeEndOperators } from '~/core/utils/MathUtils'
-import { animateShakeAmountInput } from '~/core/utils/AnimationUtils.js'
 
 export const useCurrencyConversion = ({
   amount,
@@ -19,9 +18,6 @@ export const useCurrencyConversion = ({
       UIUtils.showToastError('Cannot evaluate expression')
       return null
     }
-
-    const hasChanged = parseFloat(newAmount ?? 0) !== parseFloat(value ?? 0)
-    hasChanged ? await animateShakeAmountInput() : null
 
     return value
   }

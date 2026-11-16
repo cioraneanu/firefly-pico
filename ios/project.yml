@@ -1,4 +1,4 @@
-name: PicoVoice
+name: FireflyPico
 
 options:
   deploymentTarget:
@@ -19,11 +19,11 @@ settings:
     TARGETED_DEVICE_FAMILY: "1"
 
 targets:
-  PicoVoice:
+  FireflyPico:
     type: application
     platform: iOS
     sources:
-      - PicoVoice
+      - FireflyPico
       - Shared
       # The built web app (scripts/build-web.sh), served at pico://localhost
       - path: WebApp
@@ -31,16 +31,16 @@ targets:
         buildPhase: resources
         optional: true
     dependencies:
-      - target: PicoVoiceWidgets
+      - target: FireflyPicoWidgets
     entitlements:
-      path: PicoVoice/PicoVoice.entitlements
+      path: FireflyPico/FireflyPico.entitlements
       properties:
         com.apple.security.application-groups:
           - $(APP_GROUP_ID)
     info:
-      path: PicoVoice/Info.plist
+      path: FireflyPico/Info.plist
       properties:
-        CFBundleDisplayName: Pico Voice
+        CFBundleDisplayName: Firefly Pico
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         UILaunchScreen: {}
@@ -50,7 +50,7 @@ targets:
           - UIInterfaceOrientationPortrait
         UIBackgroundModes:
           - audio
-        NSMicrophoneUsageDescription: Pico Voice records what you say so Firefly Pico can turn it into transactions.
+        NSMicrophoneUsageDescription: Firefly Pico records what you say and turns it into transactions.
         # The web app's dictation (Web Speech API) runs on iOS speech recognition
         NSSpeechRecognitionUsageDescription: Pico turns what you dictate into text so it can fill in transactions.
         NSSupportsLiveActivities: true
@@ -63,21 +63,21 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID)
         ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
 
-  PicoVoiceWidgets:
+  FireflyPicoWidgets:
     type: app-extension
     platform: iOS
     sources:
-      - PicoVoiceWidgets
+      - FireflyPicoWidgets
       - Shared
     entitlements:
-      path: PicoVoiceWidgets/PicoVoiceWidgets.entitlements
+      path: FireflyPicoWidgets/FireflyPicoWidgets.entitlements
       properties:
         com.apple.security.application-groups:
           - $(APP_GROUP_ID)
     info:
-      path: PicoVoiceWidgets/Info.plist
+      path: FireflyPicoWidgets/Info.plist
       properties:
-        CFBundleDisplayName: Pico Voice
+        CFBundleDisplayName: Firefly Pico
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         NSExtension:

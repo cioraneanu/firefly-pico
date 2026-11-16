@@ -1,21 +1,26 @@
 <template>
   <div ref="amountField" class="mx-f scroll-mt-3" :class="[attrs.class, { bad: !!error }]" :style="attrs.style">
     <div class="mx-l">{{ $t('amount') }}<span v-if="isAmountRequired" class="req">*</span></div>
-    <label class="mx-in mx-amt-in" :class="{ dis: disabled }">
+    <label class="mx-in mx-amt-in" :class="{ dis: disabled, 'an-run': rollUp }">
       <app-icon :icon="IconCoins" :size="16" :stroke="2" />
-      <input
-        ref="inputAmount"
-        v-bind="amountInput"
-        type="text"
-        inputmode="decimal"
-        placeholder="0"
-        class="transaction-amount-field-input"
-        :name="attrs.name"
-        :disabled="disabled"
-        :aria-label="$t('amount')"
-        @focus="onFocus"
-        @blur="onBlur"
-      />
+      <span class="mx-an-box">
+        <input
+          ref="inputAmount"
+          v-bind="amountInput"
+          type="text"
+          inputmode="decimal"
+          placeholder="0"
+          :name="attrs.name"
+          :disabled="disabled"
+          :aria-label="$t('amount')"
+          @focus="onFocus"
+          @blur="onBlur"
+        />
+        <span v-if="rollUp" :key="rollUp.key" class="mx-an" aria-hidden="true">
+          <span class="o">{{ rollUp.from }}</span>
+          <span class="n">{{ rollUp.to }}</span>
+        </span>
+      </span>
       <span v-if="currencySymbol" class="suf">{{ currencySymbol }}</span>
     </label>
     <div v-if="error" class="mx-ferr">{{ error }}</div>
@@ -162,6 +167,18 @@ const evaluateAmount = async () => {
   amount.value = newAmount ?? currentAmount
 }
 
+// The expression rolls up and out while the total rolls in from below (design: MX-TransactionNew, result animation 1)
+const rollUp = ref(null)
+let rollUpTimer = null
+const playRollUp = async (from) => {
+  await nextTick()
+  const to = inputAmount.value?.value
+  if (!profileStore.showAnimations || !/[+\-*/]/.test(`${from}`.replace(/^-/, '')) || from === to) return
+  rollUp.value = { from, to, key: Date.now() }
+  clearTimeout(rollUpTimer)
+  rollUpTimer = setTimeout(() => (rollUp.value = null), 600)
+}
+
 const onFocus = () => {
   isFocused.value = true
   onAmountInputFocus()
@@ -170,8 +187,10 @@ const onFocus = () => {
 const onBlur = async () => {
   await nextTick()
   isFocused.value = false
+  const from = inputAmount.value?.value
   await evaluateAmount()
   onAmountInputBlur()
+  playRollUp(from)
 
   // On iOS if you hide the keyboard via the "Done" button, onBlur gets called but it's not actually blurred. This is a temp fix...
   inputAmount.value?.blur()
@@ -194,7 +213,9 @@ const onOperation = async (button) => {
     return
   }
   if (button.value === '=') {
+    const from = inputAmount.value?.value
     await evaluateAmount()
+    playRollUp(from)
     return
   }
   amount.value = sanitizeAmount(`${amount.value ?? ''}${button.value}`)

@@ -59,7 +59,7 @@ private struct StageView: View {
                 HStack(spacing: 10) {
                     RambleMark()
                         .frame(width: 40, height: 16)
-                    Text("Pico Voice")
+                    Text("Firefly Pico")
                         .font(.system(size: 18, weight: .heavy, design: .rounded))
                         .foregroundStyle(.white)
                 }

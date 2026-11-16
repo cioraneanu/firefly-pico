@@ -3,7 +3,7 @@ import Security
 
 /// Minimal generic-password Keychain wrapper.
 enum Keychain {
-    private static let service = "PicoVoice"
+    private static let service = "FireflyPico"
 
     static func read(_ account: String) -> String? {
         let query: [String: Any] = [

@@ -7,5 +7,5 @@ PICO_DEV_SERVER =
 
 #include? "Local.xcconfig"
 
-APP_BUNDLE_ID = $(BUNDLE_ID_PREFIX).PicoVoice
+APP_BUNDLE_ID = $(BUNDLE_ID_PREFIX).FireflyPico
 APP_GROUP_ID = group.$(APP_BUNDLE_ID)
