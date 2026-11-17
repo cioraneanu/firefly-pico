@@ -1,13 +1,17 @@
-import LanguageUtils from './LanguageUtils.js'
-
-const normalizeTag = (tag) => LanguageUtils.removeAccentsAndLowerCase(tag)
 const getSplits = (transaction) => transaction?.attributes?.transactions ?? []
 const getJournalId = (split) => String(split.transaction_journal_id)
 
+export function isSameTransactionGroup(original, updated) {
+  if (!original?.id || String(original.id) !== String(updated?.id)) return false
+  const originalIds = getSplits(original).map(getJournalId)
+  const updatedSplits = getSplits(updated)
+  const updatedIds = new Set(updatedSplits.map(getJournalId))
+  return originalIds.length > 0 && originalIds.length === updatedSplits.length && originalIds.length === updatedIds.size && originalIds.every((id) => updatedIds.has(id))
+}
+
 export function getTodoJournalIds(transaction, tagName) {
-  const marker = normalizeTag(tagName)
   return getSplits(transaction)
-    .filter((split) => split.transaction_journal_id && split.tags?.some((tag) => normalizeTag(tag) === marker))
+    .filter((split) => split.transaction_journal_id && split.tags?.includes(tagName))
     .map(getJournalId)
 }
 
@@ -16,7 +20,6 @@ export function getTodoTagUpdate(transaction, tagName, journalIds, isTodo) {
   const availableIds = new Set(splits.map(getJournalId))
   if (splits.some((split) => !split.transaction_journal_id) || availableIds.size !== splits.length || journalIds.some((id) => !availableIds.has(id))) return null
 
-  const marker = normalizeTag(tagName)
   let changed = false
   const transactions = splits.map((split) => {
     // Firefly replaces the split list. Include every journal, even if its tags are untouched.
@@ -24,7 +27,7 @@ export function getTodoTagUpdate(transaction, tagName, journalIds, isTodo) {
     if (!journalIds.includes(getJournalId(split))) return journal
 
     const tags = split.tags ?? []
-    const otherTags = tags.filter((tag) => normalizeTag(tag) !== marker)
+    const otherTags = tags.filter((tag) => tag !== tagName)
     if ((otherTags.length !== tags.length) === isTodo) return journal
 
     changed = true

@@ -17,7 +17,7 @@
         <icon-paperclip v-if="hasAttachments" :size="13" class="shrink-0 text-dim" />
         <icon-calendar-repeat v-if="recurrence" :size="13" class="shrink-0 text-dim" />
       </span>
-      <span v-if="rawNotes" class="truncate text-xs text-dim" :title="rawNotes">{{ rawNotes }}</span>
+      <span v-if="rawNotes" class="max-h-48 overflow-y-auto text-xs whitespace-pre-wrap wrap-anywhere text-dim">{{ rawNotes }}</span>
     </div>
     <span class="flex min-w-0 items-center gap-1.5">
       <d-chip v-if="displayedAccounts[0]" :icon="Account.getIcon(displayedAccounts[0]) ?? IconCreditCard">{{ Account.getDisplayName(displayedAccounts[0]) }}</d-chip>

@@ -24,12 +24,12 @@ export default class TransactionRepository extends BaseRepository {
     return await axios.get(searchUrl, { showErrorToast: false })
   }
 
-  async getTodoTransaction(id) {
-    const response = await axios.get(`${this.getUrl()}/${id}`, { showLoading: false, showErrorToast: false })
+  async getTodoTransaction(id, connection) {
+    const response = await axios.get(`${connection.picoBackendURL}/${this.endpoint}/${id}`, { connection, showLoading: false, showErrorToast: false })
     return get(response, 'data.data')
   }
 
-  async updateTodoTags(id, data) {
-    return await axios.put(`${this.getUrl()}/${id}`, data, { showLoading: false, showErrorToast: false })
+  async updateTodoTags(id, data, connection) {
+    return await axios.put(`${connection.picoBackendURL}/${this.endpoint}/${id}`, data, { connection, showLoading: false, showErrorToast: false })
   }
 }

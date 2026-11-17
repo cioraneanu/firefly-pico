@@ -29,7 +29,7 @@ axios.interceptors.request.use(
     })
     config.headers['Authorization'] = `Bearer ${authToken}`
     config.timeout = config.timeout || appStore.queryTimeout
-    if (appStore.isDemoMode) config.adapter = demoAdapter
+    if (config.connection?.isDemoMode ?? appStore.isDemoMode) config.adapter = demoAdapter
     return config
   },
   (error) => {
@@ -105,4 +105,4 @@ axios.interceptors.response.use(
   },
 )
 
-export default defineNuxtPlugin((nuxtApp) => {})
+export default defineNuxtPlugin(() => {})
