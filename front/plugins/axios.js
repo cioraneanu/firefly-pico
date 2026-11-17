@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { get } from 'lodash-es'
+import { demoAdapter } from '~/core/demo/DemoBackend.js'
 
 axios.interceptors.request.use(
   (config) => {
@@ -26,6 +27,7 @@ axios.interceptors.request.use(
     })
     config.headers['Authorization'] = `Bearer ${authToken}`
     config.timeout = config.timeout || appStore.queryTimeout
+    if (appStore.isDemoMode) config.adapter = demoAdapter
     return config
   },
   (error) => {

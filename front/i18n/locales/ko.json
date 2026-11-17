@@ -217,7 +217,11 @@
       "connection_successful": "연결 성공",
       "fetching": "가져오는 중...",
       "add_http_header": "헤더 추가",
-      "http_headers_info": "Pico 백엔드로 보내는 모든 요청에 포함됩니다. 예: Cloudflare Access 또는 리버스 프록시."
+      "http_headers_info": "Pico 백엔드로 보내는 모든 요청에 포함됩니다. 예: Cloudflare Access 또는 리버스 프록시.",
+      "demo": "데모 모드",
+      "demo_start": "샘플 데이터로 체험하기",
+      "demo_exit": "데모 모드 종료",
+      "demo_info": "서버 없이 이 기기에만 저장되는 샘플 데이터로 앱을 둘러보세요. 종료하면 샘플 데이터가 삭제되고 앱이 초기화됩니다."
     },
     "ui_entry": "사용자 인터페이스",
     "ui": {

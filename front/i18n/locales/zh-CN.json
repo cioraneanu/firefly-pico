@@ -217,7 +217,11 @@
       "connection_successful": "连接成功",
       "fetching": "获取中...",
       "add_http_header": "添加请求头",
-      "http_headers_info": "随每个请求发送到 Pico 后端，例如用于 Cloudflare Access 或反向代理。"
+      "http_headers_info": "随每个请求发送到 Pico 后端，例如用于 Cloudflare Access 或反向代理。",
+      "demo": "演示模式",
+      "demo_start": "使用示例数据试用",
+      "demo_exit": "退出演示模式",
+      "demo_info": "使用仅保存在此设备上的示例数据体验应用，无需服务器。退出后将删除示例数据并重置应用。"
     },
     "ui_entry": "用户界面",
     "ui": {

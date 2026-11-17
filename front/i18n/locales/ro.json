@@ -217,7 +217,11 @@
       "connection_successful": "Conexiune reușită",
       "fetching": "Se obține...",
       "add_http_header": "Adaugă header",
-      "http_headers_info": "Trimise cu fiecare cerere către backend-ul Pico, de ex. pentru Cloudflare Access sau un reverse proxy."
+      "http_headers_info": "Trimise cu fiecare cerere către backend-ul Pico, de ex. pentru Cloudflare Access sau un reverse proxy.",
+      "demo": "Mod demo",
+      "demo_start": "Încearcă cu date de exemplu",
+      "demo_exit": "Ieși din modul demo",
+      "demo_info": "Explorează aplicația cu date de exemplu păstrate doar pe acest dispozitiv, fără server. La ieșire, datele de exemplu se șterg și aplicația se resetează."
     },
     "ui_entry": "Interfața utilizatorului",
     "ui": {

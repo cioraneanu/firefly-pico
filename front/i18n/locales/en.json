@@ -217,7 +217,11 @@
       "connection_successful": "Connection successful",
       "fetching": "Fetching...",
       "add_http_header": "Add header",
-      "http_headers_info": "Sent with every request to the Pico backend, e.g. for Cloudflare Access or a reverse proxy."
+      "http_headers_info": "Sent with every request to the Pico backend, e.g. for Cloudflare Access or a reverse proxy.",
+      "demo": "Demo mode",
+      "demo_start": "Try with sample data",
+      "demo_exit": "Exit demo mode",
+      "demo_info": "Explore the app with sample data kept only on this device, no server needed. Exiting deletes the sample data and resets the app."
     },
     "ui_entry": "User interface",
     "ui": {

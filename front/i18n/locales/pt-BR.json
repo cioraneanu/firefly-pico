@@ -217,7 +217,11 @@
       "connection_successful": "Conexão bem-sucedida",
       "fetching": "Buscando...",
       "add_http_header": "Adicionar cabeçalho",
-      "http_headers_info": "Enviados em cada requisição ao backend do Pico, por ex. para Cloudflare Access ou um proxy reverso."
+      "http_headers_info": "Enviados em cada requisição ao backend do Pico, por ex. para Cloudflare Access ou um proxy reverso.",
+      "demo": "Modo demonstração",
+      "demo_start": "Experimentar com dados de exemplo",
+      "demo_exit": "Sair do modo demonstração",
+      "demo_info": "Explore o app com dados de exemplo salvos apenas neste dispositivo, sem servidor. Ao sair, os dados de exemplo são apagados e o app é redefinido."
     },
     "ui_entry": "Interface do usuário",
     "ui": {

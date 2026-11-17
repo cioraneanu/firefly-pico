@@ -4,6 +4,18 @@
 
     <app-form @submit="onSave">
       <main class="mx-body has-save">
+        <app-card v-if="appStore.isDemoMode || !appStore.hasAuthToken" :section="$t('settings.setup.demo')">
+          <button v-if="appStore.isDemoMode" type="button" class="mx-btn dng mx-btn-block" @click="exitDemo">
+            <app-icon :icon="IconLogout" :size="16" :stroke="2" />
+            <span>{{ $t('settings.setup.demo_exit') }}</span>
+          </button>
+          <button v-else type="button" class="mx-btn out mx-btn-block" @click="startDemo">
+            <app-icon :icon="IconPlayerPlay" :size="16" :stroke="2" />
+            <span>{{ $t('settings.setup.demo_start') }}</span>
+          </button>
+          <div class="mx-d">{{ $t('settings.setup.demo_info') }}</div>
+        </app-card>
+
         <app-card>
           <app-field v-model="picoBackendURL" name="picoBackendURL" inputmode="url" :label="$t('settings.setup.pico_backend_url')" :rules="[rule.required()]">
             <template #left-icon>
@@ -112,7 +124,8 @@ import UserRepository from '~/core/repository/UserRepository'
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
 import { cloneDeep, get } from 'lodash-es'
 import { rule } from '~/core/utils/ValidationUtils.js'
-import { IconCalendarRepeat, IconPlugConnected, IconPlus, IconToggleRight, IconTrash, IconWebhook, IconWorld } from '@tabler/icons-vue'
+import { IconCalendarRepeat, IconLogout, IconPlayerPlay, IconPlugConnected, IconPlus, IconToggleRight, IconTrash, IconWebhook, IconWorld } from '@tabler/icons-vue'
+import { exitDemo, startDemo } from '~/core/demo/DemoBackend.js'
 
 const appStore = useAppStore()
 const profileStore = useProfileStore()

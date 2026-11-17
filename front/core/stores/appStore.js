@@ -30,6 +30,8 @@ export const useAppStore = defineStore('app', () => {
   const picoBackendHeaders = useLocalStorage('picoBackendHeaders', [])
   const syncProfileInDB = useLocalStorage('syncProfileInDB', true)
   const daysBetweenFullSync = useLocalStorage('daysBetweenFullSync', 4)
+  // Demo mode answers every request from local sample data (core/demo/DemoBackend.js)
+  const isDemoMode = useLocalStorage('demoMode', false)
 
   const profileFloatButtonPosition = useLocalStorage('profileFloatButtonPosition', { y: window.innerHeight / 2.2 })
 
@@ -146,6 +148,7 @@ export const useAppStore = defineStore('app', () => {
     picoBackendHeaders,
     syncProfileInDB,
     daysBetweenFullSync,
+    isDemoMode,
 
     profileFloatButtonPosition,
     currentAppVersion,

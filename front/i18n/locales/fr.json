@@ -217,7 +217,11 @@
       "connection_successful": "Connexion réussie",
       "fetching": "Récupération ...",
       "add_http_header": "Ajouter un en-tête",
-      "http_headers_info": "Envoyés avec chaque requête au backend Pico, par ex. pour Cloudflare Access ou un reverse proxy."
+      "http_headers_info": "Envoyés avec chaque requête au backend Pico, par ex. pour Cloudflare Access ou un reverse proxy.",
+      "demo": "Mode démo",
+      "demo_start": "Essayer avec des données d'exemple",
+      "demo_exit": "Quitter le mode démo",
+      "demo_info": "Découvrez l'application avec des données d'exemple conservées uniquement sur cet appareil, sans serveur. En quittant, les données d'exemple sont supprimées et l'application est réinitialisée."
     },
     "ui_entry": "Interfacte Utilisateur",
     "ui": {
