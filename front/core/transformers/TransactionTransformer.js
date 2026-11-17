@@ -64,7 +64,7 @@ export default class TransactionTransformer extends ApiTransformer {
 
   static transformToApi(item) {
     const profileStore = useProfileStore()
-    const id = get(item, 'data.id')
+    const id = get(item, 'id') ?? get(item, 'data.id')
 
     const transactions = item.attributes.transactions.map((transaction) => {
       const accountSource = get(transaction, 'accountSource')
