@@ -10,7 +10,7 @@
 
     <!-- Review controls stay on top while the list scrolls -->
     <section
-      v-if="isPanelVisible"
+      v-if="isPanelVisible || doneCount > 0"
       class="sticky top-3 z-6 flex items-center gap-6 rounded-xl bg-card px-5 py-4 shadow-[0_8px_16px_-12px_rgb(0_0_0/0.25)] ring-1 ring-fg/10"
       :aria-label="$t('todo_page.review_controls')"
     >
@@ -22,8 +22,8 @@
         <d-button size="sm" :icon="isDoneView ? IconListCheck : IconHistory" :aria-pressed="isDoneView" :disabled="!isDoneView && doneCount === 0" @click="toggleView">
           {{ $t(isDoneView ? 'todo_page.show_todo' : 'todo_page.show_done') }}
         </d-button>
-        <d-button v-if="isDoneView" size="sm" :icon="IconArrowBackUp" :disabled="isBusy" @click="onPutBackAllShown">{{ $t('todo_page.put_all_back') }}</d-button>
-        <d-button v-else variant="primary" size="sm" :icon="IconChecks" :disabled="isBusy" @click="onMarkAllDone(filtered)">{{ $t('todo_page.mark_all_done') }}</d-button>
+        <d-button v-if="isDoneView" size="sm" :icon="IconArrowBackUp" :disabled="isBusy || !filtered.length" @click="onPutBackAllShown">{{ $t('todo_page.put_all_back') }}</d-button>
+        <d-button v-else variant="primary" size="sm" :icon="IconChecks" :disabled="isBusy || !filtered.length" @click="onMarkAllDone(filtered)">{{ $t('todo_page.mark_all_done') }}</d-button>
       </div>
     </section>
 
@@ -34,6 +34,12 @@
     </div>
 
     <d-filter-chips v-if="todoStore.activeFilters.length" :filters="todoStore.activeFilters" @remove="removeFilter" @clear="clearFilters" />
+
+    <p v-if="!isDoneView && todoStore.dateRange" class="text-sm text-dim">{{ $t('todo_page.date_range', todoStore.dateRange) }}</p>
+    <div v-if="!isDoneView && todoStore.loadError" role="alert" class="flex flex-wrap items-center gap-3 rounded-xl bg-card p-3 ring-1 ring-fg/10">
+      <span>{{ $t('todo_page.load_failed') }}</span>
+      <d-button size="sm" :loading="todoStore.isLoading" @click="todoStore.retryLoad">{{ $t('todo_page.retry_load') }}</d-button>
+    </div>
 
     <section v-if="filtered.length" class="overflow-x-auto rounded-xl bg-card ring-1 ring-fg/10">
       <div role="table" class="min-w-265">
@@ -61,15 +67,15 @@
       </div>
     </section>
 
-    <section v-else-if="list.length || (todoStore.activeFilters.length && !isDoneView)" class="rounded-xl bg-card ring-1 ring-fg/10">
-      <d-empty :icon="IconSearchOff" :title="$t('general.list_no_results')" :text="$t('todo_page.no_match')">
-        <d-button size="sm" @click="clearSearchAndFilters">{{ $t('general.clear_filters') }}</d-button>
-      </d-empty>
-    </section>
-
     <section v-else-if="!tagStore.tagTodo" class="rounded-xl bg-card ring-1 ring-fg/10">
       <d-empty :icon="IconTag" :title="$t('desktop.no_todo_tag')" :text="$t('desktop.todo_hint')">
         <d-button size="sm" :to="RouteConstants.ROUTE_TAG_LIST">{{ $t('tags') }}</d-button>
+      </d-empty>
+    </section>
+
+    <section v-else-if="(isDoneView || hasFinished) && (list.length || (todoStore.activeFilters.length && !isDoneView))" class="rounded-xl bg-card ring-1 ring-fg/10">
+      <d-empty :icon="IconSearchOff" :title="$t('general.list_no_results')" :text="$t('todo_page.no_match')">
+        <d-button size="sm" @click="clearSearchAndFilters">{{ $t('general.clear_filters') }}</d-button>
       </d-empty>
     </section>
 
@@ -79,14 +85,15 @@
       </d-empty>
     </section>
 
-    <section v-else-if="!todoStore.isLoading" class="rounded-xl bg-card ring-1 ring-fg/10">
+    <section v-else-if="hasFinished" class="rounded-xl bg-card ring-1 ring-fg/10">
       <d-empty :icon="IconSparkles" :title="$t('todo_page.all_caught_up')" :text="$t('todo_page.all_caught_up_hint')">
-        <div class="flex gap-2">
-          <d-button v-if="doneCount" size="sm" :icon="IconHistory" @click="toggleView">{{ $t('todo_page.review_done', { count: doneCount }) }}</d-button>
-          <d-button size="sm" variant="ghost" :to="RouteConstants.ROUTE_DASHBOARD">{{ $t('todo_page.back_to_dashboard') }}</d-button>
-        </div>
+        <d-button size="sm" variant="ghost" :to="RouteConstants.ROUTE_DASHBOARD">{{ $t('todo_page.back_to_dashboard') }}</d-button>
       </d-empty>
     </section>
+
+    <div v-if="canLoadMore" ref="sentinel" class="flex justify-center">
+      <d-button :loading="todoStore.isLoading" @click="todoStore.loadMore">{{ $t('todo_page.load_more') }}</d-button>
+    </div>
 
     <!-- Bulk actions for the selected rows -->
     <div v-if="selectedList.length" role="toolbar" class="fixed bottom-6 left-1/2 z-30 flex -translate-x-1/2 items-center gap-1 rounded-xl bg-pop p-1.5 shadow-lg ring-1 ring-fg/10">
@@ -105,6 +112,7 @@
 <script setup>
 import { get } from 'lodash-es'
 import { IconArrowBackUp, IconChecks, IconFilter, IconHistory, IconListCheck, IconRefresh, IconSearch, IconSearchOff, IconSparkles, IconTag } from '@tabler/icons-vue'
+import { useIntersectionObserver } from '@vueuse/core'
 import RouteConstants from '~/core/constants/RouteConstants'
 import Account from '~/core/models/Account'
 import Tag from '~/core/models/Tag'
@@ -117,6 +125,9 @@ const tagStore = useTagStore()
 const { isDoneView, isBusy, list, todoCount, doneCount, progress, isPanelVisible, onMarkAllDone, onPutBackAll, filters, removeFilter, clearFilters } = useTodoInbox()
 const selected = reactive({})
 const isFiltersOpen = ref(false)
+const sentinel = useTemplateRef('sentinel')
+const canLoadMore = computed(() => !!tagStore.tagTodo && !isDoneView.value && !route.params.id && !isFiltersOpen.value && !isBusy.value && !todoStore.isFinished && !todoStore.loadError)
+const hasFinished = computed(() => todoStore.isFinished && !todoStore.isLoading && !todoStore.loadError)
 
 const { search, filtered } = useSearch(
   list,
@@ -157,5 +168,12 @@ const onChanged = (event, response, id) => {
   if (event === useFormEvent.postDelete) todoStore.onDeleted(id)
 }
 
-onMounted(todoStore.fetchTodo)
+// Local text search can hide rows. For the unfiltered list, check the end again after each batch.
+const autoLoadTarget = computed(() => (canLoadMore.value && !search.value && !todoStore.isLoading ? sentinel.value : null))
+useIntersectionObserver(autoLoadTarget, (entries) => {
+  if (autoLoadTarget.value && entries.some((entry) => entry.isIntersecting)) todoStore.loadMore()
+})
+onMounted(() => {
+  if (!route.params.id) todoStore.fetchTodoOnce()
+})
 </script>

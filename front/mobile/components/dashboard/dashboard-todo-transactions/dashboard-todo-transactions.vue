@@ -8,7 +8,7 @@
       <button v-if="tagStore.tagTodo" type="button" class="mx-btn xs out" @click="onGoToTodos">
         <app-icon :icon="IconListCheck" :size="14" :stroke="2" />
         <span>{{ $t('todo') }}</span>
-        <span class="mx-badge pri">{{ todoStore.visibleTodoList.length }}</span>
+        <span v-if="todoStore.todoCountLabel != null" class="mx-badge pri">{{ todoStore.todoCountLabel }}</span>
       </button>
       <div v-else class="flex items-center gap-1">
         <span class="mx-muted text-12">{{ $t('dash_page.no_todo_tag') }}</span>

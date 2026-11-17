@@ -23,4 +23,14 @@ export default class TransactionRepository extends BaseRepository {
     // A failure (422 = more transactions match than the backend sums, or a timeout) is shown next to the total, not as an error toast
     return await axios.get(searchUrl, { showErrorToast: false })
   }
+
+  async getTodoTransactionResponse(id, connection) {
+    return await axios.get(`${connection.picoBackendURL}/${this.endpoint}/${id}`, { connection, showLoading: false, showErrorToast: false })
+  }
+
+  async searchTodoTransactions(query, { page, pageSize }, connection) {
+    const url = this.getUrlForRequest({ url: `${connection.picoBackendURL}/api/search/transactions`, filters: [{ field: 'query', value: query }], page, pageSize })
+    const response = await axios.get(url, { connection, showLoading: false, showErrorToast: false })
+    return response?.status === 200 ? response.data : undefined
+  }
 }

@@ -22,11 +22,17 @@ const paginate = (list, params) => {
 const searchTransactions = (db, params) => {
   const query = params.get('query') ?? ''
   const [after, before, type] = ['date_after', 'date_before', 'type'].map((name) => query.match(new RegExp(`${name}:(\\S+)`))?.[1])
+  const tag = query.match(/(?:^|\s)tag_is:"([^"]*)"/)?.[1]
   const firstSplit = (item) => item.attributes.transactions[0]
   return db.transactions
     .filter((item) => {
       const { date, type: splitType } = firstSplit(item)
-      return (!after || date.slice(0, 10) >= after) && (!before || date.slice(0, 10) <= before) && (!type || splitType === type)
+      return (
+        (!after || date.slice(0, 10) >= after) &&
+        (!before || date.slice(0, 10) <= before) &&
+        (!type || splitType === type.replaceAll('"', '')) &&
+        (!tag || item.attributes.transactions.some((split) => split.tags?.includes(tag)))
+      )
     })
     .sort((a, b) => firstSplit(b).date.localeCompare(firstSplit(a).date))
 }
@@ -53,6 +59,18 @@ const handle = (method, path, params, body) => {
   if (path === 'user') return { data: { id: '1', type: 'users', attributes: { email: 'demo@example.com' } } }
   if (path === 'currencies/exchange') return { rates: { USD: 1, EUR: 0.92 } }
   if (path === 'search/transactions' || (path === 'transactions' && method === 'GET')) return paginate(searchTransactions(db, params), params)
+  if (method === 'GET' && resource === 'tags' && action === 'transactions') {
+    const name = db.tags.find((tag) => tag.id === id)?.attributes.tag ?? decodeURIComponent(id)
+    const start = params.get('start')
+    const end = params.get('end')
+    const transactions = db.transactions.filter((item) =>
+      item.attributes.transactions.some((split) => {
+        const date = split.date.slice(0, 10)
+        return split.tags?.includes(name) && (!start || date >= start) && (!end || date <= end)
+      }),
+    )
+    return paginate(transactions, params)
+  }
 
   const list = db[resource]
   if (!list || action) return { data: [] }

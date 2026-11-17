@@ -3,7 +3,7 @@
     <template #actions>
       <d-button v-if="tagStore.tagTodo" size="sm" :icon="IconListCheck" :to="links.todo()">
         {{ $t('todo') }}
-        <d-badge class="px-1.5 text-dim tabular-nums">{{ todoStore.visibleTodoList.length }}</d-badge>
+        <d-badge v-if="todoStore.todoCountLabel != null" class="px-1.5 text-dim tabular-nums">{{ todoStore.todoCountLabel }}</d-badge>
       </d-button>
     </template>
     <div class="-mb-4 -mt-1 divide-y divide-line border-t border-line">
@@ -22,7 +22,14 @@
           >{{ signs[Transaction.getFirstSplit(transaction)?.type?.code] ?? '' }}{{ Transaction.getAmountFormatted(transaction) }} {{ Transaction.getFirstSplit(transaction)?.currency_symbol }}</span
         >
       </nuxt-link>
-      <d-empty v-if="!todoStore.visibleTodoList.length" :icon="IconChecks" :title="tagStore.tagTodo ? $t('desktop.dashboard.nothing_to_do') : $t('desktop.no_todo_tag')" />
+      <d-empty v-if="!tagStore.tagTodo" :icon="IconChecks" :title="$t('desktop.no_todo_tag')" />
+      <d-empty v-else-if="todoStore.loadError" :title="$t('todo_page.load_failed')" />
+      <d-empty
+        v-else-if="!todoStore.isLoading && todoStore.isFinished && !todoStore.visibleTodoList.length"
+        :icon="IconChecks"
+        :title="$t('todo_page.all_caught_up')"
+        :text="$t('todo_page.all_caught_up_hint')"
+      />
     </div>
   </d-card>
 </template>

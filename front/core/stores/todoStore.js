@@ -1,9 +1,10 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import { chunk, cloneDeep, get } from 'lodash-es'
 import { useLocalStorage } from '@vueuse/core'
 import Tag from '~/core/models/Tag'
 import Transaction from '~/core/models/Transaction'
+import TagRepository from '~/core/repository/TagRepository'
 import TransactionRepository from '~/core/repository/TransactionRepository'
 import TransactionTransformer from '~/core/transformers/TransactionTransformer'
 import TransactionFilterUtils from '~/core/utils/TransactionFilterUtils'
@@ -11,6 +12,7 @@ import { areIntEqual } from '~/core/utils/DataUtils'
 import { getActiveFilters } from '~/core/utils/FilterUtils'
 import { withoutDeleted } from '~/core/utils/DeleteUtils'
 import UIUtils from '~/core/utils/UIUtils'
+import { getTodoDateRange, loadTodoPage } from '~/core/utils/TodoInboxLoader'
 
 // TODO Inbox: transactions tagged with the todo tag, reviewed one by one.
 // "Mark as done" only removes the todo tag. What was marked as done stays listed for this session (not persisted),
@@ -18,19 +20,36 @@ import UIUtils from '~/core/utils/UIUtils'
 // The one source for the inbox, its badges (sidebar, Extras) and the dashboard cards.
 // Extra list filters (the transaction filters bag) narrow the inbox and are kept in localStorage.
 export const useTodoStore = defineStore('todo', () => {
+  const appStore = useAppStore()
   const todoList = ref([])
   const doneList = ref([])
   const isLoading = ref(false)
+  const isFinished = ref(false)
+  const loadError = ref(false)
+  const dateRange = ref(null)
+  let seenIds = new Set()
+  let isFetched = false
+  let lastLoadWasRefresh = true
+  let listRevision = 0
+  const connection = computed(() => ({
+    picoBackendURL: appStore.picoBackendURL,
+    authToken: appStore.authToken,
+    picoBackendHeaders: (appStore.picoBackendHeaders ?? []).map(({ key, value }) => ({ key, value })),
+    isDemoMode: appStore.isDemoMode,
+  }))
+  const todoTag = computed(() => useTagStore().tagTodo)
+  const todoTagName = computed(() => Tag.getDisplayName(todoTag.value))
 
   const reviveDates = (bag) => ({ ...bag, dateStart: bag.dateStart && new Date(bag.dateStart), dateEnd: bag.dateEnd && new Date(bag.dateEnd) })
   const filters = useLocalStorage('todoInboxFilters', {}, { serializer: { read: (value) => reviveDates(JSON.parse(value)), write: JSON.stringify } })
   const activeFilters = computed(() => getActiveFilters(Object.values(TransactionFilterUtils.filters), filters.value))
   const setFilters = (value) => {
     filters.value = value ?? {}
+    resetLoadedQueue()
     return fetchTodo()
   }
 
-  const isTodoTag = (name) => LanguageUtils.removeAccentsAndLowerCase(name) === LanguageUtils.removeAccentsAndLowerCase(Tag.getDisplayName(useTagStore().tagTodo))
+  const isTodoTag = (name) => LanguageUtils.removeAccentsAndLowerCase(name) === LanguageUtils.removeAccentsAndLowerCase(todoTagName.value)
 
   // The transformer swaps tag names for the synced tags: keep the raw names too, so saving never drops a tag Pico does not know yet
   const fromApi = (item) => {
@@ -44,36 +63,102 @@ export const useTodoStore = defineStore('todo', () => {
 
   // Rows hidden behind a pending Undo delete are not shown or counted
   const visibleTodoList = computed(() => withoutDeleted(todoList.value))
+  const todoCountLabel = computed(() => {
+    if (loadError.value) return null
+    const count = visibleTodoList.value.length
+    if (isFinished.value) return count
+    return count ? `${count}+` : null
+  })
   const visibleDoneList = computed(() => withoutDeleted(doneList.value))
   const totalCount = computed(() => visibleTodoList.value.length + visibleDoneList.value.length)
 
   // Loaded once at app start for the badges; the dashboard, the inbox page and its actions refresh it
-  let isFetched = false
   const fetchTodoOnce = () => isFetched || fetchTodo()
+  const fetchTodo = () => loadTodo(true)
+  const loadMore = () => loadTodo(!isFetched)
+  const retryLoad = () => loadTodo(lastLoadWasRefresh)
 
-  const getQuery = () => [TransactionFilterUtils.filters.tag.filter(useTagStore().tagTodo), ...activeFilters.value.map((filter) => filter.filter)].join(' ')
+  function resetLoadedQueue() {
+    isFetched = false
+    isFinished.value = false
+    loadError.value = false
+    dateRange.value = null
+    todoList.value = []
+    seenIds = new Set()
+  }
 
-  // A load already running (app start + dashboard) is not fired twice; filters changed meanwhile load again right after
-  async function fetchTodo() {
-    if (isLoading.value) return
-    if (!useTagStore().tagTodo) {
-      todoList.value = []
+  watch(
+    [connection, todoTagName],
+    () => {
+      listRevision++
+      resetLoadedQueue()
+      doneList.value = []
+    },
+    { flush: 'sync' },
+  )
+
+  const inboxRequest = computed(() => ({
+    connection: connection.value,
+    tagName: todoTagName.value,
+    tagId: todoTag.value?.id,
+    dateStart: filters.value.dateStart,
+    dateEnd: filters.value.dateEnd,
+    extraFilters: activeFilters.value.filter(({ bagKey }) => bagKey !== 'dateStart' && bagKey !== 'dateEnd').map(({ filter }) => filter),
+  }))
+
+  async function loadTodo(refresh) {
+    if (isLoading.value || (!refresh && isFinished.value)) return
+    const request = inboxRequest.value
+    if (!request.tagName) {
+      isFinished.value = true
       return
     }
-    isFetched = true
     isLoading.value = true
-    const query = getQuery()
-    const list = await new TransactionRepository().getAllWithMerge({
-      filters: [{ field: 'query', value: query }],
-      getAll: (params) => new TransactionRepository().searchTransaction({ ...params, showLoading: false }),
-    })
-    todoList.value = list.map(fromApi)
-    doneList.value = without(
-      doneList.value,
-      todoList.value.map((item) => item.id),
-    )
-    isLoading.value = false
-    if (query !== getQuery()) return fetchTodo()
+    loadError.value = false
+    lastLoadWasRefresh = refresh
+    const revision = listRevision
+    const isCurrent = () => request === inboxRequest.value && revision === listRevision
+    try {
+      const range = getTodoDateRange(request)
+      const transactions = new TransactionRepository()
+      const tags = new TagRepository()
+      const tagQuery = TransactionFilterUtils.filters.tag.filter(todoTag.value)
+      const existingIds = refresh ? new Set() : new Set([...seenIds, ...todoList.value.map(({ id }) => String(id))])
+      const result = await loadTodoPage({
+        range,
+        tagName: request.tagName,
+        seenIds: existingIds,
+        readPage: (window) => {
+          if (!isCurrent()) return
+          if (!request.extraFilters.length) return tags.getTodoTransactions(request.tagId ?? request.tagName, window, request.connection)
+          const query = [tagQuery, `date_after:${window.start}`, `date_before:${window.end}`, ...request.extraFilters].join(' ')
+          return transactions.searchTodoTransactions(query, window, request.connection)
+        },
+        readGroup: async (id) => {
+          if (!isCurrent()) return null
+          const response = await transactions.getTodoTransactionResponse(id, request.connection)
+          if (response?.status === 404) return null
+          const group = get(response, 'data.data')
+          if (response?.status !== 200 || String(group?.id) !== id || !Transaction.getSplits(group).length) throw new Error('Could not read TODO transaction group')
+          return group
+        },
+      })
+      if (isCurrent()) {
+        const items = result.items.map(fromApi)
+        todoList.value = refresh ? items : [...todoList.value, ...items]
+        const ids = items.map(({ id }) => id)
+        doneList.value = without(doneList.value, ids)
+        seenIds = result.seenIds
+        isFinished.value = result.isFinished
+        dateRange.value = range
+        isFetched = true
+      }
+    } catch {
+      if (isCurrent()) loadError.value = true
+    } finally {
+      isLoading.value = false
+    }
+    if (!isCurrent()) return loadTodo(refresh || request !== inboxRequest.value)
   }
 
   // Only the tags change: each split is sent with its journal id and its new tag list, nothing else
@@ -103,6 +188,8 @@ export const useTodoStore = defineStore('todo', () => {
 
   // A transaction saved anywhere in the inbox goes to the list its tags say
   function onSaved(transaction) {
+    if (!transaction) return
+    listRevision++
     const isTodo = hasTodoTag(transaction)
     const ids = [transaction.id]
     todoList.value = isTodo ? [...without(todoList.value, ids), transaction].sort(byDateDesc) : without(todoList.value, ids)
@@ -110,6 +197,7 @@ export const useTodoStore = defineStore('todo', () => {
   }
 
   function onDeleted(id) {
+    listRevision++
     todoList.value = without(todoList.value, [id])
     doneList.value = without(doneList.value, [id])
   }
@@ -125,14 +213,20 @@ export const useTodoStore = defineStore('todo', () => {
     todoList,
     doneList,
     visibleTodoList,
+    todoCountLabel,
     visibleDoneList,
     isLoading,
+    isFinished,
+    loadError,
+    dateRange,
     totalCount,
     filters,
     activeFilters,
     setFilters,
     fetchTodo,
     fetchTodoOnce,
+    loadMore,
+    retryLoad,
     markDone,
     putBack,
     onSaved,

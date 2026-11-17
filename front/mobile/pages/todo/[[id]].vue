@@ -13,7 +13,7 @@
     </app-top-toolbar>
 
     <main class="mx-body">
-      <app-list v-model:refreshing="isRefreshing" finished @refresh="onRefresh">
+      <app-list v-model:refreshing="isRefreshing" :loading="todoStore.isLoading && !isDoneView" :finished="!canLoadMore" @load="onLoadMore" @refresh="onRefresh">
         <div v-if="todoStore.activeFilters.length > 0" class="mxe-fchips items-center justify-start">
           <span v-for="activeFilter in todoStore.activeFilters" :key="activeFilter.bagKey" class="mx-chip fill">
             <span>{{ activeFilter.display }}</span>
@@ -24,7 +24,15 @@
           <button type="button" class="mx-btn xs ghost" @click="clearFilters">{{ $t('general.clear_filters') }}</button>
         </div>
 
-        <section v-if="isPanelVisible" class="mx-card td-sum td-cp" :aria-label="$t('todo_page.review_controls')">
+        <p v-if="!isDoneView && todoStore.dateRange" class="mx-foot">{{ $t('todo_page.date_range', todoStore.dateRange) }}</p>
+        <div v-if="!isDoneView && todoStore.loadError" class="mx-card" role="alert">
+          <div class="mx-empty">
+            <b>{{ $t('todo_page.load_failed') }}</b>
+            <button type="button" class="mx-btn out sm" :disabled="todoStore.isLoading" @click="todoStore.retryLoad">{{ $t('todo_page.retry_load') }}</button>
+          </div>
+        </div>
+
+        <section v-if="isPanelVisible || doneCount > 0" class="mx-card td-sum td-cp" :aria-label="$t('todo_page.review_controls')">
           <div class="td-cp__h">
             <div class="td-cp__ht">
               <b>{{ isDoneView ? $t('todo_page.done_this_session', { count: doneCount }) : $t('todo_page.left_to_review', { count: todoCount }) }}</b>
@@ -41,11 +49,11 @@
               <app-icon :icon="isAnyCollapsed ? IconChevronsDown : IconChevronsUp" :size="16" :stroke="2" />
               <span>{{ $t(isAnyCollapsed ? 'todo_page.expand_all' : 'todo_page.collapse_all') }}</span>
             </button>
-            <button v-if="isDoneView" type="button" class="mx-btn sm out" :disabled="isBusy" @click="onPutBackAll(list)">
+            <button v-if="isDoneView" type="button" class="mx-btn sm out" :disabled="isBusy || !list.length" @click="onPutBackAll(list)">
               <app-icon :icon="IconArrowBackUp" :size="16" :stroke="2" />
               <span>{{ $t('todo_page.put_all_back') }}</span>
             </button>
-            <button v-else type="button" class="mx-btn sm pri" :disabled="isBusy" @click="onMarkAllDone(list)">
+            <button v-else type="button" class="mx-btn sm pri" :disabled="isBusy || !list.length" @click="onMarkAllDone(list)">
               <app-icon :icon="IconChecks" :size="16" :stroke="2" />
               <span>{{ $t('todo_page.mark_all_done') }}</span>
             </button>
@@ -86,7 +94,7 @@
           </div>
         </div>
 
-        <empty-list v-else-if="todoStore.activeFilters.length > 0 && !todoStore.isLoading" filtered>
+        <empty-list v-else-if="todoStore.activeFilters.length > 0 && hasFinished" filtered>
           <template #action>
             <button type="button" class="mx-btn out" @click="clearFilters">
               <app-icon :icon="IconAdjustmentsOff" :size="16" :stroke="2" />
@@ -95,15 +103,11 @@
           </template>
         </empty-list>
 
-        <div v-else-if="!todoStore.isLoading" class="mx-card">
+        <div v-else-if="hasFinished" class="mx-card">
           <div class="mx-empty">
             <span class="ic"><app-icon :icon="IconSparkles" :size="20" :stroke="2" /></span>
             <b>{{ $t('todo_page.all_caught_up') }}</b>
             <span>{{ $t('todo_page.all_caught_up_hint') }}</span>
-            <button v-if="doneCount > 0" type="button" class="mx-btn out sm" @click="isDoneView = true">
-              <app-icon :icon="IconHistory" :size="16" :stroke="2" />
-              <span>{{ $t('todo_page.review_done', { count: doneCount }) }}</span>
-            </button>
             <button type="button" class="mx-btn ghost sm" @click="navigateTo(RouteConstants.ROUTE_DASHBOARD)">{{ $t('todo_page.back_to_dashboard') }}</button>
           </div>
         </div>
@@ -145,6 +149,11 @@ const transactionFiltersRef = useTemplateRef('transactionFiltersRef')
 const isRefreshing = ref(false)
 const expanded = reactive({})
 const isEditingDone = computed(() => todoStore.doneList.some((transaction) => String(transaction.id) === String(route.params.id)))
+const canLoadMore = computed(() => !!tagStore.tagTodo && !isDoneView.value && !route.params.id && !isBusy.value && !todoStore.isFinished && !todoStore.loadError)
+const hasFinished = computed(() => todoStore.isFinished && !todoStore.isLoading && !todoStore.loadError)
+const onLoadMore = () => {
+  if (canLoadMore.value) todoStore.loadMore()
+}
 
 // Rows without more to show ignore their expanded flag
 const expandableIds = computed(() => list.value.map((transaction) => transaction.id))
@@ -163,14 +172,14 @@ const onRefresh = async () => {
 }
 
 watch(isDoneView, () => document.querySelector('.mx-body')?.scrollTo({ top: 0 }))
-onMounted(todoStore.fetchTodo)
+onMounted(() => {
+  if (!route.params.id) todoStore.fetchTodoOnce()
+})
 
 const { t } = useI18n()
 useToolbar().init({
   title: t('todo_page.title'),
-  subtitle: computed(() =>
-    isDoneView.value ? t('todo_page.done_this_session_short', { count: doneCount.value }) : todoCount.value ? t('todo_page.tagged_todo', { count: todoCount.value }) : t('todo_page.inbox_zero'),
-  ),
+  subtitle: computed(() => (isDoneView.value ? t('todo_page.done_this_session_short', { count: doneCount.value }) : '')),
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })
 </script>
