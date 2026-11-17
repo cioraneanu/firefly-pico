@@ -5,7 +5,7 @@
     </transition>
     <transition name="mx-sh" @after-leave="leave">
       <div v-if="isOpen" class="td-esh" :class="{ drag: isDragging, back: !isDragging }" :style="dragY ? { '--dy': `${dragY}px` } : null" role="dialog" aria-modal="true" :aria-label="title">
-        <div class="td-grab" aria-hidden="true" @pointerdown="onGrabDown" @pointermove="onGrabMove" @pointerup="onGrabUp" @pointercancel="onGrabUp"><span /></div>
+        <div class="td-grab" aria-hidden="true" v-on="grabDrag"><span /></div>
         <div class="td-esh__b">
           <div class="mx-page">
             <header class="mx-top">
@@ -91,19 +91,14 @@ const onSubmit = async () => {
 
 const dragY = ref(0)
 const isDragging = ref(false)
-let startY = 0
-const onGrabDown = (event) => {
-  event.currentTarget.setPointerCapture?.(event.pointerId)
-  startY = event.clientY
-  isDragging.value = true
-}
-const onGrabMove = (event) => {
-  if (isDragging.value) dragY.value = Math.max(0, event.clientY - startY)
-}
-const onGrabUp = () => {
-  if (!isDragging.value) return
-  isDragging.value = false
-  if (dragY.value > 110) close()
-  else dragY.value = 0
-}
+const grabDrag = useTouchDrag({
+  onLock: () => (isDragging.value = true),
+  onMove: ({ dy }) => (dragY.value = Math.max(0, dy)),
+  onEnd: ({ isDrag }) => {
+    if (!isDrag) return
+    isDragging.value = false
+    if (dragY.value > 110) close()
+    else dragY.value = 0
+  },
+})
 </script>

@@ -31,7 +31,10 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
         SharedState.setRecording(false)
         Task { await RecordingActivity.endOrphans() }
         UploadService.shared.activate()
-        UploadService.shared.flush()
+        // A background launch delivers finished uploads; flushing before they arrive would resend them.
+        if application.applicationState != .background {
+            UploadService.shared.flush()
+        }
         return true
     }
 

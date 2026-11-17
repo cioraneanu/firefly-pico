@@ -163,13 +163,12 @@ const onSaveEdit = async (ramble) => {
 }
 
 const onAdd = async () => {
-  stopRecording()
-  await nextTick()
+  await stopRecording()
   emit('add')
 }
 
-const onInterpret = () => {
-  stopRecording()
+const onInterpret = async () => {
+  await stopRecording()
   emit('interpret')
 }
 

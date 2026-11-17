@@ -30,7 +30,7 @@ export const useProfileStore = defineStore('profile', () => {
   const autoFocusAssistant = useLocalStorage('autoFocusAssistant', false)
   const assistantLlmContext = useLocalStorage('assistantLlmContext', '')
   // How many recent transactions (unique descriptions, no amounts) the assistant LLM gets as examples. 0 = off.
-  const assistantHistoryCount = useLocalStorage('assistantHistoryCount', 50)
+  const assistantHistoryCount = useLocalStorage('assistantHistoryCount', 0)
 
   const defaultAccountSource = useLocalStorage('defaultAccountSource', null, { serializer: StorageSerializers.object })
   const defaultAccountDestination = useLocalStorage('defaultAccountDestination', null, { serializer: StorageSerializers.object })

@@ -16,7 +16,7 @@
           <div class="mx-d">{{ $t('settings.setup.demo_info') }}</div>
         </app-card>
 
-        <app-card>
+        <app-card v-if="!appStore.isDemoMode">
           <app-field v-model="picoBackendURL" name="picoBackendURL" inputmode="url" :label="$t('settings.setup.pico_backend_url')" :rules="[rule.required()]">
             <template #left-icon>
               <app-icon :icon="IconWorld" :size="16" :stroke="2" />

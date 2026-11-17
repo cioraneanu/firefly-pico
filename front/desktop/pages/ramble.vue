@@ -292,8 +292,7 @@ const rambleMeta = (ramble) =>
     .join(' · ')
 
 const addCaptured = async () => {
-  stopRecording()
-  await nextTick()
+  await stopRecording()
   await addRamble()
 }
 
@@ -311,7 +310,7 @@ const saveEdit = async (ramble) => {
 }
 
 const interpret = async () => {
-  stopRecording()
+  await stopRecording()
   if ((await interpretRambleText()) || rambleError.value) step.value = STEP_DRAFTS
 }
 

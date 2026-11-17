@@ -22,6 +22,7 @@ services:
       # - ASSISTANT_TRANSCRIPTION_MODEL=gpt-4o-mini-transcribe
       # - ASSISTANT_TRANSCRIPTION_API_KEY=your-api-key
       # - ASSISTANT_TRANSCRIPTION_LANGUAGE=en
+      # - ASSISTANT_ALLOW_PRIVATE_ENDPOINTS=true  # let users point their own assistant connection at LAN hosts (e.g. Ollama)
     volumes:
       - ./firefly-pico-data:/var/www/html/database/data
       # Optional: custom icons (.svg/.png/.webp/.jpg) for the icon picker

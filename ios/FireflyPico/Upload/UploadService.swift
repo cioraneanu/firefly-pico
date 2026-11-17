@@ -25,6 +25,15 @@ final class UploadService: NSObject {
 
     private var responseBodies: [Int: Data] = [:]
 
+    /// Recordings with an upload task, so overlapping flushes never send one twice.
+    private var sending: Set<UUID> = []
+    /// Adopts the tasks a previous launch left in the session, once, before the first send.
+    private lazy var adoptTasks = Task {
+        sending.formUnion(await session.allTasks.compactMap { $0.taskDescription.flatMap(UUID.init(uuidString:)) })
+    }
+    /// A flush requested while iOS was still delivering finished uploads; runs once they are in.
+    private var flushAfterEvents = false
+
     private static let bodiesDirectory = URL.applicationSupportDirectory.appending(path: "UploadBodies", directoryHint: .isDirectory)
 
     private static func bodyURL(for id: UUID) -> URL {
@@ -39,10 +48,15 @@ final class UploadService: NSObject {
     /// Starts an upload for every stored recording that doesn't already have one in flight.
     func flush() {
         log.info("flush: \(RecordingStore.shared.pending.count) pending")
+        // Finished uploads may not be removed from the store yet; sending now would duplicate them.
+        guard backgroundCompletionHandler == nil else {
+            flushAfterEvents = true
+            return
+        }
         Task {
-            let inFlight = Set(await session.allTasks.compactMap(\.taskDescription))
-            log.info("flush: \(inFlight.count) in flight")
-            for recording in RecordingStore.shared.pending where !inFlight.contains(recording.id.uuidString) {
+            await adoptTasks.value
+            // No await from here on, so concurrent flushes see each other's sends.
+            for recording in RecordingStore.shared.pending where !sending.contains(recording.id) {
                 send(recording)
             }
         }
@@ -63,6 +77,7 @@ final class UploadService: NSObject {
             let task = session.uploadTask(with: request, fromFile: bodyURL)
             task.taskDescription = recording.id.uuidString
             task.resume()
+            sending.insert(recording.id)
             RecordingHistory.shared.update(recording.id, status: .sending)
             log.info("upload started for \(recording.id, privacy: .public)")
         } catch {
@@ -72,6 +87,7 @@ final class UploadService: NSObject {
     }
 
     private func finish(_ id: UUID, status: Int?, body: Data?, error: Error?) {
+        sending.remove(id)
         try? FileManager.default.removeItem(at: Self.bodyURL(for: id))
         log.info("upload finished for \(id, privacy: .public): status \(status ?? -1), error \(String(describing: error), privacy: .public)")
 
@@ -128,6 +144,10 @@ extension UploadService: URLSessionDataDelegate {
         MainActor.assumeIsolated {
             backgroundCompletionHandler?()
             backgroundCompletionHandler = nil
+            if flushAfterEvents {
+                flushAfterEvents = false
+                flush()
+            }
         }
     }
 }

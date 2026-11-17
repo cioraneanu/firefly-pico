@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\Validations\AssistantValidation;
+
 // Shared by the llm and transcription connections: the user's own one when they switched to it, else the server's ASSISTANT_* values.
 abstract class AssistantConfigService
 {
@@ -51,7 +53,8 @@ abstract class AssistantConfigService
         return [
             'source' => $source,
             // A saved key that no longer decrypts leaves the connection unconfigured instead of calling it without the key.
-            'isConfigured' => !fget($values, 'isApiKeyLost') && ($endpoint !== '' || $apiKey !== ''),
+            // Also re-checks a user's endpoint on every use, so values saved before the check or resolving elsewhere since are refused too.
+            'isConfigured' => !fget($values, 'isApiKeyLost') && ($endpoint !== '' || $apiKey !== '') && ($source === 'server' || $endpoint === '' || AssistantValidation::isAllowedOwnEndpoint($endpoint)),
             'endpoint' => $endpoint ?: config("services.assistant_{$this->group}.defaults.endpoint"),
             'model' => trim((string)fget($values, 'model')) ?: config("services.assistant_{$this->group}.defaults.model"),
             'apiKey' => $apiKey,

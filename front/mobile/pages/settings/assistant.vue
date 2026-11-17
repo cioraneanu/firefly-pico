@@ -344,7 +344,7 @@ const assistantTodoTagMatcher = ref('')
 const assistantCurrency = ref(null)
 const autoFocusAssistant = ref(false)
 const assistantLlmContext = ref('')
-const assistantHistoryCount = ref(50)
+const assistantHistoryCount = ref(0)
 
 const syncedSettings = [
   { store: profileStore, path: 'autoFocusAssistant', ref: autoFocusAssistant },

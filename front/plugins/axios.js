@@ -41,11 +41,12 @@ const retryRequest = async (error) => {
   let errorMessage = get(error, 'response.data.message') ?? get(error, 'message') ?? ''
 
   const isTimeout = error.code === 'ECONNABORTED' || errorMessage.includes('timeout') || errorMessage.includes('Failed to connect to')
-  if (!isTimeout) {
+  const config = error.config
+  // Only reads are retried: a write that timed out may still have gone through, a retry would repeat it
+  if (!isTimeout || config?.method !== 'get') {
     return
   }
 
-  const config = error.config
   if (!config?.retry) {
     config.retry = 0
   }

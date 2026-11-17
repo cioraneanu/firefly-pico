@@ -13,10 +13,7 @@
         role="dialog"
         aria-modal="true"
         :aria-label="title"
-        @touchstart="onTouchStart"
-        @touchmove="onTouchMove"
-        @touchend="onTouchEnd"
-        @touchcancel="onTouchEnd"
+        v-on="drag"
       >
         <div class="mx-sh__h">
           <h2>{{ title }}</h2>
@@ -99,61 +96,29 @@ const sheetStyle = computed(() => ({ '--dy': offset.value ? `${offset.value}px` 
 // Dims through --ov (not opacity), so the leave fade still runs after a drag-to-close
 const overlayStyle = computed(() => (offset.value > 0 ? { '--ov': Math.max(0, 1 - offset.value / 400) } : null))
 
-let touch = null
 const canScroll = (element) => !!element && element.scrollHeight > element.clientHeight + 1
+let scroller = null
 
-const onTouchStart = (event) => {
-  const { clientX, clientY } = event.touches[0]
-  touch = event.touches.length === 1 ? { x: clientX, y: clientY, lastY: clientY, lastTime: event.timeStamp, velocity: 0, scroller: event.target.closest('.mx-sh__b'), axis: null } : null
-}
-
-const onTouchMove = (event) => {
-  if (!touch) {
-    return
-  }
-  const { clientX, clientY } = event.touches[0]
-  const dx = clientX - touch.x
-  const dy = clientY - touch.y
-  if (!touch.axis) {
-    if (Math.abs(dx) < 4 && Math.abs(dy) < 4) {
-      return
-    }
-    const isAtTop = (touch.scroller?.scrollTop ?? 0) <= 0
-    const isVertical = Math.abs(dy) > Math.abs(dx)
-    // Down: drag the sheet once its list is at the top. Up: rubber-band when there is nothing to scroll.
-    const isDrag = isVertical && (dy > 0 ? isAtTop : !canScroll(touch.scroller))
-    touch.axis = isDrag && event.cancelable ? 'drag' : 'none'
-    if (touch.axis === 'drag') {
-      isDragging.value = true
-      if (dy > 0) {
-        document.activeElement?.blur?.()
-      }
-    }
-  }
-  if (touch.axis !== 'drag') {
-    return
-  }
-  event.preventDefault()
-  const elapsed = event.timeStamp - touch.lastTime
-  if (elapsed > 0) {
-    touch.velocity = (clientY - touch.lastY) / elapsed
-  }
-  touch.lastY = clientY
-  touch.lastTime = event.timeStamp
-  offset.value = dy > 0 ? dy : -Math.sqrt(-dy) * 2.5
-}
-
-const onTouchEnd = async () => {
-  const isClosing = touch?.axis === 'drag' && (offset.value > 140 || (offset.value > 24 && touch.velocity > 0.45))
-  if (touch?.axis === 'drag') {
+const drag = useTouchDrag({
+  onStart: (event) => {
+    scroller = event.target.closest('.mx-sh__b')
+  },
+  // Down: drag the sheet once its list is at the top. Up: rubber-band when there is nothing to scroll.
+  onLock: (dx, dy) => {
+    const isDrag = Math.abs(dy) > Math.abs(dx) && (dy > 0 ? (scroller?.scrollTop ?? 0) <= 0 : !canScroll(scroller))
+    isDragging.value = isDrag
+    if (isDrag && dy > 0) document.activeElement?.blur?.()
+    return isDrag
+  },
+  onMove: ({ dy }) => (offset.value = dy > 0 ? dy : -Math.sqrt(-dy) * 2.5),
+  // A downward flick closes it, and so does a slow drag past 140px
+  onEnd: async ({ isDrag, vy }) => {
+    if (!isDrag) return
     isDragging.value = false
-    offset.value = isClosing ? offset.value : 0
-  }
-  touch = null
-  // A downward flick closes it, and so does a slow drag past 140px. After the render that drops .dragging: a leaving element is not patched, so it would keep `transition: none` and vanish
-  if (isClosing) {
+    if (!(offset.value > 140 || (offset.value > 24 && vy > 0.45))) return (offset.value = 0)
+    // After the render that drops .dragging: a leaving element is not patched, so it would keep `transition: none` and vanish
     await nextTick()
     close()
-  }
-}
+  },
+})
 </script>

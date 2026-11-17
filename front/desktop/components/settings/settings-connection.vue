@@ -5,7 +5,7 @@
       <d-button v-else :icon="IconPlayerPlay" class="self-start" @click="startDemo">{{ $t('settings.setup.demo_start') }}</d-button>
     </d-settings-group>
 
-    <d-settings-group>
+    <d-settings-group v-if="!appStore.isDemoMode">
       <d-field :label="$t('settings.setup.pico_backend_url')" :rules="[rule.required()]" :value="connection.picoBackendURL">
         <d-input v-model="connection.picoBackendURL" :icon="IconLink" />
       </d-field>

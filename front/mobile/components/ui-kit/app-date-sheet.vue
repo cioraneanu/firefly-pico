@@ -13,7 +13,7 @@
       <div class="mx-cp__g mx-cp__wk">
         <span v-for="weekday in weekdays" :key="weekday" class="w">{{ weekday }}</span>
       </div>
-      <div class="mx-cp__view" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd" @touchcancel="onTouchEnd" @click.capture="onClickCapture">
+      <div class="mx-cp__view" v-on="drag" @click.capture="onClickCapture">
         <div ref="stripRef" class="mx-cp__strip" :class="{ dragging: isDragging }" :style="{ transform: `translateX(${-page * 100}%)` }">
           <div v-for="(month, monthIndex) in months" :key="month.getTime()" class="mx-cp__g mx-cp__m">
             <!-- Only the months around the visible one are rendered, the rest are empty pages of the same size -->
@@ -86,58 +86,39 @@ const onMove = (step) => (page.value = Math.min(Math.max(index.value + step, 0),
 
 // ----- swipe: a touch pager rather than a snap scroller, so a new swipe continues from wherever the last one is
 // (three quick flicks = three months) and the title changes as soon as the next month is more than half in view -----
-let touch = null
+let start = null
 let hasDragged = false
 const lastPage = () => months.value.length - 1
 
-const onTouchStart = (event) => {
-  const width = event.currentTarget.clientWidth
-  // Catch the strip mid-animation: continue from where it is now, not from where it was going
-  const target = page.value
-  page.value = -new DOMMatrixReadOnly(getComputedStyle(stripRef.value).transform).m41 / width
-  touch = { x: event.touches[0].clientX, y: event.touches[0].clientY, page: page.value, target, width, axis: null, lastX: event.touches[0].clientX, lastTime: event.timeStamp, velocity: 0 }
-  hasDragged = false
-}
-const onTouchMove = (event) => {
-  if (!touch) {
-    return
-  }
-  const { clientX, clientY } = event.touches[0]
-  const dx = clientX - touch.x
-  if (!touch.axis) {
-    if (Math.abs(dx) < 4 && Math.abs(clientY - touch.y) < 4) {
-      return
+const drag = useTouchDrag({
+  onStart: (event) => {
+    const width = event.currentTarget.clientWidth
+    // Catch the strip mid-animation: continue from where it is now, not from where it was going
+    const target = page.value
+    page.value = -new DOMMatrixReadOnly(getComputedStyle(stripRef.value).transform).m41 / width
+    start = { page: page.value, target, width }
+    hasDragged = false
+  },
+  onLock: (dx, dy) => (isDragging.value = Math.abs(dx) > Math.abs(dy)),
+  onMove: ({ dx }) => {
+    hasDragged = true
+    const target = start.page - dx / start.width
+    // Rubber band past the first / last month
+    const overflow = target < 0 ? target : target > lastPage() ? target - lastPage() : 0
+    page.value = target - overflow + overflow / 3
+  },
+  onEnd: ({ isDrag, vx }) => {
+    if (isDrag) {
+      const isFlick = Math.abs(vx) > 0.25
+      const target = isFlick ? (vx < 0 ? Math.ceil(page.value) : Math.floor(page.value)) : Math.round(page.value)
+      page.value = Math.min(Math.max(target, 0), lastPage())
+    } else {
+      // A tap or a vertical drag: carry on to the month it was going to
+      page.value = start.target
     }
-    touch.axis = Math.abs(dx) > Math.abs(clientY - touch.y) ? 'x' : 'none'
-    isDragging.value = touch.axis === 'x'
-  }
-  if (touch.axis !== 'x') {
-    return
-  }
-  event.preventDefault()
-  hasDragged = true
-  if (event.timeStamp > touch.lastTime) {
-    touch.velocity = (clientX - touch.lastX) / (event.timeStamp - touch.lastTime)
-  }
-  touch.lastX = clientX
-  touch.lastTime = event.timeStamp
-  const target = touch.page - dx / touch.width
-  // Rubber band past the first / last month
-  const overflow = target < 0 ? target : target > lastPage() ? target - lastPage() : 0
-  page.value = target - overflow + overflow / 3
-}
-const onTouchEnd = () => {
-  if (touch?.axis === 'x') {
-    const isFlick = Math.abs(touch.velocity) > 0.25
-    const target = isFlick ? (touch.velocity < 0 ? Math.ceil(page.value) : Math.floor(page.value)) : Math.round(page.value)
-    page.value = Math.min(Math.max(target, 0), lastPage())
-  } else if (touch) {
-    // A tap or a vertical drag: carry on to the month it was going to
-    page.value = touch.target
-  }
-  isDragging.value = false
-  touch = null
-}
+    isDragging.value = false
+  },
+})
 // A drag that ends on a day does not pick it
 const onClickCapture = (event) => hasDragged && event.stopPropagation()
 

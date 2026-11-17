@@ -20,7 +20,15 @@ export function useTransactionInlineEdit(transaction, onSaved) {
 
   const save = (changes) => {
     Object.assign(pending.value, changes)
-    queue = queue.then(() => send(changes))
+    // catch: one failed save (a thrown error) must not block the edits queued after it
+    queue = queue
+      .then(() => send(changes))
+      .catch(console.error)
+      .finally(() => {
+        isSaving.value = false
+        // Drop what this save sent, unless a newer change of the same field is waiting (a failed save shows the server value again)
+        Object.keys(changes).forEach((key) => toRaw(pending.value)[key] === changes[key] && delete pending.value[key])
+      })
   }
 
   const send = async (changes) => {
@@ -33,10 +41,7 @@ export function useTransactionInlineEdit(transaction, onSaved) {
     if (changes.tags) payload.tags = [...payload.tags, ...(await unknownTagNames())]
 
     const response = await new TransactionRepository().update(item.id, { ...api, transactions: [payload] })
-    isSaving.value = false
     if (ResponseUtils.isSuccess(response)) onSaved(TransactionTransformer.transformFromApi(get(response, 'data.data')))
-    // Drop what this save sent, unless a newer change of the same field is waiting (a failed save shows the server value again)
-    Object.keys(changes).forEach((key) => toRaw(pending.value)[key] === changes[key] && delete pending.value[key])
   }
 
   // Tags Pico has not synced are undefined after transformFromApi: read their names from Firefly so a tag change keeps them

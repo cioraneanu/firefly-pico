@@ -148,7 +148,7 @@ export default defineNuxtConfig({
     },
     workbox: {
       navigateFallback: '/',
-      globPatterns: ['fonts/*.woff2'],
+      globPatterns: ['**/*.{js,css,html}', 'fonts/*.woff2'],
       runtimeCaching: [
         {
           // Admin custom icons. The backend may be on another origin => also cache opaque responses (status 0)

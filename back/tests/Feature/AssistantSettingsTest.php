@@ -21,6 +21,8 @@ class AssistantSettingsTest extends TestCase
     {
         parent::setUp();
         config(['services.assistant_llm.endpoint' => self::SERVER_LLM, 'services.assistant_llm.api_key' => 'server-key']);
+        // own.example does not resolve: these tests are about keys and scoping, the address checks are tested with the flag off below.
+        config(['services.assistant.allow_private_endpoints' => true]);
         Http::fake(function ($request) {
             if (str_contains($request->url(), 'own.example/fail')) {
                 return Http::response(['error' => ['message' => 'internal detail']], 404);
@@ -206,5 +208,63 @@ class AssistantSettingsTest extends TestCase
 
         $response->assertStatus(502)->assertJsonPath('message', 'Assistant transcription request failed.');
         $this->assertStringNotContainsString('internal detail', $response->getContent());
+    }
+
+    public function test_own_endpoint_must_not_point_to_a_private_or_reserved_address()
+    {
+        config(['services.assistant.allow_private_endpoints' => false]);
+        $private = ['http://127.0.0.1:8080/v1', 'http://localhost/v1', 'http://10.0.0.5/v1', 'http://192.168.1.10/v1', 'http://169.254.169.254/latest/meta-data', 'http://[::1]/v1', 'http://[fe80::1]/v1', 'http://[fc00::1]/v1', 'https://unresolvable.invalid/v1'];
+
+        foreach ($private as $endpoint) {
+            $this->saveSettings(['llm_endpoint' => $endpoint])->assertStatus(422)->assertJsonValidationErrors('llm_endpoint');
+            $this->saveSettings(['transcription_use_own' => true, 'transcription_endpoint' => $endpoint])->assertStatus(422)->assertJsonValidationErrors('transcription_endpoint');
+            $this->postJson('api/assistant/test-llm', ['config' => ['use_own' => true, 'endpoint' => $endpoint]], $this->headers())->assertStatus(422)->assertJsonValidationErrors('config.endpoint');
+            $this->postJson('api/assistant/test-transcription', ['config' => ['use_own' => true, 'endpoint' => $endpoint]], $this->headers())->assertStatus(422)->assertJsonValidationErrors('config.endpoint');
+            $this->postJson('api/assistant/interpret-transactions', ['payload' => ['messages' => [['role' => 'user', 'content' => 'coffee']]], 'config' => ['use_own' => true, 'endpoint' => $endpoint]], $this->headers())->assertStatus(422)->assertJsonValidationErrors('config.endpoint');
+        }
+
+        $this->saveSettings(['llm_endpoint' => 'http://127.0.0.1/v1'])->assertJsonPath('errors.llm_endpoint.0', 'The llm endpoint must not point to a private or reserved address.');
+        $this->assertDatabaseCount('assistant_user_settings', 0);
+        Http::assertNotSent(fn($request) => !str_contains($request->url(), 'api/v1/about/user'));
+    }
+
+    public function test_saved_private_endpoint_is_not_called()
+    {
+        // Saved while ASSISTANT_ALLOW_PRIVATE_ENDPOINTS was on (or before the check existed), then turned off.
+        $this->saveSettings(['llm_endpoint' => 'http://169.254.169.254/latest'])->assertOk();
+        config(['services.assistant.allow_private_endpoints' => false]);
+
+        $this->postJson('api/assistant/test-llm', [], $this->headers())->assertStatus(422)->assertJsonPath('message', 'Assistant LLM is not configured.');
+        Http::assertNotSent(fn($request) => str_contains($request->url(), '169.254.169.254'));
+    }
+
+    public function test_own_endpoint_on_a_public_address_is_accepted()
+    {
+        config(['services.assistant.allow_private_endpoints' => false]);
+        $endpoint = 'https://93.184.216.34/v1/chat/completions';
+
+        $this->saveSettings(['llm_endpoint' => $endpoint])->assertOk()->assertJsonPath('data.llm_endpoint', $endpoint);
+        $this->postJson('api/assistant/test-llm', [], $this->headers());
+
+        Http::assertSent(fn($request) => $request->url() === $endpoint);
+    }
+
+    public function test_private_endpoint_is_allowed_when_the_server_allows_it()
+    {
+        $endpoint = 'http://192.168.1.10:11434/v1/chat/completions';
+
+        $this->saveSettings(['llm_endpoint' => $endpoint])->assertOk();
+        $this->postJson('api/assistant/test-llm', [], $this->headers());
+
+        Http::assertSent(fn($request) => $request->url() === $endpoint);
+    }
+
+    public function test_server_endpoint_is_not_restricted()
+    {
+        config(['services.assistant.allow_private_endpoints' => false, 'services.assistant_llm.endpoint' => 'http://10.0.0.5/v1/chat/completions']);
+
+        $this->postJson('api/assistant/test-llm', [], $this->headers());
+
+        Http::assertSent(fn($request) => $request->url() === 'http://10.0.0.5/v1/chat/completions');
     }
 }
