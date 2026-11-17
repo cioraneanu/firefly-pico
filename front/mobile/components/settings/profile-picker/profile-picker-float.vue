@@ -9,7 +9,7 @@
     @pointercancel="onDragEnd"
     @click="onClick"
   >
-    <span class="mx-prof-fab__grip" aria-hidden="true" />
+    <span class="mx-prof-fab__grip" aria-hidden="true"><i v-for="dot in 6" :key="dot" /></span>
     <button
       v-if="profileStore.dashboard.isProfileFloatVisible"
       type="button"
@@ -48,7 +48,7 @@ import { useWindowSize } from '@vueuse/core'
 import { useProfileStore } from '~/core/stores/profileStore.js'
 
 // Floating tab on the right edge (design: .mx-prof-fab): the profile switcher and, in the iOS app, the voice recorder.
-// Drag it up or down to move it, sideways to tuck it into the edge (a tap pulls it back); both are remembered.
+// Drag it up or down to move it, sideways to tuck it into the edge (a shorter sliver with the dot grip; a tap pulls it back); both are remembered.
 const appStore = useAppStore()
 const profileStore = useProfileStore()
 const { isNativeApp, recording, recordingTime, toggleRecording } = useNativeApp()
@@ -84,7 +84,7 @@ const onDragMove = (event) => {
   if (start.axis === 'y') {
     dragY.value = start.top + dy
   } else {
-    const hiddenX = start.width - 14
+    const hiddenX = start.width - 16
     dragX.value = Math.min(Math.max((isHidden.value ? hiddenX : 0) + dx, 0), hiddenX)
   }
 }

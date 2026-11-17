@@ -15,7 +15,7 @@
         <icon-info-circle v-else :size="16" class="text-info" />
         <span class="flex-1 font-medium">{{ toast.message }}</span>
         <template v-if="toast.action">
-          <d-button size="sm" :icon="IconArrowBackUp" @click="toast.onAction">{{ toast.action.label }}</d-button>
+          <d-button size="sm" :icon="toast.action.icon ?? IconArrowBackUp" @click="toast.onAction">{{ toast.action.label }}</d-button>
           <span class="d-toast-bar absolute bottom-0 left-0 h-0.5 w-full bg-fg/25" :style="{ animationDuration: `${toast.duration}ms` }" />
         </template>
       </div>

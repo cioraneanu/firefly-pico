@@ -1,5 +1,7 @@
 import axios from 'axios'
 import { get } from 'lodash-es'
+import { IconSettings } from '@tabler/icons-vue'
+import RouteConstants from '~/core/constants/RouteConstants'
 import { demoAdapter } from '~/core/demo/DemoBackend.js'
 
 axios.interceptors.request.use(
@@ -16,7 +18,7 @@ axios.interceptors.request.use(
 
     const { authToken, picoBackendHeaders } = config.connection ?? appStore
     if (!authToken) {
-      UIUtils.showToastError('No personal access token...')
+      showNoTokenToast()
       controller.abort()
     }
 
@@ -34,6 +36,15 @@ axios.interceptors.request.use(
     return Promise.reject(error)
   },
 )
+
+// One toast for the burst of requests a page fires without a token, with a shortcut to Setup (token or demo mode)
+let noTokenToast = null
+const showNoTokenToast = () => {
+  if (noTokenToast) return
+  const { t } = useNuxtApp().$i18n
+  const action = { label: t('settings.setup_entry'), icon: IconSettings, onClick: () => navigateTo(RouteConstants.ROUTE_SETTINGS_SETUP) }
+  noTokenToast = UIUtils.showToast(t('settings.setup.no_token'), 'danger', 6000, { action, onClose: () => (noTokenToast = null) })
+}
 
 const MAX_RETRIES = 1
 
@@ -80,7 +91,8 @@ axios.interceptors.response.use(
   },
   async function (error) {
     let errorMessage = get(error, 'response.data.message') ?? get(error, 'message')
-    let showErrorToast = error.config?.showErrorToast !== false
+    // Requests cancelled on purpose (no token, leaving the page) need no toast
+    let showErrorToast = error.config?.showErrorToast !== false && !axios.isCancel(error)
     errorMessage && showErrorToast && UIUtils.showToastError(`Error: ${errorMessage}`, 4000)
 
     // The retry gets its own requestId on the same config: remember this one first

@@ -9,7 +9,7 @@ export default class UIUtils {
     return UIUtils.showToast(message, 'danger', duration)
   }
 
-  // options: { action: { label, onClick }, onClose } => returns { close }
+  // options: { action: { label, icon, onClick }, onClose } => returns { close }
   static showToast(message, type, duration, options = {}) {
     return UIUtils.ui.toast(message, type, duration, options)
   }

@@ -2791,7 +2791,8 @@ a.mx-bar {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 4px;
+  max-height: 160px;
   padding: 7px 6px 6px 14px;
   border-radius: 12px 0 0 12px;
   background: var(--card);
@@ -2803,9 +2804,12 @@ a.mx-bar {
   color: var(--foreground);
   user-select: none;
   -webkit-user-select: none;
-  transition: transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition:
+    transform 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+    max-height 0.28s cubic-bezier(0.2, 0.8, 0.2, 1),
+    margin-top 0.28s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
-/* drag up/down to move it, sideways to tuck it into the edge; the grip stays visible to pull it back (design: MX-Transactions) */
+/* drag up/down to move it, sideways to tuck it into the edge: a shorter sliver with the dot grip stays to pull it back (design: MX-Transactions, dock "Dots + slide + shrink") */
 .mx-prof-fab.is-drag {
   transition: none;
   box-shadow:
@@ -2813,7 +2817,13 @@ a.mx-bar {
     0 14px 28px -8px rgb(0 0 0 / 0.4);
 }
 .mx-prof-fab.is-hid {
-  transform: translateX(calc(100% - 14px));
+  transform: translateX(calc(100% - 16px));
+}
+/* the tall tab (with the iOS recorder) also shrinks to about half, around its middle */
+.mx-prof-fab.is-hid:has(.mx-prof-fab__mic) {
+  max-height: 52px;
+  margin-top: 26px;
+  overflow: hidden;
 }
 .mx-prof-fab > :not(.mx-prof-fab__grip) {
   transition: opacity 0.2s;
@@ -2824,17 +2834,26 @@ a.mx-bar {
 }
 .mx-prof-fab__grip {
   position: absolute;
-  left: 5px;
+  left: 4px;
   top: 50%;
-  width: 4px;
-  height: 30px;
-  margin-top: -15px;
+  display: grid;
+  grid-template-columns: 3px 3px;
+  gap: 1px;
+  width: 7px;
+  height: 11px;
+  margin-top: -6px;
+}
+.mx-prof-fab__grip i {
+  width: 3px;
+  height: 3px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--foreground) 30%, transparent);
+  background: color-mix(in srgb, var(--foreground) 40%, transparent);
 }
 .mx-prof-fab.rec .mx-prof-fab__grip {
-  background: #ef4444;
   animation: mx-prof-blink 1.2s ease-in-out infinite;
+}
+.mx-prof-fab.rec .mx-prof-fab__grip i {
+  background: #ef4444;
 }
 @keyframes mx-prof-blink {
   50% {

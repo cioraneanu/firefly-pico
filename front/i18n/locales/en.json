@@ -221,7 +221,8 @@
       "demo": "Demo mode",
       "demo_start": "Try with sample data",
       "demo_exit": "Exit demo mode",
-      "demo_info": "Explore the app with sample data kept only on this device, no server needed. Exiting deletes the sample data and resets the app."
+      "demo_info": "Explore the app with sample data kept only on this device, no server needed. Exiting deletes the sample data and resets the app.",
+      "no_token": "No access token yet. Add one, or try demo mode, in Setup."
     },
     "ui_entry": "User interface",
     "ui": {

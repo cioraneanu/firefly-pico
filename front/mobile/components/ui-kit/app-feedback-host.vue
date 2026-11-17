@@ -5,7 +5,7 @@
         <span class="ok"><app-icon :icon="toastIcon(toast)" :size="13" :stroke="3" /></span>
         <span class="flex-1 min-w-0">{{ toast.message }}</span>
         <button v-if="toast.action" type="button" class="mx-btn xs ghost mx-toast__act" @click.stop="toast.onAction">
-          <app-icon :icon="IconArrowBackUp" :size="14" :stroke="2" />{{ toast.action.label }}
+          <app-icon :icon="toast.action.icon ?? IconArrowBackUp" :size="14" :stroke="2" />{{ toast.action.label }}
         </button>
         <span v-if="toast.action" class="mx-toast__bar" :style="{ animationDuration: `${toast.duration}ms` }" />
       </div>

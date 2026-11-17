@@ -221,7 +221,8 @@
       "demo": "Tryb demo",
       "demo_start": "Wypróbuj z przykładowymi danymi",
       "demo_exit": "Wyjdź z trybu demo",
-      "demo_info": "Poznaj aplikację z przykładowymi danymi zapisanymi tylko na tym urządzeniu, bez serwera. Wyjście usuwa przykładowe dane i resetuje aplikację."
+      "demo_info": "Poznaj aplikację z przykładowymi danymi zapisanymi tylko na tym urządzeniu, bez serwera. Wyjście usuwa przykładowe dane i resetuje aplikację.",
+      "no_token": "Brak tokenu dostępu. Dodaj go lub wypróbuj tryb demo w Konfiguracji."
     },
     "ui_entry": "Interfejs użytkownika",
     "ui": {

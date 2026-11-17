@@ -214,7 +214,9 @@ private final class BundledWebApp: NSObject, WKURLSchemeHandler {
     func webView(_ webView: WKWebView, start task: any WKURLSchemeTask) {
         let path = task.request.url?.path(percentEncoded: false) ?? "/"
         var file = root.appending(path: path).standardizedFileURL
-        if path.hasSuffix("/") || !file.path.hasPrefix(root.path) || !FileManager.default.fileExists(atPath: file.path) {
+        var isDirectory: ObjCBool = false
+        // Prerendered routes (e.g. /settings/setup) exist as folders: those get index.html too.
+        if !file.path.hasPrefix(root.path) || !FileManager.default.fileExists(atPath: file.path, isDirectory: &isDirectory) || isDirectory.boolValue {
             if path.contains(".") { log.error("not in WebApp/: \(path, privacy: .public)") }
             file = root.appending(path: "index.html")
         }

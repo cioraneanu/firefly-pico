@@ -221,7 +221,8 @@
       "demo": "Modo demo",
       "demo_start": "Probar con datos de ejemplo",
       "demo_exit": "Salir del modo demo",
-      "demo_info": "Explora la app con datos de ejemplo guardados solo en este dispositivo, sin servidor. Al salir, los datos de ejemplo se borran y la app se restablece."
+      "demo_info": "Explora la app con datos de ejemplo guardados solo en este dispositivo, sin servidor. Al salir, los datos de ejemplo se borran y la app se restablece.",
+      "no_token": "Aún no hay token de acceso. Agrega uno o prueba el modo demo en Configuración."
     },
     "ui_entry": "Interfaz de usuario",
     "ui": {

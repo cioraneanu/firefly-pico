@@ -221,7 +221,8 @@
       "demo": "Mode démo",
       "demo_start": "Essayer avec des données d'exemple",
       "demo_exit": "Quitter le mode démo",
-      "demo_info": "Découvrez l'application avec des données d'exemple conservées uniquement sur cet appareil, sans serveur. En quittant, les données d'exemple sont supprimées et l'application est réinitialisée."
+      "demo_info": "Découvrez l'application avec des données d'exemple conservées uniquement sur cet appareil, sans serveur. En quittant, les données d'exemple sont supprimées et l'application est réinitialisée.",
+      "no_token": "Aucun jeton d'accès pour l'instant. Ajoutez-en un ou essayez le mode démo dans Configuration."
     },
     "ui_entry": "Interfacte Utilisateur",
     "ui": {
