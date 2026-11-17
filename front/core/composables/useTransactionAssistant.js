@@ -49,7 +49,8 @@ export function useTransactionAssistant(text, onChange) {
     if (!isEqual(parsed.value, result)) parsed.value = result
   }
 
-  watch(text, debounce(parse, 200))
+  const debouncedParse = debounce(parse, 200)
+  watch(text, debouncedParse)
 
   const previewTags = computed(() =>
     [
@@ -75,5 +76,8 @@ export function useTransactionAssistant(text, onChange) {
     }),
   )
 
-  return { parsed, previewTags }
+  // Parses what was typed right away (Enter saves without waiting for the debounce)
+  const flush = () => debouncedParse.flush()
+
+  return { parsed, previewTags, flush }
 }

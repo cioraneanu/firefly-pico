@@ -79,19 +79,23 @@ export default defineNuxtConfig({
       path: '~/mobile/components',
       pathPrefix: false,
     },
-    {
-      path: '~/mobile/components/global',
-      global: true,
-    },
   ],
 
-  css: ['~/assets/styles/tailwind.css', '~/mobile/styles/variables.css', '~/mobile/styles/theme-white.css', '~/mobile/styles/theme-dark.css', '~/assets/styles/animations.css'],
+  css: [
+    '~/assets/styles/tailwind.css',
+    '~/assets/styles/animations.css',
+    '~/mobile/styles/mx.css',
+    '~/mobile/styles/mx-app-kit.css',
+    '~/mobile/styles/mx-app-tx.css',
+    '~/mobile/styles/mx-app-dash.css',
+    '~/mobile/styles/mx-app-entities.css',
+  ],
 
   build: {
     // transpile: ['vuetify'],
   },
 
-  modules: ['@vite-pwa/nuxt', '@nuxtjs/device', '@pinia/nuxt', '@vant/nuxt', 'nuxt-svgo', '@nuxt/eslint', '@nuxtjs/i18n'],
+  modules: ['@vite-pwa/nuxt', '@nuxtjs/device', '@pinia/nuxt', 'nuxt-svgo', '@nuxt/eslint', '@nuxtjs/i18n'],
 
   svgo: {
     defaultImport: 'component',
@@ -144,6 +148,7 @@ export default defineNuxtConfig({
     },
     workbox: {
       navigateFallback: '/',
+      globPatterns: ['**/*.{js,css,html}', 'fonts/*.woff2'],
       runtimeCaching: [
         {
           // Admin custom icons. The backend may be on another origin => also cache opaque responses (status 0)

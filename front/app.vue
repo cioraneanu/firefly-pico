@@ -1,8 +1,8 @@
 <template>
-  <van-config-provider :theme="theme">
+  <div :class="themeClass">
     <NuxtPwaManifest />
     <component :is="shell" />
-  </van-config-provider>
+  </div>
 </template>
 
 <script setup>
@@ -16,22 +16,25 @@ const dashboardStore = useDashboardStore()
 const profileStore = useProfileStore()
 const appStore = useAppStore()
 
-const theme = computed(() => (profileStore.darkTheme ? 'dark' : 'white'))
+// theme-dark is the dark-mode hook for the desktop tokens and Tailwind's dark: variant
+const themeClass = computed(() => ({ 'theme-dark': profileStore.darkTheme }))
 const pwaColor = computed(() => (profileStore.darkTheme ? '#1c1c1e' : '#ffffff'))
 useHead({
   meta: [{ name: 'theme-color', content: pwaColor }],
 })
 
 onMounted(async () => {
+  // Before the token check: after a first setup the dashboard opens without a reload
+  await dashboardStore.init()
   if (!appStore.authToken) {
     navigateTo(`${RouteConstants.ROUTE_SETTINGS_SETUP}`)
     return
   }
-  await dashboardStore.init()
 
   appStore.fetchInfo()
   await profileStore.getProfiles({ showLoading: false })
   await appStore.syncEverythingIfOld()
+  useTodoStore().fetchTodoOnce()
 })
 </script>
 

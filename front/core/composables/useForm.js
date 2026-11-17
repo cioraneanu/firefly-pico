@@ -1,8 +1,8 @@
 import { onMounted, ref } from 'vue'
 import { get, cloneDeep } from 'lodash-es'
 import UIUtils from '~/core/utils/UIUtils'
-import { next } from 'lodash-es/seq'
 import { getGUID } from '~/core/utils/Utils.js'
+import { deleteWithUndo } from '~/core/utils/DeleteUtils'
 
 export const useFormEvent = {
   postFetch: 'postFetch',
@@ -11,13 +11,15 @@ export const useFormEvent = {
 }
 
 export function useForm(props) {
-  const { routeList, routeForm, shouldFetchOnMount = true } = props
+  // resetOnCreate (ref): whether creating empties the form for the next one; defaults to profileStore.resetFormOnCreate
+  const { routeList, routeForm, shouldFetchOnMount = true, resetOnCreate = null } = props
   const { model, resetFields, onEvent, fetchItem: fetchItem_ } = props
 
   const transformer = model.getTransformer()
   const repository = model.getRepository()
 
   let profileStore = useProfileStore()
+  const { t } = useI18n()
 
   let formName = ref(`form-${getGUID()}`)
 
@@ -58,7 +60,12 @@ export function useForm(props) {
     onEvent?.(useFormEvent.postFetch)
   }
 
+  // Enter, key repeat or a double click can submit again while a save runs: ignore those
+  let isSaving = false
+
   async function saveItem() {
+    if (isSaving) return
+    isSaving = true
     isLoading.value = true
 
     let newItem = item.value
@@ -73,11 +80,11 @@ export function useForm(props) {
     isLoading.value = false
 
     if (ResponseUtils.isSuccess(response)) {
-      UIUtils.showToastSuccess('Success')
+      UIUtils.showToastSuccess(t('success'))
       onEvent?.(useFormEvent.postSave, response)
 
       // Should reset form
-      if (!itemId.value && profileStore.resetFormOnCreate) {
+      if (!itemId.value && (toValue(resetOnCreate) ?? profileStore.resetFormOnCreate)) {
         item.value = model.getEmpty()
         resetFields ? resetFields() : null
       } else {
@@ -86,18 +93,15 @@ export function useForm(props) {
       }
     }
 
+    isSaving = false
     return response
   }
 
   const onDelete = async () => {
-    let result = await UIUtils.showDeleteConfirmation('Delete confirmation', 'Are you sure you want to delete this?')
-    if (result) {
-      let response = await repository.delete(itemId.value)
-      if (ResponseUtils.isSuccess(response)) {
-        onEvent ? onEvent(useFormEvent.postDelete, response) : null
-        routeList ? await navigateTo(routeList) : null
-        UIUtils.showToastSuccess(`Deleted successfully.`, 1000)
-      }
+    const id = itemId.value
+    const response = await deleteWithUndo(item.value, () => repository.delete(id), { leave: routeList && (() => navigateTo(routeList, { replace: true })), undoable: !!routeList })
+    if (ResponseUtils.isSuccess(response)) {
+      onEvent ? onEvent(useFormEvent.postDelete, response) : null
     }
   }
 
@@ -112,21 +116,18 @@ export function useForm(props) {
   }
 
   const onValidationError = (errorInfo) => {
-    UIUtils.showToastError('Form has invalid values. Check the red fields :)')
+    UIUtils.showToastError(t('validation.form_invalid'))
     scrollToError(errorInfo)
   }
 
   const scrollToError = (errorInfo) => {
     let errorFields = (errorInfo.errors ?? []).map((item) => item.name).filter((item) => item)
-    const formElement = document.querySelector(`.van-form[name="${formName.value}"]`)
+    const formElement = document.querySelector(`form[name="${formName.value}"]`)
     if (!formElement) {
       return
     }
 
-    let topField = errorFields
-      .map((item) => formElement.querySelector(`[name="${item}"]`))
-      .filter((item) => item)
-      .reduce((result, item) => (item.offsetTop > (result.offsetTop ?? 0) ? item : result))
+    let topField = errorFields.map((item) => formElement.querySelector(`[name="${item}"]`)).find((item) => item)
 
     topField?.scrollIntoView({ behavior: 'smooth', block: 'center' })
   }
@@ -138,7 +139,6 @@ export function useForm(props) {
   })
 
   // ----- Loading indicators -----
-
 
   // -----------------------------
 

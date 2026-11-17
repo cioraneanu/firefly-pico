@@ -1,34 +1,49 @@
 <template>
-  <div :class="formClass">
+  <div class="mx-page">
     <app-top-toolbar>
       <template #right>
         <app-button-list-add @click="onAdd" />
       </template>
     </app-top-toolbar>
 
-    <empty-list v-if="isEmpty" />
+    <main class="mx-body">
+      <app-list v-model:refreshing="isRefreshing" :loading="isLoading" :finished="isFinished" @load="onLoadMore" @refresh="onRefresh">
+        <template v-if="list.length > 0">
+          <app-list-search v-model="search" :placeholder="$t('recurring_transaction_page.search')" />
 
-    <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
-      <van-list class="p-1" :finished="isFinished" @load="onLoadMore">
-        <app-list-search v-if="isSearchVisible && list.length > 0" v-model="search">
-          <template #right>
-            <van-popover v-model:show="showFilterPopover" placement="bottom-end" overlay :overlay-style="{ background: 'transparent' }">
-              <div class="flex flex-col gap-1 p-2.5">
-                <div class="text-12 font-semibold text-muted">{{ $t('transaction_type') }}</div>
-                <app-tabs v-model="filterTransactionType" :items="transactionTypeTabs" />
-              </div>
+          <div class="mx-tabs" role="tablist" :aria-label="$t('transaction_type')">
+            <button
+              v-for="tab in transactionTypeTabs"
+              :key="tab.value"
+              type="button"
+              role="tab"
+              :class="{ on: tab.value === filterTransactionType }"
+              :aria-selected="tab.value === filterTransactionType"
+              @click="filterTransactionType = tab.value"
+            >
+              <span>{{ tab.label }}</span>
+              <span class="n">{{ tab.count }}</span>
+            </button>
+          </div>
+        </template>
 
-              <template #reference>
-                <button type="button" class="app-button-icon">
-                  <app-icon :icon="TablerIconConstants.settings" :size="18" />
-                </button>
-              </template>
-            </van-popover>
+        <div v-if="filteredList.length > 0" class="mx-list">
+          <recurring-transaction-list-item v-for="item in filteredList" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
+        </div>
+
+        <empty-list v-else-if="list.length > 0" filtered>
+          <template #action>
+            <button type="button" class="mx-btn out" @click="onClearFilters">{{ $t('general.clear_filters') }}</button>
           </template>
-        </app-list-search>
-        <recurring-transaction-list-item v-for="item in filteredList" :key="item.id" :value="item" @on-edit="onEdit" @on-delete="onDelete" />
-      </van-list>
-    </van-pull-refresh>
+        </empty-list>
+
+        <empty-list v-else-if="isEmpty" :icon="TablerIconConstants.recurringTransaction" :hint="$t('recurring_transaction_page.empty_hint')">
+          <template #action>
+            <button type="button" class="mx-btn pri" @click="onAdd">{{ $t('recurring_transaction_page.title_add') }}</button>
+          </template>
+        </empty-list>
+      </app-list>
+    </main>
   </div>
 </template>
 
@@ -37,7 +52,6 @@ import RouteConstants from '~/core/constants/RouteConstants'
 import { useRecurringTransactionStore } from '~/core/stores/recurringTransactionStore'
 import { useList } from '~/core/composables/useList'
 import { useToolbar } from '~/mobile/composables/useToolbar'
-import AppListSearch from '~/mobile/components/ui-kit/theme/app-list-search.vue'
 import { animateSwipeList } from '~/core/utils/AnimationUtils.js'
 import RecurringTransaction from '~/core/models/RecurringTransaction.js'
 import Transaction from '~/core/models/Transaction.js'
@@ -52,44 +66,43 @@ const onEvent = (event, payload) => {
   }
 }
 
-const search = ref('')
-const isSearchVisible = ref(true)
-
-const showFilterPopover = ref(false)
-const filterTransactionType = ref('all')
-const transactionTypeTabs = computed(() => [
-  { label: t('transaction.type.all'), value: 'all' },
-  { label: t('transaction.type.expense'), value: Transaction.types.expense.code },
-  { label: t('transaction.type.income'), value: Transaction.types.income.code },
-  { label: t('transaction.type.transfer'), value: Transaction.types.transfer.code },
-])
-
-const filteredList = computed(() => {
-  let result = list.value
-  if (filterTransactionType.value !== 'all') {
-    result = result.filter((item) => RecurringTransaction.getType(item)?.code === filterTransactionType.value)
-  }
-  if (search.value.length === 0) {
-    return result
-  }
-  return result.filter((item) => {
-    return LanguageUtils.includesSearch(RecurringTransaction.getDisplayName(item), search.value)
-  })
-})
-
-const { isLoading, isFinished, isRefreshing, page, pageSize, totalPages, listTotalCount, list, isEmpty, onAdd, onEdit, onDelete } = useList({
-  title: 'Recurring transactions list',
+const { isLoading, isFinished, isRefreshing, list, isEmpty, onAdd, onEdit, onDelete } = useList({
   routeList: RouteConstants.ROUTE_RECURRING_TRANSACTION_LIST,
   routeForm: RouteConstants.ROUTE_RECURRING_TRANSACTION_ID,
   model: new RecurringTransaction(),
   onEvent: onEvent,
 })
 
-const formClass = computed(() => ({
-  'app-form': true,
-  empty: isEmpty.value,
-}))
+const search = ref('')
+const filterTransactionType = ref('all')
+const getTypeCode = (item) => RecurringTransaction.getType(item)?.code
 
+const transactionTypeTabs = computed(() => [
+  { label: t('transaction.type.all'), value: 'all', count: list.value.length },
+  ...[Transaction.types.expense, Transaction.types.income, Transaction.types.transfer].map((type) => ({
+    label: t(type.t),
+    value: type.code,
+    count: list.value.filter((item) => getTypeCode(item) === type.code).length,
+  })),
+])
+
+const filteredList = computed(() => {
+  let result = list.value
+  if (filterTransactionType.value !== 'all') {
+    result = result.filter((item) => getTypeCode(item) === filterTransactionType.value)
+  }
+  if (search.value.length > 0) {
+    result = result.filter((item) => LanguageUtils.includesSearch(RecurringTransaction.getDisplayName(item), search.value))
+  }
+  return result
+})
+
+const onClearFilters = () => {
+  search.value = ''
+  filterTransactionType.value = 'all'
+}
+
+// The whole list is fetched in one go, so one load finishes it
 const onRefresh = async () => {
   if (isLoading.value) {
     isRefreshing.value = false
@@ -101,20 +114,14 @@ const onRefresh = async () => {
   await recurringTransactionStore.fetchRecurringTransactions()
   list.value = recurringTransactionStore.recurringTransactionList
 
-  // The whole list is fetched in one go => stop van-list from requesting more pages on scroll
   isFinished.value = true
   isLoading.value = false
   isRefreshing.value = false
 }
 
-const onLoadMore = () => {
-  onRefresh()
-}
+const onLoadMore = () => onRefresh()
 
-// -----
-
-const toolbar = useToolbar()
-toolbar.init({
+useToolbar().init({
   title: t('recurring_transactions'),
   backRoute: RouteConstants.ROUTE_EXTRAS,
 })

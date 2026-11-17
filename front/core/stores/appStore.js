@@ -18,9 +18,11 @@ import { usePiggyBankStore } from '~/core/stores/piggyBankStore.js'
 import { useRecurringTransactionStore } from '~/core/stores/recurringTransactionStore.js'
 import { useIconStore } from '~/core/stores/iconStore.js'
 import DateUtils from '~/core/utils/DateUtils.js'
+import { isNativeApp } from '~/core/composables/useNativeApp.js'
 
 export const useAppStore = defineStore('app', () => {
-  const defaultUrl = window.location.origin
+  // The iOS app serves the web app from its own pico://localhost origin, so there is no default backend there
+  const defaultUrl = isNativeApp ? '' : window.location.origin
   const runtimeConfig = useRuntimeConfig()
 
   const authToken = useLocalStorage('authToken', '')
@@ -28,6 +30,8 @@ export const useAppStore = defineStore('app', () => {
   const picoBackendHeaders = useLocalStorage('picoBackendHeaders', [])
   const syncProfileInDB = useLocalStorage('syncProfileInDB', true)
   const daysBetweenFullSync = useLocalStorage('daysBetweenFullSync', 4)
+  // Demo mode answers every request from local sample data (core/demo/DemoBackend.js)
+  const isDemoMode = useLocalStorage('demoMode', false)
 
   const profileFloatButtonPosition = useLocalStorage('profileFloatButtonPosition', { y: window.innerHeight / 2.2 })
 
@@ -144,6 +148,7 @@ export const useAppStore = defineStore('app', () => {
     picoBackendHeaders,
     syncProfileInDB,
     daysBetweenFullSync,
+    isDemoMode,
 
     profileFloatButtonPosition,
     currentAppVersion,

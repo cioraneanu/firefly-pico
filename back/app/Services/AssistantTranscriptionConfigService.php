@@ -2,53 +2,39 @@
 
 namespace App\Services;
 
-class AssistantTranscriptionConfigService
+class AssistantTranscriptionConfigService extends AssistantConfigService
 {
-    /**
-     * @param string|null $language Per-request language, winning over the configured one.
-     */
-    public function getConfig($language = null)
-    {
-        $endpoint = $this->trimValue(config('services.assistant_transcription.endpoint'));
-        $model = $this->trimValue(config('services.assistant_transcription.model'));
-        $apiKey = $this->trimValue(config('services.assistant_transcription.api_key'));
-        // Read this at runtime as well so a container-provided language is not
-        // lost when Laravel's configuration was cached before startup.
-        $language = $this->trimValue($language) ?: $this->trimValue(getenv('ASSISTANT_TRANSCRIPTION_LANGUAGE') ?: config('services.assistant_transcription.language'));
+    protected string $group = 'transcription';
 
-        return [
-            'isConfigured' => $endpoint !== '' || $apiKey !== '',
-            'endpoint' => $endpoint ?: config('services.assistant_transcription.defaults.endpoint'),
-            'model' => $model ?: config('services.assistant_transcription.defaults.model'),
-            'apiKey' => $apiKey,
-            'language' => $this->normalizeLanguage($language),
-        ];
+    // $language: per-request language, winning over the configured one.
+    public function getConfig(?array $override = null, $userId = null, $language = null): array
+    {
+        $config = $this->getConnection($override, $userId);
+
+        return [...$config, 'language' => $this->normalizeLanguage(trim((string)$language) ?: $config['language'])];
     }
 
-    public function getPublicConfig()
+    public function getServerConfig(): array
     {
-        $config = $this->getConfig();
+        // Read this at runtime as well so a container-provided language is not
+        // lost when Laravel's configuration was cached before startup.
+        $language = trim((string)(getenv('ASSISTANT_TRANSCRIPTION_LANGUAGE') ?: config('services.assistant_transcription.language')));
 
-        return [
-            'is_configured' => $config['isConfigured'],
-            'endpoint' => $config['endpoint'],
-            'model' => $config['model'],
-            'language' => $config['language'],
-        ];
+        return [...parent::getServerConfig(), 'language' => $this->normalizeLanguage($language)];
+    }
+
+    public function getPublicConfig(bool $forUser = false): array
+    {
+        return [...parent::getPublicConfig($forUser), 'language' => $this->getServerConfig()['language']];
     }
 
     // Transcription APIs expect an ISO-639-1 code, so "ro-RO" or "ro_RO" becomes "ro".
     private function normalizeLanguage($language)
     {
-        if (!preg_match('/^([a-z]{2,3})[-_]/i', $language, $matches)) {
+        if (!preg_match('/^([a-z]{2,3})[-_]/i', (string)$language, $matches)) {
             return $language;
         }
 
         return strtolower($matches[1]);
-    }
-
-    private function trimValue($value)
-    {
-        return trim((string)($value ?? ''));
     }
 }

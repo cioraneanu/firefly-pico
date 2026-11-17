@@ -1,67 +1,34 @@
 <template>
-  <app-select
-    v-model="modelValue"
-    v-model:show-dropdown="showDropdown"
-    :label="$t('transaction_type')"
-    :popup-title="$t('transaction_type')"
-    :list="list"
-    :columns="1"
-    :get-display-value="getDisplayValue"
-    v-bind="dynamicAttrs"
-    :has-search="false"
-  >
+  <app-select v-model="modelValue" :label="$t('transaction_type')" :popup-title="$t('transaction_type')" :list="list" :get-display-value="getDisplayValue" :has-search="false">
     <template #item="{ item }">
-      <div class="flex items-center gap-2">
-        <component :is="getIconComponentForType(item)" :size="24" :class="getClass(item)" />
-        {{ $t(item.t) }}
-      </div>
+      <span class="ic" :style="{ color: getColor(item) }"><app-icon :icon="getIcon(item)" :size="16" :stroke="2" /></span>
+      <span class="lb">{{ getDisplayValue(item) }}</span>
     </template>
 
     <template #inputItemContent="{ item }">
-      <div class="flex items-center gap-2">
-        <component :is="getIconComponentForType(item)" :size="16" :class="getClass(item)" />
-        {{ $t(item.t) }}
-      </div>
+      <app-icon :icon="getIcon(item)" :size="16" :stroke="2" :style="{ color: getColor(item) }" />
+      <span class="tx">{{ getDisplayValue(item) }}</span>
     </template>
   </app-select>
 </template>
 
 <script setup>
-import Account from '~/core/models/Account'
-import { useFormAttributes } from '~/core/composables/useFormAttributes'
+import { IconCircleArrowRight, IconCircleMinus, IconCirclePlus } from '@tabler/icons-vue'
 import Transaction from '~/core/models/Transaction.js'
-import { IconHexagonPlusFilled, IconHexagonMinusFilled, IconHexagonLetterTFilled } from '@tabler/icons-vue'
 
+// Transaction type picker; type icons and colors as the design's type pills.
 const { t } = useI18n()
 
-const attrs = useAttrs()
-const { dynamicAttrs } = useFormAttributes(attrs)
 const modelValue = defineModel()
 const list = Transaction.typesList
 
 const getDisplayValue = (item) => t(item.t)
 
-const getIconComponentForType = (transactionType) => {
-  switch (transactionType.code) {
-    case Transaction.types.expense.code:
-      return IconHexagonMinusFilled
-    case Transaction.types.income.code:
-      return IconHexagonPlusFilled
-    case Transaction.types.transfer.code:
-      return IconHexagonLetterTFilled
-  }
+const typeStyle = {
+  [Transaction.types.expense.code]: { icon: IconCircleMinus, color: 'var(--t-exp)' },
+  [Transaction.types.income.code]: { icon: IconCirclePlus, color: 'var(--t-inc)' },
+  [Transaction.types.transfer.code]: { icon: IconCircleArrowRight, color: 'var(--t-tr)' },
 }
-
-const getClass = (transactionType) => {
-  switch (transactionType.code) {
-    case Transaction.types.expense.code:
-      return 'text-[#dc3545]'
-    case Transaction.types.income.code:
-      return 'text-[#28a745]'
-    case Transaction.types.transfer.code:
-      return 'text-[#007bff]'
-  }
-}
-
-const showDropdown = ref(null)
+const getIcon = (item) => typeStyle[item?.code]?.icon
+const getColor = (item) => typeStyle[item?.code]?.color
 </script>

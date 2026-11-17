@@ -1,0 +1,12 @@
+// Copy to Config/Local.xcconfig and fill in. That file is git-ignored.
+
+// Your Apple Developer Team ID (Xcode → Settings → Accounts, or developer.apple.com → Membership).
+DEVELOPMENT_TEAM = ABCDE12345
+
+// Bundle IDs must be unique to your team. The app becomes $(BUNDLE_ID_PREFIX).FireflyPico.
+// BUNDLE_ID_PREFIX = com.yourname
+
+// Debug builds only: load the web app from `npm run dev` in ../front instead of the bundled WebApp/, with hot reload.
+// host:port only, no scheme (xcconfig treats // as a comment). The simulator reaches the Mac at localhost;
+// for a phone use the Mac's IP and start the dev server with `npm run dev -- --host`.
+// PICO_DEV_SERVER = localhost:3000

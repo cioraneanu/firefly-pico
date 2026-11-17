@@ -6,31 +6,32 @@
     </template>
 
     <d-search v-model="search" :count="filtered.length" />
-    <div v-if="filtered.length" class="grid grid-cols-[repeat(auto-fill,minmax(18rem,1fr))] gap-4">
-      <nuxt-link
+    <d-list v-if="filtered.length">
+      <d-list-item
         v-for="piggyBank in filtered"
         :key="piggyBank.id"
+        :title="PiggyBank.getDisplayName(piggyBank)"
+        :icon="PiggyBank.getIcon(piggyBank) ?? IconPigMoney"
         :to="`${RouteConstants.ROUTE_PIGGY_BANK_ID}/${piggyBank.id}`"
-        class="flex flex-col gap-4 rounded-xl bg-card p-4 ring-1 ring-fg/10 transition-shadow hover:shadow-md"
+        :active="piggyBank.id === id"
       >
-        <span class="flex items-center gap-3">
-          <d-tile :icon="PiggyBank.getIcon(piggyBank) ?? IconPigMoney" size="lg" />
-          <span class="flex min-w-0 flex-col">
-            <b class="truncate font-medium">{{ PiggyBank.getDisplayName(piggyBank) }}</b>
-            <span class="truncate text-[13px] text-dim">{{ Account.getDisplayName(PiggyBank.getAccount(piggyBank)) }}</span>
+        <template #subtitle>
+          <d-badge variant="outline" class="tabular-nums text-dim">{{ Math.round(PiggyBank.getPercent(piggyBank)) }}%</d-badge>
+          <d-badge variant="outline" class="text-dim"><icon-building-bank :size="12" />{{ Account.getDisplayName(PiggyBank.getAccount(piggyBank)) }}</d-badge>
+          <d-badge v-if="PiggyBank.getTargetDate(piggyBank)" variant="outline" class="tabular-nums text-dim"
+            ><icon-calendar :size="12" />{{ DateUtils.dateToUI(PiggyBank.getTargetDate(piggyBank)) }}</d-badge
+          >
+          <span class="tabular-nums">{{ $t('piggy_bank_page.left_to_save') }}: {{ PiggyBank.getLeftToSave(piggyBank) }} {{ PiggyBank.getCurrencySymbol(piggyBank) }}</span>
+        </template>
+        <span class="flex w-60 shrink-0 flex-col gap-1.5">
+          <span class="flex items-baseline gap-1.5 text-[13px] leading-[18px] tabular-nums">
+            <b class="font-medium">{{ PiggyBank.getCurrentAmount(piggyBank) }} {{ PiggyBank.getCurrencySymbol(piggyBank) }}</b>
+            <span class="whitespace-nowrap text-dim">/ {{ PiggyBank.getTargetAmount(piggyBank) }}</span>
           </span>
+          <d-progress :value="PiggyBank.getPercent(piggyBank)" />
         </span>
-        <span class="flex items-end justify-between">
-          <span class="text-xl font-semibold tabular-nums">{{ PiggyBank.getCurrentAmount(piggyBank) }} {{ PiggyBank.getCurrencySymbol(piggyBank) }}</span>
-          <span class="text-[13px] tabular-nums text-dim">/ {{ PiggyBank.getTargetAmount(piggyBank) }}</span>
-        </span>
-        <d-progress :value="PiggyBank.getPercent(piggyBank)" />
-        <span class="flex justify-between text-xs text-dim">
-          <span>{{ $t('piggy_bank_page.left_to_save') }}: {{ PiggyBank.getLeftToSave(piggyBank) }} {{ PiggyBank.getCurrencySymbol(piggyBank) }}</span>
-          <span v-if="PiggyBank.getTargetDate(piggyBank)">{{ DateUtils.dateToUI(PiggyBank.getTargetDate(piggyBank)) }}</span>
-        </span>
-      </nuxt-link>
-    </div>
+      </d-list-item>
+    </d-list>
     <d-list v-else>
       <d-empty :icon="IconPigMoney" />
     </d-list>
@@ -40,7 +41,7 @@
 </template>
 
 <script setup>
-import { IconPigMoney, IconPlus } from '@tabler/icons-vue'
+import { IconBuildingBank, IconCalendar, IconPigMoney, IconPlus } from '@tabler/icons-vue'
 import RouteConstants from '~/core/constants/RouteConstants'
 import Account from '~/core/models/Account'
 import PiggyBank from '~/core/models/PiggyBank'

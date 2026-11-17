@@ -1,6 +1,7 @@
 import { capitalize, get, isEqual } from 'lodash-es'
 import { formatTimeAgo } from '@vueuse/core'
 import { marked } from 'marked'
+import { differenceInCalendarDays } from 'date-fns'
 import DateUtils from '~/core/utils/DateUtils'
 import Transaction from '~/core/models/Transaction'
 import { transactionListFieldList } from '~/core/constants/TransactionConstants.js'
@@ -63,6 +64,8 @@ export function useTransactionListItem(props) {
   const date = computed(() => DateUtils.autoToDate(get(firstTransaction.value, 'date')))
   const dateFormatted = computed(() => DateUtils.dateToUI(date.value))
   const timeAgo = computed(() => (date.value ? capitalize(formatTimeAgo(date.value)) : ''))
+  // Relative for the last 3 days ("2 days ago"), the full date for anything older
+  const dateOrTimeAgo = computed(() => (date.value && Math.abs(differenceInCalendarDays(new Date(), date.value)) <= 3 ? timeAgo.value : dateFormatted.value))
 
   const getStyleForField = ({ code }) => {
     const fieldsConfig = Array.isArray(profileStore.transactionListFieldsConfig) ? profileStore.transactionListFieldsConfig : transactionListFieldList
@@ -110,6 +113,7 @@ export function useTransactionListItem(props) {
     transactionCurrency,
     dateFormatted,
     timeAgo,
+    dateOrTimeAgo,
     getStyleForField,
     amountStyle,
   }

@@ -1,5 +1,5 @@
 <template>
-  <div :class="['grid min-w-0 grid-cols-[var(--label-w,9rem)_minmax(0,1fr)] gap-x-4 gap-y-2', top ? 'items-start' : 'items-center']">
+  <div :class="['grid min-w-0 grid-cols-[var(--label-w,8.5rem)_minmax(0,1fr)] gap-x-4 gap-y-2', top ? 'items-start' : 'items-center']">
     <span :class="['flex items-center gap-2 text-sm font-medium', top && 'pt-1.5']">
       <component :is="icon" v-if="icon" :size="16" class="text-dim" />
       {{ label }}

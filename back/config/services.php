@@ -31,6 +31,11 @@ return [
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
 
+    // Lets users point their own assistant connection at private/LAN addresses (e.g. Ollama). The server's ASSISTANT_* endpoints are never restricted.
+    'assistant' => [
+        'allow_private_endpoints' => (bool)env('ASSISTANT_ALLOW_PRIVATE_ENDPOINTS', false),
+    ],
+
     'assistant_llm' => [
         'endpoint' => env('ASSISTANT_LLM_ENDPOINT'),
         'model' => env('ASSISTANT_LLM_MODEL'),

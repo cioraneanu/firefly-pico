@@ -13,8 +13,10 @@ export function useSettingsDraft(paths, { onSaved } = {}) {
     paths.forEach((path) => set(profileStore, path, cloneDeep(draft[path])))
     const response = await profileStore.writeProfile()
     if (!response || ResponseUtils.isSuccess(response)) {
-      await onSaved?.()
-      UIUtils.showToastSuccess(t('settings.settings_saved'))
+      // onSaved returns false when it failed (and showed its own error)
+      if ((await onSaved?.()) !== false) {
+        UIUtils.showToastSuccess(t('settings.settings_saved'))
+      }
     }
     isSaving.value = false
   }

@@ -1,17 +1,14 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { keyBy } from 'lodash-es'
-import { StorageSerializers, useLocalStorage } from '@vueuse/core'
+import { keyBy, omit } from 'lodash-es'
+import { useLocalStorage } from '@vueuse/core'
 import CurrencyRepository from '~/core/repository/CurrencyRepository'
-import Currency from '~/core/models/Currency.js'
 
 export const useCurrencyStore = defineStore('currency', () => {
   const exchangeRates = useLocalStorage('exchangeRates', {})
   const currenciesList = useLocalStorage('currenciesList', [])
   const isLoadingCurrencies = ref(false)
   const isLoadingExchangeRates = ref(false)
-
-
 
   const currencyDictionary = computed(() => {
     return keyBy(currenciesList.value, 'id')
@@ -21,18 +18,31 @@ export const useCurrencyStore = defineStore('currency', () => {
     return currenciesList.value.find((item) => item?.attributes?.default)
   })
 
+  // The fetched rates with the user's own rates on top: what every conversion uses
+  const rates = computed(() => ({ ...exchangeRates.value?.rates, ...useProfileStore().exchangeRateOverrides }))
+
   const exchangeRatesList = computed(() => {
     let infoList = exchangeRates.value?.currencies ?? []
     let infoDictionary = keyBy(infoList, 'code')
 
-    let rates = exchangeRates.value?.rates
-    return Object.keys(rates ?? {}).map((currencyCode) => ({
+    let fetchedRates = exchangeRates.value?.rates ?? {}
+    return Object.keys(rates.value).map((currencyCode) => ({
       code: currencyCode,
-      value: rates[currencyCode],
+      value: rates.value[currencyCode],
+      fetchedValue: fetchedRates[currencyCode],
+      isCustom: currencyCode in useProfileStore().exchangeRateOverrides,
+      isEditable: currencyCode !== 'USD',
       name: infoDictionary?.[currencyCode]?.name ?? ' - ',
       country: infoDictionary?.[currencyCode]?.country ?? ' - ',
     }))
   })
+
+  // value = null goes back to the fetched rate
+  async function setExchangeRate(code, value) {
+    const profileStore = useProfileStore()
+    profileStore.exchangeRateOverrides = value === null ? omit(profileStore.exchangeRateOverrides, code) : { ...profileStore.exchangeRateOverrides, [code]: value }
+    await profileStore.writeProfile()
+  }
 
   async function fetchExchangeRate() {
     isLoadingExchangeRates.value = true
@@ -53,7 +63,9 @@ export const useCurrencyStore = defineStore('currency', () => {
     isLoadingExchangeRates,
     currencyDictionary,
     defaultCurrency,
+    rates,
     exchangeRatesList,
+    setExchangeRate,
     fetchExchangeRate,
     fetchCurrencies,
   }

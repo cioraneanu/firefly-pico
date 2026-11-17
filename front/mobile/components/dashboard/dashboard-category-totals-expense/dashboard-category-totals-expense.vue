@@ -1,59 +1,43 @@
 <template>
-  <van-cell-group inset>
-    <div class="van-cell-group-title flex items-center">
-      <div class="flex-1">{{ $t('dashboard.expenses_by_categories') }}:</div>
-      <van-popover v-model:show="showOptionsPopover" placement="bottom-end">
-        <div class="flex flex-col gap-2 p-2.5">
-          <div class="flex flex-col gap-1">
-            <div class="text-12 font-semibold text-muted">{{ $t('amount') }}</div>
-            <app-tabs v-model="dashboardStore.widgetsNetAmountMode" :items="amountModeTabs" />
-          </div>
-        </div>
+  <app-card :title="$t('dashboard.expenses_by_categories')" :form="false">
+    <template #actions>
+      <button type="button" class="mx-ib sm" :aria-label="$t('dash_page.card_options')" @click="showOptions = true">
+        <app-icon :icon="TablerIconConstants.settings" :size="16" :stroke="2" />
+      </button>
+    </template>
 
-        <template #reference>
-          <button type="button" class="app-button-icon">
-            <app-icon :icon="TablerIconConstants.settings" :size="18" />
-          </button>
-        </template>
-      </van-popover>
+    <dashboard-bar-list :bars="barsList" :get-icon="(bar) => Category.getIcon(bar.category) ?? TablerIconConstants.category" @select="onShowActions" />
+  </app-card>
+
+  <app-sheet v-model:show="showOptions" :title="$t('dash_page.card_options')">
+    <div class="mx-form">
+      <div class="mx-f">
+        <div class="mx-l">{{ $t('amount') }}</div>
+        <app-tabs v-model="dashboardStore.widgetsNetAmountMode" :items="amountModeTabs" />
+      </div>
     </div>
-    <div class="flex flex-col ml-3.75 mr-3.75">
-      <table>
-        <tr v-for="bar in barsList" :key="bar.category?.id ?? 'not-set'" class="cursor-pointer" @click="onShowActionSheet(bar)">
-          <td style="width: 1%">
-            <div class="flex items-center gap-1 my-1">
-              <app-icon :icon="Category.getIcon(bar.category) ?? TablerIconConstants.category" :size="20" />
-              <span class="text-12 font-normal flex-1">{{ ellipsizeText(bar.label, 25) }}</span>
-            </div>
-          </td>
+  </app-sheet>
 
-          <td>
-            <bar-chart-item-horizontal :percent="bar.percent" :get-background="getBarColor" />
-          </td>
-
-          <td style="width: 1%">
-            <div class="flex flex-col">
-              <span class="text-12 font-normal">{{ bar.value }}</span>
-            </div>
-          </td>
-        </tr>
-      </table>
-    </div>
-  </van-cell-group>
+  <dashboard-item-sheet
+    v-model:show="showActions"
+    :title="selectedBar?.label"
+    :description="selectedBar ? `${selectedBar.value} · ${rangeTitle}` : null"
+    :edit-label="selectedBar?.category ? $t('category_page.title_edit') : null"
+    @edit="onGoToCategory(selectedBar.category)"
+    @transactions="onGoToTransactions(selectedBar.category)"
+  />
 </template>
 <script setup>
 import RouteConstants from '~/core/constants/RouteConstants.js'
 import Transaction from '~/core/models/Transaction.js'
 import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 import Category from '~/core/models/Category.js'
-import { useActionSheet } from '~/mobile/composables/useActionSheet.js'
 
-import { useCategoryStore } from '~/core/stores/categoryStore'
 import { useDashboardStore } from '~/core/stores/dashboardStore'
 
 const dashboardStore = useDashboardStore()
 const { t } = useI18n()
-const showOptionsPopover = ref(false)
+const showOptions = ref(false)
 
 const amountModeTabs = computed(() => [
   { label: t('dashboard.amount_modes.expenses_only'), value: false },
@@ -61,18 +45,14 @@ const amountModeTabs = computed(() => [
 ])
 
 const { expensesByCategory: barsList } = useDashboardBars()
+const { rangeTitle } = useDashboardSummary()
 const links = useDashboardLinks()
 
-const getBarColor = () => {
-  return '#F06292'
-}
-
-const actionSheet = useActionSheet()
-const onShowActionSheet = ({ category }) => {
-  actionSheet.show([
-    { name: 'Edit category', callback: () => onGoToCategory(category) },
-    { name: 'Show transactions', callback: () => onGoToTransactions(category) },
-  ])
+const showActions = ref(false)
+const selectedBar = ref(null)
+const onShowActions = (bar) => {
+  selectedBar.value = bar
+  showActions.value = true
 }
 
 const onGoToCategory = async (category) => {

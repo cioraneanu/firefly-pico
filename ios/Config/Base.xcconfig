@@ -1,0 +1,11 @@
+// Shared build settings. Put your own values in Config/Local.xcconfig (git-ignored),
+// starting from Config/Local.xcconfig.example.
+
+BUNDLE_ID_PREFIX = com.cioraneanu
+DEVELOPMENT_TEAM =
+PICO_DEV_SERVER =
+
+#include? "Local.xcconfig"
+
+APP_BUNDLE_ID = $(BUNDLE_ID_PREFIX).FireflyPico
+APP_GROUP_ID = group.$(APP_BUNDLE_ID)

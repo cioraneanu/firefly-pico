@@ -3,7 +3,7 @@
     <div class="mb-3 flex items-end justify-between gap-3">
       <div class="flex flex-col gap-0.5">
         <small class="text-xs text-dim">{{ $t('desktop.dashboard.spent_last_days', { count: weekBars.length }) }}</small>
-        <b class="text-2xl font-semibold tracking-[-0.02em] tabular-nums">{{ money(total) }}</b>
+        <b class="text-2xl font-semibold tracking-[-0.02em] tabular-nums"><app-count-up :value="money(total)" /></b>
       </div>
       <span
         v-if="previousWeekTotal"

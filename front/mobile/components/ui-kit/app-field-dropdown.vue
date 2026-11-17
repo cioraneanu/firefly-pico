@@ -1,43 +1,43 @@
 <template>
-  <div class="van-cell-fake cursor-pointer app-field-dropdown">
-    <van-popover v-model:show="showPopover" placement="bottom-start" class="">
-      <van-cell-group>
-        <van-cell v-for="item in dropdownList" :key="item" :title="item" class="cursor-pointer" @click="onSelect(item)"/>
-      </van-cell-group>
-
-      <template #reference>
-        <app-field v-model="modelValue" v-bind="$attrs" @focus="isFocused = true" @blur="isFocused = false" @click.stop.prevent />
-      </template>
-    </van-popover>
-  </div>
+  <app-field v-model="modelValue" v-bind="$attrs" @focus="onFocus" @blur="isFocused = false">
+    <template #extra>
+      <div v-if="isFocused && dropdownList.length" class="mx-quick" role="listbox">
+        <button v-for="item in dropdownList" :key="item" type="button" role="option" class="mx-quick__b" :class="{ on: item === modelValue }" @pointerdown.prevent @click="onSelect(item)">
+          {{ item }}
+        </button>
+      </div>
+    </template>
+  </app-field>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import { debounce } from 'lodash-es/function'
+import { debounce } from 'lodash-es'
+
+// Text field with suggestions: while focused, matching values from `list` (an array or an async function of the text)
+// show as quick buttons under the input.
+defineOptions({ inheritAttrs: false })
 
 const modelValue = defineModel()
-const showPopover = ref(false)
-const isFocused = ref(false)
-const dropdownList = ref([])
 
 const props = defineProps({
   list: {},
 })
 
-const getListWithDebounce = debounce(async () => {
-  dropdownList.value = typeof props.list === 'function' ? await props.list(modelValue.value) : props.list
-}, 500)
+const isFocused = ref(false)
+const dropdownList = ref([])
 
-watch(modelValue, (newValue) => {
-  getListWithDebounce()
-})
+const getList = async () => {
+  dropdownList.value = (typeof props.list === 'function' ? await props.list(modelValue.value) : props.list) ?? []
+}
+const getListWithDebounce = debounce(getList, 500)
+watch(modelValue, getListWithDebounce)
 
-watch([isFocused, dropdownList], () => {
-  showPopover.value = isFocused.value && dropdownList.value.length > 0
-})
+const onFocus = () => {
+  isFocused.value = true
+  getList()
+}
+
 const onSelect = (item) => {
   modelValue.value = item
-  showPopover.value = false
 }
 </script>

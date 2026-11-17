@@ -56,7 +56,6 @@ RUN composer install --no-dev --no-scripts --no-autoloader
 COPY back/ .
 RUN mv .env.example .env
 RUN composer dump-autoload --no-dev --optimize
-RUN php artisan key:generate
 ARG APP_VERSION
 RUN echo $APP_VERSION > /var/www/html/VERSION
 RUN tar --owner=www-data --group=www-data --exclude=.git -czf /tmp/app-back.tar.gz .

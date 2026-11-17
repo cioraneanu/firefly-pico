@@ -1,10 +1,11 @@
 <template>
   <div class="d-app flex">
     <d-sidebar v-if="isSidebarOpen" />
-    <div :class="['my-2 mr-2 flex min-h-[calc(100vh-1rem)] min-w-0 flex-1 flex-col rounded-xl bg-bg shadow-sm', !isSidebarOpen && 'ml-2']">
+    <div class="flex min-h-screen min-w-0 flex-1 flex-col bg-bg">
       <d-header v-model:sidebar="isSidebarOpen" />
       <NuxtPage :page-key="(route) => route.matched[0]?.path" />
     </div>
+    <d-command-palette />
     <d-confirm />
     <d-toaster />
   </div>
@@ -21,7 +22,7 @@ UIUtils.ui = DesktopUI
 const profileStore = useProfileStore()
 const portal = Object.assign(document.createElement('div'), { id: 'd-portal' })
 document.body.append(portal)
-watchEffect(() => (portal.className = profileStore.darkTheme ? 'd-portal van-theme-dark' : 'd-portal'))
+watchEffect(() => (portal.className = profileStore.darkTheme ? 'd-portal theme-dark' : 'd-portal'))
 onBeforeUnmount(() => portal.remove())
 
 const isSidebarOpen = useLocalStorage('desktopSidebarOpen', true)

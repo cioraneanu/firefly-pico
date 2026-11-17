@@ -31,16 +31,18 @@ export default class BaseRepository {
 
   async getAllWithMerge({ filters = [], getAll = null } = {}) {
     let list = []
-    let getMethod = (getAll ?? this.getAll)
+    let getMethod = getAll ?? this.getAll
     const firstPageResponseBody = await getMethod({ filters, page: 1 })
     let responseList = get(firstPageResponseBody, 'data', [])
     list = [...list, ...responseList]
 
+    // Stop at the first empty page too => Firefly's search endpoint reports total_pages for all transactions, not just the matches.
+    // A failed page has no `data` and doesn't stop the pages after it
     let totalPages = get(firstPageResponseBody, 'meta.pagination.total_pages')
-    for (let page = 2; page <= totalPages; page++) {
+    for (let page = 2; page <= totalPages && responseList?.length !== 0; page++) {
       const pageResponse = await getMethod({ filters, page })
-      let responseList = get(pageResponse, 'data', [])
-      list = [...list, ...responseList]
+      responseList = get(pageResponse, 'data')
+      list = [...list, ...(responseList ?? [])]
     }
     return list
   }

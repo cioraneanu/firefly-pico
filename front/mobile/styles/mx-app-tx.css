@@ -1,0 +1,168 @@
+/* Mobile app styles for the tx area (on top of mx.css). Only add rules the design boards need that mx.css lacks. */
+
+/* ----- transactions list ----- */
+/* first load: the skeleton list replaces the "Loading…" row */
+.mx-tx-sk ~ .mx-more {
+  display: none;
+}
+/* notes are rendered markdown */
+.mx-tx-notes p,
+.mx-tx-notes ul,
+.mx-tx-notes ol,
+.mx-tx-notes pre {
+  margin: 0;
+}
+.mx-tx-notes ul,
+.mx-tx-notes ol {
+  padding-left: 16px;
+}
+.mx-tx-notes a {
+  text-decoration: underline;
+}
+
+/* Calculate total toggle in the top bar */
+.mx-ib.out[aria-pressed='true'] {
+  background: var(--muted);
+}
+
+/* ----- transaction form ----- */
+.mx-l .hint.mx-spin {
+  width: 14px;
+  height: 14px;
+}
+/* ramble page (design: MX-Ramble) */
+.mxr-error {
+  color: var(--destructive);
+  background: color-mix(in oklch, var(--destructive) 8%, transparent);
+}
+.mxr-tx.ok {
+  opacity: 0.6;
+}
+.mx-tx .acts {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.mxr-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+  background: color-mix(in oklch, var(--muted) 45%, var(--card));
+}
+.mx-list > * + .mxr-edit,
+.mx-list > .mxr-edit + * {
+  box-shadow: inset 0 1px 0 var(--border);
+}
+.mxr-edit .hd {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.mxr-edit .hd .m {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.mxr-edit .hd b {
+  font-size: 13.5px;
+  font-weight: 600;
+}
+.mxr-edit .hd small {
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.mxr-edit .mx-in.ta {
+  background: var(--card);
+}
+.mxr-edit textarea {
+  font-size: 14px;
+  line-height: 20px;
+}
+.mxr-edit .acts {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.mxr-create {
+  display: flex;
+}
+.mxr-create .mx-btn {
+  flex: 1;
+  height: 46px;
+  font-size: 15px;
+}
+
+/* TODO Inbox editor: the transaction form in a 90% sheet (design: td-esh embedding MX-TransactionEdit).
+   It sits under the pickers and alerts it opens (they teleport into the same portal). */
+.mx-app .mx-ov.td-esh-ov {
+  z-index: 15;
+}
+.mx-app .td-esh {
+  z-index: 16;
+}
+.mx-app .td-esh.back {
+  transition: transform 0.2s ease;
+}
+.mx-app .td-esh.mx-sh-leave-active {
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+.mx-app .td-esh .mx-top {
+  height: 48px;
+  padding: 0 12px 0 16px;
+  box-shadow: none;
+}
+.mx-app .mx-portal > .td-esh > .td-esh__b .mx-page .mx-body {
+  overflow-y: auto;
+  padding-bottom: 24px;
+}
+.mx-app .mx-portal > .td-esh > .td-esh__b .mx-page .mx-body.has-save {
+  padding-bottom: 88px;
+}
+.mx-app .td-esh .mx-save {
+  padding-bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+}
+.mx-app .td-esh .mx-save .mx-btn.out {
+  background: var(--card);
+}
+.mx-app .td-row .td-open {
+  color: inherit;
+}
+/* the todo tag chip keeps its dark fill inside a row's tray */
+.mx-tx .tray .mx-chip.todo {
+  background: var(--primary);
+}
+
+/* Σ total for the current filters (transactions list) */
+.mx-stot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 6px 6px 12px;
+}
+.mx-stot__l {
+  flex: none;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.mx-stot__v,
+.mx-stot__m {
+  flex: 1;
+  min-width: 0;
+  text-align: right;
+}
+.mx-stot__v {
+  font-size: 16px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.mx-stot__m {
+  font-size: 12.5px;
+  color: var(--muted-foreground);
+}

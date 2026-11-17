@@ -1,10 +1,10 @@
 <template>
-  <div class="split-transaction-badge transaction-desktop-split gap-1">
-    <app-icon :icon="TablerIconConstants.lock" :size="14" />
-    <div class="">{{ $t('transaction.split_short') }}</div>
-  </div>
+  <span class="mx-chip split">
+    <app-icon :icon="IconArrowsSplit2" :size="12" :stroke="2" />
+    <span>{{ $t('transaction.split_short') }}</span>
+  </span>
 </template>
 
 <script setup>
-import TablerIconConstants from '~/core/constants/TablerIconConstants'
+import { IconArrowsSplit2 } from '@tabler/icons-vue'
 </script>

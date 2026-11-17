@@ -1,39 +1,24 @@
 <template>
-  <div :class="classComputed" :style="style">
-    <slot name="left"/>
-    <van-button round type="primary" native-type="submit" class="flex-1 shadow-depth2 cursor-pointer">
-      {{ label ?? $t('save') }}
-    </van-button>
+  <div class="mx-save">
+    <slot name="left" />
+    <button type="submit" class="mx-btn pri" :disabled="disabled">
+      <app-icon :icon="IconCheck" :size="16" :stroke="2" />
+      <span>{{ label ?? $t('save') }}</span>
+    </button>
     <slot name="right" />
   </div>
 </template>
 
 <script setup>
+import { IconCheck } from '@tabler/icons-vue'
 import { animateSaveButton } from '~/core/utils/AnimationUtils.js'
 
-const props = defineProps({
-  label: {},
-  bottom: {
-    default: '+ 20px',
-  },
+// Sticky full-width Save bar above the bottom nav (design: .mx-save). Lives inside <app-form>, so it submits it.
+// The page's .mx-body needs the `has-save` class so the last field is not hidden behind the bar.
+defineProps({
+  label: { type: String, default: null },
+  disabled: { type: Boolean, default: false },
 })
 
-const { isKeyboardVisible, keyboardHeight, visualViewportHeight, visualViewportOffsetTop, visualViewportPageTop, debug } = useKeyboard()
-
-const style = computed(() => {
-  const bottomWithoutKeyboard = `calc(env(safe-area-inset-bottom, 0px) + var(--van-tabbar-height) ${props.bottom})`
-  const bottomWithKeyboard = `${Math.max(keyboardHeight.value + 10 - visualViewportOffsetTop.value, 0)}px`
-  return {
-    bottom: isKeyboardVisible.value ? bottomWithKeyboard : bottomWithoutKeyboard,
-  }
-})
-
-const classComputed = computed(() => ({
-  'app-button-save flex items-center gap-2': true,
-  mobile: true,
-}))
-
-onMounted(async () => {
-  await animateSaveButton()
-})
+onMounted(animateSaveButton)
 </script>

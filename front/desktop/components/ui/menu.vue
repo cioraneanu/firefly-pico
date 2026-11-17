@@ -5,7 +5,10 @@
       v-for="item in items"
       :key="item.label"
       type="button"
-      :class="['flex w-full cursor-default items-center gap-2 rounded-md px-1.5 py-1 text-left', item.danger ? 'text-danger hover:bg-danger/10' : 'hover:bg-soft']"
+      :class="[
+        'flex w-full cursor-default items-center gap-1.5 whitespace-nowrap rounded-md px-1.5 py-1 text-left',
+        item.danger ? 'text-danger hover:bg-danger/10 dark:hover:bg-danger/20' : 'hover:bg-soft',
+      ]"
       @click.stop="select(item)"
     >
       <component :is="item.icon" v-if="item.icon" :size="16" :class="!item.danger && 'text-dim'" />

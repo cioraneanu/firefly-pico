@@ -3,7 +3,7 @@
     <template #actions>
       <div class="flex">
         <d-button size="icon" :icon="IconChevronLeft" class="rounded-r-none" @click="onPreviousMonth" />
-        <div class="relative z-1 -mx-px w-37 focus-within:z-2 [&>button]:rounded-none">
+        <div class="relative z-1 -mx-px w-37 focus-within:z-2 [&>div]:rounded-none">
           <d-select v-model="selectedMonth" :options="monthOptions" :get-meta="(option) => option !== selectedMonth && option.meta" :icon="IconCalendar" />
         </div>
         <d-button size="icon" :icon="IconChevronRight" class="rounded-l-none" @click="onNextMonth" />
@@ -11,32 +11,37 @@
       <div class="w-28">
         <d-currency-select v-model="dashboardStore.dashboardCurrency" />
       </div>
-      <d-button size="icon" :icon="profileStore.dashboard.showAccountAmounts ? IconEye : IconEyeOff" @click="profileStore.dashboard.showAccountAmounts = !profileStore.dashboard.showAccountAmounts" />
+      <d-button
+        size="icon"
+        :icon="profileStore.dashboard.showAccountAmounts ? IconEye : IconEyeOff"
+        :aria-pressed="!profileStore.dashboard.showAccountAmounts"
+        @click="profileStore.dashboard.showAccountAmounts = !profileStore.dashboard.showAccountAmounts"
+      />
       <d-dash-filters v-model="filters" :active-filters-count />
       <d-refresh-button :action="dashboardStore.fetchDashboard" />
-      <d-button size="icon" :icon="IconAdjustmentsHorizontal" :to="RouteConstants.ROUTE_SETTINGS_DASHBOARD" :title="$t('dashboard.configure_cards')" />
     </template>
 
-    <div v-if="activeFilters.length" class="-mt-2 flex flex-wrap items-center gap-2">
-      <span v-for="filter in activeFilters" :key="filter.bagKey" class="inline-flex h-7 items-center overflow-hidden rounded-md border border-line text-[13px]">
-        <span class="px-2">{{ filter.display }}</span>
-        <button type="button" class="grid h-full cursor-pointer place-items-center border-l border-line px-1.5 text-dim hover:bg-soft hover:text-fg" @click="filters = omit(filters, filter.bagKey)">
-          <icon-x :size="14" />
-        </button>
-      </span>
-      <d-button variant="ghost" size="sm" class="text-dim" @click="filters = {}">{{ $t('filters.clear') }}</d-button>
-    </div>
+    <d-filter-chips v-if="activeFilters.length" :filters="activeFilters" @remove="(bagKey) => (filters = omit(filters, bagKey))" @clear="filters = {}" />
 
     <div class="columns-[460px] gap-4">
       <div v-for="card in visibleCards" :key="card.code" class="mb-4 break-inside-avoid">
         <component :is="cards[card.code]" v-bind="cardProps[card.code]" />
       </div>
     </div>
+
+    <nuxt-link
+      :to="RouteConstants.ROUTE_SETTINGS_DASHBOARD"
+      class="-mt-2 flex h-11 items-center gap-2.5 rounded-xl border border-dashed border-field px-4 font-medium text-dim transition-colors hover:bg-soft/50 hover:text-fg"
+    >
+      <icon-settings :size="16" />
+      <span class="flex-1">{{ $t('dashboard.configure_cards') }}</span>
+      <icon-chevron-right :size="16" />
+    </nuxt-link>
   </d-page>
 </template>
 
 <script setup>
-import { IconAdjustmentsHorizontal, IconCalendar, IconChevronLeft, IconChevronRight, IconEye, IconEyeOff, IconX } from '@tabler/icons-vue'
+import { IconCalendar, IconChevronLeft, IconChevronRight, IconEye, IconEyeOff, IconSettings } from '@tabler/icons-vue'
 import { addMonths, isSameMonth, startOfMonth } from 'date-fns'
 import { omit } from 'lodash-es'
 import RouteConstants from '~/core/constants/RouteConstants'

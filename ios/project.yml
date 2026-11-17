@@ -1,0 +1,90 @@
+name: FireflyPico
+
+options:
+  deploymentTarget:
+    iOS: "18.0"
+  createIntermediateGroups: true
+  developmentLanguage: en
+
+configFiles:
+  Debug: Config/Base.xcconfig
+  Release: Config/Base.xcconfig
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    CODE_SIGN_STYLE: Automatic
+    TARGETED_DEVICE_FAMILY: "1"
+
+targets:
+  FireflyPico:
+    type: application
+    platform: iOS
+    sources:
+      - FireflyPico
+      - Shared
+      # The built web app (scripts/build-web.sh), served at pico://localhost
+      - path: WebApp
+        type: folder
+        buildPhase: resources
+        optional: true
+    dependencies:
+      - target: FireflyPicoWidgets
+    entitlements:
+      path: FireflyPico/FireflyPico.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - $(APP_GROUP_ID)
+    info:
+      path: FireflyPico/Info.plist
+      properties:
+        CFBundleDisplayName: Firefly Pico
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UILaunchScreen: {}
+        UIApplicationSceneManifest:
+          UIApplicationSupportsMultipleScenes: false
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+        UIBackgroundModes:
+          - audio
+        NSMicrophoneUsageDescription: Firefly Pico records what you say and turns it into transactions.
+        # The web app's dictation (Web Speech API) runs on iOS speech recognition
+        NSSpeechRecognitionUsageDescription: Pico turns what you dictate into text so it can fill in transactions.
+        NSSupportsLiveActivities: true
+        NSAppTransportSecurity:
+          NSAllowsLocalNetworking: true
+        PicoAppGroup: $(APP_GROUP_ID)
+        PicoDevServer: $(PICO_DEV_SERVER)
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID)
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+
+  FireflyPicoWidgets:
+    type: app-extension
+    platform: iOS
+    sources:
+      - FireflyPicoWidgets
+      - Shared
+    entitlements:
+      path: FireflyPicoWidgets/FireflyPicoWidgets.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - $(APP_GROUP_ID)
+    info:
+      path: FireflyPicoWidgets/Info.plist
+      properties:
+        CFBundleDisplayName: Firefly Pico
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+        PicoAppGroup: $(APP_GROUP_ID)
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: $(APP_BUNDLE_ID).Widgets
+        # Shared intents compile here too, but only the app process records and uploads.
+        SWIFT_ACTIVE_COMPILATION_CONDITIONS: $(inherited) WIDGET_EXTENSION

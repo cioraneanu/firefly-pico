@@ -4,7 +4,7 @@
       <span class="truncate text-xs text-dim">{{ label }}</span>
       <app-icon v-if="icon" :icon :size="14" :stroke="2" :class="['shrink-0', texts[tone] ?? 'text-dim']" />
     </span>
-    <b :class="['truncate text-[17px] font-semibold leading-[22px] tabular-nums', texts[tone]]">{{ value }}</b>
+    <b :class="['truncate text-[17px] font-semibold leading-[22px] tabular-nums', texts[tone]]"><app-count-up :value /></b>
     <span class="h-1 overflow-hidden rounded-full bg-fg/9">
       <span :class="['block h-full rounded-full', bars[tone] ?? 'bg-fg']" :style="{ width: `${Math.min(Math.max(meter || 0, 0), 100)}%` }" />
     </span>

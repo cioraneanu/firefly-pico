@@ -1,26 +1,29 @@
 <template>
-  <div class="app-form">
+  <div class="mx-page">
     <app-top-toolbar />
 
-    <van-form class="" @submit="onSave">
-      <van-cell-group inset>
-        <account-select v-model="defaultAccountSource" :label="$t('settings.transactions.default_form_values.default_source_account')" />
+    <app-form @submit="onSave">
+      <main class="mx-body has-save">
+        <app-card>
+          <account-select v-model="defaultAccountSource" :label="$t('settings.transactions.default_form_values.default_source_account')" />
 
-        <account-select v-model="defaultAccountDestination" :label="$t('settings.transactions.default_form_values.default_destination_account')" />
+          <account-select v-model="defaultAccountDestination" :label="$t('settings.transactions.default_form_values.default_destination_account')" />
 
-        <category-select v-model="defaultCategory" :label="$t('settings.transactions.default_form_values.default_category')" />
+          <category-select v-model="defaultCategory" :label="$t('settings.transactions.default_form_values.default_category')" />
 
-        <tag-select v-model="defaultTags" :label="$t('settings.transactions.default_form_values.default_tags')" />
+          <tag-select v-model="defaultTags" :label="$t('settings.transactions.default_form_values.default_tags')" />
 
-        <tag-select v-model="autoAddedTags" :label="$t('settings.transactions.default_form_values.auto_tags')" />
+          <tag-select v-model="autoAddedTags" :label="$t('settings.transactions.default_form_values.auto_tags')" />
 
-        <currency-select v-model="defaultForeignCurrency" :label="$t('settings.transactions.default_form_values.foreign_currency')" />
+          <currency-select v-model="defaultForeignCurrency" :label="$t('settings.transactions.default_form_values.foreign_currency')" />
 
-        <app-boolean v-model="defaultTransactionTimeAtMidnight" :label="$t('settings.transactions.default_form_values.set_default_time_to_midnight')" />
-      </van-cell-group>
+          <div class="mx-hr" />
+          <app-boolean v-model="defaultTransactionTimeAtMidnight" :label="$t('settings.transactions.default_form_values.set_default_time_to_midnight')" />
+        </app-card>
+      </main>
 
       <app-button-form-save />
-    </van-form>
+    </app-form>
   </div>
 </template>
 
@@ -60,7 +63,9 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   const response = await profileStore.writeProfile()
-  ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
+  if (ResponseUtils.isSuccess(response)) {
+    UIUtils.showToastSuccess(t('settings.settings_saved'))
+  }
 }
 
 const toolbar = useToolbar()

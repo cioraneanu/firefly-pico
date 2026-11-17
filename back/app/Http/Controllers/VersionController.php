@@ -15,8 +15,9 @@ class VersionController extends BaseController
     {
         return $this->respond([
             'latest_version' => $this->resolveLatestVersion(),
-            'assistant_llm' => $assistantLlmConfigService->getPublicConfig(),
-            'assistant_transcription' => $assistantTranscriptionConfigService->getPublicConfig(),
+            // forUser asks Firefly who the user is: if Firefly can't be reached, fall back to the server's config
+            'assistant_llm' => rescue(fn() => $assistantLlmConfigService->getPublicConfig(forUser: true), fn() => $assistantLlmConfigService->getPublicConfig(), false),
+            'assistant_transcription' => rescue(fn() => $assistantTranscriptionConfigService->getPublicConfig(forUser: true), fn() => $assistantTranscriptionConfigService->getPublicConfig(), false),
         ]);
     }
 
@@ -32,8 +33,8 @@ class VersionController extends BaseController
         }
 
         $url = 'https://api.github.com/repos/cioraneanu/firefly-pico/tags?per_page=100';
-        $response = Http::get($url);
-        if (!$response->successful()) {
+        $response = rescue(fn() => Http::get($url), null, false);
+        if (!$response?->successful()) {
             return null;
         }
         $versions = fcollect($response->json())

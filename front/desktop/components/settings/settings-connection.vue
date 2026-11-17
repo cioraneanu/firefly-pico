@@ -1,6 +1,11 @@
 <template>
-  <d-form class="[--label-w:13rem]" @submit="save">
-    <d-settings-group>
+  <d-form class="[--label-w:13.75rem]" @submit="save">
+    <d-settings-group v-if="appStore.isDemoMode || !appStore.hasAuthToken" :title="$t('settings.setup.demo')" :description="$t('settings.setup.demo_info')">
+      <d-button v-if="appStore.isDemoMode" variant="danger" :icon="IconLogout" class="self-start" @click="exitDemo">{{ $t('settings.setup.demo_exit') }}</d-button>
+      <d-button v-else :icon="IconPlayerPlay" class="self-start" @click="startDemo">{{ $t('settings.setup.demo_start') }}</d-button>
+    </d-settings-group>
+
+    <d-settings-group v-if="!appStore.isDemoMode">
       <d-field :label="$t('settings.setup.pico_backend_url')" :rules="[rule.required()]" :value="connection.picoBackendURL">
         <d-input v-model="connection.picoBackendURL" :icon="IconLink" />
       </d-field>
@@ -35,8 +40,14 @@
     </d-settings-group>
 
     <d-settings-group :title="$t('settings.setup.loaded_data_stats')">
-      <div class="grid grid-cols-[repeat(auto-fill,minmax(9rem,1fr))] gap-2">
-        <d-dash-tile v-for="stat in stats" :key="stat.t" :label="$t(stat.t)" :value="stat.value" :icon="stat.icon" />
+      <div class="grid grid-cols-[repeat(auto-fill,minmax(min(10.5rem,100%),1fr))] gap-3">
+        <div v-for="stat in stats" :key="stat.t" class="flex min-w-0 flex-col gap-1 rounded-lg border border-line bg-card p-3">
+          <span class="flex min-w-0 items-center gap-1.5 text-[13px] text-dim">
+            <component :is="stat.icon" :size="14" class="shrink-0" />
+            <span class="truncate">{{ $t(stat.t) }}</span>
+          </span>
+          <b class="truncate text-xl font-semibold tracking-[-0.01em] tabular-nums">{{ stat.value }}</b>
+        </div>
       </div>
     </d-settings-group>
 
@@ -57,7 +68,9 @@ import {
   IconEyeOff,
   IconKey,
   IconLink,
+  IconLogout,
   IconPigMoney,
+  IconPlayerPlay,
   IconPlugConnected,
   IconPlus,
   IconRefresh,
@@ -67,6 +80,7 @@ import {
 } from '@tabler/icons-vue'
 import { cloneDeep, get } from 'lodash-es'
 import UserRepository from '~/core/repository/UserRepository'
+import { exitDemo, startDemo } from '~/core/demo/DemoBackend.js'
 import { rule } from '~/core/utils/ValidationUtils'
 
 const { t } = useI18n()

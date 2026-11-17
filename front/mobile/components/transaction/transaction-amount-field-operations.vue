@@ -1,38 +1,34 @@
 <template>
-  <div class="transaction-amount-operations flex items-center gap-1" :style="style">
-    <div v-for="operator in operatorsList" class="button flex items-center justify-center" @mousedown.prevent.stop="onOperation(operator)">
-      <component :is="operator.icon" :size="16" :stroke="2.0" />
+  <Teleport to="#mx-portal" defer>
+    <div class="mx-ops" role="group" :aria-label="$t('transaction.calculator')">
+      <button
+        v-for="operator in operatorsList"
+        :key="operator.value"
+        type="button"
+        :class="{ eq: operator.value === '=' }"
+        :aria-label="operator.value"
+        @mousedown.prevent.stop="emit('result', operator)"
+      >
+        {{ operator.label }}
+      </button>
     </div>
-  </div>
+  </Teleport>
 </template>
 
 <script setup>
-import { IconPlus, IconMinus, IconAsteriskSimple, IconDivide } from '@tabler/icons-vue'
+// Calculator keys floating above the save bar and the keyboard (design: .mx-ops). Emits the pressed operator; mousedown keeps the input focused.
+// `basic` keeps only + − × ÷ (the assistant text).
+const props = defineProps({
+  basic: Boolean,
+})
 const emit = defineEmits(['result'])
 
-const onOperation = (value) => {
-  emit('result', value)
-}
-
-const operator = {
-  plus: { value: '+', icon: IconPlus },
-  minus: { value: '-', icon: IconMinus },
-  multiply: { value: '*', icon: IconAsteriskSimple },
-  divide: { value: '/', icon: IconDivide },
-}
-
-const operatorsList = Object.values(operator)
-
-onMounted(() => {})
-
-const { isKeyboardVisible, keyboardHeight, visualViewportHeight, visualViewportOffsetTop, visualViewportPageTop, debug } = useKeyboard()
-
-const style = computed(() => {
-  const offset = 70
-  const bottomWithoutKeyboard = `calc(env(safe-area-inset-bottom, 0px) + var(--van-tabbar-height) + ${offset}px)`
-  const bottomWithKeyboard = `${Math.max(keyboardHeight.value - 10 + offset - visualViewportOffsetTop.value, 0)}px`
-  return {
-    bottom: isKeyboardVisible.value ? bottomWithKeyboard : bottomWithoutKeyboard,
-  }
-})
+const operatorsList = [
+  { value: '+', label: '+' },
+  { value: '-', label: '−' },
+  { value: '*', label: '×' },
+  { value: '/', label: '÷' },
+  { value: 'C', label: 'C' },
+  { value: '=', label: '=' },
+].slice(0, props.basic ? 4 : 6)
 </script>

@@ -1,5 +1,5 @@
 import { onMounted, ref } from 'vue'
-import UIUtils from '~/core/utils/UIUtils'
+import { deleteWithUndo, withoutDeleted } from '~/core/utils/DeleteUtils'
 import _, { get } from 'lodash-es'
 
 // by convention, composable function names start with "use"
@@ -16,7 +16,9 @@ export function useList(prop) {
   const listTotalCount = ref(0)
   const totalPages = ref(0)
 
-  const list = ref([])
+  const items = ref([])
+  // Hides the items whose delete waits behind an Undo toast
+  const list = computed({ get: () => withoutDeleted(items.value), set: (value) => (items.value = value) })
   const listPagination = ref(null)
   const isLoading = ref(false)
   const isFinished = ref(false)
@@ -72,7 +74,7 @@ export function useList(prop) {
       newList = transformer.transformFromApiList(newList)
     }
 
-    list.value = isRefreshing.value ? newList : [...list.value, ...newList]
+    items.value = isRefreshing.value ? newList : [...items.value, ...newList]
 
     // list.value.push(...newList)
 
@@ -102,20 +104,17 @@ export function useList(prop) {
   }
 
   const onDelete = async (item) => {
-    let result = await UIUtils.showDeleteConfirmation('Delete confirmation', 'Are you sure you want to delete this?')
-    if (result) {
-      let response = await repository.delete(item.id)
-      if (ResponseUtils.isSuccess(response)) {
-        UIUtils.showToastSuccess(`Deleted successfully.`, 1000)
-        list.value = list.value.filter((currentItem) => currentItem.id !== item.id)
-        onEvent ? onEvent('onPostDelete', item) : null
-      }
+    const response = await deleteWithUndo(item, () => repository.delete(item.id))
+    if (ResponseUtils.isSuccess(response)) {
+      items.value = items.value.filter((currentItem) => currentItem.id !== item.id)
+      onEvent ? onEvent('onPostDelete', item) : null
     }
   }
 
+  // Swaps in an item saved somewhere else (desktop inline edit)
+  const onReplace = (item) => (items.value = items.value.map((currentItem) => (currentItem.id === item.id ? item : currentItem)))
+
   // -----------------------------
-
-
 
   // -----------------------------
 
@@ -140,5 +139,6 @@ export function useList(prop) {
     onLoadMore,
     onRefresh,
     onDelete,
+    onReplace,
   }
 }

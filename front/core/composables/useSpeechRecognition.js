@@ -1,4 +1,5 @@
 import { ref } from 'vue'
+import { until } from '@vueuse/core'
 import UIUtils from '~/core/utils/UIUtils'
 import * as LanguageConstants from '~/core/constants/LanguageConstants'
 
@@ -43,11 +44,13 @@ export function useSpeechRecognition({ language, onSpeechFinished, onSpeechTempo
     }
     speechRecognition.start()
   }
+  // Resolves once recognition has ended, so the last final result is already in textFinal / onSpeechFinished
   const stopRecording = () => {
     if (!isRecording.value) {
-      return
+      return Promise.resolve()
     }
     speechRecognition.stop()
+    return until(isRecording).toBe(false, { timeout: 3000 })
   }
 
   const registerMic = () => {

@@ -1,54 +1,55 @@
 <template>
   <d-page :title="$t('toolbar.transactions')" :description="`${listTotalCount} ${$t('items')}`">
     <template #actions>
-      <d-refresh-button :action="onRefresh" />
+      <d-button :icon="isEditing ? IconCheck : IconPencil" :aria-pressed="isEditing" :class="isEditing && 'bg-soft'" @click="isEditing = !isEditing">
+        {{ $t(isEditing ? 'desktop.done_editing' : 'desktop.edit_inline') }}
+      </d-button>
+      <d-button :icon="IconSum" :aria-pressed="showSearchTotal" :class="showSearchTotal && 'bg-soft'" @click="onToggleSearchTotal">{{ $t('filters.compute_total') }}</d-button>
       <d-button variant="primary" :icon="IconPlus" :to="RouteConstants.ROUTE_TRANSACTION_ID">{{ $t('new_transaction') }}</d-button>
     </template>
 
     <div class="flex flex-wrap items-center gap-2">
       <d-input v-model="search" :icon="IconSearch" :placeholder="$t('description')" clearable class="w-70" />
-      <div class="w-44">
-        <d-enum-select v-model="transactionType" :options="Transaction.typesList" :placeholder="$t('transaction_type')" clearable />
+      <div class="w-40">
+        <d-enum-select v-model="transactionType" :options="Transaction.typesList" :icon="IconFilter" :placeholder="$t('transaction_type')" clearable />
       </div>
       <span class="flex-1" />
-      <d-button :icon="IconSum" :aria-pressed="showSearchTotal" :class="showSearchTotal && 'bg-soft'" @click="onToggleSearchTotal">{{ $t('filters.total') }}</d-button>
+      <d-button :icon="IconRefresh" :loading="isRefreshing" @click="refresh">{{ $t('desktop.refresh') }}</d-button>
       <d-button :icon="IconFilter" @click="isFiltersOpen = true">
         {{ $t('desktop.filters') }}
-        <d-badge v-if="activeFiltersCount">{{ activeFiltersCount }}</d-badge>
+        <d-badge v-if="activeFiltersCount" class="px-1.5 text-dim tabular-nums">{{ activeFiltersCount }}</d-badge>
       </d-button>
     </div>
 
-    <div v-if="activeFilters.length" class="-mt-2 flex flex-wrap items-center gap-2">
-      <span v-for="filter in activeFilters" :key="filter.bagKey" class="inline-flex h-7 items-center overflow-hidden rounded-md border border-line text-[13px]">
-        <span class="px-2">{{ filter.display }}</span>
-        <button type="button" class="grid h-full cursor-pointer place-items-center border-l border-line px-1.5 text-dim hover:bg-soft hover:text-fg" @click="removeFilter(filter.bagKey)">
-          <icon-x :size="14" />
-        </button>
-      </span>
-      <d-button variant="ghost" size="sm" class="text-dim" @click="onClearFilters">{{ $t('filters.clear') }}</d-button>
-    </div>
+    <d-filter-chips v-if="activeFilters.length" :filters="activeFilters" @remove="removeFilter" @clear="onClearFilters" />
 
     <div v-if="showSearchTotal" class="-mt-2 flex flex-wrap items-center gap-3 rounded-xl px-3 py-2.5 ring-1 ring-fg/10">
-      <d-button size="sm" :loading="isComputingSearchTotal" @click="onComputeSearchTotal">{{ $t('filters.compute_total') }}</d-button>
-      <b class="font-semibold tabular-nums">{{ searchTotalFormatted ?? '—' }}</b>
+      <span class="text-sm text-dim">{{ $t('filters.total_hint') }}</span>
       <span class="flex-1" />
-      <div class="w-36">
-        <d-currency-select v-model="searchTotalCurrency" />
-      </div>
+      <span v-if="isSearchTotalTooBig" class="text-sm text-dim">{{ $t('filters.total_too_many') }}</span>
+      <template v-else>
+        <b class="inline-flex items-center gap-1.5 font-semibold tabular-nums">
+          <icon-loader-2 v-if="isComputingSearchTotal" :size="14" class="d-spin text-dim" />
+          <app-count-up :value="searchTotalFormatted ?? '—'" />
+        </b>
+        <div class="w-28">
+          <d-currency-select v-model="searchTotalCurrency" />
+        </div>
+      </template>
     </div>
 
     <section class="overflow-x-auto rounded-xl bg-card ring-1 ring-fg/10">
       <div role="table" class="min-w-245">
         <template v-for="group in groups" :key="group.label">
-          <div role="row" class="flex h-9 items-center justify-between border-y border-line bg-soft/55 px-4 text-xs font-medium text-dim first:border-t-0">
+          <div v-if="group.label" role="row" class="flex h-9 items-center justify-between border-y border-line bg-soft/55 px-4 text-xs font-medium text-dim first:border-t-0">
             <span>
               <b class="mr-2 font-medium text-fg">{{ group.label }}</b>
               {{ group.relative }}
             </span>
-            <span class="tabular-nums">{{ group.total }}</span>
+            <app-count-up :value="group.total" class="tabular-nums" />
           </div>
           <div class="divide-y divide-line">
-            <d-transaction-row v-for="transaction in group.items" :key="transaction.id" :value="transaction" @delete="onDelete" />
+            <d-transaction-row v-for="transaction in group.items" :key="transaction.id" :value="transaction" :editing="isEditing" @delete="onDelete" @saved="onReplace" />
           </div>
         </template>
       </div>
@@ -61,17 +62,16 @@
     </section>
 
     <d-transaction-filters v-model="filters" v-model:open="isFiltersOpen" />
-    <d-transaction-dialog v-if="isOpen" :key="`${id}-${route.query.transaction_id}`" @changed="onRefresh" />
+    <d-transaction-dialog v-if="isOpen" :key="`${id}-${route.query.transaction_id}-${route.query.assistant}`" @changed="onRefresh" />
   </d-page>
 </template>
 
 <script setup>
-import { IconCoins, IconFilter, IconLoader2, IconPlus, IconSearch, IconSum, IconX } from '@tabler/icons-vue'
-import { formatTimeAgo, useElementVisibility, watchDebounced } from '@vueuse/core'
-import { capitalize, groupBy, omit } from 'lodash-es'
+import { IconCheck, IconCoins, IconFilter, IconLoader2, IconPencil, IconPlus, IconRefresh, IconSearch, IconSum } from '@tabler/icons-vue'
+import { useElementVisibility, watchDebounced } from '@vueuse/core'
+import { omit } from 'lodash-es'
 import RouteConstants from '~/core/constants/RouteConstants'
 import Transaction from '~/core/models/Transaction'
-import { formatNumber } from '~/core/utils/NumberUtils'
 
 const route = useRoute()
 const { id, isOpen } = useRouteDialog(RouteConstants.ROUTE_TRANSACTION_LIST)
@@ -84,6 +84,7 @@ const {
   onLoadMore,
   onRefresh,
   onDelete,
+  onReplace,
   filters,
   activeFilters,
   activeFiltersCount,
@@ -91,12 +92,15 @@ const {
   showSearchTotal,
   searchTotalCurrency,
   isComputingSearchTotal,
+  isSearchTotalTooBig,
   searchTotalFormatted,
   onToggleSearchTotal,
-  onComputeSearchTotal,
 } = useTransactionList()
 
 const isFiltersOpen = ref(false)
+const isRefreshing = ref(false)
+// Edit mode: rows turn into inputs that save on change
+const isEditing = ref(false)
 const search = ref('')
 const sentinel = ref(null)
 const isSentinelVisible = useElementVisibility(sentinel)
@@ -108,20 +112,15 @@ const transactionType = computed({
 
 const removeFilter = (bagKey) => (filters.value = omit(filters.value, bagKey))
 
+const refresh = async () => {
+  isRefreshing.value = true
+  await onRefresh()
+  isRefreshing.value = false
+}
+
 watch(filters, (value) => (search.value = value.description ?? ''), { immediate: true })
 watchDebounced(search, (value) => value !== (filters.value.description ?? '') && (filters.value = { ...filters.value, description: value }), { debounce: 400 })
 watchEffect(() => isSentinelVisible.value && !isFinished.value && !isLoading.value && onLoadMore())
 
-const groups = computed(() =>
-  Object.entries(groupBy(list.value, (transaction) => DateUtils.dateToUI(Transaction.getDate(transaction)))).map(([label, items]) => {
-    const expenses = items.filter((transaction) => Transaction.getTypeCode(transaction) === Transaction.types.expense.code)
-    const total = expenses.reduce((sum, transaction) => sum + parseFloat(Transaction.getAmount(transaction) || 0), 0)
-    return {
-      label,
-      items,
-      relative: capitalize(formatTimeAgo(DateUtils.autoToDate(Transaction.getDate(items[0])))),
-      total: total ? `−${formatNumber(total, 2)} ${Transaction.getFirstSplit(items[0])?.currency_symbol ?? ''}` : '',
-    }
-  }),
-)
+const groups = useTransactionGroups(list)
 </script>

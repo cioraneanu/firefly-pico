@@ -1,18 +1,24 @@
 <template>
-  <div class="app-form">
+  <div class="mx-page">
     <app-top-toolbar />
 
-    <van-form class="" @submit="onSave">
-      <van-cell-group inset>
-        <app-boolean v-model="budgetsEnabled" :label="$t('settings.setup.enable_budgets')" />
-        <app-boolean v-model="categoriesEnabled" :label="$t('settings.setup.enable_categories')" />
-        <app-boolean v-model="tagsEnabled" :label="$t('settings.setup.enable_tags')" />
-        <app-boolean v-model="piggyBanksEnabled" :label="$t('settings.setup.enable_piggy_banks')" />
-        <app-boolean v-model="recurringTransactionsEnabled" :label="$t('settings.setup.enable_recurring_transactions')" />
-      </van-cell-group>
+    <app-form @submit="onSave">
+      <main class="mx-body has-save">
+        <app-card>
+          <app-boolean v-model="budgetsEnabled" :label="$t('settings.setup.enable_budgets')" />
+          <div class="mx-hr" />
+          <app-boolean v-model="categoriesEnabled" :label="$t('settings.setup.enable_categories')" />
+          <div class="mx-hr" />
+          <app-boolean v-model="tagsEnabled" :label="$t('settings.setup.enable_tags')" />
+          <div class="mx-hr" />
+          <app-boolean v-model="piggyBanksEnabled" :label="$t('settings.setup.enable_piggy_banks')" />
+          <div class="mx-hr" />
+          <app-boolean v-model="recurringTransactionsEnabled" :label="$t('settings.setup.enable_recurring_transactions')" />
+        </app-card>
+      </main>
 
       <app-button-form-save />
-    </van-form>
+    </app-form>
   </div>
 </template>
 

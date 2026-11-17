@@ -1,41 +1,30 @@
 <template>
-  <van-swipe-cell ref="swipeCell" v-bind="clickWithoutSwipe">
-    <van-cell>
-      <template #title>
-        <div class="list-item-container" :class="itemClass">
-          <div class="first_column flex items-center justify-center flex-col">
-            <!--            <app-icon :icon="icon ?? TablerIconConstants.budget" :size="TablerIconConstants.defaultSize" />-->
-            <budget-icon :value="props.value" />
-          </div>
-
-          <div class="separator"/>
-
-          <div class="second_column flex-1 flex-col">
-            <div v-if="displayName" class="title flex items-center">
-              <div class="flex-1">{{ displayName }}</div>
-              <div class="text-12">{{ budgetLimitSpent }} / {{ budgetLimitAmount }} {{ budgetCurrencySymbol }}</div>
-            </div>
-            <!--            <bar-chart-item-horizontal :percent="budgetLimitPercent" class="p-0 mb-2.5" />-->
-            <div class="flex flex-wrap gap-1 mt-1.25">
-              <div class="tag-gray list-item-subtitle text-12">{{ budgetType }}</div>
-              <div v-if="budgetAmount" class="tag-gray list-item-subtitle text-12">{{ budgetPeriod }}</div>
-            </div>
-          </div>
-        </div>
-      </template>
-    </van-cell>
-
-    <template #right>
-      <van-button class="delete-button" square type="danger" text="Delete" @click="onDelete" />
-    </template>
-  </van-swipe-cell>
+  <app-list-item :row-class="{ 'mx-tx': true, 'is-off': !isActive }" @on-edit="emit('onEdit', value)" @on-delete="emit('onDelete', value)">
+    <div class="hd">
+      <span class="mx-lead"><app-icon :icon="icon ?? TablerIconConstants.budget" :size="18" :stroke="2" /></span>
+      <div class="m" style="gap: 6px">
+        <span class="mx-row__hd">
+          <span class="mx-row__t">{{ displayName }}</span>
+          <span class="mx-amt mx-money" style="font-size: 13.5px">{{ budgetLimitSpent }} / {{ budgetLimitAmount }} {{ budgetCurrencySymbol }}</span>
+        </span>
+        <span class="mx-prog"><span :class="{ over: budgetLimitPercent >= 100 }" :style="{ width: `${Math.min(budgetLimitPercent, 100)}%` }" /></span>
+      </div>
+    </div>
+    <span class="mx-chips" style="margin-top: 0">
+      <span class="mx-chip"
+        ><span>{{ budgetType }}</span></span
+      >
+      <span v-if="budgetAmount" class="mx-chip"
+        ><span>{{ budgetPeriod }}</span></span
+      >
+    </span>
+  </app-list-item>
 </template>
 
 <script setup>
-import _, { get } from 'lodash-es'
-import { useClickWithoutSwipe } from '~/mobile/composables/useClickWithoutSwipe'
+import { get } from 'lodash-es'
 import Budget from '~/core/models/Budget.js'
-import BudgetIcon from '~/mobile/components/budget/budget-icon.vue'
+import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
 
 const props = defineProps({
   value: Object,
@@ -45,27 +34,14 @@ const emit = defineEmits(['onEdit', 'onDelete'])
 
 const budgetLimit = computed(() => Budget.getLimit(props.value))
 
+const icon = computed(() => Budget.getIcon(props.value))
 const displayName = computed(() => get(props.value, 'attributes.name', ' - '))
+const isActive = computed(() => !!get(props.value, 'attributes.active'))
 const budgetType = computed(() => get(props.value, 'attributes.auto_budget_type.name', ' - '))
 const budgetPeriod = computed(() => get(props.value, 'attributes.auto_budget_period.name', ' - '))
 const budgetAmount = computed(() => get(props.value, 'attributes.amount', ' - ') || ' - ')
 const budgetLimitSpent = computed(() => Math.abs(get(budgetLimit.value, `attributes.spent`, 0)))
 const budgetLimitAmount = computed(() => get(budgetLimit.value, 'attributes.amount') ?? 0)
+const budgetLimitPercent = computed(() => get(budgetLimit.value, 'attributes.percent') ?? 0)
 const budgetCurrencySymbol = computed(() => Budget.getCurrencySymbol(props.value))
-
-const itemClass = computed(() => ({
-  'list-item-disabled': !get(props.value, 'attributes.active'),
-}))
-
-const onEdit = async (e) => {
-  emit('onEdit', props.value)
-}
-
-const onDelete = async () => {
-  emit('onDelete', props.value)
-}
-
-const swipeCell = ref(null)
-const clickWithoutSwipe = useClickWithoutSwipe({ swipeCell: swipeCell, onClick: onEdit })
 </script>
-

@@ -36,5 +36,6 @@ export default [
   { path: '/tags/:id?', component: () => import('./pages/tags.vue') },
   { path: '/currencies/:id?', component: () => import('./pages/currencies.vue') },
   { path: '/exchange-rates', component: () => import('./pages/exchange-rates.vue') },
+  { path: '/todo/:id?', component: () => import('./pages/todo.vue') },
   { path: '/:pathMatch(.*)*', redirect: '/dashboard' },
 ].map((route) => ({ ...route, meta: { scrollToTop, ...route.meta } }))

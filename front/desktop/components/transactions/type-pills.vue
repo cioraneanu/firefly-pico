@@ -25,8 +25,8 @@ const model = defineModel()
 const options = useTransactionTypeOptions()
 
 const colors = {
-  expense: 'bg-expense/10 text-expense ring-[1.5px] ring-inset ring-expense',
-  income: 'bg-income/10 text-income ring-[1.5px] ring-inset ring-income',
-  transfer: 'bg-transfer/10 text-transfer ring-[1.5px] ring-inset ring-transfer',
+  expense: 'bg-tx-expense/9 text-tx-expense ring-[1.5px] ring-inset ring-tx-expense',
+  income: 'bg-income/9 text-income ring-[1.5px] ring-inset ring-income',
+  transfer: 'bg-transfer/9 text-transfer ring-[1.5px] ring-inset ring-transfer',
 }
 </script>

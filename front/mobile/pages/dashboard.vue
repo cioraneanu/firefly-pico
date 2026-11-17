@@ -1,22 +1,28 @@
 <template>
-  <div class="app-form">
-    <app-top-toolbar />
+  <div class="mx-page">
+    <app-top-toolbar>
+      <template #right>
+        <dashboard-control-buttons />
+      </template>
+    </app-top-toolbar>
 
-    <van-pull-refresh v-model="isRefreshing" @refresh="onRefresh">
-      <dashboard-control />
+    <main class="mx-body">
+      <app-list v-model:refreshing="isRefreshing" finished @refresh="onRefresh">
+        <dashboard-control />
 
-      <div ref="dashboard" class="dashboard-cards-frame" :class="{ 'dashboard-cards-back': isDashboardCardsBack }">
-        <transition :name="profileStore.showAnimations ? 'dashboard-cards' : ''" mode="out-in">
-          <div :key="+dashboardStore.month" class="dynamic-masonry">
-            <component :is="card.component" v-for="card in visibleCards" :key="card.code" />
-          </div>
-        </transition>
-      </div>
+        <div ref="dashboard" class="mx-dash-frame" :class="{ back: isDashboardCardsBack }">
+          <transition :name="profileStore.showAnimations ? 'mx-dash-slide' : ''" mode="out-in">
+            <div :key="+dashboardStore.month" class="mx-body mx-dash-cards">
+              <component :is="card.component" v-for="card in visibleCards" :key="card.code" />
+            </div>
+          </transition>
+        </div>
 
-      <app-card-info style="order: 99">
-        <app-field-link :label="$t('dashboard.configure_cards')" :icon="TablerIconConstants.settings" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER)" />
-      </app-card-info>
-    </van-pull-refresh>
+        <app-card-info>
+          <app-field-link :label="$t('dashboard.configure_cards')" :icon="IconLayoutDashboard" @click="navigateTo(RouteConstants.ROUTE_SETTINGS_DASHBOARD_CARDS_ORDER)" />
+        </app-card-info>
+      </app-list>
+    </main>
   </div>
 </template>
 
@@ -26,7 +32,7 @@ import { debounce } from 'lodash-es/function'
 import { animateDashboard } from '~/core/utils/AnimationUtils.js'
 import RouteConstants from '~/core/constants/RouteConstants.js'
 import { dashboardCard } from '~/core/constants/DashboardConstants.js'
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
+import { IconLayoutDashboard } from '@tabler/icons-vue'
 import { useSwipe } from '@vueuse/core'
 import { addMonths } from 'date-fns'
 import DashboardCalendar from '~/mobile/components/dashboard/dashboard-calendar/dashboard-calendar.vue'
@@ -120,33 +126,3 @@ const toolbar = useToolbar()
 const { t } = useI18n()
 toolbar.init({ title: t('dashboard.title') })
 </script>
-
-<style scoped>
-.dashboard-cards-frame {
-  --enter-x: 36px;
-  --leave-x: -36px;
-  overflow-x: hidden;
-}
-
-.dashboard-cards-back {
-  --enter-x: -36px;
-  --leave-x: 36px;
-}
-
-.dashboard-cards-enter-active,
-.dashboard-cards-leave-active {
-  transition:
-    transform 0.22s cubic-bezier(0.2, 0, 0, 1),
-    opacity 0.18s ease;
-}
-
-.dashboard-cards-enter-from {
-  opacity: 0;
-  transform: translateX(var(--enter-x));
-}
-
-.dashboard-cards-leave-to {
-  opacity: 0;
-  transform: translateX(var(--leave-x));
-}
-</style>

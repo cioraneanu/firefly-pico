@@ -1,51 +1,24 @@
 <template>
   <app-select
     v-model="modelValue"
-    v-model:show-dropdown="showDropdown"
     :label="$t('language_select.label')"
     :popup-title="$t('language_select.title')"
     :list="list"
-    :columns="3"
-    v-bind="dynamicAttrs"
     :has-search="false"
-    :clearable="false">
-    <template #item="{ item, isActive }">
-      <div class="flex flex-col text-12">
-        <div class="flex items-center justify-center gap-2 mx-1 flex-wrap">
-          <app-icon :icon="item.icon" :size="24" />
-          <div class="text-center">{{ item.displayName }}</div>
-        </div>
-        <div v-if="isActive" class="app-icon-item mt-1.25"/>
-      </div>
-    </template>
-
-    <template #inputItemContent="{ item }">
-      <div class="flex items-center gap-2">
-        <app-icon :icon="item.icon" :size="18" />
-        {{ item.displayName }}
-      </div>
-    </template>
-  </app-select>
+    :clearable="false"
+    :get-display-value="(item) => item.displayName"
+    :get-icon-value="(item) => item.icon"
+  />
 </template>
 
 <script setup>
-import { useFormAttributes } from '~/core/composables/useFormAttributes.js'
 import { supportedLanguages } from '~/i18n/index.js'
 
-const attrs = useAttrs()
-const { dynamicAttrs } = useFormAttributes(attrs)
-
-// Internally use the language object, externaly use just the code: "en"
+// Internally use the language object, externally use just the code: "en"
 const modelValue = defineModel({
-  set: (value) => {
-    return value.code
-  },
-  get: (value) => {
-    return list.value.find((item) => item.code === value)
-  },
+  set: (value) => value?.code,
+  get: (value) => list.value.find((item) => item.code === value),
 })
 
 const list = computed(() => supportedLanguages)
-
-const showDropdown = ref(null)
 </script>

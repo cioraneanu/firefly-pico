@@ -1,5 +1,5 @@
 <template>
-  <d-form class="[--label-w:13rem]" @submit="save">
+  <d-form class="[--label-w:13.75rem]" @submit="save">
     <d-settings-group :title="$t('settings.ui.title')">
       <d-field :label="$t('settings.ui.theme')">
         <d-tabs v-model="draft.darkTheme" :options="themes" />
@@ -22,6 +22,9 @@
       </d-field>
       <d-field :label="$t('settings.ui.reset_forms_after_creation')">
         <d-switch v-model="draft.resetFormOnCreate" />
+      </d-field>
+      <d-field :label="$t('settings.ui.undo_delete')">
+        <d-switch v-model="draft.undoDelete" />
       </d-field>
     </d-settings-group>
 
@@ -77,6 +80,7 @@ const { draft, save, reset, isSaving } = useSettingsDraft([
   'startingPage',
   'showAnimations',
   'resetFormOnCreate',
+  'undoDelete',
   'numberFormat',
   'dateFormat',
   'weekStartsOn',

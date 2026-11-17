@@ -22,11 +22,15 @@ export const useProfileStore = defineStore('profile', () => {
   const startingPage = useLocalStorage('startingPage', Page.types.transactionNew)
   const showAnimations = useLocalStorage('showAnimations', true)
   const resetFormOnCreate = useLocalStorage('resetFormOnCreate', false)
+  // Deletes happen at once with an Undo toast instead of an "Are you sure?" dialog
+  const undoDelete = useLocalStorage('undoDelete', true)
 
   const assistantTodoTagMatcher = useLocalStorage('assistantTodoTagMatcher', '!!')
   const assistantCurrency = useLocalStorage('assistantCurrency', null, { serializer: StorageSerializers.object })
   const autoFocusAssistant = useLocalStorage('autoFocusAssistant', false)
   const assistantLlmContext = useLocalStorage('assistantLlmContext', '')
+  // How many recent transactions (unique descriptions, no amounts) the assistant LLM gets as examples. 0 = off.
+  const assistantHistoryCount = useLocalStorage('assistantHistoryCount', 0)
 
   const defaultAccountSource = useLocalStorage('defaultAccountSource', null, { serializer: StorageSerializers.object })
   const defaultAccountDestination = useLocalStorage('defaultAccountDestination', null, { serializer: StorageSerializers.object })
@@ -42,11 +46,14 @@ export const useProfileStore = defineStore('profile', () => {
   const transactionListDefaultFilterDateEnd = useLocalStorage('transactionListDefaultFilterDateEnd', null)
 
   const isForeignCurrencyAlwaysVisible = useLocalStorage('isForeignCurrencyAlwaysVisible', false)
+  // Rates typed in by the user ({ RON: 4.55 }, per 1 USD). They win over the fetched exchange rates.
+  const exchangeRateOverrides = useLocalStorage('exchangeRateOverrides', {})
 
   const quickValueButtons = useLocalStorage('quickValueButtons', ['-10', '-1', '+1', '+10'])
 
   const transactionFormFieldsConfig = useLocalStorage('transactionFormFieldsConfig', transactionFormFieldList)
   const transactionListFieldsConfig = useLocalStorage('transactionListFieldsConfig', transactionListFieldList)
+  const transactionListGroupByDay = useLocalStorage('transactionListGroupByDay', true)
   const dashboardWidgetsConfig = useLocalStorage('dashboardWidgetsConfig', dashboardCardList)
 
   const dateFormat = useLocalStorage('dateFormat', DateUtils.FORMAT_ENGLISH_DATE)
@@ -106,6 +113,10 @@ export const useProfileStore = defineStore('profile', () => {
   function setProfile(profile) {
     profileActiveId.value = profile ? parseInt(profile?.id) : null
     useProfileStore().$patch(profile?.settings ?? {})
+    // $patch deep-merges objects and never drops keys: the profile's overrides replace the current ones
+    if (profile) {
+      exchangeRateOverrides.value = profile.settings?.exchangeRateOverrides ?? {}
+    }
   }
 
   function getProfileSettings() {
@@ -143,7 +154,7 @@ export const useProfileStore = defineStore('profile', () => {
 
   async function writeProfile() {
     const appStore = useAppStore()
-    if (!appStore.syncProfileInDB) {
+    if (!appStore.syncProfileInDB || !profileActiveId.value) {
       return
     }
 
@@ -178,10 +189,12 @@ export const useProfileStore = defineStore('profile', () => {
     startingPage,
     showAnimations,
     resetFormOnCreate,
+    undoDelete,
     assistantTodoTagMatcher,
     assistantCurrency,
     autoFocusAssistant,
     assistantLlmContext,
+    assistantHistoryCount,
     defaultAccountSource,
     defaultAccountDestination,
     defaultCategory,
@@ -193,9 +206,11 @@ export const useProfileStore = defineStore('profile', () => {
     transactionListDefaultFilterDateStart,
     transactionListDefaultFilterDateEnd,
     isForeignCurrencyAlwaysVisible,
+    exchangeRateOverrides,
     quickValueButtons,
     transactionFormFieldsConfig,
     transactionListFieldsConfig,
+    transactionListGroupByDay,
     dashboardWidgetsConfig,
     dateFormat,
     copyCategoryToDescription,

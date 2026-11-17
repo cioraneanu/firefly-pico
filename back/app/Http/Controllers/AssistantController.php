@@ -8,6 +8,8 @@ use App\Jobs\TranscribeAssistantRamble;
 use App\Models\AssistantRamble;
 use App\Services\AssistantLlmConfigService;
 use App\Services\AssistantTranscriptionService;
+use App\Services\AssistantUserSettingsService;
+use App\Validations\AssistantValidation;
 use Illuminate\Http\Client\ConnectionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -92,6 +94,16 @@ class AssistantController extends BaseController
         return $disk->response($ramble->voice_path);
     }
 
+    // Fixing the text of a voice ramble also marks it transcribed, so a later transcription does not append to it
+    public function updateRamble(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        AssistantValidation::validateRambleUpdate($request);
+        $ramble = AssistantRamble::query()->allowed()->findOrFail($request->id);
+        $ramble->update(['text' => trim($request->input('text')), 'is_transcribed' => true]);
+        return $this->respond(['data' => $ramble]);
+    }
+
     public function deleteRamble(Request $request)
     {
         BaseAuthorization::checkUser();
@@ -131,12 +143,8 @@ class AssistantController extends BaseController
     public function interpretTransactions(Request $request)
     {
         BaseAuthorization::checkUser();
-        $request->validate([
-            'payload' => ['required', 'array'],
-            'payload.messages' => ['required', 'array'],
-        ]);
-
-        $config = app(AssistantLlmConfigService::class)->getConfig();
+        AssistantValidation::validateInterpretTransactions($request);
+        $config = app(AssistantLlmConfigService::class)->getConfig($request->input('config'));
 
         if (!$config['isConfigured']) {
             return $this->setStatusCode(self::HTTP_CODE_UNPROCESSABLE_ENTITY)->respond([
@@ -148,13 +156,14 @@ class AssistantController extends BaseController
         $this->appendContext($payload, $config['context'], $request->input('context'));
         $payload['model'] = $config['model'];
 
-        return $this->sendLlmRequest($config, $payload);
+        return $this->sendLlmRequest($config, $payload, $request->boolean('debug'));
     }
 
     public function testLlm(Request $request)
     {
         BaseAuthorization::checkUser();
-        $config = app(AssistantLlmConfigService::class)->getConfig();
+        AssistantValidation::validateConfigOverride($request);
+        $config = app(AssistantLlmConfigService::class)->getConfig($request->input('config'));
 
         if (!$config['isConfigured']) {
             return $this->setStatusCode(self::HTTP_CODE_UNPROCESSABLE_ENTITY)->respond([
@@ -173,7 +182,8 @@ class AssistantController extends BaseController
     public function testTranscription(Request $request)
     {
         BaseAuthorization::checkUser();
-        $result = app(AssistantTranscriptionService::class)->testConfiguration();
+        AssistantValidation::validateConfigOverride($request);
+        $result = app(AssistantTranscriptionService::class)->testConfiguration($request->input('config'));
 
         if (!$result['successful']) {
             return $this->setStatusCode($result['status'])->respond([
@@ -182,6 +192,20 @@ class AssistantController extends BaseController
         }
 
         return $this->respond(['success' => true]);
+    }
+
+    public function getSettings(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        return $this->respond(['data' => app(AssistantUserSettingsService::class)->getForResponse(getUserId())]);
+    }
+
+    public function updateSettings(Request $request)
+    {
+        BaseAuthorization::checkUser();
+        AssistantValidation::validateSettingsUpdate($request);
+        $settings = app(AssistantUserSettingsService::class)->save(getUserId(), $request->all());
+        return $this->respond(['data' => $settings]);
     }
 
     private function appendContext(&$payload, $globalContext, $userContext)
@@ -206,8 +230,13 @@ class AssistantController extends BaseController
         $payload['messages'][] = ['role' => 'system', 'content' => $context];
     }
 
-    private function sendLlmRequest($config, $payload)
+    /**
+     * @param bool $debug Adds pico_debug (the messages actually sent, model, source, duration) so the
+     *                    settings screen can show the exact prompt in "Try it out".
+     */
+    private function sendLlmRequest($config, $payload, $debug = false)
     {
+        $startedAt = microtime(true);
 
         $headers = [
             'Accept' => 'application/json',
@@ -220,30 +249,41 @@ class AssistantController extends BaseController
 
         try {
             $response = Http::withHeaders($headers)
+                ->withoutRedirecting()
                 ->connectTimeout(10)
                 ->timeout(60)
                 ->post($config['endpoint'], $payload);
-        } catch (ConnectionException $exception) {
+        } catch (ConnectionException) {
             return $this->setStatusCode(502)->respond([
-                'message' => $exception->getMessage() ?: 'Assistant LLM request failed.',
+                'message' => 'Assistant LLM request failed.',
             ]);
         }
 
         $responseBody = $response->json();
 
+        // A user's own endpoint can point anywhere the server reaches, so only the answer goes back: never its raw body, error or status.
+        $isOwn = $config['source'] === 'own';
         if (!$response->successful()) {
-            return $this->setStatusCode($response->status())->respond([
-                'message' => data_get($responseBody, 'error.message') ?? data_get($responseBody, 'message') ?? 'Assistant LLM request failed.',
+            return $this->setStatusCode($isOwn ? 502 : $response->status())->respond([
+                'message' => ($isOwn ? null : fget($responseBody, 'error.message') ?? fget($responseBody, 'message')) ?? 'Assistant LLM request failed.',
             ]);
         }
 
-        if (is_array($responseBody)) {
-            return $this->respond($responseBody);
+        $result = [
+            'content' => fget($responseBody, 'choices.0.message.content') ?? (!$isOwn && !is_array($responseBody) ? $response->body() : null),
+            'usage' => fget($responseBody, 'usage'),
+        ];
+
+        if ($debug) {
+            $result['pico_debug'] = [
+                'messages' => fget($payload, 'messages'),
+                'model' => $config['model'],
+                'source' => $config['source'],
+                'duration_ms' => (int)round((microtime(true) - $startedAt) * 1000),
+            ];
         }
 
-        return $this->respond([
-            'content' => $response->body(),
-        ]);
+        return $this->respond($result);
     }
 
 }

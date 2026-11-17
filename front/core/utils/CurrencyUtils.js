@@ -1,12 +1,11 @@
-import { get } from 'lodash-es'
 import Transaction from '~/core/models/Transaction'
 import { useCurrencyStore } from '~/core/stores/currencyStore'
 
 export function convertCurrency(amount, fromCurrency, toCurrency) {
   const currencyStore = useCurrencyStore()
 
-  const exchangeSource = get(currencyStore.exchangeRates, `rates.${fromCurrency}`)
-  const exchangeDestination = get(currencyStore.exchangeRates, `rates.${toCurrency}`)
+  const exchangeSource = currencyStore.rates[fromCurrency]
+  const exchangeDestination = currencyStore.rates[toCurrency]
   return (1.0 * amount * exchangeDestination) / exchangeSource
 }
 

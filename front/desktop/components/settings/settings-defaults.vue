@@ -1,5 +1,5 @@
 <template>
-  <d-form class="[--label-w:13rem]" @submit="saveAll">
+  <d-form class="[--label-w:13.75rem]" @submit="saveAll">
     <d-settings-group :title="$t('settings.transactions.default_form_values.title')">
       <d-field :label="$t('settings.transactions.default_form_values.default_source_account')">
         <d-account-select v-model="draft.defaultAccountSource" clearable />

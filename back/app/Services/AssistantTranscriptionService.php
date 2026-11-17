@@ -27,13 +27,13 @@ class AssistantTranscriptionService
             return;
         }
 
-        $config = $this->configService->getConfig($language);
-        if (!$config['isConfigured']) {
-            return;
-        }
-
+        // Each recording uses its owner's connection (their own one, or the server's).
+        $configs = [];
         foreach ($pending as $ramble) {
-            $this->transcribe($ramble, $config);
+            $config = $configs[$ramble->user_id] ??= $this->configService->getConfig(userId: $ramble->user_id, language: $language);
+            if ($config['isConfigured']) {
+                $this->transcribe($ramble, $config);
+            }
         }
 
         $this->purgeEmpty($pending);
@@ -60,9 +60,12 @@ class AssistantTranscriptionService
         })->values();
     }
 
-    public function testConfiguration(): array
+    /**
+     * @param array|null $override Unsaved values from the settings screen ({ use_own, endpoint, model, api_key, language }).
+     */
+    public function testConfiguration(?array $override = null): array
     {
-        $config = $this->configService->getConfig();
+        $config = $this->configService->getConfig($override);
         if (!$config['isConfigured']) {
             return ['successful' => false, 'status' => 422, 'message' => 'Assistant transcription is not configured.'];
         }
@@ -70,21 +73,27 @@ class AssistantTranscriptionService
         $sampleRate = 8000;
         $audio = str_repeat("\0", $sampleRate / 4 * 2);
         $wav = 'RIFF' . pack('V', 36 + strlen($audio)) . 'WAVEfmt ' . pack('VvvVVvv', 16, 1, 1, $sampleRate, $sampleRate * 2, 2, 16) . 'data' . pack('V', strlen($audio)) . $audio;
-        $request = Http::acceptJson()->connectTimeout(10)->timeout(120);
+        $request = Http::acceptJson()->withoutRedirecting()->connectTimeout(10)->timeout(120);
         if ($config['apiKey']) {
             $request = $request->withToken($config['apiKey']);
         }
 
         try {
             $response = $request->attach('file', $wav, 'test.wav')->post($config['endpoint'], $this->buildPayload($config));
-        } catch (ConnectionException $exception) {
-            return ['successful' => false, 'status' => 502, 'message' => $exception->getMessage() ?: 'Assistant transcription request failed.'];
+        } catch (ConnectionException) {
+            return ['successful' => false, 'status' => 502, 'message' => 'Assistant transcription request failed.'];
         }
 
+        if ($response->successful()) {
+            return ['successful' => true, 'status' => 200, 'message' => null];
+        }
+
+        // A user's own endpoint can point anywhere the server reaches, so its error and status are not passed on.
+        $isOwn = $config['source'] === 'own';
         return [
-            'successful' => $response->successful(),
-            'status' => $response->successful() ? 200 : $response->status(),
-            'message' => fget($response->json(), 'error.message') ?? fget($response->json(), 'message') ?? 'Assistant transcription request failed.',
+            'successful' => false,
+            'status' => $isOwn ? 502 : $response->status(),
+            'message' => ($isOwn ? null : fget($response->json(), 'error.message') ?? fget($response->json(), 'message')) ?? 'Assistant transcription request failed.',
         ];
     }
 
@@ -120,7 +129,7 @@ class AssistantTranscriptionService
             return '';
         }
 
-        $request = Http::acceptJson()->connectTimeout(10)->timeout(120);
+        $request = Http::acceptJson()->withoutRedirecting()->connectTimeout(10)->timeout(120);
         if ($config['apiKey']) {
             $request = $request->withToken($config['apiKey']);
         }
@@ -137,7 +146,7 @@ class AssistantTranscriptionService
             return null;
         }
 
-        return trim((string)data_get($response->json(), 'text'));
+        return trim((string)fget($response->json(), 'text'));
     }
 
     /**

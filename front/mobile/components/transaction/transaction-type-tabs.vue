@@ -1,28 +1,29 @@
 <template>
-  <div class="transaction-type-container">
-    <div v-for="item in list" :class="getItemClass(item)" @click="onClick(item)">
+  <div class="mx-types" role="radiogroup" :aria-label="$t('transaction_type')">
+    <button
+      v-for="item in list"
+      :key="item.code"
+      type="button"
+      role="radio"
+      :class="[typeClass[item.code], { on: isEqual(item, modelValue) }]"
+      :aria-checked="isEqual(item, modelValue)"
+      @click="modelValue = item"
+    >
+      <app-icon :icon="typeIcon[item.code]" :size="16" :stroke="2" />
       <span>{{ $t(item.t) }}</span>
-      <span class="type-indicator"/>
-    </div>
+    </button>
   </div>
 </template>
 
 <script setup>
+import { IconCircleArrowRight, IconCircleMinus, IconCirclePlus } from '@tabler/icons-vue'
+import { isEqual } from 'lodash-es'
 import Transaction from '~/core/models/Transaction'
-import { isEqual } from 'lodash-es/lang'
 
+// Outline type pills (design: .mx-types with exp / inc / tr)
 const modelValue = defineModel()
-// const list = ref(['Expense', 'Income', 'Transfer'])
 const list = Transaction.typesList
 
-const onClick = (item) => {
-  modelValue.value = item
-}
-
-const getItemClass = (item) => {
-  return {
-    'transaction-type-item': true,
-    selected: isEqual(item, modelValue.value),
-  }
-}
+const typeClass = { expense: 'exp', income: 'inc', transfer: 'tr' }
+const typeIcon = { expense: IconCircleMinus, income: IconCirclePlus, transfer: IconCircleArrowRight }
 </script>

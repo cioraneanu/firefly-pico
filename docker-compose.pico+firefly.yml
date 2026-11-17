@@ -14,6 +14,9 @@ services:
       # Optional: on hosts that don't let non-root processes bind port 80 (e.g. Synology
       # Container Manager), change the mapping above to 6976:8080 and uncomment this:
       # - NGINX_PORT=8080
+      # Optional: encrypts the API keys users save for the assistant: exactly 32 characters, or "base64:" + the output of `openssl rand -base64 32`.
+      # Without it one is generated on the first start and kept in ./firefly-pico-data, so it survives upgrades.
+      # - APP_KEY=<add unique 32-char key>
       - DB_CONNECTION=pgsql
       - DB_HOST=firefly-pico-postgresql
       - DB_PORT=5432
@@ -31,9 +34,12 @@ services:
       # - ASSISTANT_TRANSCRIPTION_MODEL=gpt-4o-mini-transcribe
       # - ASSISTANT_TRANSCRIPTION_API_KEY=your-api-key
       # - ASSISTANT_TRANSCRIPTION_LANGUAGE=en
-    # Optional: custom icons. Put .svg/.png/.webp/.jpg files in this folder and they show up in the icon picker
-    # volumes:
-    #   - /<your_path>/firefly-pico-icons:/var/www/html/storage/app/custom-icons:ro
+      # - ASSISTANT_ALLOW_PRIVATE_ENDPOINTS=true  # let users point their own assistant connection at LAN hosts (e.g. Ollama)
+    volumes:
+      # Keeps the generated APP_KEY across upgrades (see APP_KEY above)
+      - ./firefly-pico-data:/var/www/html/database/data
+      # Optional: custom icons. Put .svg/.png/.webp/.jpg files in this folder and they show up in the icon picker
+      # - /<your_path>/firefly-pico-icons:/var/www/html/storage/app/custom-icons:ro
     networks:
       firefly:
 

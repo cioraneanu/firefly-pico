@@ -6,12 +6,12 @@ import { useProfileStore } from '~/core/stores/profileStore'
 import { useAppStore } from '~/core/stores/appStore'
 import { useAccountStore } from '~/core/stores/accountStore'
 import { useCategoryStore } from '~/core/stores/categoryStore'
-import { useTagStore } from '~/core/stores/tagStore'
 import { useTemplateStore } from '~/core/stores/templateStore'
 import { useCurrencyStore } from '~/core/stores/currencyStore'
 import { useBudgetStore } from '~/core/stores/budgetStore'
 import { usePiggyBankStore } from '~/core/stores/piggyBankStore'
 import { useRecurringTransactionStore } from '~/core/stores/recurringTransactionStore'
+import { useTodoStore } from '~/core/stores/todoStore'
 import { keyBy, head, uniq, uniqBy } from 'lodash-es'
 import AccountRepository from '~/core/repository/AccountRepository'
 import AccountTransformer from '~/core/transformers/AccountTransformer'
@@ -24,8 +24,6 @@ import TransactionTransformer from '~/core/transformers/TransactionTransformer'
 import Tag from '~/core/models/Tag.js'
 import DateUtils from '~/core/utils/DateUtils.js'
 import { getExcludedTransactionFilters } from '~/core/utils/DashboardUtils.js'
-import TransactionFilterUtils from '~/core/utils/TransactionFilterUtils.js'
-import { useListFilters } from '~/core/composables/useListFilters.js'
 
 export const useDashboardStore = defineStore('dashboard', () => {
   const accountStore = useAccountStore()
@@ -40,7 +38,6 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const isLoadingDashboardAccounts = ref(false)
   const transactionsList = ref([])
   const transactionsListLastWeek = ref([])
-  const transactionsWithTodo = ref([])
   const tagsWidgetModeOnlyRootTag = useLocalStorage('tagsWidgetModeOnlyRootTag', true)
   const widgetsNetAmountMode = useLocalStorage('widgetsNetAmountMode', false)
   const isLoadingTransactions = ref(false)
@@ -106,28 +103,6 @@ export const useDashboardStore = defineStore('dashboard', () => {
     transactionsListLastWeek.value = TransactionTransformer.transformFromApiList(list)
   }
 
-  async function fetchTransactionsWithTodos() {
-    const tagStore = useTagStore()
-    const tagTodo = tagStore.tagTodo
-    if (!tagTodo) {
-      transactionsWithTodo.value = []
-      return
-    }
-
-    const { filters, filtersBackendList } = useListFilters({
-      filterDefinitions: Object.values(TransactionFilterUtils.filters),
-    })
-
-    filters.value = {
-      ...TransactionFilterUtils.getPredefinedFilters(),
-      tag: tagTodo,
-    }
-    const requestFilters = [{ field: 'query', value: filtersBackendList.value.join(' ') }]
-
-    let list = await new TransactionRepository().searchTransaction({ filters: requestFilters })
-    transactionsWithTodo.value = TransactionTransformer.transformFromApiList(list?.data ?? [])
-  }
-
   async function fetchDashboard() {
     const budgetStore = useBudgetStore()
     const piggyBankStore = usePiggyBankStore()
@@ -137,7 +112,7 @@ export const useDashboardStore = defineStore('dashboard', () => {
       fetchDashboardAccounts(),
       fetchTransactionsForInterval(),
       fetchTransactionsForWeek(),
-      fetchTransactionsWithTodos(),
+      useTodoStore().fetchTodo(),
       budgetStore.fetchBudgets(),
       piggyBankStore.fetchPiggyBanks(),
       recurringTransactionStore.fetchRecurringTransactions(),
@@ -389,7 +364,6 @@ export const useDashboardStore = defineStore('dashboard', () => {
     isLoadingDashboardAccounts,
     transactionsList,
     transactionsListLastWeek,
-    transactionsWithTodo,
     tagsWidgetModeOnlyRootTag,
     widgetsNetAmountMode,
     dashboardAccountDictionary,
@@ -398,7 +372,6 @@ export const useDashboardStore = defineStore('dashboard', () => {
     init,
     fetchTransactionsForInterval,
     fetchTransactionsForWeek,
-    fetchTransactionsWithTodos,
     fetchDashboardAccounts,
     fetchDashboard,
     isLoadingTransactions,

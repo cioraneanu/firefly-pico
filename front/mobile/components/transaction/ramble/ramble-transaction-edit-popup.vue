@@ -1,56 +1,34 @@
 <template>
-  <app-popup v-model:show="show" :popup-style="popupStyle">
-    <div ref="popupRef" class="flex flex-col h-full min-h-0">
-      <div class="flex items-center gap-2 px-4 py-2 ramble-divider-bottom">
-        <div class="font-semibold text-16 flex-1">{{ $t('transaction.assistant_ramble_edit_title') }}</div>
-        <van-button size="small" class="cursor-pointer" @click="show = false">
-          <app-icon :icon="TablerIconConstants.close" :size="18" />
-        </van-button>
-      </div>
+  <app-sheet v-model:show="show" :title="$t('transaction.assistant_ramble_edit_title')" full>
+    <app-form v-if="transaction" ref="formRef" name="ramble-transaction-form" class="flex flex-col gap-3 pb-3" @submit="onSave" @failed="onFailed">
+      <transaction-form v-model="transaction.item" />
+    </app-form>
 
-      <div ref="popupContentRef" class="flex-1 min-h-0 overflow-auto">
-        <transaction-form v-if="transaction" ref="formRef" v-model="transaction.item" form-name="ramble-transaction-form" />
-      </div>
-
-      <div class="flex gap-2 p-4 ramble-divider">
-        <van-button block class="cursor-pointer" @click="show = false">{{ $t('cancel') }}</van-button>
-        <van-button block type="primary" class="cursor-pointer" @click="onSave">{{ $t('save') }}</van-button>
-      </div>
-    </div>
-  </app-popup>
+    <template #footer>
+      <button type="button" class="mx-btn out" @click="show = false">{{ $t('cancel') }}</button>
+      <button type="button" class="mx-btn pri" @click="formRef?.submit()">
+        <app-icon :icon="IconCheck" :size="16" :stroke="2" />
+        <span>{{ $t('save') }}</span>
+      </button>
+    </template>
+  </app-sheet>
 </template>
 
 <script setup>
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
+import { IconCheck } from '@tabler/icons-vue'
 import TransactionForm from '~/mobile/components/transaction/TransactionForm.vue'
 import UIUtils from '~/core/utils/UIUtils.js'
-import { useSwipeToDismiss } from '~/mobile/composables/useSwipeToDismiss'
 
+// Edit one interpreted ramble transaction in a full sheet with the regular transaction fields.
 const emit = defineEmits(['save'])
 const show = defineModel('show', { type: Boolean, default: false })
 const transaction = defineModel({ type: Object, default: null })
 
 const formRef = ref(null)
-const popupRef = ref(null)
-const popupContentRef = ref(null)
 
-useSwipeToDismiss({
-  onSwipe: () => (show.value = false),
-  swipeRef: popupRef,
-  scrollRef: popupContentRef,
-  showDropdown: show,
-})
+const onFailed = () => UIUtils.showToastError('Form has invalid values. Check the red fields :)')
 
-const popupStyle = { height: '96%' }
-
-const onSave = async () => {
-  try {
-    await formRef.value?.validate()
-  } catch {
-    UIUtils.showToastError('Form has invalid values. Check the red fields :)')
-    return
-  }
-
+const onSave = () => {
   emit('save', transaction.value)
   show.value = false
 }

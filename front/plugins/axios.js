@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { get } from 'lodash-es'
+import { demoAdapter } from '~/core/demo/DemoBackend.js'
 
 axios.interceptors.request.use(
   (config) => {
@@ -26,6 +27,7 @@ axios.interceptors.request.use(
     })
     config.headers['Authorization'] = `Bearer ${authToken}`
     config.timeout = config.timeout || appStore.queryTimeout
+    if (appStore.isDemoMode) config.adapter = demoAdapter
     return config
   },
   (error) => {
@@ -39,11 +41,12 @@ const retryRequest = async (error) => {
   let errorMessage = get(error, 'response.data.message') ?? get(error, 'message') ?? ''
 
   const isTimeout = error.code === 'ECONNABORTED' || errorMessage.includes('timeout') || errorMessage.includes('Failed to connect to')
-  if (!isTimeout) {
+  const config = error.config
+  // Only reads are retried: a write that timed out may still have gone through, a retry would repeat it
+  if (!isTimeout || config?.method !== 'get') {
     return
   }
 
-  const config = error.config
   if (!config?.retry) {
     config.retry = 0
   }
@@ -80,11 +83,13 @@ axios.interceptors.response.use(
     let showErrorToast = error.config?.showErrorToast !== false
     errorMessage && showErrorToast && UIUtils.showToastError(`Error: ${errorMessage}`, 4000)
 
-    await retryRequest(error)
+    // The retry gets its own requestId on the same config: remember this one first
+    const requestId = error.config?.requestId
+    const retryResponse = await retryRequest(error)
 
     const loadingStore = useLoadingStore()
-    error.config?.showLoading && loadingStore.removeActiveRequest(error.config?.requestId)
-    return Promise.resolve(error.response)
+    error.config?.showLoading && loadingStore.removeActiveRequest(requestId)
+    return Promise.resolve(retryResponse ?? error.response)
   },
 )
 

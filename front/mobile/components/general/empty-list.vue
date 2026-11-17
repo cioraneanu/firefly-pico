@@ -1,32 +1,35 @@
 <template>
-  <div class="absolute w-full h-full top-0 left-0 flex items-center justify-center pointer-events-none">
-    <div class="flex flex-col items-center text-center p-5 max-w-[420px] pointer-events-auto">
-      <img :src="EmptyIllustrationHalf" :srcset="`${EmptyIllustrationHalf} 1x, ${EmptyIllustration} 2x`" class="max-w-full h-auto mb-6 md:w-50 md:mb-8" width="160" alt="Empty state" />
-      <h3 class="m-0 mb-2 text-16 md:text-20 font-semibold">{{ title || $t('general.list_empty') }}</h3>
-      <p class="m-0 mb-6 text-13 md:text-15 font-normal leading-normal">
-        {{ subtitle || $t('general.list_empty_subtitle') }}
-      </p>
-
-      <div v-if="$slots.action" class="mt-2 md:mt-4">
-        <slot name="action" />
+  <div class="mxe mxe-state" :class="filtered ? 'r-fade' : 'n-ghost'">
+    <div class="mxe-ghost">
+      <div v-for="(delay, index) in delays" :key="index" class="mxe-sk" :class="{ out: filtered }" :style="{ '--d': `${delay}s` }">
+        <span class="t" />
+        <span class="m"><i /><i /></span>
+        <span class="r" />
       </div>
+      <div v-if="!filtered && hint" class="mxe-float">
+        <app-icon v-if="icon" :icon="icon" :size="16" :stroke="2" />
+        <span>{{ hint }}</span>
+      </div>
+    </div>
+    <div class="mxe-tx">
+      <b>{{ title || (filtered ? $t('general.list_no_results') : $t('general.list_empty')) }}</b>
+      <p>{{ subtitle || (filtered ? $t('general.list_no_results_subtitle') : $t('general.list_empty_subtitle')) }}</p>
+    </div>
+    <div v-if="$slots.action" class="mxe-act">
+      <slot name="action" />
     </div>
   </div>
 </template>
 
 <script setup>
-import EmptyIllustration from '~/assets/images/empty-folder.png'
-import EmptyIllustrationHalf from '~/assets/images/empty-folder-half.png'
-
-defineProps({
-  title: {
-    type: String,
-    default: '',
-  },
-  subtitle: {
-    type: String,
-    default: '',
-  },
+// Empty list state from the design: a ghost list (no data yet) or fading ghosts (search/filters hide everything).
+const props = defineProps({
+  title: { type: String, default: '' },
+  subtitle: { type: String, default: '' },
+  hint: { type: String, default: '' },
+  icon: { default: null },
+  filtered: { type: Boolean, default: false },
 })
-</script>
 
+const delays = computed(() => (props.filtered ? [0, 0.25, 0.5] : [0, 0.12, 0.24, 0.36]))
+</script>

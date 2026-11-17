@@ -1,37 +1,37 @@
 <template>
-  <div class="app-form">
+  <div class="mx-page">
     <app-top-toolbar />
 
-    <van-form class="" @submit="onSave">
-      <van-cell-group inset>
-        <app-field-link :icon="TablerIconConstants.order" :label="$t('settings.dashboard.cards_order')" @click="onGoToDashboardCardsOrder" />
-      </van-cell-group>
+    <app-form @submit="onSave">
+      <main class="mx-body has-save">
+        <app-card-info>
+          <app-field-link :icon="IconLayoutDashboard" :label="$t('settings.dashboard.cards_order')" @click="onGoToDashboardCardsOrder" />
+        </app-card-info>
 
-      <van-cell-group inset>
-        <div class="van-cell-group-title mb-0">{{ $t('settings.dashboard.config') }}:</div>
-        <app-boolean v-model="areEmptyAccountsVisible" :label="$t('settings.dashboard.show_empty_accounts')" />
-        <app-boolean v-model="showDecimal" :label="$t('settings.dashboard.show_decimal_places')" />
-
-        <app-select
+        <app-card :section="$t('settings.dashboard.config')">
+          <app-boolean v-model="areEmptyAccountsVisible" :label="$t('settings.dashboard.show_empty_accounts')" />
+          <div class="mx-hr" />
+          <app-boolean v-model="showDecimal" :label="$t('settings.dashboard.show_decimal_places')" />
+          <div class="mx-hr" />
+          <app-select
             v-model="firstDayOfMonth"
             v-model:show-dropdown="isDropdownFirstDayVisible"
             :label="$t('settings.formatting.first_day_of_month')"
             :popup-title="$t('settings.formatting.select_first_day_of_month')"
             :list="firstDayOfMonthList"
-            :columns="4"
             :has-search="false"
-        />
-      </van-cell-group>
+          />
+        </app-card>
 
-      <van-cell-group inset>
-        <div class="van-cell-group-title mb-0">{{ $t('settings.dashboard.transaction_exclusion') }}:</div>
-        <account-select v-model="excludedAccountsList" :is-multi-select="true" />
-        <category-select v-model="excludedCategoriesList" :is-multi-select="true" />
-        <tag-select v-model="excludedTagsList" :is-multi-select="true" :auto-select-parents="false" />
-      </van-cell-group>
+        <app-card :section="$t('settings.dashboard.transaction_exclusion')">
+          <account-select v-model="excludedAccountsList" :is-multi-select="true" />
+          <category-select v-model="excludedCategoriesList" :is-multi-select="true" />
+          <tag-select v-model="excludedTagsList" :is-multi-select="true" :auto-select-parents="false" />
+        </app-card>
+      </main>
 
       <app-button-form-save />
-    </van-form>
+    </app-form>
   </div>
 </template>
 
@@ -43,7 +43,7 @@ import { useToolbar } from '~/mobile/composables/useToolbar.js'
 import RouteConstants from '~/core/constants/RouteConstants.js'
 import { saveSettingsToStore, watchSettingsStore } from '~/core/utils/SettingUtils.js'
 import { useI18n } from 'vue-i18n'
-import TablerIconConstants from '~/core/constants/TablerIconConstants.js'
+import { IconLayoutDashboard } from '@tabler/icons-vue'
 
 const { t } = useI18n()
 const profileStore = useProfileStore()
@@ -65,7 +65,6 @@ const syncedSettings = [
   { store: profileStore, path: 'dashboard.excludedCategoriesList', ref: excludedCategoriesList },
   { store: profileStore, path: 'dashboard.excludedTagsList', ref: excludedTagsList },
   { store: profileStore, path: 'dashboard.firstDayOfMonth', ref: firstDayOfMonth },
-
 ]
 
 watchSettingsStore(syncedSettings)
@@ -73,7 +72,9 @@ watchSettingsStore(syncedSettings)
 const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   const response = await profileStore.writeProfile()
-  ResponseUtils.isSuccess(response) ? UIUtils.showToastSuccess(t('settings.settings_saved')) : null
+  if (ResponseUtils.isSuccess(response)) {
+    UIUtils.showToastSuccess(t('settings.settings_saved'))
+  }
 }
 
 const toolbar = useToolbar()
