@@ -23,4 +23,13 @@ export default class TransactionRepository extends BaseRepository {
     // A failure (422 = more transactions match than the backend sums, or a timeout) is shown next to the total, not as an error toast
     return await axios.get(searchUrl, { showErrorToast: false })
   }
+
+  async getTodoTransaction(id) {
+    const response = await axios.get(`${this.getUrl()}/${id}`, { showLoading: false, showErrorToast: false })
+    return get(response, 'data.data')
+  }
+
+  async updateTodoTags(id, data) {
+    return await axios.put(`${this.getUrl()}/${id}`, data, { showLoading: false, showErrorToast: false })
+  }
 }

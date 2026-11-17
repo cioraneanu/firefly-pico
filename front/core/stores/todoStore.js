@@ -11,6 +11,7 @@ import { areIntEqual } from '~/core/utils/DataUtils'
 import { getActiveFilters } from '~/core/utils/FilterUtils'
 import { withoutDeleted } from '~/core/utils/DeleteUtils'
 import UIUtils from '~/core/utils/UIUtils'
+import { getTodoJournalIds, getTodoTagUpdate } from '~/core/utils/TodoTagUpdate'
 
 // TODO Inbox: transactions tagged with the todo tag, reviewed one by one.
 // "Mark as done" only removes the todo tag. What was marked as done stays listed for this session (not persisted),
@@ -21,6 +22,8 @@ export const useTodoStore = defineStore('todo', () => {
   const todoList = ref([])
   const doneList = ref([])
   const isLoading = ref(false)
+  const removedTodoJournals = new Map()
+  const pendingTagChanges = new Set()
 
   const reviveDates = (bag) => ({ ...bag, dateStart: bag.dateStart && new Date(bag.dateStart), dateEnd: bag.dateEnd && new Date(bag.dateEnd) })
   const filters = useLocalStorage('todoInboxFilters', {}, { serializer: { read: (value) => reviveDates(JSON.parse(value)), write: JSON.stringify } })
@@ -68,6 +71,7 @@ export const useTodoStore = defineStore('todo', () => {
       getAll: (params) => new TransactionRepository().searchTransaction({ ...params, showLoading: false }),
     })
     todoList.value = list.map(fromApi)
+    todoList.value.forEach((item) => removedTodoJournals.delete(String(item.id)))
     doneList.value = without(
       doneList.value,
       todoList.value.map((item) => item.id),
@@ -76,15 +80,35 @@ export const useTodoStore = defineStore('todo', () => {
     if (query !== getQuery()) return fetchTodo()
   }
 
-  // Only the tags change: each split is sent with its journal id and its new tag list, nothing else
+  // Search results can omit splits, and their tags can change while the Inbox is open.
   async function updateTags(transaction, isTodo) {
-    const tagTodoName = Tag.getDisplayName(useTagStore().tagTodo)
-    const transactions = Transaction.getSplits(transaction).map((split) => {
-      const tags = (split.tagNames ?? []).filter((name) => !isTodoTag(name))
-      return { transaction_journal_id: split.transaction_journal_id, tags: isTodo ? [tagTodoName, ...tags] : tags }
-    })
-    const response = await new TransactionRepository().update(transaction.id, { transactions })
-    return ResponseUtils.isSuccess(response) ? fromApi(get(response, 'data.data')) : null
+    const id = String(transaction.id)
+    if (pendingTagChanges.has(id)) return true
+    pendingTagChanges.add(id)
+    try {
+      const tagName = Tag.getDisplayName(useTagStore().tagTodo)
+      if (!tagName) return false
+
+      const repository = new TransactionRepository()
+      const latest = await repository.getTodoTransaction(id)
+      const receipt = removedTodoJournals.get(id)
+      const journalIds = isTodo ? (receipt?.tagName === tagName ? receipt.journalIds : []) : getTodoJournalIds(latest, tagName)
+      const update = getTodoTagUpdate(latest, tagName, journalIds, isTodo)
+      if (!update || tagName !== Tag.getDisplayName(useTagStore().tagTodo)) return false
+
+      const response = await repository.updateTodoTags(id, update)
+      if (response?.status >= 400 && response.status < 500) return false
+      // A response can go missing after Firefly applied the write. Read it back instead of retrying.
+      const saved = get(response, 'data.data') ?? (await repository.getTodoTransaction(id))
+      if (!saved?.attributes?.transactions?.length) return false
+      const markedIds = getTodoJournalIds(saved, tagName)
+      if (isTodo ? !journalIds.every((journalId) => markedIds.includes(journalId)) : markedIds.length > 0) return false
+
+      onSaved(fromApi(saved), { tagName, journalIds })
+      return true
+    } finally {
+      pendingTagChanges.delete(id)
+    }
   }
 
   // A few requests at a time; the user hears about the ones that failed
@@ -92,7 +116,6 @@ export const useTodoStore = defineStore('todo', () => {
     let failedCount = 0
     for (const batch of chunk(transactions, 5)) {
       const results = await Promise.all(batch.map((transaction) => updateTags(transaction, isTodo)))
-      results.filter(Boolean).forEach(onSaved)
       failedCount += results.filter((result) => !result).length
     }
     if (failedCount) UIUtils.showToastError(useNuxtApp().$i18n.t('todo_page.some_failed', { count: failedCount }))
@@ -102,14 +125,29 @@ export const useTodoStore = defineStore('todo', () => {
   const putBack = (transactions) => setTodo(transactions, true)
 
   // A transaction saved anywhere in the inbox goes to the list its tags say
-  function onSaved(transaction) {
+  function onSaved(transaction, receipt) {
+    if (!transaction) return
     const isTodo = hasTodoTag(transaction)
     const ids = [transaction.id]
+    const id = String(transaction.id)
+    if (isTodo) {
+      removedTodoJournals.delete(id)
+    } else if (receipt) {
+      removedTodoJournals.set(id, receipt)
+    } else {
+      // A regular save can also remove the marker. Retain the known journal IDs for Put Back.
+      const previous = todoList.value.find((item) => areIntEqual(item.id, id))
+      const journalIds = Transaction.getSplits(previous)
+        .filter((split) => split.transaction_journal_id && split.tagNames?.some(isTodoTag))
+        .map((split) => String(split.transaction_journal_id))
+      if (journalIds.length) removedTodoJournals.set(id, { tagName: Tag.getDisplayName(useTagStore().tagTodo), journalIds })
+    }
     todoList.value = isTodo ? [...without(todoList.value, ids), transaction].sort(byDateDesc) : without(todoList.value, ids)
     doneList.value = isTodo ? without(doneList.value, ids) : [transaction, ...without(doneList.value, ids)]
   }
 
   function onDeleted(id) {
+    removedTodoJournals.delete(String(id))
     todoList.value = without(todoList.value, [id])
     doneList.value = without(doneList.value, [id])
   }
