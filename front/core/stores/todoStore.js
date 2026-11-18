@@ -76,25 +76,37 @@ export const useTodoStore = defineStore('todo', () => {
     if (query !== getQuery()) return fetchTodo()
   }
 
-  // Only the tags change: each split is sent with its journal id and its new tag list, nothing else
+  // Only the todo tag changes, without rules or webhooks (a rule could add it right back).
+  // Firefly deletes the splits a PUT leaves out and search results can miss some, so start from the whole transaction.
+  // "Done" remembers which splits had the tag, so "Put back" tags only those (all of them when unknown)
   async function updateTags(transaction, isTodo) {
+    const repository = new TransactionRepository()
+    const latest = get(await repository.getOne(transaction.id), 'data')
+    const splits = Transaction.getSplits(latest)
+    if (!splits.length) return null
     const tagTodoName = Tag.getDisplayName(useTagStore().tagTodo)
-    const transactions = Transaction.getSplits(transaction).map((split) => {
-      const tags = (split.tagNames ?? []).filter((name) => !isTodoTag(name))
-      return { transaction_journal_id: split.transaction_journal_id, tags: isTodo ? [tagTodoName, ...tags] : tags }
+    const todoJournalIds = isTodo ? transaction.todoJournalIds : splits.filter((split) => split.tags?.some(isTodoTag)).map((split) => split.transaction_journal_id)
+    const transactions = splits.map((split) => {
+      const tags = (split.tags ?? []).filter((name) => !isTodoTag(name))
+      const hasTodo = isTodo && (!todoJournalIds?.length || todoJournalIds.includes(split.transaction_journal_id))
+      return { transaction_journal_id: split.transaction_journal_id, tags: hasTodo ? [tagTodoName, ...tags] : tags }
     })
-    const response = await new TransactionRepository().update(transaction.id, { transactions })
-    return ResponseUtils.isSuccess(response) ? fromApi(get(response, 'data.data')) : null
+    const response = await repository.update(transaction.id, { apply_rules: false, fire_webhooks: false, group_title: latest.attributes.group_title, transactions })
+    return ResponseUtils.isSuccess(response) ? Object.assign(fromApi(get(response, 'data.data')), { todoJournalIds }) : null
   }
 
-  // A few requests at a time; the user hears about the ones that failed
+  // A few requests at a time; the user hears about the ones that failed. A row already saving is skipped (double click)
+  const savingIds = new Set()
   async function setTodo(transactions, isTodo) {
+    transactions = transactions.filter((transaction) => !savingIds.has(transaction.id))
+    transactions.forEach((transaction) => savingIds.add(transaction.id))
     let failedCount = 0
     for (const batch of chunk(transactions, 5)) {
       const results = await Promise.all(batch.map((transaction) => updateTags(transaction, isTodo)))
       results.filter(Boolean).forEach(onSaved)
       failedCount += results.filter((result) => !result).length
     }
+    transactions.forEach((transaction) => savingIds.delete(transaction.id))
     if (failedCount) UIUtils.showToastError(useNuxtApp().$i18n.t('todo_page.some_failed', { count: failedCount }))
   }
 
