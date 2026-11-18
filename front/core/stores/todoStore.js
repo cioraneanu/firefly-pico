@@ -21,6 +21,7 @@ export const useTodoStore = defineStore('todo', () => {
   const todoList = ref([])
   const doneList = ref([])
   const isLoading = ref(false)
+  const isError = ref(false)
 
   const reviveDates = (bag) => ({ ...bag, dateStart: bag.dateStart && new Date(bag.dateStart), dateEnd: bag.dateEnd && new Date(bag.dateEnd) })
   const filters = useLocalStorage('todoInboxFilters', {}, { serializer: { read: (value) => reviveDates(JSON.parse(value)), write: JSON.stringify } })
@@ -62,17 +63,24 @@ export const useTodoStore = defineStore('todo', () => {
     }
     isFetched = true
     isLoading.value = true
+    isError.value = false
     const query = getQuery()
+    // A failed page (e.g. a timeout on a large database) has no data: keep the current list, the page suggests narrowing the filters
     const list = await new TransactionRepository().getAllWithMerge({
       filters: [{ field: 'query', value: query }],
-      getAll: (params) => new TransactionRepository().searchTransaction({ ...params, showLoading: false }),
+      getAll: async (params) => {
+        const body = await new TransactionRepository().searchTransaction({ ...params, showLoading: false })
+        isError.value ||= !body.data
+        return body
+      },
     })
+    isLoading.value = false
+    if (isError.value) return
     todoList.value = list.map(fromApi)
     doneList.value = without(
       doneList.value,
       todoList.value.map((item) => item.id),
     )
-    isLoading.value = false
     if (query !== getQuery()) return fetchTodo()
   }
 
@@ -139,6 +147,7 @@ export const useTodoStore = defineStore('todo', () => {
     visibleTodoList,
     visibleDoneList,
     isLoading,
+    isError,
     totalCount,
     filters,
     activeFilters,

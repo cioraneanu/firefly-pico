@@ -61,6 +61,15 @@
       </div>
     </section>
 
+    <section v-else-if="todoStore.isError && !list.length" class="rounded-xl bg-card ring-1 ring-fg/10">
+      <d-empty :icon="IconAlertTriangle" :title="$t('todo_page.load_failed')" :text="$t('todo_page.load_failed_hint')">
+        <div class="flex gap-2">
+          <d-button size="sm" :icon="IconFilter" @click="isFiltersOpen = true">{{ $t('desktop.filters') }}</d-button>
+          <d-button size="sm" variant="ghost" :icon="IconRefresh" @click="todoStore.fetchTodo">{{ $t('todo_page.retry') }}</d-button>
+        </div>
+      </d-empty>
+    </section>
+
     <section v-else-if="list.length || (todoStore.activeFilters.length && !isDoneView)" class="rounded-xl bg-card ring-1 ring-fg/10">
       <d-empty :icon="IconSearchOff" :title="$t('general.list_no_results')" :text="$t('todo_page.no_match')">
         <d-button size="sm" @click="clearSearchAndFilters">{{ $t('general.clear_filters') }}</d-button>
@@ -104,7 +113,7 @@
 
 <script setup>
 import { get } from 'lodash-es'
-import { IconArrowBackUp, IconChecks, IconFilter, IconHistory, IconListCheck, IconRefresh, IconSearch, IconSearchOff, IconSparkles, IconTag } from '@tabler/icons-vue'
+import { IconAlertTriangle, IconArrowBackUp, IconChecks, IconFilter, IconHistory, IconListCheck, IconRefresh, IconSearch, IconSearchOff, IconSparkles, IconTag } from '@tabler/icons-vue'
 import RouteConstants from '~/core/constants/RouteConstants'
 import Account from '~/core/models/Account'
 import Tag from '~/core/models/Tag'

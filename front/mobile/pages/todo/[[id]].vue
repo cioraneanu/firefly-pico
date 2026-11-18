@@ -86,6 +86,16 @@
           </div>
         </div>
 
+        <div v-else-if="todoStore.isError" class="mx-card">
+          <div class="mx-empty">
+            <span class="ic"><app-icon :icon="IconAlertTriangle" :size="20" :stroke="2" /></span>
+            <b>{{ $t('todo_page.load_failed') }}</b>
+            <span>{{ $t('todo_page.load_failed_hint') }}</span>
+            <button type="button" class="mx-btn out sm" @click="transactionFiltersRef.show()">{{ $t('filters.transaction_filters') }}</button>
+            <button type="button" class="mx-btn ghost sm" @click="onRefresh">{{ $t('todo_page.retry') }}</button>
+          </div>
+        </div>
+
         <empty-list v-else-if="todoStore.activeFilters.length > 0 && !todoStore.isLoading" filtered>
           <template #action>
             <button type="button" class="mx-btn out" @click="clearFilters">
@@ -119,6 +129,7 @@
 import {
   IconAdjustmentsHorizontal,
   IconAdjustmentsOff,
+  IconAlertTriangle,
   IconArrowBackUp,
   IconChecks,
   IconChevronsDown,

@@ -54,7 +54,7 @@ export function useDashboardLinks() {
     byTag: (tag, type) => transactions([tag ? `tag_id=${tag.id}` : 'without_tag=true', ...period(), typeParam(type)]),
     byCategory: (category, type) => transactions([category ? `category_id=${category.id}` : 'without_category=true', ...period(), typeParam(type)]),
     savings: () => `${RouteConstants.ROUTE_TRANSACTION_LIST}?${TransactionFilterUtils.filters.id.toUrl(dashboardStore.transactionsListSavings.map((item) => item.id).join(','))}`,
-    todo: () => tagStore.tagTodo && `${RouteConstants.ROUTE_TRANSACTION_LIST}?tag_id=${tagStore.tagTodo.id}`,
+    todo: () => tagStore.tagTodo && RouteConstants.ROUTE_TODO,
   }
 }
 
