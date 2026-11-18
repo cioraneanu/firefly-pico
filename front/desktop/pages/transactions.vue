@@ -1,7 +1,8 @@
 <template>
   <d-page :title="$t('toolbar.transactions')" :description="`${listTotalCount} ${$t('items')}`">
     <template #actions>
-      <d-button :icon="isEditing ? IconCheck : IconPencil" :aria-pressed="isEditing" :class="isEditing && 'bg-soft'" @click="isEditing = !isEditing">
+      <!-- Inline edit is hidden while it is being playtested; flip v-if to bring the button back -->
+      <d-button v-if="false" :icon="isEditing ? IconCheck : IconPencil" :aria-pressed="isEditing" :class="isEditing && 'bg-soft'" @click="isEditing = !isEditing">
         {{ $t(isEditing ? 'desktop.done_editing' : 'desktop.edit_inline') }}
       </d-button>
       <d-button :icon="IconSum" :aria-pressed="showSearchTotal" :class="showSearchTotal && 'bg-soft'" @click="onToggleSearchTotal">{{ $t('filters.compute_total') }}</d-button>

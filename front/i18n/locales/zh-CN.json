@@ -222,6 +222,8 @@
       "demo_start": "使用示例数据试用",
       "demo_exit": "退出演示模式",
       "demo_info": "使用仅保存在此设备上的示例数据体验应用，无需服务器。退出后将删除示例数据并重置应用。",
+      "disconnect": "断开连接",
+      "disconnect_confirm": "这将删除访问令牌以及此设备上保存的所有数据和设置，然后重置应用。您的 Firefly III 数据不受影响。",
       "no_token": "尚未设置访问令牌。请在设置中添加一个，或试用演示模式。"
     },
     "ui_entry": "用户界面",
@@ -652,7 +654,10 @@
     "list_empty_subtitle": "使用右上角的按钮添加一些条目。",
     "list_no_results": "没有匹配的结果",
     "list_no_results_subtitle": "搜索和筛选条件隐藏了所有内容。",
-    "clear_filters": "清除筛选"
+    "clear_filters": "清除筛选",
+    "page_not_found": "页面未找到",
+    "page_not_found_subtitle": "{path} 处没有内容。",
+    "go_to_dashboard": "前往仪表板"
   },
   "cancel": "取消",
   "close": "关闭",

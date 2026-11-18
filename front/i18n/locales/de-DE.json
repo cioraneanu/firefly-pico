@@ -222,6 +222,8 @@
       "demo_start": "Mit Beispieldaten testen",
       "demo_exit": "Demomodus beenden",
       "demo_info": "Entdecke die App mit Beispieldaten, die nur auf diesem Gerät gespeichert sind, ganz ohne Server. Beim Beenden werden die Beispieldaten gelöscht und die App zurückgesetzt.",
+      "disconnect": "Verbindung trennen",
+      "disconnect_confirm": "Entfernt das Zugriffstoken sowie alle auf diesem Gerät gespeicherten Daten und Einstellungen und setzt die App zurück. Deine Firefly III-Daten bleiben unverändert.",
       "no_token": "Noch kein Zugriffstoken. Füge eines hinzu oder teste den Demo-Modus in der Einrichtung."
     },
     "ui_entry": "Nutzer Interface",
@@ -694,7 +696,10 @@
     "list_empty_subtitle": "Füge einige Einträge mit dem Button oben rechts hinzu.",
     "list_no_results": "Nichts gefunden",
     "list_no_results_subtitle": "Suche und Filter blenden hier alles aus.",
-    "clear_filters": "Filter zurücksetzen"
+    "clear_filters": "Filter zurücksetzen",
+    "page_not_found": "Seite nicht gefunden",
+    "page_not_found_subtitle": "Unter {path} gibt es nichts.",
+    "go_to_dashboard": "Zum Dashboard"
   },
   "cancel": "Abbrechen",
   "close": "Schließen",

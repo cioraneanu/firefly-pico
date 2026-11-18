@@ -222,6 +222,8 @@
       "demo_start": "Probar con datos de ejemplo",
       "demo_exit": "Salir del modo demo",
       "demo_info": "Explora la app con datos de ejemplo guardados solo en este dispositivo, sin servidor. Al salir, los datos de ejemplo se borran y la app se restablece.",
+      "disconnect": "Desconectar",
+      "disconnect_confirm": "Elimina el token de acceso y todos los datos y ajustes guardados en este dispositivo, y luego restablece la app. Tus datos de Firefly III no se modifican.",
       "no_token": "Aún no hay token de acceso. Agrega uno o prueba el modo demo en Configuración."
     },
     "ui_entry": "Interfaz de usuario",
@@ -694,7 +696,10 @@
     "list_empty_subtitle": "Agregue algunas entradas con el botón superior derecho.",
     "list_no_results": "Nada coincide",
     "list_no_results_subtitle": "Tu búsqueda y filtros ocultan todo aquí.",
-    "clear_filters": "Limpiar filtros"
+    "clear_filters": "Limpiar filtros",
+    "page_not_found": "Página no encontrada",
+    "page_not_found_subtitle": "No hay nada en {path}.",
+    "go_to_dashboard": "Ir al panel"
   },
   "cancel": "Cancelar",
   "close": "Cerrar",

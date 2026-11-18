@@ -222,6 +222,8 @@
       "demo_start": "Wypróbuj z przykładowymi danymi",
       "demo_exit": "Wyjdź z trybu demo",
       "demo_info": "Poznaj aplikację z przykładowymi danymi zapisanymi tylko na tym urządzeniu, bez serwera. Wyjście usuwa przykładowe dane i resetuje aplikację.",
+      "disconnect": "Rozłącz",
+      "disconnect_confirm": "Usuwa token dostępu oraz wszystkie dane i ustawienia zapisane na tym urządzeniu, a następnie resetuje aplikację. Twoje dane w Firefly III pozostają bez zmian.",
       "no_token": "Brak tokenu dostępu. Dodaj go lub wypróbuj tryb demo w Konfiguracji."
     },
     "ui_entry": "Interfejs użytkownika",
@@ -694,7 +696,10 @@
     "list_empty_subtitle": "Dodaj wpisy za pomocą przycisku w prawym górnym rogu.",
     "list_no_results": "Brak dopasowań",
     "list_no_results_subtitle": "Wyszukiwanie i filtry ukrywają wszystko.",
-    "clear_filters": "Wyczyść filtry"
+    "clear_filters": "Wyczyść filtry",
+    "page_not_found": "Nie znaleziono strony",
+    "page_not_found_subtitle": "Pod adresem {path} nic nie ma.",
+    "go_to_dashboard": "Przejdź do pulpitu"
   },
   "cancel": "Anuluj",
   "close": "Zamknij",

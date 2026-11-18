@@ -222,6 +222,8 @@
       "demo_start": "Încearcă cu date de exemplu",
       "demo_exit": "Ieși din modul demo",
       "demo_info": "Explorează aplicația cu date de exemplu păstrate doar pe acest dispozitiv, fără server. La ieșire, datele de exemplu se șterg și aplicația se resetează.",
+      "disconnect": "Deconectare",
+      "disconnect_confirm": "Se șterg tokenul de acces și toate datele și setările salvate pe acest dispozitiv, apoi aplicația este resetată. Datele din Firefly III nu sunt afectate.",
       "no_token": "Nu ai setat încă un token de acces. Adaugă unul sau încearcă modul demo din Setări."
     },
     "ui_entry": "Interfața utilizatorului",
@@ -694,7 +696,10 @@
     "list_empty_subtitle": "Adaugă câteva intrări folosind butonul din dreapta sus.",
     "list_no_results": "Nimic nu se potrivește",
     "list_no_results_subtitle": "Căutarea și filtrele ascund tot ce e aici.",
-    "clear_filters": "Șterge filtrele"
+    "clear_filters": "Șterge filtrele",
+    "page_not_found": "Pagină negăsită",
+    "page_not_found_subtitle": "Nu există nimic la {path}.",
+    "go_to_dashboard": "Mergi la dashboard"
   },
   "cancel": "Anulează",
   "close": "Închide",

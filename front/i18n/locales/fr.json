@@ -222,6 +222,8 @@
       "demo_start": "Essayer avec des données d'exemple",
       "demo_exit": "Quitter le mode démo",
       "demo_info": "Découvrez l'application avec des données d'exemple conservées uniquement sur cet appareil, sans serveur. En quittant, les données d'exemple sont supprimées et l'application est réinitialisée.",
+      "disconnect": "Se déconnecter",
+      "disconnect_confirm": "Supprime le jeton d'accès ainsi que toutes les données et tous les réglages enregistrés sur cet appareil, puis réinitialise l'application. Vos données Firefly III ne sont pas touchées.",
       "no_token": "Aucun jeton d'accès pour l'instant. Ajoutez-en un ou essayez le mode démo dans Configuration."
     },
     "ui_entry": "Interfacte Utilisateur",
@@ -694,7 +696,10 @@
     "list_empty_subtitle": "Ajoutez des entrées avec le bouton en haut à droite.",
     "list_no_results": "Aucun résultat",
     "list_no_results_subtitle": "Votre recherche et vos filtres masquent tout ici.",
-    "clear_filters": "Effacer les filtres"
+    "clear_filters": "Effacer les filtres",
+    "page_not_found": "Page introuvable",
+    "page_not_found_subtitle": "Il n’y a rien à {path}.",
+    "go_to_dashboard": "Aller au tableau de bord"
   },
   "cancel": "Annuler",
   "close": "Fermer",

@@ -70,6 +70,11 @@
             </div>
           </div>
         </app-card>
+
+        <button v-if="!appStore.isDemoMode && appStore.hasAuthToken" type="button" class="mx-btn dng mx-btn-block" @click="disconnect">
+          <app-icon :icon="IconLogout" :size="16" :stroke="2" />
+          <span>{{ $t('settings.setup.disconnect') }}</span>
+        </button>
       </main>
 
       <app-button-form-save />
@@ -143,7 +148,7 @@ const picoBackendHeaders = ref([])
 const syncProfileInDB = ref(true)
 const daysBetweenFullSync = ref(4)
 const showHeadersSheet = ref(false)
-const { testConnection, isTesting } = useConnectionTest()
+const { testConnection, isTesting, disconnect } = useConnectionTest()
 
 const headersCount = computed(() => picoBackendHeaders.value.filter(({ key }) => key?.trim()).length)
 const accountsCount = computed(() => accountStore.accountList.length)

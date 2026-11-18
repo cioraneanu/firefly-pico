@@ -31,6 +31,7 @@
       <d-field :label="$t('settings.setup.days_between_sync')" :rules="[rule.required()]" :value="connection.daysBetweenFullSync">
         <d-input v-model="connection.daysBetweenFullSync" type="number" min="0" class="w-30" />
       </d-field>
+      <d-button v-if="appStore.hasAuthToken" variant="danger" :icon="IconLogout" class="self-start" @click="disconnect">{{ $t('settings.setup.disconnect') }}</d-button>
     </d-settings-group>
 
     <d-settings-group :title="$t('settings.setup.enabled_resources')">
@@ -88,7 +89,7 @@ const appStore = useAppStore()
 const isTokenVisible = ref(false)
 const isSyncing = ref(false)
 const isVerifying = ref(false)
-const { testConnection, isTesting } = useConnectionTest()
+const { testConnection, isTesting, disconnect } = useConnectionTest()
 
 const resources = [
   { path: 'budgetsEnabled', t: 'settings.setup.enable_budgets' },

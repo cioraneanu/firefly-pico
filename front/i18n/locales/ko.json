@@ -222,6 +222,8 @@
       "demo_start": "샘플 데이터로 체험하기",
       "demo_exit": "데모 모드 종료",
       "demo_info": "서버 없이 이 기기에만 저장되는 샘플 데이터로 앱을 둘러보세요. 종료하면 샘플 데이터가 삭제되고 앱이 초기화됩니다.",
+      "disconnect": "연결 해제",
+      "disconnect_confirm": "액세스 토큰과 이 기기에 저장된 모든 데이터 및 설정을 삭제한 뒤 앱을 초기화합니다. Firefly III 데이터는 영향을 받지 않습니다.",
       "no_token": "아직 액세스 토큰이 없습니다. 설정에서 토큰을 추가하거나 데모 모드를 사용해 보세요."
     },
     "ui_entry": "사용자 인터페이스",
@@ -694,7 +696,10 @@
     "list_empty_subtitle": "오른쪽 상단 버튼으로 항목을 추가하세요.",
     "list_no_results": "일치하는 항목 없음",
     "list_no_results_subtitle": "검색어와 필터로 모든 항목이 숨겨졌습니다.",
-    "clear_filters": "필터 지우기"
+    "clear_filters": "필터 지우기",
+    "page_not_found": "페이지를 찾을 수 없음",
+    "page_not_found_subtitle": "{path}에는 아무것도 없습니다.",
+    "go_to_dashboard": "대시보드로 이동"
   },
   "cancel": "취소",
   "close": "닫기",

@@ -1,5 +1,6 @@
 import { get } from 'lodash-es'
 import UserRepository from '~/core/repository/UserRepository'
+import { exitDemo } from '~/core/demo/DemoBackend.js'
 
 export function useConnectionTest() {
   const { t } = useI18n()
@@ -15,5 +16,8 @@ export function useConnectionTest() {
     UIUtils.showToastSuccess(t('settings.setup.connection_successful'))
   }
 
-  return { testConnection, isTesting }
+  // Back to a fresh install (same reset as leaving demo mode), so the token can be replaced or demo mode tried
+  const disconnect = async () => (await UIUtils.showDeleteConfirmation(t('settings.setup.disconnect'), t('settings.setup.disconnect_confirm'))) && exitDemo()
+
+  return { testConnection, isTesting, disconnect }
 }
