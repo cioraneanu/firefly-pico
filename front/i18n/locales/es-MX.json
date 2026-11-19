@@ -231,7 +231,6 @@
       "theme": "Tema",
       "title": "Ajustes de interfaz",
       "show_animations": "Mostrar animaciones",
-      "is_profile_float_visible": "Mostrar el botón flotante de perfil en el panel",
       "reset_forms_after_creation": "Reiniciar formularios después de crear",
       "undo_delete": "Eliminar al instante con Deshacer (sin confirmación)",
       "transaction_list": "Lista de transacciones",

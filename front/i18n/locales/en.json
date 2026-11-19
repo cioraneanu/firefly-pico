@@ -231,7 +231,6 @@
       "theme": "Theme",
       "title": "UI settings",
       "show_animations": "Show animations",
-      "is_profile_float_visible": "Show profile floating button on dashboard",
       "reset_forms_after_creation": "Reset forms after creation",
       "undo_delete": "Delete at once with Undo (no confirmation)",
       "transaction_list": "Transaction list",

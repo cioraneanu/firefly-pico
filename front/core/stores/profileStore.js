@@ -82,7 +82,6 @@ export const useProfileStore = defineStore('profile', () => {
   const recurringTransactionsEnabled = useLocalStorage('recurringTransactionsEnabled', true)
 
   const dashboard = reactive({
-    isProfileFloatVisible: useLocalStorage('isProfileFloatVisible', true),
     firstDayOfMonth: useLocalStorage('firstDayOfMonth', 1),
     showAccountAmounts: useLocalStorage('showAccountAmounts', true),
     showDecimal: useLocalStorage('showDecimals', false),

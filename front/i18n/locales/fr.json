@@ -231,7 +231,6 @@
       "theme": "Theme",
       "title": "Paramètres de l'interface utilisateur",
       "show_animations": "Voir les animations",
-      "is_profile_float_visible": "Afficher le bouton flottant du profil sur le tableau de bord",
       "reset_forms_after_creation": "Réinitialiser les formulaires après la création",
       "undo_delete": "Supprimer tout de suite avec Annuler (sans confirmation)",
       "transaction_list": "Transactions",

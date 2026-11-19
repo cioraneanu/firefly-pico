@@ -231,7 +231,6 @@
       "theme": "Motyw",
       "title": "Ustawienia UI",
       "show_animations": "Pokaż animacje",
-      "is_profile_float_visible": "Pokaż pływający przycisk profilu na pulpicie",
       "reset_forms_after_creation": "Resetuj formularze po utworzeniu",
       "undo_delete": "Usuwaj od razu z opcją Cofnij (bez potwierdzenia)",
       "transaction_list": "Lista transakcji",

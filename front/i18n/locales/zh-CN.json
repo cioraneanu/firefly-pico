@@ -231,7 +231,6 @@
       "theme": "主题",
       "title": "UI 设置",
       "show_animations": "显示动画",
-      "is_profile_float_visible": "在仪表板上显示个人资料悬浮按钮",
       "reset_forms_after_creation": "创建后重置表单",
       "undo_delete": "立即删除并可撤销（无需确认）",
       "transaction_list": "交易列表",

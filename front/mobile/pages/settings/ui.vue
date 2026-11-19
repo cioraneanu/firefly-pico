@@ -41,8 +41,6 @@
           <app-boolean v-model="resetFormOnCreate" :label="$t('settings.ui.reset_forms_after_creation')" />
           <div class="mx-hr" />
           <app-boolean v-model="undoDelete" :label="$t('settings.ui.undo_delete')" />
-          <div class="mx-hr" />
-          <app-boolean v-model="isProfileFloatVisible" :label="$t('settings.ui.is_profile_float_visible')" />
         </app-card>
       </main>
 
@@ -79,7 +77,6 @@ const language = ref(null)
 const showAnimations = ref(true)
 const resetFormOnCreate = ref(false)
 const undoDelete = ref(true)
-const isProfileFloatVisible = ref(true)
 
 const syncedSettings = [
   { store: profileStore, path: 'darkTheme', ref: darkTheme },
@@ -88,7 +85,6 @@ const syncedSettings = [
   { store: profileStore, path: 'showAnimations', ref: showAnimations },
   { store: profileStore, path: 'resetFormOnCreate', ref: resetFormOnCreate },
   { store: profileStore, path: 'undoDelete', ref: undoDelete },
-  { store: profileStore, path: 'dashboard.isProfileFloatVisible', ref: isProfileFloatVisible },
 ]
 
 watchSettingsStore(syncedSettings)

@@ -231,7 +231,6 @@
       "theme": "테마",
       "title": "UI 설정",
       "show_animations": "애니메이션 표시",
-      "is_profile_float_visible": "대시보드에 프로필 플로팅 버튼 표시",
       "reset_forms_after_creation": "생성 후 양식 초기화",
       "undo_delete": "확인 없이 바로 삭제하고 실행 취소 제공",
       "transaction_list": "거래 목록",

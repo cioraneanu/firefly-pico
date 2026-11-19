@@ -9,7 +9,8 @@ import { useRambleTransactionResolver } from '~/core/composables/useRambleTransa
 const estimateTokens = (text) => Math.ceil(String(text ?? '').length / 4)
 
 const splitSystemPrompt = (content) => {
-  const [base, rest = ''] = String(content ?? '').split(/\n(?=Backend context \(default\):|Frontend context \(higher priority\):)/)
+  const [base, ...contexts] = String(content ?? '').split(/\n(?=Backend context \(default\):|Frontend context \(higher priority\):)/)
+  const rest = contexts.join('\n')
   const serverMatch = rest.match(/Backend context \(default\):\n([\s\S]*?)(?=\n\nFrontend context|$)/)
   const userMatch = rest.match(/Frontend context \(higher priority\):\n([\s\S]*)/)
   return { base, server: serverMatch?.[1] ?? '', user: userMatch?.[1] ?? '' }

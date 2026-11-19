@@ -42,8 +42,9 @@
   <div v-if="isForeignAmountVisible" class="mx-f fx-box" :class="{ bad: !!errorForeign }" :style="attrs.style">
     <div class="mx-l">{{ $t('desktop.foreign_amount') }}<span v-if="isForeignAmountRequired" class="req">*</span></div>
     <div class="mx-in" :class="{ dis: disabled }" @click.self="inputAmountForeign?.focus()">
-      <currency-dropdown v-model="currencyForeign" />
+      <app-icon :icon="IconWorld" :size="16" :stroke="2" />
       <input ref="inputAmountForeign" v-model="amountForeign" type="text" inputmode="decimal" placeholder="0" :disabled="disabled" :aria-label="$t('desktop.foreign_amount')" />
+      <currency-dropdown v-model="currencyForeign" />
     </div>
     <div v-if="errorForeign" class="mx-ferr">{{ errorForeign }}</div>
     <div v-if="isConvertButtonVisible" class="fx-rrow">
@@ -63,7 +64,7 @@
 </template>
 
 <script setup>
-import { IconArrowDown, IconArrowUp, IconCoins } from '@tabler/icons-vue'
+import { IconArrowDown, IconArrowUp, IconCoins, IconWorld } from '@tabler/icons-vue'
 import { evalMath, removeEndOperators, sanitizeAmount } from '~/core/utils/MathUtils'
 import { formatAmount } from '~/core/utils/AmountUtils.js'
 import Currency from '~/core/models/Currency.js'

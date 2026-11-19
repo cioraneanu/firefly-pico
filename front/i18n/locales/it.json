@@ -231,7 +231,6 @@
       "theme": "Tema",
       "title": "Impostazioni UI",
       "show_animations": "Mostra animazioni",
-      "is_profile_float_visible": "Mostra il pulsante flottante del profilo nella dashboard",
       "reset_forms_after_creation": "Reimposta i moduli dopo la creazione",
       "undo_delete": "Elimina subito con Annulla (senza conferma)",
       "transaction_list": "Elenco transazioni",

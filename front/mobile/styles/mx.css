@@ -2848,7 +2848,7 @@ a.mx-bar {
   flex-direction: column;
   align-items: center;
   gap: 4px;
-  max-height: 160px;
+  max-height: 220px;
   padding: 7px 6px 6px 14px;
   border-radius: 12px 0 0 12px;
   background: var(--card);

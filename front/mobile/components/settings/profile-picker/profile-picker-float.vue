@@ -7,24 +7,18 @@
     @pointermove="onDragMove"
     @pointerup="onDragEnd"
     @pointercancel="onDragEnd"
+    @touchend="onTouchEnd"
     @click="onClick"
   >
     <span class="mx-prof-fab__grip" aria-hidden="true"><i v-for="dot in 6" :key="dot" /></span>
-    <button
-      v-if="profileStore.dashboard.isProfileFloatVisible"
-      type="button"
-      class="mx-prof-fab__p"
-      aria-haspopup="dialog"
-      :aria-label="$t('profile_page.title')"
-      @click="onTap(() => (isListVisible = true))"
-    >
+    <button type="button" class="mx-prof-fab__p" aria-haspopup="dialog" :aria-label="$t('profile_page.title')" @click="onTap(() => (isListVisible = true))">
       <span class="av"><app-icon :icon="IconNut" :size="15" :stroke="2" /></span>
       <span v-if="profileStore.shortProfileName" class="nm">{{ profileStore.shortProfileName }}</span>
     </button>
 
     <!-- iOS app only: record a voice ramble natively (keeps going in the background) -->
     <template v-if="isNativeApp">
-      <span v-if="profileStore.dashboard.isProfileFloatVisible" class="mx-prof-fab__sep" />
+      <span class="mx-prof-fab__sep" />
       <button
         type="button"
         class="mx-prof-fab__mic"
@@ -37,17 +31,28 @@
       </button>
       <span v-if="isRecording" class="mx-prof-fab__time">{{ recordingTime }}</span>
     </template>
+
+    <!-- Saved rambles waiting to be turned into transactions -->
+    <template v-if="savedRamblesCount > 0">
+      <span class="mx-prof-fab__sep" />
+      <button type="button" class="mx-prof-fab__p" :aria-label="$t('transaction.assistant_ramble_title')" @click="onTap(() => navigateTo(RouteConstants.ROUTE_RAMBLE))">
+        <span class="mx-prof-fab__mic"><app-icon :icon="IconMessages" :size="16" :stroke="2" /></span>
+        <span class="nm">{{ savedRamblesCount > 99 ? '99+' : savedRamblesCount }}</span>
+      </button>
+    </template>
   </div>
 
   <profile-picker-list v-model:show="isListVisible" />
 </template>
 
 <script setup>
-import { IconCheck, IconMicrophone, IconNut } from '@tabler/icons-vue'
+import { IconCheck, IconMessages, IconMicrophone, IconNut } from '@tabler/icons-vue'
 import { useWindowSize } from '@vueuse/core'
 import { useProfileStore } from '~/core/stores/profileStore.js'
+import RouteConstants from '~/core/constants/RouteConstants'
 
 // Floating tab on the right edge (design: .mx-prof-fab): the profile switcher and, in the iOS app, the voice recorder.
+// Below them, the saved rambles count when there are any (a tap opens the ramble page).
 // Drag it up or down to move it, sideways to tuck it into the edge (a shorter sliver with the dot grip; a tap pulls it back); both are remembered.
 const appStore = useAppStore()
 const profileStore = useProfileStore()
@@ -55,6 +60,14 @@ const { isNativeApp, recording, recordingTime, toggleRecording } = useNativeApp(
 const isListVisible = ref(false)
 const isRecording = computed(() => recording.value.state === 'recording')
 const isHidden = computed(() => !!appStore.profileFloatButtonPosition.hidden)
+
+const route = useRoute()
+const { savedRamblesCount, refreshSavedRambleCount } = useRamble()
+watch(
+  () => [route.path, recording.value.state],
+  () => refreshSavedRambleCount(),
+  { immediate: true },
+)
 
 const { height } = useWindowSize()
 const dragX = ref(null)
@@ -99,6 +112,8 @@ const onDragEnd = () => {
   dragY.value = null
 }
 const onTap = (action) => !start?.axis && action()
+// After a drag, a canceled touchend keeps the browser from clicking whatever is under the finger
+const onTouchEnd = (event) => start?.axis && event.preventDefault()
 // Runs after the buttons' own clicks; a tucked tab only takes clicks here, and a tap pulls it back
 const onClick = () => {
   if (isHidden.value && !start?.axis) {

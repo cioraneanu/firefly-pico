@@ -231,7 +231,6 @@
       "theme": "Theme",
       "title": "UI Einstellungen",
       "show_animations": "Animationen anzeigen",
-      "is_profile_float_visible": "Profil-Button auf Dashboard anzeigen",
       "reset_forms_after_creation": "Formulare nach Erzeugung zurücksetzten",
       "undo_delete": "Sofort löschen mit Rückgängig (ohne Bestätigung)",
       "transaction_list": "Transaktions-Liste",
