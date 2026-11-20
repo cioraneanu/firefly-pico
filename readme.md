@@ -45,11 +45,11 @@ on the go, all while maintaining completely private control over your own data.
 Apart from the sleek interface, it augments **Firefly III** with custom entity icons,
 support for sub-tags, and "templates" for auto-filling the transaction form.  
 
-Last but not least, it also comes with a smart "assistant" which makes recording expenses a breeze 🎉:
+Last but not least, it also comes with a smart "assistant" which makes recording expenses a breeze 🎉 (no LLM just fast pure type matching):
 
-<div style="text-align:center">
-  <img src="docs/images/assistant.gif" width="250">
-</div>
+<p align="center">
+  <img src="docs/images/assistant.gif" width="800" alt="Pico assistant turning “groc 23” into a transaction">
+</p>
 
 
 <div style="text-align:center">
@@ -60,7 +60,10 @@ Check out the **[full documentation](https://cioraneanu.github.io/firefly-pico-d
 ## 🚀 Features
 - ✅ Beautiful clean minimalistic UI :fire: subtle animations and dark-theme support :first_quarter_moon_with_face: 
 - ✅ Optimized for mobile, with PWA support for a native feel :iphone:
+- ✅ Optimized for desktop to take advantage of the extra space :desktop:️
 - ✅ The Assistant makes recording an expense feel like magic :sparkles:
+- ✅ Configure a LLM of your choice and use natural language to track your expenses. Type it or speak it, your choice 🖥️
+- ✅ Mark transactions as "Todo" for later examination and see them in your "TODO Inbox" 📥
 - ✅ Expand Firefly data with icons for all resources :art:
 - ✅ Expand Firefly "tags" with the option of subtags for better granularity
 - ✅ Add "templates" to make auto-completing fields a breeze :loudspeaker:
