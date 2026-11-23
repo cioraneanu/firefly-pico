@@ -25,6 +25,9 @@ export function useTransactionList() {
   })
 
   const { filters, filtersBackendList, filtersDisplayList, activeFilters, activeFiltersCount } = useListFilters({ filterDefinitions })
+  // Read during setup, so the list's first page (asked on mount) already uses them
+  const urlFilters = getFiltersFromURL(filterDefinitions)
+  filters.value = filterBagHasValues(urlFilters) ? urlFilters : TransactionFilterUtils.getPredefinedFilters()
 
   const showSearchTotal = ref(false)
   const searchTotal = ref(null)
@@ -84,11 +87,6 @@ export function useTransactionList() {
       searchTotalCurrency.value = currencyStore.currenciesList.find((currency) => Currency.getCode(currency) === dominantTotal?.currency_code) ?? currencyStore.defaultCurrency
     }
   }
-
-  onMounted(() => {
-    filters.value = getFiltersFromURL(filterDefinitions)
-    if (!filterBagHasValues(filters.value)) filters.value = TransactionFilterUtils.getPredefinedFilters()
-  })
 
   return {
     ...listState,

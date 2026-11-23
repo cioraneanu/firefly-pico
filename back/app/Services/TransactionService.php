@@ -14,7 +14,7 @@ class TransactionService
 
     /**
      * Sum the transactions matched by a Firefly search query, split per currency.
-     * Withdrawals count as money spent (+), deposits as refunds (-), transfers are ignored.
+     * The net result: deposits count as income (+), withdrawals as spent (-), transfers are ignored.
      */
     public function computeSearchTotal($query)
     {
@@ -23,7 +23,8 @@ class TransactionService
         [$totals, $transactionsCount] = $this->sumTransactions($searchUrl, ['query' => $query], null, self::COMPUTE_TOTAL_MAX_TRANSACTIONS);
 
         $totals = array_map(function ($total) {
-            $total['amount'] = round($total['amount'], 2);
+            // sumTransactions counts spending as +, flipped here (+ 0 turns -0.0 into 0)
+            $total['amount'] = round(-$total['amount'], 2) + 0;
             return $total;
         }, array_values($totals));
 

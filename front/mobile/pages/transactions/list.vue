@@ -129,7 +129,7 @@ watch(
 )
 watchDebounced(search, (value) => (filters.value.description ?? '') !== value && (filters.value = { ...filters.value, description: value || null }), { debounce: 500 })
 
-// Rows grouped by day, each with its expenses total (same as the desktop list)
+// Rows grouped by day, each with its net total (same as the desktop list)
 const groups = useTransactionGroups(list)
 
 const transactionFiltersRef = useTemplateRef('transactionFiltersRef')
