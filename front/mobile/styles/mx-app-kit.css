@@ -66,3 +66,81 @@
 .mx-cdd.borderless > .mx-btn svg:last-child {
   color: var(--muted-foreground);
 }
+
+/* Page transition "depth zoom" (mobile-app.vue): the old page zooms past the camera and blurs away while the new one comes forward from 90%.
+   History back (.mx-back-*) runs the depth axis the other way. */
+.mx-app :is(.mx-page-enter-active, .mx-back-enter-active) {
+  transition:
+    transform 0.38s cubic-bezier(0.2, 0, 0, 1),
+    opacity 0.3s 0.08s cubic-bezier(0, 0, 0.2, 1),
+    filter 0.23s 0.08s cubic-bezier(0, 0, 0.2, 1);
+}
+.mx-app :is(.mx-page-leave-active, .mx-back-leave-active) {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  transition:
+    transform 0.38s cubic-bezier(0.2, 0, 0, 1),
+    opacity 0.15s cubic-bezier(0.4, 0, 1, 1),
+    filter 0.15s linear;
+}
+.mx-app :is(.mx-page-enter-from, .mx-page-leave-to, .mx-back-enter-from, .mx-back-leave-to) {
+  opacity: 0;
+  filter: blur(6px);
+}
+.mx-app :is(.mx-page-enter-from, .mx-back-leave-to) {
+  transform: scale(0.9);
+}
+.mx-app :is(.mx-page-leave-to, .mx-back-enter-from) {
+  transform: scale(1.08);
+}
+
+/* Save button (app-button-form-save): while the form saves, the label cross-fades to a spinner in the same cell, so the width never changes */
+.mx-save .mx-save__btn {
+  display: grid;
+  place-items: center;
+}
+.mx-save__btn > * {
+  grid-area: 1 / 1;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: opacity 0.12s;
+}
+.mx-save__btn > .mx-spin {
+  opacity: 0;
+  border-color: color-mix(in oklch, currentColor 25%, transparent);
+  border-top-color: currentColor;
+}
+.mx-save__btn.busy > :first-child {
+  opacity: 0;
+}
+.mx-save__btn.busy > .mx-spin {
+  opacity: 1;
+  transition-delay: 0.1s;
+}
+
+/* Saved: a green line opens from the center along the header's bottom edge, then fades (UIUtils.showSaveSuccess) */
+.mx-top {
+  position: relative;
+}
+.mx-top__line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--in) 20%, var(--in) 80%, transparent);
+  opacity: 0;
+  transform: scaleX(0);
+  pointer-events: none;
+  transition:
+    opacity 0.3s,
+    transform 0s 0.3s;
+}
+.mx-top__line.on {
+  opacity: 1;
+  transform: scaleX(1);
+  transition: transform 0.52s cubic-bezier(0.32, 0.72, 0, 1);
+}

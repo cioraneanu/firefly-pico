@@ -2,6 +2,8 @@
 // and <app-feedback-host> renders it inside the .mx root.
 const toasts = ref([])
 const confirmState = ref(null)
+// A form saved: the top toolbar flashes its line (.mx-top__line)
+const isSaved = ref(false)
 let seq = 0
 
 export function useMobileFeedback() {
@@ -49,5 +51,10 @@ export function useMobileFeedback() {
     confirmState.value = null
   }
 
-  return { toasts, confirmState, pushToast, askConfirm, answerConfirm }
+  const flashSaved = () => {
+    isSaved.value = true
+    setTimeout(() => (isSaved.value = false), 700)
+  }
+
+  return { toasts, confirmState, isSaved, pushToast, askConfirm, answerConfirm, flashSaved }
 }

@@ -15,7 +15,7 @@ export function useSettingsDraft(paths, { onSaved } = {}) {
     if (!response || ResponseUtils.isSuccess(response)) {
       // onSaved returns false when it failed (and showed its own error)
       if ((await onSaved?.()) !== false) {
-        UIUtils.showToastSuccess(t('settings.settings_saved'))
+        UIUtils.showSaveSuccess(t('settings.settings_saved'))
       }
     }
     isSaving.value = false

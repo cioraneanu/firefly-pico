@@ -1,4 +1,4 @@
-import { animate, stagger, createTimeline, utils, createSpring } from 'animejs'
+import { animate, stagger, createTimeline, utils, cubicBezier } from 'animejs'
 import { useProfileStore } from '~/core/stores/profileStore.js'
 
 const clearAnimationStyle = (animation) => {
@@ -34,23 +34,22 @@ export function animateSwipeList(list) {
   })
 }
 
-export async function animateTransactionForm() {
+// <transition :css="false" @leave="animateCollapse">: a card leaving a .mx-body folds away, so the content below glides up instead of jumping
+export function animateCollapse(element, done) {
   if (!useProfileStore().showAnimations) {
-    return
+    return done()
   }
 
-  await nextTick()
-
-  const targets = '.mx-body > .mx-card, .mx-body > .mx-types'
-
-  animate(targets, {
-    translateY: [-100, 0],
-    ease: 'outElastic(1, .5)',
-    opacity: [0, 1],
-    duration: 1000,
-    onComplete: (animation) => {
-      clearAnimationStyle(animation) // Leaving "transform: translateY(0px);" after the animation is finished on a card breaks the absolutely positioned sheets inside it
-    },
+  element.style.overflow = 'hidden'
+  animate(element, {
+    height: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    marginBottom: -12, // the .mx-body gap
+    opacity: { to: 0, duration: 140 },
+    duration: 300,
+    ease: cubicBezier(0.32, 0.72, 0, 1),
+    onComplete: done,
   })
 }
 
@@ -103,22 +102,6 @@ export async function animateBottomToolbarAddButton() {
     duration: 150,
     delay: 0,
     ease: 'outSine',
-  })
-}
-
-export async function animateSaveButton() {
-  if (!useProfileStore().showAnimations) {
-    return
-  }
-
-  await nextTick()
-
-  animate('.mx-save .mx-btn', {
-    opacity: [0, 1],
-    scale: [0.7, 1],
-    delay: 200,
-    ease: 'outElastic(1, .5)',
-    duration: 700,
   })
 }
 

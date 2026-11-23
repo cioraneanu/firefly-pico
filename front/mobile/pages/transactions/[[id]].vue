@@ -9,7 +9,9 @@
     <app-form v-if="isReady" :name="formName" @submit="saveItem" @failed="onValidationError">
       <main class="mx-body" :class="{ 'has-save': !isSplitTransaction }">
         <!-- Enter in the assistant submits the form (implicit submission), as the old @keyup.enter did -->
-        <transaction-assistant v-if="!itemId && !isCloning" v-model="assistantText" @change="onAssistant" />
+        <transition :css="false" @leave="animateCollapse">
+          <transaction-assistant v-if="!itemId && !isCloning" v-model="assistantText" @change="onAssistant" />
+        </transition>
 
         <transaction-form ref="transactionFormRef" v-model="item">
           <template #actions>
@@ -36,7 +38,7 @@
 import RouteConstants from '~/core/constants/RouteConstants'
 import TablerIconConstants from '~/core/constants/TablerIconConstants'
 import { useToolbar } from '~/mobile/composables/useToolbar'
-import { animateTransactionForm } from '~/core/utils/AnimationUtils.js'
+import { animateCollapse } from '~/core/utils/AnimationUtils.js'
 import TransactionForm from '~/mobile/components/transaction/TransactionForm.vue'
 
 const assistantText = ref('')
@@ -55,7 +57,4 @@ toolbar.init({
   title,
   backRoute: RouteConstants.ROUTE_TRANSACTION_LIST,
 })
-
-onMounted(() => isReady.value && animateTransactionForm())
-watch(isReady, animateTransactionForm)
 </script>

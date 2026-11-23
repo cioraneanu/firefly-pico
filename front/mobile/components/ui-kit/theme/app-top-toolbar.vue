@@ -12,14 +12,17 @@
     <div class="mx-top__a">
       <slot name="right" />
     </div>
+    <i class="mx-top__line" :class="{ on: isSaved }" />
   </header>
 </template>
 
 <script setup>
 import { IconArrowLeft } from '@tabler/icons-vue'
 import { useToolbar } from '~/mobile/composables/useToolbar'
+import { useMobileFeedback } from '~/mobile/composables/useMobileFeedback'
 
 const { title, subtitle, onBack, backRoute } = useToolbar()
+const { isSaved } = useMobileFeedback()
 
 const hasSubtitle = computed(() => !isStringEmpty(subtitle.value))
 </script>

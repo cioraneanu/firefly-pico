@@ -195,7 +195,7 @@ const onSave = async () => {
 
   await appStore.fetchInfo()
   await appStore.syncEverything()
-  UIUtils.showToastSuccess(t('settings.settings_saved'))
+  UIUtils.showSaveSuccess(t('settings.settings_saved'))
 }
 
 const toolbar = useToolbar()

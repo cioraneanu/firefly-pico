@@ -10,6 +10,9 @@ export const useFormEvent = {
   postDelete: 'onPostDelete',
 }
 
+// Set while a form moves to the URL of the item it just created, so the mobile app keeps the page mounted (mobile-app.vue)
+export const formNavigation = { keepPage: false }
+
 export function useForm(props) {
   // resetOnCreate (ref): whether creating empties the form for the next one; defaults to profileStore.resetFormOnCreate
   const { routeList, routeForm, shouldFetchOnMount = true, resetOnCreate = null } = props
@@ -80,16 +83,19 @@ export function useForm(props) {
     isLoading.value = false
 
     if (ResponseUtils.isSuccess(response)) {
-      UIUtils.showToastSuccess(t('success'))
+      UIUtils.showSaveSuccess(t('success'))
       onEvent?.(useFormEvent.postSave, response)
 
       // Should reset form
       if (!itemId.value && (toValue(resetOnCreate) ?? profileStore.resetFormOnCreate)) {
         item.value = model.getEmpty()
         resetFields ? resetFields() : null
-      } else {
-        let responseId = get(response, 'data.data.id')
-        routeForm ? await navigateTo(`${routeForm}/${responseId}`) : null
+      } else if (!itemId.value && routeForm) {
+        // Show the created item in place and only change the URL: remounting the page would flicker
+        const saved = get(response, 'data.data')
+        item.value = transformer ? transformer.transformFromApi(saved) : saved
+        formNavigation.keepPage = true
+        await navigateTo(`${routeForm}/${saved.id}`)
       }
     }
 

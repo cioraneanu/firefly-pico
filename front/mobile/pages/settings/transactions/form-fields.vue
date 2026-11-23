@@ -46,7 +46,7 @@ const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   const response = await profileStore.writeProfile()
   if (ResponseUtils.isSuccess(response)) {
-    UIUtils.showToastSuccess(t('settings.settings_saved'))
+    UIUtils.showSaveSuccess(t('settings.settings_saved'))
   }
   init()
 }

@@ -371,7 +371,7 @@ const onSave = async () => {
   saveSettingsToStore(syncedSettings)
   const [response, isConnectionSaved] = await Promise.all([profileStore.writeProfile(), save()])
   if (ResponseUtils.isSuccess(response) && isConnectionSaved) {
-    UIUtils.showToastSuccess(t('settings.settings_saved'))
+    UIUtils.showSaveSuccess(t('settings.settings_saved'))
   }
 }
 

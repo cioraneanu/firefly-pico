@@ -6,15 +6,18 @@
 
 <script setup>
 // The form element of the kit: fields register through useFormField(); submit validates them in order
-// and emits `submit`, or `failed` with { errors: [{ name, message }] } (the shape useForm expects).
-defineProps({
+// and calls @submit (awaited: isSubmitting is true meanwhile), or emits `failed` with { errors: [{ name, message }] } (the shape useForm expects).
+const props = defineProps({
   name: { type: String, default: null },
+  onSubmit: { type: Function, default: null },
 })
 
-const emit = defineEmits(['submit', 'failed'])
+const emit = defineEmits(['failed'])
 
 const fields = []
+const isSubmitting = ref(false)
 provide('appForm', {
+  isSubmitting,
   register: (field) => {
     fields.push(field)
     return () => fields.splice(fields.indexOf(field), 1)
@@ -33,12 +36,15 @@ const validate = async () => {
 }
 
 const submit = async () => {
+  if (isSubmitting.value) return
   const errors = await validate()
   if (errors.length) {
     emit('failed', { errors })
     return
   }
-  emit('submit')
+  isSubmitting.value = true
+  await props.onSubmit?.()
+  isSubmitting.value = false
 }
 
 defineExpose({ validate, submit })
