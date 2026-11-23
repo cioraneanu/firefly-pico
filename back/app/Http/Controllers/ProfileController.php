@@ -61,12 +61,11 @@ class ProfileController extends BaseController
     {
         BaseAuthorization::checkUser();
 
-        Profile::where('id', $request->id)->update([
-            'auth_token_hash' => getAuthTokenHash(),
+        $profile = Profile::where('auth_token_hash', getAuthTokenHash())->findOrFail($request->id);
+        $profile->update([
             'name' => $request->name,
             'settings' => $request->settings,
         ]);
-        $profile = Profile::find($request->id);
         return $this->respondSuccessWithData(['data' => $profile]);
     }
 
