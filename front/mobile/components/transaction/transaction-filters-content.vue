@@ -24,6 +24,11 @@
       <app-checkbox v-model="withoutBudget" :label="$t('transaction_list_page.without_budget')" />
     </div>
 
+    <div v-if="profileStore.subscriptionsEnabled" class="flex flex-col gap-1">
+      <subscription-select v-model="subscription" :disabled="!!withoutSubscription" />
+      <app-checkbox v-model="withoutSubscription" :label="$t('transaction_list_page.without_subscription')" />
+    </div>
+
     <template v-if="showDate">
       <div class="mx-2">
         <app-date v-model="dateStart" :label="$t('date_after')" />
@@ -56,22 +61,26 @@ defineProps({
 })
 
 const { t } = useI18n()
+const profileStore = useProfileStore()
 
-const { description, dateStart, dateEnd, amountStart, amountEnd, category, withoutCategory, tag, withoutTag, account, transactionType, withoutBudget, budget } = generateChildren(modelValue, [
-  'description',
-  'dateStart',
-  'dateEnd',
-  'amountStart',
-  'amountEnd',
-  'category',
-  'withoutCategory',
-  'withoutTag',
-  'tag',
-  'withoutBudget',
-  'budget',
-  'account',
-  'transactionType',
-])
+const { description, dateStart, dateEnd, amountStart, amountEnd, category, withoutCategory, tag, withoutTag, account, transactionType, withoutBudget, budget, subscription, withoutSubscription } =
+  generateChildren(modelValue, [
+    'description',
+    'dateStart',
+    'dateEnd',
+    'amountStart',
+    'amountEnd',
+    'category',
+    'withoutCategory',
+    'withoutTag',
+    'tag',
+    'withoutBudget',
+    'budget',
+    'subscription',
+    'withoutSubscription',
+    'account',
+    'transactionType',
+  ])
 
 // The segmented control works on codes; the filter keeps the whole type object
 const typeItems = computed(() => [{ label: t('transaction.type.all'), value: '' }, ...Transaction.typesList.map((type) => ({ label: t(type.t), value: type.code }))])

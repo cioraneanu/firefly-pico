@@ -224,7 +224,8 @@
       "demo_info": "서버 없이 이 기기에만 저장되는 샘플 데이터로 앱을 둘러보세요. 종료하면 샘플 데이터가 삭제되고 앱이 초기화됩니다.",
       "disconnect": "연결 해제",
       "disconnect_confirm": "액세스 토큰과 이 기기에 저장된 모든 데이터 및 설정을 삭제한 뒤 앱을 초기화합니다. Firefly III 데이터는 영향을 받지 않습니다.",
-      "no_token": "아직 액세스 토큰이 없습니다. 설정에서 토큰을 추가하거나 데모 모드를 사용해 보세요."
+      "no_token": "아직 액세스 토큰이 없습니다. 설정에서 토큰을 추가하거나 데모 모드를 사용해 보세요.",
+      "enable_subscriptions": "구독 사용"
     },
     "ui_entry": "사용자 인터페이스",
     "ui": {
@@ -426,7 +427,8 @@
         "transfers_by_category": "카테고리별 이체",
         "todo_transactions": "할 일 거래",
         "piggy_banks": "저금통",
-        "recurring_transactions": "다가오는 거래"
+        "recurring_transactions": "다가오는 거래",
+        "subscriptions": "구독"
       }
     },
     "token": {
@@ -822,7 +824,8 @@
     "without_budget": "예산 없음",
     "active_count": "{count}개 적용됨",
     "empty_hint": "거래 내역이 여기에 표시됩니다",
-    "showing": "{total}개 중 {count}개 표시"
+    "showing": "{total}개 중 {count}개 표시",
+    "without_subscription": "구독 없음"
   },
   "dash_page": {
     "hide_amounts": "금액 숨기기",
@@ -837,7 +840,12 @@
     "no_piggy_banks": "저금통 없음 ^_^",
     "amount_left": "{amount} 남음",
     "peak": "최고 {amount} · {date}",
-    "no_todo_tag": "\"todo\" 태그 없음"
+    "no_todo_tag": "\"todo\" 태그 없음",
+    "subscriptions_paid_of": "{total}개 중 {paid}개 결제",
+    "subscriptions_off_schedule": "일찍 또는 늦게 결제됨",
+    "subscriptions_cancel_by": "{date}까지 해지",
+    "subscriptions_ends_on": "{date} 종료",
+    "no_subscriptions": "이번 달 예정된 구독 없음"
   },
   "todo_page": {
     "title": "TODO 받은함",
@@ -882,5 +890,41 @@
     "selected": "{count}개 선택됨",
     "clear": "지우기",
     "some_failed": "{count}개를 업데이트하지 못했습니다. 다시 시도하세요."
+  },
+  "subscription": "구독",
+  "subscriptions": "구독",
+  "subscription_select": "구독 선택",
+  "subscription_page": {
+    "title_add": "구독 추가",
+    "title_edit": "구독 편집",
+    "amount_min": "최소 금액",
+    "amount_max": "최대 금액",
+    "amount_max_too_low": "최소 금액 이상이어야 합니다",
+    "first_date": "첫 예정일",
+    "repeat_freq": "반복",
+    "skip": "건너뛰기",
+    "skip_description": "결제 사이에 건너뛸 기간 수, 예: 1 = 한 기간 걸러",
+    "end_date": "종료일",
+    "extension_date": "갱신일",
+    "extension_date_description": "계약 해지 또는 갱신 마감일",
+    "active": "활성",
+    "repeat": {
+      "weekly": "매주",
+      "monthly": "매월",
+      "quarterly": "분기별",
+      "half-year": "6개월마다",
+      "yearly": "매년"
+    },
+    "per_month": "월",
+    "per_year": "연",
+    "next": "다음 {date}",
+    "state": {
+      "paid": "결제됨",
+      "due": "예정",
+      "missed": "미결제",
+      "not_due": "예정 없음"
+    },
+    "search": "구독 검색…",
+    "empty_hint": "구독이 여기에 표시됩니다"
   }
 }

@@ -97,6 +97,7 @@ const resources = [
   { path: 'tagsEnabled', t: 'settings.setup.enable_tags' },
   { path: 'piggyBanksEnabled', t: 'settings.setup.enable_piggy_banks' },
   { path: 'recurringTransactionsEnabled', t: 'settings.setup.enable_recurring_transactions' },
+  { path: 'subscriptionsEnabled', t: 'settings.setup.enable_subscriptions' },
 ]
 
 const {

@@ -10,6 +10,7 @@ use App\Http\Controllers\FireflyProxyController;
 use App\Http\Controllers\PiggyBankController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RecurrenceController;
+use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\TransactionTemplateController;
@@ -48,6 +49,7 @@ RouteUtils::makeCRUD("categories", CategoryController::class);
 RouteUtils::makeCRUD("budgets", BudgetController::class);
 RouteUtils::makeCRUD("piggy-banks", PiggyBankController::class);
 RouteUtils::makeCRUD("recurrences", RecurrenceController::class);
+RouteUtils::makeCRUD("bills", SubscriptionController::class);
 RouteUtils::makeCRUD("tags", TagController::class);
 Route::post("tags/{id}/total", [TagController::class, 'computeTotal'])->where('id', '[0-9]+');
 

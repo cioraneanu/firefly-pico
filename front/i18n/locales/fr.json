@@ -224,7 +224,8 @@
       "demo_info": "Découvrez l'application avec des données d'exemple conservées uniquement sur cet appareil, sans serveur. En quittant, les données d'exemple sont supprimées et l'application est réinitialisée.",
       "disconnect": "Se déconnecter",
       "disconnect_confirm": "Supprime le jeton d'accès ainsi que toutes les données et tous les réglages enregistrés sur cet appareil, puis réinitialise l'application. Vos données Firefly III ne sont pas touchées.",
-      "no_token": "Aucun jeton d'accès pour l'instant. Ajoutez-en un ou essayez le mode démo dans Configuration."
+      "no_token": "Aucun jeton d'accès pour l'instant. Ajoutez-en un ou essayez le mode démo dans Configuration.",
+      "enable_subscriptions": "Activer les abonnements"
     },
     "ui_entry": "Interfacte Utilisateur",
     "ui": {
@@ -426,7 +427,8 @@
         "transfers_by_category": "Transferts par catégories",
         "todo_transactions": "Transactions à faire",
         "piggy_banks": "Tirelires",
-        "recurring_transactions": "Opérations récurrentes à venir"
+        "recurring_transactions": "Opérations récurrentes à venir",
+        "subscriptions": "Abonnements"
       }
     },
     "token": {
@@ -822,7 +824,8 @@
     "without_budget": "Sans budget",
     "active_count": "{count} actifs",
     "empty_hint": "Vos transactions apparaîtront ici",
-    "showing": "{count} sur {total} affichées"
+    "showing": "{count} sur {total} affichées",
+    "without_subscription": "Sans abonnement"
   },
   "dash_page": {
     "hide_amounts": "Masquer les montants",
@@ -837,7 +840,12 @@
     "no_piggy_banks": "Aucune tirelire ^_^",
     "amount_left": "{amount} restants",
     "peak": "Pic {amount} · {date}",
-    "no_todo_tag": "Aucune étiquette \"todo\""
+    "no_todo_tag": "Aucune étiquette \"todo\"",
+    "subscriptions_paid_of": "{paid} sur {total} payés",
+    "subscriptions_off_schedule": "Payé en avance ou en retard",
+    "subscriptions_cancel_by": "Résilier avant le {date}",
+    "subscriptions_ends_on": "Se termine le {date}",
+    "no_subscriptions": "Aucun abonnement à payer ce mois-ci"
   },
   "todo_page": {
     "title": "Boîte TODO",
@@ -882,5 +890,41 @@
     "selected": "{count} sélectionnées",
     "clear": "Effacer",
     "some_failed": "{count} n’ont pas pu être mises à jour. Réessayez."
+  },
+  "subscription": "Abonnement",
+  "subscriptions": "Abonnements",
+  "subscription_select": "Choisir un abonnement",
+  "subscription_page": {
+    "title_add": "Ajouter un abonnement",
+    "title_edit": "Modifier l'abonnement",
+    "amount_min": "Montant minimum",
+    "amount_max": "Montant maximum",
+    "amount_max_too_low": "Doit être au moins égal au montant minimum",
+    "first_date": "Première date prévue",
+    "repeat_freq": "Répétition",
+    "skip": "Sauter",
+    "skip_description": "Périodes à sauter entre deux paiements, ex. 1 = une période sur deux",
+    "end_date": "Date de fin",
+    "extension_date": "Date de reconduction",
+    "extension_date_description": "Dernier jour pour résilier ou reconduire le contrat",
+    "active": "Actif",
+    "repeat": {
+      "weekly": "Hebdomadaire",
+      "monthly": "Mensuel",
+      "quarterly": "Trimestriel",
+      "half-year": "Semestriel",
+      "yearly": "Annuel"
+    },
+    "per_month": "par mois",
+    "per_year": "par an",
+    "next": "Prochain {date}",
+    "state": {
+      "paid": "Payé",
+      "due": "À payer",
+      "missed": "Manqué",
+      "not_due": "Pas d'échéance"
+    },
+    "search": "Rechercher des abonnements…",
+    "empty_hint": "Vos abonnements apparaîtront ici"
   }
 }

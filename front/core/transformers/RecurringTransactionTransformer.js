@@ -9,6 +9,8 @@ import RecurringTransaction from '~/core/models/RecurringTransaction.js'
 import { useAccountStore } from '~/core/stores/accountStore'
 import { useCategoryStore } from '~/core/stores/categoryStore'
 import { useBudgetStore } from '~/core/stores/budgetStore'
+import { useSubscriptionStore } from '~/core/stores/subscriptionStore'
+import { useProfileStore } from '~/core/stores/profileStore'
 import { useTagStore } from '~/core/stores/tagStore'
 import { useCurrencyStore } from '~/core/stores/currencyStore'
 
@@ -78,6 +80,7 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
     item.attributes.accountDestination = accountStore.accountDictionary[get(transaction, 'destination_id')]
     item.attributes.category = categoryStore.categoryDictionary[get(transaction, 'category_id')]
     item.attributes.budget = budgetStore.budgetDictionary[get(transaction, 'budget_id')]
+    item.attributes.subscription = useSubscriptionStore().subscriptionDictionary[get(transaction, 'bill_id')]
     item.attributes.tags = (get(transaction, 'tags') ?? []).map((tagName) => tagStore.tagDictionaryByName[LanguageUtils.removeAccentsAndLowerCase(tagName)]).filter(Boolean)
 
     return item
@@ -131,6 +134,7 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
     const currencyId = get(Account.getCurrency(amountAccount), 'id')
     const categoryId = get(data, 'category.id')
     const budgetId = get(data, 'budget.id')
+    const subscriptionId = get(data, 'subscription.id')
 
     let transaction = {
       description: get(data, 'description') || get(data, 'title', ''),
@@ -146,8 +150,13 @@ export default class RecurringTransactionTransformer extends ApiTransformer {
     if (categoryId || isUpdate) {
       transaction.category_id = categoryId ?? null
     }
-    if (budgetId || isUpdate) {
+    if ((budgetId || isUpdate) && useProfileStore().budgetsEnabled) {
       transaction.budget_id = budgetId ?? null
+    }
+    // Keep a link to a subscription this device doesn't know, like transactions do
+    const billId = get(data, 'transactions.0.bill_id')
+    if ((subscriptionId || isUpdate) && useProfileStore().subscriptionsEnabled) {
+      transaction.bill_id = subscriptionId ?? (billId && !useSubscriptionStore().subscriptionDictionary[billId] ? billId : null)
     }
 
     let tags = (get(data, 'tags') ?? []).map((tag) => Tag.getDisplayNameEllipsized(tag))

@@ -224,7 +224,8 @@
       "demo_info": "Entdecke die App mit Beispieldaten, die nur auf diesem Gerät gespeichert sind, ganz ohne Server. Beim Beenden werden die Beispieldaten gelöscht und die App zurückgesetzt.",
       "disconnect": "Verbindung trennen",
       "disconnect_confirm": "Entfernt das Zugriffstoken sowie alle auf diesem Gerät gespeicherten Daten und Einstellungen und setzt die App zurück. Deine Firefly III-Daten bleiben unverändert.",
-      "no_token": "Noch kein Zugriffstoken. Füge eines hinzu oder teste den Demo-Modus in der Einrichtung."
+      "no_token": "Noch kein Zugriffstoken. Füge eines hinzu oder teste den Demo-Modus in der Einrichtung.",
+      "enable_subscriptions": "Abonnements aktivieren"
     },
     "ui_entry": "Nutzer Interface",
     "ui": {
@@ -426,7 +427,8 @@
         "transfers_by_category": "Transfers nach Kategorien",
         "todo_transactions": "Todo Transaktionen",
         "piggy_banks": "Sparschweine",
-        "recurring_transactions": "Kommende wiederkehrende Transaktionen"
+        "recurring_transactions": "Kommende wiederkehrende Transaktionen",
+        "subscriptions": "Abonnements"
       }
     },
     "token": {
@@ -822,7 +824,8 @@
     "without_budget": "Ohne Budget",
     "active_count": "{count} aktiv",
     "empty_hint": "Deine Buchungen erscheinen hier",
-    "showing": "{count} von {total} angezeigt"
+    "showing": "{count} von {total} angezeigt",
+    "without_subscription": "Ohne Abonnement"
   },
   "dash_page": {
     "hide_amounts": "Beträge ausblenden",
@@ -837,7 +840,12 @@
     "no_piggy_banks": "Keine Sparschweine ^_^",
     "amount_left": "{amount} übrig",
     "peak": "Spitze {amount} · {date}",
-    "no_todo_tag": "Kein \"todo\"-Tag"
+    "no_todo_tag": "Kein \"todo\"-Tag",
+    "subscriptions_paid_of": "{paid} von {total} bezahlt",
+    "subscriptions_off_schedule": "Früher oder später bezahlt",
+    "subscriptions_cancel_by": "Kündigen bis {date}",
+    "subscriptions_ends_on": "Endet am {date}",
+    "no_subscriptions": "Keine Abonnements in diesem Monat fällig"
   },
   "todo_page": {
     "title": "TODO-Eingang",
@@ -882,5 +890,41 @@
     "selected": "{count} ausgewählt",
     "clear": "Leeren",
     "some_failed": "{count} konnten nicht aktualisiert werden. Versuche es erneut."
+  },
+  "subscription": "Abonnement",
+  "subscriptions": "Abonnements",
+  "subscription_select": "Abonnement auswählen",
+  "subscription_page": {
+    "title_add": "Abonnement hinzufügen",
+    "title_edit": "Abonnement bearbeiten",
+    "amount_min": "Mindestbetrag",
+    "amount_max": "Höchstbetrag",
+    "amount_max_too_low": "Muss mindestens dem Mindestbetrag entsprechen",
+    "first_date": "Erstes erwartetes Datum",
+    "repeat_freq": "Wiederholung",
+    "skip": "Überspringen",
+    "skip_description": "Zu überspringende Perioden zwischen Zahlungen, z. B. 1 = jede zweite Periode",
+    "end_date": "Enddatum",
+    "extension_date": "Verlängerungsdatum",
+    "extension_date_description": "Letzter Tag zum Kündigen oder Verlängern",
+    "active": "Aktiv",
+    "repeat": {
+      "weekly": "Wöchentlich",
+      "monthly": "Monatlich",
+      "quarterly": "Vierteljährlich",
+      "half-year": "Halbjährlich",
+      "yearly": "Jährlich"
+    },
+    "per_month": "pro Monat",
+    "per_year": "pro Jahr",
+    "next": "Nächste {date}",
+    "state": {
+      "paid": "Bezahlt",
+      "due": "Fällig",
+      "missed": "Verpasst",
+      "not_due": "Nicht fällig"
+    },
+    "search": "Abonnements suchen…",
+    "empty_hint": "Deine Abonnements erscheinen hier"
   }
 }

@@ -9,6 +9,7 @@ export const icons = {
   budget: 'IconBasket',
   piggyBank: 'IconPigMoney',
   recurringTransaction: 'IconCalendarRepeat',
+  subscription: 'IconReceiptRefund',
   attachment: 'IconPhoto',
   budgetLimit: 'IconCalendarDollar',
   currency: 'IconCoin',

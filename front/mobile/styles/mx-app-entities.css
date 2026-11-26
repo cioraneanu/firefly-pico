@@ -25,3 +25,15 @@
 .mx-app .mx-rate.custom i svg {
   color: var(--muted-foreground);
 }
+
+/* subscriptions: this month's state chip */
+.mx-app .mx-chip.st-paid {
+  box-shadow: none;
+  background: color-mix(in oklch, var(--in) 14%, transparent);
+  color: var(--in);
+}
+.mx-app .mx-chip.st-missed {
+  box-shadow: none;
+  background: color-mix(in oklch, var(--destructive) 14%, transparent);
+  color: var(--destructive);
+}

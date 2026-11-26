@@ -30,6 +30,7 @@ export default [
   { path: '/accounts/:id?', component: () => import('./pages/accounts.vue') },
   { path: '/budgets/:id?', component: () => import('./pages/budgets.vue') },
   { path: '/piggy-banks/:id?', component: () => import('./pages/piggy-banks.vue') },
+  { path: '/subscriptions/:id?', component: () => import('./pages/subscriptions.vue') },
   { path: '/transaction-templates/:id?', component: () => import('./pages/templates.vue') },
   { path: '/recurring-transactions/:id?', component: () => import('./pages/recurring.vue') },
   { path: '/categories/:id?', component: () => import('./pages/categories.vue') },

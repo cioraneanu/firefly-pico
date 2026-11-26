@@ -32,6 +32,7 @@ const accountStore = useAccountStore()
 const templateStore = useTemplateStore()
 const budgetStore = useBudgetStore()
 const piggyBankStore = usePiggyBankStore()
+const subscriptionStore = useSubscriptionStore()
 const recurringTransactionStore = useRecurringTransactionStore()
 const tagStore = useTagStore()
 const categoryStore = useCategoryStore()
@@ -47,6 +48,12 @@ const sections = computed(() => [
       { label: t('templates'), icon: TablerIconConstants.transactionTemplate, route: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST, count: templateStore.transactionTemplateList.length },
       profileStore.budgetsEnabled && { label: t('budgets'), icon: TablerIconConstants.budget, route: RouteConstants.ROUTE_BUDGET_LIST, count: budgetStore.budgetList.length },
       profileStore.piggyBanksEnabled && { label: t('piggy_banks'), icon: TablerIconConstants.piggyBank, route: RouteConstants.ROUTE_PIGGY_BANK_LIST, count: piggyBankStore.piggyBankList.length },
+      profileStore.subscriptionsEnabled && {
+        label: t('subscriptions'),
+        icon: TablerIconConstants.subscription,
+        route: RouteConstants.ROUTE_SUBSCRIPTION_LIST,
+        count: subscriptionStore.subscriptionList.length,
+      },
       profileStore.recurringTransactionsEnabled && {
         label: t('recurring_transactions'),
         icon: TablerIconConstants.recurringTransaction,

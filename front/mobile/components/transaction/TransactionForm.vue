@@ -90,6 +90,8 @@
 
         <budget-select v-if="profileStore.budgetsEnabled" v-model="budget" :style="getStyleForField(transactionFormField.budget)" />
 
+        <subscription-select v-if="profileStore.subscriptionsEnabled && isTypeExpense" v-model="subscription" :style="getStyleForField(transactionFormField.subscription)" />
+
         <piggy-bank-select v-if="profileStore.piggyBanksEnabled && isTypeTransfer && !itemId" v-model="piggyBank" :style="getStyleForField(transactionFormField.piggyBank)" />
 
         <transaction-attachments-list :transaction="item" :style="getStyleForField(transactionFormField.attachments)" />
@@ -131,6 +133,7 @@ const {
   description,
   notes,
   budget,
+  subscription,
   piggyBank,
   accountSource,
   accountDestination,
@@ -147,6 +150,7 @@ const {
   onToday,
   onAddDay,
   isTypeTransfer,
+  isTypeExpense,
   getStyleForField,
   accountSourceBinding,
   accountDestinationBinding,

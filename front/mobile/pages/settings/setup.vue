@@ -66,6 +66,7 @@
                 :value="recurringTransactionsCount"
                 :muted="!profileStore.recurringTransactionsEnabled"
               />
+              <app-config-stat :icon="TablerIconConstants.subscription" :name="$t('subscriptions')" :value="subscriptionsCount" :muted="!profileStore.subscriptionsEnabled" />
               <app-config-stat :icon="TablerIconConstants.lastSync" :name="$t('settings.setup.last_sync')" :value="lastSync" />
             </div>
           </div>
@@ -139,6 +140,7 @@ const categoryStore = useCategoryStore()
 const tagStore = useTagStore()
 const budgetStore = useBudgetStore()
 const piggyBankStore = usePiggyBankStore()
+const subscriptionStore = useSubscriptionStore()
 const recurringTransactionStore = useRecurringTransactionStore()
 const templateStore = useTemplateStore()
 
@@ -156,6 +158,7 @@ const categoriesCount = computed(() => categoryStore.categoryList.length)
 const tagsCount = computed(() => tagStore.tagList.length)
 const budgetsCount = computed(() => budgetStore.budgetList.length)
 const piggyBanksCount = computed(() => piggyBankStore.piggyBankList.length)
+const subscriptionsCount = computed(() => subscriptionStore.subscriptionList.length)
 const recurringTransactionsCount = computed(() => recurringTransactionStore.recurringTransactionList.length)
 const transactionTemplatesCount = computed(() => templateStore.transactionTemplateList.length)
 const lastSync = computed(() => {

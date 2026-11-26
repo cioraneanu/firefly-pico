@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { IconBasket, IconCalendar, IconCategory, IconCoins, IconCreditCard, IconFilter, IconHash, IconRepeat, IconSearch, IconTag, IconX } from '@tabler/icons-vue'
+import { IconBasket, IconCalendar, IconCategory, IconCoins, IconCreditCard, IconFilter, IconHash, IconReceiptRefund, IconRepeat, IconSearch, IconTag, IconX } from '@tabler/icons-vue'
 
 defineProps({ filters: Array })
 const emit = defineEmits(['remove', 'clear'])
@@ -35,6 +35,8 @@ const icons = {
   withoutTag: IconTag,
   budget: IconBasket,
   withoutBudget: IconBasket,
+  subscription: IconReceiptRefund,
+  withoutSubscription: IconReceiptRefund,
   recurrence: IconRepeat,
   account: IconCreditCard,
   excludedAccount: IconCreditCard,

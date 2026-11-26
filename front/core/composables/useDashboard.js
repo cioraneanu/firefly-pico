@@ -1,14 +1,16 @@
 import { capitalize, get } from 'lodash-es'
-import { addMonths, differenceInDays, eachDayOfInterval, format, startOfDay, subDays, subMonths } from 'date-fns'
+import { addDays, addMonths, differenceInDays, eachDayOfInterval, format, min, startOfDay, subDays, subMonths } from 'date-fns'
 import { formatTimeAgo } from '@vueuse/core'
 import RouteConstants from '~/core/constants/RouteConstants'
 import { dashboardCard, dashboardCardList } from '~/core/constants/DashboardConstants'
 import Category from '~/core/models/Category'
 import PiggyBank from '~/core/models/PiggyBank'
 import RecurringTransaction from '~/core/models/RecurringTransaction'
+import Subscription from '~/core/models/Subscription'
 import Tag from '~/core/models/Tag'
 import { getExcludedTransactionUrl } from '~/core/utils/DashboardUtils'
 import { formatNumberForDashboard } from '~/core/utils/NumberUtils'
+import { getReminders, subscriptionState } from '~/core/utils/SubscriptionUtils'
 
 export function useDashboardCards() {
   const profileStore = useProfileStore()
@@ -23,6 +25,7 @@ export function useDashboardCards() {
       [dashboardCard.transfersByCategory.code]: profileStore.categoriesEnabled,
       [dashboardCard.piggyBanks.code]: profileStore.piggyBanksEnabled,
       [dashboardCard.recurringTransactions.code]: profileStore.recurringTransactionsEnabled,
+      [dashboardCard.subscriptions.code]: profileStore.subscriptionsEnabled,
     })[code] ?? true
 
   const visibleCards = computed(() =>
@@ -163,4 +166,62 @@ export function useDashboardSummary() {
     transactionsListSavingsAmount: computed(() => formatNumberForDashboard(dashboardStore.transactionsListSavingsAmount)),
     savingsPercentFormatted: computed(() => `${Math.trunc(dashboardStore.transactionsListSavingsPercentage)} %`),
   }
+}
+
+// One row per subscription expected or paid in the selected month, plus contract reminders for the next 30 days
+export function useDashboardSubscriptions() {
+  const dashboardStore = useDashboardStore()
+  const subscriptionStore = useSubscriptionStore()
+  const { toDashboardCurrency, currencySymbol } = useSubscriptionTotals()
+  const stateOrder = { [subscriptionState.missed]: 0, [subscriptionState.due]: 1, [subscriptionState.paid]: 2 }
+
+  // Firefly >= 6.2 sends each payment's amount; older versions only the date
+  const getPaidAmount = (subscription, paidDates, average) =>
+    paidDates.every((paidDate) => paidDate.amount !== undefined)
+      ? paidDates.reduce((sum, paidDate) => sum + toDashboardCurrency(Math.abs(parseFloat(paidDate.amount) || 0), paidDate.currency_code ?? Subscription.getCurrencyCode(subscription)), 0)
+      : average * paidDates.length
+
+  const rows = computed(() => {
+    // Past months count as fully passed, the current one up to today
+    const today = min([new Date(), addDays(dashboardStore.dashboardDateEnd ?? new Date(), 1)])
+    return dashboardStore.dashboardSubscriptionList
+      .map((subscription) => ({ subscription, status: Subscription.getMonthStatus(subscription, today) }))
+      .filter(({ status }) => status)
+      .map(({ subscription, status }) => {
+        const average = toDashboardCurrency(Subscription.getAverageAmount(subscription), Subscription.getCurrencyCode(subscription))
+        const paidAmount = getPaidAmount(subscription, get(subscription, 'attributes.paid_dates') ?? [], average)
+        const expectedAmount = average * status.expected
+        return {
+          ...status,
+          subscription,
+          label: Subscription.getDisplayName(subscription),
+          // Paid rows have no next date this month: show when it was due
+          dateFormatted: DateUtils.dateToUI(status.nextDate ?? DateUtils.autoToDate((get(subscription, 'attributes.pay_dates') ?? []).at(-1))),
+          paidAmount,
+          expectedAmount,
+          amount: formatNumberForDashboard(status.expected ? expectedAmount : paidAmount),
+        }
+      })
+      .sort((a, b) => stateOrder[a.state] - stateOrder[b.state] || (a.nextDate ?? 0) - (b.nextDate ?? 0))
+  })
+
+  const expectedRows = computed(() => rows.value.filter((row) => row.expected > 0))
+  const summary = computed(() => ({
+    paidCount: expectedRows.value.filter((row) => row.state === subscriptionState.paid).length,
+    expectedCount: expectedRows.value.length,
+    paidAmount: formatNumberForDashboard(rows.value.reduce((sum, row) => sum + row.paidAmount, 0)),
+    expectedAmount: formatNumberForDashboard(expectedRows.value.reduce((sum, row) => sum + row.expectedAmount, 0)),
+  }))
+
+  const reminders = computed(() =>
+    getReminders(subscriptionStore.subscriptionList, new Date()).map((reminder) => ({
+      ...reminder,
+      label: Subscription.getDisplayName(reminder.subscription),
+      dateFormatted: DateUtils.dateToUI(reminder.date),
+    })),
+  )
+
+  const transactionsRoute = (subscription) => `${RouteConstants.ROUTE_TRANSACTION_LIST}?${TransactionFilterUtils.filters.subscription.toUrl(subscription)}`
+
+  return { rows, summary, reminders, currencySymbol, transactionsRoute }
 }

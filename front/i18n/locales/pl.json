@@ -224,7 +224,8 @@
       "demo_info": "Poznaj aplikację z przykładowymi danymi zapisanymi tylko na tym urządzeniu, bez serwera. Wyjście usuwa przykładowe dane i resetuje aplikację.",
       "disconnect": "Rozłącz",
       "disconnect_confirm": "Usuwa token dostępu oraz wszystkie dane i ustawienia zapisane na tym urządzeniu, a następnie resetuje aplikację. Twoje dane w Firefly III pozostają bez zmian.",
-      "no_token": "Brak tokenu dostępu. Dodaj go lub wypróbuj tryb demo w Konfiguracji."
+      "no_token": "Brak tokenu dostępu. Dodaj go lub wypróbuj tryb demo w Konfiguracji.",
+      "enable_subscriptions": "Włącz subskrypcje"
     },
     "ui_entry": "Interfejs użytkownika",
     "ui": {
@@ -426,7 +427,8 @@
         "transfers_by_category": "Transfery wg kategorii",
         "todo_transactions": "Transakcje to-do",
         "piggy_banks": "Skarbonki",
-        "recurring_transactions": "Nadchodzące transakcje cykliczne"
+        "recurring_transactions": "Nadchodzące transakcje cykliczne",
+        "subscriptions": "Subskrypcje"
       }
     },
     "token": {
@@ -822,7 +824,8 @@
     "without_budget": "Bez budżetu",
     "active_count": "{count} aktywne",
     "empty_hint": "Tutaj pojawią się Twoje transakcje",
-    "showing": "Wyświetlono {count} z {total}"
+    "showing": "Wyświetlono {count} z {total}",
+    "without_subscription": "Bez subskrypcji"
   },
   "dash_page": {
     "hide_amounts": "Ukryj kwoty",
@@ -837,7 +840,12 @@
     "no_piggy_banks": "Brak skarbonek ^_^",
     "amount_left": "Pozostało {amount}",
     "peak": "Szczyt {amount} · {date}",
-    "no_todo_tag": "Brak tagu \"todo\""
+    "no_todo_tag": "Brak tagu \"todo\"",
+    "subscriptions_paid_of": "Opłacono {paid} z {total}",
+    "subscriptions_off_schedule": "Opłacona wcześniej lub później",
+    "subscriptions_cancel_by": "Zrezygnuj do {date}",
+    "subscriptions_ends_on": "Kończy się {date}",
+    "no_subscriptions": "Brak subskrypcji w tym miesiącu"
   },
   "todo_page": {
     "title": "Skrzynka TODO",
@@ -882,5 +890,41 @@
     "selected": "Zaznaczono {count}",
     "clear": "Wyczyść",
     "some_failed": "Nie udało się zaktualizować {count}. Spróbuj ponownie."
+  },
+  "subscription": "Subskrypcja",
+  "subscriptions": "Subskrypcje",
+  "subscription_select": "Wybierz subskrypcję",
+  "subscription_page": {
+    "title_add": "Dodaj subskrypcję",
+    "title_edit": "Edytuj subskrypcję",
+    "amount_min": "Kwota minimalna",
+    "amount_max": "Kwota maksymalna",
+    "amount_max_too_low": "Musi wynosić co najmniej kwotę minimalną",
+    "first_date": "Pierwsza oczekiwana data",
+    "repeat_freq": "Powtarza się",
+    "skip": "Pomiń",
+    "skip_description": "Okresy pomijane między płatnościami, np. 1 = co drugi okres",
+    "end_date": "Data zakończenia",
+    "extension_date": "Data przedłużenia",
+    "extension_date_description": "Ostatni dzień na rezygnację lub przedłużenie umowy",
+    "active": "Aktywna",
+    "repeat": {
+      "weekly": "Co tydzień",
+      "monthly": "Co miesiąc",
+      "quarterly": "Co kwartał",
+      "half-year": "Co pół roku",
+      "yearly": "Co rok"
+    },
+    "per_month": "miesięcznie",
+    "per_year": "rocznie",
+    "next": "Następna {date}",
+    "state": {
+      "paid": "Opłacona",
+      "due": "Do zapłaty",
+      "missed": "Pominięta",
+      "not_due": "Brak terminu"
+    },
+    "search": "Szukaj subskrypcji…",
+    "empty_hint": "Tu pojawią się Twoje subskrypcje"
   }
 }

@@ -29,6 +29,7 @@ export default class RecurringTransaction extends BaseModel {
         accountDestination: null,
         category: null,
         budget: null,
+        subscription: null,
         tags: [],
         repetitionType: RecurringTransaction.repetitionTypes.monthly,
         repetitionWeekday: null,

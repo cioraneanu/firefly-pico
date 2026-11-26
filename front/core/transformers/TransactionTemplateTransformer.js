@@ -4,6 +4,8 @@ import { useAccountStore } from '~/core/stores/accountStore'
 import { useCategoryStore } from '~/core/stores/categoryStore'
 import { useTagStore } from '~/core/stores/tagStore'
 import { useBudgetStore } from '~/core/stores/budgetStore'
+import { useSubscriptionStore } from '~/core/stores/subscriptionStore'
+import { useProfileStore } from '~/core/stores/profileStore'
 import Transaction from '~/core/models/Transaction'
 
 export default class TransactionTemplateTransformer extends ApiTransformer {
@@ -27,6 +29,7 @@ export default class TransactionTemplateTransformer extends ApiTransformer {
     item.account_destination = accountsDictionary[item['account_destination_id']]
     item.category = categoryDictionary[item['category_id']]
     item.budget = budgetStore.budgetDictionary[item['budget_id']]
+    item.subscription = useSubscriptionStore().subscriptionDictionary[item['bill_id']]
     item.tags = (item.tags ?? []).map((transactionTemplateTag) => tagDictionaryById[transactionTemplateTag.tag_id])
     item.extra_names = get(item, 'extra_names', []).map((item) => {
       return {
@@ -59,7 +62,10 @@ export default class TransactionTemplateTransformer extends ApiTransformer {
       budget_id: get(item, 'budget.id'),
       tags: (item.tags ?? []).map((item) => item.id),
       type: get(transactionType, 'fireflyCode'),
-      // tags
+      // Left out while subscriptions are off, and a link to a subscription this device doesn't know stays
+      ...(useProfileStore().subscriptionsEnabled
+        ? { bill_id: get(item, 'subscription.id') ?? (item.bill_id && !useSubscriptionStore().subscriptionDictionary[item.bill_id] ? item.bill_id : null) }
+        : {}),
     }
   }
 }

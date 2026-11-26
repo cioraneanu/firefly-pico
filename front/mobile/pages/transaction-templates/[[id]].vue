@@ -37,6 +37,8 @@
 
           <budget-select v-model="budget" />
 
+          <subscription-select v-if="isSubscriptionVisible" v-model="subscription" />
+
           <app-field v-model="notes" type="textarea" rows="2" autosize :label="$t('notes')" />
         </app-card>
 
@@ -71,6 +73,8 @@ const {
   category,
   type,
   budget,
+  subscription,
+  isSubscriptionVisible,
   accountSourceAllowedTypes,
   accountDestinationAllowedTypes,
 } = useTemplateForm()

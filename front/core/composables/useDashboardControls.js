@@ -35,6 +35,7 @@ export const useDashboardControls = () => {
             if (!oldVal) return
             dashboardStore.fetchDashboardAccounts()
             dashboardStore.fetchTransactionsForInterval()
+            dashboardStore.fetchSubscriptionsForInterval()
             budgetStore.fetchBudgetLimits()
         }
     )

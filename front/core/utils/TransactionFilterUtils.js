@@ -5,12 +5,14 @@ import Category from '~/core/models/Category.js'
 import Budget from '~/core/models/Budget.js'
 import Account from '~/core/models/Account.js'
 import RecurringTransaction from '~/core/models/RecurringTransaction.js'
+import Subscription from '~/core/models/Subscription.js'
 import { useProfileStore } from '~/core/stores/profileStore.js'
 import { useCategoryStore } from '~/core/stores/categoryStore'
 import { useTagStore } from '~/core/stores/tagStore'
 import { useBudgetStore } from '~/core/stores/budgetStore'
 import { useAccountStore } from '~/core/stores/accountStore'
 import { useRecurringTransactionStore } from '~/core/stores/recurringTransactionStore'
+import { useSubscriptionStore } from '~/core/stores/subscriptionStore'
 import { translate } from '~/plugins/plugin-i18n.js'
 
 export default {
@@ -103,6 +105,20 @@ export default {
       display: (item) => `No budget`,
       toUrl: (item) => `without_budget=true`,
       fromUrl: () => useRoute().query?.without_budget,
+    },
+    subscription: {
+      bagKey: 'subscription',
+      filter: (item) => `bill_is:"${Subscription.getDisplayName(item)}"`,
+      display: (item) => `Subscription: ${Subscription.getDisplayName(item)}`,
+      toUrl: (item) => `bill_id=${item.id}`,
+      fromUrl: () => useSubscriptionStore().subscriptionDictionary[useRoute().query?.bill_id],
+    },
+    noSubscription: {
+      bagKey: 'withoutSubscription',
+      filter: () => `has_any_bill:false`,
+      display: () => `No subscription`,
+      toUrl: () => `without_bill=true`,
+      fromUrl: () => useRoute().query?.without_bill,
     },
     account: {
       bagKey: 'account',

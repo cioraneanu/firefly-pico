@@ -8,6 +8,7 @@ import {
   IconLayoutDashboard,
   IconListCheck,
   IconPigMoney,
+  IconReceiptRefund,
   IconReplace,
   IconSettings,
   IconTag,
@@ -44,6 +45,7 @@ export function useDesktopNav() {
         items: [
           { label: t('budgets'), icon: IconBasket, to: RouteConstants.ROUTE_BUDGET_LIST, hidden: !profileStore.budgetsEnabled },
           { label: t('piggy_banks'), icon: IconPigMoney, to: RouteConstants.ROUTE_PIGGY_BANK_LIST, hidden: !profileStore.piggyBanksEnabled },
+          { label: t('subscriptions'), icon: IconReceiptRefund, to: RouteConstants.ROUTE_SUBSCRIPTION_LIST, hidden: !profileStore.subscriptionsEnabled },
           { label: t('recurring_transactions'), icon: IconCalendarRepeat, to: RouteConstants.ROUTE_RECURRING_TRANSACTION_LIST, hidden: !profileStore.recurringTransactionsEnabled },
           { label: t('templates'), icon: IconTemplate, to: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_LIST },
         ],

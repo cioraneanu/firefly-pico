@@ -11,6 +11,7 @@ import { useCurrencyStore } from '~/core/stores/currencyStore'
 import { useBudgetStore } from '~/core/stores/budgetStore'
 import { usePiggyBankStore } from '~/core/stores/piggyBankStore'
 import { useRecurringTransactionStore } from '~/core/stores/recurringTransactionStore'
+import { useSubscriptionStore } from '~/core/stores/subscriptionStore'
 import { useTodoStore } from '~/core/stores/todoStore'
 import { keyBy, head, uniq, uniqBy } from 'lodash-es'
 import AccountRepository from '~/core/repository/AccountRepository'
@@ -21,6 +22,8 @@ import Currency from '~/core/models/Currency.js'
 import { convertCurrency, convertTransactionAmountToCurrency, convertTransactionsTotalAmountToCurrency } from '~/core/utils/CurrencyUtils'
 import TransactionRepository from '~/core/repository/TransactionRepository'
 import TransactionTransformer from '~/core/transformers/TransactionTransformer'
+import SubscriptionRepository from '~/core/repository/SubscriptionRepository'
+import SubscriptionTransformer from '~/core/transformers/SubscriptionTransformer'
 import Tag from '~/core/models/Tag.js'
 import DateUtils from '~/core/utils/DateUtils.js'
 import { getExcludedTransactionFilters } from '~/core/utils/DashboardUtils.js'
@@ -38,6 +41,8 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const isLoadingDashboardAccounts = ref(false)
   const transactionsList = ref([])
   const transactionsListLastWeek = ref([])
+  const dashboardSubscriptionList = ref([])
+  let subscriptionsRequest = 0
   const tagsWidgetModeOnlyRootTag = useLocalStorage('tagsWidgetModeOnlyRootTag', true)
   const widgetsNetAmountMode = useLocalStorage('widgetsNetAmountMode', false)
   const isLoadingTransactions = ref(false)
@@ -103,6 +108,23 @@ export const useDashboardStore = defineStore('dashboard', () => {
     transactionsListLastWeek.value = TransactionTransformer.transformFromApiList(list)
   }
 
+  // Firefly fills in the expected and paid dates of the selected month; a newer request wins over a slower older one
+  async function fetchSubscriptionsForInterval() {
+    if (!useProfileStore().subscriptionsEnabled) {
+      dashboardSubscriptionList.value = []
+      return
+    }
+    const request = ++subscriptionsRequest
+    const filters = [
+      { field: 'start', value: DateUtils.dateToString(dashboardDateStart.value) },
+      { field: 'end', value: DateUtils.dateToString(dashboardDateEnd.value) },
+    ]
+    const list = await new SubscriptionRepository().getAllWithMerge({ filters })
+    if (request === subscriptionsRequest) {
+      dashboardSubscriptionList.value = SubscriptionTransformer.transformFromApiList(list)
+    }
+  }
+
   async function fetchDashboard() {
     const budgetStore = useBudgetStore()
     const piggyBankStore = usePiggyBankStore()
@@ -116,6 +138,8 @@ export const useDashboardStore = defineStore('dashboard', () => {
       budgetStore.fetchBudgets(),
       piggyBankStore.fetchPiggyBanks(),
       recurringTransactionStore.fetchRecurringTransactions(),
+      useSubscriptionStore().fetchSubscriptions(),
+      fetchSubscriptionsForInterval(),
     ])
   }
 
@@ -357,6 +381,8 @@ export const useDashboardStore = defineStore('dashboard', () => {
   const budgetLimitRemaining = computed(() => budgetLimitTotal.value - budgetLimitSpent.value)
 
   return {
+    dashboardSubscriptionList,
+    fetchSubscriptionsForInterval,
     isLoading,
     backendFilters,
     month,

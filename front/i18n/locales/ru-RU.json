@@ -224,7 +224,8 @@
       "demo_info": "Изучите приложение на примерах данных, которые хранятся только на этом устройстве, без сервера. При выходе примеры данных удаляются, а приложение сбрасывается.",
       "disconnect": "Отключиться",
       "disconnect_confirm": "Удаляет токен доступа и все данные и настройки, сохранённые на этом устройстве, затем сбрасывает приложение. Ваши данные в Firefly III не затрагиваются.",
-      "no_token": "Токен доступа не задан. Добавьте его или попробуйте демо-режим в настройках."
+      "no_token": "Токен доступа не задан. Добавьте его или попробуйте демо-режим в настройках.",
+      "enable_subscriptions": "Включить подписки"
     },
     "ui_entry": "Интерфейс пользователя",
     "ui": {
@@ -426,7 +427,8 @@
         "transfers_by_category": "Переводы по категориям",
         "todo_transactions": "Транзакции к выполнению",
         "piggy_banks": "Копилки",
-        "recurring_transactions": "Предстоящие повторяющиеся транзакции"
+        "recurring_transactions": "Предстоящие повторяющиеся транзакции",
+        "subscriptions": "Подписки"
       }
     },
     "token": {
@@ -822,7 +824,8 @@
     "without_budget": "Без бюджета",
     "active_count": "Активно: {count}",
     "empty_hint": "Здесь появятся ваши транзакции",
-    "showing": "Показано {count} из {total}"
+    "showing": "Показано {count} из {total}",
+    "without_subscription": "Без подписки"
   },
   "dash_page": {
     "hide_amounts": "Скрыть суммы",
@@ -837,7 +840,12 @@
     "no_piggy_banks": "Нет копилок ^_^",
     "amount_left": "Осталось {amount}",
     "peak": "Пик {amount} · {date}",
-    "no_todo_tag": "Нет тега \"todo\""
+    "no_todo_tag": "Нет тега \"todo\"",
+    "subscriptions_paid_of": "Оплачено {paid} из {total}",
+    "subscriptions_off_schedule": "Оплачено раньше или позже",
+    "subscriptions_cancel_by": "Отменить до {date}",
+    "subscriptions_ends_on": "Заканчивается {date}",
+    "no_subscriptions": "В этом месяце нет подписок к оплате"
   },
   "todo_page": {
     "title": "Входящие TODO",
@@ -882,5 +890,41 @@
     "selected": "Выбрано: {count}",
     "clear": "Очистить",
     "some_failed": "Не удалось обновить: {count}. Попробуйте ещё раз."
+  },
+  "subscription": "Подписка",
+  "subscriptions": "Подписки",
+  "subscription_select": "Выберите подписку",
+  "subscription_page": {
+    "title_add": "Добавить подписку",
+    "title_edit": "Редактировать подписку",
+    "amount_min": "Минимальная сумма",
+    "amount_max": "Максимальная сумма",
+    "amount_max_too_low": "Должна быть не меньше минимальной суммы",
+    "first_date": "Первая ожидаемая дата",
+    "repeat_freq": "Повтор",
+    "skip": "Пропуск",
+    "skip_description": "Сколько периодов пропускать между платежами, напр. 1 = через период",
+    "end_date": "Дата окончания",
+    "extension_date": "Дата продления",
+    "extension_date_description": "Последний день для отмены или продления договора",
+    "active": "Активна",
+    "repeat": {
+      "weekly": "Еженедельно",
+      "monthly": "Ежемесячно",
+      "quarterly": "Ежеквартально",
+      "half-year": "Раз в полгода",
+      "yearly": "Ежегодно"
+    },
+    "per_month": "в месяц",
+    "per_year": "в год",
+    "next": "След. {date}",
+    "state": {
+      "paid": "Оплачено",
+      "due": "К оплате",
+      "missed": "Пропущено",
+      "not_due": "Не к оплате"
+    },
+    "search": "Поиск подписок…",
+    "empty_hint": "Здесь появятся ваши подписки"
   }
 }
