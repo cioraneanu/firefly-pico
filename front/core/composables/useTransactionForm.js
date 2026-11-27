@@ -265,9 +265,15 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
     return field ? field.isVisible : fieldType.isVisible
   }
 
+  // Fields missing from the saved config (added in a newer app version) go last instead of first
+  const getPosition = (code) => {
+    const position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === code)
+    return position === -1 ? 999 : position
+  }
+
   const getStyleForField = (fieldType) => {
     const fieldCode = fieldType.code
-    const position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
+    const position = getPosition(fieldCode)
     const displayStyle = isFieldVisible(fieldType) ? '' : 'display: none'
 
     if (isTypeExpense.value) {
@@ -275,12 +281,12 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
     }
 
     if (isTypeIncome.value) {
-      let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
+      let position = getPosition(fieldCode)
       if (fieldCode === transactionFormField.sourceAccount.code) {
-        position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === transactionFormField.destinationAccount.code)
+        position = getPosition(transactionFormField.destinationAccount.code)
       }
       if (fieldCode === transactionFormField.destinationAccount.code) {
-        position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === transactionFormField.sourceAccount.code)
+        position = getPosition(transactionFormField.sourceAccount.code)
       }
       return `order: ${position}; ${displayStyle}`
     }
@@ -289,7 +295,6 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
       if ([transactionFormField.sourceAccount.code, transactionFormField.destinationAccount.code].includes(fieldCode)) {
         return `order: 0`
       }
-      const position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
       return `order: ${position}; ${displayStyle}`
     }
 

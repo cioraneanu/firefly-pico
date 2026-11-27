@@ -19,7 +19,7 @@
       <app-checkbox v-model="withoutTag" :label="$t('transaction_list_page.without_tag')" />
     </div>
 
-    <div class="flex flex-col gap-1">
+    <div v-if="profileStore.budgetsEnabled" class="flex flex-col gap-1">
       <budget-select v-model="budget" :disabled="!!withoutBudget" />
       <app-checkbox v-model="withoutBudget" :label="$t('transaction_list_page.without_budget')" />
     </div>

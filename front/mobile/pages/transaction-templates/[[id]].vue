@@ -35,7 +35,7 @@
 
           <tag-select v-model="tags" />
 
-          <budget-select v-model="budget" />
+          <budget-select v-if="isBudgetVisible" v-model="budget" />
 
           <subscription-select v-if="isSubscriptionVisible" v-model="subscription" />
 
@@ -75,6 +75,7 @@ const {
   budget,
   subscription,
   isSubscriptionVisible,
+  isBudgetVisible,
   accountSourceAllowedTypes,
   accountDestinationAllowedTypes,
 } = useTemplateForm()

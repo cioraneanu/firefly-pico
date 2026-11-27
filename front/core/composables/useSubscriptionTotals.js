@@ -1,6 +1,7 @@
 import Subscription from '~/core/models/Subscription'
 import Currency from '~/core/models/Currency'
 import { convertCurrency } from '~/core/utils/CurrencyUtils'
+import { withoutDeleted } from '~/core/utils/DeleteUtils'
 
 // Cost of the active subscriptions, converted into the dashboard currency like every dashboard card
 export function useSubscriptionTotals() {
@@ -14,7 +15,7 @@ export function useSubscriptionTotals() {
   }
 
   const monthly = computed(() =>
-    subscriptionStore.subscriptionList
+    withoutDeleted(subscriptionStore.subscriptionList)
       .filter((subscription) => Subscription.isActive(subscription))
       .reduce((sum, subscription) => sum + toDashboardCurrency(Subscription.getMonthlyCost(subscription), Subscription.getCurrencyCode(subscription)), 0),
   )

@@ -30,7 +30,7 @@
     <d-field :label="$t('category')">
       <d-category-select v-model="form.category" />
     </d-field>
-    <d-field :label="$t('budget')">
+    <d-field v-if="form.isBudgetVisible" :label="$t('budget')">
       <d-budget-select v-model="form.budget" />
     </d-field>
     <d-field v-if="form.isSubscriptionVisible" :label="$t('subscription')">

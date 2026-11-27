@@ -74,6 +74,7 @@ import {
   IconPlayerPlay,
   IconPlugConnected,
   IconPlus,
+  IconReceiptRefund,
   IconRefresh,
   IconTag,
   IconTemplate,
@@ -125,6 +126,7 @@ const stats = computed(() => [
   { t: 'settings.setup.budgets', value: useBudgetStore().budgetList.length, icon: IconBasket },
   { t: 'settings.setup.piggy_banks', value: usePiggyBankStore().piggyBankList.length, icon: IconPigMoney },
   { t: 'settings.setup.recurring_transactions', value: useRecurringTransactionStore().recurringTransactionList.length, icon: IconCalendarRepeat },
+  { t: 'subscriptions', value: useSubscriptionStore().subscriptionList.length, icon: IconReceiptRefund },
   { t: 'settings.setup.last_sync', value: appStore.lastSync ? DateUtils.dateToUIWithTime(appStore.lastSync) : '-', icon: IconCloudDown },
 ])
 

@@ -39,7 +39,7 @@
           <d-checkbox v-model="draft.withoutTag">{{ $t('without') }}</d-checkbox>
         </div>
       </d-field>
-      <d-field :label="$t('budget')">
+      <d-field v-if="profileStore.budgetsEnabled" :label="$t('budget')">
         <div class="flex flex-col gap-1">
           <d-budget-select v-model="draft.budget" />
           <d-checkbox v-model="draft.withoutBudget">{{ $t('without') }}</d-checkbox>

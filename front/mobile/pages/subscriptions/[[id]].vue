@@ -38,7 +38,7 @@
 
           <subscription-repeat-select v-model="repeatFreq" name="repeatFreq" :rules="[rule.required()]" required />
 
-          <app-field v-model="skip" name="skip" type="number" inputmode="numeric" :label="$t('subscription_page.skip')" :description="$t('subscription_page.skip_description')" />
+          <app-field v-model="skip" name="skip" type="digit" :label="$t('subscription_page.skip')" :description="$t('subscription_page.skip_description')" />
 
           <div class="mx-2">
             <app-date v-model="endDate" :label="$t('subscription_page.end_date')" />

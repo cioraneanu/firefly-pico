@@ -51,6 +51,8 @@ export function useTemplateForm(options = {}) {
 
   // Subscriptions are paid by withdrawals only; a template without a type gets it from its accounts
   const isSubscriptionVisible = computed(() => useProfileStore().subscriptionsEnabled && (!fields.type.value || isEqual(fields.type.value, Transaction.types.expense)))
+  watch(isSubscriptionVisible, (isVisible) => !isVisible && (fields.subscription.value = null))
+  const isBudgetVisible = computed(() => useProfileStore().budgetsEnabled)
 
-  return { ...form, ...fields, accountSourceAllowedTypes, accountDestinationAllowedTypes, isSubscriptionVisible }
+  return { ...form, ...fields, accountSourceAllowedTypes, accountDestinationAllowedTypes, isSubscriptionVisible, isBudgetVisible }
 }

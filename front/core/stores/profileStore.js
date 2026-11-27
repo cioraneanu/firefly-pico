@@ -136,6 +136,8 @@ export const useProfileStore = defineStore('profile', () => {
   async function getProfiles({ showLoading = true } = {}) {
     const appStore = useAppStore()
     if (!appStore.syncProfileInDB) {
+      // Without DB profiles the local settings still need the fields added since they were saved
+      migrateProfile()
       return
     }
 
