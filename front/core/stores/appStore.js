@@ -15,6 +15,7 @@ import { useTemplateStore } from '~/core/stores/templateStore.js'
 import { useCurrencyStore } from '~/core/stores/currencyStore.js'
 import { useBudgetStore } from '~/core/stores/budgetStore.js'
 import { usePiggyBankStore } from '~/core/stores/piggyBankStore.js'
+import { useSubscriptionStore } from '~/core/stores/subscriptionStore.js'
 import { useRecurringTransactionStore } from '~/core/stores/recurringTransactionStore.js'
 import { useIconStore } from '~/core/stores/iconStore.js'
 import DateUtils from '~/core/utils/DateUtils.js'
@@ -122,6 +123,7 @@ export const useAppStore = defineStore('app', () => {
     const budgetStore = useBudgetStore()
     const piggyBankStore = usePiggyBankStore()
     const recurringTransactionStore = useRecurringTransactionStore()
+    const subscriptionStore = useSubscriptionStore()
     const iconStore = useIconStore()
     const profileStore = useProfileStore()
 
@@ -134,6 +136,7 @@ export const useAppStore = defineStore('app', () => {
       budgetStore.fetchBudgets(),
       piggyBankStore.fetchPiggyBanks(),
       recurringTransactionStore.fetchRecurringTransactions(),
+      subscriptionStore.fetchSubscriptions(),
       iconStore.fetchCustomIcons(),
       currencyStore.fetchExchangeRate(),
       profileStore.getProfiles(),

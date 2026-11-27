@@ -11,7 +11,7 @@ class TransactionTemplate extends Model
     protected $fillable = [
         'name',
         'amount', 'account_source_id', 'account_destination_id', 'category_id', 'budget_id',
-        'type', 'notes', 'description'
+        'type', 'notes', 'description', 'bill_id'
     ];
 
     protected $with = ['tags', 'extraNames'];

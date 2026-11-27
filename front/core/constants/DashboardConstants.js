@@ -11,6 +11,7 @@ export const dashboardCard = {
   todoTransactions: { t: 'settings.dashboard.cards.todo_transactions', code: 'todoTransactions', isVisible: true },
   piggyBanks: { t: 'settings.dashboard.cards.piggy_banks', code: 'piggyBanks', isVisible: true },
   recurringTransactions: { t: 'settings.dashboard.cards.recurring_transactions', code: 'recurringTransactions', isVisible: true },
+  subscriptions: { t: 'settings.dashboard.cards.subscriptions', code: 'subscriptions', isVisible: true },
 }
 
 export const dashboardCardList = Object.values(dashboardCard)

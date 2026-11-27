@@ -4,7 +4,8 @@ import { areIntEqual } from '~/core/utils/DataUtils'
 export function useEntityForm({ list, dictionary, transformer, onEvent, ...options }) {
   const sync = (event, payload) => {
     const others = list.value.filter((item) => !areIntEqual(item.id, form.itemId.value))
-    if (event === useFormEvent.postSave) list.value = [transformer.transformFromApi(get(payload, 'data.data')), ...others]
+    // Transformers change the item in place and useForm transforms the same response again: give the store its own copy
+    if (event === useFormEvent.postSave) list.value = [transformer.transformFromApi(cloneDeep(get(payload, 'data.data'))), ...others]
     if (event === useFormEvent.postDelete) list.value = others
     onEvent?.(event, payload)
   }

@@ -224,7 +224,8 @@
       "demo_info": "Esplora l'app con dati di esempio salvati solo su questo dispositivo, senza server. Uscendo, i dati di esempio vengono eliminati e l'app viene reimpostata.",
       "disconnect": "Disconnetti",
       "disconnect_confirm": "Rimuove il token di accesso e tutti i dati e le impostazioni salvati su questo dispositivo, poi reimposta l'app. I tuoi dati di Firefly III non vengono toccati.",
-      "no_token": "Nessun token di accesso. Aggiungine uno o prova la modalità demo in Configurazione."
+      "no_token": "Nessun token di accesso. Aggiungine uno o prova la modalità demo in Configurazione.",
+      "enable_subscriptions": "Abilita abbonamenti"
     },
     "ui_entry": "Interfaccia utente",
     "ui": {
@@ -426,7 +427,8 @@
         "transfers_by_category": "Trasferimenti per categorie",
         "todo_transactions": "Transazioni da fare",
         "piggy_banks": "Salvadanai",
-        "recurring_transactions": "Prossime transazioni ricorrenti"
+        "recurring_transactions": "Prossime transazioni ricorrenti",
+        "subscriptions": "Abbonamenti"
       }
     },
     "token": {
@@ -822,7 +824,8 @@
     "without_budget": "Senza budget",
     "active_count": "{count} attivi",
     "empty_hint": "Le tue transazioni appariranno qui",
-    "showing": "Visualizzate {count} di {total}"
+    "showing": "Visualizzate {count} di {total}",
+    "without_subscription": "Senza abbonamento"
   },
   "dash_page": {
     "hide_amounts": "Nascondi importi",
@@ -837,7 +840,12 @@
     "no_piggy_banks": "Nessun salvadanaio ^_^",
     "amount_left": "{amount} rimanenti",
     "peak": "Picco {amount} · {date}",
-    "no_todo_tag": "Nessun tag \"todo\""
+    "no_todo_tag": "Nessun tag \"todo\"",
+    "subscriptions_paid_of": "Pagati {paid} su {total}",
+    "subscriptions_off_schedule": "Pagato in anticipo o in ritardo",
+    "subscriptions_cancel_by": "Disdici entro il {date}",
+    "subscriptions_ends_on": "Termina il {date}",
+    "no_subscriptions": "Nessun abbonamento in scadenza questo mese"
   },
   "todo_page": {
     "title": "Inbox TODO",
@@ -882,5 +890,41 @@
     "selected": "{count} selezionate",
     "clear": "Pulisci",
     "some_failed": "Impossibile aggiornarne {count}. Riprova."
+  },
+  "subscription": "Abbonamento",
+  "subscriptions": "Abbonamenti",
+  "subscription_select": "Seleziona abbonamento",
+  "subscription_page": {
+    "title_add": "Aggiungi abbonamento",
+    "title_edit": "Modifica abbonamento",
+    "amount_min": "Importo minimo",
+    "amount_max": "Importo massimo",
+    "amount_max_too_low": "Deve essere almeno l'importo minimo",
+    "first_date": "Prima data prevista",
+    "repeat_freq": "Si ripete",
+    "skip": "Salta",
+    "skip_description": "Periodi da saltare tra i pagamenti, es. 1 = un periodo sì e uno no",
+    "end_date": "Data di fine",
+    "extension_date": "Data di rinnovo",
+    "extension_date_description": "Ultimo giorno per disdire o rinnovare il contratto",
+    "active": "Attivo",
+    "repeat": {
+      "weekly": "Settimanale",
+      "monthly": "Mensile",
+      "quarterly": "Trimestrale",
+      "half-year": "Semestrale",
+      "yearly": "Annuale"
+    },
+    "per_month": "al mese",
+    "per_year": "all'anno",
+    "next": "Prossimo {date}",
+    "state": {
+      "paid": "Pagato",
+      "due": "Da pagare",
+      "missed": "Mancato",
+      "not_due": "Non in scadenza"
+    },
+    "search": "Cerca abbonamenti…",
+    "empty_hint": "I tuoi abbonamenti appariranno qui"
   }
 }

@@ -5,6 +5,7 @@ import Category from '~/core/models/Category'
 import Tag from '~/core/models/Tag'
 import Currency from '~/core/models/Currency.js'
 import Transaction from '~/core/models/Transaction'
+import Subscription from '~/core/models/Subscription'
 import { transactionFormField, transactionExtraDateFieldList } from '~/core/constants/TransactionConstants.js'
 import { generateChildren } from '~/core/utils/VueUtils'
 import { isStringEmpty } from '~/core/utils/DataUtils'
@@ -19,7 +20,7 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
   const categoryStore = useCategoryStore()
   const tagStore = useTagStore()
 
-  const { amount, amountForeign, date, tags, description, notes, budget, piggyBank, accountSource, accountDestination, category, type, currencyForeign } = generateChildren(item, [
+  const { amount, amountForeign, date, tags, description, notes, budget, subscription, piggyBank, accountSource, accountDestination, category, type, currencyForeign } = generateChildren(item, [
     { computed: 'amount', parentKey: `${transactionPathKey}.amount` },
     { computed: 'amountForeign', parentKey: `${transactionPathKey}.amountForeign` },
     { computed: 'currencyForeign', parentKey: `${transactionPathKey}.currencyForeign` },
@@ -32,6 +33,7 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
     { computed: 'category', parentKey: `${transactionPathKey}.category` },
     { computed: 'type', parentKey: `${transactionPathKey}.type` },
     { computed: 'budget', parentKey: `${transactionPathKey}.budget` },
+    { computed: 'subscription', parentKey: `${transactionPathKey}.subscription` },
     { computed: 'piggyBank', parentKey: `${transactionPathKey}.piggyBank` },
   ])
 
@@ -88,7 +90,18 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
     notes.value = transactionTemplate.notes
     tags.value = transactionTemplate.tags
     budget.value = transactionTemplate.budget
+    subscription.value = transactionTemplate.subscription ?? null
   }
+
+  // Picking a subscription fills in its expected amount when none is typed yet
+  watch(subscription, (newValue) => {
+    if (newValue && !(parseFloat(amount.value) > 0)) {
+      amount.value = Subscription.getAverageAmount(newValue).toFixed(Account.getCurrencyDecimalPlaces(accountSource.value) ?? 2)
+    }
+  })
+
+  // Subscriptions are paid by withdrawals only (no type yet, e.g. a typeless template, isn't a reason to drop it)
+  watch(type, (newValue) => newValue && !isEqual(newValue, Transaction.types.expense) && subscription.value && (subscription.value = null))
 
   watch(category, async (newValue) => {
     if (!profileStore.copyCategoryToDescription || !isStringEmpty(description.value) || itemId.value || !newValue) {
@@ -252,9 +265,15 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
     return field ? field.isVisible : fieldType.isVisible
   }
 
+  // Fields missing from the saved config (added in a newer app version) go last instead of first
+  const getPosition = (code) => {
+    const position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === code)
+    return position === -1 ? 999 : position
+  }
+
   const getStyleForField = (fieldType) => {
     const fieldCode = fieldType.code
-    const position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
+    const position = getPosition(fieldCode)
     const displayStyle = isFieldVisible(fieldType) ? '' : 'display: none'
 
     if (isTypeExpense.value) {
@@ -262,12 +281,12 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
     }
 
     if (isTypeIncome.value) {
-      let position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
+      let position = getPosition(fieldCode)
       if (fieldCode === transactionFormField.sourceAccount.code) {
-        position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === transactionFormField.destinationAccount.code)
+        position = getPosition(transactionFormField.destinationAccount.code)
       }
       if (fieldCode === transactionFormField.destinationAccount.code) {
-        position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === transactionFormField.sourceAccount.code)
+        position = getPosition(transactionFormField.sourceAccount.code)
       }
       return `order: ${position}; ${displayStyle}`
     }
@@ -276,7 +295,6 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
       if ([transactionFormField.sourceAccount.code, transactionFormField.destinationAccount.code].includes(fieldCode)) {
         return `order: 0`
       }
-      const position = profileStore.transactionFormFieldsConfig.findIndex((item) => item.code === fieldCode)
       return `order: ${position}; ${displayStyle}`
     }
 
@@ -310,6 +328,7 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
     description,
     notes,
     budget,
+    subscription,
     piggyBank,
     accountSource,
     accountDestination,
@@ -326,6 +345,7 @@ export const useTransactionForm = ({ item, itemId, profileStore = useProfileStor
     onToday,
     onAddDay,
     isTypeTransfer,
+    isTypeExpense,
     getStyleForField,
     isFieldVisible,
     accountSourceBinding,

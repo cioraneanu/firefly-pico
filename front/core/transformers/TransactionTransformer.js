@@ -8,6 +8,7 @@ import { useCategoryStore } from '~/core/stores/categoryStore'
 import { useTagStore } from '~/core/stores/tagStore'
 import { useBudgetStore } from '~/core/stores/budgetStore'
 import { usePiggyBankStore } from '~/core/stores/piggyBankStore'
+import { useSubscriptionStore } from '~/core/stores/subscriptionStore'
 import { useCurrencyStore } from '~/core/stores/currencyStore'
 import Transaction from '~/core/models/Transaction'
 import Tag from '~/core/models/Tag'
@@ -28,6 +29,7 @@ export default class TransactionTransformer extends ApiTransformer {
     const tagDictionaryByName = useTagStore().tagDictionaryByName
     const budgetDictionary = useBudgetStore().budgetDictionary
     const piggyBankDictionary = usePiggyBankStore().piggyBankDictionary
+    const subscriptionDictionary = useSubscriptionStore().subscriptionDictionary
     const currencyDictionary = useCurrencyStore().currencyDictionary
 
     item.attributes.transactions = item.attributes.transactions.map((transaction) => {
@@ -46,6 +48,7 @@ export default class TransactionTransformer extends ApiTransformer {
       transaction.budget = budgetDictionary[transaction['budget_id']]
       // Firefly III does not return "piggy_bank_id" on reads, but map it in case it ever does
       transaction.piggyBank = piggyBankDictionary[transaction['piggy_bank_id']]
+      transaction.subscription = subscriptionDictionary[transaction['bill_id']]
       transaction.type = Transaction.typesList.find((type) => type.fireflyCode === transaction.type)
 
       transaction.tags = transaction.tags.map((tagName) => tagDictionaryByName[LanguageUtils.removeAccentsAndLowerCase(tagName)])
@@ -64,6 +67,7 @@ export default class TransactionTransformer extends ApiTransformer {
 
   static transformToApi(item) {
     const profileStore = useProfileStore()
+    const subscriptionDictionary = useSubscriptionStore().subscriptionDictionary
     const id = get(item, 'id')
 
     const transactions = item.attributes.transactions.map((transaction) => {
@@ -79,7 +83,6 @@ export default class TransactionTransformer extends ApiTransformer {
         destination_id: get(accountDestination, 'id'),
         destination_name: Account.getDisplayName(accountDestination),
         category_id: get(transaction, 'category.id') ?? null,
-        budget_id: get(transaction, 'budget.id') ?? 0,
         date: DateUtils.dateToString(transaction.date, DateUtils.FORMAT_ENGLISH_DATE_HOUR_MINUTE),
         type: get(transaction, 'type.fireflyCode') ?? Transaction.getTransactionTypeForAccounts({ source: accountSource, destination: accountDestination }).fireflyCode,
       }
@@ -92,6 +95,17 @@ export default class TransactionTransformer extends ApiTransformer {
       if (foreignAmount > 0 && foreignCurrencyId) {
         newItem.foreign_amount = foreignAmount
         newItem.foreign_currency_id = foreignCurrencyId
+      }
+
+      // Budgets off: leave the transaction's budget in Firefly alone
+      if (profileStore.budgetsEnabled) {
+        newItem.budget_id = get(transaction, 'budget.id') ?? 0
+      }
+
+      // Only touch the link while subscriptions are on, and keep a link to a subscription this device doesn't know
+      if (profileStore.subscriptionsEnabled) {
+        const billId = get(transaction, 'bill_id')
+        newItem.bill_id = get(transaction, 'subscription.id') ?? (billId && !subscriptionDictionary[billId] ? billId : null)
       }
 
       const piggyBankId = get(transaction, 'piggyBank.id')

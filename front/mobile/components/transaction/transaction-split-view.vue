@@ -55,6 +55,11 @@
           <b>{{ split.budget ? Budget.getDisplayName(split.budget) : split.budget_name }}</b>
         </div>
 
+        <div v-if="profileStore.subscriptionsEnabled && (split.subscription || split.bill_name)">
+          <span class="k"><app-icon :icon="TablerIconConstants.subscription" :size="14" :stroke="2" />{{ $t('subscription') }}</span>
+          <b>{{ split.subscription ? Subscription.getDisplayName(split.subscription) : split.bill_name }}</b>
+        </div>
+
         <div v-if="profileStore.tagsEnabled && split.tags?.filter(Boolean).length">
           <span class="k"><app-icon :icon="TablerIconConstants.tag" :size="14" :stroke="2" />{{ $t('tags') }}</span>
           <span class="mx-chips justify-end" style="margin-top: 0">
@@ -91,6 +96,7 @@
 import { IconArrowsSplit2 } from '@tabler/icons-vue'
 import Account from '~/core/models/Account.js'
 import Budget from '~/core/models/Budget.js'
+import Subscription from '~/core/models/Subscription.js'
 import Category from '~/core/models/Category.js'
 import Tag from '~/core/models/Tag.js'
 import DateUtils from '~/core/utils/DateUtils.js'

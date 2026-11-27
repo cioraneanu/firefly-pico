@@ -224,7 +224,8 @@
       "demo_info": "使用仅保存在此设备上的示例数据体验应用，无需服务器。退出后将删除示例数据并重置应用。",
       "disconnect": "断开连接",
       "disconnect_confirm": "这将删除访问令牌以及此设备上保存的所有数据和设置，然后重置应用。您的 Firefly III 数据不受影响。",
-      "no_token": "尚未设置访问令牌。请在设置中添加一个，或试用演示模式。"
+      "no_token": "尚未设置访问令牌。请在设置中添加一个，或试用演示模式。",
+      "enable_subscriptions": "启用订阅"
     },
     "ui_entry": "用户界面",
     "ui": {
@@ -434,7 +435,8 @@
         "transfers_by_category": "按类别分类的转账",
         "todo_transactions": "待处理交易",
         "piggy_banks": "存钱罐",
-        "recurring_transactions": "即将到来的交易"
+        "recurring_transactions": "即将到来的交易",
+        "subscriptions": "订阅"
       }
     },
     "sync_everything": "全部同步",
@@ -780,7 +782,8 @@
     "without_budget": "无预算",
     "active_count": "{count} 个已启用",
     "empty_hint": "你的交易将显示在这里",
-    "showing": "显示 {count} / {total}"
+    "showing": "显示 {count} / {total}",
+    "without_subscription": "无订阅"
   },
   "dash_page": {
     "hide_amounts": "隐藏金额",
@@ -795,7 +798,12 @@
     "no_piggy_banks": "没有存钱罐 ^_^",
     "amount_left": "剩余 {amount}",
     "peak": "峰值 {amount} · {date}",
-    "no_todo_tag": "没有 \"todo\" 标签"
+    "no_todo_tag": "没有 \"todo\" 标签",
+    "subscriptions_paid_of": "已付 {paid}/{total}",
+    "subscriptions_off_schedule": "提前或延后付款",
+    "subscriptions_cancel_by": "请在 {date} 前取消",
+    "subscriptions_ends_on": "{date} 结束",
+    "no_subscriptions": "本月没有到期的订阅"
   },
   "piggy_bank_page": {
     "title_add": "添加存钱罐",
@@ -882,5 +890,41 @@
     "selected": "已选 {count} 条",
     "clear": "清除",
     "some_failed": "{count} 项无法更新。请重试。"
+  },
+  "subscription": "订阅",
+  "subscriptions": "订阅",
+  "subscription_select": "选择订阅",
+  "subscription_page": {
+    "title_add": "添加订阅",
+    "title_edit": "编辑订阅",
+    "amount_min": "最低金额",
+    "amount_max": "最高金额",
+    "amount_max_too_low": "不能低于最低金额",
+    "first_date": "首次预计日期",
+    "repeat_freq": "重复",
+    "skip": "跳过",
+    "skip_description": "两次付款之间跳过的周期数，例如 1 = 每隔一个周期",
+    "end_date": "结束日期",
+    "extension_date": "续约日期",
+    "extension_date_description": "取消或续约的最后一天",
+    "active": "启用",
+    "repeat": {
+      "weekly": "每周",
+      "monthly": "每月",
+      "quarterly": "每季度",
+      "half-year": "每半年",
+      "yearly": "每年"
+    },
+    "per_month": "每月",
+    "per_year": "每年",
+    "next": "下次 {date}",
+    "state": {
+      "paid": "已付",
+      "due": "待付",
+      "missed": "未付",
+      "not_due": "本月无"
+    },
+    "search": "搜索订阅…",
+    "empty_hint": "你的订阅将显示在这里"
   }
 }

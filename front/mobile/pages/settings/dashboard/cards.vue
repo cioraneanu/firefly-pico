@@ -36,6 +36,7 @@ const isCardEnabled = (cardCode) => {
   if ([dashboardCard.expensesByCategory.code, dashboardCard.transfersByCategory.code].includes(cardCode) && !profileStore.categoriesEnabled) return false
   if (cardCode === dashboardCard.piggyBanks.code && !profileStore.piggyBanksEnabled) return false
   if (cardCode === dashboardCard.recurringTransactions.code && !profileStore.recurringTransactionsEnabled) return false
+  if (cardCode === dashboardCard.subscriptions.code && !profileStore.subscriptionsEnabled) return false
   return true
 }
 

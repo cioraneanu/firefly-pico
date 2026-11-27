@@ -46,6 +46,7 @@ import DashboardTagTotalsTransfer from '~/mobile/components/dashboard/dashboard-
 import DashboardCategoryTotalsTransfer from '~/mobile/components/dashboard/dashboard-category-totals-transfer/dashboard-category-totals-transfer.vue'
 import DashboardTodoTransactions from '~/mobile/components/dashboard/dashboard-todo-transactions/dashboard-todo-transactions.vue'
 import DashboardPiggyBanks from '~/mobile/components/dashboard/dashboard-piggy-banks/dashboard-piggy-banks.vue'
+import DashboardSubscriptions from '~/mobile/components/dashboard/dashboard-subscriptions/dashboard-subscriptions.vue'
 import DashboardRecurringTransactions from '~/mobile/components/dashboard/dashboard-recurring-transactions/dashboard-recurring-transactions.vue'
 
 import { useDashboardStore } from '~/core/stores/dashboardStore'
@@ -65,6 +66,7 @@ const cardComponents = {
   [dashboardCard.transfersByCategory.code]: DashboardCategoryTotalsTransfer,
   [dashboardCard.todoTransactions.code]: DashboardTodoTransactions,
   [dashboardCard.piggyBanks.code]: DashboardPiggyBanks,
+  [dashboardCard.subscriptions.code]: DashboardSubscriptions,
   [dashboardCard.recurringTransactions.code]: DashboardRecurringTransactions,
 }
 

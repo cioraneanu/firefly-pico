@@ -25,11 +25,12 @@
           <d-chip :icon="IconCreditCard">{{ Account.getDisplayName(split.accountDestination) }}</d-chip>
         </span>
       </d-field>
-      <d-field v-if="split.category || split.tags?.length || split.budget" :label="$t('classifications')">
+      <d-field v-if="split.category || split.tags?.length || split.budget || split.subscription" :label="$t('classifications')">
         <span class="flex flex-wrap gap-1">
           <d-chip v-if="split.category" :icon="Category.getIcon(split.category) ?? IconCategory">{{ Category.getDisplayName(split.category) }}</d-chip>
           <d-chip v-for="tag in split.tags?.filter(Boolean)" :key="tag.id" :icon="Tag.getIcon(tag) ?? IconTag">{{ Tag.getDisplayName(tag) }}</d-chip>
           <d-chip v-if="split.budget" :icon="IconBasket">{{ Budget.getDisplayName(split.budget) }}</d-chip>
+          <d-chip v-if="split.subscription" :icon="IconReceiptRefund">{{ Subscription.getDisplayName(split.subscription) }}</d-chip>
         </span>
       </d-field>
       <d-field v-if="split.notes" :label="$t('notes')">
@@ -40,10 +41,11 @@
 </template>
 
 <script setup>
-import { IconArrowRight, IconBasket, IconCategory, IconCreditCard, IconTag } from '@tabler/icons-vue'
+import { IconArrowRight, IconBasket, IconCategory, IconCreditCard, IconReceiptRefund, IconTag } from '@tabler/icons-vue'
 import { get } from 'lodash-es'
 import Account from '~/core/models/Account'
 import Budget from '~/core/models/Budget'
+import Subscription from '~/core/models/Subscription'
 import Category from '~/core/models/Category'
 import Tag from '~/core/models/Tag'
 import Transaction from '~/core/models/Transaction'

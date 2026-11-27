@@ -54,6 +54,7 @@ import DashBudgets from '~/desktop/components/dashboard/dash-budgets.vue'
 import DashBars from '~/desktop/components/dashboard/dash-bars.vue'
 import DashTodo from '~/desktop/components/dashboard/dash-todo.vue'
 import DashPiggyBanks from '~/desktop/components/dashboard/dash-piggy-banks.vue'
+import DashSubscriptions from '~/desktop/components/dashboard/dash-subscriptions.vue'
 import DashRecurring from '~/desktop/components/dashboard/dash-recurring.vue'
 
 const dashboardStore = useDashboardStore()
@@ -90,6 +91,7 @@ const cards = {
   [dashboardCard.transfersByCategory.code]: DashBars,
   [dashboardCard.todoTransactions.code]: DashTodo,
   [dashboardCard.piggyBanks.code]: DashPiggyBanks,
+  [dashboardCard.subscriptions.code]: DashSubscriptions,
   [dashboardCard.recurringTransactions.code]: DashRecurring,
 }
 

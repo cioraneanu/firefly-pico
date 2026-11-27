@@ -224,7 +224,8 @@
       "demo_info": "Explorează aplicația cu date de exemplu păstrate doar pe acest dispozitiv, fără server. La ieșire, datele de exemplu se șterg și aplicația se resetează.",
       "disconnect": "Deconectare",
       "disconnect_confirm": "Se șterg tokenul de acces și toate datele și setările salvate pe acest dispozitiv, apoi aplicația este resetată. Datele din Firefly III nu sunt afectate.",
-      "no_token": "Nu ai setat încă un token de acces. Adaugă unul sau încearcă modul demo din Setări."
+      "no_token": "Nu ai setat încă un token de acces. Adaugă unul sau încearcă modul demo din Setări.",
+      "enable_subscriptions": "Activează abonamentele"
     },
     "ui_entry": "Interfața utilizatorului",
     "ui": {
@@ -426,7 +427,8 @@
         "transfers_by_category": "Transferuri pe categorii",
         "todo_transactions": "Tranzacții în așteptare",
         "piggy_banks": "Pușculițe",
-        "recurring_transactions": "Tranzacții recurente viitoare"
+        "recurring_transactions": "Tranzacții recurente viitoare",
+        "subscriptions": "Abonamente"
       }
     },
     "token": {
@@ -822,7 +824,8 @@
     "without_budget": "Fără buget",
     "active_count": "{count} active",
     "empty_hint": "Tranzacțiile tale vor apărea aici",
-    "showing": "Se afișează {count} din {total}"
+    "showing": "Se afișează {count} din {total}",
+    "without_subscription": "Fără abonament"
   },
   "dash_page": {
     "hide_amounts": "Ascunde sumele",
@@ -837,7 +840,12 @@
     "no_piggy_banks": "Nicio pușculiță ^_^",
     "amount_left": "{amount} rămași",
     "peak": "Maxim {amount} · {date}",
-    "no_todo_tag": "Nicio etichetă \"todo\""
+    "no_todo_tag": "Nicio etichetă \"todo\"",
+    "subscriptions_paid_of": "Plătite {paid} din {total}",
+    "subscriptions_off_schedule": "Plătit mai devreme sau mai târziu",
+    "subscriptions_cancel_by": "Anulează până la {date}",
+    "subscriptions_ends_on": "Se încheie pe {date}",
+    "no_subscriptions": "Niciun abonament luna aceasta"
   },
   "todo_page": {
     "title": "Inbox TODO",
@@ -882,5 +890,41 @@
     "selected": "{count} selectate",
     "clear": "Golește",
     "some_failed": "{count} nu au putut fi actualizate. Încearcă din nou."
+  },
+  "subscription": "Abonament",
+  "subscriptions": "Abonamente",
+  "subscription_select": "Alege abonamentul",
+  "subscription_page": {
+    "title_add": "Adaugă abonament",
+    "title_edit": "Editează abonamentul",
+    "amount_min": "Sumă minimă",
+    "amount_max": "Sumă maximă",
+    "amount_max_too_low": "Trebuie să fie cel puțin suma minimă",
+    "first_date": "Prima dată așteptată",
+    "repeat_freq": "Se repetă",
+    "skip": "Sari peste",
+    "skip_description": "Perioade sărite între plăți, ex. 1 = o perioadă da, una nu",
+    "end_date": "Data de sfârșit",
+    "extension_date": "Data prelungirii",
+    "extension_date_description": "Ultima zi pentru anulare sau prelungire",
+    "active": "Activ",
+    "repeat": {
+      "weekly": "Săptămânal",
+      "monthly": "Lunar",
+      "quarterly": "Trimestrial",
+      "half-year": "La 6 luni",
+      "yearly": "Anual"
+    },
+    "per_month": "pe lună",
+    "per_year": "pe an",
+    "next": "Următoarea {date}",
+    "state": {
+      "paid": "Plătit",
+      "due": "De plătit",
+      "missed": "Ratat",
+      "not_due": "Nu e scadent"
+    },
+    "search": "Caută abonamente…",
+    "empty_hint": "Abonamentele tale vor apărea aici"
   }
 }

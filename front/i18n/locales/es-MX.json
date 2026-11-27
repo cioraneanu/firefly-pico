@@ -224,7 +224,8 @@
       "demo_info": "Explora la app con datos de ejemplo guardados solo en este dispositivo, sin servidor. Al salir, los datos de ejemplo se borran y la app se restablece.",
       "disconnect": "Desconectar",
       "disconnect_confirm": "Elimina el token de acceso y todos los datos y ajustes guardados en este dispositivo, y luego restablece la app. Tus datos de Firefly III no se modifican.",
-      "no_token": "Aún no hay token de acceso. Agrega uno o prueba el modo demo en Configuración."
+      "no_token": "Aún no hay token de acceso. Agrega uno o prueba el modo demo en Configuración.",
+      "enable_subscriptions": "Activar suscripciones"
     },
     "ui_entry": "Interfaz de usuario",
     "ui": {
@@ -426,7 +427,8 @@
         "transfers_by_category": "Transferencias por categorías",
         "todo_transactions": "Transacciones pendientes",
         "piggy_banks": "alcancías",
-        "recurring_transactions": "Próximas transacciones recurrentes"
+        "recurring_transactions": "Próximas transacciones recurrentes",
+        "subscriptions": "Suscripciones"
       }
     },
     "token": {
@@ -822,7 +824,8 @@
     "without_budget": "Sin presupuesto",
     "active_count": "{count} activos",
     "empty_hint": "Tus transacciones aparecerán aquí",
-    "showing": "Mostrando {count} de {total}"
+    "showing": "Mostrando {count} de {total}",
+    "without_subscription": "Sin suscripción"
   },
   "dash_page": {
     "hide_amounts": "Ocultar montos",
@@ -837,7 +840,12 @@
     "no_piggy_banks": "Sin alcancías ^_^",
     "amount_left": "Quedan {amount}",
     "peak": "Máximo {amount} · {date}",
-    "no_todo_tag": "Sin etiqueta \"todo\""
+    "no_todo_tag": "Sin etiqueta \"todo\"",
+    "subscriptions_paid_of": "Pagadas {paid} de {total}",
+    "subscriptions_off_schedule": "Pagado antes o después",
+    "subscriptions_cancel_by": "Cancela antes del {date}",
+    "subscriptions_ends_on": "Termina el {date}",
+    "no_subscriptions": "No hay suscripciones este mes"
   },
   "todo_page": {
     "title": "Bandeja TODO",
@@ -882,5 +890,41 @@
     "selected": "{count} seleccionadas",
     "clear": "Limpiar",
     "some_failed": "No se pudieron actualizar {count}. Inténtalo de nuevo."
+  },
+  "subscription": "Suscripción",
+  "subscriptions": "Suscripciones",
+  "subscription_select": "Seleccionar suscripción",
+  "subscription_page": {
+    "title_add": "Agregar suscripción",
+    "title_edit": "Editar suscripción",
+    "amount_min": "Monto mínimo",
+    "amount_max": "Monto máximo",
+    "amount_max_too_low": "Debe ser al menos el monto mínimo",
+    "first_date": "Primera fecha esperada",
+    "repeat_freq": "Se repite",
+    "skip": "Saltar",
+    "skip_description": "Periodos a saltar entre pagos, p. ej. 1 = un periodo sí y otro no",
+    "end_date": "Fecha de fin",
+    "extension_date": "Fecha de renovación",
+    "extension_date_description": "Último día para cancelar o renovar el contrato",
+    "active": "Activa",
+    "repeat": {
+      "weekly": "Semanal",
+      "monthly": "Mensual",
+      "quarterly": "Trimestral",
+      "half-year": "Semestral",
+      "yearly": "Anual"
+    },
+    "per_month": "al mes",
+    "per_year": "al año",
+    "next": "Próximo {date}",
+    "state": {
+      "paid": "Pagado",
+      "due": "Por pagar",
+      "missed": "Atrasado",
+      "not_due": "Sin vencimiento"
+    },
+    "search": "Buscar suscripciones…",
+    "empty_hint": "Tus suscripciones aparecerán aquí"
   }
 }

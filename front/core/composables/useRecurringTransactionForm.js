@@ -33,6 +33,7 @@ export function useRecurringTransactionForm(options = {}) {
     { computed: 'accountDestination', parentKey: 'attributes.accountDestination' },
     { computed: 'category', parentKey: 'attributes.category' },
     { computed: 'budget', parentKey: 'attributes.budget' },
+    { computed: 'subscription', parentKey: 'attributes.subscription' },
     { computed: 'tags', parentKey: 'attributes.tags' },
     { computed: 'description', parentKey: 'attributes.description' },
     { computed: 'repetitionType', parentKey: 'attributes.repetitionType' },
@@ -73,6 +74,10 @@ export function useRecurringTransactionForm(options = {}) {
   const isTypeExpense = computed(() => isEqual(type.value, Transaction.types.expense))
   const isTypeIncome = computed(() => isEqual(type.value, Transaction.types.income))
   const isTypeTransfer = computed(() => isEqual(type.value, Transaction.types.transfer))
+  // Subscriptions are paid by withdrawals only
+  const isSubscriptionVisible = computed(() => useProfileStore().subscriptionsEnabled && isTypeExpense.value)
+  watch(isSubscriptionVisible, (isVisible) => !isVisible && (fields.subscription.value = null))
+  const isBudgetVisible = computed(() => useProfileStore().budgetsEnabled)
 
   const accountSourceAllowedTypes = computed(() => Account.getAccountTypesForTransactionTypeSource(type.value))
   const accountDestinationAllowedTypes = computed(() => Account.getAccountTypesForTransactionTypeDestination(type.value))
@@ -113,6 +118,8 @@ export function useRecurringTransactionForm(options = {}) {
   return {
     ...form,
     ...fields,
+    isSubscriptionVisible,
+    isBudgetVisible,
     upcomingDates,
     transactionsRoute,
     isRepetitionWeekly,

@@ -51,7 +51,8 @@
           />
 
           <category-select v-model="category" />
-          <budget-select v-model="budget" />
+          <budget-select v-if="isBudgetVisible" v-model="budget" />
+          <subscription-select v-if="isSubscriptionVisible" v-model="subscription" />
           <tag-select v-model="tags" />
 
           <app-field v-model="description" name="description" :label="$t('description')" maxlength="255" :rules="[rule.required()]" required />
@@ -164,6 +165,9 @@ const {
   accountDestination,
   category,
   budget,
+  subscription,
+  isSubscriptionVisible,
+  isBudgetVisible,
   tags,
   description,
   repetitionType,

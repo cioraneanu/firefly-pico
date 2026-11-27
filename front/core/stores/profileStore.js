@@ -75,11 +75,12 @@ export const useProfileStore = defineStore('profile', () => {
 
   const heroIcons = useLocalStorage('heroIcons', [transactionListHeroIcon.tags, transactionListHeroIcon.account])
 
-  const budgetsEnabled = useLocalStorage('budgetsEnabled', true)
+  const budgetsEnabled = useLocalStorage('budgetsEnabled', false)
   const categoriesEnabled = useLocalStorage('categoriesEnabled', true)
   const tagsEnabled = useLocalStorage('tagsEnabled', true)
   const piggyBanksEnabled = useLocalStorage('piggyBanksEnabled', false)
   const recurringTransactionsEnabled = useLocalStorage('recurringTransactionsEnabled', true)
+  const subscriptionsEnabled = useLocalStorage('subscriptionsEnabled', false)
 
   const dashboard = reactive({
     firstDayOfMonth: useLocalStorage('firstDayOfMonth', 1),
@@ -135,6 +136,8 @@ export const useProfileStore = defineStore('profile', () => {
   async function getProfiles({ showLoading = true } = {}) {
     const appStore = useAppStore()
     if (!appStore.syncProfileInDB) {
+      // Without DB profiles the local settings still need the fields added since they were saved
+      migrateProfile()
       return
     }
 
@@ -229,6 +232,7 @@ export const useProfileStore = defineStore('profile', () => {
     tagsEnabled,
     piggyBanksEnabled,
     recurringTransactionsEnabled,
+    subscriptionsEnabled,
     dashboard,
     profileDictionary,
     activeProfile,

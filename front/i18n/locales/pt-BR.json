@@ -224,7 +224,8 @@
       "demo_info": "Explore o app com dados de exemplo salvos apenas neste dispositivo, sem servidor. Ao sair, os dados de exemplo são apagados e o app é redefinido.",
       "disconnect": "Desconectar",
       "disconnect_confirm": "Remove o token de acesso e todos os dados e configurações salvos neste dispositivo e depois redefine o app. Seus dados do Firefly III não são afetados.",
-      "no_token": "Nenhum token de acesso ainda. Adicione um ou experimente o modo demo em Configuração."
+      "no_token": "Nenhum token de acesso ainda. Adicione um ou experimente o modo demo em Configuração.",
+      "enable_subscriptions": "Ativar assinaturas"
     },
     "ui_entry": "Interface do usuário",
     "ui": {
@@ -426,7 +427,8 @@
         "transfers_by_category": "Transferências por categorias",
         "todo_transactions": "Transações a fazer",
         "piggy_banks": "Mealheiros",
-        "recurring_transactions": "Próximas transações recorrentes"
+        "recurring_transactions": "Próximas transações recorrentes",
+        "subscriptions": "Assinaturas"
       }
     },
     "token": {
@@ -822,7 +824,8 @@
     "without_budget": "Sem orçamento",
     "active_count": "{count} ativos",
     "empty_hint": "Suas transações aparecerão aqui",
-    "showing": "Mostrando {count} de {total}"
+    "showing": "Mostrando {count} de {total}",
+    "without_subscription": "Sem assinatura"
   },
   "dash_page": {
     "hide_amounts": "Ocultar valores",
@@ -837,7 +840,12 @@
     "no_piggy_banks": "Nenhum cofrinho ^_^",
     "amount_left": "{amount} restantes",
     "peak": "Pico {amount} · {date}",
-    "no_todo_tag": "Nenhuma tag \"todo\""
+    "no_todo_tag": "Nenhuma tag \"todo\"",
+    "subscriptions_paid_of": "Pagas {paid} de {total}",
+    "subscriptions_off_schedule": "Pago antes ou depois",
+    "subscriptions_cancel_by": "Cancele até {date}",
+    "subscriptions_ends_on": "Termina em {date}",
+    "no_subscriptions": "Nenhuma assinatura neste mês"
   },
   "todo_page": {
     "title": "Caixa TODO",
@@ -882,5 +890,41 @@
     "selected": "{count} selecionadas",
     "clear": "Limpar",
     "some_failed": "Não foi possível atualizar {count}. Tente novamente."
+  },
+  "subscription": "Assinatura",
+  "subscriptions": "Assinaturas",
+  "subscription_select": "Selecionar assinatura",
+  "subscription_page": {
+    "title_add": "Adicionar assinatura",
+    "title_edit": "Editar assinatura",
+    "amount_min": "Valor mínimo",
+    "amount_max": "Valor máximo",
+    "amount_max_too_low": "Deve ser pelo menos o valor mínimo",
+    "first_date": "Primeira data prevista",
+    "repeat_freq": "Repete",
+    "skip": "Pular",
+    "skip_description": "Períodos a pular entre pagamentos, ex. 1 = período sim, período não",
+    "end_date": "Data de término",
+    "extension_date": "Data de renovação",
+    "extension_date_description": "Último dia para cancelar ou renovar o contrato",
+    "active": "Ativa",
+    "repeat": {
+      "weekly": "Semanal",
+      "monthly": "Mensal",
+      "quarterly": "Trimestral",
+      "half-year": "Semestral",
+      "yearly": "Anual"
+    },
+    "per_month": "por mês",
+    "per_year": "por ano",
+    "next": "Próximo {date}",
+    "state": {
+      "paid": "Pago",
+      "due": "A pagar",
+      "missed": "Atrasado",
+      "not_due": "Sem vencimento"
+    },
+    "search": "Buscar assinaturas…",
+    "empty_hint": "Suas assinaturas aparecerão aqui"
   }
 }

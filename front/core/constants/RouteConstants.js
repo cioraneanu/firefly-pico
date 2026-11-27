@@ -46,6 +46,8 @@ export default {
 
   ROUTE_PIGGY_BANK_LIST: '/piggy-banks/list',
   ROUTE_PIGGY_BANK_ID: '/piggy-banks',
+  ROUTE_SUBSCRIPTION_LIST: '/subscriptions/list',
+  ROUTE_SUBSCRIPTION_ID: '/subscriptions',
 
   ROUTE_RECURRING_TRANSACTION_LIST: '/recurring-transactions/list',
   ROUTE_RECURRING_TRANSACTION_ID: '/recurring-transactions',

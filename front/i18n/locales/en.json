@@ -224,7 +224,8 @@
       "demo_info": "Explore the app with sample data kept only on this device, no server needed. Exiting deletes the sample data and resets the app.",
       "disconnect": "Disconnect",
       "disconnect_confirm": "This removes the access token and all data and settings stored on this device, then resets the app. Your Firefly III data is not affected.",
-      "no_token": "No access token yet. Add one, or try demo mode, in Setup."
+      "no_token": "No access token yet. Add one, or try demo mode, in Setup.",
+      "enable_subscriptions": "Enable subscriptions"
     },
     "ui_entry": "User interface",
     "ui": {
@@ -426,7 +427,8 @@
         "transfers_by_category": "Transfers by categories",
         "todo_transactions": "Todo transactions",
         "piggy_banks": "Piggy banks",
-        "recurring_transactions": "Upcoming transactions"
+        "recurring_transactions": "Upcoming transactions",
+        "subscriptions": "Subscriptions"
       }
     },
     "token": {
@@ -822,7 +824,8 @@
     "without_budget": "Without budget",
     "active_count": "{count} active",
     "empty_hint": "Your transactions will appear here",
-    "showing": "Showing {count} of {total}"
+    "showing": "Showing {count} of {total}",
+    "without_subscription": "Without subscription"
   },
   "dash_page": {
     "hide_amounts": "Hide amounts",
@@ -837,7 +840,12 @@
     "no_piggy_banks": "No piggy banks ^_^",
     "amount_left": "{amount} left",
     "peak": "Peak {amount} · {date}",
-    "no_todo_tag": "No \"todo\" tag"
+    "no_todo_tag": "No \"todo\" tag",
+    "subscriptions_paid_of": "Paid {paid} of {total}",
+    "subscriptions_off_schedule": "Paid early or late",
+    "subscriptions_cancel_by": "Cancel by {date}",
+    "subscriptions_ends_on": "Ends {date}",
+    "no_subscriptions": "No subscriptions due this month"
   },
   "todo_page": {
     "title": "TODO Inbox",
@@ -882,5 +890,41 @@
     "selected": "{count} selected",
     "clear": "Clear",
     "some_failed": "{count} could not be updated. Try again."
+  },
+  "subscription": "Subscription",
+  "subscriptions": "Subscriptions",
+  "subscription_select": "Select subscription",
+  "subscription_page": {
+    "title_add": "Add subscription",
+    "title_edit": "Edit subscription",
+    "amount_min": "Minimum amount",
+    "amount_max": "Maximum amount",
+    "amount_max_too_low": "Must be at least the minimum amount",
+    "first_date": "First expected date",
+    "repeat_freq": "Repeats",
+    "skip": "Skip",
+    "skip_description": "Periods to skip between payments, e.g. 1 = every other period",
+    "end_date": "End date",
+    "extension_date": "Extension date",
+    "extension_date_description": "Last day to cancel or extend the contract",
+    "active": "Active",
+    "repeat": {
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "quarterly": "Quarterly",
+      "half-year": "Every 6 months",
+      "yearly": "Yearly"
+    },
+    "per_month": "per month",
+    "per_year": "per year",
+    "next": "Next {date}",
+    "state": {
+      "paid": "Paid",
+      "due": "Due",
+      "missed": "Missed",
+      "not_due": "Not due"
+    },
+    "search": "Search subscriptions…",
+    "empty_hint": "Your subscriptions will appear here"
   }
 }

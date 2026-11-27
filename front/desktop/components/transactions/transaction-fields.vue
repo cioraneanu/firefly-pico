@@ -63,6 +63,13 @@
       <d-budget-select v-model="budget" />
     </d-field>
     <d-field
+      v-if="profileStore.subscriptionsEnabled && isTypeExpense && isFieldVisible(transactionFormField.subscription)"
+      :label="$t('subscription')"
+      :style="getStyleForField(transactionFormField.subscription)"
+    >
+      <d-subscription-select v-model="subscription" />
+    </d-field>
+    <d-field
       v-if="profileStore.piggyBanksEnabled && isTypeTransfer && !itemId && isFieldVisible(transactionFormField.piggyBank)"
       :label="$t('piggy_bank')"
       :style="getStyleForField(transactionFormField.piggyBank)"
@@ -101,6 +108,7 @@ const {
   description,
   notes,
   budget,
+  subscription,
   piggyBank,
   accountSource,
   accountDestination,
@@ -116,6 +124,7 @@ const {
   onToday,
   onAddDay,
   isTypeTransfer,
+  isTypeExpense,
   getStyleForField,
   isFieldVisible,
   accountSourceBinding,

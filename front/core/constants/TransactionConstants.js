@@ -97,6 +97,12 @@ export const transactionFormField = {
     icon: TablerIconConstants.budget,
     isVisible: true,
   },
+  subscription: {
+    t: 'subscription',
+    code: 'subscription',
+    icon: TablerIconConstants.subscription,
+    isVisible: true,
+  },
   piggyBank: {
     t: 'piggy_bank',
     code: 'piggyBank',

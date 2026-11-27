@@ -14,6 +14,8 @@
           <app-boolean v-model="piggyBanksEnabled" :label="$t('settings.setup.enable_piggy_banks')" />
           <div class="mx-hr" />
           <app-boolean v-model="recurringTransactionsEnabled" :label="$t('settings.setup.enable_recurring_transactions')" />
+          <div class="mx-hr" />
+          <app-boolean v-model="subscriptionsEnabled" :label="$t('settings.setup.enable_subscriptions')" />
         </app-card>
       </main>
 
@@ -40,6 +42,7 @@ const categoriesEnabled = ref(true)
 const tagsEnabled = ref(true)
 const piggyBanksEnabled = ref(true)
 const recurringTransactionsEnabled = ref(true)
+const subscriptionsEnabled = ref(false)
 
 const syncedSettings = [
   { store: profileStore, path: 'budgetsEnabled', ref: budgetsEnabled },
@@ -47,6 +50,7 @@ const syncedSettings = [
   { store: profileStore, path: 'tagsEnabled', ref: tagsEnabled },
   { store: profileStore, path: 'piggyBanksEnabled', ref: piggyBanksEnabled },
   { store: profileStore, path: 'recurringTransactionsEnabled', ref: recurringTransactionsEnabled },
+  { store: profileStore, path: 'subscriptionsEnabled', ref: subscriptionsEnabled },
 ]
 
 watchSettingsStore(syncedSettings)

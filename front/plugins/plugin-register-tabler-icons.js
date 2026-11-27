@@ -76,6 +76,7 @@ import {
   IconX,
   IconArrowNarrowRight,
   IconListCheck,
+  IconReceiptRefund,
 } from '@tabler/icons-vue'
 
 export default defineNuxtPlugin((nuxtApp) => {
@@ -148,6 +149,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.component('IconPigMoney', IconPigMoney)
   nuxtApp.vueApp.component('IconRepeat', IconRepeat)
   nuxtApp.vueApp.component('IconCalendarRepeat', IconCalendarRepeat)
+  nuxtApp.vueApp.component('IconReceiptRefund', IconReceiptRefund)
   nuxtApp.vueApp.component('IconMicrophone', IconMicrophone)
   nuxtApp.vueApp.component('IconPlayerPlay', IconPlayerPlay)
   nuxtApp.vueApp.component('IconPlayerStop', IconPlayerStop)

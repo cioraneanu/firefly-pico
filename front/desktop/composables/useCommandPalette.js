@@ -1,9 +1,10 @@
-import { IconBasket, IconBuildingBank, IconCategory, IconPigMoney, IconPlus, IconSearch, IconSparkles, IconTag, IconTemplate } from '@tabler/icons-vue'
+import { IconBasket, IconBuildingBank, IconCategory, IconPigMoney, IconPlus, IconReceiptRefund, IconSearch, IconSparkles, IconTag, IconTemplate } from '@tabler/icons-vue'
 import RouteConstants from '~/core/constants/RouteConstants'
 import Account from '~/core/models/Account'
 import Budget from '~/core/models/Budget'
 import Category from '~/core/models/Category'
 import PiggyBank from '~/core/models/PiggyBank'
+import Subscription from '~/core/models/Subscription'
 import Tag from '~/core/models/Tag'
 import TransactionTemplate from '~/core/models/TransactionTemplate'
 import { withoutDeleted } from '~/core/utils/DeleteUtils'
@@ -42,6 +43,7 @@ export function useCommandPalette(query = ref('')) {
       profileStore.tagsEnabled && { label: t('tag_page.title_add'), icon: IconTag, to: RouteConstants.ROUTE_TAG_ID },
       profileStore.budgetsEnabled && { label: t('budget_page.title_add'), icon: IconBasket, to: RouteConstants.ROUTE_BUDGET_ID },
       profileStore.piggyBanksEnabled && { label: t('piggy_bank_page.title_add'), icon: IconPigMoney, to: RouteConstants.ROUTE_PIGGY_BANK_ID },
+      profileStore.subscriptionsEnabled && { label: t('subscription_page.title_add'), icon: IconReceiptRefund, to: RouteConstants.ROUTE_SUBSCRIPTION_ID },
       { label: t('transaction_template_page.title_add'), icon: IconTemplate, to: RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID },
     ]
       .filter(Boolean)
@@ -55,6 +57,7 @@ export function useCommandPalette(query = ref('')) {
           ...resource(profileStore.tagsEnabled, t('tags'), useTagStore().tagList, Tag, RouteConstants.ROUTE_TAG_ID, IconTag),
           ...resource(profileStore.budgetsEnabled, t('budgets'), useBudgetStore().budgetList, Budget, RouteConstants.ROUTE_BUDGET_ID, IconBasket),
           ...resource(profileStore.piggyBanksEnabled, t('piggy_banks'), usePiggyBankStore().piggyBankList, PiggyBank, RouteConstants.ROUTE_PIGGY_BANK_ID, IconPigMoney),
+          ...resource(profileStore.subscriptionsEnabled, t('subscriptions'), useSubscriptionStore().subscriptionList, Subscription, RouteConstants.ROUTE_SUBSCRIPTION_ID, IconReceiptRefund),
           ...resource(true, t('templates'), useTemplateStore().transactionTemplateList, TransactionTemplate, RouteConstants.ROUTE_TRANSACTION_TEMPLATE_ID, IconTemplate),
         ]
 

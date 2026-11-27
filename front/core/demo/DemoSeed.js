@@ -1,4 +1,4 @@
-import { addDays, format, setDate, setHours, startOfDay, subDays, subMonths } from 'date-fns'
+import { addDays, endOfMonth, format, setDate, setHours, startOfDay, startOfMonth, subDays, subMonths } from 'date-fns'
 
 // Starting data for demo mode, in the shapes the Pico backend returns. Dates are relative to today so the dashboard always has data.
 
@@ -79,6 +79,47 @@ const transactionList = () => {
     })
 }
 
+// Demo GET ignores start/end, so this month's expected and paid dates are fixed relative to today
+const subscriptionList = (today) => {
+  const day = (date) => format(date, 'yyyy-MM-dd')
+  const monthStart = startOfMonth(today)
+  const gymDates = [0, 7, 14, 21, 28].map((offset) => addDays(monthStart, offset)).filter((date) => date <= endOfMonth(today))
+  const subscription = (id, attributes) => entity('bills', id, { currency_id: '1', currency_code: 'EUR', skip: 0, active: true, notes: null, end_date: null, extension_date: null, ...attributes })
+  return [
+    subscription(1, {
+      name: 'Netflix',
+      amount_min: '15.99',
+      amount_max: '15.99',
+      repeat_freq: 'monthly',
+      date: day(setDate(subMonths(today, 6), 3)),
+      pay_dates: [day(setDate(today, 3))],
+      paid_dates: [{ date: day(setDate(today, 3)) }],
+      next_expected_match: day(setDate(addDays(endOfMonth(today), 1), 3)),
+    }),
+    subscription(2, {
+      name: 'Gym',
+      amount_min: '12',
+      amount_max: '12',
+      repeat_freq: 'weekly',
+      date: day(monthStart),
+      pay_dates: gymDates.map(day),
+      paid_dates: [{ date: day(gymDates[0]) }],
+      next_expected_match: day(gymDates[1]),
+    }),
+    subscription(3, {
+      name: 'Car insurance',
+      amount_min: '480',
+      amount_max: '480',
+      repeat_freq: 'yearly',
+      date: day(subMonths(today, 10)),
+      extension_date: day(addDays(today, 20)),
+      pay_dates: [],
+      paid_dates: [],
+      next_expected_match: day(addDays(today, 60)),
+    }),
+  ]
+}
+
 export function createDemoSeed() {
   const today = new Date()
   const transactions = transactionList()
@@ -103,6 +144,7 @@ export function createDemoSeed() {
         target_date: format(addDays(today, 180), 'yyyy-MM-dd'),
       }),
     ],
+    bills: subscriptionList(today),
     recurrences: [
       entity('recurrences', 1, {
         type: 'withdrawal',
